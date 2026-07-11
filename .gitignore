@@ -186,6 +186,9 @@ data/interim/activations/
 
 **/activations/**
 **/probes/**
+# but do track the vendored src/probes tree (formerly a submodule)
+!src/probes/
+!src/probes/**
 
 .envrc
 # Temporary files
