@@ -547,11 +547,11 @@ class Experiment:
             "ai_audit__reasoning": 1,
             "ai_audit__no_reasoning": 1,
             "roleplaying__plain": 1,
-            "harm_refusal_choice__plain": 1,
+            "harm_refusal_choice__plain": 16,
             "harm_refusal_knowledge_report__plain": 1,
             "insider_trading_cadenza__plain": 1,
-            "instruct_dishonesty_default__plain": 1,
-            "instruct_dishonesty_donotadmit__plain": 1,
+            "instruct_dishonesty_default__plain": 32,
+            "instruct_dishonesty_donotadmit__plain": 32,
             "mask__plain": 1,
             "convince_me__plain": 1,
             "sleeper_agents__plain": 1,
@@ -560,7 +560,7 @@ class Experiment:
             "insider_trading_doubledown__onpolicy": 1,
             "insider_trading__upscale": 2,
             "insider_trading_doubledown__upscale": 2,
-            "alpaca__plain": 4,
+            "alpaca__plain": 32,
         }
 
         all_scores = {}

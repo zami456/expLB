@@ -5,10 +5,10 @@ model_name: "llama-70b-3.3"
 train_data: "repe_honesty__plain"
 eval_data:
   - "harm_refusal_choice__plain"
-  - "harm_refusal_knowledge_report__plain" # works
+  #- "harm_refusal_knowledge_report__plain" # works
   - "instruct_dishonesty__plain"
-  - "convince_me__plain" # only for llama and gemma
-  - "insider_trading_cadenza__plain"
+  #- "convince_me__plain" # only for llama and gemma
+  #- "insider_trading_cadenza__plain"
   # - "mask__plain" # ignore for all models
 
 eval_on_policy: false
