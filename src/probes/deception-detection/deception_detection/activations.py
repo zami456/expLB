@@ -3,6 +3,7 @@ Creates and handles inputs to white box deception detectors. Run's the model on 
 and returns activations at the detection positions.
 """
 
+import hashlib
 import pickle
 from dataclasses import dataclass
 from pathlib import Path
@@ -57,11 +58,20 @@ class Activations:
         model_key = model.name_or_path.replace("/", "_")
         layers_key = "all" if layers is None else "-".join(map(str, layers))
         logits_key = "_logits" if save_logits else ""
+        # dataset_partial_id only identifies the dataset/variant, not which rows are present -
+        # callers that shard a dataset (e.g. eval scoring) reuse the same id for every shard, so
+        # a content fingerprint is needed to stop different shards colliding on the same cache dir
+        tokens_fingerprint = hashlib.sha1(
+            tokenized_dataset.tokens.numpy().tobytes()
+        ).hexdigest()[:10]
         cache_dir = (
             REPO_ROOT
             / "activations"
             / "nnsight_cache"
-            / f"{tokenized_dataset.dataset_partial_id}_{model_key}_bs{batch_size}_layers{layers_key}{logits_key}"
+            / (
+                f"{tokenized_dataset.dataset_partial_id}_{tokens_fingerprint}_{model_key}"
+                f"_bs{batch_size}_layers{layers_key}{logits_key}"
+            )
         )
         cache_dir.mkdir(parents=True, exist_ok=True)
 
