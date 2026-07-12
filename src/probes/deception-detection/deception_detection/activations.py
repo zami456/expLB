@@ -52,14 +52,44 @@ class Activations:
         activations_by_batch: list[Float[Tensor, "batch seqpos layer emb"]] = []
         logits_by_batch: list[Float[Tensor, "batch seqpos vocab"]] = []
 
+        # model identity is part of the cache key so that switching checkpoints (e.g. a
+        # different LoRA merge) can't silently load another model's cached activations
+        model_key = model.name_or_path.replace("/", "_")
+        layers_key = "all" if layers is None else "-".join(map(str, layers))
+        logits_key = "_logits" if save_logits else ""
+        cache_dir = (
+            REPO_ROOT
+            / "activations"
+            / "nnsight_cache"
+            / f"{tokenized_dataset.dataset_partial_id}_{model_key}_bs{batch_size}_layers{layers_key}{logits_key}"
+        )
+        cache_dir.mkdir(parents=True, exist_ok=True)
+
+        def save_atomic(obj: object, path: Path) -> None:
+            # write-then-rename so a process killed mid-write can't leave a corrupt cache
+            # file behind that a resumed run would treat as valid
+            tmp_path = path.with_suffix(path.suffix + ".tmp")
+            torch.save(obj, tmp_path)
+            tmp_path.replace(path)
+
         for i in trange(
             0, len(tokenized_dataset), batch_size, desc="Computing activations", disable=not verbose
         ):
+            cache_path = cache_dir / f"{i}.pt"
+            if cache_path.exists():
+                cached = torch.load(cache_path)
+                if save_logits:
+                    activations_by_batch.append(cached["acts"])
+                    logits_by_batch.append(cached["logits"])
+                else:
+                    activations_by_batch.append(cached)
+                continue
+
             batch: TokenizedDataset = tokenized_dataset[i : i + batch_size]
 
             """all_activations: list[Float[Tensor, "batch seqpos emb"]] = []"""
             # Enable mixed precision for modern large models
-            model_supports_amp = any(name in model.name_or_path.lower() 
+            model_supports_amp = any(name in model.name_or_path.lower()
                                    for name in ["llama", "mistral", "gemma", "qwen"])
             with model.trace(batch.tokens.to(device), attention_mask=batch.attention_mask.to(device), remote=True):
                 all_activations: list[Float[Tensor, "batch seqpos emb"]] = list().save()
@@ -68,6 +98,9 @@ class Activations:
                 for layer_idx in layers_to_process:
                     layer_activation = model.model.layers[layer_idx].output
                     all_activations.append(layer_activation)
+
+                if save_logits:
+                    batch_logits = model.output.logits.save()
 
             """with torch.amp.autocast('cuda', enabled=model_supports_amp):
                 fwd_out = model(
@@ -91,7 +124,14 @@ class Activations:
 
                 del fwd_out"""
 
-            activations_by_batch.append(torch.stack(all_activations, dim=2))
+            batch_acts = torch.stack(all_activations, dim=2)
+            if save_logits:
+                batch_logits = batch_logits.cpu()
+                save_atomic({"acts": batch_acts, "logits": batch_logits}, cache_path)
+                logits_by_batch.append(batch_logits)
+            else:
+                save_atomic(batch_acts, cache_path)
+            activations_by_batch.append(batch_acts)
 
         all_acts = torch.cat(activations_by_batch)
         logits = torch.cat(logits_by_batch) if save_logits else None
