@@ -181,6 +181,12 @@ Open **`notebooks/colab_extract_activations.ipynb`** in Colab and run the cells 
 5. **Loops over your models**, one run each — the pipeline is single-model-per-run (`model_name` is a
    single field), so to cover all four models you run four experiments (the notebook does this in a loop).
 
+> **Model support on Colab.** Only **Llama** and **Qwen** work through the remote flow — in
+> `models.py` they load via nnsight `LanguageModel` (weights stay on NDIF). **Mistral** and **Gemma**
+> instead load the full model *locally* (`AutoModelForImageTextToText`, `device_map="auto"`,
+> `local_files_only=True`), which won't fit a Colab GPU and needs pre-downloaded weights — so don't
+> use them on Colab. Also confirm the model is actually **hosted on NDIF** (`llama-70b-3.1` is safest).
+
 **Watching progress & resuming.** tqdm progress bars stream into the run cell, and cached batch files
 appear under the Drive folders. Runs are **resumable**: because outputs and the per-batch activation
 cache live on Drive, a Colab idle-disconnect (expected after ~90 min) is harmless — reconnect and
