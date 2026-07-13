@@ -41,6 +41,7 @@ Environment variables (set in `.env` at the repo root):
 | `OPENAI_API_KEY` | External-judge scoring in `src/blackbox/` |
 | `ANTHROPIC_API_KEY` | External-judge scoring in `src/blackbox/` |
 | `HF_TOKEN` | Pulling source datasets and pushing generated subsets |
+| `NDIF_API_KEY` | Remote nnsight activation extraction (`src/probes/`, `model.trace(..., remote=True)`); get one at <https://login.ndif.us> |
 
 See `src/models.py` for the full provider routing table.
 
@@ -152,6 +153,39 @@ High-level workflow:
 3. Train and evaluate probes via the submodule's own entry points (see `src/probes/README.md` and `src/probes/Makefile`); install its dependencies with `make install-dev` from inside the submodule first.
 
 The probes operate at the level of single hidden-state vectors (typically the last-token activation of the assistant turn) and produce a deceptive / honest score per row, comparable in shape to the black-box detector outputs.
+
+> **Note.** Activation extraction now runs the model **remotely on NDIF** via nnsight
+> (`Activations.from_model` in `src/probes/.../activations.py` uses `model.trace(..., remote=True)`),
+> so you no longer need local weights or a big local GPU — set `NDIF_API_KEY` (see above) and the
+> target model must be hosted on NDIF. Downloaded activations are cached **per batch** with atomic
+> writes, so a killed run resumes without re-downloading completed batches. The cache lives under
+> `activations/nnsight_cache/` by default; set `ACTS_CACHE_DIR` to relocate it (e.g. to Google Drive).
+
+### Running activation extraction on Google Colab (outputs to Drive)
+
+You can drive extraction from Colab while keeping **all code in GitHub** and **all outputs on Google
+Drive**, and still edit code in VS Code:
+
+```
+VS Code (edit) --git push--> GitHub <--git pull-- Colab (run) --> Google Drive (outputs)
+```
+
+Open **`notebooks/colab_extract_activations.ipynb`** in Colab and run the cells top to bottom. It:
+
+1. Mounts Google Drive and clones/pulls this repo (re-run the pull cell after each `git push` from VS Code).
+2. Installs the `deception_detection` package (which now pulls in `nnsight`).
+3. Reads `NDIF_API_KEY` and `HF_TOKEN` from **Colab Secrets** and registers the NDIF key with nnsight.
+4. Points outputs at Drive — the experiment folder via `--folder=/content/drive/MyDrive/expLB/results`
+   and the activation cache via the `ACTS_CACHE_DIR` env var
+   (`/content/drive/MyDrive/expLB/activations_cache`).
+5. **Loops over your models**, one run each — the pipeline is single-model-per-run (`model_name` is a
+   single field), so to cover all four models you run four experiments (the notebook does this in a loop).
+
+**Watching progress & resuming.** tqdm progress bars stream into the run cell, and cached batch files
+appear under the Drive folders. Runs are **resumable**: because outputs and the per-batch activation
+cache live on Drive, a Colab idle-disconnect (expected after ~90 min) is harmless — reconnect and
+re-run the run cell. Finished models are skipped (their `detector.pt` / scores exist) and, within a
+model, completed activation **batches** load from `ACTS_CACHE_DIR` instead of re-downloading from NDIF.
 
 ---
 

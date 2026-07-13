@@ -4,6 +4,7 @@ and returns activations at the detection positions.
 """
 
 import hashlib
+import os
 import pickle
 from dataclasses import dataclass
 from pathlib import Path
@@ -21,6 +22,16 @@ from deception_detection.tokenized_data import TokenizedDataset, get_tokenized_d
 from deception_detection.utils import REPO_ROOT, mask_sparse_activations
 import nnsight
 from nnsight import LanguageModel
+
+
+def get_acts_cache_dir() -> Path:
+    """Base directory for the cached nnsight activations.
+
+    Defaults to ``REPO_ROOT/activations/nnsight_cache``. Override with the ``ACTS_CACHE_DIR``
+    environment variable — e.g. point it at a mounted Google Drive path when running on Colab
+    so the per-batch cache (and therefore resume-after-disconnect) survives runtime restarts.
+    """
+    return Path(os.environ.get("ACTS_CACHE_DIR", str(REPO_ROOT / "activations" / "nnsight_cache")))
 
 
 @dataclass
@@ -64,14 +75,9 @@ class Activations:
         tokens_fingerprint = hashlib.sha1(
             tokenized_dataset.tokens.numpy().tobytes()
         ).hexdigest()[:10]
-        cache_dir = (
-            REPO_ROOT
-            / "activations"
-            / "nnsight_cache"
-            / (
-                f"{tokenized_dataset.dataset_partial_id}_{tokens_fingerprint}_{model_key}"
-                f"_bs{batch_size}_layers{layers_key}{logits_key}"
-            )
+        cache_dir = get_acts_cache_dir() / (
+            f"{tokenized_dataset.dataset_partial_id}_{tokens_fingerprint}_{model_key}"
+            f"_bs{batch_size}_layers{layers_key}{logits_key}"
         )
         cache_dir.mkdir(parents=True, exist_ok=True)
 
