@@ -178,14 +178,17 @@ Open **`notebooks/colab_extract_activations.ipynb`** in Colab and run the cells 
 4. Points outputs at Drive — the experiment folder via `--folder=/content/drive/MyDrive/expLB/results`
    and the activation cache via the `ACTS_CACHE_DIR` env var
    (`/content/drive/MyDrive/expLB/activations_cache`).
-5. **Loops over your models**, one run each — the pipeline is single-model-per-run (`model_name` is a
-   single field), so to cover all four models you run four experiments (the notebook does this in a loop).
+5. **Loops over the Liars' Bench scenario configs** (`XXXX-*.yaml`), running each **unchanged** — the
+   `CONFIGS` list, not the datasets inside a config. Each run gets a stable, timestamp-free name (the
+   config stem), and the loop attempts every scenario and prints a per-scenario status summary.
 
-> **Model support on Colab.** Only **Llama** and **Qwen** work through the remote flow — in
-> `models.py` they load via nnsight `LanguageModel` (weights stay on NDIF). **Mistral** and **Gemma**
-> instead load the full model *locally* (`AutoModelForImageTextToText`, `device_map="auto"`,
-> `local_files_only=True`), which won't fit a Colab GPU and needs pre-downloaded weights — so don't
-> use them on Colab. Also confirm the model is actually **hosted on NDIF** (`llama-70b-3.1` is safest).
+> **Which scenarios actually run on Colab.** The `XXXX-*` configs *are* the benchmark, so each carries
+> its own model. Only **`XXXX-9`** (base Llama-70B-3.3, loaded via nnsight `LanguageModel`) runs on
+> stock NDIF. The other scenarios use **fine-tuned / LoRA model organisms** — `XXXX-15/16`
+> (LoRA-adapted Llama) and `XXXX-17/18/19` (Gemma sleeper-agents; Gemma also loads locally via
+> `AutoModelForImageTextToText`). NDIF hosts base models only, so those need their weights hosted on
+> NDIF or must be **run locally** (that's what the `Saving`-branch local cache is for); otherwise they
+> report `FAILED` in the notebook's summary.
 
 **Watching progress & resuming.** Per-batch download progress bars (plus per-dataset bars) stream into
 the run cell, and cached batch files appear under the Drive folders. Runs are **resumable at two
@@ -193,12 +196,8 @@ levels**, and because both outputs and the per-batch activation cache live on Dr
 idle-disconnect (expected after ~90 min) is harmless — reconnect and re-run the run cell:
 - **Activations** — completed per-batch `.pt` files load from `ACTS_CACHE_DIR` instead of
   re-downloading from NDIF (content-keyed, atomic writes).
-- **Results** — the notebook gives each run a stable, timestamp-free experiment name
-  (`<config>__<model>`), so a finished `detector.pt` / `scores.json` is skipped rather than recomputed.
-
-**Smoke test first.** `deception_detection/scripts/configs/colab_smoke.yaml` is a trimmed config (one
-small eval dataset, tiny control set, single layer) for a quick end-to-end check before committing to a
-full run — point `CONFIG_FILE` at it in the notebook.
+- **Results** — the notebook gives each run a stable, timestamp-free experiment name (the config
+  stem, e.g. `XXXX-9`), so a finished `detector.pt` / `scores.json` is skipped rather than recomputed.
 
 ---
 
