@@ -178,17 +178,18 @@ Open **`notebooks/colab_extract_activations.ipynb`** in Colab and run the cells 
 4. Points outputs at Drive — the experiment folder via `--folder=/content/drive/MyDrive/expLB/results`
    and the activation cache via the `ACTS_CACHE_DIR` env var
    (`/content/drive/MyDrive/expLB/activations_cache`).
-5. **Loops over the Liars' Bench scenario configs** (`XXXX-*.yaml`), running each **unchanged** — the
-   `CONFIGS` list, not the datasets inside a config. Each run gets a stable, timestamp-free name (the
-   config stem), and the loop attempts every scenario and prints a per-scenario status summary.
+5. **Runs the enabled Liars' Bench scenario config(s)** from the `CONFIGS` list, each **unchanged** —
+   not the datasets inside a config. Each run gets a stable, timestamp-free name (the config stem), and
+   the loop prints a per-scenario status summary.
 
-> **Which scenarios actually run on Colab.** The `XXXX-*` configs *are* the benchmark, so each carries
-> its own model. Only **`XXXX-9`** (base Llama-70B-3.3, loaded via nnsight `LanguageModel`) runs on
-> stock NDIF. The other scenarios use **fine-tuned / LoRA model organisms** — `XXXX-15/16`
-> (LoRA-adapted Llama) and `XXXX-17/18/19` (Gemma sleeper-agents; Gemma also loads locally via
-> `AutoModelForImageTextToText`). NDIF hosts base models only, so those need their weights hosted on
-> NDIF or must be **run locally** (that's what the `Saving`-branch local cache is for); otherwise they
-> report `FAILED` in the notebook's summary.
+> **Base models only.** The `XXXX-*` configs *are* the benchmark, and each carries its own model. With
+> base weights, the one runnable scenario is **`XXXX-9`** (Llama-70B-3.3 → harm-refusal +
+> instructed-dishonesty), loaded via nnsight `LanguageModel` on NDIF — it is the default in the
+> notebook. The remaining scenarios need **fine-tuned / LoRA model-organism adapters**: `XXXX-15/16`
+> (LoRA-adapted Llama) and `XXXX-17/18/19` (Gemma sleeper-agents). Without those adapters they can't be
+> run at all — Colab or local — so they are commented out in the notebook's `CONFIGS`. If you obtain an
+> adapter (from Cadenza-Labs), run that scenario **locally** (NDIF hosts base models only), using the
+> local per-batch cache from the `Saving` branch.
 
 **Watching progress & resuming.** Per-batch download progress bars (plus per-dataset bars) stream into
 the run cell, and cached batch files appear under the Drive folders. Runs are **resumable at two
