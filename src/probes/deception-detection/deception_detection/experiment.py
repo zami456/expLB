@@ -313,6 +313,7 @@ class Experiment:
             layers=self.cfg.detect_layers,
             use_goodfire_sae_acts=self.cfg.use_goodfire_sae_acts,
             detect_all=self.cfg.detect_all_tokens,
+            verbose=True,  # per-batch download progress bar for the training activations
         )
         honest_fit_acts, deceptive_fit_acts = split_paired_acts.get_all_acts()
 
@@ -655,7 +656,7 @@ class Experiment:
                 acts.apply_sae_latent_mask(self.cfg.sae_latent_whitelist)
             return acts
 
-        acts = Activations.from_model(self.model, toks, batch_size=BATCH_SIZE_ACTS, layers=self.cfg.detect_layers)  # Increased for better performance
+        acts = Activations.from_model(self.model, toks, batch_size=BATCH_SIZE_ACTS, layers=self.cfg.detect_layers, verbose=True)  # verbose=True -> per-batch download progress bar
         if self.cfg.use_local_sae_acts:
             acts = self.to_local_sae_acts(acts)
 
