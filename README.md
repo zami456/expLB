@@ -187,11 +187,18 @@ Open **`notebooks/colab_extract_activations.ipynb`** in Colab and run the cells 
 > `local_files_only=True`), which won't fit a Colab GPU and needs pre-downloaded weights — so don't
 > use them on Colab. Also confirm the model is actually **hosted on NDIF** (`llama-70b-3.1` is safest).
 
-**Watching progress & resuming.** tqdm progress bars stream into the run cell, and cached batch files
-appear under the Drive folders. Runs are **resumable**: because outputs and the per-batch activation
-cache live on Drive, a Colab idle-disconnect (expected after ~90 min) is harmless — reconnect and
-re-run the run cell. Finished models are skipped (their `detector.pt` / scores exist) and, within a
-model, completed activation **batches** load from `ACTS_CACHE_DIR` instead of re-downloading from NDIF.
+**Watching progress & resuming.** Per-batch download progress bars (plus per-dataset bars) stream into
+the run cell, and cached batch files appear under the Drive folders. Runs are **resumable at two
+levels**, and because both outputs and the per-batch activation cache live on Drive, a Colab
+idle-disconnect (expected after ~90 min) is harmless — reconnect and re-run the run cell:
+- **Activations** — completed per-batch `.pt` files load from `ACTS_CACHE_DIR` instead of
+  re-downloading from NDIF (content-keyed, atomic writes).
+- **Results** — the notebook gives each run a stable, timestamp-free experiment name
+  (`<config>__<model>`), so a finished `detector.pt` / `scores.json` is skipped rather than recomputed.
+
+**Smoke test first.** `deception_detection/scripts/configs/colab_smoke.yaml` is a trimmed config (one
+small eval dataset, tiny control set, single layer) for a quick end-to-end check before committing to a
+full run — point `CONFIG_FILE` at it in the notebook.
 
 ---
 
