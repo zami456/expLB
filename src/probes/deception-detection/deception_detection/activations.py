@@ -12,7 +12,7 @@ from pathlib import Path
 import torch
 from jaxtyping import Float
 from torch import Tensor
-from tqdm import trange
+from tqdm.auto import tqdm, trange
 from transformers import PreTrainedModel, PreTrainedTokenizerBase
 
 from deception_detection.data.base import DialogueDataset
@@ -88,9 +88,14 @@ class Activations:
             torch.save(obj, tmp_path)
             tmp_path.replace(path)
 
-        for i in trange(
-            0, len(tokenized_dataset), batch_size, desc="Computing activations", disable=not verbose
-        ):
+        pbar = tqdm(
+            total=len(tokenized_dataset),
+            desc=f"Downloading acts [{tokenized_dataset.dataset_partial_id}]",
+            unit="ex",
+            disable=not verbose,
+        )
+        for i in range(0, len(tokenized_dataset), batch_size):
+            n_in_batch = min(batch_size, len(tokenized_dataset) - i)
             cache_path = cache_dir / f"{i}.pt"
             if cache_path.exists():
                 cached = torch.load(cache_path)
@@ -99,6 +104,7 @@ class Activations:
                     logits_by_batch.append(cached["logits"])
                 else:
                     activations_by_batch.append(cached)
+                pbar.update(n_in_batch)
                 continue
 
             batch: TokenizedDataset = tokenized_dataset[i : i + batch_size]
@@ -148,6 +154,8 @@ class Activations:
             else:
                 save_atomic(batch_acts, cache_path)
             activations_by_batch.append(batch_acts)
+            pbar.update(n_in_batch)
+        pbar.close()
 
         all_acts = torch.cat(activations_by_batch)
         logits = torch.cat(logits_by_batch) if save_logits else None
