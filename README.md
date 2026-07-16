@@ -178,9 +178,13 @@ Open **`notebooks/colab_extract_activations.ipynb`** in Colab and run the cells 
 4. Points outputs at Drive — the experiment folder via `--folder=/content/drive/MyDrive/expLB/results`
    and the activation cache via the `ACTS_CACHE_DIR` env var
    (`/content/drive/MyDrive/expLB/activations_cache`).
-5. **Runs the enabled Liars' Bench scenario config(s)** from the `CONFIGS` list, each **unchanged** —
-   not the datasets inside a config. Each run gets a stable, timestamp-free name (the config stem), and
-   the loop prints a per-scenario status summary.
+5. **Runs the full pipeline** for the enabled Liars' Bench scenario config(s) in `CONFIGS`, each
+   **unchanged** — one `run` per config downloads activations, **trains** the probe (`detector.pt`),
+   computes eval + control **scores**, and generates **figures** into `results/<name>/plots/` (ROC,
+   AUROC, violin, per-dataset). So training and final results/figures all happen on Colab, saved to
+   Drive. Each run gets a stable, timestamp-free name and the loop prints a per-scenario status summary.
+   Set `MODEL_OVERRIDE` to run the same scenario on another base model (`llama-70b-3.1`, `qwen-72b`);
+   each model writes its own `<config>__<model>` folder so runs don't collide.
 
 > **Base models only.** The `XXXX-*` configs *are* the benchmark, and each carries its own model. With
 > base weights, the one runnable scenario is **`XXXX-9`** (Llama-70B-3.3 → harm-refusal +
