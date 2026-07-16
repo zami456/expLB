@@ -204,6 +204,12 @@ idle-disconnect (expected after ~90 min) is harmless — reconnect and re-run th
 - **Results** — the notebook gives each run a stable, timestamp-free experiment name (the config
   stem, e.g. `XXXX-9`), so a finished `detector.pt` / `scores.json` is skipped rather than recomputed.
 
+**Aggregate across runs (optional).** An extra cell combines every run under the Drive `results/`
+folder into a multi-experiment dashboard (`multi_experiment_dashboard_<ts>.html`), a combined CSV, and
+a best-effort LaTeX table (`white_box_results.tex`) via `generate_html_dashboard.py --multi` and
+`make_white_box_tables.py`. Re-run it after adding another model. The LaTeX table is tuned to the full
+paper matrix, so base-model-only runs yield a sparse table; the dashboard + CSV are the robust view.
+
 ---
 
 ## Repository layout
