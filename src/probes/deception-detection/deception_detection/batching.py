@@ -30,6 +30,9 @@ DEFAULT_NDIF_TOKEN_BUDGET = 8000
 # At 8192 dims and 2 bytes per element, 32k tokens is ~525 MB.
 DEFAULT_HOST_TOKEN_BUDGET = 32_000
 
+# How many times a budget must OOM before it is believed to be genuinely too large.
+OOM_DEMOTE_THRESHOLD = 3
+
 FailureKind = Literal["oom", "transient", "unknown", "fatal"]
 
 # Matched against the exception text. The remote backend's exact exception types are not
@@ -142,14 +145,32 @@ class BudgetMemory:
         return f"{model_name}|layers={n_layers}"
 
     def suggest(self, key: str, configured: int) -> int:
-        """Budget to start from: the best known-good, never at or above a known OOM."""
+        """Budget to start from: the best known-good, demoted only on repeated OOMs.
+
+        A single OOM is not evidence that a budget is too large. The remote backend is a
+        shared deployment, so an occasional failure reflects what else was running on it,
+        and an in-run OOM costs exactly one wasted call before the ladder recovers. Halving
+        the starting budget permanently would instead double the round trips of every
+        future run. So demote only once a budget has failed OOM_DEMOTE_THRESHOLD times.
+        """
         entry = self._data.get(key, {})
         budget = max(configured, entry.get("ok", 0))
-        oom = entry.get("oom")
-        if oom is not None and budget >= oom:
-            budget = max(1, oom // 2)
-            logger.info(f"Budget {configured} >= previously OOMing {oom}; starting at {budget}")
+        ceiling = self._repeated_oom_floor(entry)
+        if ceiling is not None and budget >= ceiling:
+            budget = max(1, ceiling // 2)
+            logger.info(
+                f"Budget {configured} >= {ceiling}, which has OOMed "
+                f"{OOM_DEMOTE_THRESHOLD}+ times; starting at {budget}"
+            )
         return budget
+
+    @staticmethod
+    def _repeated_oom_floor(entry: dict[str, object]) -> int | None:
+        """Smallest budget that has OOMed often enough to be believed."""
+        counts = entry.get("oom_counts") or {}
+        assert isinstance(counts, dict)
+        repeated = [int(b) for b, n in counts.items() if int(n) >= OOM_DEMOTE_THRESHOLD]
+        return min(repeated) if repeated else None
 
     def record_success(self, key: str, budget: int) -> None:
         entry = self._data.setdefault(key, {})
@@ -159,9 +180,10 @@ class BudgetMemory:
 
     def record_oom(self, key: str, budget: int) -> None:
         entry = self._data.setdefault(key, {})
-        if budget < entry.get("oom", 1 << 62):
-            entry["oom"] = budget
-            self._flush()
+        counts = entry.setdefault("oom_counts", {})
+        assert isinstance(counts, dict)
+        counts[str(budget)] = int(counts.get(str(budget), 0)) + 1
+        self._flush()
 
     def _flush(self) -> None:
         try:

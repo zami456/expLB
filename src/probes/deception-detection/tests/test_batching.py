@@ -5,6 +5,7 @@ import json
 import pytest
 
 from deception_detection.batching import (
+    OOM_DEMOTE_THRESHOLD,
     BudgetMemory,
     classify_failure,
     execute_in_batches,
@@ -168,15 +169,52 @@ class TestBudgetMemory:
         memory.record_success(key, 8000)
         memory.record_oom(key, 32000)
 
-        assert json.loads(path.read_text())[key] == {"ok": 8000, "oom": 32000}
+        assert json.loads(path.read_text())[key] == {"ok": 8000, "oom_counts": {"32000": 1}}
+        # a known-good budget is preferred over the caller's lower default
         assert BudgetMemory(path).suggest(key, 4000) == 8000
 
-    def test_never_suggests_a_budget_known_to_oom(self, tmp_path):
+    def test_a_single_oom_does_not_demote_the_budget(self, tmp_path):
+        # observed in production: 8000 succeeded thousands of times and OOMed once on a
+        # shared backend. Halving it permanently would double every later run's round
+        # trips, while an in-run OOM costs one wasted call.
         memory = BudgetMemory(tmp_path / "budget_memory.json")
         key = BudgetMemory.key("m", 1)
+        memory.record_success(key, 8000)
         memory.record_oom(key, 8000)
-        # asking for 16000 when 8000 already failed must come back below 8000
+        assert memory.suggest(key, 8000) == 8000
+
+    def test_repeated_ooms_do_demote_the_budget(self, tmp_path):
+        memory = BudgetMemory(tmp_path / "budget_memory.json")
+        key = BudgetMemory.key("m", 1)
+        for _ in range(OOM_DEMOTE_THRESHOLD):
+            memory.record_oom(key, 8000)
         assert memory.suggest(key, 16000) == 4000
+
+    def test_demotion_uses_the_smallest_repeatedly_failing_budget(self, tmp_path):
+        memory = BudgetMemory(tmp_path / "budget_memory.json")
+        key = BudgetMemory.key("m", 1)
+        for budget in (8000, 4000):
+            for _ in range(OOM_DEMOTE_THRESHOLD):
+                memory.record_oom(key, budget)
+        assert memory.suggest(key, 16000) == 2000
+
+    def test_oom_counts_survive_a_reload(self, tmp_path):
+        path = tmp_path / "budget_memory.json"
+        key = BudgetMemory.key("m", 1)
+        first = BudgetMemory(path)
+        for _ in range(OOM_DEMOTE_THRESHOLD - 1):
+            first.record_oom(key, 8000)
+        reloaded = BudgetMemory(path)
+        assert reloaded.suggest(key, 8000) == 8000  # not yet enough evidence
+        reloaded.record_oom(key, 8000)              # threshold reached across runs
+        assert reloaded.suggest(key, 8000) == 4000
+
+    def test_reads_a_legacy_file_without_oom_counts(self, tmp_path):
+        # files written before oom_counts existed carry a bare "oom" key
+        path = tmp_path / "budget_memory.json"
+        key = BudgetMemory.key("m", 1)
+        path.write_text(json.dumps({key: {"ok": 8000, "oom": 8000}}))
+        assert BudgetMemory(path).suggest(key, 8000) == 8000
 
     def test_unreadable_file_is_not_fatal(self, tmp_path):
         path = tmp_path / "budget_memory.json"
