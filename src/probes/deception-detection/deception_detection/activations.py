@@ -6,13 +6,20 @@ and returns activations at the detection positions.
 import pickle
 from dataclasses import dataclass
 from pathlib import Path
+from typing import cast
 
 import torch
 from jaxtyping import Float
 from torch import Tensor
-from tqdm import trange
+from tqdm.auto import tqdm
 from transformers import PreTrainedModel, PreTrainedTokenizerBase
 
+from deception_detection import acts_cache
+from deception_detection.batching import (
+    DEFAULT_NDIF_TOKEN_BUDGET,
+    BudgetMemory,
+    execute_in_batches,
+)
 from deception_detection.data.base import DialogueDataset
 from deception_detection.goodfire_client import get_goodfire_activations
 from deception_detection.log import logger
@@ -45,58 +52,126 @@ class Activations:
         batch_size: int = 20,
         layers: list[int] | None = None,
         verbose: bool = False,
+        token_budget: int | None = None,
+        cache_mode: str = "full",
     ) -> "Activations":
-        """Creates Activations by running the model on the tokenized dataset."""
+        """Creates Activations by running the model on the tokenized dataset.
+
+        Examples already on disk are loaded rather than re-downloaded, and whatever is
+        missing is grouped into remote calls by token budget. ``batch_size`` is kept for
+        signature compatibility but no longer sizes the remote call: a row count cannot
+        bound GPU memory when examples within a dataset differ in length by 5x or more
+        (see deception_detection.batching).
+        """
+        if save_logits:
+            # The remote trace never captured logits; the old code path collected an empty
+            # list and failed in torch.cat. Fail clearly instead of producing nothing.
+            raise NotImplementedError("save_logits is not supported by the remote path")
+
         device = "cuda" if torch.cuda.is_available() else "cpu"
+        budget = token_budget if token_budget is not None else DEFAULT_NDIF_TOKEN_BUDGET
+        use_cache = cache_mode != "off"
 
-        activations_by_batch: list[Float[Tensor, "batch seqpos layer emb"]] = []
-        logits_by_batch: list[Float[Tensor, "batch seqpos vocab"]] = []
+        tokens = tokenized_dataset.tokens
+        attn_mask = tokenized_dataset.attention_mask
+        n_examples, padded_len = tokens.shape
+        # Padding is on the left, so each row's real tokens are its final true_len columns.
+        true_lens = [int(attn_mask[i].sum().item()) for i in range(n_examples)]
 
-        for i in trange(
-            0, len(tokenized_dataset), batch_size, desc="Computing activations", disable=not verbose
-        ):
-            batch: TokenizedDataset = tokenized_dataset[i : i + batch_size]
+        model_key = str(model.name_or_path)
+        keys = [
+            acts_cache.example_key(tokens[i, padded_len - true_lens[i] :], model_key, layers)
+            if use_cache
+            else ""
+            for i in range(n_examples)
+        ]
 
-            """all_activations: list[Float[Tensor, "batch seqpos emb"]] = []"""
-            # Enable mixed precision for modern large models
-            model_supports_amp = any(name in model.name_or_path.lower() 
-                                   for name in ["llama", "mistral", "gemma", "qwen"])
-            with model.trace(batch.tokens.to(device), attention_mask=batch.attention_mask.to(device), remote=True):
+        # Filled from cache where possible, from the model otherwise; unpadded per example.
+        per_example: list[Tensor | None] = [None] * n_examples
+        stats = acts_cache.CacheStats()
+        if use_cache:
+            for i in range(n_examples):
+                cached = acts_cache.load(keys[i], true_lens[i])
+                if cached is not None:
+                    per_example[i] = cached
+                    stats.hits += 1
+                    stats.dtypes.add(str(cached.dtype))
+
+        missing = [i for i in range(n_examples) if per_example[i] is None]
+        stats.misses = len(missing)
+        mean_missing_len = (
+            sum(true_lens[i] for i in missing) / len(missing) if missing else 0.0
+        )
+
+        pbar = tqdm(
+            total=n_examples,
+            desc=f"Acts [{tokenized_dataset.dataset_partial_id}]",
+            unit="ex",
+            disable=not verbose,
+        )
+        pbar.update(stats.hits)
+
+        def run_batch(batch: list[int]) -> None:
+            # Trim to this batch's own longest example: the leading pad columns of the
+            # full dataset tensor are what the token budget is trying to avoid paying for.
+            batch_len = max(true_lens[i] for i in batch)
+            selection = torch.tensor(batch, dtype=torch.long)
+            batch_tokens = tokens[selection][:, padded_len - batch_len :]
+            batch_attn = attn_mask[selection][:, padded_len - batch_len :]
+
+            with model.trace(
+                batch_tokens.to(device),
+                attention_mask=batch_attn.to(device),
+                remote=True,
+            ):
                 all_activations: list[Float[Tensor, "batch seqpos emb"]] = list().save()
 
-                layers_to_process = (layers if layers is not None else range(len(model.model.layers)))
+                layers_to_process = layers if layers is not None else range(len(model.model.layers))
                 for layer_idx in layers_to_process:
-                    layer_activation = model.model.layers[layer_idx].output
-                    all_activations.append(layer_activation)
+                    all_activations.append(model.model.layers[layer_idx].output)
 
-            """with torch.amp.autocast('cuda', enabled=model_supports_amp):
-                fwd_out = model(
-                    batch.tokens.to(device),
-                    output_hidden_states=True,
-                    attention_mask=batch.attention_mask.to(device),
-                    # only compute logits on last token if we don't care about logits
-                    num_logits_to_keep=0 if save_logits else 1,
-                    use_cache=False,
-                )
+            batch_acts = torch.stack(all_activations, dim=2).cpu()
 
-                layers_to_process = (
-                    layers if layers is not None else range(len(fwd_out.hidden_states))
-                )
-                for layer_idx in layers_to_process:
-                    layer_activation = fwd_out.hidden_states[layer_idx].cpu()
-                    all_activations.append(layer_activation)
+            for row, i in enumerate(batch):
+                example_acts = acts_cache.unpad_left(batch_acts[row], true_lens[i])
+                per_example[i] = example_acts
+                stats.dtypes.add(str(example_acts.dtype))
+                if use_cache:
+                    acts_cache.store(keys[i], example_acts)
 
-                if save_logits:
-                    logits_by_batch.append(fwd_out.logits.cpu())
+            if use_cache:
+                acts_cache.report_projection(batch_acts, len(missing), mean_missing_len)
+            pbar.update(len(batch))
 
-                del fwd_out"""
+        if missing:
+            memory = BudgetMemory(acts_cache.cache_root().parent / "budget_memory.json")
+            memory_key = BudgetMemory.key(model_key, 0 if layers is None else len(layers))
+            execute_in_batches(
+                missing,
+                lambda i: true_lens[i],
+                memory.suggest(memory_key, budget),
+                run_batch,
+                memory=memory,
+                memory_key=memory_key,
+            )
 
-            activations_by_batch.append(torch.stack(all_activations, dim=2))
+        pbar.close()
+        if verbose:
+            logger.info(f"{tokenized_dataset.dataset_partial_id}: {stats.summary()}")
 
-        all_acts = torch.cat(activations_by_batch)
-        logits = torch.cat(logits_by_batch) if save_logits else None
+        if any(a is None for a in per_example):
+            missing_still = [i for i, a in enumerate(per_example) if a is None]
+            raise RuntimeError(
+                f"{len(missing_still)} examples of "
+                f"{tokenized_dataset.dataset_partial_id} produced no activations"
+            )
 
-        return cls(all_acts, tokenized_dataset, logits, layers)
+        # Reassemble the padded tensor the rest of the pipeline expects. Pad positions stay
+        # zero: scoring reads only get_all_activations (attention mask) or
+        # get_masked_activations (detection mask), neither of which touches them.
+        all_acts = acts_cache.reassemble(cast(list[Tensor], per_example), true_lens, padded_len)
+
+        return cls(all_acts, tokenized_dataset, None, layers)
 
     @classmethod
     def from_goodfire(cls, tokenized_dataset: TokenizedDataset) -> "Activations":
@@ -300,6 +375,8 @@ class PairedActivations:
         enforce_equal_detect_lengths: bool = False,
         use_goodfire_sae_acts: bool = False,
         detect_all: bool = False,
+        token_budget: int | None = None,
+        cache_mode: str = "full",
     ) -> "PairedActivations":
         """
         Create SplitPairedActivations from a DialogueDataset.
@@ -344,6 +421,8 @@ class PairedActivations:
                 save_logits=save_logits,
                 verbose=verbose,
                 batch_size=batch_size,
+                token_budget=token_budget,
+                cache_mode=cache_mode,
             )
             deceptive_acts = Activations.from_model(
                 model,
@@ -352,6 +431,8 @@ class PairedActivations:
                 save_logits=save_logits,
                 verbose=verbose,
                 batch_size=batch_size,
+                token_budget=token_budget,
+                cache_mode=cache_mode,
             )
         else:
             honest_acts = Activations.from_goodfire(honest_toks)

@@ -1,5 +1,6 @@
 import gc
 import json
+import os
 from datetime import datetime
 from pathlib import Path
 from typing import Annotated, Any, Literal
@@ -11,6 +12,10 @@ from tqdm import tqdm, trange
 from transformers import PreTrainedModel, PreTrainedTokenizerBase
 
 from deception_detection.activations import Activations, PairedActivations
+from deception_detection.batching import (
+    DEFAULT_HOST_TOKEN_BUDGET,
+    DEFAULT_NDIF_TOKEN_BUDGET,
+)
 from deception_detection.baselines import compute_black_box_scores_for_dataset
 from deception_detection.data import DialogueDataset
 from deception_detection.detectors import (
@@ -124,6 +129,14 @@ class ExperimentConfig(BaseModel):
     normalize_acts: bool = True
     max_llama_token_length: int | None = None
     use_class_weights: bool = False
+
+    # Remote extraction. acts_cache_mode "full" reuses activations already downloaded to
+    # disk so an interrupted run resumes instead of restarting; "off" disables the cache.
+    # ndif_token_budget bounds padded tokens per remote call -- see batching.py for why a
+    # row count cannot bound GPU memory. It shrinks automatically if a call still OOMs.
+    acts_cache_mode: Literal["full", "off"] = "full"
+    ndif_token_budget: int = DEFAULT_NDIF_TOKEN_BUDGET
+    host_token_budget: int = DEFAULT_HOST_TOKEN_BUDGET
 
     use_followup_question: bool = False
     followup_question: str = (
@@ -278,6 +291,7 @@ class Experiment:
         """
         self.cfg = cfg
         self._model = None  # Store actual model in _model attribute
+        self._max_tokens_cache: dict[str, int] = {}  # dataset name -> longest example
         _, tokenizer = get_model_and_tokenizer(cfg.model_name, omit_model=True, lora_path=cfg.lora_path)
         self.tokenizer = tokenizer
         self.train_dataset = self.get_train_dataset()
@@ -313,6 +327,9 @@ class Experiment:
             layers=self.cfg.detect_layers,
             use_goodfire_sae_acts=self.cfg.use_goodfire_sae_acts,
             detect_all=self.cfg.detect_all_tokens,
+            verbose=True,
+            token_budget=self.cfg.ndif_token_budget,
+            cache_mode=self.cfg.acts_cache_mode,
         )
         honest_fit_acts, deceptive_fit_acts = split_paired_acts.get_all_acts()
 
@@ -504,14 +521,7 @@ class Experiment:
             logger.error(f"Train dataset {self.train_dataset.name} is empty, cannot compute scores")
             return
         
-        # Shard sizes for common training datasets (based on by_reg_coeff.py)
-        shard_sizes = {
-            "repe_honesty__plain": 20,
-        }
-        
-        shard_size = (
-            None if self.cfg.use_goodfire_sae_acts else shard_sizes.get(self.train_dataset.name, 12)
-        )
+        shard_size = self._shard_size_for(self.train_dataset)
         scores, scores_all_tokens = self.compute_scores_for_dataset(self.train_dataset, shard_size)
         
         # Add labels to scores
@@ -531,70 +541,116 @@ class Experiment:
             json.dump(scores_all_tokens, f, default=lambda scores: scores.to_dict())
             logger.info(f"Saved train_scores_all_tokens to {f.name}")
 
+    def _max_tokens_for(self, dataset: DialogueDataset) -> int:
+        """Longest tokenized example in a dataset, measured once and remembered.
+
+        Tokenizing is local and cheap; it is the download that is expensive, so measuring
+        beats guessing.
+        """
+        if dataset.name not in self._max_tokens_cache:
+            toks = TokenizedDataset.from_dataset(
+                dataset,
+                self.tokenizer,
+                detect_all=self.cfg.detect_all_tokens,
+                detect_only_start_of_turn=self.cfg.detect_only_start_of_turn,
+                detect_only_last_token=self.cfg.detect_only_last_token,
+            )
+            self._max_tokens_cache[dataset.name] = int(toks.attention_mask.sum(dim=1).max().item())
+        return self._max_tokens_cache[dataset.name]
+
+    def _shard_size_for(self, dataset: DialogueDataset) -> int | None:
+        """Rows per shard, derived from host RAM instead of hand-tuned per dataset.
+
+        The token budget now bounds what any single remote call allocates (batching.py),
+        so shard size only governs two local things: how large the padded activation
+        tensor a shard assembles gets, and how often scores are checkpointed. Both scale
+        with rows * longest example, so bound that product rather than guessing a row
+        count -- which is what the old per-dataset table was doing, and why it ranged from
+        476 to 25,500 padded tokens per call depending on which dataset you looked at.
+        """
+        if self.cfg.use_goodfire_sae_acts:
+            return None
+        max_tokens = max(1, self._max_tokens_for(dataset))
+        return max(1, min(self.cfg.host_token_budget // max_tokens, len(dataset)))
+
+    @staticmethod
+    def _load_scores_file(path: Path) -> dict[str, Scores]:
+        """Scores already on disk from an earlier attempt, or {} if unusable."""
+        if not path.exists():
+            return {}
+        try:
+            with open(path) as f:
+                raw = json.load(f)
+            return {name: Scores.from_dict(scores) for name, scores in raw.items()}
+        except (OSError, json.JSONDecodeError, KeyError, TypeError) as err:
+            logger.warning(f"Could not reuse {path} ({err}); recomputing it")
+            return {}
+
+    @staticmethod
+    def _write_scores_file(path: Path, scores: dict[str, "Scores"], label: str) -> None:
+        tmp = path.with_suffix(".json.tmp")
+        with open(tmp, "w") as f:
+            json.dump(scores, f, default=lambda s: s.to_dict())
+        os.replace(tmp, path)
+        logger.info(f"Saved {label} ({len(scores)} datasets) to {path}")
+
     def compute_scores(self, is_control: bool = False) -> None:
         """
         Compute the scores for datasets both on the detection mask and on all tokens and save
         them to file.
 
         If is_control is True, compute for control datasets, otherwise for eval datasets.
+
+        Results are written after each dataset rather than once at the end, so a crash part
+        way through a sweep costs only the dataset that was in flight. A re-run picks up
+        whatever is already on disk.
         """
         datasets = self.control_datasets if is_control else self.eval_datasets
         prefix = "control_" if is_control else ""
+        scores_path = self.cfg.folder / f"{prefix}scores.json"
+        all_tokens_path = self.cfg.folder / f"{prefix}scores_all_tokens.json"
 
-        shard_sizes = {
-            "lmsys": 2,
-            "sandbagging_v2__wmdp_mmlu": 2,
-            "ai_audit__reasoning": 1,
-            "ai_audit__no_reasoning": 1,
-            "roleplaying__plain": 1,
-            "harm_refusal_choice__plain": 16,
-            "harm_refusal_knowledge_report__plain": 1,
-            "insider_trading_cadenza__plain": 1,
-            "instruct_dishonesty_default__plain": 32,
-            "instruct_dishonesty_donotadmit__plain": 32,
-            "mask__plain": 1,
-            "convince_me__plain": 1,
-            "sleeper_agents__plain": 1,
-            "gender_secret__plain": 1,
-            "insider_trading__onpolicy": 1,
-            "insider_trading_doubledown__onpolicy": 1,
-            "insider_trading__upscale": 2,
-            "insider_trading_doubledown__upscale": 2,
-            "alpaca__plain": 32,
-        }
+        all_scores = self._load_scores_file(scores_path)
+        all_scores_all_tokens = self._load_scores_file(all_tokens_path)
+        # only datasets present in both files are safely done
+        already_scored = set(all_scores) & set(all_scores_all_tokens)
 
-        all_scores = {}
-        all_scores_all_tokens = {}
         for dataset in tqdm(datasets, desc=f"{'Control' if is_control else 'Eval'} Datasets"):
             if len(dataset) == 0:
                 logger.warning(f"Skipping empty dataset: {dataset.name}")
                 continue
-            shard_size = (
-                None if self.cfg.use_goodfire_sae_acts else shard_sizes.get(dataset.name, 12)
-            )
+            if dataset.name in already_scored:
+                logger.info(f"Skipping {dataset.name}: already scored in {scores_path.name}")
+                continue
+
+            shard_size = self._shard_size_for(dataset)
             scores, scores_all_tokens = self.compute_scores_for_dataset(dataset, shard_size)
-            all_scores[dataset.name] = scores
-            all_scores_all_tokens[dataset.name] = scores_all_tokens
             # add is_deceptive to scores
             assert len(dataset.labels) == len(scores) == len(scores_all_tokens), (
                 f"Mismatch labels (len {len(dataset.labels)}) and scores (len {len(scores)})"
                 f" and scores_all_tokens (len {len(scores_all_tokens)}) for dataset {dataset.name}"
             )
-            all_scores[dataset.name].labels = dataset.labels
-            all_scores_all_tokens[dataset.name].labels = dataset.labels
-            
+            scores.labels = dataset.labels
+            scores_all_tokens.labels = dataset.labels
+            all_scores[dataset.name] = scores
+            all_scores_all_tokens[dataset.name] = scores_all_tokens
+
+            self._write_scores_file(scores_path, all_scores, f"{prefix}scores")
+            self._write_scores_file(
+                all_tokens_path, all_scores_all_tokens, f"{prefix}scores_all_tokens"
+            )
+
             # Clean up GPU memory after each dataset
             gc.collect()
             if torch.cuda.is_available():
                 torch.cuda.empty_cache()
 
-        with open(self.cfg.folder / f"{prefix}scores.json", "w") as f:
-            json.dump(all_scores, f, default=lambda scores: scores.to_dict())
-            logger.info(f"Saved {prefix}scores to {f.name}")
-
-        with open(self.cfg.folder / f"{prefix}scores_all_tokens.json", "w") as f:
-            json.dump(all_scores_all_tokens, f, default=lambda scores: scores.to_dict())
-            logger.info(f"Saved {prefix}scores_all_tokens to {f.name}")
+        # ensure both files exist even when every dataset was skipped or empty
+        if not scores_path.exists() or not all_tokens_path.exists():
+            self._write_scores_file(scores_path, all_scores, f"{prefix}scores")
+            self._write_scores_file(
+                all_tokens_path, all_scores_all_tokens, f"{prefix}scores_all_tokens"
+            )
 
     def compute_scores_for_dataset(
         self, dataset: DialogueDataset, shard_size: int | None
@@ -655,7 +711,15 @@ class Experiment:
                 acts.apply_sae_latent_mask(self.cfg.sae_latent_whitelist)
             return acts
 
-        acts = Activations.from_model(self.model, toks, batch_size=BATCH_SIZE_ACTS, layers=self.cfg.detect_layers)  # Increased for better performance
+        acts = Activations.from_model(
+            self.model,
+            toks,
+            batch_size=BATCH_SIZE_ACTS,
+            layers=self.cfg.detect_layers,
+            verbose=True,
+            token_budget=self.cfg.ndif_token_budget,
+            cache_mode=self.cfg.acts_cache_mode,
+        )
         if self.cfg.use_local_sae_acts:
             acts = self.to_local_sae_acts(acts)
 

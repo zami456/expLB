@@ -34,11 +34,11 @@ def run(
         save_detection_masks(experiment)
         experiment.get_detector()
     except Exception as err:
-        # cleanup experiment folder and any files inside it (if it exists)
-        if config.folder.exists():
-            for f in config.folder.iterdir():
-                f.unlink()
-            config.folder.rmdir()
+        # Deliberately leave the folder in place. It holds the state a re-run needs to
+        # resume -- cfg.yaml, a trained detector.pt, whatever scores already finished --
+        # and deleting it turned every failure into a full restart. (The old cleanup also
+        # called unlink on subdirectories like plots/, so it raised on its way out.)
+        logger.error(f"Run failed; keeping {config.folder} so a re-run can resume")
         raise err
     experiment.get_eval_scores()
     experiment.get_control_scores()
