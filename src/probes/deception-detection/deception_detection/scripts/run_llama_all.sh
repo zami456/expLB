@@ -16,6 +16,27 @@ set -u
 
 export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
 
+# nnsight authenticates against NDIF with the NDIF_API_KEY environment variable
+# (nnsight/intervention/backends/remote.py falls back to it). Nothing in the probe
+# pipeline loads .env, so pull the two keys across explicitly and fail early rather than
+# hitting an auth error part way into a long download.
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel 2>/dev/null || (cd "$SCRIPT_DIR/../../../../.." && pwd))"
+ENV_FILE="$REPO_ROOT/.env"
+if [ -f "$ENV_FILE" ]; then
+    for key in NDIF_API_KEY HF_TOKEN; do
+        value="$(grep -E "^${key}=" "$ENV_FILE" | head -1 | cut -d= -f2-)"
+        if [ -n "$value" ]; then export "$key=$value"; fi
+    done
+fi
+
+if [ -z "${NDIF_API_KEY:-}" ]; then
+    echo "NDIF_API_KEY is not set (looked in the environment and $ENV_FILE)." >&2
+    echo "Activation extraction runs remotely and cannot authenticate without it." >&2
+    echo "Get a key at https://login.ndif.us" >&2
+    exit 1
+fi
+
 CONFIG=deception_detection/scripts/configs/XXXX-9-llama-all.yaml
 
 echo "### Starting XXXX-9-llama-all (resumable; re-run this script to continue)"
