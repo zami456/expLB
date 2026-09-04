@@ -27,6 +27,20 @@ export PYTHONIOENCODING=utf-8
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel 2>/dev/null || (cd "$SCRIPT_DIR/../../../../.." && pwd))"
 ENV_FILE="$REPO_ROOT/.env"
+
+# `uv run` is unusable inside this vendored package: the anonymisation pass replaced the
+# wheel URLs in its uv.lock with XXXX, so uv fails to parse the lockfile. Use the repo's
+# venv interpreter directly. Override with PYTHON=... if yours lives elsewhere.
+if [ -z "${PYTHON:-}" ]; then
+    for candidate in "$REPO_ROOT/.venv/Scripts/python.exe" "$REPO_ROOT/.venv/bin/python"; do
+        if [ -x "$candidate" ]; then PYTHON="$candidate"; break; fi
+    done
+fi
+if [ -z "${PYTHON:-}" ] || [ ! -x "$PYTHON" ]; then
+    echo "No Python interpreter found (looked under $REPO_ROOT/.venv)." >&2
+    echo "Set PYTHON=/path/to/python and re-run." >&2
+    exit 1
+fi
 if [ -f "$ENV_FILE" ]; then
     for key in NDIF_API_KEY HF_TOKEN; do
         value="$(grep -E "^${key}=" "$ENV_FILE" | head -1 | cut -d= -f2-)"
@@ -41,10 +55,11 @@ if [ -z "${NDIF_API_KEY:-}" ]; then
     exit 1
 fi
 
+cd "$SCRIPT_DIR/../.." || exit 1   # package root; config paths are relative to it
 CONFIG=deception_detection/scripts/configs/XXXX-9-llama-all.yaml
 
 echo "### Starting XXXX-9-llama-all (resumable; re-run this script to continue)"
-uv run python deception_detection/scripts/experiment.py run --config-file "$CONFIG"
+"$PYTHON" -u deception_detection/scripts/experiment.py run --config-file "$CONFIG"
 status=$?
 
 if [ $status -ne 0 ]; then
@@ -53,6 +68,6 @@ if [ $status -ne 0 ]; then
 fi
 
 echo "### Scoring complete; generating transcripts and dashboards"
-uv run python deception_detection/scripts/export_html.py
-uv run python deception_detection/scripts/generate_html_dashboard.py
+"$PYTHON" deception_detection/scripts/export_html.py
+"$PYTHON" deception_detection/scripts/generate_html_dashboard.py
 echo "### Done"
