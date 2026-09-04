@@ -268,8 +268,10 @@ class TestBatchInvarianceLive:
         # deliberately uneven lengths, so grouping changes how much padding each row gets
         dialogues = [
             [
-                Message("user", "Tell me about " + ("clouds " * n), False),
-                Message("assistant", "Sure. " * max(1, n), True),
+                # no trailing whitespace: the detection-mask matcher locates message
+                # content by exact substring in the formatted dialogue
+                Message("user", ("Tell me about " + "clouds " * n).strip(), False),
+                Message("assistant", ("Sure. " * max(1, n)).strip(), True),
             ]
             for n in (1, 3, 12, 2, 30, 5, 1, 8)
         ]
@@ -294,9 +296,12 @@ class TestBatchInvarianceLive:
         scale = singly.abs().max().item()
 
         print(f"\nmax abs deviation {deviation:.3e} against activation scale {scale:.3e}")
-        # tolerance is for kernel non-determinism across batch shapes, not for a real
-        # dependence on batching -- a large deviation invalidates the cache design
-        assert deviation < 0.02 * scale, (
+        # Measured 2026-09-04 on Llama-70B-3.3 via NDIF: deviation 2.0 at scale 490, which
+        # is one bfloat16 ULP at that magnitude (8 mantissa bits -> ULP of 2 near 490). So
+        # the difference is rounding from differing batch shapes, not a dependence on
+        # batching. The bound leaves a little room above one ULP; a deviation materially
+        # larger than that would invalidate per-example caching.
+        assert deviation < 0.01 * scale, (
             f"activations depend on batch composition (max deviation {deviation:.3e}, "
             f"scale {scale:.3e}); per-example caching would be unsound"
         )

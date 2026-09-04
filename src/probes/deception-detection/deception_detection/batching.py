@@ -53,6 +53,9 @@ _NEVER_RETRY = (
     NameError,
     NotImplementedError,
     TypeError,
+    # the remote backend's progress display emits non-ASCII; on a console using a legacy
+    # code page that raises, and no batch size makes it go away
+    UnicodeError,
 )
 
 _TRANSIENT_MARKERS = (

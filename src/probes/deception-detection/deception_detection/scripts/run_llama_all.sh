@@ -16,6 +16,10 @@ set -u
 
 export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
 
+# nnsight's remote progress display prints non-ASCII (e.g. U+25C9). On Windows consoles
+# defaulting to cp1252 that raises UnicodeEncodeError mid-trace and kills the run.
+export PYTHONIOENCODING=utf-8
+
 # nnsight authenticates against NDIF with the NDIF_API_KEY environment variable
 # (nnsight/intervention/backends/remote.py falls back to it). Nothing in the probe
 # pipeline loads .env, so pull the two keys across explicitly and fail early rather than
