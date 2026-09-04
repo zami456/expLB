@@ -115,7 +115,7 @@ class TestUnpadAndReassemble:
         per_example = [make_acts(2), make_acts(5), make_acts(3)]
         out = acts_cache.reassemble(per_example, [2, 5, 3], padded_len=5)
         assert out.shape == (3, 5, 1, 8)
-        for row, (acts, true_len) in enumerate(zip(per_example, [2, 5, 3])):
+        for row, (acts, true_len) in enumerate(zip(per_example, [2, 5, 3], strict=False)):
             torch.testing.assert_close(out[row, 5 - true_len :], acts)
 
     def test_reassemble_leaves_pad_positions_zero(self):
@@ -130,9 +130,9 @@ class TestUnpadAndReassemble:
         direct = acts_cache.reassemble(per_example, true_lens, padded_len=5)
 
         keys = [acts_cache.example_key(torch.arange(n), "llama", [20]) for n in true_lens]
-        for key, acts in zip(keys, per_example):
+        for key, acts in zip(keys, per_example, strict=False):
             acts_cache.store(key, acts)
-        from_cache = [acts_cache.load(k, n) for k, n in zip(keys, true_lens)]
+        from_cache = [acts_cache.load(k, n) for k, n in zip(keys, true_lens, strict=False)]
         assert all(a is not None for a in from_cache)
 
         torch.testing.assert_close(
@@ -163,3 +163,140 @@ class TestCacheStats:
 
     def test_summary_handles_no_examples(self):
         assert acts_cache.CacheStats().summary() == "no examples"
+
+
+class TestFromModelUsesTheCache:
+    """End-to-end through Activations.from_model, with every example already cached.
+
+    When nothing is missing the remote path is never entered, so this exercises key
+    derivation, lookup and reassembly against the real code without needing a backend.
+    """
+
+    @staticmethod
+    def build_tokenized(tokens: torch.Tensor, attention_mask: torch.Tensor):
+        from deception_detection.tokenized_data import TokenizedDataset
+
+        return TokenizedDataset(
+            dialogues=[],
+            formatted_dialogues=[],
+            tokens=tokens,
+            str_tokens=[],
+            detection_mask=attention_mask.bool(),
+            attention_mask=attention_mask,
+            dataset_partial_id="test__plain",
+        )
+
+    class FakeModel:
+        name_or_path = "fake/llama-70b-3.3"
+
+        def trace(self, *args, **kwargs):  # pragma: no cover - must never be reached
+            raise AssertionError("from_model downloaded despite a full cache")
+
+    def test_full_cache_hit_avoids_the_backend_and_rebuilds_the_tensor(self):
+        from deception_detection.activations import Activations
+
+        # two left-padded rows of true length 2 and 4
+        tokens = torch.tensor([[0, 0, 11, 12], [21, 22, 23, 24]])
+        attention_mask = torch.tensor([[0, 0, 1, 1], [1, 1, 1, 1]])
+        tokenized = self.build_tokenized(tokens, attention_mask)
+
+        true_lens = [2, 4]
+        per_example = [make_acts(n) for n in true_lens]
+        for i, n in enumerate(true_lens):
+            key = acts_cache.example_key(tokens[i, 4 - n :], "fake/llama-70b-3.3", [20])
+            acts_cache.store(key, per_example[i])
+
+        acts = Activations.from_model(
+            self.FakeModel(), tokenized, layers=[20], cache_mode="full"
+        )
+
+        assert acts.all_acts.shape == (2, 4, 1, 8)
+        torch.testing.assert_close(acts.all_acts[0, 2:], per_example[0])
+        torch.testing.assert_close(acts.all_acts[1], per_example[1])
+        assert torch.all(acts.all_acts[0, :2] == 0)  # pad positions untouched
+
+    def test_cache_mode_off_ignores_what_is_on_disk(self):
+        from deception_detection.activations import Activations
+
+        tokens = torch.tensor([[11, 12]])
+        attention_mask = torch.tensor([[1, 1]])
+        key = acts_cache.example_key(tokens[0], "fake/llama-70b-3.3", [20])
+        acts_cache.store(key, make_acts(2))
+
+        # reaching the backend is the point: an AssertionError is a local bug, so it must
+        # propagate rather than be retried down the backoff ladder
+        with pytest.raises(AssertionError, match="downloaded despite"):
+            Activations.from_model(
+                self.FakeModel(),
+                self.build_tokenized(tokens, attention_mask),
+                layers=[20],
+                cache_mode="off",
+            )
+
+    def test_save_logits_is_rejected_rather_than_silently_empty(self):
+        from deception_detection.activations import Activations
+
+        tokens = torch.tensor([[11, 12]])
+        with pytest.raises(NotImplementedError, match="save_logits"):
+            Activations.from_model(
+                self.FakeModel(),
+                self.build_tokenized(tokens, torch.tensor([[1, 1]])),
+                layers=[20],
+                save_logits=True,
+            )
+
+
+@pytest.mark.slow
+class TestBatchInvarianceLive:
+    """The assumption the per-example cache rests on, checked against a real backend.
+
+    An example's activations must not depend on which batch it was downloaded in. If they
+    did, a cache entry written at one budget would be wrong when reused at another, and
+    the whole design would be unsound. Padding is left-side and masked out, and RoPE is
+    relative, so this should hold up to floating-point noise from differing batch shapes.
+
+    Needs NDIF credentials and model access: run with --runslow before a long download.
+    """
+
+    def test_activations_do_not_depend_on_batch_composition(self):
+        from deception_detection.activations import Activations
+        from deception_detection.models import ModelName, get_model_and_tokenizer
+        from deception_detection.tokenized_data import TokenizedDataset
+        from deception_detection.types import Message
+
+        model, tokenizer = get_model_and_tokenizer(ModelName.LLAMA_70B_3_3)
+        # deliberately uneven lengths, so grouping changes how much padding each row gets
+        dialogues = [
+            [
+                Message("user", "Tell me about " + ("clouds " * n), False),
+                Message("assistant", "Sure. " * max(1, n), True),
+            ]
+            for n in (1, 3, 12, 2, 30, 5, 1, 8)
+        ]
+        tokenized = TokenizedDataset.from_dialogue_list(
+            dialogues,
+            tokenizer,
+            padding={m: {"left": 0, "right": 0} for m in ["gemma", "mistral", "llama", "qwen"]},
+        )
+
+        # budget=1 forces one example per call; a large budget puts them all in one
+        one_at_a_time = Activations.from_model(
+            model, tokenized, layers=[20], token_budget=1, cache_mode="off"
+        )
+        all_together = Activations.from_model(
+            model, tokenized, layers=[20], token_budget=1_000_000, cache_mode="off"
+        )
+
+        mask = tokenized.attention_mask.bool()
+        singly = one_at_a_time.all_acts[mask].float()
+        together = all_together.all_acts[mask].float()
+        deviation = (singly - together).abs().max().item()
+        scale = singly.abs().max().item()
+
+        print(f"\nmax abs deviation {deviation:.3e} against activation scale {scale:.3e}")
+        # tolerance is for kernel non-determinism across batch shapes, not for a real
+        # dependence on batching -- a large deviation invalidates the cache design
+        assert deviation < 0.02 * scale, (
+            f"activations depend on batch composition (max deviation {deviation:.3e}, "
+            f"scale {scale:.3e}); per-example caching would be unsound"
+        )

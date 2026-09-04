@@ -30,7 +30,7 @@ DEFAULT_NDIF_TOKEN_BUDGET = 8000
 # At 8192 dims and 2 bytes per element, 32k tokens is ~525 MB.
 DEFAULT_HOST_TOKEN_BUDGET = 32_000
 
-FailureKind = Literal["oom", "transient", "unknown"]
+FailureKind = Literal["oom", "transient", "unknown", "fatal"]
 
 # Matched against the exception text. The remote backend's exact exception types are not
 # part of its public contract, so classification is best-effort and defaults to shrinking.
@@ -42,6 +42,19 @@ _OOM_MARKERS = (
     "resource exhausted",
     "not enough memory",
 )
+# Errors a smaller batch cannot possibly fix -- they mean the calling code is wrong.
+# Retrying these would burn time and bury the real traceback under a backoff ladder.
+_NEVER_RETRY = (
+    AssertionError,
+    AttributeError,
+    ImportError,
+    IndexError,
+    KeyError,
+    NameError,
+    NotImplementedError,
+    TypeError,
+)
+
 _TRANSIENT_MARKERS = (
     "evicted",
     "deployment",
@@ -91,9 +104,12 @@ def classify_failure(err: BaseException) -> FailureKind:
     """Decide whether a failed remote call should shrink the batch or just be retried.
 
     An eviction or a dropped connection says nothing about batch size, so retrying at the
-    same size is right. An OOM means the batch was too big. Anything unrecognised is
-    treated as unknown and shrunk, since shrinking is the safe direction to guess in.
+    same size is right. An OOM means the batch was too big. A local programming error is
+    fatal, because no batch size fixes it. Anything else unrecognised is shrunk, since the
+    backend's error vocabulary is not fully known and shrinking is the safe way to guess.
     """
+    if isinstance(err, _NEVER_RETRY):
+        return "fatal"
     text = f"{type(err).__name__}: {err}".lower()
     if any(marker in text for marker in _OOM_MARKERS):
         return "oom"
@@ -192,6 +208,9 @@ def execute_in_batches(
                 except Exception as err:
                     kind = classify_failure(err)
 
+                    if kind == "fatal":
+                        raise
+
                     if kind == "transient":
                         if transient_attempts >= max_transient_retries:
                             raise
@@ -222,3 +241,16 @@ def execute_in_batches(
 
         if needs_retry:
             pending.append((needs_retry, max(1, group_budget // 2)))
+
+
+def shard_size_for(max_tokens: int, host_budget: int, n_rows: int) -> int:
+    """Rows per shard, bounded by the padded tensor a shard assembles in host RAM.
+
+    Separate from the remote budget on purpose. Once the remote call is bounded by
+    ``plan_batches``, shard size no longer affects GPU memory at all -- it governs only
+    how much local RAM the assembled activations take and how often scores are
+    checkpointed. Both scale with rows * longest example, so bound that product.
+    """
+    if host_budget < 1:
+        raise ValueError(f"host_budget must be >= 1, got {host_budget}")
+    return max(1, min(host_budget // max(1, max_tokens), max(1, n_rows)))

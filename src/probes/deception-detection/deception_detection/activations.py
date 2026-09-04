@@ -8,8 +8,10 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import cast
 
+import nnsight
 import torch
 from jaxtyping import Float
+from nnsight import LanguageModel
 from torch import Tensor
 from tqdm.auto import tqdm
 from transformers import PreTrainedModel, PreTrainedTokenizerBase
@@ -25,8 +27,6 @@ from deception_detection.goodfire_client import get_goodfire_activations
 from deception_detection.log import logger
 from deception_detection.tokenized_data import TokenizedDataset, get_tokenized_dataset_pair
 from deception_detection.utils import REPO_ROOT, mask_sparse_activations
-import nnsight
-from nnsight import LanguageModel
 
 
 @dataclass

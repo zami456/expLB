@@ -109,6 +109,57 @@ python visualize_all_datasets.py
 
 Outputs land under `results/` / `results__<run-id>/` with per-experiment AUROC, balanced accuracy, recall, FPR, and saved probe weights.
 
+## Resumable runs and the activation cache
+
+The full llama sweep over every base liars-bench subset:
+
+```bash
+bash deception_detection/scripts/run_llama_all.sh
+# or directly:
+uv run python deception_detection/scripts/experiment.py run \
+    --config-file deception_detection/scripts/configs/XXXX-9-llama-all.yaml
+```
+
+Activation extraction runs the model remotely (`model.trace(..., remote=True)`), so the
+download is the expensive part of a run — tens of GB and hours of transfer for a full
+llama sweep. Runs are resumable at three levels, and re-running the same command continues
+rather than restarting:
+
+| level | what is reused | where |
+|---|---|---|
+| activations | every example already downloaded | `activations/cache/` (gitignored) |
+| scores | every dataset already scored | `<results>/scores.json`, written after each dataset |
+| detector | a probe already trained | `<results>/detector.pt` |
+
+For this to work the run needs a **stable name**, otherwise each attempt creates a fresh
+timestamped folder and reuses nothing. Set `name:` in the config (as
+`XXXX-9-llama-all.yaml` does) or pass `--name=...`.
+
+The cache is keyed per example, on that example's own tokens, so changing the batch size
+between runs does not invalidate it. It defaults to `activations/cache`; override with
+`ACTS_CACHE_DIR` to put it on another drive. Budget roughly 60 GB for a full llama sweep
+at bfloat16 — the first batch of a run logs the measured figure and warns if it will not
+fit. Set `acts_cache_mode: off` to disable caching entirely.
+
+A failed run **keeps** its folder, since that folder is what a resume reads.
+
+### Batch sizing
+
+Remote calls are bounded by padded tokens, not by row count. With left padding a batch
+costs `len(batch) * max_len_in_batch`, so a fixed row count cannot bound GPU memory when
+examples within a dataset differ in length — `harm_refusal_choice` averages 174 tokens but
+reaches 1144, which made a fixed shard size crash or survive depending only on which rows
+happened to group together.
+
+`ndif_token_budget` (default 8000) sets that bound. If a call still OOMs, the budget for
+the offending examples halves and retries, down to a single example; a transient eviction
+is retried without shrinking. The largest budget that worked is remembered in
+`activations/budget_memory.json` so later runs start there.
+
+`host_token_budget` (default 32000) separately bounds the padded tensor a shard assembles
+in local RAM, and sets how often scores are checkpointed. Shard sizes are derived from it
+and each dataset's measured longest example — there is no per-dataset table to tune.
+
 ## Probe methods & metrics
 
 **Methods used** (in `deception_detection/detectors.py`):

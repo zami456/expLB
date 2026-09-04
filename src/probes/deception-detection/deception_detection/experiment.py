@@ -15,6 +15,7 @@ from deception_detection.activations import Activations, PairedActivations
 from deception_detection.batching import (
     DEFAULT_HOST_TOKEN_BUDGET,
     DEFAULT_NDIF_TOKEN_BUDGET,
+    shard_size_for,
 )
 from deception_detection.baselines import compute_black_box_scores_for_dataset
 from deception_detection.data import DialogueDataset
@@ -442,6 +443,18 @@ class Experiment:
 
     # ---- SCORES ----- #
 
+    def _scores_are_complete(self, path: Path, datasets: list[DialogueDataset]) -> bool:
+        """Whether a scores file already covers every dataset that would be computed.
+
+        Existence alone is not enough now that scores are written after each dataset: a
+        run interrupted midway leaves a real but partial file, and treating that as
+        finished would silently drop the datasets it never reached.
+        """
+        if not path.exists():
+            return False
+        expected = {dataset.name for dataset in datasets if len(dataset) > 0}
+        return expected.issubset(self._load_scores_file(path).keys())
+
     def get_control_scores(self, all_tokens: bool = False) -> dict[str, Scores]:
         """
         Returns scores for each control dataset.
@@ -456,7 +469,7 @@ class Experiment:
         file_name = "control_scores_all_tokens.json" if all_tokens else "control_scores.json"
         path = self.cfg.folder / file_name
 
-        if not path.exists():
+        if not self._scores_are_complete(path, self.control_datasets):
             logger.info("Computing control scores")
             self.compute_control_scores()
 
@@ -493,7 +506,7 @@ class Experiment:
         """
         file_name = "scores_all_tokens.json" if all_tokens else "scores.json"
         path = self.cfg.folder / file_name
-        if not path.exists():
+        if not self._scores_are_complete(path, self.eval_datasets):
             logger.info("Computing scores")
             self.compute_eval_scores()
         with open(path) as f:
@@ -570,8 +583,9 @@ class Experiment:
         """
         if self.cfg.use_goodfire_sae_acts:
             return None
-        max_tokens = max(1, self._max_tokens_for(dataset))
-        return max(1, min(self.cfg.host_token_budget // max_tokens, len(dataset)))
+        return shard_size_for(
+            self._max_tokens_for(dataset), self.cfg.host_token_budget, len(dataset)
+        )
 
     @staticmethod
     def _load_scores_file(path: Path) -> dict[str, Scores]:

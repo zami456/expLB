@@ -9,6 +9,7 @@ from deception_detection.batching import (
     classify_failure,
     execute_in_batches,
     plan_batches,
+    shard_size_for,
 )
 
 
@@ -77,6 +78,26 @@ class TestClassifyFailure:
     def test_unknown_defaults_to_shrinking(self):
         # unknown is handled like an OOM, because shrinking is the safe way to guess
         assert classify_failure(ValueError("something else entirely")) == "unknown"
+
+    @pytest.mark.parametrize(
+        "err", [AssertionError("bug"), TypeError("bug"), AttributeError("bug"), KeyError("bug")]
+    )
+    def test_local_bugs_are_fatal(self, err: BaseException):
+        # no batch size fixes a programming error, so it must not be retried
+        assert classify_failure(err) == "fatal"
+
+
+class TestFatalErrorsPropagate:
+    def test_a_local_bug_is_raised_immediately(self):
+        calls = {"n": 0}
+
+        def run_batch(batch: list[int]) -> None:
+            calls["n"] += 1
+            raise AttributeError("model has no attribute 'trace'")
+
+        with pytest.raises(AttributeError, match="no attribute"):
+            execute_in_batches(range(8), lambda i: 100, 800, run_batch)
+        assert calls["n"] == 1  # not retried down the ladder
 
 
 class TestExecuteInBatches:
@@ -161,3 +182,29 @@ class TestBudgetMemory:
         path = tmp_path / "budget_memory.json"
         path.write_text("{ not json")
         assert BudgetMemory(path).suggest(BudgetMemory.key("m", 1), 8000) == 8000
+
+
+class TestShardSizeFor:
+    def test_bounds_the_host_tensor_not_the_row_count(self):
+        # long examples get few rows per shard, short examples get many -- the product is
+        # what stays bounded, which is exactly what a hand-tuned row count could not do
+        assert shard_size_for(max_tokens=1766, host_budget=32_000, n_rows=1080) == 18
+        assert shard_size_for(max_tokens=192, host_budget=32_000, n_rows=5432) == 166
+        assert shard_size_for(max_tokens=798, host_budget=32_000, n_rows=2000) == 40
+
+    @pytest.mark.parametrize("max_tokens", [1, 7, 192, 798, 1766, 40_000])
+    def test_never_exceeds_the_host_budget_unless_a_single_row_cannot_fit(self, max_tokens: int):
+        budget = 32_000
+        size = shard_size_for(max_tokens, budget, n_rows=10_000)
+        assert size * max_tokens <= budget or size == 1
+
+    def test_never_returns_more_rows_than_the_dataset_has(self):
+        assert shard_size_for(max_tokens=10, host_budget=32_000, n_rows=7) == 7
+
+    def test_always_at_least_one_row(self):
+        # an example larger than the whole budget still has to be processed
+        assert shard_size_for(max_tokens=10**9, host_budget=32_000, n_rows=5) == 1
+
+    def test_rejects_nonsense_budget(self):
+        with pytest.raises(ValueError):
+            shard_size_for(100, 0, 10)
