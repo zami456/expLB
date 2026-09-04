@@ -95,7 +95,12 @@ def store(key: str, acts: Tensor) -> None:
     that a resumed run would load as if it were complete.
     """
     path = path_for(key)
-    payload = {"acts": acts.cpu(), "version": CACHE_FORMAT_VERSION}
+    # clone() is load-bearing, not defensive tidying. These tensors are slices of the
+    # batch they arrived in, and torch.save serialises a view's entire underlying storage,
+    # so saving the view directly writes the whole batch into every example's file --
+    # measured at 8x here, and worse at larger batch sizes. Slicing dim 0 keeps the result
+    # contiguous, so .contiguous() is a no-op and cannot fix it; only a copy can.
+    payload = {"acts": acts.detach().cpu().clone(), "version": CACHE_FORMAT_VERSION}
     try:
         path.parent.mkdir(parents=True, exist_ok=True)
         tmp = path.with_suffix(".pt.tmp")

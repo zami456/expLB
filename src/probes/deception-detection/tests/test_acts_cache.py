@@ -305,3 +305,34 @@ class TestBatchInvarianceLive:
             f"activations depend on batch composition (max deviation {deviation:.3e}, "
             f"scale {scale:.3e}); per-example caching would be unsound"
         )
+
+
+class TestStoredFilesHoldOnlyTheirOwnExample:
+    """Regression: torch.save writes a view's whole underlying storage.
+
+    Per-example activations are slices of the batch they were downloaded in. Saving those
+    views directly put the entire batch into every example's file -- 8 examples of a
+    323-token batch cost 338 MB instead of 42 MB, and it scales with batch size.
+    """
+
+    def test_a_slice_does_not_drag_its_batch_to_disk(self):
+        batch = torch.zeros((8, 300, 1, 64), dtype=torch.float32)  # ~614 KB whole
+        one_example = batch[0, 290:]  # 10 tokens -> should be ~2.5 KB
+
+        key = acts_cache.example_key(torch.tensor([1, 2, 3]), "llama", [20])
+        acts_cache.store(key, one_example)
+        on_disk = acts_cache.path_for(key).stat().st_size
+
+        whole_batch_bytes = batch.numel() * batch.element_size()
+        slice_bytes = one_example.numel() * one_example.element_size()
+        assert on_disk < slice_bytes * 4 + 2048, (
+            f"stored {on_disk} bytes for a {slice_bytes}-byte slice; the whole batch is "
+            f"{whole_batch_bytes} bytes, so the view dragged its storage along"
+        )
+
+    def test_the_values_still_round_trip(self):
+        batch = torch.arange(8 * 300 * 1 * 4, dtype=torch.float32).reshape(8, 300, 1, 4)
+        one_example = batch[3, 290:]
+        key = acts_cache.example_key(torch.tensor([9]), "llama", [20])
+        acts_cache.store(key, one_example)
+        torch.testing.assert_close(acts_cache.load(key, 10), one_example)
