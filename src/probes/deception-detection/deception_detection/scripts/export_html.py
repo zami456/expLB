@@ -443,7 +443,18 @@ def export_dataset_html(
     Returns:
         Dictionary mapping dataset names to the number of samples
     """
-    scorer = create_prompt_scorer("mean", experiment, [0.01], default_fpr=0.01, control_dataset_name="XXXX-22")
+    # Take the control dataset from the experiment's own config rather than hardcoding a
+    # name: this was pinned to "XXXX-22" while configs here use "XXXX-20__plain", so the
+    # scorer's lookup raised KeyError for every run whose control was named anything else.
+    # scripts/experiment.py:results() already resolves it this way.
+    control_dataset_name = experiment.cfg.control_data[0]
+    scorer = create_prompt_scorer(
+        "mean",
+        experiment,
+        [0.01],
+        default_fpr=0.01,
+        control_dataset_name=control_dataset_name,
+    )
     output_dir.mkdir(parents=True, exist_ok=True)
 
     counts: dict[str, dict[str, int]] = {}
