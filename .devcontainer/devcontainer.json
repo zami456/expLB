@@ -1,0 +1,12 @@
+{
+  "name": "my-repo-dev",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {}
+  },
+  "postCreateCommand": "sudo chown -R vscode:vscode /home/vscode/.claude && curl -fsSL https://claude.ai/install.sh | bash && git config --global --add safe.directory '*' && git submodule update --init --recursive",
+  "mounts": [
+    "source=claude-code-config-${devcontainerId},target=/home/vscode/.claude,type=volume"
+  ],
+  "remoteUser": "vscode"
+}
