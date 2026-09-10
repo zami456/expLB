@@ -55,12 +55,34 @@ def add_role_args(ap) -> None:
                     help="JSON role-set with a 'groups' object (e.g. role_groups.json)")
     ap.add_argument("--groups", nargs="+", default=None,
                     help="restrict --roles_file to these group names")
+    ap.add_argument("--shard", default=None, metavar="i/n",
+                    help="process only shard i of n (0-based). Roles are dealt out "
+                         "round-robin so shards stay balanced across groups and disjoint "
+                         "-- run n processes with different i to keep several NDIF jobs "
+                         "in flight. Every stage is per-role and resumable, so shards "
+                         "never write the same output file.")
+
+
+def _apply_shard(roles: list[str], spec: str) -> list[str]:
+    try:
+        i, n = (int(x) for x in spec.split("/", 1))
+    except ValueError:
+        raise SystemExit(f"--shard expects 'i/n' (e.g. 0/2), got {spec!r}") from None
+    if n < 1 or not 0 <= i < n:
+        raise SystemExit(f"--shard {spec}: need 0 <= i < n and n >= 1")
+    return sorted(roles)[i::n]
 
 
 def resolve_roles(args) -> list[str] | None:
     """Explicit role list, or None meaning 'all roles in roles_dir'."""
+    roles = None
     if getattr(args, "roles", None):
-        return list(args.roles)
-    if getattr(args, "roles_file", None):
-        return roles_from_file(args.roles_file, getattr(args, "groups", None))
-    return None
+        roles = list(args.roles)
+    elif getattr(args, "roles_file", None):
+        roles = roles_from_file(args.roles_file, getattr(args, "groups", None))
+    shard = getattr(args, "shard", None)
+    if shard:
+        if roles is None:
+            raise SystemExit("--shard needs a known role list; pass --roles or --roles_file")
+        roles = _apply_shard(roles, shard)
+    return roles
