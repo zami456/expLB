@@ -1,0 +1,399 @@
+#!/usr/bin/env python3
+"""
+Step 2 + 4 (remote variant): extract per-role persona vectors on NDIF via nnsight.
+
+Replaces ``2_activations.py`` + ``4_vectors.py`` for no-local-GPU setups. For each
+role it teacher-forces a forward pass over every *kept* ``[system,user,assistant]``
+conversation on NDIF, takes the mean residual-stream activation over the assistant
+response tokens, averages those per-response vectors, and writes one tensor per
+role -- the same dict shape ``5_axis.py`` reads:
+
+    <output_dir>/<role>.pt  ==  {"vector": Tensor(K, hidden), "layers": [...],
+                                 "type": ..., "role": ..., "n": <responses averaged>}
+
+K = len(--layers). Default ``--layers target`` keeps only the model's middle layer
+(40 of 80 for Llama-3.3-70B) -> a 32 KB vector per role. ``--layers all`` keeps every
+layer (2.6 MB/role) and is what activation capping needs.
+
+"Kept" = judge score == 3 (``--keep_scores``), except ``default`` where all
+responses are used. Roles with < ``--min_count`` kept responses are skipped.
+
+DOWNLOAD BUDGET -- the whole point of this script. With ``--accum session``
+(default) many batches are bundled into ONE ``llm.session(remote=True)`` job and
+the running sum is accumulated *on the server*; only a single (K, hidden) tensor
+per session comes back. At full scale that is ~9 MB total, versus ~4.2 GB if each
+batch were downloaded separately at one layer, or ~350 GB at all 80 layers.
+``--accum client`` is the fallback: one job per batch, per-batch (B,K,H) download.
+
+Resumable at role granularity (skips roles whose <output_dir>/<role>.pt exists).
+
+Usage:
+    .venv-aa/bin/python assistant_axis/pipeline/2_activations_ndif.py \
+        --model meta-llama/Llama-3.3-70B-Instruct \
+        --responses_dir "$OUTPUT_DIR/responses" \
+        --scores_dir    "$OUTPUT_DIR/scores" \
+        --output_dir    "$OUTPUT_DIR/vectors"
+"""
+
+import argparse
+import gc
+import importlib.util
+import json
+import logging
+import os
+import sys
+import time
+from pathlib import Path
+
+import jsonlines
+import torch
+from dotenv import load_dotenv
+from tqdm import tqdm
+
+PIPELINE_DIR = Path(__file__).resolve().parent
+REPO_ROOT = PIPELINE_DIR.parents[1]
+AA_ROOT = REPO_ROOT / "assistant_axis"  # vendored submodule: library + data/
+
+# .env: pipeline-local first, then repo root. Before importing nnsight so its
+# from_env() sees NDIF_API_KEY / NDIF_HOST.
+load_dotenv(PIPELINE_DIR / ".env")
+load_dotenv(REPO_ROOT / ".env")
+os.environ.setdefault("NDIF_HOST", "https://api.ndif.us")  # nnsight 0.7 ships a broken bare host
+for _v in ("HF_TOKEN", "HUGGINGFACE_HUB_TOKEN"):
+    if os.getenv(_v):
+        os.environ["HF_TOKEN"] = os.environ["HF_HUB_TOKEN"] = os.environ[_v].strip()
+        break
+
+# Load ConversationEncoder standalone (by file path) so we do NOT trigger
+# assistant_axis/__init__.py, which pulls sklearn/matplotlib/vllm not present
+# in .venv-aa. conversation.py itself only needs torch + transformers.
+_conv_path = AA_ROOT / "assistant_axis" / "internals" / "conversation.py"
+_spec = importlib.util.spec_from_file_location("aa_conversation", _conv_path)
+_conv_mod = importlib.util.module_from_spec(_spec)
+_spec.loader.exec_module(_conv_mod)
+ConversationEncoder = _conv_mod.ConversationEncoder
+
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+logger = logging.getLogger("2_activations_ndif")
+
+
+def key(pi: int, qi: int) -> str:
+    return f"pos_p{pi}_q{qi}"
+
+
+# --------------------------------------------------------------------------- #
+# nnsight / NDIF setup
+# --------------------------------------------------------------------------- #
+def init_ndif(model_name: str):
+    import nnsight
+    from nnsight import CONFIG, LanguageModel
+
+    api_key = (os.getenv("NDIF_API_KEY") or "").strip()
+    hf_token = (os.getenv("HF_TOKEN") or os.getenv("HUGGINGFACE_HUB_TOKEN") or "").strip()
+    if not api_key:
+        logger.error("NDIF_API_KEY not set (checked .env and environment)."); sys.exit(1)
+    if not hf_token:
+        logger.error("HF_TOKEN not set -- needed for the gated tokenizer/config."); sys.exit(1)
+
+    # nnsight's from_env() already applied NDIF_API_KEY / NDIF_HOST; re-assert in-process
+    # (harmless) and make sure the host carries a scheme.
+    host = (os.getenv("NDIF_HOST", "").strip() or getattr(CONFIG.API, "HOST", "")
+            or "https://api.ndif.us")
+    if not host.startswith("http"):
+        host = "https://" + host
+    CONFIG.API.HOST = host
+    CONFIG.API.APIKEY = api_key
+
+    logger.info("nnsight %s  NDIF host=%s  model=%s",
+                nnsight.__version__, CONFIG.API.HOST, model_name)
+    llm = LanguageModel(model_name)
+    n_layers = int(llm.config.num_hidden_layers)
+    logger.info("model config: %d layers, hidden=%d", n_layers, llm.config.hidden_size)
+    return nnsight, llm, n_layers
+
+
+# --------------------------------------------------------------------------- #
+# per-role work
+# --------------------------------------------------------------------------- #
+def build_items(encoder: ConversationEncoder, conversations: list[list[dict]], max_length: int):
+    """Return list of (input_ids:list[int], a_start:int, a_end:int) for the last assistant span."""
+    items = []
+    for conv in conversations:
+        try:
+            full_ids, spans = encoder.build_turn_spans(conv)
+        except Exception as e:  # noqa: BLE001
+            logger.debug("span build failed: %s", e); continue
+        asst = [s for s in spans if s.get("role") == "assistant"]
+        if not asst:
+            continue
+        s = asst[-1]
+        a0, a1 = int(s["start"]), int(s["end"])
+        if a1 <= a0:
+            continue
+        if len(full_ids) > max_length:
+            full_ids = full_ids[:max_length]
+        a1 = min(a1, len(full_ids))
+        if a0 >= a1:
+            continue
+        items.append((full_ids, a0, a1))
+    return items
+
+
+def batched(seq, n):
+    for i in range(0, len(seq), n):
+        yield seq[i:i + n]
+
+
+def resolve_layers(spec, n_layers: int, target_layer: int) -> list[int]:
+    """--layers 'target' | 'all' | explicit ints -> sorted list of layer indices."""
+    if isinstance(spec, str):
+        spec = [spec]
+    if len(spec) == 1 and str(spec[0]).lower() in ("target", "middle", "mid"):
+        return [target_layer]
+    if len(spec) == 1 and str(spec[0]).lower() == "all":
+        return list(range(n_layers))
+    idx = sorted({int(x) for x in spec})
+    bad = [i for i in idx if not 0 <= i < n_layers]
+    if bad:
+        raise ValueError(f"--layers out of range for a {n_layers}-layer model: {bad}")
+    return idx
+
+
+def pad_batch(batch, pad_id: int):
+    """(ids, a0, a1) list -> right-padded input_ids, attention_mask, and a (B,T)
+    float span mask that is 1.0 exactly on the assistant response tokens."""
+    maxlen = max(len(ids) for ids, _, _ in batch)
+    input_ids = torch.full((len(batch), maxlen), pad_id, dtype=torch.long)
+    attn = torch.zeros((len(batch), maxlen), dtype=torch.long)
+    span = torch.zeros((len(batch), maxlen), dtype=torch.float32)
+    for b, (ids, a0, a1) in enumerate(batch):
+        input_ids[b, : len(ids)] = torch.tensor(ids, dtype=torch.long)
+        attn[b, : len(ids)] = 1
+        span[b, a0:a1] = 1.0
+    return input_ids, attn, span
+
+
+def _span_mean_sum(llm, layer_idx, input_ids, attn, span):
+    """Body shared by both accum modes. Runs on NDIF, inside an open trace.
+
+    Returns (K,H) = sum over the batch of the per-response mean residual stream
+    over that response's assistant tokens.
+    """
+    # transformers 5 / nnsight 0.7: layer .output is the hidden-states tensor
+    # (B,T,H) itself, NOT a (hidden, ...) tuple -> no [0].
+    hs = torch.stack([llm.model.layers[L].output for L in layer_idx])   # (K,B,T,H)
+    # span was built on the client: CPU/float32 next to a sharded bf16 model.
+    # Take device+dtype off a live activation at run time.
+    m = span.to(hs.device, hs.dtype)                                    # (B,T)
+    num = (hs * m[None, :, :, None]).sum(dim=2)                         # (K,B,H)
+    den = m.sum(dim=1).clamp(min=1.0)[None, :, None]                    # (1,B,1)
+    return (num / den).to(torch.float32).sum(dim=1)                     # (K,H)
+
+
+def _run_session(llm, layer_idx, hidden, prepared, retries):
+    """Bundle many batches into ONE NDIF job, accumulating the sum server-side.
+
+    Only (K,hidden) + a count come back, regardless of how many batches went in.
+    """
+    delay = 3.0
+    for attempt in range(retries):
+        try:
+            with llm.session(remote=True):
+                acc = torch.zeros(len(layer_idx), hidden, dtype=torch.float32).save()
+                cnt = torch.zeros(1, dtype=torch.float32).save()
+                for input_ids, attn, span in prepared:
+                    with llm.trace({"input_ids": input_ids, "attention_mask": attn}):
+                        acc += _span_mean_sum(llm, layer_idx, input_ids, attn, span).cpu()
+                        cnt += float(span.shape[0])
+            a = getattr(acc, "value", acc)
+            c = float(getattr(cnt, "value", cnt).reshape(-1)[0])
+            if c == 0:
+                raise RuntimeError("session returned count==0 (server-side accumulation "
+                                   "did not take effect -- try --accum client)")
+            return a, c
+        except Exception as e:  # noqa: BLE001 -- engineio b'P' / ConnectionError / NDIF hiccup
+            logger.warning("  session attempt %d/%d failed: %s: %s",
+                           attempt + 1, retries, type(e).__name__, str(e)[:200])
+            time.sleep(delay)
+            delay = min(delay * 2, 60)
+    return None
+
+
+def _run_batch_client(llm, layer_idx, input_ids, attn, span, retries):
+    """Fallback: one NDIF job per batch, (K,H) sum downloaded per batch."""
+    delay = 3.0
+    for attempt in range(retries):
+        try:
+            with llm.trace({"input_ids": input_ids, "attention_mask": attn}, remote=True):
+                out = _span_mean_sum(llm, layer_idx, input_ids, attn, span).cpu().save()
+            return getattr(out, "value", out), float(span.shape[0])
+        except Exception as e:  # noqa: BLE001
+            logger.warning("  trace attempt %d/%d failed: %s: %s",
+                           attempt + 1, retries, type(e).__name__, str(e)[:200])
+            time.sleep(delay)
+            delay = min(delay * 2, 60)
+    return None
+
+
+def extract_role_vector(llm, layer_idx, hidden, items, args, pad_id):
+    """Mean over kept responses of (mean over assistant-span tokens of residual stream)."""
+    total = torch.zeros(len(layer_idx), hidden, dtype=torch.float64)
+    count = 0.0
+    failed = 0
+    batches = [pad_batch(b, pad_id) for b in batched(items, args.batch_size)]
+
+    if args.accum == "session":
+        chunks = list(batched(batches, args.session_batches))
+        for chunk in tqdm(chunks, desc="  ndif sessions", leave=False):
+            got = _run_session(llm, layer_idx, hidden, chunk, args.retries)
+            if got is None:
+                failed += sum(int(s.shape[0]) for _, _, s in chunk)
+                continue
+            s, n = got
+            total += s.to(torch.float64)
+            count += n
+    else:
+        for input_ids, attn, span in tqdm(batches, desc="  ndif batches", leave=False):
+            got = _run_batch_client(llm, layer_idx, input_ids, attn, span, args.retries)
+            if got is None:
+                failed += int(span.shape[0])
+                continue
+            s, n = got
+            total += s.to(torch.float64)
+            count += n
+
+    if failed:
+        logger.warning("  %d/%d responses dropped to NDIF errors", failed, failed + int(count))
+    if count == 0:
+        return None, 0
+    return (total / count).to(torch.float32), int(count)  # (K,H)
+
+
+def load_scores(path: Path) -> dict:
+    if not path.exists():
+        return {}
+    try:
+        return json.loads(path.read_text())
+    except Exception:
+        return {}
+
+
+def process_role(llm, layer_idx, hidden, encoder, role: str, args, pad_id: int) -> None:
+    out_file = Path(args.output_dir) / f"{role}.pt"
+    if out_file.exists() and not args.overwrite:
+        logger.info("Skip %s (vector exists)", role); return
+
+    resp_file = Path(args.responses_dir) / f"{role}.jsonl"
+    if not resp_file.exists():
+        logger.warning("Skip %s: no responses", role); return
+
+    rows = []
+    with jsonlines.open(resp_file) as reader:
+        for r in reader:
+            rows.append(r)
+
+    is_default = "default" in role
+    keep = {int(x) for x in str(args.keep_scores).split(",") if x.strip() != ""}
+    if is_default:
+        convs = [r["conversation"] for r in rows]
+        vtype = "mean"
+    else:
+        scores = load_scores(Path(args.scores_dir) / f"{role}.json")
+        convs = [r["conversation"] for r in rows
+                 if scores.get(key(r["prompt_index"], r["question_index"])) in keep]
+        vtype = "pos_3"
+
+    if len(convs) < args.min_count:
+        logger.warning("Skip %s: only %d kept (min_count=%d)", role, len(convs), args.min_count)
+        return
+
+    items = build_items(encoder, convs, args.max_length)
+    if len(items) < args.min_count:
+        logger.warning("Skip %s: only %d usable spans (min_count=%d)", role, len(items), args.min_count)
+        return
+    logger.info("Role %s: %d kept, %d usable -> NDIF", role, len(convs), len(items))
+
+    vec, n_used = extract_role_vector(llm, layer_idx, hidden, items, args, pad_id)
+    if vec is None:
+        logger.error("Role %s: no vector produced", role); return
+    if not torch.isfinite(vec).all():
+        logger.error("Role %s: vector has non-finite values; not saving", role); return
+
+    out_file.parent.mkdir(parents=True, exist_ok=True)
+    torch.save({"vector": vec, "layers": list(layer_idx), "type": vtype,
+                "role": role, "n": n_used}, out_file)
+    norms = vec.norm(dim=1)
+    logger.info("Role %s: saved %s over n=%d  layers=%s  norms[min/max]=%.3f/%.3f -> %s",
+                role, tuple(vec.shape), n_used,
+                layer_idx if len(layer_idx) <= 4 else f"{layer_idx[0]}..{layer_idx[-1]}",
+                norms.min(), norms.max(), out_file)
+
+
+def main() -> None:
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("--model", default="meta-llama/Llama-3.3-70B-Instruct")
+    ap.add_argument("--responses_dir", required=True)
+    ap.add_argument("--scores_dir", required=True)
+    ap.add_argument("--output_dir", required=True)
+    ap.add_argument("--roles", nargs="+", default=None)
+    ap.add_argument("--keep_scores", default="3", help="comma-sep judge scores to keep (default 3)")
+    ap.add_argument("--min_count", type=int, default=50)
+    ap.add_argument("--batch_size", type=int, default=8)
+    ap.add_argument("--max_length", type=int, default=2048)
+    ap.add_argument("--retries", type=int, default=4)
+    ap.add_argument("--overwrite", action="store_true")
+    ap.add_argument("--layers", nargs="+", default=["target"],
+                    help="'target' (model's middle layer, default), 'all', or explicit indices")
+    ap.add_argument("--session_batches", type=int, default=20,
+                    help="batches bundled into one NDIF session (--accum session). Keep the "
+                         "session under NDIF's ~1h per-request ceiling.")
+    ap.add_argument("--accum", choices=("session", "client"), default="session",
+                    help="'session' accumulates the sum on NDIF and downloads one (K,H) "
+                         "tensor per session; 'client' downloads one per batch (fallback)")
+    args = ap.parse_args()
+
+    Path(args.output_dir).mkdir(parents=True, exist_ok=True)
+    resp_files = sorted(Path(args.responses_dir).glob("*.jsonl"))
+    if args.roles:
+        wanted = set(args.roles)
+        resp_files = [f for f in resp_files if f.stem in wanted]
+
+    nnsight, llm, n_layers = init_ndif(args.model)
+    hidden = int(llm.config.hidden_size)
+
+    # Middle layer for known models comes from assistant_axis/models.py
+    # (Llama-3.3-70B -> 40 of 80); fall back to n_layers // 2.
+    target_layer = n_layers // 2
+    try:
+        _mp = AA_ROOT / "assistant_axis" / "models.py"
+        _s = importlib.util.spec_from_file_location("aa_models", _mp)
+        _m = importlib.util.module_from_spec(_s)
+        _s.loader.exec_module(_m)
+        target_layer = int(_m.MODEL_CONFIGS[args.model]["target_layer"])
+    except Exception:  # noqa: BLE001 -- unknown model, or models.py pulls something missing
+        logger.info("models.py lookup failed for %s; using middle layer %d",
+                    args.model, target_layer)
+    layer_idx = resolve_layers(args.layers, n_layers, target_layer)
+
+    encoder = ConversationEncoder(llm.tokenizer, args.model)
+    pad_id = llm.tokenizer.pad_token_id
+    if pad_id is None:
+        pad_id = llm.tokenizer.eos_token_id
+    logger.info("Extracting %d roles | layers=%s (K=%d of %d) | hidden=%d | accum=%s | pad_id=%s",
+                len(resp_files),
+                layer_idx if len(layer_idx) <= 6 else f"{layer_idx[0]}..{layer_idx[-1]}",
+                len(layer_idx), n_layers, hidden, args.accum, pad_id)
+    logger.info("Per-role vector: (%d, %d) float32 = %.1f KB",
+                len(layer_idx), hidden, len(layer_idx) * hidden * 4 / 1024)
+
+    for rf in resp_files:
+        try:
+            process_role(llm, layer_idx, hidden, encoder, rf.stem, args, pad_id)
+        except Exception as e:  # noqa: BLE001
+            logger.error("Role %s aborted: %s", rf.stem, e)
+        gc.collect()
+    logger.info("Done.")
+
+
+if __name__ == "__main__":
+    main()
