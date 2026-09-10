@@ -125,9 +125,21 @@ def build_items(encoder: ConversationEncoder, conversations: list[list[dict]], m
     items = []
     for conv in conversations:
         try:
-            full_ids, spans = encoder.build_turn_spans(conv)
+            # transformers 5 made apply_chat_template default to return_dict=True, so the
+            # vendored encoder (written for transformers 4) hands back a BatchEncoding
+            # instead of list[int]; iterating that yields its KEYS and the spans come out
+            # as (0, 1). Force the transformers-4 return shape.
+            full_ids, spans = encoder.build_turn_spans(conv, return_dict=False)
         except Exception as e:  # noqa: BLE001
             logger.debug("span build failed: %s", e); continue
+        # Deliberately outside the try: a per-conversation failure is worth skipping,
+        # but a changed return shape is systemic and must not be swallowed into
+        # "0 usable spans" for every role.
+        if not (isinstance(full_ids, list) and (not full_ids or isinstance(full_ids[0], int))):
+            raise TypeError(
+                f"build_turn_spans returned {type(full_ids).__name__}, expected list[int]; "
+                "the tokenizer/transformers version may have changed again"
+            )
         asst = [s for s in spans if s.get("role") == "assistant"]
         if not asst:
             continue
@@ -188,15 +200,29 @@ def _span_mean_sum(llm, layer_idx, span):
     Returns (K,H) = sum over the batch of the per-response mean residual stream
     over that response's assistant tokens.
     """
+    # Reduce one layer at a time, on that layer's own device, and stack the small
+    # (H,) results on the CPU.
+    #
+    # Two reasons this is per-layer rather than one torch.stack over all layers:
+    #   1. A 70B on NDIF is SHARDED across GPUs -- layer 0 lands on cuda:0 and layer
+    #      79 on cuda:3 -- so stacking raw .output across layers raises
+    #      "Expected all tensors to be on the same device". Only shows up on a
+    #      multi-GPU deployment and with more than one layer requested.
+    #   2. The stacked (K,B,T,H) intermediate is enormous: 80 x 8 x 2048 x 8192 in
+    #      bf16 is ~86 GB. Reducing per layer never materialises it.
+    #
     # transformers 5 / nnsight 0.7: layer .output is the hidden-states tensor
     # (B,T,H) itself, NOT a (hidden, ...) tuple -> no [0].
-    hs = torch.stack([llm.model.layers[L].output for L in layer_idx])   # (K,B,T,H)
-    # span was built on the client: CPU/float32 next to a sharded bf16 model.
-    # Take device+dtype off a live activation at run time.
-    m = span.to(hs.device, hs.dtype)                                    # (B,T)
-    num = (hs * m[None, :, :, None]).sum(dim=2)                         # (K,B,H)
-    den = m.sum(dim=1).clamp(min=1.0)[None, :, None]                    # (1,B,1)
-    return (num / den).to(torch.float32).sum(dim=1)                     # (K,H)
+    # span was built on the client (CPU/float32) next to a sharded bf16 model, so
+    # take device+dtype off a live activation at run time, per layer.
+    per_layer = []
+    for L in layer_idx:                                                 # ascending: reading
+        h = llm.model.layers[L].output                                  # a late module then an
+        m = span.to(h.device, h.dtype)                                  # early one is an error
+        num = (h * m[:, :, None]).sum(dim=1)                            # (B,H)
+        den = m.sum(dim=1).clamp(min=1.0)[:, None]                      # (B,1)
+        per_layer.append((num / den).to(torch.float32).sum(dim=0).cpu())  # (H,)
+    return torch.stack(per_layer)                                       # (K,H) on CPU
 
 
 def _run_session(llm, layer_idx, hidden, prepared, retries):
@@ -400,7 +426,7 @@ def main() -> None:
         try:
             process_role(llm, layer_idx, hidden, encoder, rf.stem, args, pad_id)
         except Exception as e:  # noqa: BLE001
-            logger.error("Role %s aborted: %s", rf.stem, e)
+            logger.error("Role %s aborted: %s", rf.stem, e, exc_info=True)
         gc.collect()
     logger.info("Done.")
 
