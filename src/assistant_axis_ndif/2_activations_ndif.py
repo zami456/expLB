@@ -11,9 +11,11 @@ role -- the same dict shape ``5_axis.py`` reads:
     <output_dir>/<role>.pt  ==  {"vector": Tensor(K, hidden), "layers": [...],
                                  "type": ..., "role": ..., "n": <responses averaged>}
 
-K = len(--layers). Default ``--layers target`` keeps only the model's middle layer
-(40 of 80 for Llama-3.3-70B) -> a 32 KB vector per role. ``--layers all`` keeps every
-layer (2.6 MB/role) and is what activation capping needs.
+K = len(--layers). Default ``--layers all`` keeps every layer (80 for
+Llama-3.3-70B) -> a 2.6 MB fp32 vector per role, which is what the per-layer axis
+and activation capping need. ``--layers target`` keeps only the middle layer
+(40 of 80) -> 32 KB/role. The saved artifact records the layer indices under
+"layers", so axis[40] means layer 40 whatever was requested.
 
 "Kept" = judge score == 3 (``--keep_scores``), except ``default`` where all
 responses are used. Roles with < ``--min_count`` kept responses are skipped.
@@ -21,14 +23,14 @@ responses are used. Roles with < ``--min_count`` kept responses are skipped.
 DOWNLOAD BUDGET -- the whole point of this script. With ``--accum session``
 (default) many batches are bundled into ONE ``llm.session(remote=True)`` job and
 the running sum is accumulated *on the server*; only a single (K, hidden) tensor
-per session comes back. At full scale that is ~9 MB total, versus ~4.2 GB if each
-batch were downloaded separately at one layer, or ~350 GB at all 80 layers.
+per session comes back. Over the 100-role set at all 80 layers that is ~260 MB
+total, versus ~157 GB if each conversation's pooled vector were downloaded.
 ``--accum client`` is the fallback: one job per batch, per-batch (B,K,H) download.
 
 Resumable at role granularity (skips roles whose <output_dir>/<role>.pt exists).
 
 Usage:
-    .venv-aa/bin/python assistant_axis/pipeline/2_activations_ndif.py \
+    .venv-aa/bin/python src/assistant_axis_ndif/2_activations_ndif.py \
         --model meta-llama/Llama-3.3-70B-Instruct \
         --responses_dir "$OUTPUT_DIR/responses" \
         --scores_dir    "$OUTPUT_DIR/scores" \
@@ -53,6 +55,9 @@ from tqdm import tqdm
 PIPELINE_DIR = Path(__file__).resolve().parent
 REPO_ROOT = PIPELINE_DIR.parents[1]
 AA_ROOT = REPO_ROOT / "assistant_axis"  # vendored submodule: library + data/
+
+sys.path.insert(0, str(PIPELINE_DIR))
+from aa_roles import add_role_args, resolve_roles  # noqa: E402
 
 # .env: pipeline-local first, then repo root. Before importing nnsight so its
 # from_env() sees NDIF_API_KEY / NDIF_HOST.
@@ -335,15 +340,15 @@ def main() -> None:
     ap.add_argument("--responses_dir", required=True)
     ap.add_argument("--scores_dir", required=True)
     ap.add_argument("--output_dir", required=True)
-    ap.add_argument("--roles", nargs="+", default=None)
+    add_role_args(ap)
     ap.add_argument("--keep_scores", default="3", help="comma-sep judge scores to keep (default 3)")
     ap.add_argument("--min_count", type=int, default=50)
     ap.add_argument("--batch_size", type=int, default=8)
     ap.add_argument("--max_length", type=int, default=2048)
     ap.add_argument("--retries", type=int, default=4)
     ap.add_argument("--overwrite", action="store_true")
-    ap.add_argument("--layers", nargs="+", default=["target"],
-                    help="'target' (model's middle layer, default), 'all', or explicit indices")
+    ap.add_argument("--layers", nargs="+", default=["all"],
+                    help="'all' (every layer, default), 'target' (model's middle layer), or explicit indices")
     ap.add_argument("--session_batches", type=int, default=20,
                     help="batches bundled into one NDIF session (--accum session). Keep the "
                          "session under NDIF's ~1h per-request ceiling.")
@@ -354,8 +359,9 @@ def main() -> None:
 
     Path(args.output_dir).mkdir(parents=True, exist_ok=True)
     resp_files = sorted(Path(args.responses_dir).glob("*.jsonl"))
-    if args.roles:
-        wanted = set(args.roles)
+    _want = resolve_roles(args)
+    if _want:
+        wanted = set(_want)
         resp_files = [f for f in resp_files if f.stem in wanted]
 
     nnsight, llm, n_layers = init_ndif(args.model)

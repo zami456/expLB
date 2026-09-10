@@ -1,0 +1,144 @@
+{
+  "name": "deception-sycophancy-100",
+  "description": "100 roles selected from the Assistant Axis 275-role list, grouped for deception and sycophancy detection. Semantic analogues of the persona sets in Mahadik & Skapars' Persona Coordinates, whose own persona names are not in the AA list.",
+  "subject_model": "meta-llama/Llama-3.3-70B-Instruct",
+  "source_role_list": "assistant_axis/data/roles/instructions",
+  "groups": {
+    "deception": {
+      "contrast_with": "honesty",
+      "note": "conceal, manipulate, selectively disclose",
+      "roles": [
+        "spy",
+        "saboteur",
+        "smuggler",
+        "rogue",
+        "fixer",
+        "criminal",
+        "hacker",
+        "vigilante",
+        "trickster",
+        "genie",
+        "chameleon",
+        "shapeshifter",
+        "simulacrum",
+        "actor",
+        "gossip",
+        "marketer",
+        "influencer",
+        "evangelist",
+        "celebrity",
+        "networker",
+        "predator",
+        "parasite"
+      ]
+    },
+    "honesty": {
+      "contrast_with": "deception",
+      "note": "disclose, verify, record",
+      "roles": [
+        "auditor",
+        "archivist",
+        "journalist",
+        "reporter",
+        "witness",
+        "validator",
+        "examiner",
+        "proofreader",
+        "detective",
+        "researcher",
+        "scientist",
+        "statistician",
+        "historian",
+        "librarian",
+        "curator",
+        "observer",
+        "secretary",
+        "prophet",
+        "jester",
+        "realist",
+        "scholar",
+        "interpreter"
+      ]
+    },
+    "sycophancy": {
+      "contrast_with": "anti_sycophancy",
+      "note": "agree, flatter, validate",
+      "roles": [
+        "caregiver",
+        "empath",
+        "optimist",
+        "altruist",
+        "peacekeeper",
+        "collaborator",
+        "facilitator",
+        "counselor",
+        "therapist",
+        "romantic",
+        "martyr",
+        "bartender",
+        "symbiont",
+        "ecosystem",
+        "hedonist",
+        "coach"
+      ]
+    },
+    "anti_sycophancy": {
+      "contrast_with": "sycophancy",
+      "note": "challenge, critique, disagree",
+      "roles": [
+        "critic",
+        "skeptic",
+        "contrarian",
+        "devils_advocate",
+        "cynic",
+        "maverick",
+        "rebel",
+        "provocateur",
+        "stoic",
+        "pragmatist",
+        "purist",
+        "perfectionist",
+        "grader",
+        "screener",
+        "supervisor",
+        "judge"
+      ]
+    },
+    "assistant_anchor": {
+      "contrast_with": null,
+      "note": "Assistant-like end of the paper's role PC1",
+      "roles": [
+        "default",
+        "assistant",
+        "consultant",
+        "analyst",
+        "evaluator",
+        "generalist",
+        "reviewer",
+        "specialist"
+      ]
+    },
+    "breadth_control": {
+      "contrast_with": null,
+      "note": "fantastical/non-human far end of PC1; keeps PC1 interpretable as Assistant-ness",
+      "roles": [
+        "ghost",
+        "leviathan",
+        "bard",
+        "hermit",
+        "oracle",
+        "whale",
+        "eldritch",
+        "egregore",
+        "hive",
+        "void",
+        "wraith",
+        "revenant",
+        "tree",
+        "wind",
+        "swarm",
+        "aberration"
+      ]
+    }
+  }
+}

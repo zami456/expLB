@@ -15,7 +15,7 @@ Output schema per row of `responses/<role>.jsonl` (consumed by steps 3 and 2):
 Resumable: a role's already-present (prompt_index, question_index) pairs are skipped;
 new rows are appended after every batch.
 
-    .venv-aa/bin/python assistant_axis/pipeline/1_generate_ndif.py \
+    .venv-aa/bin/python src/assistant_axis_ndif/1_generate_ndif.py \
         --model meta-llama/Llama-3.3-70B-Instruct \
         --output_dir "$OUT_DIR/responses" --question_count 240
 """
@@ -35,6 +35,9 @@ from tqdm import tqdm
 PIPELINE_DIR = Path(__file__).resolve().parent
 REPO_ROOT = PIPELINE_DIR.parents[1]
 AA_ROOT = REPO_ROOT / "assistant_axis"  # vendored submodule: library + data/
+
+sys.path.insert(0, str(PIPELINE_DIR))
+from aa_roles import add_role_args, resolve_roles  # noqa: E402
 
 # .env: pipeline-local first, then repo root. Must run before importing nnsight so its
 # from_env() picks up NDIF_API_KEY / NDIF_HOST.
@@ -244,7 +247,7 @@ def main() -> None:
     ap.add_argument("--output_dir", required=True)
     ap.add_argument("--question_count", type=int, default=240)
     ap.add_argument("--prompt_indices", type=int, nargs="+", default=None)
-    ap.add_argument("--roles", nargs="+", default=None)
+    add_role_args(ap)
     ap.add_argument("--gen_batch", type=int, default=24)
     ap.add_argument("--session_batches", type=int, default=8,
                     help="batches bundled into one NDIF session (1 = one job per batch). "
@@ -261,8 +264,9 @@ def main() -> None:
     logger.info("Loaded %d questions", len(questions))
 
     role_files = sorted(Path(args.roles_dir).glob("*.json"))
-    if args.roles:
-        want = set(args.roles)
+    _want = resolve_roles(args)
+    if _want:
+        want = set(_want)
         role_files = [f for f in role_files if f.stem in want]
     logger.info("Roles to process: %d", len(role_files))
 

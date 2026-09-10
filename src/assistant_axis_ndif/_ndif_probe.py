@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Throwaway: verify NDIF creds + nnsight 0.7 API shape before the real smoke test.
 
-    .venv-aa/bin/python assistant_axis/pipeline/_ndif_probe.py [model]
+    .venv-aa/bin/python src/assistant_axis_ndif/_ndif_probe.py [model]
 
 Checks: remote trace works, what `layer.output` looks like, layer count, tokenizer.
 """

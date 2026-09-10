@@ -2,7 +2,7 @@
 """Step 0a (part 2): exercise the REAL 2_activations_ndif.py session path on a small
 HOT model, so the shipped code -- not a proxy -- is what gets validated.
 
-    .venv-aa/bin/python assistant_axis/pipeline/_span_probe_07.py [model]
+    .venv-aa/bin/python src/assistant_axis_ndif/_span_probe_07.py [model]
 
 Asserts: layer .output is a (B,T,H) tensor (not a tuple), the masked span-mean
 reduces to (K,H), and a multi-batch session accumulates server-side correctly.

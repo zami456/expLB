@@ -15,7 +15,7 @@ Same I/O contract as the stock `3_judge.py`:
   - resumable: existing scores kept; only missing keys queried
   - roles whose role file has no "eval_prompt" (e.g. default) are skipped
 
-    .venv-aa/bin/python assistant_axis/pipeline/3_judge_ndif.py \
+    .venv-aa/bin/python src/assistant_axis_ndif/3_judge_ndif.py \
         --responses_dir "$OUT_DIR/responses" \
         --roles_dir assistant_axis/data/roles/instructions \
         --output_dir "$OUT_DIR/scores" \
@@ -38,6 +38,9 @@ from tqdm import tqdm
 PIPELINE_DIR = Path(__file__).resolve().parent
 REPO_ROOT = PIPELINE_DIR.parents[1]
 AA_ROOT = REPO_ROOT / "assistant_axis"  # vendored submodule: library + data/
+
+sys.path.insert(0, str(PIPELINE_DIR))
+from aa_roles import add_role_args, resolve_roles  # noqa: E402
 
 load_dotenv(PIPELINE_DIR / ".env")
 load_dotenv(REPO_ROOT / ".env")
@@ -81,10 +84,46 @@ def batched(seq, n):
         yield seq[i:i + n]
 
 
-def judge_batch(llm, prompts: list[str], retries: int) -> list[str] | None:
+def _encode(llm, prompts: list[str]):
     enc = llm.tokenizer(prompts, return_tensors="pt", padding=True, add_special_tokens=False)
-    in_ids, attn = enc["input_ids"], enc["attention_mask"]
-    in_len = in_ids.shape[1]
+    return enc["input_ids"], enc["attention_mask"], enc["input_ids"].shape[1]
+
+
+def judge_batches_session(llm, prompt_batches: list[list[str]], retries: int) -> list[list[str]] | None:
+    """Bundle several judge batches into ONE NDIF job.
+
+    A judge call is ~4 output tokens over a long prompt, so per-job queue and transport
+    overhead dominates the actual work: un-bundled, --judge_batch 48 means one NDIF job
+    per 48 responses. Same trade-off as stage 1 -- NDIF kills a request after ~1h and one
+    failed trace aborts the whole session -- so keep --session_batches modest.
+    """
+    import nnsight
+
+    encs = [_encode(llm, p) for p in prompt_batches]
+    delay = 3.0
+    for attempt in range(retries):
+        try:
+            with llm.session(remote=True):
+                outs = nnsight.save([])
+                for in_ids, attn, _ in encs:
+                    with llm.generate(in_ids, attention_mask=attn, max_new_tokens=4,
+                                      do_sample=False, pad_token_id=llm.tokenizer.pad_token_id):
+                        outs.append(llm.generator.output)
+            outs = getattr(outs, "value", outs)
+            if len(outs) != len(encs):
+                raise RuntimeError(f"session returned {len(outs)} outputs, expected {len(encs)}")
+            return [llm.tokenizer.batch_decode(o[:, in_len:], skip_special_tokens=True)
+                    for (_, _, in_len), o in zip(encs, outs)]
+        except Exception as e:  # noqa: BLE001 -- engineio b'P' / ConnectionError / NDIF hiccup
+            logger.warning("  judge session attempt %d/%d (%d batches) failed: %s: %s",
+                           attempt + 1, retries, len(encs), type(e).__name__, str(e)[:200])
+            time.sleep(delay)
+            delay = min(delay * 2, 60)
+    return None
+
+
+def judge_batch(llm, prompts: list[str], retries: int) -> list[str] | None:
+    in_ids, attn, in_len = _encode(llm, prompts)
     delay = 3.0
     for attempt in range(retries):
         try:
@@ -137,15 +176,25 @@ def process_role(llm, role: str, args) -> None:
     logger.info("Role %s: scoring %d", role, len(todo))
 
     new = 0
-    for batch in tqdm(list(batched(todo, args.judge_batch)), desc=role):
-        texts = judge_batch(llm, [p for _, p in batch], args.retries)
-        if texts is None:
-            logger.error("  role %s: batch permanently failed; leaving for resume", role); continue
-        for (k, _), t in zip(batch, texts):
-            s = parse_judge_score(t)
-            if s is not None:
-                scores[k] = s
-                new += 1
+    batches = list(batched(todo, args.judge_batch))
+    groups = list(batched(batches, max(1, args.session_batches)))
+    for group in tqdm(groups, desc=role):
+        if len(group) > 1:
+            per_batch = judge_batches_session(llm, [[p for _, p in b] for b in group], args.retries)
+        else:
+            texts = judge_batch(llm, [p for _, p in group[0]], args.retries)
+            per_batch = None if texts is None else [texts]
+        if per_batch is None:
+            logger.error("  role %s: %d batches permanently failed; leaving for resume",
+                         role, len(group))
+            continue
+        for batch, texts in zip(group, per_batch):
+            for (k, _), t in zip(batch, texts):
+                s = parse_judge_score(t)
+                if s is not None:
+                    scores[k] = s
+                    new += 1
+        # checkpoint after every session so a later failure never loses scored work
         out_file.parent.mkdir(parents=True, exist_ok=True)
         out_file.write_text(json.dumps(scores, indent=2))
     logger.info("Role %s: +%d scores (total %d) -> %s", role, new, len(scores), out_file)
@@ -159,15 +208,20 @@ def main() -> None:
     ap.add_argument("--judge_model", default="meta-llama/Llama-3.1-405B-Instruct",
                     help="HOT+pinned on NDIF; Qwen/Qwen2.5-72B-Instruct is the "
                          "different-family alternative but is COLD and must warm up")
-    ap.add_argument("--roles", nargs="+", default=None)
+    add_role_args(ap)
     ap.add_argument("--judge_batch", type=int, default=48)
+    ap.add_argument("--session_batches", type=int, default=8,
+                    help="judge batches bundled into one NDIF session (1 = one job per "
+                         "batch, the old behaviour). Keep session_batches * seconds_per_batch "
+                         "well under NDIF's ~1h per-request ceiling; a session retries whole.")
     ap.add_argument("--retries", type=int, default=4)
     args = ap.parse_args()
 
     Path(args.output_dir).mkdir(parents=True, exist_ok=True)
     resp_files = sorted(Path(args.responses_dir).glob("*.jsonl"))
-    if args.roles:
-        want = set(args.roles)
+    _want = resolve_roles(args)
+    if _want:
+        want = set(_want)
         resp_files = [f for f in resp_files if f.stem in want]
 
     import nnsight  # noqa: F401

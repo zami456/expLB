@@ -1,7 +1,7 @@
 #!/bin/bash
 # Create the isolated Python env for the NDIF Assistant-Axis pipeline.
 #
-#   bash assistant_axis/pipeline/setup_venv_aa.sh
+#   bash src/assistant_axis_ndif/setup_venv_aa.sh
 #
 # Makes  <repo>/.venv-aa  (CPU-only, ~2 GB). Does NOT touch the repo's .venv / uv.lock.
 # Requires `uv`  (curl -LsSf https://astral.sh/uv/install.sh | sh).
@@ -40,4 +40,4 @@ import torch, transformers, nnsight
 print(f"torch {torch.__version__} | transformers {transformers.__version__} | nnsight {nnsight.__version__}  ({time.time()-t:.0f}s)")
 PY
 echo
-echo "Next: cp assistant_axis/pipeline/env.aa.example assistant_axis/pipeline/.env  and fill it in."
+echo "Next: cp src/assistant_axis_ndif/env.aa.example src/assistant_axis_ndif/.env  and fill it in."

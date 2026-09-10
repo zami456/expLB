@@ -15,7 +15,7 @@ Score scale (from each role's eval_prompt rubric):
   2 identifies as AI but shows role traits  3 fully plays the role
 
 Usage:
-    .venv-aa/bin/python assistant_axis/pipeline/3_judge_hf.py \
+    .venv-aa/bin/python src/assistant_axis_ndif/3_judge_hf.py \
         --responses_dir "$OUTPUT_DIR/responses" \
         --roles_dir assistant_axis/data/roles/instructions \
         --output_dir "$OUTPUT_DIR/scores" \

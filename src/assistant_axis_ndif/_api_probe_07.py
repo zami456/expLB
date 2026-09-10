@@ -5,7 +5,7 @@ The docs vendored at repo `docs/` describe nnsight 0.8; `.venv-aa` runs 0.7.0. T
 script decides, empirically, which idiom the pipeline must use. Each check is
 independent -- a failure prints a verdict and moves on.
 
-    .venv-aa/bin/python assistant_axis/pipeline/_api_probe_07.py [model]
+    .venv-aa/bin/python src/assistant_axis_ndif/_api_probe_07.py [model]
 
 Default model is Llama-3.1-8B (HOT + pinned on NDIF) so the checks are fast; the
 answers are API-shape facts that carry to the 70B.

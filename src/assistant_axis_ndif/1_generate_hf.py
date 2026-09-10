@@ -15,7 +15,7 @@ Resumable: a role whose JSONL already contains every (prompt_index, question_ind
 key is skipped; missing combinations are appended.
 
 Usage:
-    .venv-aa/bin/python assistant_axis/pipeline/1_generate_hf.py \
+    .venv-aa/bin/python src/assistant_axis_ndif/1_generate_hf.py \
         --model meta-llama/Llama-3.3-70B-Instruct \
         --output_dir "$OUTPUT_DIR/responses" \
         --question_count 240

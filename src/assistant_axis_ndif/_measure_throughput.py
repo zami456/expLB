@@ -4,7 +4,7 @@
 Runs the ACTUAL production code paths against the real 70B/405B models, times
 them, and turns "how long will this take?" into a number instead of a guess.
 
-    .venv-aa/bin/python assistant_axis/pipeline/_measure_throughput.py \
+    .venv-aa/bin/python src/assistant_axis_ndif/_measure_throughput.py \
         [--gen_batch 24] [--max_new_tokens 512] [--n_batches 5]
 
 Reports seconds/generation and the projected step-1 wall-clock for the full
