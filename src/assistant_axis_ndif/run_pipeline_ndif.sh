@@ -77,27 +77,31 @@ echo "out=$OUT_DIR  question_count=$QUESTION_COUNT  prompt_indices=${PROMPT_INDI
 echo "roles=${ROLES:-${ROLES_FILE##*/}${GROUPS:+ [$GROUPS]}}"
 echo "layers=$LAYERS  gen_batch=$GEN_BATCH  sessions: gen=$GEN_SESSION_BATCHES act=$ACT_SESSION_BATCHES"
 
-echo; echo "=== step 1/4: generate (NDIF) ==="
+echo; echo "=== step 1/5: generate (NDIF) ==="
 "$PY" "$PIPE/1_generate_ndif.py" --model "$MODEL" \
     --output_dir "$OUT_DIR/responses" --question_count "$QUESTION_COUNT" \
     --gen_batch "$GEN_BATCH" --session_batches "$GEN_SESSION_BATCHES" \
     "${PI_ARGS[@]}" "${ROLE_ARGS[@]}"
 
-echo; echo "=== step 2/4: judge (NDIF, $JUDGE_MODEL) ==="
+echo; echo "=== step 2/5: judge (NDIF, $JUDGE_MODEL) ==="
 "$PY" "$PIPE/3_judge_ndif.py" \
     --responses_dir "$OUT_DIR/responses" --roles_dir "$ROLES_DIR" \
     --output_dir "$OUT_DIR/scores" --judge_model "$JUDGE_MODEL" \
     --judge_batch "$JUDGE_BATCH" --session_batches "$JUDGE_SESSION_BATCHES"     "${ROLE_ARGS[@]}"
 
-echo; echo "=== step 3/4: per-role persona vectors (NDIF) ==="
+echo; echo "=== step 3/5: per-role persona vectors (NDIF) ==="
 "$PY" "$PIPE/2_activations_ndif.py" --model "$MODEL" \
     --responses_dir "$OUT_DIR/responses" --scores_dir "$OUT_DIR/scores" \
     --output_dir "$OUT_DIR/vectors" --batch_size "$ACT_BATCH" --min_count "$MIN_COUNT" \
     --layers $LAYERS --session_batches "$ACT_SESSION_BATCHES" "${ROLE_ARGS[@]}"
 
-echo; echo "=== step 4/4: axis (local) ==="
+echo; echo "=== step 4/5: assistant axis (local, upstream) ==="
 "$PY" "$AA_PIPE/5_axis.py" --vectors_dir "$OUT_DIR/vectors" --output "$OUT_DIR/axis.pt"
+
+echo; echo "=== step 5/5: axes + PCA + validation (local) ==="
+"$PY" "$PIPE/6_axes.py" --vectors_dir "$OUT_DIR/vectors" --output "$OUT_DIR/axes.pt"     ${ROLES_FILE:+--roles_file "$ROLES_FILE"}
 
 echo; echo "=== done ==="
 echo "persona vectors : $OUT_DIR/vectors/*.pt"
+echo "axes+PCA       : $OUT_DIR/axes.pt"
 echo "assistant axis  : $OUT_DIR/axis.pt"
