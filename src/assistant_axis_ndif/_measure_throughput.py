@@ -40,7 +40,13 @@ CONFIG.API.HOST = os.environ["NDIF_HOST"]
 CONFIG.API.APIKEY = (os.getenv("NDIF_API_KEY") or "").strip()
 CONFIG.APP.REMOTE_LOGGING = False
 
-FULL_SCALE = 276 * 5 * 240  # 331,200 generations
+def _default_n_roles() -> int:
+    """Roles in the curated set (role_groups.json); falls back to the paper's 276."""
+    try:
+        g = json.loads((PIPELINE_DIR / 'role_groups.json').read_text())['groups']
+        return len({r for spec in g.values() for r in spec['roles']})
+    except Exception:  # noqa: BLE001
+        return 276
 
 
 def _load(name, fname):
@@ -72,8 +78,11 @@ def main():
     ap.add_argument("--top_p", type=float, default=0.9)
     ap.add_argument("--retries", type=int, default=3)
     ap.add_argument("--session_batches", type=int, default=1)
+    ap.add_argument("--n_roles", type=int, default=_default_n_roles(),
+                    help="roles the projection assumes (default: role_groups.json)")
     ap.add_argument("--skip_judge", action="store_true")
     args = ap.parse_args()
+    full_scale = args.n_roles * 5 * 240
 
     gen = _load("gen_ndif", "1_generate_ndif.py")
 
@@ -86,7 +95,7 @@ def main():
     print(f"model={args.model}")
     print(f"gen_batch={args.gen_batch}  max_new_tokens={args.max_new_tokens}  "
           f"n_batches={args.n_batches}  session_batches={args.session_batches}")
-    print(f"full scale = 276 roles x 5 prompts x 240 questions = {FULL_SCALE:,} generations\n")
+    print(f"scale = {args.n_roles} roles x 5 prompts x 240 questions = {full_scale:,} generations\n")
 
     llm = LanguageModel(args.model)
     llm.tokenizer.padding_side = "left"
@@ -139,16 +148,16 @@ def main():
     print(f"\n  measured: {n_ok} generations in {total:.1f}s")
     print(f"  cold (incl. 1st call): {s_per_gen:.2f} s/gen")
     print(f"  warm (excl. 1st call): {s_per_gen_warm:.2f} s/gen")
-    print(f"\n  PROJECTED step 1 for {FULL_SCALE:,} generations, serial:")
-    print(f"    at cold rate: {fmt(FULL_SCALE * s_per_gen)}")
-    print(f"    at warm rate: {fmt(FULL_SCALE * s_per_gen_warm)}")
+    print(f"\n  PROJECTED step 1 for {full_scale:,} generations, serial:")
+    print(f"    at cold rate: {fmt(full_scale * s_per_gen)}")
+    print(f"    at warm rate: {fmt(full_scale * s_per_gen_warm)}")
     for c in (2, 3, 4):
-        print(f"    warm rate, {c} jobs in flight: {fmt(FULL_SCALE * s_per_gen_warm / c)}")
+        print(f"    warm rate, {c} jobs in flight: {fmt(full_scale * s_per_gen_warm / c)}")
 
     print("\n  Scale-reduction options (warm rate, serial):")
-    for pi, qc, lbl in ((5, 240, "full paper          "), (2, 240, "2 prompts/role      "),
+    for pi, qc, lbl in ((5, 240, "paper depth         "), (2, 240, "2 prompts/role      "),
                         (5, 120, "120 questions       "), (2, 120, "2 prompts + 120 q   ")):
-        n = 276 * pi * qc
+        n = args.n_roles * pi * qc
         print(f"    {lbl} {n:>8,} gens -> {fmt(n * s_per_gen_warm)}")
 
     if not args.skip_judge:
@@ -169,7 +178,7 @@ def main():
             dt = time.time() - t
             out = getattr(out, "value", out)
             print(f"  {len(jp)} judgements in {dt:.1f}s -> {dt / len(jp):.2f} s/judgement")
-            print(f"  PROJECTED step 3 for {FULL_SCALE:,}: {fmt(FULL_SCALE * dt / len(jp))} serial")
+            print(f"  PROJECTED step 3 for {full_scale:,}: {fmt(full_scale * dt / len(jp))} serial")
         except Exception as e:  # noqa: BLE001
             print(f"  judge measurement failed: {type(e).__name__}: {str(e)[:200]}")
 
