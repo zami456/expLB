@@ -172,13 +172,17 @@ def pad_batch(batch, pad_id: int):
     attn = torch.zeros((len(batch), maxlen), dtype=torch.long)
     span = torch.zeros((len(batch), maxlen), dtype=torch.float32)
     for b, (ids, a0, a1) in enumerate(batch):
+        # The span mask is the sole source of truth for which tokens are pooled, so a
+        # span reaching past the real tokens would silently average in padding.
+        if not 0 <= a0 < a1 <= len(ids):
+            raise ValueError(f"row {b}: span ({a0},{a1}) outside its {len(ids)} real tokens")
         input_ids[b, : len(ids)] = torch.tensor(ids, dtype=torch.long)
         attn[b, : len(ids)] = 1
         span[b, a0:a1] = 1.0
     return input_ids, attn, span
 
 
-def _span_mean_sum(llm, layer_idx, input_ids, attn, span):
+def _span_mean_sum(llm, layer_idx, span):
     """Body shared by both accum modes. Runs on NDIF, inside an open trace.
 
     Returns (K,H) = sum over the batch of the per-response mean residual stream
@@ -208,7 +212,7 @@ def _run_session(llm, layer_idx, hidden, prepared, retries):
                 cnt = torch.zeros(1, dtype=torch.float32).save()
                 for input_ids, attn, span in prepared:
                     with llm.trace({"input_ids": input_ids, "attention_mask": attn}):
-                        acc += _span_mean_sum(llm, layer_idx, input_ids, attn, span).cpu()
+                        acc += _span_mean_sum(llm, layer_idx, span).cpu()
                         cnt += float(span.shape[0])
             a = getattr(acc, "value", acc)
             c = float(getattr(cnt, "value", cnt).reshape(-1)[0])
@@ -230,7 +234,7 @@ def _run_batch_client(llm, layer_idx, input_ids, attn, span, retries):
     for attempt in range(retries):
         try:
             with llm.trace({"input_ids": input_ids, "attention_mask": attn}, remote=True):
-                out = _span_mean_sum(llm, layer_idx, input_ids, attn, span).cpu().save()
+                out = _span_mean_sum(llm, layer_idx, span).cpu().save()
             return getattr(out, "value", out), float(span.shape[0])
         except Exception as e:  # noqa: BLE001
             logger.warning("  trace attempt %d/%d failed: %s: %s",

@@ -133,8 +133,6 @@ def generate_batches_session(llm, prompt_batches: list[list[str]], args) -> list
 
 def generate_batch(llm, prompts: list[str], args) -> list[str] | None:
     """Remote batched generation; returns decoded new-token text per prompt, or None on failure."""
-    import torch
-
     enc = llm.tokenizer(prompts, return_tensors="pt", padding=True, add_special_tokens=False)
     in_ids, attn = enc["input_ids"], enc["attention_mask"]
     in_len = in_ids.shape[1]
