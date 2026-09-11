@@ -21,16 +21,21 @@ VIRTUAL_ENV="$VENV" UV_LINK_MODE=copy uv pip install --python "$VENV/bin/python"
   "nnsight==0.7.0" \
   "torch==2.14.0" \
   "transformers==5.17.0" \
-  "python-socketio==5.16.4" \
-  "python-engineio==4.13.0" \
   "websocket-client==1.8.0" \
   "huggingface_hub" \
   "python-dotenv" \
   "jsonlines" \
   "tqdm"
+
 # NOTE: websocket-client 1.9.x + python-engineio 4.14 crash the NDIF result socket
-# on long-running jobs ("invalid literal for int() ... b'P'"). The pins above are the
-# combo verified to work for multi-minute remote .generate() / .trace() calls.
+# on long-running jobs ("invalid literal for int() ... b'P'"). The combo verified to work
+# for multi-minute remote .generate() / .trace() calls is socketio 5.16.4 + engineio
+# 4.13.0 + websocket-client 1.8.0. socketio 5.16.4's metadata declares engineio>=4.13.2,
+# so uv's strict resolver refuses the pin; pip installed it anyway and it works. Force the
+# exact pins with --no-deps to bypass that metadata floor.
+echo "=== pinning the verified socket combo (--no-deps) ==="
+VIRTUAL_ENV="$VENV" UV_LINK_MODE=copy uv pip install --python "$VENV/bin/python" \
+  --no-deps --reinstall "python-socketio==5.16.4" "python-engineio==4.13.0"
 
 echo
 echo "=== done. quick import check (first run is slow, ~3 min cold) ==="

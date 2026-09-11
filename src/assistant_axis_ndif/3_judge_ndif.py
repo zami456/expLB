@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
 """
 Step 3 (NDIF variant): score role responses 0-3 with an open judge model
-(`meta-llama/Llama-3.1-405B-Instruct` by default) served remotely on NDIF via
+(`meta-llama/Llama-3.1-70B-Instruct` by default) served remotely on NDIF via
 nnsight `.generate(remote=True)`. No HF Inference, no OpenAI.
 
-405B is the default because it is HOT *and pinned* on NDIF, so it never triggers
-a cold deploy -- the long COLD wait is what crashed earlier runs. Qwen2.5-72B-Instruct
-is a reasonable alternative (different model family from the Llama subject model =
-more independent judging) but is COLD on NDIF and must warm up first.
+Llama-3.1-70B-Instruct is the default because it is HOT *and pinned* on NDIF, so it
+never triggers a cold deploy -- a cold-start wait is what crashed earlier runs. It is
+also ~6x cheaper per call than the 405B (which is prefill-dominated here) and more
+capable than the paper's gpt-4.1-mini judge. Llama-3.1-405B-Instruct is a heavier
+alternative (set --judge_model) but is not always pinned; Qwen2.5-72B-Instruct is a
+different-family option for more independent judging but is COLD and must warm up.
 
 Same I/O contract as the stock `3_judge.py`:
   - reads  <responses_dir>/<role>.jsonl  and  <roles_dir>/<role>.json  ("eval_prompt")
@@ -19,7 +21,7 @@ Same I/O contract as the stock `3_judge.py`:
         --responses_dir "$OUT_DIR/responses" \
         --roles_dir assistant_axis/data/roles/instructions \
         --output_dir "$OUT_DIR/scores" \
-        --judge_model meta-llama/Llama-3.1-405B-Instruct
+        --judge_model meta-llama/Llama-3.1-70B-Instruct
 """
 
 import argparse
@@ -45,6 +47,24 @@ from aa_roles import add_role_args, resolve_roles  # noqa: E402
 load_dotenv(PIPELINE_DIR / ".env")
 load_dotenv(REPO_ROOT / ".env")
 os.environ.setdefault("NDIF_HOST", "https://api.ndif.us")
+
+# Windows (uv standalone Python) needs two fixes for NDIF's remote transport:
+#  1. its bundled CA store is stale, so the websocket TLS handshake fails with
+#     "certificate verify failed: certificate has expired" -- point SSL at certifi
+#     (the CA bundle requests already uses successfully). Harmless on Linux.
+#  2. the console codec (cp1252) can't encode nnsight's status glyphs (e.g. ◉),
+#     crashing with UnicodeEncodeError -- force stdout/stderr to UTF-8.
+try:
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+except Exception:  # noqa: BLE001
+    pass
+try:
+    import certifi
+    os.environ.setdefault("SSL_CERT_FILE", certifi.where())
+except Exception:  # noqa: BLE001
+    pass
+
 for _v in ("HF_TOKEN", "HUGGINGFACE_HUB_TOKEN"):
     if os.getenv(_v):
         os.environ["HF_TOKEN"] = os.environ["HF_HUB_TOKEN"] = os.environ[_v].strip()
@@ -205,9 +225,10 @@ def main() -> None:
     ap.add_argument("--responses_dir", required=True)
     ap.add_argument("--roles_dir", default=str(AA_ROOT / "data" / "roles" / "instructions"))
     ap.add_argument("--output_dir", required=True)
-    ap.add_argument("--judge_model", default="meta-llama/Llama-3.1-405B-Instruct",
-                    help="HOT+pinned on NDIF; Qwen/Qwen2.5-72B-Instruct is the "
-                         "different-family alternative but is COLD and must warm up")
+    ap.add_argument("--judge_model", default="meta-llama/Llama-3.1-70B-Instruct",
+                    help="HOT+pinned on NDIF and ~6x cheaper than the 405B; pass "
+                         "meta-llama/Llama-3.1-405B-Instruct for the heavier judge when "
+                         "it is HOT, or Qwen/Qwen2.5-72B-Instruct for a different family")
     add_role_args(ap)
     ap.add_argument("--judge_batch", type=int, default=48)
     ap.add_argument("--session_batches", type=int, default=8,

@@ -3,7 +3,7 @@
 # Assistant Axis for Llama-3.3-70B-Instruct -- every model call on NDIF.
 #
 #   1_generate_ndif.py   role responses          (Llama-3.3-70B on NDIF)
-#   3_judge_ndif.py      0-3 role-adherence      (Llama-3.1-405B on NDIF)
+#   3_judge_ndif.py      0-3 role-adherence      (Llama-3.1-70B on NDIF)
 #   2_activations_ndif.py per-role persona vectors (Llama-3.3-70B on NDIF)
 #   5_axis.py            axis = mean(default) - mean(roles)   (local, CPU)
 #
@@ -15,7 +15,7 @@
 # Config (env vars):
 #   OUT_DIR          (required) output dir; needs ~1 GB free
 #   MODEL            default meta-llama/Llama-3.3-70B-Instruct
-#   JUDGE_MODEL      default meta-llama/Llama-3.1-405B-Instruct (HOT+pinned on NDIF)
+#   JUDGE_MODEL      default meta-llama/Llama-3.1-70B-Instruct (HOT+pinned on NDIF)
 #   LAYERS           default "all" = every layer (80 for Llama-70B; ~2.6 MB/role),
 #                    which is what the per-layer axis and activation capping need.
 #                    "target" = middle layer only (40), ~32 KB/role. Or an explicit
@@ -45,7 +45,7 @@ AA_PIPE="$REPO/assistant_axis/pipeline"       # upstream, unmodified (5_axis.py)
 ROLES_DIR="$REPO/assistant_axis/data/roles/instructions"
 
 MODEL="${MODEL:-meta-llama/Llama-3.3-70B-Instruct}"
-JUDGE_MODEL="${JUDGE_MODEL:-meta-llama/Llama-3.1-405B-Instruct}"
+JUDGE_MODEL="${JUDGE_MODEL:-meta-llama/Llama-3.1-70B-Instruct}"
 OUT_DIR="${OUT_DIR:?set OUT_DIR to an output directory with ~1 GB free}"
 LAYERS="${LAYERS:-all}"
 QUESTION_COUNT="${QUESTION_COUNT:-240}"

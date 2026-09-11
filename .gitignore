@@ -133,6 +133,7 @@ celerybeat.pid
 .env
 .venv
 .venv-aa/
+.venv-aa-win/
 env/
 venv/
 ENV/
@@ -141,6 +142,7 @@ venv.bak/
 
 # Assistant Axis / NDIF pipeline: isolated env + run outputs (see src/assistant_axis_ndif/)
 aa-smoke/
+aa-smoke-win/
 src/assistant_axis_ndif/.env
 
 # Spyder project settings

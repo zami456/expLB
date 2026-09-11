@@ -44,6 +44,24 @@ from aa_roles import add_role_args, resolve_roles  # noqa: E402
 load_dotenv(PIPELINE_DIR / ".env")
 load_dotenv(REPO_ROOT / ".env")
 os.environ.setdefault("NDIF_HOST", "https://api.ndif.us")  # nnsight 0.7 ships a broken bare host
+
+# Windows (uv standalone Python) needs two fixes for NDIF's remote transport:
+#  1. its bundled CA store is stale, so the websocket TLS handshake fails with
+#     "certificate verify failed: certificate has expired" -- point SSL at certifi
+#     (the CA bundle requests already uses successfully). Harmless on Linux.
+#  2. the console codec (cp1252) can't encode nnsight's status glyphs (e.g. ◉),
+#     crashing with UnicodeEncodeError -- force stdout/stderr to UTF-8.
+try:
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+except Exception:  # noqa: BLE001
+    pass
+try:
+    import certifi
+    os.environ.setdefault("SSL_CERT_FILE", certifi.where())
+except Exception:  # noqa: BLE001
+    pass
+
 for _v in ("HF_TOKEN", "HUGGINGFACE_HUB_TOKEN"):
     if os.getenv(_v):
         os.environ["HF_TOKEN"] = os.environ["HF_HUB_TOKEN"] = os.environ[_v].strip()

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Step 0c: measure real NDIF throughput and project the full run.
 
-Runs the ACTUAL production code paths against the real 70B/405B models, times
+Runs the ACTUAL production code paths against the real subject + judge models, times
 them, and turns "how long will this take?" into a number instead of a guess.
 
     .venv-aa/bin/python src/assistant_axis_ndif/_measure_throughput.py \
@@ -91,7 +91,7 @@ def fmt(seconds: float) -> str:
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--model", default="meta-llama/Llama-3.3-70B-Instruct")
-    ap.add_argument("--judge_model", default="meta-llama/Llama-3.1-405B-Instruct")
+    ap.add_argument("--judge_model", default="meta-llama/Llama-3.1-70B-Instruct")
     ap.add_argument("--gen_batch", type=int, default=24)
     ap.add_argument("--max_new_tokens", type=int, default=512)
     ap.add_argument("--n_batches", type=int, default=5)
