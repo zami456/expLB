@@ -46,15 +46,37 @@ confirm the pin held (engineio exposes no `__version__`, so read it from package
 It must print `4.13.0 5.16.4 1.8.0`. If engineio shows 4.14.x, reinstall:
 `uv pip install --python .venv-aa\Scripts\python.exe --no-deps --reinstall python-engineio==4.13.0`.
 
-## 3. Confirm NDIF is reachable
+## 3. Confirm NDIF is reachable (preflight)
+
+NDIF availability drifts — models that are HOT can go COLD, and the subject model isn't
+pinned. Run the preflight; it prints the live service state and each model's
+`state · level · pinned`, plus the other HOT models right now, and returns a verdict:
 
 ```
-.venv-aa\Scripts\python.exe -c "import os; from dotenv import load_dotenv; load_dotenv('src/assistant_axis_ndif/.env'); os.environ.setdefault('NDIF_HOST','https://api.ndif.us'); import nnsight; print(nnsight.is_model_running('meta-llama/Llama-3.3-70B-Instruct'), nnsight.is_model_running('meta-llama/Llama-3.1-70B-Instruct'))"
+.venv-aa\Scripts\python.exe src\assistant_axis_ndif\0_preflight_ndif.py
 ```
-Both should print `True`. The 70B is HOT but **not pinned**, so it can occasionally be
-evicted — if a run stalls, re-check this and wait for redeploy. `nnsight.compare()` will show
-`torch`/`transformers` differ from the server; that is expected and fine (nnsight matches at
-0.7.0, which is what governs the wire protocol).
+or, checking the subject **and** judge together and stopping (no stages run):
+```
+set ONLY=0
+.venv-aa\Scripts\python.exe src\assistant_axis_ndif\run_pipeline.py
+```
+
+Verdicts:
+- **READY** — required models are RUNNING. Proceed.
+- **WARMING** — a required model is deploying/warm; it should come up shortly. Proceeding is
+  safe (every stage is resumable), or wait a minute and re-check.
+- **NOT READY** — a required model is COLD/absent, or NDIF is DOWN. Do **not** start a long
+  run: wait and re-check, or if it's the *judge* that's cold, set `JUDGE_MODEL` to one of the
+  HOT pinned models the preflight lists (e.g. it defaults to the pinned
+  `meta-llama/Llama-3.1-70B-Instruct`).
+
+The full run (step 5) executes this preflight automatically as **stage 0** and **aborts
+before generation** if the subject model isn't ready — so you never waste hours on a cold
+model. It only warns (never blocks) on the judge, since judging is stage 2, hours away, and
+resumable. `SKIP_PREFLIGHT=1` bypasses the check.
+
+`nnsight.compare()` will show `torch`/`transformers` differ from the server; that is expected
+and fine (nnsight matches at 0.7.0, which is what governs the wire protocol).
 
 ## 4. Smoke test (~15 min) — the go/no-go
 
@@ -137,8 +159,10 @@ fine (recorded), but zero norms or all-NaN means a bad run — re-run the affect
   role; expected attrition (the paper kept 377 of 275+ roles for Llama). Not an error.
 - **`402` or HF Inference errors** → you're running an old `*_hf.py` script by mistake; use
   `run_pipeline.py` / the `*_ndif.py` stages.
-- **`is_model_running` returns False mid-run** → the 70B was evicted (it isn't pinned);
-  wait and re-check, then resume.
+- **A model went cold / `Model Provisioning...` errors mid-run** → NDIF evicted it (the 70B
+  isn't pinned; the 405B judge went cold this way in testing). Re-run the preflight
+  (`ONLY=0`) to see the live state; wait for it to warm up and resume, or switch `JUDGE_MODEL`
+  to a HOT pinned model. Nothing is lost — every stage is resumable.
 - **`NDIF_API_KEY not set`** → `.env` isn't at `src/assistant_axis_ndif/.env` or the key line
   is blank.
 - **(Windows) SSL "certificate has expired" or `UnicodeEncodeError` on a status glyph** →

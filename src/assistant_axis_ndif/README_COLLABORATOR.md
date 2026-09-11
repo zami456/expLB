@@ -36,6 +36,8 @@ then start the full run. It manages everything — you don't need to babysit com
   to run it again — it resumes exactly where it left off and never redoes finished work.
 - Keep the machine **awake and online** (disable sleep). NDIF is a shared service, so speed
   varies with load.
+- **Claude checks NDIF is up before starting.** If it says the model is cold or the service
+  is down, nothing is wasted — wait a little and tell it to run again.
 
 ## What to send back
 

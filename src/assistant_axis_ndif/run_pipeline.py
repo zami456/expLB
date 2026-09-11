@@ -33,7 +33,9 @@ Windows and Linux:
     GEN_SESSION_BATCHES / JUDGE_SESSION_BATCHES / ACT_SESSION_BATCHES   default 8 / 8 / 20
     MIN_COUNT       min score-3 responses/role for a vector (default 50; lower for smoke)
     AA_PY           python to run stages with (default: the repo's .venv-aa)
-    ONLY            comma-sep stages to run, e.g. "1,3,2" or "6" (default: all)
+    ONLY            comma-sep stages to run; "0"=preflight (default: 0,1,3,2,5,6).
+                    ONLY=0 runs just the NDIF status preflight and stops.
+    SKIP_PREFLIGHT  set 1 to skip the stage-0 NDIF check
 
 Requires src/assistant_axis_ndif/.env (see env.aa.example).
 """
@@ -141,7 +143,7 @@ def main() -> None:
     judge_sess = env("JUDGE_SESSION_BATCHES", "8")
     act_sess = env("ACT_SESSION_BATCHES", "20")
     min_count = env("MIN_COUNT", "50")
-    only = {s.strip() for s in env("ONLY", "1,3,2,5,6").split(",") if s.strip()}
+    only = {s.strip() for s in env("ONLY", "0,1,3,2,5,6").split(",") if s.strip()}
 
     roles = role_args()
     pi = ["--prompt_indices", *split_args(env("PROMPT_INDICES"))] if env("PROMPT_INDICES") else []
@@ -151,6 +153,23 @@ def main() -> None:
     print(f"model={model}  judge={judge}")
     print(f"out={out_dir}  layers={layers}  question_count={qc}  shard={env('SHARD', 'none')}")
     print(f"roles={env('ROLES') or (env('GROUPS') or Path(env('ROLES_FILE', 'role_groups.json')).name)}")
+
+    if "0" in only and env("SKIP_PREFLIGHT") not in ("1", "true", "True"):
+        print("\n=== step 0: NDIF preflight ===")
+        pf = PIPE / "0_preflight_ndif.py"
+        # Gate the run on the SUBJECT model: a multi-day generation must not start against
+        # a cold/absent subject or a down service. Abort fast if so.
+        if subprocess.run([py, str(pf), "--require", model]).returncode != 0:
+            raise SystemExit(
+                "NDIF preflight failed for the subject model -- aborting before stage 1. "
+                "Wait for it to warm up and re-run (everything is resumable), or set "
+                "SKIP_PREFLIGHT=1 to bypass."
+            )
+        # The judge is stage 2 (hours away) and resumable, so report but never block on it.
+        subprocess.run([py, str(pf), "--require", judge, "--warn-only"])
+        if only == {"0"}:
+            print("\npreflight only (ONLY=0) -- stopping.")
+            return
 
     if "1" in only:
         print("\n=== step 1/5: generate (NDIF) ===")
