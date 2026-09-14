@@ -15,13 +15,22 @@
     * rclone talks to the Drive API directly. No mount, nothing to crash, no local
       copy, and -Move deletes the local file only after the upload verifies.
 
-  ONE-TIME SETUP (needs your browser, and you must pick the right account):
+  ONE-TIME SETUP (needs your browser, and you must pick the right account).
+  root_folder_id confines the remote to ONE folder -- "experiment thesis" -- so every
+  rclone path is relative to it and nothing else in the Drive is reachable by path:
 
-      rclone config create tamara drive scope=drive
+      $rc = "$env:LOCALAPPDATA\Microsoft\WinGet\Packages\Rclone.Rclone_Microsoft.Winget.Source_8wekyb3d8bbwe\rclone-v1.75.1-windows-amd64\rclone.exe"
+      & $rc config create tamara drive scope=drive root_folder_id=1JkRKnwtl4PuPIG5wPemdxzIHaFkDJenq
 
   A browser opens -- sign in as tamarayushra@gmail.com. Confirm with:
 
       .\src\assistant_axis_ndif\drive.ps1 -Check
+
+  Scope caveat, stated plainly: root_folder_id limits where rclone OPERATES, not what the
+  OAuth token is permitted to reach. scope=drive.file would limit the token itself, but
+  Google grants that scope access only to files the app created, so it cannot see a folder
+  made by hand in the web UI. Confining by root_folder_id is the option that works with a
+  pre-existing folder.
 
 .EXAMPLE
   .\src\assistant_axis_ndif\drive.ps1 -Check
@@ -34,11 +43,16 @@ param(
     [string]$Sync,
     [string]$Dest,
     [string]$Remote = "tamara",
-    [string]$Root = "expLB",
+    # the remote is already rooted at the "experiment thesis" folder via
+    # root_folder_id, so paths here are relative to it; no extra nesting needed
+    [string]$Root = "",
     # delete each local file once rclone has verified it landed -- this is what keeps
     # the 20 GB of activations off a 34 GB disk
     [switch]$Move,
-    [int]$Transfers = 4
+    [int]$Transfers = 4,
+    # the "experiment thesis" folder; the remote is rooted here so rclone cannot
+    # reach anything else in the Drive by path
+    [string]$FolderId = "1JkRKnwtl4PuPIG5wPemdxzIHaFkDJenq"
 )
 
 function Get-Rclone {
@@ -94,7 +108,8 @@ function Invoke-Check {
     Write-Host "  binary  : $rclone"
     $remotes = & $rclone listremotes 2>$null
     if (-not $remotes) {
-        Write-Warning "  no remote configured. Run:  rclone config create $Remote drive scope=drive"
+        Write-Warning "  no remote configured. Run:"
+        Write-Host   "    & `"$rclone`" config create $Remote drive scope=drive root_folder_id=$FolderId"
         Write-Host   "  then sign in as tamarayushra@gmail.com when the browser opens."
         return $false
     }
@@ -119,7 +134,7 @@ if ($Check -or (-not $Sync)) {
 
 if (-not (Test-Path $Sync)) { throw "source not found: $Sync" }
 if (-not $Dest) { $Dest = Split-Path $Sync -Leaf }
-$target = "${Remote}:$Root/$Dest"
+$target = if ($Root) { "${Remote}:$Root/$Dest" } else { "${Remote}:$Dest" }
 
 $verb = if ($Move) { "move" } else { "copy" }
 Write-Host "`n=== rclone $verb  $Sync  ->  $target ==="
