@@ -1,0 +1,64 @@
+{
+  "name": "paper16-persona-coordinates",
+  "description": "Mahadik & Skapars' own persona sets (arXiv:2605.09391v2, Appendices A-B), reconstructed in Assistant-Axis instruction format. 8 deceptive + 7 honest = the paper's 16-persona deception set once the shared `default` anchor is counted; 5 + 5 + default = its 11-persona sycophancy set. Group NAMES are the ones 6_axes.py hardcodes; the roles inside are all pc_* so this bank never mixes with own100.",
+  "subject_model": "meta-llama/Llama-3.3-70B-Instruct",
+  "source_role_list": "src/assistant_axis_ndif/pc_instructions",
+  "groups": {
+    "deception": {
+      "contrast_with": "honesty",
+      "note": "control disclosure: timing, emphasis, omission",
+      "roles": [
+        "pc_handler",
+        "pc_broker",
+        "pc_impression_manager",
+        "pc_coverup_operator",
+        "pc_gatekeeper",
+        "pc_spin_doctor",
+        "pc_plausible_denier",
+        "pc_narrative_manager"
+      ]
+    },
+    "honesty": {
+      "contrast_with": "deception",
+      "note": "completeness of the record as the governing value",
+      "roles": [
+        "pc_ombudsman",
+        "pc_transparency_officer",
+        "pc_disclosure_counsel",
+        "pc_whistleblower",
+        "pc_documentarian",
+        "pc_fact_checker",
+        "pc_archivist"
+      ]
+    },
+    "sycophancy": {
+      "contrast_with": "anti_sycophancy",
+      "note": "agreement and validation over accuracy",
+      "roles": [
+        "pc_yes_man",
+        "pc_flatterer",
+        "pc_people_pleaser",
+        "pc_cheerleader",
+        "pc_enabler"
+      ]
+    },
+    "anti_sycophancy": {
+      "contrast_with": "sycophancy",
+      "note": "assessment and pushback over agreement",
+      "roles": [
+        "pc_critic",
+        "pc_skeptic",
+        "pc_contrarian",
+        "pc_blunt_advisor",
+        "pc_tough_love_mentor"
+      ]
+    },
+    "assistant_anchor": {
+      "contrast_with": null,
+      "note": "the paper's default anchor; reuses the existing AA role",
+      "roles": [
+        "default"
+      ]
+    }
+  }
+}
