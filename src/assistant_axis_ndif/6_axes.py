@@ -88,6 +88,32 @@ def pca_per_layer(X: torch.Tensor, k: int):
     return torch.stack(comps), torch.stack(ratios)
 
 
+def orient_pcs(comps: torch.Tensor, reference: torch.Tensor):
+    """Pin each PC's sign per layer. -> (comps, signs (K, k)).
+
+    torch.linalg.svd picks an arbitrary sign, independently at every layer. Left alone,
+    a layer sweep of <z, u_k> comes out as a sawtooth and AUROC flips to 1 - AUROC at
+    random layers. Orient each component so it points the same way as `reference`
+    (that behaviour's own contrast direction); for a component near-orthogonal to the
+    reference, fall back to "largest-magnitude coordinate is positive" so the choice is
+    still deterministic across rebuilds.
+    """
+    K, k, _ = comps.shape
+    signs = torch.ones(K, k)
+    for layer in range(K):
+        for j in range(k):
+            u = comps[layer, j]
+            c = cos(u, reference[layer]).item()
+            if abs(c) < 1e-3:
+                idx = int(u.abs().argmax())
+                s = 1.0 if u[idx] >= 0 else -1.0
+            else:
+                s = 1.0 if c > 0 else -1.0
+            signs[layer, j] = s
+            comps[layer, j] = u * s
+    return comps, signs
+
+
 def cos(a: torch.Tensor, b: torch.Tensor) -> torch.Tensor:
     return torch.nn.functional.cosine_similarity(a, b, dim=-1)
 
@@ -144,10 +170,52 @@ def main() -> None:
         axes[name] = d
         counts[name] = (npos, nneg)
 
-    # --- PCA over centered role vectors (Eq 2, then PCA) -----------------------------
+    # the paper's unified harmful axis (Appendix C): both harmful groups vs both harmless
+    harmful = groups["deception"]["roles"] + groups["sycophancy"]["roles"]
+    harmless = groups["honesty"]["roles"] + groups["anti_sycophancy"]["roles"]
+    d, npos, nneg = class_contrast(vecs, harmful, harmless)
+    if d is not None:
+        axes["unified"] = d
+        counts["unified"] = (npos, nneg)
+
+    # --- PCA: one basis per behaviour, plus the all-roles basis (Eq 2, then Eq 3) -----
+    # Mahadik & Skapars run PCA over the behaviour-specific persona set ONLY, so their PC1
+    # is a behaviour axis by construction. PCA over every role instead recovers the
+    # Assistant Axis -- a different object (measured cos(PC1, assistant) = 0.77-0.82 on
+    # both our vectors and the published HF ones). Build both, labelled for what they are.
     names = sorted(vecs)
-    X = torch.stack([vecs[r] for r in names])
-    comps, ratios = pca_per_layer(X - X.mean(0, keepdim=True), args.pcs)
+    pcas: dict[str, dict] = {}
+
+    def build_pca(tag: str, subset: list[str], reference: torch.Tensor, ref_name: str):
+        present = sorted({r for r in subset if r in vecs})
+        if len(present) < 3:
+            print(f"  ! pca[{tag}] skipped: only {len(present)} vector(s)")
+            return
+        Xs = torch.stack([vecs[r] for r in present])
+        c, rt = pca_per_layer(Xs - Xs.mean(0, keepdim=True), args.pcs)
+        c, sg = orient_pcs(c, reference)
+        pcas[tag] = {"components": c, "variance_ratio": rt, "sign": sg,
+                     "roles": present, "reference": ref_name}
+
+    if "deception" in axes:
+        build_pca("deception",
+                  groups["deception"]["roles"] + groups["honesty"]["roles"] + default_like,
+                  axes["deception"], "deception contrast")
+    if "sycophancy" in axes:
+        build_pca("sycophancy",
+                  groups["sycophancy"]["roles"] + groups["anti_sycophancy"]["roles"] + default_like,
+                  axes["sycophancy"], "sycophancy contrast")
+    if "unified" in axes:
+        build_pca("unified",
+                  groups["deception"]["roles"] + groups["honesty"]["roles"]
+                  + groups["sycophancy"]["roles"] + groups["anti_sycophancy"]["roles"] + default_like,
+                  axes["unified"], "unified contrast")
+    build_pca("all", names, assistant_axis, "assistant axis")
+
+    # kept at the top level under the original names for backward compatibility: this is
+    # the ASSISTANT-AXIS basis, not a behaviour one.
+    comps = pcas["all"]["components"]
+    ratios = pcas["all"]["variance_ratio"]
 
     # --- report ----------------------------------------------------------------------
     target = args.report_layer if args.report_layer is not None else layers[len(layers) // 2]
@@ -157,15 +225,36 @@ def main() -> None:
         npos, nneg = counts[name]
         print(f"  {name:11} norm = {ax[li].norm():8.3f}   ({npos} vs {nneg} roles)")
 
+    # --- all-roles PCA: this is the Assistant Axis replication (Lu et al. 2026) -------
     pc1 = comps[:, 0, :]
-    here = cos(pc1[li], axes["assistant"][li]).abs().item()
-    across = cos(pc1, axes["assistant"]).abs()
-    print(f"\n  cos(PC1, assistant axis) = {here:.3f} at layer {layers[li]}"
-          "   [paper: > 0.71 mid-layer]")
-    print(f"  across layers: min {across.min():.3f}, median {across.median():.3f}"
-          "   [paper: > 0.60 all layers]")
+    here = cos(pc1[li], axes["assistant"][li]).item()
+    across = cos(pc1, axes["assistant"])
+    print()
+    print(f"  [all-roles PCA = Assistant Axis basis, n={len(pcas['all']['roles'])}]")
+    print(f"  cos(PC1, assistant axis) = {here:+.3f} at layer {layers[li]}"
+          "   [Assistant Axis paper: > 0.71 mid-layer]")
+    print(f"  across layers: min {across.min():+.3f}, median {across.median():+.3f}"
+          "   [Assistant Axis paper: > 0.60 all layers]")
     print(f"  PC1 explains {ratios[li, 0]:.1%} of role variance; "
           f"top-{ratios.shape[1]} {ratios[li].sum():.1%}")
+
+    # --- per-behaviour PCA: the basis Mahadik & Skapars actually use ------------------
+    # Signs are pinned, so these cosines are signed and comparable across layers.
+    print()
+    print("  [per-behaviour PCA -- the persona-coordinates basis]")
+    print("    " + f"{'basis':12}{'n':>4}{'cos(PC1,contrast)':>20}"
+          f"{'cos(PC1,assistant)':>21}{'PC1 var':>10}")
+    for tag in ("deception", "sycophancy", "unified"):
+        if tag not in pcas:
+            continue
+        pk = pcas[tag]
+        b1 = pk["components"][:, 0, :]
+        print("    " + f"{tag:12}{len(pk['roles']):>4}"
+              f"{cos(b1[li], axes[tag][li]).item():>20.3f}"
+              f"{cos(b1[li], axes['assistant'][li]).item():>21.3f}"
+              f"{pk['variance_ratio'][li, 0]:>10.1%}")
+    print("    a behaviour PC1 near +1.0 on its own contrast is the expected geometry;")
+    print("    a large |cos| with the assistant axis is inherited from the contrast itself.")
 
     proj = {r: (vecs[r][li] @ pc1[li]).item() for r in names}
     dvals = [proj[r] for r in default_like]
@@ -189,10 +278,15 @@ def main() -> None:
     out = Path(args.output)
     out.parent.mkdir(parents=True, exist_ok=True)
     torch.save({"axes": axes, "counts": counts, "layers": layers,
+                # backward-compatible aliases: the ALL-ROLES (Assistant Axis) basis
                 "pca_components": comps, "pca_variance_ratio": ratios,
+                # per-behaviour bases, each sign-pinned against its own contrast
+                "pca": pcas,
                 "roles": names, "role_groups": groups,
                 "vectors_dir": str(Path(args.vectors_dir).resolve())}, out)
-    print(f"\nwrote {out}  ({', '.join(axes)}; PCA {tuple(comps.shape)})")
+    print()
+    print(f"wrote {out}  (axes: {', '.join(axes)}; "
+          f"pca bases: {', '.join(pcas)}; PCA {tuple(comps.shape)})")
 
 
 if __name__ == "__main__":
