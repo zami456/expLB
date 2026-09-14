@@ -45,6 +45,7 @@ import logging
 import os
 import sys
 import time
+from collections import Counter
 from pathlib import Path
 
 import jsonlines
@@ -138,9 +139,22 @@ def init_ndif(model_name: str):
 # --------------------------------------------------------------------------- #
 # per-role work
 # --------------------------------------------------------------------------- #
-def build_items(encoder: ConversationEncoder, conversations: list[list[dict]], max_length: int):
-    """Return list of (input_ids:list[int], a_start:int, a_end:int) for the last assistant span."""
+def build_items(encoder: ConversationEncoder, conversations: list[list[dict]], max_length: int,
+                drops: Counter | None = None):
+    """Return list of (input_ids:list[int], a_start:int, a_end:int) for the last assistant span.
+
+    `drops` counts every conversation that does not survive, by reason. It used to be
+    possible to lose an entire dataset here without a single line of output: the assistant
+    span sits at the END of the sequence, but truncation kept the HEAD (``full_ids[:max]``),
+    so on a long-context row everything retained is context and the span falls past the cut.
+    Measured on the evaluation corpus at max_length=2048, that silently removed all 80
+    ai_audit rows (context median 5,285 tokens) and 22 sandbagging_v2 rows. Over-long
+    sequences now keep their TAIL -- the response is the only thing we pool over -- and both
+    truncations and drops are counted.
+    """
     items = []
+    if drops is None:
+        drops = Counter()
     for conv in conversations:
         try:
             # transformers 5 made apply_chat_template default to return_dict=True, so the
@@ -149,7 +163,9 @@ def build_items(encoder: ConversationEncoder, conversations: list[list[dict]], m
             # as (0, 1). Force the transformers-4 return shape.
             full_ids, spans = encoder.build_turn_spans(conv, return_dict=False)
         except Exception as e:  # noqa: BLE001
-            logger.debug("span build failed: %s", e); continue
+            logger.debug("span build failed: %s", e)
+            drops["span_build_failed"] += 1
+            continue
         # Deliberately outside the try: a per-conversation failure is worth skipping,
         # but a changed return shape is systemic and must not be swallowed into
         # "0 usable spans" for every role.
@@ -160,18 +176,39 @@ def build_items(encoder: ConversationEncoder, conversations: list[list[dict]], m
             )
         asst = [s for s in spans if s.get("role") == "assistant"]
         if not asst:
+            drops["no_assistant_span"] += 1
             continue
         s = asst[-1]
         a0, a1 = int(s["start"]), int(s["end"])
         if a1 <= a0:
+            drops["empty_assistant_span"] += 1
             continue
         if len(full_ids) > max_length:
-            full_ids = full_ids[:max_length]
-        a1 = min(a1, len(full_ids))
+            # keep the TAIL, not the head: the assistant span is at the end and is the only
+            # thing we pool over. Head-truncation drops the span entirely on long-context
+            # rows, which is how a whole dataset can disappear without an error.
+            cut = len(full_ids) - max_length
+            full_ids = full_ids[cut:]
+            a0, a1 = a0 - cut, a1 - cut
+            drops["truncated_context"] += 1
+        a0, a1 = max(a0, 0), min(a1, len(full_ids))
         if a0 >= a1:
+            drops["span_lost_to_truncation"] += 1
             continue
         items.append((full_ids, a0, a1))
     return items
+
+
+def report_drops(drops: Counter, n_in: int, n_out: int, label: str = "") -> None:
+    """Say out loud what build_items threw away. Silence here is how a dataset vanishes."""
+    lost = n_in - n_out
+    if drops.get("truncated_context"):
+        logger.warning("%s%d/%d conversation(s) exceeded max_length and were tail-truncated",
+                       label, drops["truncated_context"], n_in)
+    if lost:
+        detail = ", ".join(f"{k}={v}" for k, v in sorted(drops.items())
+                           if k != "truncated_context")
+        logger.warning("%s%d/%d conversation(s) dropped (%s)", label, lost, n_in, detail)
 
 
 def batched(seq, n):
@@ -360,7 +397,9 @@ def process_role(llm, layer_idx, hidden, encoder, role: str, args, pad_id: int) 
         logger.warning("Skip %s: only %d kept (min_count=%d)", role, len(convs), args.min_count)
         return
 
-    items = build_items(encoder, convs, args.max_length)
+    drops: Counter = Counter()
+    items = build_items(encoder, convs, args.max_length, drops)
+    report_drops(drops, len(convs), len(items), f"{role}: ")
     if len(items) < args.min_count:
         logger.warning("Skip %s: only %d usable spans (min_count=%d)", role, len(items), args.min_count)
         return
