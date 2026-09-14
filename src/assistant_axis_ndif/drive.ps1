@@ -54,14 +54,21 @@ function Invoke-Check {
     param([string]$rclone)
 
     Write-Host "=== disk ==="
+    # Only report free space for REAL disks. G: and H: are Google Drive mounts and the
+    # number Windows reports for them is meaningless: H: is a shortcut whose target is a
+    # folder on C:, so it just echoes C:'s free space, and G: returns a placeholder the
+    # streaming filesystem invents. Neither relates to the account's quota -- that comes
+    # only from `rclone about`, printed below.
+    $notStorage = @{
+        'G' = 'Google Drive STREAM mount (suraiyashanaz1) -- not storage'
+        'H' = 'Google Drive shortcut -> tamarayushra mirror folder on C: -- not storage'
+    }
     Get-PSDrive -PSProvider FileSystem | ForEach-Object {
-        # G:/H: are Drive mounts, not storage; say so rather than implying free space
-        $note = switch ($_.Name) {
-            'G' { '  (Google Drive stream mount - suraiyashanaz1)' }
-            'H' { '  (Google Drive shortcut - tamarayushra mirror)' }
-            default { '' }
+        if ($notStorage.ContainsKey($_.Name)) {
+            Write-Host ("  {0}:  {1}" -f $_.Name, $notStorage[$_.Name])
+        } else {
+            Write-Host ("  {0}:  {1,6:N1} GB free   (real disk)" -f $_.Name, ($_.Free / 1GB))
         }
-        Write-Host ("  {0}:  {1,6:N1} GB free{2}" -f $_.Name, ($_.Free / 1GB), $note)
     }
 
     Write-Host "`n=== Drive desktop app ==="
