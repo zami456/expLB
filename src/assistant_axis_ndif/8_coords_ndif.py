@@ -209,7 +209,7 @@ class SlowDownload(RuntimeError):
     """An NDIF result download collapsed and is not worth waiting for."""
 
 
-def install_download_deadline(min_kbps: float, grace: float) -> bool:
+def install_download_deadline(min_kbps: float, grace: float, attempts: int = 4) -> bool:
     """Abort a collapsed NDIF result download so the session retries on a fresh connection.
 
     Measured on the lab PC 2026-09-15: result downloads from prod-ndif-results.s3 are
@@ -221,10 +221,14 @@ def install_download_deadline(min_kbps: float, grace: float) -> bool:
     fixes it and waiting does not.
 
     httpx's read timeout cannot catch this, because bytes keep arriving -- just very few of
-    them. So the check is on throughput, after a grace period so a slow start is not
-    punished. Raising here lands in run_session's retry, which re-dispatches the session and
-    calls get_result again on a brand-new client. That costs one ~15s recompute instead of
-    the six minutes the supervisor's stall killer needs to notice and restart the process.
+    them. So the check is on throughput, after a grace period so a slow start is not punished.
+
+    A violation retries the GET here, on a new client, against the same presigned URL --
+    NOT by raising straight away. The result is already sitting in S3, so re-dispatching the
+    whole session to NDIF would pay ~15s of recompute to fetch a file that already exists.
+    Only when every attempt draws a sick flow does this raise, and then run_session's retry
+    takes over as before. Either way it beats the six minutes the supervisor's stall killer
+    needs to notice and restart the process.
 
     Returns False if nnsight's internals have moved, in which case the run continues
     unpatched and the supervisor's stall killer is still the backstop.
@@ -240,28 +244,34 @@ def install_download_deadline(min_kbps: float, grace: float) -> bool:
     import httpx
 
     def get_result(self, url: str, content_length=None):
-        result_bytes = io.BytesIO()
         timeout = httpx.Timeout(self.CONNECT_TIMEOUT, read=self.READ_TIMEOUT)
-        t0 = time.time()
-        got = 0
-        with httpx.Client(timeout=timeout) as client:
-            with client.stream("GET", url) as stream:
-                total = content_length or float(stream.headers.get("Content-length", 0))
-                with tqdm(total=total or None, unit="B", unit_scale=True,
-                          desc="downloading", leave=False) as bar:
-                    for data in stream.iter_bytes(chunk_size=128 * 1024):
-                        got += len(data)
-                        bar.update(len(data))
-                        result_bytes.write(data)
-                        elapsed = time.time() - t0
-                        if elapsed > grace:
-                            kbps = got / 1024.0 / elapsed
-                            if kbps < min_kbps:
-                                raise SlowDownload(
-                                    "%.1f MB in %.0fs = %.0f KB/s (floor %.0f); "
-                                    "dropping this flow and retrying"
-                                    % (got / 1e6, elapsed, kbps, min_kbps))
-        return self._decompress_and_load(result_bytes)
+        last = None
+        for attempt in range(1, attempts + 1):
+            result_bytes = io.BytesIO()
+            t0 = time.time()
+            got = 0
+            try:
+                with httpx.Client(timeout=timeout) as client:
+                    with client.stream("GET", url) as stream:
+                        total = content_length or float(stream.headers.get("Content-length", 0))
+                        with tqdm(total=total or None, unit="B", unit_scale=True,
+                                  desc="downloading", leave=False) as bar:
+                            for data in stream.iter_bytes(chunk_size=128 * 1024):
+                                got += len(data)
+                                bar.update(len(data))
+                                result_bytes.write(data)
+                                elapsed = time.time() - t0
+                                if elapsed > grace and (got / 1024.0 / elapsed) < min_kbps:
+                                    raise SlowDownload(
+                                        "%.1f MB in %.0fs = %.0f KB/s (floor %.0f)"
+                                        % (got / 1e6, elapsed, got / 1024.0 / elapsed, min_kbps))
+                return self._decompress_and_load(result_bytes)
+            except SlowDownload as exc:
+                last = exc
+                result_bytes.close()
+                logger.warning("  download attempt %d/%d: %s -- new connection",
+                               attempt, attempts, exc)
+        raise SlowDownload("%s after %d attempts" % (last, attempts))
 
     RemoteBackend.get_result = get_result
     return True
@@ -453,7 +463,10 @@ def main() -> None:
     ap.add_argument("--min_download_kbps", type=float, default=300.0,
                     help="abort a result download slower than this, and retry on a "
                          "fresh connection (0 disables)")
-    ap.add_argument("--download_grace", type=float, default=20.0,
+    ap.add_argument("--download_attempts", type=int, default=4,
+                    help="re-GET the same result URL this many times on a fresh "
+                         "connection before giving up and re-running the session")
+    ap.add_argument("--download_grace", type=float, default=12.0,
                     help="seconds before the download throughput floor starts applying")
     ap.add_argument("--prepare_only", action="store_true")
     ap.add_argument("--overwrite", action="store_true")
@@ -476,7 +489,8 @@ def main() -> None:
         nnsight, llm, n_layers = act2.init_ndif(args.model)
         tok = llm.tokenizer
         if args.min_download_kbps > 0:
-            ok = install_download_deadline(args.min_download_kbps, args.download_grace)
+            ok = install_download_deadline(args.min_download_kbps, args.download_grace,
+                                           args.download_attempts)
             logger.info("download floor %.0f KB/s after %.0fs: %s",
                         args.min_download_kbps, args.download_grace,
                         "installed" if ok else "NOT installed (nnsight internals moved)")
