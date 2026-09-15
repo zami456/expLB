@@ -287,6 +287,13 @@ def main() -> None:
     logger.info("nnsight %s  NDIF host=%s  judge=%s",
                 nnsight.__version__, os.environ.get("NDIF_HOST"), args.judge_model)
     llm = LanguageModel(args.judge_model)
+
+    # Resilience shared with the rest of the pipeline. Not a trace body, so importing it is
+    # safe -- only blocks that appear inside trace/generate/session must live in this file.
+    import importlib.util as _ilu
+    _spec = _ilu.spec_from_file_location("ndif_common", PIPELINE_DIR / "ndif_common.py")
+    _nc = _ilu.module_from_spec(_spec); _spec.loader.exec_module(_nc)
+    _nc.harden()
     llm.tokenizer.padding_side = "left"
     if llm.tokenizer.pad_token_id is None:
         llm.tokenizer.pad_token_id = llm.tokenizer.eos_token_id

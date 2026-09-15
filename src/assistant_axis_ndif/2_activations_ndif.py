@@ -131,6 +131,14 @@ def init_ndif(model_name: str):
     logger.info("nnsight %s  NDIF host=%s  model=%s",
                 nnsight.__version__, CONFIG.API.HOST, model_name)
     llm = LanguageModel(model_name)
+
+    # Harden here rather than in each caller: init_ndif is the single door every remote
+    # script goes through, including 8_coords_ndif and 10_sycophancy_ndif. The rebuild that
+    # hung for 40 minutes at "RUNNING (32.0s)" was running without any of this.
+    import importlib.util as _ilu
+    _spec = _ilu.spec_from_file_location("ndif_common", Path(__file__).resolve().parent / "ndif_common.py")
+    _nc = _ilu.module_from_spec(_spec); _spec.loader.exec_module(_nc)
+    _nc.harden()
     n_layers = int(llm.config.num_hidden_layers)
     logger.info("model config: %d layers, hidden=%d", n_layers, llm.config.hidden_size)
     return nnsight, llm, n_layers
