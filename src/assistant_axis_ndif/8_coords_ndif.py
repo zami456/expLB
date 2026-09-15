@@ -158,6 +158,34 @@ def batch_by_tokens(items, token_budget: int, max_rows: int):
     return out
 
 
+def group_sessions(groups, session_tokens: int, max_batches: int):
+    """Bundle batches into one NDIF job by TOTAL padded tokens, not by a fixed batch count.
+
+    --token_budget bounds ONE batch. session_batches bounded the NUMBER of batches, so a
+    session's real cost was batches x (whatever each batch happened to cost) and nothing
+    bounded that product. Measured 2026-09-15: instructed-deception batches run ~2,000 padded
+    tokens, so 8 of them is ~16,000 and every session completed; insider-trading batches sit
+    at 11,976 -- right at the per-batch budget -- so 8 of them is ~95,800 and NDIF rejected
+    every job 0.4s after dispatch, livelocking the dataset.
+
+    This is the same bug as judge_batch 48 sending 35,040 padded tokens and returning zero
+    scores overnight, one level up: bound the thing that actually costs, which is padded
+    tokens, and keep the count only as a secondary cap.
+    """
+    out, cur, cur_tok = [], [], 0
+    for g in groups:
+        cost = len(g) * max(len(it[1]) for it in g)
+        if cur and (cur_tok + cost > session_tokens or len(cur) >= max_batches):
+            out.append(cur)
+            cur, cur_tok = [g], cost
+        else:
+            cur.append(g)
+            cur_tok += cost
+    if cur:
+        out.append(cur)
+    return out
+
+
 def pad_batch(batch, pad_id: int):
     """-> input_ids (B,T), attention_mask (B,T), span (B,T) float32 1.0 on response tokens."""
     T = max(len(ids) for _, ids, _, _ in batch)
@@ -398,8 +426,11 @@ def process_dataset(llm, nnsight, tok, encoder, key: str, layer_idx, args, pad_i
 
     seq = len(list(out_dir.glob("chunk_*.pt")))
     want_last = "last" in args.pooling
-    chunks = [groups[i:i + args.session_batches]
-              for i in range(0, len(groups), args.session_batches)]
+    chunks = group_sessions(groups, args.session_tokens, args.session_batches)
+    if chunks:
+        _cost = [sum(len(g) * max(len(it[1]) for it in g) for g in c) for c in chunks]
+        logger.info("  %d sessions, widest %d padded tokens (session budget %d)",
+                    len(chunks), max(_cost), args.session_tokens)
     for chunk in tqdm(chunks, desc=f"  {key}", leave=False):
         prepared = [pad_batch(b, pad_id) for b in chunk]
         got = run_session(llm, nnsight, layer_idx, prepared, want_last, args.retries)
@@ -458,7 +489,14 @@ def main() -> None:
     ap.add_argument("--batch_size", type=int, default=8,
                     help="max ROWS per call; the real bound is --token_budget")
     ap.add_argument("--token_budget", type=int, default=12000)
-    ap.add_argument("--session_batches", type=int, default=8)
+    ap.add_argument("--session_batches", type=int, default=8,
+                    help="max batches per NDIF job; the real bound is --session_tokens")
+    ap.add_argument("--session_tokens", type=int, default=16000,
+                    help="max TOTAL padded tokens per NDIF job. instructed-deception "
+                         "ran at ~12,200 per session and always completed; "
+                         "insider-trading at 8 batches is ~95,800 and NDIF rejects it "
+                         "0.4s after dispatch. 16,000 keeps short-context datasets "
+                         "unchanged and gives long ones one batch per session")
     ap.add_argument("--retries", type=int, default=4)
     ap.add_argument("--min_download_kbps", type=float, default=300.0,
                     help="abort a result download slower than this, and retry on a "
