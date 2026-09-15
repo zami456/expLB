@@ -36,6 +36,7 @@ import importlib.util
 import json
 import logging
 import os
+import random
 import sys
 import time
 from pathlib import Path
@@ -245,13 +246,50 @@ def resolve_layers(spec, n_layers: int):
     return idx
 
 
+def subsample(rows, n: int, seed: int):
+    """Label-stratified subsample, deterministic under `seed`.
+
+    --limit takes the head, which is a sample only if the file happens to be shuffled.
+    Measured: instructed-deception is label-sorted, so --limit 200 returns 0 deceptive
+    and 200 honest; harm-pressure-choice's first 200 rows swallow all 134 of its
+    deceptive rows and nothing else. The layer sweep chooses a layer from these rows, so
+    a skewed subsample chooses the layer on a skewed corpus.
+
+    Round-robin over label buckets, so the result is as balanced as the data allows and
+    degrades gracefully when a class is smaller than n/2. row_id order is restored at the
+    end to keep chunk resume and items.pt stable across runs.
+    """
+    if n <= 0 or n >= len(rows):
+        return rows
+    buckets: dict = {}
+    for r in rows:
+        buckets.setdefault(r.label, []).append(r)
+    rng = random.Random(seed)
+    for v in buckets.values():
+        rng.shuffle(v)
+    keys = sorted(k for k in buckets if k is not None)
+    out: list = []
+    while len(out) < n and any(buckets[k] for k in keys):
+        for k in keys:
+            if buckets[k] and len(out) < n:
+                out.append(buckets[k].pop())
+    # Ambiguous rows only backfill. Round-robining them alongside the labelled classes
+    # spent 66 of roleplaying's 200 slots on rows every probe drops, while 87 usable
+    # labelled rows sat unsampled.
+    if len(out) < n:
+        out.extend(buckets.get(None, [])[: n - len(out)])
+    return sorted(out, key=lambda r: r.row_id)
+
+
 def process_dataset(llm, nnsight, tok, encoder, key: str, layer_idx, args, pad_id):
     out_dir = Path(args.output_dir) / key
     out_dir.mkdir(parents=True, exist_ok=True)
     items_path = out_dir / "items.pt"
 
     rows = E.load_dataset(key)
-    if args.limit:
+    if args.sample:
+        rows = subsample(rows, args.sample, args.seed)
+    elif args.limit:
         rows = rows[:args.limit]
     by_id = {r.row_id: r for r in rows}
 
@@ -337,7 +375,12 @@ def main() -> None:
     ap.add_argument("--layers", nargs="+", default=["every4"],
                     help="all | every4 | explicit ints")
     ap.add_argument("--pooling", nargs="+", default=["mean", "last"])
-    ap.add_argument("--limit", type=int, default=0, help="first N rows per dataset (0 = all)")
+    ap.add_argument("--limit", type=int, default=0,
+                    help="first N rows per dataset (0 = all). Head slice -- NOT a sample; "
+                         "several datasets are label-sorted. Use --sample instead.")
+    ap.add_argument("--sample", type=int, default=0,
+                    help="label-stratified N rows per dataset (0 = all); overrides --limit")
+    ap.add_argument("--seed", type=int, default=42)
     ap.add_argument("--max_length", type=int, default=8192)
     ap.add_argument("--batch_size", type=int, default=8,
                     help="max ROWS per call; the real bound is --token_budget")
