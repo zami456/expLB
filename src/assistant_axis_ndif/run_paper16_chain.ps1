@@ -68,12 +68,18 @@ if ($n -lt 20) { Log "TOO FEW ROLE FILES -- stopping before judging"; exit 1 }
 
 # ---- stage 3: judge ------------------------------------------------------------------
 # Llama-3.1-70B-Instruct is pinned and was HOT through the outage, unlike the subject model.
-Log "judging with meta-llama/Llama-3.1-70B-Instruct"
+#
+# judge_batch 16, not the default 48. Measured against the longest paper16 prompts, a call
+# costs len(batch) * longest-in-batch with left padding: batch 16 = 11,680 padded tokens
+# and completes; batch 24 = 17,520 and NDIF rejects it 0.3s after dispatch. The default 48
+# sends 35,040 and failed every single job, which is why the first overnight run produced
+# 0 scores. Same class of bug as row-count batching in extraction.
+Log "judging with meta-llama/Llama-3.1-70B-Instruct (judge_batch 16 -- 48 is over the limit)"
 & $py "$D\3_judge_ndif.py" `
     --responses_dir "$out\responses" --roles_dir "$D\pc_instructions" `
     --roles_file "$D\pc_role_groups.json" --output_dir "$out\scores" `
     --judge_model meta-llama/Llama-3.1-70B-Instruct `
-    --judge_batch 48 --session_batches 8 `
+    --judge_batch 16 --session_batches 8 `
     *>> "logs\paper16_judge.log"
 Log "scores on disk: $((Get-ChildItem "$out\scores\*.json" -EA SilentlyContinue).Count)"
 
