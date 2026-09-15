@@ -119,6 +119,11 @@ foreach ($tag in @("vectors_all", "vectors_s3")) {
 
 # ---- the gate ------------------------------------------------------------------------
 Log "=== COSINE GATE: is paper16 less assistant-contaminated than own100? ==="
-& $py "$D\pc_gate.py" *>> $log
+# Capture and re-emit through Log rather than `*>> $log`. PowerShell's redirection writes
+# UTF-16 while Add-Content writes UTF-8, so mixing them in ONE file interleaves encodings
+# and the result reads as "n o   a x e s   f i l e s". The per-stage logs below are fine
+# because each is written only by its own redirect, hence internally consistent -- they
+# just have to be read back as UTF-16.
+foreach ($line in (& $py "$D\pc_gate.py" 2>&1)) { Log $line }
 
 Log "=== chain finished ==="
