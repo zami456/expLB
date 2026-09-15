@@ -270,13 +270,18 @@ def _span_mean_sum(llm, layer_idx, span):
     # (B,T,H) itself, NOT a (hidden, ...) tuple -> no [0].
     # span was built on the client (CPU/float32) next to a sharded bf16 model, so
     # take device+dtype off a live activation at run time, per layer.
+    # The mask stays fp32 and every reduction names dtype=float32. Casting it to the
+    # model's bfloat16 rounds the token COUNT: bf16 carries 8 mantissa bits, so integers
+    # step by 2 above 256 and by 4 above 512. Measured on the paper16 rollouts -- median
+    # response 293 tokens, p90 474 -- 27.6% of responses landed on a count bf16 cannot
+    # represent, so their mean was divided by the wrong denominator.
     per_layer = []
     for L in layer_idx:                                                 # ascending: reading
         h = llm.model.layers[L].output                                  # a late module then an
-        m = span.to(h.device, h.dtype)                                  # early one is an error
-        num = (h * m[:, :, None]).sum(dim=1)                            # (B,H)
-        den = m.sum(dim=1).clamp(min=1.0)[:, None]                      # (B,1)
-        per_layer.append((num / den).to(torch.float32).sum(dim=0).cpu())  # (H,)
+        m = span.to(h.device, torch.float32)                            # early one is an error
+        num = (h * m[:, :, None].to(h.dtype)).sum(dim=1, dtype=torch.float32)   # (B,H)
+        den = m.sum(dim=1, dtype=torch.float32).clamp(min=1.0)[:, None]         # (B,1)
+        per_layer.append((num / den).sum(dim=0).cpu())                  # (H,)
     return torch.stack(per_layer)                                       # (K,H) on CPU
 
 
