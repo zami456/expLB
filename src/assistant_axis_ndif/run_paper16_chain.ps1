@@ -43,8 +43,9 @@ function Wait-ForGeneration {
     while ($true) {
         # Poll rather than Wait-Process: the venv python is a trampoline that re-execs, so
         # the pid worth waiting on is not the one that survives.
+        # require the .py so a query mentioning the script does not count as the script
         $p = Get-CimInstance Win32_Process -Filter "Name='python.exe'" -ErrorAction SilentlyContinue |
-             Where-Object { $_.CommandLine -match '1_generate_ndif' }
+             Where-Object { $_.CommandLine -match '1_generate_ndif\.py' }
         if (-not $p) { return }
         Start-Sleep -Seconds 30
     }

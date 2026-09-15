@@ -54,16 +54,36 @@ function Test-Done {
 }
 
 function Test-ChainAlive {
+    # Match the script as it is INVOKED (-File <path>), not any command line that merely
+    # mentions it. A bare -match 'run_paper16_chain' also matches the query asking about it,
+    # so a Get-CimInstance check counted ITSELF and reported a chain running when none was.
+    # That happened, and sent a diagnosis off in the wrong direction for several minutes.
     $c = Get-CimInstance Win32_Process -Filter "Name='powershell.exe'" -ErrorAction SilentlyContinue |
-         Where-Object { $_.CommandLine -match 'run_paper16_chain' -and $_.ProcessId -ne $PID }
+         Where-Object {
+             $_.ProcessId -ne $PID -and
+             $_.CommandLine -match '-File\s+\S*run_paper16_chain\.ps1' -and
+             $_.CommandLine -notmatch 'Get-CimInstance'
+         }
+    # Stage scripts are invoked as `python <dir>/N_name_ndif.py`, so require the .py.
     $g = Get-CimInstance Win32_Process -Filter "Name='python.exe'" -ErrorAction SilentlyContinue |
-         Where-Object { $_.CommandLine -match 'assistant_axis_ndif' }
+         Where-Object { $_.CommandLine -match 'assistant_axis_ndif\S*\.py' }
     return [bool]($c -or $g)
 }
 
+$script:lastNdifOk    = $false
+$script:lastNdifCheck = [datetime]::MinValue
+
 function Test-NdifReady {
+    # Each call costs 30-60s importing torch/transformers/nnsight, so a READY answer is
+    # cached briefly. A NOT-READY answer is never cached -- that is the state worth
+    # noticing the moment it changes.
+    if ($script:lastNdifOk -and ((Get-Date) - $script:lastNdifCheck).TotalMinutes -lt 15) {
+        return $true
+    }
     & $py "$D\0_preflight_ndif.py" *> "logs\paper16_preflight.log"
-    return ($LASTEXITCODE -eq 0)   # 0 = READY or WARMING, 2 = NOT READY
+    $script:lastNdifOk    = ($LASTEXITCODE -eq 0)   # 0 = READY or WARMING, 2 = NOT READY
+    $script:lastNdifCheck = Get-Date
+    return $script:lastNdifOk
 }
 
 $restarts = 0
