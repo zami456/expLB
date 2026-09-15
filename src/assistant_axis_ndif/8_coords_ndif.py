@@ -186,6 +186,51 @@ def group_sessions(groups, session_tokens: int, max_batches: int):
     return out
 
 
+def attn_bytes(rows: int, seqlen: int, n_heads: int) -> int:
+    """Bytes the eager attention score matrix needs: rows x heads x T x T x 4."""
+    return rows * n_heads * seqlen * seqlen * 4
+
+
+def batch_by_attention(items, budget_bytes: int, n_heads: int, max_rows: int):
+    """Group so the attention score matrix fits, and report rows that cannot fit alone.
+
+    The binding constraint on NDIF is NOT padded tokens. Measured 2026-09-15 against the real
+    deployment, once the error message was finally visible:
+
+        B=1  T=3000  product 3,000   attn 2.15 GiB  OK
+        B=16 T=400   product 6,400   attn 0.61 GiB  OK
+        B=2  T=3000  product 6,000   attn 4.30 GiB  FAIL
+        B=6  T=1869  product 11,214  attn 5.36 GiB  FAIL  "Tried to allocate 5.00 GiB"
+
+    Equal products land on opposite sides, and a SMALLER product fails while a larger one
+    passes, so "rows x longest" never described the limit. "rows x heads x T^2 x 4" does: it
+    is the eager attention score matrix. Llama-3.3-70B has 64 heads, and the 70B already
+    occupies ~40 of the GPU's 44.42 GiB, leaving a few GiB shared with other tenants.
+
+    T^2 is why this matters: doubling sequence length quadruples the cost, so one long row
+    can cost more than sixteen short ones. A row whose own T exceeds the budget cannot run at
+    ANY batch size; those come back separately instead of being dropped in silence.
+    """
+    ordered = sorted(items, key=lambda it: len(it[1]), reverse=True)
+    too_long = [it for it in ordered if attn_bytes(1, len(it[1]), n_heads) > budget_bytes]
+    fits = [it for it in ordered if attn_bytes(1, len(it[1]), n_heads) <= budget_bytes]
+
+    out, cur, cur_max = [], [], 0
+    for it in fits:
+        L = len(it[1])
+        nm = max(cur_max, L)
+        if cur and (attn_bytes(len(cur) + 1, nm, n_heads) > budget_bytes
+                    or len(cur) >= max_rows):
+            out.append(cur)
+            cur, cur_max = [it], L
+        else:
+            cur.append(it)
+            cur_max = nm
+    if cur:
+        out.append(cur)
+    return out, too_long
+
+
 def pad_batch(batch, pad_id: int):
     """-> input_ids (B,T), attention_mask (B,T), span (B,T) float32 1.0 on response tokens."""
     T = max(len(ids) for _, ids, _, _ in batch)
@@ -316,19 +361,37 @@ def run_session(llm, nnsight, layer_idx, prepared, want_last: bool, retries: int
                 for ids, attn, span in prepared:
                     # ONE implicit invoke per trace. Several tracer.invoke() blocks are the
                     # documented way to get results back in model order, not input order.
-                    with llm.trace({"input_ids": ids, "attention_mask": attn}):
+                    with llm.trace({"input_ids": ids, "attention_mask": attn}) as tracer:
                         p, n = _pool(llm, layer_idx, span, want_last)
                         pooled.append(p)
                         ntoks.append(n)
+                        # Bail before the LM head. Without this the run continues through the
+                        # remaining layers, the final norm and lm_head, which materialises
+                        # logits of (batch, seq, 128256) -- for a 10,015-token batch that is
+                        # ~5 GB in fp32, and NDIF returned exactly that:
+                        #   "OutOfMemoryError: CUDA out of memory. Tried to allocate 4.78 GiB"
+                        # on a 44.42 GiB GPU already holding the 70B. We never read logits;
+                        # we read layer outputs. Stopping at the last layer we actually need
+                        # removes the largest allocation in the pass and skips layers 77-79
+                        # as a bonus. The layer we stop at still runs, so _pool has its value.
+                        tracer.stop()
             P = getattr(pooled, "value", pooled)
             N = getattr(ntoks, "value", ntoks)
             if len(P) != len(prepared):
                 raise RuntimeError(f"session returned {len(P)} of {len(prepared)} batches")
             return list(zip(P, N))
         except Exception as exc:  # noqa: BLE001
-            logger.warning("  session attempt %d/%d (%d batches) failed: %s: %s",
-                           attempt + 1, retries, len(prepared), type(exc).__name__,
-                           str(exc)[:300])
+            # Log the LAST line, not the first 300 characters. nnsight wraps the remote
+            # failure in a client-side traceback, so str(exc)[:300] spent its whole budget on
+            # "File remote.py, line 567, in __call__ ..." and cut off immediately before the
+            # RemoteException description -- the only part that says what actually went
+            # wrong. 160 sessions failed and not one log line said why.
+            _lines = [ln for ln in str(exc).strip().splitlines() if ln.strip()]
+            _tail = _lines[-1].strip() if _lines else repr(exc)
+            _cost = sum(int(t[0].shape[0]) * int(t[0].shape[1]) for t in prepared)
+            logger.warning("  session attempt %d/%d (%d batches, %d padded tokens) failed: "
+                           "%s: %s", attempt + 1, retries, len(prepared), _cost,
+                           type(exc).__name__, _tail[:400])
             time.sleep(delay)
             delay = min(delay * 2, 60)
     return None
@@ -382,7 +445,8 @@ def subsample(rows, n: int, seed: int):
     return sorted(out, key=lambda r: r.row_id)
 
 
-def process_dataset(llm, nnsight, tok, encoder, key: str, layer_idx, args, pad_id):
+def process_dataset(llm, nnsight, tok, encoder, key: str, layer_idx, args, pad_id,
+                    n_heads: int):
     out_dir = Path(args.output_dir) / key
     out_dir.mkdir(parents=True, exist_ok=True)
     items_path = out_dir / "items.pt"
@@ -419,10 +483,22 @@ def process_dataset(llm, nnsight, tok, encoder, key: str, layer_idx, args, pad_i
         return
     logger.info("%s: %d to do (%d already on disk)", key, len(todo), len(done))
 
-    groups = batch_by_tokens(todo, args.token_budget, args.batch_size)
-    widest = max(len(b) * max(len(i[1]) for i in b) for b in groups)
-    logger.info("  %d batches, widest %d padded tokens (budget %d)",
-                len(groups), widest, args.token_budget)
+    budget_bytes = int(args.attn_budget_gib * (1024 ** 3))
+    groups, too_long = batch_by_attention(todo, budget_bytes, n_heads, args.batch_size)
+    if too_long:
+        worst = max(len(it[1]) for it in too_long)
+        cap = int((budget_bytes / (n_heads * 4)) ** 0.5)
+        logger.error("  %s: %d of %d rows CANNOT run at any batch size -- longest is %d "
+                     "tokens and the attention budget caps a single row at ~%d tokens. "
+                     "Raise --attn_budget_gib only if the GPU has room, or lower "
+                     "--max_length to tail-truncate them (which changes what they mean).",
+                     key, len(too_long), len(todo), worst, cap)
+    if not groups:
+        logger.error("  %s: no runnable batches; skipping", key)
+        return
+    widest = max(attn_bytes(len(b), max(len(i[1]) for i in b), n_heads) for b in groups)
+    logger.info("  %d batches, widest attention %.2f GiB (budget %.2f GiB)",
+                len(groups), widest / (1024 ** 3), args.attn_budget_gib)
 
     seq = len(list(out_dir.glob("chunk_*.pt")))
     want_last = "last" in args.pooling
@@ -488,7 +564,13 @@ def main() -> None:
     ap.add_argument("--max_length", type=int, default=8192)
     ap.add_argument("--batch_size", type=int, default=8,
                     help="max ROWS per call; the real bound is --token_budget")
-    ap.add_argument("--token_budget", type=int, default=12000)
+    ap.add_argument("--attn_budget_gib", type=float, default=1.5,
+                    help="max eager-attention score matrix per call: rows x heads x T^2 x 4 "
+                         "bytes. Measured 2.15 GiB completes and 4.30 GiB OOMs on a 44.42 "
+                         "GiB GPU already holding the 70B and shared with other tenants")
+    ap.add_argument("--token_budget", type=int, default=12000,
+                    help="legacy padded-token bound, kept for reference only; the real "
+                         "constraint is --attn_budget_gib")
     ap.add_argument("--session_batches", type=int, default=8,
                     help="max batches per NDIF job; the real bound is --session_tokens")
     ap.add_argument("--session_tokens", type=int, default=16000,
@@ -523,9 +605,11 @@ def main() -> None:
         tok = AutoTokenizer.from_pretrained(args.model, token=os.getenv("HF_TOKEN"))
         nnsight = llm = None
         n_layers = 80
+        n_heads = 64
     else:
         nnsight, llm, n_layers = act2.init_ndif(args.model)
         tok = llm.tokenizer
+        n_heads = int(llm.config.num_attention_heads)
         if args.min_download_kbps > 0:
             ok = install_download_deadline(args.min_download_kbps, args.download_grace,
                                            args.download_attempts)
@@ -543,7 +627,8 @@ def main() -> None:
 
     for key in keys:
         try:
-            process_dataset(llm, nnsight, tok, encoder, key, layer_idx, args, tok.pad_token_id)
+            process_dataset(llm, nnsight, tok, encoder, key, layer_idx, args,
+                            tok.pad_token_id, n_heads)
         except Exception as exc:  # noqa: BLE001
             logger.error("%s FAILED: %s: %s", key, type(exc).__name__, exc)
     logger.info("Done.")
