@@ -41,6 +41,7 @@ import warnings
 
 import numpy as np
 import torch
+from sklearn.base import BaseEstimator, ClassifierMixin
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import roc_auc_score
 from sklearn.pipeline import make_pipeline
@@ -148,15 +149,44 @@ def make_features(X, kind: str, bank, layer: int, k: int, seed: int):
 # --------------------------------------------------------------------------- #
 # probes
 # --------------------------------------------------------------------------- #
+class MeanMassShift(BaseEstimator, ClassifierMixin):
+    """Apollo's "mms" method: score along the difference of class means.
+
+    descriptive.yaml uses this rather than logistic regression, and it is the standard
+    strong baseline in this literature -- no fitting beyond two means, so it cannot overfit
+    8192 dimensions the way the paper's C=1 does.
+    """
+
+    def fit(self, X, y):
+        y = np.asarray(y)
+        self.w_ = X[y == 1].mean(axis=0) - X[y == 0].mean(axis=0)
+        return self
+
+    def decision_function(self, X):
+        return X @ self.w_
+
+
 def make_probe(name: str, seed: int):
     if name == "paper":
+        # the persona-coordinates paper's own setting: C=1, intercept, no scaler
         return LogisticRegression(C=1.0, fit_intercept=True,
                                   max_iter=1000, random_state=seed)
-    if name == "apollo":
-        # Apollo's roleplaying.yaml: reg_coeff 10, i.e. C = 1/10, plus normalisation
+    if name in ("lr_reg10", "apollo"):
+        # THE deception-probe literature's standard config, and it is shared: Apollo's
+        # roleplaying.yaml and descriptive.yaml use detect_layers [22], Liars' Bench's own
+        # configs use detect_layers [20], but BOTH are method "lr" with reg_coeff 10. So the
+        # difference between "the Apollo probe" and "the Liars' Bench probe" is the layer,
+        # not the estimator -- which is why the layer is a separate axis here (--layer) and
+        # is exactly what Q6 asks about.
+        #
+        # fit_intercept=False, matching detectors.py:476 -- LogisticRegression(
+        # C=1/reg_coeff, random_state=42, fit_intercept=False) -- after StandardScaler,
+        # which centres the features so an intercept is largely redundant anyway.
         return make_pipeline(StandardScaler(),
-                             LogisticRegression(C=0.1, fit_intercept=True,
+                             LogisticRegression(C=0.1, fit_intercept=False,
                                                 max_iter=1000, random_state=seed))
+    if name == "mms":
+        return make_pipeline(StandardScaler(), MeanMassShift())
     raise ValueError(name)
 
 
@@ -443,7 +473,11 @@ def main() -> None:
     ap.add_argument("--k", type=int, default=5, help="persona coordinates to keep")
     ap.add_argument("--features", nargs="+",
                     default=["raw", "pc:deception", "axes", "axes_resid", "random"])
-    ap.add_argument("--probes", nargs="+", default=["paper", "apollo"])
+    ap.add_argument("--probes", nargs="+", default=["paper", "lr_reg10", "mms"],
+                    choices=["paper", "lr_reg10", "apollo", "mms"],
+                    help="paper = the paper's C=1 no-scaler probe; lr_reg10 = the "
+                         "lr/reg_coeff-10 config shared by Apollo and Liars' Bench "
+                         "(they differ only in layer); mms = Apollo's mean-mass shift")
     ap.add_argument("--protocol", nargs="+", default=["p1"],
                     choices=["p1", "p2", "p3", "confounds", "null", "all"])
     ap.add_argument("--seed", type=int, default=42)
