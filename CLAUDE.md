@@ -2,6 +2,24 @@
 
 Guidance for working in this repo (a.k.a. `expLB` / `dishonesty-bench` / **Liars' Bench**).
 
+> ## ⚠️ Active research: read `docs/ONBOARDING.md` first
+>
+> This repo is currently the base for a **persona-coordinates replication on
+> Llama-3.3-70B-Instruct, run entirely on NDIF** (no local GPU). If you are picking this
+> up cold, `docs/ONBOARDING.md` tells you what the research is, what has already been
+> answered, how the owner wants the work done, which skills to load, and — importantly —
+> which mistakes have already been made and paid for.
+>
+> Two things that will bite you within the hour if you skip it:
+>
+> 1. **Long-running work must be a Windows Scheduled Task**, never `Start-Process` over
+>    SSH — OpenSSH takes the process tree down with the session.
+> 2. **A trace body must be defined in the script that runs it.** nnsight serialises the
+>    block from its source module; NDIF rejects one from an importlib-loaded module with
+>    `Module importlib is not whitelisted`.
+>
+> Load the `nnsight-ndif-context` skill before writing any remote code.
+
 ## What this repo is
 
 Liars' Bench: a benchmark for evaluating lie/deception-detection methods on LLMs.
