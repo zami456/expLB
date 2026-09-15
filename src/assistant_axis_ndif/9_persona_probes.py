@@ -223,6 +223,9 @@ def build(run_dir: Path, keys, layer: int, pooling: str):
             continue
         y = np.array([m["label"] for m in meta], dtype=int)
         data[k] = (X, y, meta)
+        sem = {m.get("label_semantics") for m in meta}
+        if len(sem) > 1:
+            logger.warning("  %s mixes label semantics %s", k, sorted(sem))
         logger.info("  %-32s n=%-6d %dD/%dH", k, len(y), int(y.sum()), int((1 - y).sum()))
     return data
 
@@ -238,6 +241,12 @@ def p1_transfer(data, bank, args):
     feats = args.features
     rows = []
     src = sources(data)
+    sem_of = {k: (meta[0].get("label_semantics") or "?") for k, (_, _, meta) in data.items()}
+    present = sorted(set(sem_of.values()))
+    if len(present) < 2:
+        logger.warning("  only one label semantics present (%s) -- the within/across split "
+                       "is vacuous until roleplaying (judge_grade) or mask "
+                       "(belief_inconsistency) finish extracting", present[0])
     for fkind in feats:
         for probe in args.probes:
             mat = {}
@@ -264,14 +273,30 @@ def p1_transfer(data, bank, args):
                     mat[(s, t)] = auroc(clf, Ft[te], yt[te])
             diag = [v for (s, t), v in mat.items() if s == t and not np.isnan(v)]
             off = [v for (s, t), v in mat.items() if s != t and not np.isnan(v)]
+            # Q5: transfer WITHIN a label definition vs ACROSS one. The three label
+            # semantics are different constructs -- instructed_intent (the prompt told it to
+            # lie), judge_grade (a judge said it lied), belief_inconsistency (it contradicted
+            # its own elicited belief) -- so an off-diagonal mean that pools them can look
+            # healthy purely because most pairs share a definition. Splitting the mean is
+            # the actual test, and it is the difference between "the method transfers" and
+            # "the method transfers within one notion of deception".
+            same = [v for (s, t), v in mat.items()
+                    if s != t and not np.isnan(v) and sem_of[s] == sem_of[t]]
+            cross = [v for (s, t), v in mat.items()
+                     if s != t and not np.isnan(v) and sem_of[s] != sem_of[t]]
             rows.append({"features": fkind, "probe": probe,
                          "diagonal": float(np.mean(diag)) if diag else float("nan"),
                          "off_diagonal": float(np.mean(off)) if off else float("nan"),
-                         "n_pairs": len(off), "matrix": {f"{s}->{t}": v
-                                                         for (s, t), v in mat.items()}})
-            logger.info("  %-16s %-7s diag=%.3f off-diag=%.3f (%d pairs)",
+                         "within_semantics": float(np.mean(same)) if same else float("nan"),
+                         "across_semantics": float(np.mean(cross)) if cross else float("nan"),
+                         "n_within": len(same), "n_across": len(cross),
+                         "n_pairs": len(off),
+                         "matrix": {f"{s}->{t}": v for (s, t), v in mat.items()}})
+            logger.info("  %-16s %-7s diag=%.3f off=%.3f  within-sem=%.3f (%d) "
+                        "across-sem=%.3f (%d)",
                         fkind, probe, rows[-1]["diagonal"], rows[-1]["off_diagonal"],
-                        len(off))
+                        rows[-1]["within_semantics"], len(same),
+                        rows[-1]["across_semantics"], len(cross))
     return rows
 
 

@@ -37,7 +37,21 @@ param(
     [int]$TokenBudget   = 12000,
     [int]$SessionBatches = 8,
     # every 4th layer, and also 22 (Apollo's) -- see the note above
-    [int[]]$Layers      = @(0,4,8,12,16,20,22,24,28,32,36,40,44,48,52,56,60,64,68,72,76)
+    [int[]]$Layers      = @(0,4,8,12,16,20,22,24,28,32,36,40,44,48,52,56,60,64,68,72,76),
+    # Deliberate order, not E.all_keys(). The corpus carries THREE label semantics and the
+    # scientific question is whether a probe transfers across them, not just within one.
+    # Alphabetical-ish order put roleplaying 8th and mask last, so the first datasets to
+    # finish were instructed-deception and both harm-pressure sets -- all instructed_intent,
+    # which makes every early transfer number a within-semantics number and the headline
+    # claim untestable. roleplaying (judge_grade) and mask (belief_inconsistency) go first
+    # now, with alpaca right behind because it sets the TPR@1%FPR threshold and nothing can
+    # be thresholded without it. They are small: 371 + 585 + 2,000 rows.
+    # ai_audit is listed last and will report itself unrunnable: at ctx 5,285-6,590 its
+    # attention matrix needs ~11 GiB at batch size 1, more than the shared GPU has free.
+    [string[]]$Datasets = @(
+        'roleplaying', 'mask', 'alpaca', 'ai_liar', 'convincing-game', 'sandbagging_v2',
+        'insider-trading', 'instructed-deception', 'harm-pressure-knowledge-report',
+        'harm-pressure-choice', 'ai_audit')
 )
 $ErrorActionPreference = "Continue"
 
@@ -65,7 +79,7 @@ Log "=== coords chain started (pid $PID) repo=$Repo py=$py ==="
 
 # ---- stage 0: corpus gate, no NDIF ---------------------------------------------------
 $prep = Join-Path $Repo "logs\coords_prepare.log"
-& $py "$D\8_coords_ndif.py" --datasets all --output_dir "$Out\passB" `
+& $py "$D\8_coords_ndif.py" --datasets $Datasets --output_dir "$Out\passB" `
     --layers $Layers --prepare_only *> $prep
 if ($LASTEXITCODE -ne 0) { Log "PREPARE FAILED (exit $LASTEXITCODE) -- see $prep"; exit 1 }
 foreach ($line in (Get-Content $prep | Select-String 'rows|drop|span' | Select-Object -Last 20)) {
@@ -76,7 +90,7 @@ foreach ($line in (Get-Content $prep | Select-String 'rows|drop|span' | Select-O
 Log "Pass B: $($Layers.Count) layers, all datasets, mean+last"
 & $py "$D\8_coords_ndif.py" `
     --model meta-llama/Llama-3.3-70B-Instruct `
-    --datasets all --output_dir "$Out\passB" `
+    --datasets $Datasets --output_dir "$Out\passB" `
     --layers $Layers --pooling mean last `
     --max_length 8192 --token_budget $TokenBudget --session_batches $SessionBatches `
     *>> (Join-Path $Repo "logs\coords_passB.log")
