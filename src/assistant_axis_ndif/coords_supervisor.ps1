@@ -174,6 +174,14 @@ function Test-Stalled {
     Log ("no new chunk for {0:N1} min at {1} chunks -- killing python to force a fresh connection (kill #{2})" -f `
          $info.Age, $info.Count, $script:stallKills)
     foreach ($p in $py) { Stop-Process -Id $p.ProcessId -Force -ErrorAction SilentlyContinue }
+    # The chain script outlives the python it was waiting on -- it still has to log the exit
+    # code -- so Test-ChainAlive keeps returning true and the relaunch waits a whole tick.
+    # Killing the chain too lets the relaunch check below fire in this same iteration.
+    $ch = Get-CimInstance Win32_Process -Filter "Name='powershell.exe'" -ErrorAction SilentlyContinue |
+          Where-Object { $_.CommandLine -match '-File\s+\S*run_coords_chain\.ps1' -and
+                         $_.CommandLine -notmatch 'Get-CimInstance' }
+    foreach ($c in $ch) { Stop-Process -Id $c.ProcessId -Force -ErrorAction SilentlyContinue }
+    Start-Sleep -Seconds 3
 }
 
 $restarts = 0
@@ -185,6 +193,8 @@ while ($true) {
         Remove-Item $lock -Force -ErrorAction SilentlyContinue
         exit 0
     }
+
+    Test-Stalled
 
     if (-not (Test-ChainAlive)) {
         if (Test-NdifReady) {
@@ -200,7 +210,6 @@ while ($true) {
         }
     }
 
-    Test-Stalled
     Sync-Drive
     Start-Sleep -Seconds 300
 }
