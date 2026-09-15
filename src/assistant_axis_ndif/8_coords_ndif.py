@@ -262,19 +262,29 @@ def _pool(llm, layer_idx, span, want_last: bool):
     ntok = None
     for L in layer_idx:                                  # ASCENDING or OutOfOrderError
         h = llm.model.layers[L].output                   # (B,T,H) plain tensor in tf5
-        m = span.to(h.device, h.dtype)                   # client tensor -> live device
-        num = (h * m[:, :, None]).sum(dim=1)             # (B,H)
-        den = m.sum(dim=1).clamp(min=1.0)[:, None]
-        outs = [(num / den).to(torch.float32)]           # fp32 BEFORE any dot product
+        # The mask stays fp32 and every reduction names dtype=float32. Casting it to the
+        # model's bfloat16 corrupts anything past 256 tokens, because bf16 carries 8 mantissa
+        # bits: integers step by 2 above 256 and by 4 above 512, so a 971-token span summed
+        # in bf16 comes back 972, and 1195 comes back 1192. That fired the n_tok assertion on
+        # mask, alpaca, ai_liar, convincing-game and sandbagging_v2 -- every dataset whose
+        # responses run past 256 tokens -- while the short-span datasets passed and hid it.
+        m = span.to(h.device, torch.float32)
+        num = (h * m[:, :, None].to(h.dtype)).sum(dim=1, dtype=torch.float32)
+        den = m.sum(dim=1, dtype=torch.float32).clamp(min=1.0)[:, None]
+        outs = [num / den]
         if want_last:
-            pos = torch.arange(m.shape[1], device=m.device, dtype=m.dtype)
+            # fp32 here too, and this one was the dangerous case: it does not raise. With
+            # positions in bf16, distinct indices past 256 collapse onto the same value, so
+            # argmax silently returns the wrong "last" token for any sequence longer than
+            # that -- most of insider-trading, whose contexts run to 1,495.
+            pos = torch.arange(m.shape[1], device=m.device, dtype=torch.float32)
             last = (m * pos[None, :]).argmax(dim=1)      # last response token per row
             rows = torch.arange(h.shape[0], device=h.device)
             outs.append(h[rows, last].to(torch.float32))
         # fp16 HERE, not on the client: the cast is what halves the bytes on the wire
         per_layer.append(torch.stack(outs, dim=-1).to(torch.float16).cpu())
         if ntok is None:
-            ntok = m.sum(dim=1).to(torch.float32).cpu()
+            ntok = m.sum(dim=1, dtype=torch.float32).cpu()
     return torch.stack(per_layer, dim=1), ntok           # (B,K,H,P)
 
 
