@@ -37,10 +37,19 @@ $chain = Join-Path $D "run_coords_chain.ps1"
 New-Item -ItemType Directory -Force -Path (Join-Path $Repo "logs") | Out-Null
 function Log($m) { "$((Get-Date).ToString('yyyy-MM-dd HH:mm:ss'))  $m" | Add-Content $log }
 
-# one supervisor only -- two would double-launch the chain against each other
+# One supervisor only -- two would double-launch the chain against each other. A pid on
+# its own is not proof of that: Windows recycles pids, so an unrelated process inheriting
+# the number would wedge every future supervisor out. Check that the pid really is a
+# powershell running THIS script before believing the lock.
 if (Test-Path $lock) {
     $old = (Get-Content $lock -ErrorAction SilentlyContinue | Select-Object -First 1)
-    if ($old -and (Get-Process -Id $old -ErrorAction SilentlyContinue)) {
+    $alive = $false
+    if ($old) {
+        $proc = Get-CimInstance Win32_Process -Filter "ProcessId=$old" -ErrorAction SilentlyContinue
+        $alive = $proc -and $proc.Name -eq 'powershell.exe' -and
+                 $proc.CommandLine -match 'coords_supervisor\.ps1'
+    }
+    if ($alive) {
         Log "supervisor already running (pid $old); exiting"
         exit 0
     }
@@ -189,8 +198,19 @@ function Test-Stalled {
     Start-Sleep -Seconds 3
 }
 
+# A healthy supervisor logged nothing at all, so "no lines since 14:13" read the same as
+# "alive and fine" and as "dead since 14:57". It died at 14:57 and that cost 28 minutes of
+# extraction before anyone could tell. Heartbeat every 6th tick (~30 min) so the log always
+# says which of the two it is.
+$tick = 0
 $restarts = 0
 while ($true) {
+    $tick++
+    if ($tick % 6 -eq 1) {
+        $hc = (Get-ChildItem (Join-Path $Repo "$Out\passB\*\chunk_*.pt") -Recurse -ErrorAction SilentlyContinue)
+        $hmb = [math]::Round((($hc | Measure-Object Length -Sum).Sum)/1MB, 0)
+        Log ("heartbeat: {0} chunks, {1} MB, chain alive = {2}" -f $hc.Count, $hmb, (Test-ChainAlive))
+    }
     if (Test-Done) {
         Log "DONE -- run-coords\passB\.done present. Final checksum sync to Drive."
         Sync-Drive -Verify

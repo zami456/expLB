@@ -29,8 +29,13 @@ $action = New-ScheduledTaskAction -Execute 'powershell.exe' `
 # every boot, 2 min in so networking is up
 $boot = New-ScheduledTaskTrigger -AtStartup
 $boot.Delay = 'PT2M'
-# every 15 min forever, to revive a supervisor that died without a reboot. Harmless when
-# healthy: MultipleInstances=IgnoreNew plus the script's own lock.
+# Every 15 min forever, to revive a supervisor that died without a reboot.
+#
+# Parallel, NOT IgnoreNew. With IgnoreNew a terminated-but-not-reaped instance made the
+# scheduler believe one was still running, so the 14:59 and 15:14 triggers were dropped
+# silently and a dead supervisor stayed dead for 28 minutes. The script's own lock is
+# what prevents two supervisors; the scheduler does not need to help, and when it tries
+# it removes the only recovery path.
 $rep = New-ScheduledTaskTrigger -Once -At ((Get-Date).AddSeconds(30)) -RepetitionInterval (New-TimeSpan -Minutes 15)
 
 # S4U: runs whether or not user4 is logged on, with no stored password, inside user4's
@@ -38,7 +43,7 @@ $rep = New-ScheduledTaskTrigger -Once -At ((Get-Date).AddSeconds(30)) -Repetitio
 $principal = New-ScheduledTaskPrincipal -UserId 'user4' -LogonType S4U -RunLevel Highest
 
 $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries `
-    -StartWhenAvailable -MultipleInstances IgnoreNew -ExecutionTimeLimit ([TimeSpan]::Zero) `
+    -StartWhenAvailable -MultipleInstances Parallel -ExecutionTimeLimit ([TimeSpan]::Zero) `
     -RestartCount 3 -RestartInterval (New-TimeSpan -Minutes 5)
 
 Register-ScheduledTask -TaskName $name -Action $action -Trigger @($boot, $rep) `
