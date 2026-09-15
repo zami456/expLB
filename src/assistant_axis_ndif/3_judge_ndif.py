@@ -109,6 +109,35 @@ def _encode(llm, prompts: list[str]):
     return enc["input_ids"], enc["attention_mask"], enc["input_ids"].shape[1]
 
 
+def batch_by_tokens(llm, todo, token_budget: int, max_rows: int):
+    """Group (key, prompt) pairs so len(batch) * longest-in-batch stays under `token_budget`.
+
+    A row count cannot bound remote memory: with left padding a call costs
+    len(batch) * max_len_in_batch, so a fixed --judge_batch leaves the second factor free.
+    Measured on this deployment, 11,680 padded tokens completes and 17,520 is rejected 0.3s
+    after dispatch -- and the old default of 48 sent 35,040, which failed every job and
+    produced zero scores for a whole 26-role run before anyone noticed.
+
+    Sorted longest-first so similar lengths batch together, cutting padding waste. Order is
+    irrelevant here because each result is written back by its own key.
+    """
+    lens = {k: len(llm.tokenizer(p, add_special_tokens=False).input_ids) for k, p in todo}
+    ordered = sorted(todo, key=lambda kp: lens[kp[0]], reverse=True)
+    out, cur, cur_max = [], [], 0
+    for kp in ordered:
+        L = lens[kp[0]]
+        new_max = max(cur_max, L)
+        if cur and ((len(cur) + 1) * new_max > token_budget or len(cur) >= max_rows):
+            out.append(cur)
+            cur, cur_max = [kp], L
+        else:
+            cur.append(kp)
+            cur_max = new_max
+    if cur:
+        out.append(cur)
+    return out
+
+
 def judge_batches_session(llm, prompt_batches: list[list[str]], retries: int) -> list[list[str]] | None:
     """Bundle several judge batches into ONE NDIF job.
 
@@ -196,7 +225,11 @@ def process_role(llm, role: str, args) -> None:
     logger.info("Role %s: scoring %d", role, len(todo))
 
     new = 0
-    batches = list(batched(todo, args.judge_batch))
+    batches = batch_by_tokens(llm, todo, args.token_budget, args.judge_batch)
+    widest = max((len(b) * max(len(llm.tokenizer(p, add_special_tokens=False).input_ids)
+                               for _, p in b) for b in batches), default=0)
+    logger.info("  %d prompts -> %d batches (<= %d rows, widest ~%d padded tokens, budget %d)",
+                len(todo), len(batches), args.judge_batch, widest, args.token_budget)
     groups = list(batched(batches, max(1, args.session_batches)))
     for group in tqdm(groups, desc=role):
         if len(group) > 1:
@@ -230,7 +263,10 @@ def main() -> None:
                          "meta-llama/Llama-3.1-405B-Instruct for the heavier judge when "
                          "it is HOT, or Qwen/Qwen2.5-72B-Instruct for a different family")
     add_role_args(ap)
-    ap.add_argument("--judge_batch", type=int, default=48)
+    ap.add_argument("--judge_batch", type=int, default=16,
+                    help="max ROWS per call; the real bound is --token_budget")
+    ap.add_argument("--token_budget", type=int, default=12000,
+                    help="max padded tokens per remote call (rows x longest-in-batch)")
     ap.add_argument("--session_batches", type=int, default=8,
                     help="judge batches bundled into one NDIF session (1 = one job per "
                          "batch, the old behaviour). Keep session_batches * seconds_per_batch "

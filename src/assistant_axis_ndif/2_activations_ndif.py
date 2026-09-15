@@ -325,12 +325,51 @@ def _run_batch_client(llm, layer_idx, input_ids, attn, span, retries):
     return None
 
 
+def batch_by_tokens(items, token_budget: int, max_rows: int):
+    """Group items so that len(batch) * longest-in-batch stays under `token_budget`.
+
+    A row count cannot bound remote memory. With padding a call costs
+    len(batch) * max_len_in_batch, so a fixed --batch_size leaves the second factor free
+    and the real cost swings with whatever rows happen to land together. Measured on this
+    deployment, a judge call of 11,680 padded tokens completes and 17,520 is rejected 0.3s
+    after dispatch; the evaluation corpus reaches ~7,100 tokens on a single ai_audit row,
+    so batch_size 8 would send ~56,800 and fail on exactly the dataset we most want.
+
+    Items are sorted longest-first so similar lengths batch together, which cuts padding
+    waste. Safe here because stage 2 sums over the batch to build a role mean, so row
+    order carries no information. A per-sample extraction must keep indices instead.
+    """
+    ordered = sorted(items, key=lambda it: len(it[0]), reverse=True)
+    out, cur, cur_max = [], [], 0
+    for it in ordered:
+        L = len(it[0])
+        new_max = max(cur_max, L)
+        if cur and ((len(cur) + 1) * new_max > token_budget or len(cur) >= max_rows):
+            out.append(cur)
+            cur, cur_max = [it], L
+        else:
+            cur.append(it)
+            cur_max = new_max
+    if cur:
+        out.append(cur)
+    over = [b for b in out if len(b) == 1 and len(b[0][0]) > token_budget]
+    if over:
+        logger.warning("%d row(s) exceed the %d-token budget on their own and are sent alone; "
+                       "if these fail, raise --token_budget or drop the rows",
+                       len(over), token_budget)
+    return out
+
+
 def extract_role_vector(llm, layer_idx, hidden, items, args, pad_id):
     """Mean over kept responses of (mean over assistant-span tokens of residual stream)."""
     total = torch.zeros(len(layer_idx), hidden, dtype=torch.float64)
     count = 0.0
     failed = 0
-    batches = [pad_batch(b, pad_id) for b in batched(items, args.batch_size)]
+    groups = batch_by_tokens(items, args.token_budget, args.batch_size)
+    widest = max((len(b) * max(len(i[0]) for i in b) for b in groups), default=0)
+    logger.info("  %d rows -> %d batches (<= %d rows, widest %d padded tokens, budget %d)",
+                len(items), len(groups), args.batch_size, widest, args.token_budget)
+    batches = [pad_batch(b, pad_id) for b in groups]
 
     if args.accum == "session":
         chunks = list(batched(batches, args.session_batches))
@@ -430,7 +469,12 @@ def main() -> None:
     add_role_args(ap)
     ap.add_argument("--keep_scores", default="3", help="comma-sep judge scores to keep (default 3)")
     ap.add_argument("--min_count", type=int, default=50)
-    ap.add_argument("--batch_size", type=int, default=8)
+    ap.add_argument("--batch_size", type=int, default=8,
+                    help="max ROWS per call; the real bound is --token_budget")
+    ap.add_argument("--token_budget", type=int, default=12000,
+                    help="max padded tokens per remote call (rows x longest-in-batch). "
+                         "A judge call of 11,680 completes on this deployment and 17,520 "
+                         "is rejected, so 12000 leaves a little headroom.")
     ap.add_argument("--max_length", type=int, default=2048)
     ap.add_argument("--retries", type=int, default=4)
     ap.add_argument("--overwrite", action="store_true")
