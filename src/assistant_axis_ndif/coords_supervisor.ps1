@@ -127,11 +127,14 @@ function Sync-Drive([switch]$Verify) {
     $rlog = Join-Path $Repo "logs\coords_rclone.log"
     $extra = @()
     if ($Verify) { $extra = @("--checksum") }
-    & $rc copy $src "tamara:expLB/coords" --include "*.pt" `
+    # .pt AND .json: the original filter was --include "*.pt" alone, which quietly excluded
+    # every probe result -- FULL_L20/22/40, the zero-shot tables, splits.json -- so the
+    # chunks were backed up and the actual scientific output was not.
+    & $rc copy $src "tamara:expLB/coords" --include "*.pt" --include "*.json" `
         --transfers 4 --checkers 8 --log-file $rlog --log-level INFO @extra
     if ($LASTEXITCODE -ne 0) { Log "rclone copy exited $LASTEXITCODE -- see logs\coords_rclone.log" }
     elseif ($Verify) {
-        & $rc check $src "tamara:expLB/coords" --include "*.pt" --checksum `
+        & $rc check $src "tamara:expLB/coords" --include "*.pt" --include "*.json" --checksum `
             --log-file $rlog --log-level INFO
         Log "rclone check exited $LASTEXITCODE (0 = every chunk verified on Drive)"
     }
