@@ -128,6 +128,54 @@ function Sync-Drive([switch]$Verify) {
     }
 }
 
+# ---- stall detection ------------------------------------------------------------------
+# Measured 2026-09-15: NDIF result downloads from prod-ndif-results.s3.amazonaws.com are
+# erratic on this machine. The same 34.2 MB session came back in 3s once and took 11m45s
+# the next time, at ~35 KB/s, while a 25 MB Cloudflare download on the SAME machine at the
+# SAME moment still ran at 2.23 MB/s and the worker sat at 0% CPU. So it is not bandwidth,
+# not the link and not compute (NDIF reports RUNNING=15s): it is one sick TCP flow.
+#
+# A hung flow is invisible to Test-ChainAlive -- python is alive and "working" -- so the
+# supervisor would happily watch a 48-hour run. Killing python forces a fresh connection,
+# and resume is chunk-granular, so the cost is bounded by whatever session was in flight.
+#
+# The counter matters: if every new connection is also slow, restarting is pure loss, so
+# after MaxStallKills consecutive kills with no new chunk we stop killing and let it grind.
+$StallMinutes  = 8
+$MaxStallKills = 5
+$script:stallKills = 0
+$script:lastChunkCount = -1
+
+function Get-NewestChunkAge {
+    $c = Get-ChildItem (Join-Path $Repo "$Out\passB\*\chunk_*.pt") -Recurse -ErrorAction SilentlyContinue
+    if (-not $c) { return $null }
+    $newest = ($c | Sort-Object LastWriteTime -Descending | Select-Object -First 1)
+    return @{ Age = ((Get-Date) - $newest.LastWriteTime).TotalMinutes; Count = $c.Count }
+}
+
+function Test-Stalled {
+    $info = Get-NewestChunkAge
+    if (-not $info) { return }
+    if ($info.Count -ne $script:lastChunkCount) {
+        # progress happened since the last look -- forgive the earlier kills
+        $script:lastChunkCount = $info.Count
+        $script:stallKills = 0
+        return
+    }
+    if ($info.Age -lt $StallMinutes) { return }
+    if ($script:stallKills -ge $MaxStallKills) {
+        Log ("stalled {0:N1} min but {1} kills have not helped -- letting it grind" -f $info.Age, $script:stallKills)
+        return
+    }
+    $py = Get-CimInstance Win32_Process -Filter "Name='python.exe'" -ErrorAction SilentlyContinue |
+          Where-Object { $_.CommandLine -match '8_coords_ndif\.py' }
+    if (-not $py) { return }
+    $script:stallKills++
+    Log ("no new chunk for {0:N1} min at {1} chunks -- killing python to force a fresh connection (kill #{2})" -f `
+         $info.Age, $info.Count, $script:stallKills)
+    foreach ($p in $py) { Stop-Process -Id $p.ProcessId -Force -ErrorAction SilentlyContinue }
+}
+
 $restarts = 0
 while ($true) {
     if (Test-Done) {
@@ -152,6 +200,7 @@ while ($true) {
         }
     }
 
+    Test-Stalled
     Sync-Drive
     Start-Sleep -Seconds 300
 }
