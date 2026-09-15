@@ -574,10 +574,13 @@ def main() -> None:
     ap.add_argument("--max_length", type=int, default=8192)
     ap.add_argument("--batch_size", type=int, default=8,
                     help="max ROWS per call; the real bound is --token_budget")
-    ap.add_argument("--attn_budget_gib", type=float, default=1.5,
+    ap.add_argument("--attn_budget_gib", type=float, default=2.5,
                     help="max eager-attention score matrix per call: rows x heads x T^2 x 4 "
-                         "bytes. Measured 2.15 GiB completes and 4.30 GiB OOMs on a 44.42 "
-                         "GiB GPU already holding the 70B and shared with other tenants")
+                         "bytes, on a 44.42 GiB GPU already holding the 70B and shared "
+                         "with other tenants. Measured: 2.15 and 3.81 GiB complete, 4.30 "
+                         "and 5.00 GiB OOM. 2.5 keeps margin under 3.81 because the free "
+                         "headroom moves with whoever else is on the GPU -- it has been "
+                         "seen as low as 113 MiB")
     ap.add_argument("--token_budget", type=int, default=12000,
                     help="legacy padded-token bound, kept for reference only; the real "
                          "constraint is --attn_budget_gib")
