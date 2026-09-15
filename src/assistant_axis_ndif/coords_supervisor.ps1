@@ -81,10 +81,59 @@ function Test-NdifReady {
     return $script:lastNdifOk
 }
 
+# ---- Drive sync -----------------------------------------------------------------------
+# The lab PC is a single copy of a ~10 GB download that costs hours of NDIF time to rebuild,
+# and it has rebooted unprompted before. Chunks go to Drive as they land rather than in one
+# upload at the end, so an interruption costs minutes rather than the whole pass.
+#
+# Safe to run against a live output dir: 8_coords_ndif.py writes each chunk to .tmp and
+# os.replace()s it into place, so a chunk_*.pt that exists is always complete. --include
+# *.pt also skips the .tmp files by construction.
+#
+# Size+modtime matching, not --checksum: hashing a growing 10 GB tree every 5 minutes costs
+# more than it catches. The end-of-run verification below is the checksum pass.
+function Get-Rclone {
+    # $Repo first, and deliberately. Under the S4U scheduled task neither PATH nor
+    # $env:USERPROFILE resolved to a copy of rclone -- the supervisor logged
+    # "rclone not found" while rclone.exe sat in the invoking user's profile -- so the only
+    # dependable location is one derived from $PSScriptRoot, like everything else here.
+    $cands = @((Join-Path $Repo "tools\rclone.exe"),
+               (Join-Path $env:USERPROFILE "tools\rclone.exe"))
+    foreach ($p in $cands) { if ($p -and (Test-Path $p)) { return $p } }
+    $c = Get-Command rclone -ErrorAction SilentlyContinue
+    if ($c) { return $c.Source }
+    return $null
+}
+
+$script:warnedNoRclone = $false
+
+function Sync-Drive([switch]$Verify) {
+    $rc = Get-Rclone
+    if (-not $rc) {
+        if (-not $script:warnedNoRclone) { Log "rclone not found -- Drive sync disabled"; $script:warnedNoRclone = $true }
+        return
+    }
+    $src = Join-Path $Repo $Out
+    if (-not (Test-Path $src)) { return }
+    $rlog = Join-Path $Repo "logs\coords_rclone.log"
+    $extra = @()
+    if ($Verify) { $extra = @("--checksum") }
+    & $rc copy $src "tamara:expLB/coords" --include "*.pt" `
+        --transfers 4 --checkers 8 --log-file $rlog --log-level INFO @extra
+    if ($LASTEXITCODE -ne 0) { Log "rclone copy exited $LASTEXITCODE -- see logs\coords_rclone.log" }
+    elseif ($Verify) {
+        & $rc check $src "tamara:expLB/coords" --include "*.pt" --checksum `
+            --log-file $rlog --log-level INFO
+        Log "rclone check exited $LASTEXITCODE (0 = every chunk verified on Drive)"
+    }
+}
+
 $restarts = 0
 while ($true) {
     if (Test-Done) {
-        Log "DONE -- run-coords\passB\.done present. See logs\coords_passB.log"
+        Log "DONE -- run-coords\passB\.done present. Final checksum sync to Drive."
+        Sync-Drive -Verify
+        Log "See logs\coords_passB.log and logs\coords_rclone.log"
         Remove-Item $lock -Force -ErrorAction SilentlyContinue
         exit 0
     }
@@ -103,5 +152,6 @@ while ($true) {
         }
     }
 
+    Sync-Drive
     Start-Sleep -Seconds 300
 }
