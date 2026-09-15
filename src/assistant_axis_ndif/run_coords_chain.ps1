@@ -13,10 +13,17 @@
   shows up as a dataset with zero rows rather than as an error. Spending an hour of NDIF
   time to discover that is the thing this stage exists to prevent.
 
-  Pass B is the main corpus: every 4th layer (20 of 80), all 15,358 rows, mean + last
-  pooling. ~10 GB down. It is resumable at chunk granularity -- 8_coords_ndif.py counts
-  the chunk_*.pt already on disk and skips the row_ids they cover -- so a kill, a sleep or
-  an NDIF eviction costs only the session in flight.
+  Pass B is the main corpus: 21 layers, all 15,358 rows, mean + last pooling, ~10 GB down.
+  It is resumable at chunk granularity -- 8_coords_ndif.py counts the chunk_*.pt already on
+  disk and skips the row_ids they cover -- so a kill, a sleep or an NDIF eviction costs only
+  the session in flight.
+
+  The layer list is every 4th layer and ALSO 22, not plain --layers every4. every4 yields
+  0,4,...,76, which contains 20 and 40 but not 22 -- and 22 is Apollo's layer
+  (roleplaying.yaml, descriptive.yaml), one of the three the layer question turns on,
+  against Liars' Bench's 20 and the Assistant-Axis midpoint 40. Run as every4 the main
+  corpus simply has no layer 22, so that three-way comparison could only ever be made on
+  the 2,080-row Pass A subsample. The extra layer costs ~500 MB of the ~10 GB.
 
   Pass A (all 80 layers, subsampled) is deliberately NOT run here yet: --limit takes the
   FIRST N rows per dataset, which is not a stratified sample, and a label-sorted CSV would
@@ -28,7 +35,9 @@
 param(
     [string]$Out        = "run-coords",
     [int]$TokenBudget   = 12000,
-    [int]$SessionBatches = 8
+    [int]$SessionBatches = 8,
+    # every 4th layer, and also 22 (Apollo's) -- see the note above
+    [int[]]$Layers      = @(0,4,8,12,16,20,22,24,28,32,36,40,44,48,52,56,60,64,68,72,76)
 )
 $ErrorActionPreference = "Continue"
 
@@ -57,18 +66,18 @@ Log "=== coords chain started (pid $PID) repo=$Repo py=$py ==="
 # ---- stage 0: corpus gate, no NDIF ---------------------------------------------------
 $prep = Join-Path $Repo "logs\coords_prepare.log"
 & $py "$D\8_coords_ndif.py" --datasets all --output_dir "$Out\passB" `
-    --layers every4 --prepare_only *> $prep
+    --layers $Layers --prepare_only *> $prep
 if ($LASTEXITCODE -ne 0) { Log "PREPARE FAILED (exit $LASTEXITCODE) -- see $prep"; exit 1 }
 foreach ($line in (Get-Content $prep | Select-String 'rows|drop|span' | Select-Object -Last 20)) {
     Log "  prep| $line"
 }
 
-# ---- Pass B: every 4th layer, whole corpus -------------------------------------------
-Log "Pass B: 20 layers (every4), all datasets, mean+last"
+# ---- Pass B: every 4th layer plus 22, whole corpus -----------------------------------
+Log "Pass B: $($Layers.Count) layers, all datasets, mean+last"
 & $py "$D\8_coords_ndif.py" `
     --model meta-llama/Llama-3.3-70B-Instruct `
     --datasets all --output_dir "$Out\passB" `
-    --layers every4 --pooling mean last `
+    --layers $Layers --pooling mean last `
     --max_length 8192 --token_budget $TokenBudget --session_batches $SessionBatches `
     *>> (Join-Path $Repo "logs\coords_passB.log")
 $code = $LASTEXITCODE
