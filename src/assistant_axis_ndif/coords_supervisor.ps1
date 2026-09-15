@@ -141,7 +141,12 @@ function Sync-Drive([switch]$Verify) {
 #
 # The counter matters: if every new connection is also slow, restarting is pure loss, so
 # after MaxStallKills consecutive kills with no new chunk we stop killing and let it grind.
-$StallMinutes  = 8
+# 6, not 8: a healthy session on this corpus writes its chunk in 23-35s (measured
+# 13:49:11 / 13:49:38 / 13:50:01), and the long-context datasets -- insider-trading at
+# ctx p50 1267, ai_audit at 5285 -- should still land inside 4 min because the token
+# budget gives them fewer rows per batch. 6 caps the waste of a bad flow while keeping
+# roughly 10x headroom over a healthy session; MaxStallKills backs off if it is wrong.
+$StallMinutes  = 6
 $MaxStallKills = 5
 $script:stallKills = 0
 $script:lastChunkCount = -1
