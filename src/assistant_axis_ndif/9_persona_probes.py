@@ -126,6 +126,28 @@ def make_features(X, kind: str, bank, layer: int, k: int, seed: int):
         comps = bank["pca"][beh]["components"][layer, :k].numpy()
         comps = np.stack([unit(c) for c in comps])
         return X @ comps.T
+    if kind.startswith("erase:"):
+        # Erase a direction from the ACTIVATIONS, then probe the full 8192-d space, rather
+        # than residualising the axis and probing its projection. The nnsight probing skill
+        # is explicit about why: after any projection the ORIGINAL probe fails by
+        # arithmetic, since P w is nearly zero, so only a probe refitted on erased
+        # activations says whether the concept is gone for ANY linear probe. axes_resid
+        # answers the weaker question.
+        #
+        # This is a representational claim, not a causal one -- the erasure happens after
+        # the forward pass, so it says what is linearly decodable from the state, not what
+        # the model does with it. Q4 asks exactly the representational question: is there
+        # deception signal in the activations beyond the assistant direction?
+        what = kind.split(":", 1)[1]
+        if what == "random":
+            # rank-matched control: remove ONE arbitrary direction, same rank as the real
+            # erasure. It tells you the result is about WHICH direction, not how many.
+            rng = np.random.default_rng(seed)
+            d = rng.standard_normal(X.shape[1])
+        else:
+            d = bank["axes"][what][layer].numpy()
+        d = unit(d)
+        return X - np.outer(X @ d, d)
     if kind in ("axes", "axes_resid"):
         ax = bank["axes"]
         dec = unit(ax["deception"][layer].numpy())
@@ -410,6 +432,48 @@ def p3_loso(data, bank, args):
     return out
 
 
+def zeroshot(data, bank, args):
+    """No training at all: project onto a direction and score AUROC directly.
+
+    This is the paper's Figure 3 and the only number of theirs that can be compared without
+    matching their train/test protocol, because there is no protocol to match -- the
+    direction comes from persona prompts and never sees an eval label.
+
+    Sign is pinned per direction by construction (6_axes.py orients each PC against its own
+    behaviour contrast), but a direction that lands upside-down on a dataset would read as
+    1-AUROC, so both are reported and the flag is explicit rather than silently absolved.
+    """
+    ax = bank["axes"]
+    dirs = {"contrast": unit(ax["deception"][args.layer].numpy()),
+            "sycophancy": unit(ax["sycophancy"][args.layer].numpy()),
+            "unified": unit(ax["unified"][args.layer].numpy()),
+            "assistant": unit(ax["assistant"][args.layer].numpy())}
+    comps = bank["pca"]["deception"]["components"][args.layer].numpy()
+    for j in range(min(3, comps.shape[0])):
+        dirs[f"PC{j + 1}"] = unit(comps[j])
+    dirs["contrast_resid"] = unit(dirs["contrast"]
+                                  - float(dirs["contrast"] @ dirs["assistant"])
+                                  * dirs["assistant"])
+
+    out = []
+    logger.info("  %-16s" % "dataset" + "".join(f"{k:>16}" for k in dirs))
+    for k, (X, y, _) in data.items():
+        if len(np.unique(y)) < 2:
+            continue
+        row = {"dataset": k}
+        cells = []
+        for name, d in dirs.items():
+            a = float(roc_auc_score(y, X @ d))
+            row[name] = a
+            cells.append(f"{a:>16.3f}" + ("*" if a < 0.5 else " ")[:0])
+        out.append(row)
+        logger.info("  %-16s" % k + "".join(cells))
+    if out:
+        logger.info("  %-16s" % "MEAN" + "".join(
+            f"{np.mean([r[k] for r in out]):>16.3f}" for k in dirs))
+    return out
+
+
 def confounds(data, bank, args):
     """Does the projection just track response length? And is the null where it should be?"""
     out = []
@@ -479,7 +543,7 @@ def main() -> None:
                          "lr/reg_coeff-10 config shared by Apollo and Liars' Bench "
                          "(they differ only in layer); mms = Apollo's mean-mass shift")
     ap.add_argument("--protocol", nargs="+", default=["p1"],
-                    choices=["p1", "p2", "p3", "confounds", "null", "all"])
+                    choices=["p1", "p2", "p3", "zeroshot", "confounds", "null", "all"])
     ap.add_argument("--seed", type=int, default=42)
     ap.add_argument("--seeds", type=int, default=5, help="repeats for p2 and the null")
     ap.add_argument("--out", default="")
@@ -503,11 +567,34 @@ def main() -> None:
 
     protos = args.protocol
     if "all" in protos:
-        protos = ["p1", "p2", "p3", "confounds", "null"]
+        protos = ["p1", "p2", "p3", "zeroshot", "confounds", "null"]
+
+    # Realised split sizes, per the plan: balancing and item_id grouping both shrink a
+    # split, and by how much is not predictable from the row count -- convincing-game is
+    # 167D/100H, so a balanced train split is bounded by the 100, not the 267.
+    splits = {}
+    for k, (_, y, meta) in data.items():
+        tr, te = group_split(meta, 0.75, args.seed)
+        btr, bte = balance(tr, y, args.seed), balance(te, y, args.seed + 1)
+        ball = balance(np.arange(len(y)), y, args.seed + 1)
+        splits[k] = {"rows": int(len(y)), "items": len({m["item_id"] for m in meta}),
+                     "pos": int(y.sum()), "neg": int((1 - y).sum()),
+                     "train_items_75pct": int(len(tr)), "test_items_25pct": int(len(te)),
+                     "train_balanced": int(len(btr)), "test_balanced_ondiag": int(len(bte)),
+                     "test_balanced_offdiag": int(len(ball)),
+                     "label_semantics": meta[0].get("label_semantics")}
+    logger.info("realised splits:")
+    logger.info("  %-24s%7s%7s%9s%11s%12s%12s", "dataset", "rows", "items", "D/H",
+                "train(bal)", "test-diag", "test-off")
+    for k, v in splits.items():
+        logger.info("  %-24s%7d%7d%9s%11d%12d%12d", k, v["rows"], v["items"],
+                    f'{v["pos"]}/{v["neg"]}', v["train_balanced"],
+                    v["test_balanced_ondiag"], v["test_balanced_offdiag"])
 
     results = {"layer": args.layer, "pooling": args.pooling, "k": args.k,
                "bank": Path(args.bank).name,
-               "datasets": {k: int(len(v[1])) for k, v in data.items()}}
+               "datasets": {k: int(len(v[1])) for k, v in data.items()},
+               "splits": splits}
     if "p1" in protos:
         logger.info("P1 transfer matrix:")
         results["p1"] = p1_transfer(data, bank, args)
@@ -517,6 +604,9 @@ def main() -> None:
     if "p3" in protos:
         logger.info("P3 leave-one-dataset-out:")
         results["p3"] = p3_loso(data, bank, args)
+    if "zeroshot" in protos:
+        logger.info("zero-shot direction projections (no training; the paper's Figure 3):")
+        results["zeroshot"] = zeroshot(data, bank, args)
     if "confounds" in protos:
         logger.info("confound checks:")
         results["confounds"] = confounds(data, bank, args)
