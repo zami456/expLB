@@ -33,6 +33,7 @@ from __future__ import annotations
 
 import argparse
 import importlib.util
+import io
 import json
 import logging
 import os
@@ -202,6 +203,68 @@ def _pool(llm, layer_idx, span, want_last: bool):
         if ntok is None:
             ntok = m.sum(dim=1).to(torch.float32).cpu()
     return torch.stack(per_layer, dim=1), ntok           # (B,K,H,P)
+
+
+class SlowDownload(RuntimeError):
+    """An NDIF result download collapsed and is not worth waiting for."""
+
+
+def install_download_deadline(min_kbps: float, grace: float) -> bool:
+    """Abort a collapsed NDIF result download so the session retries on a fresh connection.
+
+    Measured on the lab PC 2026-09-15: result downloads from prod-ndif-results.s3 are
+    bimodal. A healthy 34 MB session arrives in 3-35s; a sick one trickles at ~35 KB/s for
+    eleven minutes while the worker sits at 0% CPU and NDIF reports RUNNING=15s. It is not
+    bandwidth (91 MB/s to Cloudflare on the same host at the same moment), not the socket
+    pins, and not client reuse -- nnsight opens a fresh httpx.Client per download. Killing
+    the process always cleared it, which is the tell: the flow is sick, so a new connection
+    fixes it and waiting does not.
+
+    httpx's read timeout cannot catch this, because bytes keep arriving -- just very few of
+    them. So the check is on throughput, after a grace period so a slow start is not
+    punished. Raising here lands in run_session's retry, which re-dispatches the session and
+    calls get_result again on a brand-new client. That costs one ~15s recompute instead of
+    the six minutes the supervisor's stall killer needs to notice and restart the process.
+
+    Returns False if nnsight's internals have moved, in which case the run continues
+    unpatched and the supervisor's stall killer is still the backstop.
+    """
+    try:
+        from nnsight.intervention.backends.remote import RemoteBackend
+    except Exception:  # noqa: BLE001
+        return False
+    if not (hasattr(RemoteBackend, "get_result")
+            and hasattr(RemoteBackend, "_decompress_and_load")):
+        return False
+
+    import httpx
+
+    def get_result(self, url: str, content_length=None):
+        result_bytes = io.BytesIO()
+        timeout = httpx.Timeout(self.CONNECT_TIMEOUT, read=self.READ_TIMEOUT)
+        t0 = time.time()
+        got = 0
+        with httpx.Client(timeout=timeout) as client:
+            with client.stream("GET", url) as stream:
+                total = content_length or float(stream.headers.get("Content-length", 0))
+                with tqdm(total=total or None, unit="B", unit_scale=True,
+                          desc="downloading", leave=False) as bar:
+                    for data in stream.iter_bytes(chunk_size=128 * 1024):
+                        got += len(data)
+                        bar.update(len(data))
+                        result_bytes.write(data)
+                        elapsed = time.time() - t0
+                        if elapsed > grace:
+                            kbps = got / 1024.0 / elapsed
+                            if kbps < min_kbps:
+                                raise SlowDownload(
+                                    "%.1f MB in %.0fs = %.0f KB/s (floor %.0f); "
+                                    "dropping this flow and retrying"
+                                    % (got / 1e6, elapsed, kbps, min_kbps))
+        return self._decompress_and_load(result_bytes)
+
+    RemoteBackend.get_result = get_result
+    return True
 
 
 def run_session(llm, nnsight, layer_idx, prepared, want_last: bool, retries: int):
@@ -387,6 +450,11 @@ def main() -> None:
     ap.add_argument("--token_budget", type=int, default=12000)
     ap.add_argument("--session_batches", type=int, default=8)
     ap.add_argument("--retries", type=int, default=4)
+    ap.add_argument("--min_download_kbps", type=float, default=300.0,
+                    help="abort a result download slower than this, and retry on a "
+                         "fresh connection (0 disables)")
+    ap.add_argument("--download_grace", type=float, default=20.0,
+                    help="seconds before the download throughput floor starts applying")
     ap.add_argument("--prepare_only", action="store_true")
     ap.add_argument("--overwrite", action="store_true")
     args = ap.parse_args()
@@ -407,6 +475,11 @@ def main() -> None:
     else:
         nnsight, llm, n_layers = act2.init_ndif(args.model)
         tok = llm.tokenizer
+        if args.min_download_kbps > 0:
+            ok = install_download_deadline(args.min_download_kbps, args.download_grace)
+            logger.info("download floor %.0f KB/s after %.0fs: %s",
+                        args.min_download_kbps, args.download_grace,
+                        "installed" if ok else "NOT installed (nnsight internals moved)")
 
     tok.padding_side = "right"
     if tok.pad_token_id is None:
