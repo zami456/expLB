@@ -195,6 +195,60 @@ def main() -> None:
             logger.info("   %-6s %-24s %.3f", feat, k, d[f"{feat}|{k}"])
     out["tests"]["within_organism"] = d
 
+    # ---- E. token-stratified: remove the answer token as a shortcut ---------------
+    # Every soft-trigger response is ONE token, "True" or "False", and the token is not
+    # balanced against the label: deceptive rows answer "True" ~37% of the time, honest
+    # rows ~61%. A probe could score above chance by reading which word was emitted. So
+    # score the rows that answered "True" and the rows that answered "False" separately.
+    # Inside one token, a deceptive row is simply the WRONG answer to the passage and an
+    # honest row the right one -- which is also why a positive result here cannot tell
+    # lying from being wrong: on this corpus the two are the same event.
+    logger.info("")
+    logger.info("E. token-stratified: AUROC within rows that emitted the SAME answer token")
+    spec = importlib.util.spec_from_file_location("eval_datasets",
+                                                  PIPELINE_DIR / "eval_datasets.py")
+    ED = importlib.util.module_from_spec(spec)
+    import sys
+    sys.modules["eval_datasets"] = ED     # dataclasses needs the module registered
+    spec.loader.exec_module(ED)
+    e_out = {}
+    best_src = "instructed-deception" if "instructed-deception" in corpus else sorted(corpus)[0]
+    for feat in args.features:
+        Xs, ys, ms = corpus[best_src]
+        tr = P.balance(np.arange(len(ys)), ys, args.seed)
+        F = P.make_features(Xs, feat, bank, args.layer, args.k, args.seed)
+        clf = P.make_probe(args.probe, args.seed)
+        clf.fit(F[tr], ys[tr])
+        for k in [t for t in TRIGGERS if t in sleepers]:
+            Xt, yt, mt = sleepers[k]
+            tok = {r.row_id: r.response_str.strip() for r in ED.load_dataset(k)}
+            answers = np.array([tok.get(m["row_id"], "?") for m in mt])
+            Ft = P.make_features(Xt, feat, bank, args.layer, args.k, args.seed)
+            s_probe = P._scores(clf, Ft)
+            s_zero = Xt @ d_axis
+            for word in ("True", "False"):
+                sel = answers == word
+                if sel.sum() < 20 or len(np.unique(yt[sel])) < 2:
+                    continue
+                a_p = float(roc_auc_score(yt[sel], s_probe[sel]))
+                a_z = float(roc_auc_score(yt[sel], s_zero[sel]))
+                e_out[f"{feat}|{k}|{word}"] = {"probe_from_" + best_src: a_p,
+                                              "zeroshot": a_z, "n": int(sel.sum()),
+                                              "n_pos": int(yt[sel].sum())}
+                logger.info("   %-5s %-22s answered %-5s n=%4d (%3dD)  probe %.3f  "
+                            "zero-shot %.3f", feat, k.replace("soft-trigger-", ""), word,
+                            int(sel.sum()), int(yt[sel].sum()), a_p, a_z)
+        # the size of the shortcut itself
+    for k in [t for t in TRIGGERS if t in sleepers]:
+        _, yt, mt = sleepers[k]
+        tok = {r.row_id: r.response_str.strip() for r in ED.load_dataset(k)}
+        is_true = np.array([1.0 if tok.get(m["row_id"]) == "True" else 0.0 for m in mt])
+        a = float(roc_auc_score(yt, 1 - is_true))
+        e_out[f"token_only|{k}"] = a
+        logger.info("   token identity ALONE predicts the label at %.3f on %s", a,
+                    k.replace("soft-trigger-", ""))
+    out["tests"]["token_stratified"] = e_out
+
     # ---- verdict -------------------------------------------------------------------
     logger.info("")
     logger.info("=" * 74)

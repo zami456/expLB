@@ -335,7 +335,68 @@ def fig_contamination(plt):
     return ps.save(fig, "q1_contamination.pdf")
 
 
+def fig_q11(plt):
+    """Q11: each shortcut test, side by side, at the two layers analysed."""
+    docs = [(L, load(f"q11_sleeper_L{L}_last.json")) for L in (20, 44)]
+    docs = [(L, d) for L, d in docs if d]
+    if not docs:
+        return None
+    trig = ["soft-trigger-gender", "soft-trigger-greeting", "soft-trigger-time"]
+    fig, axes = plt.subplots(1, len(docs), figsize=(4.6 * len(docs), 3.4), sharey=True)
+    axes = np.atleast_1d(axes)
+    for ax, (L, doc) in zip(axes, docs):
+        t = doc["tests"]
+        labels, raw, axs = [], [], []
+
+        def mean_of(d, feat, cond=lambda k: True):
+            v = [x for k, x in d.items() if k.startswith(feat + "|") and cond(k)]
+            return float(np.mean(v)) if v else np.nan
+
+        labels.append("within\norganism")
+        raw.append(mean_of(t["within_organism"], "raw", lambda k: "gender-secret" not in k))
+        axs.append(mean_of(t["within_organism"], "axes", lambda k: "gender-secret" not in k))
+        labels.append("cross-\ntrigger")
+        raw.append(mean_of(t["cross_trigger"], "raw"))
+        axs.append(mean_of(t["cross_trigger"], "axes"))
+        labels.append("same answer\ntoken")
+        ts = t.get("token_stratified", {})
+        raw.append(float(np.mean([v["probe_from_instructed-deception"] for k, v in ts.items()
+                                  if k.startswith("raw|")])) if ts else np.nan)
+        axs.append(float(np.mean([v["probe_from_instructed-deception"] for k, v in ts.items()
+                                  if k.startswith("axes|")])) if ts else np.nan)
+        labels.append("from\ncorpus")
+        for feat, dest in (("raw", raw), ("axes", axs)):
+            v = [x for k, row in t["corpus_to_sleeper"].items() if k.startswith(feat + "|")
+                 for tt, x in row.items() if tt in trig]
+            dest.append(float(np.mean(v)) if v else np.nan)
+        labels.append("gender-\nsecret")
+        for feat, dest in (("raw", raw), ("axes", axs)):
+            v = [row.get("gender-secret") for k, row in t["corpus_to_sleeper"].items()
+                 if k.startswith(feat + "|")]
+            dest.append(float(np.nanmean([x for x in v if x is not None])) if v else np.nan)
+
+        x = np.arange(len(labels))
+        ax.bar(x - 0.2, raw, 0.4, color=ps.FEATURE_COLOR["raw"], label=ps.FEATURE_LABEL["raw"])
+        ax.bar(x + 0.2, axs, 0.4, color=ps.FEATURE_COLOR["axes"], label=ps.FEATURE_LABEL["axes"])
+        if "token_only|soft-trigger-gender" in ts:
+            tok = np.mean([v for k, v in ts.items() if k.startswith("token_only|")])
+            ax.axhline(tok, color="#C44E52", lw=0.9, ls=":")
+            ax.annotate("answer token alone", xy=(0.01, tok), xycoords=("axes fraction", "data"),
+                        fontsize=6.5, color="#C44E52", va="bottom")
+        ps.chance(ax)
+        ax.set_xticks(x)
+        ax.set_xticklabels(labels, fontsize=7.5)
+        ax.set_ylim(0.3, 1.0)
+        ax.set_title(f"layer {L}")
+    axes[0].set_ylabel("AUROC")
+    axes[0].legend(loc="lower left", fontsize=7)
+    fig.suptitle("Q11 — base-model probes flag sleeper answers as false, across triggers;\n"
+                 "not where falsity is uncheckable (gender-secret)", y=1.05, fontsize=10)
+    return ps.save(fig, "q11_sleeper.pdf")
+
+
 FIGURES = {
+    "q11": fig_q11,
     "q1": fig_contamination,
     "q2": fig_layers,
     "transfer": fig_transfer,
