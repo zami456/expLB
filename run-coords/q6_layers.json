@@ -1,0 +1,266 @@
+{
+  "targets": [
+    20,
+    22,
+    40
+  ],
+  "tol": 0.02,
+  "rows": [
+    {
+      "source": "trained transfer, full corpus",
+      "method": "raw / mms / mean",
+      "file": "layer_sweep_passB_mms.json",
+      "at": {
+        "20": 0.6523819828366132,
+        "22": 0.6462583809589518,
+        "40": 0.6692782460636428
+      },
+      "best_layer": 32,
+      "best": 0.7167282524720204,
+      "gap_20_22": 0.0061236018776613665,
+      "gap_40_minus_best_of_20_22": 0.01689626322702964,
+      "spread_20_22_40": 0.023019865104691006,
+      "verdict": "DISAGREE"
+    },
+    {
+      "source": "trained transfer, full corpus",
+      "method": "pc:deception / mms / mean",
+      "file": "layer_sweep_passB_mms.json",
+      "at": {
+        "20": 0.5237417568658953,
+        "22": 0.5174643904798112,
+        "40": 0.6607664342269597
+      },
+      "best_layer": 40,
+      "best": 0.6607664342269597,
+      "gap_20_22": 0.006277366386084116,
+      "gap_40_minus_best_of_20_22": 0.13702467736106438,
+      "spread_20_22_40": 0.1433020437471485,
+      "verdict": "DISAGREE"
+    },
+    {
+      "source": "trained transfer, full corpus",
+      "method": "axes / mms / mean",
+      "file": "layer_sweep_passB_mms.json",
+      "at": {
+        "20": 0.5697687176723019,
+        "22": 0.5661872589200972,
+        "40": 0.7207907592494539
+      },
+      "best_layer": 44,
+      "best": 0.7308887917450181,
+      "gap_20_22": 0.0035814587522046137,
+      "gap_40_minus_best_of_20_22": 0.15102204157715204,
+      "spread_20_22_40": 0.15460350032935666,
+      "verdict": "DISAGREE"
+    },
+    {
+      "source": "trained transfer, full corpus",
+      "method": "raw / mms / last",
+      "file": "layer_sweep_passB_last.json",
+      "at": {
+        "20": 0.7075806694825058,
+        "22": 0.7203927608395664,
+        "40": 0.7046890584404109
+      },
+      "best_layer": 28,
+      "best": 0.7398721579301467,
+      "gap_20_22": 0.012812091357060629,
+      "gap_40_minus_best_of_20_22": -0.015703702399155528,
+      "spread_20_22_40": 0.015703702399155528,
+      "verdict": "AGREE"
+    },
+    {
+      "source": "trained transfer, full corpus",
+      "method": "pc:deception / mms / last",
+      "file": "layer_sweep_passB_last.json",
+      "at": {
+        "20": 0.5905948777757217,
+        "22": 0.6083867544976704,
+        "40": 0.6722304673285779
+      },
+      "best_layer": 44,
+      "best": 0.6997536614763713,
+      "gap_20_22": 0.017791876721948707,
+      "gap_40_minus_best_of_20_22": 0.0638437128309075,
+      "spread_20_22_40": 0.08163558955285621,
+      "verdict": "DISAGREE"
+    },
+    {
+      "source": "trained transfer, full corpus",
+      "method": "axes / mms / last",
+      "file": "layer_sweep_passB_last.json",
+      "at": {
+        "20": 0.6472404729269426,
+        "22": 0.6564756249348118,
+        "40": 0.7416665147087129
+      },
+      "best_layer": 44,
+      "best": 0.7657696890932673,
+      "gap_20_22": 0.009235152007869174,
+      "gap_40_minus_best_of_20_22": 0.0851908897739011,
+      "spread_20_22_40": 0.09442604178177028,
+      "verdict": "DISAGREE"
+    },
+    {
+      "source": "trained transfer, Pass A (no layer 22)",
+      "method": "raw / lr_reg10 / mean",
+      "file": "layer_sweep_mean.json",
+      "at": {
+        "20": 0.6762384731670446,
+        "22": null,
+        "40": 0.675064487276392
+      },
+      "best_layer": 32,
+      "best": 0.7176153722600151,
+      "gap_20_22": null,
+      "gap_40_minus_best_of_20_22": -0.0011739858906525402,
+      "spread_20_22_40": 0.0011739858906525402,
+      "verdict": "AGREE"
+    },
+    {
+      "source": "trained transfer, Pass A (no layer 22)",
+      "method": "pc:deception / lr_reg10 / mean",
+      "file": "layer_sweep_mean.json",
+      "at": {
+        "20": 0.5689594986142605,
+        "22": null,
+        "40": 0.6356047902494332
+      },
+      "best_layer": 36,
+      "best": 0.6574455687830688,
+      "gap_20_22": null,
+      "gap_40_minus_best_of_20_22": 0.06664529163517263,
+      "spread_20_22_40": 0.06664529163517263,
+      "verdict": "DISAGREE"
+    },
+    {
+      "source": "trained transfer, Pass A (no layer 22)",
+      "method": "axes / lr_reg10 / mean",
+      "file": "layer_sweep_mean.json",
+      "at": {
+        "20": 0.5605668304358782,
+        "22": null,
+        "40": 0.6740225592088688
+      },
+      "best_layer": 40,
+      "best": 0.6740225592088688,
+      "gap_20_22": null,
+      "gap_40_minus_best_of_20_22": 0.1134557287729906,
+      "spread_20_22_40": 0.1134557287729906,
+      "verdict": "DISAGREE"
+    },
+    {
+      "source": "trained transfer, Pass A (no layer 22)",
+      "method": "raw / mms / mean",
+      "file": "layer_sweep_mms.json",
+      "at": {
+        "20": 0.66667109473419,
+        "22": null,
+        "40": 0.678018675988914
+      },
+      "best_layer": 32,
+      "best": 0.7245128464348701,
+      "gap_20_22": null,
+      "gap_40_minus_best_of_20_22": 0.011347581254724015,
+      "spread_20_22_40": 0.011347581254724015,
+      "verdict": "AGREE"
+    },
+    {
+      "source": "trained transfer, Pass A (no layer 22)",
+      "method": "pc:deception / mms / mean",
+      "file": "layer_sweep_mms.json",
+      "at": {
+        "20": 0.5226691484001008,
+        "22": null,
+        "40": 0.6383554736709498
+      },
+      "best_layer": 40,
+      "best": 0.6383554736709498,
+      "gap_20_22": null,
+      "gap_40_minus_best_of_20_22": 0.11568632527084899,
+      "spread_20_22_40": 0.11568632527084899,
+      "verdict": "DISAGREE"
+    },
+    {
+      "source": "trained transfer, Pass A (no layer 22)",
+      "method": "axes / mms / mean",
+      "file": "layer_sweep_mms.json",
+      "at": {
+        "20": 0.5632836829176114,
+        "22": null,
+        "40": 0.6768328388762913
+      },
+      "best_layer": 44,
+      "best": 0.6870106575963718,
+      "gap_20_22": null,
+      "gap_40_minus_best_of_20_22": 0.11354915595867987,
+      "spread_20_22_40": 0.11354915595867987,
+      "verdict": "DISAGREE"
+    },
+    {
+      "source": "zero-shot, full corpus",
+      "method": "deception contrast axis / mean",
+      "file": "dotproducts_mean.json",
+      "at": {
+        "20": 0.6080517796274055,
+        "22": 0.6295062584915116,
+        "40": 0.8630105619589489
+      },
+      "best_layer": 40,
+      "best": 0.8630105619589489,
+      "gap_20_22": 0.02145447886410612,
+      "gap_40_minus_best_of_20_22": 0.23350430346743722,
+      "spread_20_22_40": 0.25495878233154334,
+      "verdict": "DISAGREE"
+    },
+    {
+      "source": "zero-shot, full corpus",
+      "method": "PC1 / mean",
+      "file": "dotproducts_mean.json",
+      "at": {
+        "20": 0.672741905827186,
+        "22": 0.6985357918446898,
+        "40": 0.8768949185173067
+      },
+      "best_layer": 40,
+      "best": 0.8768949185173067,
+      "gap_20_22": 0.025793886017503875,
+      "gap_40_minus_best_of_20_22": 0.17835912667261689,
+      "spread_20_22_40": 0.20415301269012076,
+      "verdict": "DISAGREE"
+    },
+    {
+      "source": "zero-shot per-token, Pass C",
+      "method": "axis / mean",
+      "file": "pertoken_q8.json",
+      "at": {
+        "20": 0.6954440532396591,
+        "22": 0.6986990202871461,
+        "40": 0.765238523018418
+      },
+      "best_layer": 40,
+      "best": 0.765238523018418,
+      "gap_20_22": 0.0032549670474870673,
+      "gap_40_minus_best_of_20_22": 0.06653950273127185,
+      "spread_20_22_40": 0.06979446977875892,
+      "verdict": "DISAGREE"
+    },
+    {
+      "source": "zero-shot per-token, Pass C",
+      "method": "axis / top10pct",
+      "file": "pertoken_q8.json",
+      "at": {
+        "20": 0.7981507517040236,
+        "22": 0.7629322499556874,
+        "40": 0.7698500620377383
+      },
+      "best_layer": 28,
+      "best": 0.8066829549299859,
+      "gap_20_22": 0.035218501748336184,
+      "gap_40_minus_best_of_20_22": -0.028300689666285295,
+      "spread_20_22_40": 0.035218501748336184,
+      "verdict": "DISAGREE"
+    }
+  ]
+}

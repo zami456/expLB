@@ -395,7 +395,90 @@ def fig_q11(plt):
     return ps.save(fig, "q11_sleeper.pdf")
 
 
+def fig_q6(plt):
+    """Q6: the three literature layers side by side, plus each method's own best."""
+    doc = load("q6_layers.json")
+    if doc is None:
+        return None
+    want = [
+        ("trained transfer, full corpus", "raw / mms / last", "raw probe\n(last)"),
+        ("trained transfer, full corpus", "raw / mms / mean", "raw probe\n(mean)"),
+        ("leave-one-dataset-out, Pass C", "tok_lr / top10pct", "per-token\ntrained probe"),
+        ("trained transfer, full corpus", "axes / mms / last", "persona axes\n(last)"),
+        ("trained transfer, full corpus", "axes / mms / mean", "persona axes\n(mean)"),
+        ("zero-shot, full corpus", "deception contrast axis / mean", "deception axis\nzero-shot"),
+    ]
+    rows = {(r["source"], r["method"]): r for r in doc["rows"]}
+    picked = [(rows[(s, m)], lab) for s, m, lab in want if (s, m) in rows]
+    if not picked:
+        return None
+    fig, ax = plt.subplots(figsize=(8.8, 3.4))
+    x = np.arange(len(picked))
+    cols = [("20", "layer 20 (Liars' Bench)", "#8FB3D9"),
+            ("22", "layer 22 (Apollo)", "#4C72B0"),
+            ("40", "layer 40 (Assistant Axis)", "#DD8452")]
+    w = 0.2
+    for i, (key, label, color) in enumerate(cols):
+        vals = [r["at"].get(key) for r, _ in picked]
+        ax.bar(x + (i - 1.5) * w, [v if v is not None else np.nan for v in vals], w,
+               color=color, label=label)
+    ax.bar(x + 1.5 * w, [r["best"] for r, _ in picked], w, color="#55A868",
+           label="method's own best layer")
+    for xi, (r, _) in zip(x, picked):
+        ax.annotate(f"L{r['best_layer']}", xy=(xi + 1.5 * w, r["best"] + 0.005),
+                    ha="center", va="bottom", fontsize=6.5, color="#2F6B3A")
+    ax.set_xticks(x)
+    ax.set_xticklabels([lab for _, lab in picked], fontsize=7.5)
+    ax.set_ylim(0.45, 0.95)
+    ax.set_ylabel("AUROC")
+    ps.chance(ax)
+    ax.legend(ncol=4, fontsize=7, loc="upper left")
+    fig.suptitle("Q6 — 20 vs 22 is immaterial; 40 matters for persona methods, "
+                 "not for raw probes", y=1.02, fontsize=10.5)
+    return ps.save(fig, "q6_layers.pdf")
+
+
+def fig_q8_trained(plt):
+    """Q8 finished: trained per-token probes vs trained pooled probes, same rows and folds."""
+    doc = load("q8_trained_pertoken.json")
+    if doc is None:
+        return None
+    by = {}
+    for r in doc["results"]:
+        by.setdefault((r["probe"], r["aggregation"]), {})[int(r["layer"])] = r
+    layers = doc["layers"]
+    lines = [
+        ("tok_lr", "top10pct", "token LR, top-10% tokens", "#C44E52", "-", "o"),
+        ("tok_lr", "mean", "token LR, mean of tokens", "#C44E52", "--", "o"),
+        ("pool_mean_mms", "pooled", "pooled mean, mms", "#4C72B0", "-", "s"),
+        ("pool_last_mms", "pooled", "pooled last, mms", "#4C72B0", "--", "s"),
+        ("zeroshot_axis", "top10pct", "zero-shot axis, top-10%", "#55A868", "-", "^"),
+        ("length_only", "n_tok", "response length only", "#9A9A9A", ":", None),
+    ]
+    fig, axes = plt.subplots(1, 2, figsize=(9.0, 3.3))
+    for ax, metric, ylab in ((axes[0], "auroc_mean", "AUROC, mean over 9 held-out datasets"),
+                             (axes[1], "tpr_mean", "TPR at 1% FPR (alpaca threshold)")):
+        for probe, agg, label, color, ls, mk in lines:
+            s = by.get((probe, agg))
+            if not s:
+                continue
+            ax.plot(layers, [s[L][metric] for L in layers], color=color, ls=ls,
+                    marker=mk, label=label)
+        if metric == "auroc_mean":
+            ps.chance(ax)
+        ax.set_xlabel("layer")
+        ax.set_ylabel(ylab)
+    axes[0].legend(fontsize=6.8, loc="lower right")
+    axes[0].set_title("detection on an unseen dataset")
+    axes[1].set_title("at a deployable false-positive rate")
+    fig.suptitle("Q8 — trained per-token probe vs trained pooled probe "
+                 "(leave-one-dataset-out, Pass C)", y=1.03, fontsize=10.5)
+    return ps.save(fig, "q8_trained_pertoken.pdf")
+
+
 FIGURES = {
+    "q8trained": fig_q8_trained,
+    "q6": fig_q6,
     "q11": fig_q11,
     "q1": fig_contamination,
     "q2": fig_layers,
