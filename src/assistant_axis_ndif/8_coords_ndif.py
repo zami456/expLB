@@ -231,8 +231,48 @@ def batch_by_attention(items, budget_bytes: int, n_heads: int, max_rows: int):
     return out, too_long
 
 
-def pad_batch(batch, pad_id: int):
-    """-> input_ids (B,T), attention_mask (B,T), span (B,T) float32 1.0 on response tokens."""
+def token_bytes(batch, n_layers: int) -> int:
+    """Bytes the packed per-token block costs for this batch: sum(span) x K x H x 2."""
+    return sum(a1 - a0 for _, _, a0, a1 in batch) * n_layers * 8192 * 2
+
+
+def batch_by_bytes(items, budget_bytes: int, attn_budget: int, n_heads: int,
+                   max_rows: int, n_layers: int):
+    """Group by RETURNED BYTES as well as attention memory. Pass C's binding constraint.
+
+    Measured from the Pass A spans: 2,000 rows carry 304,706 response tokens, and at six
+    layers one 1,532-token row is 143.6 MiB on its own while a batch of eight average rows is
+    114 MiB and a session of eight such batches is 912 MiB. Pass B's batching bounds attention
+    memory and row count; neither bounds what comes back, and 912 MiB downloads against a link
+    that already stalls at 35 KB/s would be unworkable.
+
+    A single row over budget is kept alone rather than dropped -- it is expensive, not
+    impossible, and silently losing the longest responses would bias exactly the rows most
+    likely to carry localised deception.
+    """
+    groups, tl = batch_by_attention(items, attn_budget, n_heads, max_rows)
+    out = []
+    for g in groups:
+        cur = []
+        for it in g:
+            trial = cur + [it]
+            if cur and token_bytes(trial, n_layers) > budget_bytes:
+                out.append(cur)
+                cur = [it]
+            else:
+                cur = trial
+        if cur:
+            out.append(cur)
+    return out, tl
+
+
+def pad_batch(batch, pad_id: int, want_tokens: bool = False):
+    """-> input_ids (B,T), attention_mask (B,T), span (B,T) float32 1.0 on response tokens.
+
+    With want_tokens, also returns (tok_index, offsets): tok_index holds b*T + t for every
+    response position, so a single gather inside the trace returns the response tokens packed
+    end to end; offsets says where each row starts and ends in that packed block.
+    """
     T = max(len(ids) for _, ids, _, _ in batch)
     B = len(batch)
     ids_t = torch.full((B, T), pad_id, dtype=torch.long)
@@ -242,14 +282,26 @@ def pad_batch(batch, pad_id: int):
         ids_t[i, :len(ids)] = torch.tensor(ids, dtype=torch.long)
         attn[i, :len(ids)] = 1
         span[i, a0:a1] = 1.0
-    return ids_t, attn, span
+    if not want_tokens:
+        return ids_t, attn, span
+    idx, offs = [], [0]
+    for i, (_, _, a0, a1) in enumerate(batch):
+        idx.extend(range(i * T + a0, i * T + a1))
+        offs.append(len(idx))
+    return ids_t, attn, span, torch.tensor(idx, dtype=torch.long), offs
 
 
 # --------------------------------------------------------------------------- #
 # the remote body
 # --------------------------------------------------------------------------- #
-def _pool(llm, layer_idx, span, want_last: bool):
-    """Runs on NDIF. -> pooled (B, K, H, P) fp16 CPU, n_tok (B,) fp32 CPU.
+def _pool(llm, layer_idx, span, want_last: bool, tok_index=None):
+    """Runs on NDIF. -> pooled (B,K,H,P) fp16, n_tok (B,) fp32, tokens (S,K,H) fp16 or None.
+
+    `tok_index` is a flat gather index built on the client: for each row b and each response
+    position t in [a0_b, a1_b), the value b*T + t. Gathering with it inside the trace returns
+    exactly the response tokens, packed end to end, and nothing else. Returning the masked
+    (B,T,H) instead would ship every context token too -- for insider-trading that is ~1,500
+    positions to keep ~100, a 15x waste on the one thing that dominates this pass.
 
     Per-sample version of 2_activations_ndif._span_mean_sum: same masked mean over the
     response tokens, but the batch dimension is KEPT rather than summed.
@@ -259,6 +311,7 @@ def _pool(llm, layer_idx, span, want_last: bool):
     stacked (K,B,T,H) intermediate would be tens of GB.
     """
     per_layer = []
+    per_layer_tokens = [] if tok_index is not None else None
     ntok = None
     for L in layer_idx:                                  # ASCENDING or OutOfOrderError
         h = llm.model.layers[L].output                   # (B,T,H) plain tensor in tf5
@@ -283,9 +336,13 @@ def _pool(llm, layer_idx, span, want_last: bool):
             outs.append(h[rows, last].to(torch.float32))
         # fp16 HERE, not on the client: the cast is what halves the bytes on the wire
         per_layer.append(torch.stack(outs, dim=-1).to(torch.float16).cpu())
+        if per_layer_tokens is not None:
+            flat = h.reshape(-1, h.shape[-1])            # (B*T, H)
+            per_layer_tokens.append(flat[tok_index.to(h.device)].to(torch.float16).cpu())
         if ntok is None:
             ntok = m.sum(dim=1, dtype=torch.float32).cpu()
-    return torch.stack(per_layer, dim=1), ntok           # (B,K,H,P)
+    tokens = torch.stack(per_layer_tokens, dim=1) if per_layer_tokens is not None else None
+    return torch.stack(per_layer, dim=1), ntok, tokens   # (B,K,H,P), (B,), (S,K,H)
 
 
 class SlowDownload(RuntimeError):
@@ -360,21 +417,27 @@ def install_download_deadline(min_kbps: float, grace: float, attempts: int = 4) 
     return True
 
 
-def run_session(llm, nnsight, layer_idx, prepared, want_last: bool, retries: int):
-    """One NDIF job over several batches. -> list of (pooled, ntok) in `prepared` order."""
+def run_session(llm, nnsight, layer_idx, prepared, want_last: bool, retries: int,
+                per_token: bool = False):
+    """One NDIF job over several batches. -> list of (pooled, ntok, tokens) in order."""
     delay = 3.0
     for attempt in range(retries):
         try:
             with llm.session(remote=True):
                 pooled = nnsight.save([])
                 ntoks = nnsight.save([])
-                for ids, attn, span in prepared:
+                toks = nnsight.save([])
+                for _pre in prepared:
+                    ids, attn, span = _pre[0], _pre[1], _pre[2]
+                    tok_index = _pre[3] if per_token else None
                     # ONE implicit invoke per trace. Several tracer.invoke() blocks are the
                     # documented way to get results back in model order, not input order.
                     with llm.trace({"input_ids": ids, "attention_mask": attn}) as tracer:
-                        p, n = _pool(llm, layer_idx, span, want_last)
+                        p, n, tk = _pool(llm, layer_idx, span, want_last, tok_index)
                         pooled.append(p)
                         ntoks.append(n)
+                        if per_token:
+                            toks.append(tk)
                         # Bail before the LM head. Without this the run continues through the
                         # remaining layers, the final norm and lm_head, which materialises
                         # logits of (batch, seq, 128256) -- for a 10,015-token batch that is
@@ -387,9 +450,13 @@ def run_session(llm, nnsight, layer_idx, prepared, want_last: bool, retries: int
                         tracer.stop()
             P = getattr(pooled, "value", pooled)
             N = getattr(ntoks, "value", ntoks)
+            K = getattr(toks, "value", toks) if per_token else [None] * len(P)
             if len(P) != len(prepared):
                 raise RuntimeError(f"session returned {len(P)} of {len(prepared)} batches")
-            return list(zip(P, N))
+            if per_token and len(K) != len(prepared):
+                raise RuntimeError(f"session returned {len(K)} token blocks of "
+                                   f"{len(prepared)}")
+            return list(zip(P, N, K))
         except Exception as exc:  # noqa: BLE001
             # Log the LAST line, not the first 300 characters. nnsight wraps the remote
             # failure in a client-side traceback, so str(exc)[:300] spent its whole budget on
@@ -494,7 +561,12 @@ def process_dataset(llm, nnsight, tok, encoder, key: str, layer_idx, args, pad_i
     logger.info("%s: %d to do (%d already on disk)", key, len(todo), len(done))
 
     budget_bytes = int(args.attn_budget_gib * (1024 ** 3))
-    groups, too_long = batch_by_attention(todo, budget_bytes, n_heads, args.batch_size)
+    if args.per_token:
+        groups, too_long = batch_by_bytes(todo, int(args.byte_budget_mib * 2**20),
+                                          budget_bytes, n_heads, args.batch_size,
+                                          len(layer_idx))
+    else:
+        groups, too_long = batch_by_attention(todo, budget_bytes, n_heads, args.batch_size)
     if too_long:
         worst = max(len(it[1]) for it in too_long)
         cap = int((budget_bytes / (n_heads * 4)) ** 0.5)
@@ -518,13 +590,16 @@ def process_dataset(llm, nnsight, tok, encoder, key: str, layer_idx, args, pad_i
         logger.info("  %d sessions, widest %d padded tokens (session budget %d)",
                     len(chunks), max(_cost), args.session_tokens)
     for chunk in tqdm(chunks, desc=f"  {key}", leave=False):
-        prepared = [pad_batch(b, pad_id) for b in chunk]
-        got = run_session(llm, nnsight, layer_idx, prepared, want_last, args.retries)
+        prepared = [pad_batch(b, pad_id, args.per_token) for b in chunk]
+        got = run_session(llm, nnsight, layer_idx, prepared, want_last,
+                          args.retries, args.per_token)
         if got is None:
             logger.error("  %s: a session failed permanently; leaving its rows for resume", key)
             continue
         ids_out, pooled_out, ntok_out = [], [], []
-        for batch, (p, n) in zip(chunk, got):
+        tok_out, tok_offs = [], [0]
+        for batch, (p, n, tk) in zip(chunk, got):
+            b_offs = pad_batch(batch, pad_id, True)[4] if args.per_token else None
             for i, (rid, _, a0, a1) in enumerate(batch):
                 expect = a1 - a0
                 got_n = int(round(float(n[i])))
@@ -535,13 +610,28 @@ def process_dataset(llm, nnsight, tok, encoder, key: str, layer_idx, args, pad_i
                 ids_out.append(rid)
                 pooled_out.append(p[i])
                 ntok_out.append(n[i])
+                if args.per_token:
+                    seg = tk[b_offs[i]:b_offs[i + 1]]          # (n_tok_i, K, H)
+                    if seg.shape[0] != expect:
+                        raise RuntimeError(
+                            f"per-token length mismatch on {rid}: packed {seg.shape[0]} "
+                            f"but span is {expect}. Do not trust these activations.")
+                    tok_out.append(seg)
+                    tok_offs.append(tok_offs[-1] + expect)
         path = out_dir / f"chunk_{seq:04d}.pt"
         tmp = path.with_suffix(".tmp")
-        torch.save({"row_ids": ids_out,
-                    "pooled": torch.stack(pooled_out),
-                    "n_tok": torch.stack(ntok_out),
-                    "layers": list(layer_idx),
-                    "pooling": list(args.pooling)}, tmp)
+        blob = {"row_ids": ids_out,
+                "pooled": torch.stack(pooled_out),
+                "n_tok": torch.stack(ntok_out),
+                "layers": list(layer_idx),
+                "pooling": list(args.pooling)}
+        if args.per_token and tok_out:
+            # packed (S,K,H) plus offsets: row i is tokens[offsets[i]:offsets[i+1]].
+            # Padding to a rectangle would multiply the largest pass in the project by the
+            # ratio of longest to mean response, which on this corpus is 1532/152 = 10x.
+            blob["tokens"] = torch.cat(tok_out)
+            blob["tok_offsets"] = tok_offs
+        torch.save(blob, tmp)
         os.replace(tmp, path)
         seq += 1
 
@@ -565,6 +655,14 @@ def main() -> None:
     ap.add_argument("--layers", nargs="+", default=["every4"],
                     help="all | every4 | explicit ints")
     ap.add_argument("--pooling", nargs="+", default=["mean", "last"])
+    ap.add_argument("--per_token", action="store_true",
+                    help="also return the response tokens unpooled, packed (S,K,H) fp16 "
+                         "with per-row offsets. This is Pass C and it is ~75x the pooled "
+                         "size, so it is off by default")
+    ap.add_argument("--byte_budget_mib", type=float, default=64.0,
+                    help="max per-token bytes returned per call. With --per_token this is "
+                         "the BINDING constraint, not attention: one 1,532-token row at 6 "
+                         "layers is 143 MiB and a naive 8-row batch is 114 MiB")
     ap.add_argument("--limit", type=int, default=0,
                     help="first N rows per dataset (0 = all). Head slice -- NOT a sample; "
                          "several datasets are label-sorted. Use --sample instead.")
