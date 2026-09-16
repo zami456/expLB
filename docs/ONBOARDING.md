@@ -42,33 +42,44 @@ from Liars' Bench (~85%), Apollo's deception-detection rollouts, and MASK.
 
 ---
 
-## 3. State as of 2026-09-16
+## 3. State as of 2026-09-17
 
-**Answered:**
+**All eleven questions are answered.** Full tables, caveats and superseded readings are in
+the plan's OUTCOMES section; one line each here, and each has a memory entry.
 
-- **Q1** — the persona set is most of the contamination. paper16 (the paper's own personas)
-  halves `cos(deception, assistant)`: −0.66 → −0.37. And it beats own100 on *detection*, not
-  just geometry.
-- **Q7** — judges barely matter. Llama-3.1-70B vs 405B on identical rollouts agree 91.2%; the
-  score-3 rate that builds the vectors differs by 0.8 pp. This **overturned** the prediction.
-- **Q4** — deception signal survives erasing the Assistant Axis from the activations (costs
-  0.006–0.023 AUROC against 0.000 for a rank-matched random erasure).
-- **Q2 — layer-dependent, and that is the finding.** Persona coordinates *lose* to the raw
-  8192-d probe at layers 20 and 22 and *win* at layer 40, the paper's own midpoint layer.
-  Zero-shot replicates and improves on the paper (PC1 0.789 vs their 0.734).
-- **Q10** — the sycophancy sign REVERSES under paper16. An earlier claim that "sycophancy is
-  clean under every construction" is false.
+- **Q1** — the persona set is most of the contamination. paper16 halves
+  `cos(deception, assistant)`: −0.66 → −0.37, and beats own100 on detection too.
+- **Q2** — a layer window, 36–48 of 80. Persona axes peak at 44 (0.731), raw at 32 (0.717);
+  `pc:deception`, the paper's headline feature, never beats raw.
+- **Q3** — the advantage *grows* with training size: raw degrades, persona axes improve.
+- **Q4** — deception signal survives erasing the Assistant Axis (−0.006 to −0.023 AUROC).
+- **Q5 — 5b.** Label semantics does not predict transfer. The naive within/across split is
+  provenance; mask ↔ sycophancy (same construct, nothing else shared) transfer at chance for
+  raw and *below* chance for persona axes, at all 8 layers.
+- **Q6** — 20 vs 22 is immaterial (median gap 0.012). Moving to 40 is worth ~+0.025 for raw
+  probes and ~+0.113 for persona methods: the method decides how much layer matters.
+- **Q7** — judges barely matter: 70B vs 405B agree 91.2%, score-3 rate differs 0.8 pp.
+- **Q8** — two halves that disagree. Zero-shot, top-decile token scoring beats mean pooling
+  (+0.053). *Trained*, pooled-mean probes beat token-trained probes at every layer
+  (−0.03 to −0.06). Quote both.
+- **Q9** — more personas buy reliability, not accuracy (peak at n=4).
+- **Q10** — the sycophancy sign REVERSES under paper16.
+- **Q11** — base-model probes flag LoRA sleeper answers at 0.96 even cross-trigger, surviving
+  cue and answer-token controls, but on that corpus a lie *is* a wrong answer; gender-secret,
+  where falsity is uncheckable, is at chance. Off-policy falsity detection, not deception
+  monitoring.
 
-**Running / pending:**
+**Controls every transfer number should sit beside:** response length alone (off-diagonal
+0.553; the deceptive class is longer in 9 of 10 datasets), a random subspace (0.522), and a
+within-dataset label-shuffle null (~0.50).
 
-- **Pass A** (80-layer sweep, ~2,080 stratified rows) — running as scheduled task `PassA-Sweep`.
-  It turns "the answer flips between 22 and 40" into a curve.
-- **Pass C** (per-token, layers 20/22/40) — not written. `8_coords_ndif.py` pools in-trace.
-- **Sycophancy half** — 2,400 prompts prepped (`10_sycophancy_ndif.py --stage prep`),
-  generation not yet run. The axis exists; nothing to test it against until this lands.
-- **own100 rebuild** — deliberately abandoned; see §6.
-- **`ai_audit`** — cannot be extracted. Its contexts are 4,211–7,543 tokens and eager
-  attention needs 4.2–13.5 GiB for a single row. Needs NDIF to enable SDPA.
+**Stores** (lab PC `run-coords/`, mirrored byte-exact on Drive `tamara:expLB/coords`): Pass A
+(80 layers, 2,000 rows), Pass B (21 layers, 15,278 rows + `sycophancy_mt`), Pass C (per-token,
+layers 20/22/28/40/44/48, 2,000 rows), `passQ11` (6,392 sleeper rows).
+
+**Still open:** only **`ai_audit`** (80 rows, eval-only). Its contexts are 4,211–7,543 tokens
+and eager attention needs 4.2–13.5 GiB for a single row. It needs NDIF to enable SDPA — a
+request on their side, not a code change here.
 
 ---
 

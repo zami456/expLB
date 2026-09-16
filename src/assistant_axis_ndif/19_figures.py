@@ -203,7 +203,7 @@ def fig_q8(plt):
     ax.set_ylabel("mean projection on the deception axis")
     ax.set_title(f"where the signal sits (layer {best['layer']})")
     ax.legend()
-    fig.suptitle("Q8 — scoring tokens individually beats pooling them first",
+    fig.suptitle("Q8, zero-shot — scoring a fixed axis per token beats pooling first (trained: see q8_trained)",
                  y=1.03, fontsize=10.5)
     return ps.save(fig, "q8_pertoken.pdf")
 
@@ -433,8 +433,8 @@ def fig_q6(plt):
     ax.set_ylabel("AUROC")
     ps.chance(ax)
     ax.legend(ncol=4, fontsize=7, loc="upper left")
-    fig.suptitle("Q6 — 20 vs 22 is immaterial; 40 matters for persona methods, "
-                 "not for raw probes", y=1.02, fontsize=10.5)
+    fig.suptitle("Q6 — 20 vs 22 is immaterial; moving to 40 matters far more for persona "
+                 "methods than for raw probes", y=1.02, fontsize=10.5)
     return ps.save(fig, "q6_layers.pdf")
 
 
@@ -468,7 +468,8 @@ def fig_q8_trained(plt):
             ps.chance(ax)
         ax.set_xlabel("layer")
         ax.set_ylabel(ylab)
-    axes[0].legend(fontsize=6.8, loc="lower right")
+    h, lab = axes[0].get_legend_handles_labels()
+    fig.legend(h, lab, loc="lower center", ncol=3, fontsize=7.5, bbox_to_anchor=(0.5, -0.16))
     axes[0].set_title("detection on an unseen dataset")
     axes[1].set_title("at a deployable false-positive rate")
     fig.suptitle("Q8 — trained per-token probe vs trained pooled probe "
