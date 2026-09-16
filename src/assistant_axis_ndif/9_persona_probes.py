@@ -113,10 +113,21 @@ def unit(v):
     return v / n if n > 0 else v
 
 
-def make_features(X, kind: str, bank, layer: int, k: int, seed: int):
-    """kind: raw | pc:<behaviour> | axes | axes_resid | random"""
+def make_features(X, kind: str, bank, layer: int, k: int, seed: int, meta=None):
+    """kind: raw | pc:<behaviour> | axes | axes_resid | random | length"""
     if kind == "raw":
         return X
+    if kind == "length":
+        # A control, not a method: one feature, the number of response tokens, no
+        # activations at all. It exists because response length predicts the label on most
+        # of this corpus in the SAME direction -- the positive class is the longer one in
+        # 9 of 10 datasets, by 505 vs 310 tokens on sandbagging_v2 and 245 vs 96 on mask.
+        # A "longer is deceptive" rule therefore transfers across datasets for reasons that
+        # have nothing to do with deception, so any off-diagonal number is only interesting
+        # to the extent it beats this.
+        if meta is None:
+            raise ValueError("features 'length' needs meta; pass meta=... to make_features")
+        return np.array([[float(m.get("span_len", 0))] for m in meta])
     if kind == "random":
         rng = np.random.default_rng(seed)
         Q, _ = np.linalg.qr(rng.standard_normal((X.shape[1], k)))
@@ -308,7 +319,8 @@ def p1_transfer(data, bank, args):
                 tr = balance(tr, ys, args.seed)
                 if len(tr) < 8:
                     continue
-                F = make_features(Xs, fkind, bank, args.layer, args.k, args.seed)
+                F = make_features(Xs, fkind, bank, args.layer, args.k, args.seed,
+                                  meta=ms)
                 clf = make_probe(probe, args.seed)
                 clf.fit(F[tr], ys[tr])
                 for t in data:
@@ -321,7 +333,8 @@ def p1_transfer(data, bank, args):
                     if len(te) < 8:
                         mat[(s, t)] = float("nan")
                         continue
-                    Ft = make_features(Xt, fkind, bank, args.layer, args.k, args.seed)
+                    Ft = make_features(Xt, fkind, bank, args.layer, args.k, args.seed,
+                                       meta=mt)
                     mat[(s, t)] = auroc(clf, Ft[te], yt[te])
             diag = [v for (s, t), v in mat.items() if s == t and not np.isnan(v)]
             off = [v for (s, t), v in mat.items() if s != t and not np.isnan(v)]
@@ -495,7 +508,25 @@ def confounds(data, bank, args):
     for r in sorted(out, key=lambda d: -d["max_r2_vs_n_tok"])[:8]:
         logger.info("  length confound: %-16s %-30s max R2=%.3f",
                     r["features"], r["dataset"], r["max_r2_vs_n_tok"])
-    return out
+
+    # The R2 above asks whether a FEATURE tracks length. The sharper question is whether
+    # length alone predicts the LABEL -- if it does, a strong diagonal proves nothing,
+    # because the probe need only have learned "long responses are the positive class".
+    # Report it next to the diagonal and let the gap speak.
+    logger.info("")
+    logger.info("  can response length alone predict the label?")
+    lens = []
+    for k, (_, y, meta) in sorted(data.items()):
+        ntok = np.array([m.get("span_len", 0) for m in meta], dtype=float)
+        if ntok.std() == 0 or len(np.unique(y)) < 2:
+            continue
+        a = float(roc_auc_score(y, ntok))
+        lens.append({"dataset": k, "auroc_from_length": a,
+                     "median_pos": float(np.median(ntok[y == 1])),
+                     "median_neg": float(np.median(ntok[y == 0]))})
+        logger.info("    %-32s %.3f   median %.0f vs %.0f tokens",
+                    k, a, lens[-1]["median_pos"], lens[-1]["median_neg"])
+    return {"feature_r2": out, "length_only_auroc": lens}
 
 
 def shuffle_null(data, bank, args):
@@ -536,7 +567,10 @@ def main() -> None:
     ap.add_argument("--pooling", default="mean", choices=["mean", "last"])
     ap.add_argument("--k", type=int, default=5, help="persona coordinates to keep")
     ap.add_argument("--features", nargs="+",
-                    default=["raw", "pc:deception", "axes", "axes_resid", "random"])
+                    default=["raw", "pc:deception", "axes", "axes_resid", "random"],
+                    help="raw | pc:<behaviour> | axes | axes_resid | erase:<dir> | "
+                         "random | length. 'length' is the response-length control -- "
+                         "one feature, no activations; see make_features")
     ap.add_argument("--probes", nargs="+", default=["paper", "lr_reg10", "mms"],
                     choices=["paper", "lr_reg10", "apollo", "mms"],
                     help="paper = the paper's C=1 no-scaler probe; lr_reg10 = the "
