@@ -1,0 +1,310 @@
+{
+  "layer": 44,
+  "pooling": "last",
+  "k": 5,
+  "bank": "axes_vectors_s3_fp32.pt",
+  "datasets": {
+    "ai_liar": 270,
+    "alpaca": 2000,
+    "convincing-game": 267,
+    "harm-pressure-choice": 2134,
+    "harm-pressure-knowledge-report": 2139,
+    "insider-trading": 1080,
+    "instructed-deception": 5432,
+    "mask": 585,
+    "roleplaying": 287,
+    "sandbagging_v2": 1000
+  },
+  "splits": {
+    "ai_liar": {
+      "rows": 270,
+      "items": 54,
+      "pos": 135,
+      "neg": 135,
+      "train_items_75pct": 200,
+      "test_items_25pct": 70,
+      "train_balanced": 150,
+      "test_balanced_ondiag": 20,
+      "test_balanced_offdiag": 270,
+      "label_semantics": "instructed_intent"
+    },
+    "alpaca": {
+      "rows": 2000,
+      "items": 2000,
+      "pos": 0,
+      "neg": 2000,
+      "train_items_75pct": 1500,
+      "test_items_25pct": 500,
+      "train_balanced": 0,
+      "test_balanced_ondiag": 0,
+      "test_balanced_offdiag": 0,
+      "label_semantics": "instructed_intent"
+    },
+    "convincing-game": {
+      "rows": 267,
+      "items": 267,
+      "pos": 167,
+      "neg": 100,
+      "train_items_75pct": 200,
+      "test_items_25pct": 67,
+      "train_balanced": 156,
+      "test_balanced_ondiag": 44,
+      "test_balanced_offdiag": 200,
+      "label_semantics": "instructed_intent"
+    },
+    "harm-pressure-choice": {
+      "rows": 2134,
+      "items": 2134,
+      "pos": 134,
+      "neg": 2000,
+      "train_items_75pct": 1600,
+      "test_items_25pct": 534,
+      "train_balanced": 210,
+      "test_balanced_ondiag": 58,
+      "test_balanced_offdiag": 268,
+      "label_semantics": "instructed_intent"
+    },
+    "harm-pressure-knowledge-report": {
+      "rows": 2139,
+      "items": 2139,
+      "pos": 139,
+      "neg": 2000,
+      "train_items_75pct": 1604,
+      "test_items_25pct": 535,
+      "train_balanced": 200,
+      "test_balanced_ondiag": 78,
+      "test_balanced_offdiag": 278,
+      "label_semantics": "instructed_intent"
+    },
+    "insider-trading": {
+      "rows": 1080,
+      "items": 1080,
+      "pos": 423,
+      "neg": 657,
+      "train_items_75pct": 810,
+      "test_items_25pct": 270,
+      "train_balanced": 656,
+      "test_balanced_ondiag": 190,
+      "test_balanced_offdiag": 846,
+      "label_semantics": "instructed_intent"
+    },
+    "instructed-deception": {
+      "rows": 5432,
+      "items": 461,
+      "pos": 3045,
+      "neg": 2387,
+      "train_items_75pct": 4071,
+      "test_items_25pct": 1361,
+      "train_balanced": 3588,
+      "test_balanced_ondiag": 1186,
+      "test_balanced_offdiag": 4774,
+      "label_semantics": "instructed_intent"
+    },
+    "mask": {
+      "rows": 585,
+      "items": 585,
+      "pos": 415,
+      "neg": 170,
+      "train_items_75pct": 439,
+      "test_items_25pct": 146,
+      "train_balanced": 250,
+      "test_balanced_ondiag": 90,
+      "test_balanced_offdiag": 340,
+      "label_semantics": "belief_inconsistency"
+    },
+    "roleplaying": {
+      "rows": 287,
+      "items": 287,
+      "pos": 203,
+      "neg": 84,
+      "train_items_75pct": 215,
+      "test_items_25pct": 72,
+      "train_balanced": 122,
+      "test_balanced_ondiag": 46,
+      "test_balanced_offdiag": 168,
+      "label_semantics": "judge_grade"
+    },
+    "sandbagging_v2": {
+      "rows": 1000,
+      "items": 1000,
+      "pos": 500,
+      "neg": 500,
+      "train_items_75pct": 750,
+      "test_items_25pct": 250,
+      "train_balanced": 734,
+      "test_balanced_ondiag": 234,
+      "test_balanced_offdiag": 1000,
+      "label_semantics": "instructed_intent"
+    }
+  },
+  "p2": [
+    {
+      "features": "raw",
+      "probe": "lr_reg10",
+      "n": 16,
+      "auroc_mean": 0.6911331976160874,
+      "auroc_sd": 0.2046552685279313,
+      "n_obs": 216
+    },
+    {
+      "features": "raw",
+      "probe": "lr_reg10",
+      "n": 32,
+      "auroc_mean": 0.6798042515258145,
+      "auroc_sd": 0.21461514350938468,
+      "n_obs": 216
+    },
+    {
+      "features": "raw",
+      "probe": "lr_reg10",
+      "n": 64,
+      "auroc_mean": 0.6867497631962656,
+      "auroc_sd": 0.21782717853265793,
+      "n_obs": 216
+    },
+    {
+      "features": "raw",
+      "probe": "lr_reg10",
+      "n": 128,
+      "auroc_mean": 0.6758411837980981,
+      "auroc_sd": 0.21047418329105297,
+      "n_obs": 216
+    },
+    {
+      "features": "raw",
+      "probe": "lr_reg10",
+      "n": 256,
+      "auroc_mean": 0.6897088063005506,
+      "auroc_sd": 0.1969184687285803,
+      "n_obs": 216
+    },
+    {
+      "features": "raw",
+      "probe": "lr_reg10",
+      "n": 512,
+      "auroc_mean": 0.6679032204957468,
+      "auroc_sd": 0.20756646772816917,
+      "n_obs": 216
+    },
+    {
+      "features": "raw",
+      "probe": "lr_reg10",
+      "n": 1024,
+      "auroc_mean": 0.6587833809750842,
+      "auroc_sd": 0.20902192954051285,
+      "n_obs": 216
+    },
+    {
+      "features": "axes",
+      "probe": "lr_reg10",
+      "n": 16,
+      "auroc_mean": 0.690494076163621,
+      "auroc_sd": 0.25227248709191924,
+      "n_obs": 216
+    },
+    {
+      "features": "axes",
+      "probe": "lr_reg10",
+      "n": 32,
+      "auroc_mean": 0.6985299261774358,
+      "auroc_sd": 0.2477733064422202,
+      "n_obs": 216
+    },
+    {
+      "features": "axes",
+      "probe": "lr_reg10",
+      "n": 64,
+      "auroc_mean": 0.6794973507161155,
+      "auroc_sd": 0.25945144240202184,
+      "n_obs": 216
+    },
+    {
+      "features": "axes",
+      "probe": "lr_reg10",
+      "n": 128,
+      "auroc_mean": 0.7051626700085165,
+      "auroc_sd": 0.23058091472876377,
+      "n_obs": 216
+    },
+    {
+      "features": "axes",
+      "probe": "lr_reg10",
+      "n": 256,
+      "auroc_mean": 0.7149313150442701,
+      "auroc_sd": 0.21924033024061285,
+      "n_obs": 216
+    },
+    {
+      "features": "axes",
+      "probe": "lr_reg10",
+      "n": 512,
+      "auroc_mean": 0.7170154112344781,
+      "auroc_sd": 0.218982942165734,
+      "n_obs": 216
+    },
+    {
+      "features": "axes",
+      "probe": "lr_reg10",
+      "n": 1024,
+      "auroc_mean": 0.7168074183835124,
+      "auroc_sd": 0.219122979683523,
+      "n_obs": 216
+    },
+    {
+      "features": "pc:deception",
+      "probe": "lr_reg10",
+      "n": 16,
+      "auroc_mean": 0.6512060253454466,
+      "auroc_sd": 0.21791410716810636,
+      "n_obs": 216
+    },
+    {
+      "features": "pc:deception",
+      "probe": "lr_reg10",
+      "n": 32,
+      "auroc_mean": 0.6854123596922476,
+      "auroc_sd": 0.22384305499496074,
+      "n_obs": 216
+    },
+    {
+      "features": "pc:deception",
+      "probe": "lr_reg10",
+      "n": 64,
+      "auroc_mean": 0.6865089600827056,
+      "auroc_sd": 0.2295272601532276,
+      "n_obs": 216
+    },
+    {
+      "features": "pc:deception",
+      "probe": "lr_reg10",
+      "n": 128,
+      "auroc_mean": 0.6730517296848006,
+      "auroc_sd": 0.23866541132520358,
+      "n_obs": 216
+    },
+    {
+      "features": "pc:deception",
+      "probe": "lr_reg10",
+      "n": 256,
+      "auroc_mean": 0.6742866951802884,
+      "auroc_sd": 0.23745891962470259,
+      "n_obs": 216
+    },
+    {
+      "features": "pc:deception",
+      "probe": "lr_reg10",
+      "n": 512,
+      "auroc_mean": 0.676854806183843,
+      "auroc_sd": 0.23368782063393992,
+      "n_obs": 216
+    },
+    {
+      "features": "pc:deception",
+      "probe": "lr_reg10",
+      "n": 1024,
+      "auroc_mean": 0.6725663622534138,
+      "auroc_sd": 0.23468999193151252,
+      "n_obs": 216
+    }
+  ]
+}

@@ -1,0 +1,108 @@
+{
+  "layer": 20,
+  "pooling": "mean",
+  "k": 5,
+  "bank": "axes_vectors_s3.pt",
+  "datasets": {
+    "ai_liar": 270,
+    "convincing-game": 267,
+    "mask": 585,
+    "roleplaying": 287
+  },
+  "splits": {
+    "ai_liar": {
+      "rows": 270,
+      "items": 54,
+      "pos": 135,
+      "neg": 135,
+      "train_items_75pct": 200,
+      "test_items_25pct": 70,
+      "train_balanced": 150,
+      "test_balanced_ondiag": 20,
+      "test_balanced_offdiag": 270,
+      "label_semantics": "instructed_intent"
+    },
+    "convincing-game": {
+      "rows": 267,
+      "items": 267,
+      "pos": 167,
+      "neg": 100,
+      "train_items_75pct": 200,
+      "test_items_25pct": 67,
+      "train_balanced": 156,
+      "test_balanced_ondiag": 44,
+      "test_balanced_offdiag": 200,
+      "label_semantics": "instructed_intent"
+    },
+    "mask": {
+      "rows": 585,
+      "items": 585,
+      "pos": 415,
+      "neg": 170,
+      "train_items_75pct": 439,
+      "test_items_25pct": 146,
+      "train_balanced": 250,
+      "test_balanced_ondiag": 90,
+      "test_balanced_offdiag": 340,
+      "label_semantics": "belief_inconsistency"
+    },
+    "roleplaying": {
+      "rows": 287,
+      "items": 287,
+      "pos": 203,
+      "neg": 84,
+      "train_items_75pct": 215,
+      "test_items_25pct": 72,
+      "train_balanced": 122,
+      "test_balanced_ondiag": 46,
+      "test_balanced_offdiag": 168,
+      "label_semantics": "judge_grade"
+    }
+  },
+  "zeroshot": [
+    {
+      "dataset": "ai_liar",
+      "contrast": 0.8968449931412894,
+      "sycophancy": 0.8241975308641976,
+      "unified": 0.8712208504801097,
+      "assistant": 0.20170096021947873,
+      "PC1": 0.8963511659807956,
+      "PC2": 0.48241426611796984,
+      "PC3": 0.4979423868312757,
+      "contrast_resid": 0.8818106995884772
+    },
+    {
+      "dataset": "convincing-game",
+      "contrast": 0.8910179640718563,
+      "sycophancy": 0.9998203592814371,
+      "unified": 0.99,
+      "assistant": 0.015389221556886233,
+      "PC1": 0.9318562874251497,
+      "PC2": 0.3834730538922156,
+      "PC3": 0.39209580838323355,
+      "contrast_resid": 0.761497005988024
+    },
+    {
+      "dataset": "mask",
+      "contrast": 0.44090715804394054,
+      "sycophancy": 0.5631325301204819,
+      "unified": 0.501715095676825,
+      "assistant": 0.4729553508150248,
+      "PC1": 0.4483628632175762,
+      "PC2": 0.5828206945428773,
+      "PC3": 0.3686605244507442,
+      "contrast_resid": 0.4233593196314671
+    },
+    {
+      "dataset": "roleplaying",
+      "contrast": 0.8075885526624443,
+      "sycophancy": 0.9019469856908282,
+      "unified": 0.893560872624912,
+      "assistant": 0.23703964344358436,
+      "PC1": 0.8395496129486276,
+      "PC2": 0.2856556415669716,
+      "PC3": 0.4617640159512081,
+      "contrast_resid": 0.784658691062632
+    }
+  ]
+}

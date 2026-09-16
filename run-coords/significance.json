@@ -1,0 +1,867 @@
+{
+  "boot_rows": 1000,
+  "boot_datasets": 10000,
+  "margin": 0.02,
+  "datasets": [
+    "ai_liar",
+    "convincing-game",
+    "harm-pressure-choice",
+    "harm-pressure-knowledge-report",
+    "insider-trading",
+    "instructed-deception",
+    "mask",
+    "roleplaying",
+    "sandbagging_v2"
+  ],
+  "reproduction_worst_diff": 3.4247402691534035e-09,
+  "per_method": [
+    {
+      "pooling": "last",
+      "feature": "axes",
+      "layer": 20,
+      "mean": 0.6472404723495452,
+      "row_ci95": [
+        0.6374735829184324,
+        0.6567394997365126
+      ],
+      "dataset_ci95": [
+        0.39485142847280247,
+        0.8826518522808046
+      ]
+    },
+    {
+      "pooling": "last",
+      "feature": "axes",
+      "layer": 22,
+      "mean": 0.6564756258675415,
+      "row_ci95": [
+        0.6469849565124606,
+        0.6660264993023398
+      ],
+      "dataset_ci95": [
+        0.394687947654761,
+        0.8979812930524348
+      ]
+    },
+    {
+      "pooling": "last",
+      "feature": "axes",
+      "layer": 40,
+      "mean": 0.7416665158751938,
+      "row_ci95": [
+        0.7277939504503997,
+        0.7543305973263665
+      ],
+      "dataset_ci95": [
+        0.5938082852791394,
+        0.8857355692641189
+      ]
+    },
+    {
+      "pooling": "last",
+      "feature": "axes",
+      "layer": 44,
+      "mean": 0.7657696919308769,
+      "row_ci95": [
+        0.7517441082021429,
+        0.7795823733632764
+      ],
+      "dataset_ci95": [
+        0.6447046717636865,
+        0.8856285063666957
+      ]
+    },
+    {
+      "pooling": "last",
+      "feature": "raw",
+      "layer": 20,
+      "mean": 0.7075806660577655,
+      "row_ci95": [
+        0.7000205516233109,
+        0.7157067521915047
+      ],
+      "dataset_ci95": [
+        0.5759895067430109,
+        0.8440179223194718
+      ]
+    },
+    {
+      "pooling": "last",
+      "feature": "raw",
+      "layer": 22,
+      "mean": 0.7203927622694108,
+      "row_ci95": [
+        0.712724217675471,
+        0.7276890019802118
+      ],
+      "dataset_ci95": [
+        0.581215460319654,
+        0.8707907658296101
+      ]
+    },
+    {
+      "pooling": "last",
+      "feature": "raw",
+      "layer": 28,
+      "mean": 0.7398721606781086,
+      "row_ci95": [
+        0.7325151264667511,
+        0.7479949679355034
+      ],
+      "dataset_ci95": [
+        0.6191258997454394,
+        0.8868168190522219
+      ]
+    },
+    {
+      "pooling": "last",
+      "feature": "raw",
+      "layer": 40,
+      "mean": 0.7046890567160315,
+      "row_ci95": [
+        0.6964008861117893,
+        0.7133496450130931
+      ],
+      "dataset_ci95": [
+        0.5929179403089708,
+        0.8282258764235302
+      ]
+    },
+    {
+      "pooling": "last",
+      "feature": "raw",
+      "layer": 44,
+      "mean": 0.7200369140029781,
+      "row_ci95": [
+        0.7112451141751889,
+        0.7294129682627196
+      ],
+      "dataset_ci95": [
+        0.6190335640916601,
+        0.8299623264733588
+      ]
+    },
+    {
+      "pooling": "mean",
+      "feature": "axes",
+      "layer": 20,
+      "mean": 0.569768720447933,
+      "row_ci95": [
+        0.562338135098192,
+        0.5774603311909029
+      ],
+      "dataset_ci95": [
+        0.38806411301506183,
+        0.8407359870210769
+      ]
+    },
+    {
+      "pooling": "mean",
+      "feature": "axes",
+      "layer": 22,
+      "mean": 0.5661872577038594,
+      "row_ci95": [
+        0.5589081835544171,
+        0.5736873803021
+      ],
+      "dataset_ci95": [
+        0.3815552079891221,
+        0.8494432649064448
+      ]
+    },
+    {
+      "pooling": "mean",
+      "feature": "axes",
+      "layer": 40,
+      "mean": 0.7207907567675041,
+      "row_ci95": [
+        0.7079910051051835,
+        0.732883325514725
+      ],
+      "dataset_ci95": [
+        0.5205212342654704,
+        0.8959724832060082
+      ]
+    },
+    {
+      "pooling": "mean",
+      "feature": "axes",
+      "layer": 44,
+      "mean": 0.7308887913823128,
+      "row_ci95": [
+        0.716500002818389,
+        0.7443923965924316
+      ],
+      "dataset_ci95": [
+        0.5972277038916946,
+        0.8670250831236098
+      ]
+    },
+    {
+      "pooling": "mean",
+      "feature": "pc:deception",
+      "layer": 40,
+      "mean": 0.6607664351662,
+      "row_ci95": [
+        0.6495637993638714,
+        0.6705276950728148
+      ],
+      "dataset_ci95": [
+        0.515968011271569,
+        0.7953239636563304
+      ]
+    },
+    {
+      "pooling": "mean",
+      "feature": "raw",
+      "layer": 20,
+      "mean": 0.6523819821789706,
+      "row_ci95": [
+        0.6451009321788459,
+        0.6598280359045828
+      ],
+      "dataset_ci95": [
+        0.521193242271769,
+        0.8088196230633183
+      ]
+    },
+    {
+      "pooling": "mean",
+      "feature": "raw",
+      "layer": 22,
+      "mean": 0.6462583827524213,
+      "row_ci95": [
+        0.6393790919288627,
+        0.6536102696957339
+      ],
+      "dataset_ci95": [
+        0.5026087939092921,
+        0.8079735459759831
+      ]
+    },
+    {
+      "pooling": "mean",
+      "feature": "raw",
+      "layer": 32,
+      "mean": 0.7167282520482937,
+      "row_ci95": [
+        0.7095121350915482,
+        0.7240312149825816
+      ],
+      "dataset_ci95": [
+        0.5577969041304305,
+        0.8674174444749951
+      ]
+    },
+    {
+      "pooling": "mean",
+      "feature": "raw",
+      "layer": 40,
+      "mean": 0.6692782477993104,
+      "row_ci95": [
+        0.6617958105815989,
+        0.6766134983756475
+      ],
+      "dataset_ci95": [
+        0.532859613792383,
+        0.8066098078130743
+      ]
+    },
+    {
+      "pooling": "mean",
+      "feature": "raw",
+      "layer": 44,
+      "mean": 0.6631316476398044,
+      "row_ci95": [
+        0.6554190702115495,
+        0.6705492480037113
+      ],
+      "dataset_ci95": [
+        0.5513275918535111,
+        0.7905810208934726
+      ]
+    }
+  ],
+  "comparisons": [
+    {
+      "name": "axes@44 vs raw@32, each at its best (mean)",
+      "question": "Q2",
+      "kind": "diff",
+      "A": [
+        "mean",
+        "axes",
+        44
+      ],
+      "B": [
+        "mean",
+        "raw",
+        32
+      ],
+      "diff": 0.014160539334019062,
+      "row_ci95": [
+        -0.00014906887275474817,
+        0.027722945229227962
+      ],
+      "dataset_ci95": [
+        -0.11226108474356512,
+        0.16125667335523758
+      ],
+      "row_p": 0.056,
+      "dataset_p": 0.8612,
+      "dataset_q_bh": 0.8612,
+      "significant": false
+    },
+    {
+      "name": "axes vs raw, same layer 40 (mean)",
+      "question": "Q2",
+      "kind": "diff",
+      "A": [
+        "mean",
+        "axes",
+        40
+      ],
+      "B": [
+        "mean",
+        "raw",
+        40
+      ],
+      "diff": 0.051512508968193704,
+      "row_ci95": [
+        0.040213685639421064,
+        0.06232491452317393
+      ],
+      "dataset_ci95": [
+        -0.12473302990651823,
+        0.22670015137302954
+      ],
+      "row_p": 0.001,
+      "dataset_p": 0.5596,
+      "dataset_q_bh": 0.664525,
+      "significant": false
+    },
+    {
+      "name": "axes vs raw, same layer 44 (mean)",
+      "question": "Q2",
+      "kind": "diff",
+      "A": [
+        "mean",
+        "axes",
+        44
+      ],
+      "B": [
+        "mean",
+        "raw",
+        44
+      ],
+      "diff": 0.06775714374250841,
+      "row_ci95": [
+        0.054386430942557,
+        0.08056715828263097
+      ],
+      "dataset_ci95": [
+        -0.06654552972779189,
+        0.21865634819577356
+      ],
+      "row_p": 0.001,
+      "dataset_p": 0.3224,
+      "dataset_q_bh": 0.5104666666666667,
+      "significant": false
+    },
+    {
+      "name": "axes@44 vs raw@28, each at its best (last)",
+      "question": "Q2",
+      "kind": "diff",
+      "A": [
+        "last",
+        "axes",
+        44
+      ],
+      "B": [
+        "last",
+        "raw",
+        28
+      ],
+      "diff": 0.02589753125276828,
+      "row_ci95": [
+        0.011181461319534338,
+        0.039925066102296035
+      ],
+      "dataset_ci95": [
+        -0.058582027442753315,
+        0.12210361554077075
+      ],
+      "row_p": 0.002,
+      "dataset_p": 0.598,
+      "dataset_q_bh": 0.6683529411764706,
+      "significant": false
+    },
+    {
+      "name": "axes vs raw, same layer 44 (last)",
+      "question": "Q2",
+      "kind": "diff",
+      "A": [
+        "last",
+        "axes",
+        44
+      ],
+      "B": [
+        "last",
+        "raw",
+        44
+      ],
+      "diff": 0.04573277792789876,
+      "row_ci95": [
+        0.03268616453925567,
+        0.05894641151988057
+      ],
+      "dataset_ci95": [
+        -0.07176634167941907,
+        0.1489468711391303
+      ],
+      "row_p": 0.001,
+      "dataset_p": 0.3212,
+      "dataset_q_bh": 0.5104666666666667,
+      "significant": false
+    },
+    {
+      "name": "pc:deception@40 vs raw@32 (mean)",
+      "question": "Q2",
+      "kind": "diff",
+      "A": [
+        "mean",
+        "pc:deception",
+        40
+      ],
+      "B": [
+        "mean",
+        "raw",
+        32
+      ],
+      "diff": -0.05596181688209367,
+      "row_ci95": [
+        -0.06836435349218337,
+        -0.04413613329007707
+      ],
+      "dataset_ci95": [
+        -0.19713538924930618,
+        0.12769094863143773
+      ],
+      "row_p": 0.001,
+      "dataset_p": 0.4778,
+      "dataset_q_bh": 0.6484428571428572,
+      "significant": false
+    },
+    {
+      "name": "axes vs raw, same layer 20 (mean)",
+      "question": "Q2",
+      "kind": "diff",
+      "A": [
+        "mean",
+        "axes",
+        20
+      ],
+      "B": [
+        "mean",
+        "raw",
+        20
+      ],
+      "diff": -0.08261326173103756,
+      "row_ci95": [
+        -0.09125182764774861,
+        -0.07374158316694472
+      ],
+      "dataset_ci95": [
+        -0.2511396741565477,
+        0.11844737897112884
+      ],
+      "row_p": 0.001,
+      "dataset_p": 0.3672,
+      "dataset_q_bh": 0.5366769230769232,
+      "significant": false
+    },
+    {
+      "name": "raw: layer 20 vs 22 (last)",
+      "question": "Q6",
+      "kind": "equiv",
+      "A": [
+        "last",
+        "raw",
+        20
+      ],
+      "B": [
+        "last",
+        "raw",
+        22
+      ],
+      "diff": -0.012812096211645363,
+      "row_ci95": [
+        -0.016746788136272988,
+        -0.008430310540522148
+      ],
+      "dataset_ci95": [
+        -0.04344247186788222,
+        0.022745813740866955
+      ],
+      "row_p": 0.001,
+      "dataset_p": 0.389,
+      "dataset_ci90": [
+        -0.03830224717967212,
+        0.015086316208751855
+      ],
+      "equivalent_within_margin": false,
+      "row_ci90": [
+        -0.01621389609839144,
+        -0.009356674789968406
+      ],
+      "row_equivalent_within_margin": true
+    },
+    {
+      "name": "raw: layer 20 vs 22 (mean)",
+      "question": "Q6",
+      "kind": "equiv",
+      "A": [
+        "mean",
+        "raw",
+        20
+      ],
+      "B": [
+        "mean",
+        "raw",
+        22
+      ],
+      "diff": 0.0061235994265492755,
+      "row_ci95": [
+        0.002683713181937078,
+        0.009552926221901238
+      ],
+      "dataset_ci95": [
+        -0.020368613803694986,
+        0.04133390208418257
+      ],
+      "row_p": 0.001,
+      "dataset_p": 0.744,
+      "dataset_ci90": [
+        -0.016471823646807684,
+        0.033450428754909875
+      ],
+      "equivalent_within_margin": false,
+      "row_ci90": [
+        0.0033473316793485586,
+        0.009059873059353135
+      ],
+      "row_equivalent_within_margin": true
+    },
+    {
+      "name": "axes: layer 20 vs 22 (mean)",
+      "question": "Q6",
+      "kind": "equiv",
+      "A": [
+        "mean",
+        "axes",
+        20
+      ],
+      "B": [
+        "mean",
+        "axes",
+        22
+      ],
+      "diff": 0.0035814627440736713,
+      "row_ci95": [
+        0.0011173892402843583,
+        0.006020494903628395
+      ],
+      "dataset_ci95": [
+        -0.015480782046462527,
+        0.025827892895050445
+      ],
+      "row_p": 0.002,
+      "dataset_p": 0.7394,
+      "dataset_ci90": [
+        -0.012646078234000178,
+        0.02164668596918588
+      ],
+      "equivalent_within_margin": false,
+      "row_ci90": [
+        0.001546539023012028,
+        0.005600023218600375
+      ],
+      "row_equivalent_within_margin": true
+    },
+    {
+      "name": "axes: layer 20 vs 22 (last)",
+      "question": "Q6",
+      "kind": "equiv",
+      "A": [
+        "last",
+        "axes",
+        20
+      ],
+      "B": [
+        "last",
+        "axes",
+        22
+      ],
+      "diff": -0.009235153517996308,
+      "row_ci95": [
+        -0.013413291577146236,
+        -0.004944277557337438
+      ],
+      "dataset_ci95": [
+        -0.023867487664439625,
+        0.002128530349305477
+      ],
+      "row_p": 0.001,
+      "dataset_p": 0.1232,
+      "dataset_ci90": [
+        -0.02126727591861377,
+        0.00048010000239380153
+      ],
+      "equivalent_within_margin": false,
+      "row_ci90": [
+        -0.012741205800557464,
+        -0.005747434693815462
+      ],
+      "row_equivalent_within_margin": true
+    },
+    {
+      "name": "axes: layer 40 vs 22 (mean)",
+      "question": "Q6",
+      "kind": "diff",
+      "A": [
+        "mean",
+        "axes",
+        40
+      ],
+      "B": [
+        "mean",
+        "axes",
+        22
+      ],
+      "diff": 0.1546034990636448,
+      "row_ci95": [
+        0.14243864579230936,
+        0.1665129809862568
+      ],
+      "dataset_ci95": [
+        0.008008656757218497,
+        0.3448097453328837
+      ],
+      "row_p": 0.001,
+      "dataset_p": 0.0256,
+      "dataset_q_bh": 0.09728,
+      "significant": false
+    },
+    {
+      "name": "axes: layer 40 vs 22 (last)",
+      "question": "Q6",
+      "kind": "diff",
+      "A": [
+        "last",
+        "axes",
+        40
+      ],
+      "B": [
+        "last",
+        "axes",
+        22
+      ],
+      "diff": 0.08519089000765234,
+      "row_ci95": [
+        0.0722748632901736,
+        0.09883071553809307
+      ],
+      "dataset_ci95": [
+        -0.017868943286187402,
+        0.23818633379414678
+      ],
+      "row_p": 0.001,
+      "dataset_p": 0.2158,
+      "dataset_q_bh": 0.4555777777777778,
+      "significant": false
+    },
+    {
+      "name": "raw: layer 40 vs 22 (mean)",
+      "question": "Q6",
+      "kind": "diff",
+      "A": [
+        "mean",
+        "raw",
+        40
+      ],
+      "B": [
+        "mean",
+        "raw",
+        22
+      ],
+      "diff": 0.023019865046889132,
+      "row_ci95": [
+        0.015531898911891962,
+        0.030534335832857726
+      ],
+      "dataset_ci95": [
+        -0.057628617187341025,
+        0.09905639561249116
+      ],
+      "row_p": 0.001,
+      "dataset_p": 0.5268,
+      "dataset_q_bh": 0.664525,
+      "significant": false
+    },
+    {
+      "name": "raw: layer 40 vs 22 (last)",
+      "question": "Q6",
+      "kind": "diff",
+      "A": [
+        "last",
+        "raw",
+        40
+      ],
+      "B": [
+        "last",
+        "raw",
+        22
+      ],
+      "diff": -0.0157037055533793,
+      "row_ci95": [
+        -0.024208675410288063,
+        -0.007181555051485919
+      ],
+      "dataset_ci95": [
+        -0.11659158714886375,
+        0.11188964039849277
+      ],
+      "row_p": 0.001,
+      "dataset_p": 0.7222,
+      "dataset_q_bh": 0.7623222222222221,
+      "significant": false
+    },
+    {
+      "name": "pooled-mean mms vs tok_lr/mean, layer 20",
+      "question": "Q8",
+      "kind": "diff",
+      "diff": 0.07195675971538038,
+      "dataset_ci95": [
+        0.012088701423097951,
+        0.14633453749315817
+      ],
+      "dataset_p": 0.0002,
+      "row_p": null,
+      "folds_pooled_wins": 8,
+      "folds": 9,
+      "dataset_q_bh": 0.0012666666666666666,
+      "significant": true
+    },
+    {
+      "name": "pooled-mean mms vs tok_lr/top10pct, layer 20",
+      "question": "Q8",
+      "kind": "diff",
+      "diff": 0.07255081189563946,
+      "dataset_ci95": [
+        0.02747426153986497,
+        0.1254777777777778
+      ],
+      "dataset_p": 0.0001,
+      "row_p": null,
+      "folds_pooled_wins": 9,
+      "folds": 9,
+      "dataset_q_bh": 0.00095,
+      "significant": true
+    },
+    {
+      "name": "pooled-mean mms vs tok_lr/mean, layer 28",
+      "question": "Q8",
+      "kind": "diff",
+      "diff": 0.08978429118773947,
+      "dataset_ci95": [
+        0.02322143678160919,
+        0.16425599616858236
+      ],
+      "dataset_p": 0.005,
+      "row_p": null,
+      "folds_pooled_wins": 8,
+      "folds": 9,
+      "dataset_q_bh": 0.02375,
+      "significant": true
+    },
+    {
+      "name": "pooled-mean mms vs tok_lr/top10pct, layer 28",
+      "question": "Q8",
+      "kind": "diff",
+      "diff": 0.0784780879401569,
+      "dataset_ci95": [
+        0.027889199051268004,
+        0.13760527777777776
+      ],
+      "dataset_p": 0.0001,
+      "row_p": null,
+      "folds_pooled_wins": 9,
+      "folds": 9,
+      "dataset_q_bh": 0.00095,
+      "significant": true
+    },
+    {
+      "name": "pooled-mean mms vs tok_lr/mean, layer 40",
+      "question": "Q8",
+      "kind": "diff",
+      "diff": 0.04351647509578546,
+      "dataset_ci95": [
+        -0.009301494252873575,
+        0.10497217432950195
+      ],
+      "dataset_p": 0.1286,
+      "row_p": null,
+      "folds_pooled_wins": 5,
+      "folds": 9,
+      "dataset_q_bh": 0.34905714285714284,
+      "significant": false
+    },
+    {
+      "name": "pooled-mean mms vs tok_lr/top10pct, layer 40",
+      "question": "Q8",
+      "kind": "diff",
+      "diff": 0.029958766648421835,
+      "dataset_ci95": [
+        -0.008677777777777796,
+        0.07648111111111111
+      ],
+      "dataset_p": 0.1552,
+      "row_p": null,
+      "folds_pooled_wins": 6,
+      "folds": 9,
+      "dataset_q_bh": 0.36860000000000004,
+      "significant": false
+    },
+    {
+      "name": "pooled-mean mms vs tok_lr/mean, layer 44",
+      "question": "Q8",
+      "kind": "diff",
+      "diff": 0.027587374566684943,
+      "dataset_ci95": [
+        -0.023282157453019488,
+        0.08199083333333332
+      ],
+      "dataset_p": 0.3158,
+      "row_p": null,
+      "folds_pooled_wins": 5,
+      "folds": 9,
+      "dataset_q_bh": 0.5104666666666667,
+      "significant": false
+    },
+    {
+      "name": "pooled-mean mms vs tok_lr/top10pct, layer 44",
+      "question": "Q8",
+      "kind": "diff",
+      "diff": 0.03428042328042331,
+      "dataset_ci95": [
+        -0.007761719576719557,
+        0.08194500000000002
+      ],
+      "dataset_p": 0.1258,
+      "row_p": null,
+      "folds_pooled_wins": 5,
+      "folds": 9,
+      "dataset_q_bh": 0.34905714285714284,
+      "significant": false
+    }
+  ]
+}

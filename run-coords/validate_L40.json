@@ -1,0 +1,58 @@
+{
+  "layer": 40,
+  "pooling": "mean",
+  "variance": [
+    0.25675004720687866,
+    0.08284451067447662,
+    0.05537055805325508,
+    0.03564109653234482,
+    0.03471197187900543,
+    0.025608740746974945,
+    0.02213474176824093,
+    0.017233651131391525,
+    0.013161726295948029,
+    0.011484223417937756
+  ],
+  "pcs": [
+    {
+      "pc": 1,
+      "auroc_label": 0.2959234123892668,
+      "best_dataset": "harm-pressure-choice",
+      "auroc_dataset": 0.9996223635235733
+    },
+    {
+      "pc": 2,
+      "auroc_label": 0.49732858944189673,
+      "best_dataset": "harm-pressure-choice",
+      "auroc_dataset": 1.0
+    },
+    {
+      "pc": 3,
+      "auroc_label": 0.49269028439254364,
+      "best_dataset": "insider-trading",
+      "auroc_dataset": 1.0
+    },
+    {
+      "pc": 4,
+      "auroc_label": 0.5949029403024633,
+      "best_dataset": "roleplaying",
+      "auroc_dataset": 0.9505721406800951
+    },
+    {
+      "pc": 5,
+      "auroc_label": 0.5896153753483627,
+      "best_dataset": "instructed-deception",
+      "auroc_dataset": 0.9680234181141439
+    }
+  ],
+  "label_acc": 0.6462472406181016,
+  "dataset_acc": 0.9933774834437085,
+  "cos_deception_pcs": [
+    0.01593676581978798,
+    0.032043084502220154,
+    0.09373420476913452,
+    0.23832619190216064,
+    0.006653526797890663
+  ],
+  "deception_in_top10": 0.16582228243350983
+}

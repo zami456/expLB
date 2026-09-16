@@ -1,0 +1,519 @@
+{
+  "layer": 40,
+  "pooling": "mean",
+  "k": 5,
+  "bank": "axes_vectors_s3.pt",
+  "datasets": {
+    "harm-pressure-choice": 2134,
+    "harm-pressure-knowledge-report": 2139,
+    "instructed-deception": 5432
+  },
+  "p1": [
+    {
+      "features": "raw",
+      "probe": "paper",
+      "diagonal": 0.9820194464111963,
+      "off_diagonal": 0.7384489634076683,
+      "n_pairs": 6,
+      "matrix": {
+        "harm-pressure-choice->harm-pressure-choice": 0.9892984542211652,
+        "harm-pressure-choice->harm-pressure-knowledge-report": 0.8571502510222039,
+        "harm-pressure-choice->instructed-deception": 0.7867038835726755,
+        "harm-pressure-knowledge-report->harm-pressure-choice": 0.8291935843172199,
+        "harm-pressure-knowledge-report->harm-pressure-knowledge-report": 0.9585798816568047,
+        "harm-pressure-knowledge-report->instructed-deception": 0.7826903828498488,
+        "instructed-deception->harm-pressure-choice": 0.5775228335932279,
+        "instructed-deception->harm-pressure-knowledge-report": 0.5974328450908338,
+        "instructed-deception->instructed-deception": 0.9981800033556189
+      }
+    },
+    {
+      "features": "raw",
+      "probe": "apollo",
+      "diagonal": 0.9847108116644835,
+      "off_diagonal": 0.6588901814532725,
+      "n_pairs": 6,
+      "matrix": {
+        "harm-pressure-choice->harm-pressure-choice": 0.995243757431629,
+        "harm-pressure-choice->harm-pressure-knowledge-report": 0.8067387816365612,
+        "harm-pressure-choice->instructed-deception": 0.6926768178913536,
+        "harm-pressure-knowledge-report->harm-pressure-choice": 0.7843060815326354,
+        "harm-pressure-knowledge-report->harm-pressure-knowledge-report": 0.960552268244576,
+        "harm-pressure-knowledge-report->instructed-deception": 0.586193912038203,
+        "instructed-deception->harm-pressure-choice": 0.5581421251949209,
+        "instructed-deception->harm-pressure-knowledge-report": 0.5252833704259614,
+        "instructed-deception->instructed-deception": 0.9983364093172453
+      }
+    },
+    {
+      "features": "pc:deception",
+      "probe": "paper",
+      "diagonal": 0.7993545327610377,
+      "off_diagonal": 0.8219766009755508,
+      "n_pairs": 6,
+      "matrix": {
+        "harm-pressure-choice->harm-pressure-choice": 0.6028537455410226,
+        "harm-pressure-choice->harm-pressure-knowledge-report": 0.8250090575021995,
+        "harm-pressure-choice->instructed-deception": 0.9485147607774201,
+        "harm-pressure-knowledge-report->harm-pressure-choice": 0.7104032078413901,
+        "harm-pressure-knowledge-report->harm-pressure-knowledge-report": 0.814595660749507,
+        "harm-pressure-knowledge-report->instructed-deception": 0.9691533651153635,
+        "instructed-deception->harm-pressure-choice": 0.6662953887280018,
+        "instructed-deception->harm-pressure-knowledge-report": 0.8124838258889292,
+        "instructed-deception->instructed-deception": 0.9806141919925835
+      }
+    },
+    {
+      "features": "pc:deception",
+      "probe": "apollo",
+      "diagonal": 0.7860915893788282,
+      "off_diagonal": 0.7992709480118722,
+      "n_pairs": 6,
+      "matrix": {
+        "harm-pressure-choice->harm-pressure-choice": 0.6135552913198573,
+        "harm-pressure-choice->harm-pressure-knowledge-report": 0.805393095595466,
+        "harm-pressure-choice->instructed-deception": 0.8173713255135475,
+        "harm-pressure-knowledge-report->harm-pressure-choice": 0.7222098462909333,
+        "harm-pressure-knowledge-report->harm-pressure-knowledge-report": 0.7646285338593031,
+        "harm-pressure-knowledge-report->instructed-deception": 0.9392449922065987,
+        "instructed-deception->harm-pressure-choice": 0.6848964134551125,
+        "instructed-deception->harm-pressure-knowledge-report": 0.826510015009575,
+        "instructed-deception->instructed-deception": 0.9800909429573239
+      }
+    },
+    {
+      "features": "pc:unified",
+      "probe": "paper",
+      "diagonal": 0.8715744196749364,
+      "off_diagonal": 0.5501269532324526,
+      "n_pairs": 6,
+      "matrix": {
+        "harm-pressure-choice->harm-pressure-choice": 0.6991676575505351,
+        "harm-pressure-choice->harm-pressure-knowledge-report": 0.18803374566533823,
+        "harm-pressure-choice->instructed-deception": 0.9544718292370223,
+        "harm-pressure-knowledge-report->harm-pressure-choice": 0.4419135664958789,
+        "harm-pressure-knowledge-report->harm-pressure-knowledge-report": 0.9335963182117027,
+        "harm-pressure-knowledge-report->instructed-deception": 0.35269699420948797,
+        "instructed-deception->harm-pressure-choice": 0.6637335709512139,
+        "instructed-deception->harm-pressure-knowledge-report": 0.6999120128357745,
+        "instructed-deception->instructed-deception": 0.9819592832625714
+      }
+    },
+    {
+      "features": "pc:unified",
+      "probe": "apollo",
+      "diagonal": 0.874112232992602,
+      "off_diagonal": 0.5059690983762074,
+      "n_pairs": 6,
+      "matrix": {
+        "harm-pressure-choice->harm-pressure-choice": 0.6932223543400713,
+        "harm-pressure-choice->harm-pressure-knowledge-report": 0.13275710366958232,
+        "harm-pressure-choice->instructed-deception": 0.9514392387616977,
+        "harm-pressure-knowledge-report->harm-pressure-choice": 0.37669859656939186,
+        "harm-pressure-knowledge-report->harm-pressure-knowledge-report": 0.9467455621301775,
+        "harm-pressure-knowledge-report->instructed-deception": 0.1385958258399033,
+        "instructed-deception->harm-pressure-choice": 0.6646246380040097,
+        "instructed-deception->harm-pressure-knowledge-report": 0.7716991874126597,
+        "instructed-deception->instructed-deception": 0.9823687825075573
+      }
+    },
+    {
+      "features": "axes",
+      "probe": "paper",
+      "diagonal": 0.8405361300731617,
+      "off_diagonal": 0.47038562511292276,
+      "n_pairs": 6,
+      "matrix": {
+        "harm-pressure-choice->harm-pressure-choice": 0.6539833531510107,
+        "harm-pressure-choice->harm-pressure-knowledge-report": 0.17732001449200352,
+        "harm-pressure-choice->instructed-deception": 0.95398233940337,
+        "harm-pressure-knowledge-report->harm-pressure-choice": 0.2951659612385832,
+        "harm-pressure-knowledge-report->harm-pressure-knowledge-report": 0.89086127547666,
+        "harm-pressure-knowledge-report->instructed-deception": 0.15939396630505728,
+        "instructed-deception->harm-pressure-choice": 0.6245266206282023,
+        "instructed-deception->harm-pressure-knowledge-report": 0.6119248486103203,
+        "instructed-deception->instructed-deception": 0.9767637615918145
+      }
+    },
+    {
+      "features": "axes",
+      "probe": "apollo",
+      "diagonal": 0.8552943274461406,
+      "off_diagonal": 0.431705456949163,
+      "n_pairs": 6,
+      "matrix": {
+        "harm-pressure-choice->harm-pressure-choice": 0.6658739595719382,
+        "harm-pressure-choice->harm-pressure-knowledge-report": 0.08291496299363386,
+        "harm-pressure-choice->instructed-deception": 0.9476224817117016,
+        "harm-pressure-knowledge-report->harm-pressure-choice": 0.2536199599019826,
+        "harm-pressure-knowledge-report->harm-pressure-knowledge-report": 0.9237343852728468,
+        "harm-pressure-knowledge-report->instructed-deception": 0.05909505983833321,
+        "instructed-deception->harm-pressure-choice": 0.6219091111606149,
+        "instructed-deception->harm-pressure-knowledge-report": 0.6250711660887118,
+        "instructed-deception->instructed-deception": 0.9762746374936371
+      }
+    },
+    {
+      "features": "axes_resid",
+      "probe": "paper",
+      "diagonal": 0.8502388506979868,
+      "off_diagonal": 0.4191015043674402,
+      "n_pairs": 6,
+      "matrix": {
+        "harm-pressure-choice->harm-pressure-choice": 0.6492271105826397,
+        "harm-pressure-choice->harm-pressure-knowledge-report": 0.1400031054293256,
+        "harm-pressure-choice->instructed-deception": 0.9536250065595849,
+        "harm-pressure-knowledge-report->harm-pressure-choice": 0.25200490086879035,
+        "harm-pressure-knowledge-report->harm-pressure-knowledge-report": 0.925706771860618,
+        "harm-pressure-knowledge-report->instructed-deception": 0.05765045932890575,
+        "instructed-deception->harm-pressure-choice": 0.65415460013366,
+        "instructed-deception->harm-pressure-knowledge-report": 0.4571709538843745,
+        "instructed-deception->instructed-deception": 0.9757826696507028
+      }
+    },
+    {
+      "features": "axes_resid",
+      "probe": "apollo",
+      "diagonal": 0.8569008794829848,
+      "off_diagonal": 0.40827214047437327,
+      "n_pairs": 6,
+      "matrix": {
+        "harm-pressure-choice->harm-pressure-choice": 0.6646848989298454,
+        "harm-pressure-choice->harm-pressure-knowledge-report": 0.08622742094094507,
+        "harm-pressure-choice->instructed-deception": 0.948310996812963,
+        "harm-pressure-knowledge-report->harm-pressure-choice": 0.25,
+        "harm-pressure-knowledge-report->harm-pressure-knowledge-report": 0.9303090072320842,
+        "harm-pressure-knowledge-report->instructed-deception": 0.05650141309695075,
+        "instructed-deception->harm-pressure-choice": 0.6557696591668523,
+        "instructed-deception->harm-pressure-knowledge-report": 0.4528233528285286,
+        "instructed-deception->instructed-deception": 0.9757087322870249
+      }
+    },
+    {
+      "features": "random",
+      "probe": "paper",
+      "diagonal": 0.7920625388173207,
+      "off_diagonal": 0.706240759807633,
+      "n_pairs": 6,
+      "matrix": {
+        "harm-pressure-choice->harm-pressure-choice": 0.7538644470868014,
+        "harm-pressure-choice->harm-pressure-knowledge-report": 0.8391905180891258,
+        "harm-pressure-choice->instructed-deception": 0.5730997518502416,
+        "harm-pressure-knowledge-report->harm-pressure-choice": 0.696870126977055,
+        "harm-pressure-knowledge-report->harm-pressure-knowledge-report": 0.7225509533201842,
+        "harm-pressure-knowledge-report->instructed-deception": 0.8139926346610402,
+        "instructed-deception->harm-pressure-choice": 0.5424370683893962,
+        "instructed-deception->harm-pressure-knowledge-report": 0.77185445887894,
+        "instructed-deception->instructed-deception": 0.8997722160449768
+      }
+    },
+    {
+      "features": "random",
+      "probe": "apollo",
+      "diagonal": 0.8524686725504932,
+      "off_diagonal": 0.6925234190042029,
+      "n_pairs": 6,
+      "matrix": {
+        "harm-pressure-choice->harm-pressure-choice": 0.7776456599286563,
+        "harm-pressure-choice->harm-pressure-knowledge-report": 0.833238445215051,
+        "harm-pressure-choice->instructed-deception": 0.5840656228780072,
+        "harm-pressure-knowledge-report->harm-pressure-choice": 0.730619291601693,
+        "harm-pressure-knowledge-report->harm-pressure-knowledge-report": 0.8790269559500329,
+        "harm-pressure-knowledge-report->instructed-deception": 0.7091298366079777,
+        "instructed-deception->harm-pressure-choice": 0.5379817331254177,
+        "instructed-deception->harm-pressure-knowledge-report": 0.7601055845970706,
+        "instructed-deception->instructed-deception": 0.9007334017727905
+      }
+    }
+  ],
+  "p3": [
+    {
+      "features": "raw",
+      "probe": "paper",
+      "held_out": "harm-pressure-choice",
+      "auroc": 0.6946981510358655,
+      "tpr_at_1pct_fpr": NaN,
+      "n_test": 268
+    },
+    {
+      "features": "raw",
+      "probe": "paper",
+      "held_out": "harm-pressure-knowledge-report",
+      "auroc": 0.6126494487862947,
+      "tpr_at_1pct_fpr": NaN,
+      "n_test": 278
+    },
+    {
+      "features": "raw",
+      "probe": "paper",
+      "held_out": "instructed-deception",
+      "auroc": 0.8093606462459253,
+      "tpr_at_1pct_fpr": NaN,
+      "n_test": 4774
+    },
+    {
+      "features": "raw",
+      "probe": "apollo",
+      "held_out": "harm-pressure-choice",
+      "auroc": 0.7861995990198263,
+      "tpr_at_1pct_fpr": NaN,
+      "n_test": 268
+    },
+    {
+      "features": "raw",
+      "probe": "apollo",
+      "held_out": "harm-pressure-knowledge-report",
+      "auroc": 0.5098079809533669,
+      "tpr_at_1pct_fpr": NaN,
+      "n_test": 278
+    },
+    {
+      "features": "raw",
+      "probe": "apollo",
+      "held_out": "instructed-deception",
+      "auroc": 0.7377134804868362,
+      "tpr_at_1pct_fpr": NaN,
+      "n_test": 4774
+    },
+    {
+      "features": "pc:deception",
+      "probe": "paper",
+      "held_out": "harm-pressure-choice",
+      "auroc": 0.6561038093116507,
+      "tpr_at_1pct_fpr": NaN,
+      "n_test": 268
+    },
+    {
+      "features": "pc:deception",
+      "probe": "paper",
+      "held_out": "harm-pressure-knowledge-report",
+      "auroc": 0.706536928730397,
+      "tpr_at_1pct_fpr": NaN,
+      "n_test": 278
+    },
+    {
+      "features": "pc:deception",
+      "probe": "paper",
+      "held_out": "instructed-deception",
+      "auroc": 0.956664090804664,
+      "tpr_at_1pct_fpr": NaN,
+      "n_test": 4774
+    },
+    {
+      "features": "pc:deception",
+      "probe": "apollo",
+      "held_out": "harm-pressure-choice",
+      "auroc": 0.669191356649588,
+      "tpr_at_1pct_fpr": NaN,
+      "n_test": 268
+    },
+    {
+      "features": "pc:deception",
+      "probe": "apollo",
+      "held_out": "harm-pressure-knowledge-report",
+      "auroc": 0.7316391491123648,
+      "tpr_at_1pct_fpr": NaN,
+      "n_test": 278
+    },
+    {
+      "features": "pc:deception",
+      "probe": "apollo",
+      "held_out": "instructed-deception",
+      "auroc": 0.932335094666,
+      "tpr_at_1pct_fpr": NaN,
+      "n_test": 4774
+    },
+    {
+      "features": "pc:unified",
+      "probe": "paper",
+      "held_out": "harm-pressure-choice",
+      "auroc": 0.6509244820672755,
+      "tpr_at_1pct_fpr": NaN,
+      "n_test": 268
+    },
+    {
+      "features": "pc:unified",
+      "probe": "paper",
+      "held_out": "harm-pressure-knowledge-report",
+      "auroc": 0.5219709124786501,
+      "tpr_at_1pct_fpr": NaN,
+      "n_test": 278
+    },
+    {
+      "features": "pc:unified",
+      "probe": "paper",
+      "held_out": "instructed-deception",
+      "auroc": 0.8988917416623944,
+      "tpr_at_1pct_fpr": NaN,
+      "n_test": 4774
+    },
+    {
+      "features": "pc:unified",
+      "probe": "apollo",
+      "held_out": "harm-pressure-choice",
+      "auroc": 0.6509244820672755,
+      "tpr_at_1pct_fpr": NaN,
+      "n_test": 268
+    },
+    {
+      "features": "pc:unified",
+      "probe": "apollo",
+      "held_out": "harm-pressure-knowledge-report",
+      "auroc": 0.5632731225091869,
+      "tpr_at_1pct_fpr": NaN,
+      "n_test": 278
+    },
+    {
+      "features": "pc:unified",
+      "probe": "apollo",
+      "held_out": "instructed-deception",
+      "auroc": 0.9308657476285894,
+      "tpr_at_1pct_fpr": NaN,
+      "n_test": 4774
+    },
+    {
+      "features": "axes",
+      "probe": "paper",
+      "held_out": "harm-pressure-choice",
+      "auroc": 0.5916128313655603,
+      "tpr_at_1pct_fpr": NaN,
+      "n_test": 268
+    },
+    {
+      "features": "axes",
+      "probe": "paper",
+      "held_out": "harm-pressure-knowledge-report",
+      "auroc": 0.6021945033900937,
+      "tpr_at_1pct_fpr": NaN,
+      "n_test": 278
+    },
+    {
+      "features": "axes",
+      "probe": "paper",
+      "held_out": "instructed-deception",
+      "auroc": 0.8989515018948646,
+      "tpr_at_1pct_fpr": NaN,
+      "n_test": 4774
+    },
+    {
+      "features": "axes",
+      "probe": "apollo",
+      "held_out": "harm-pressure-choice",
+      "auroc": 0.5887725551347739,
+      "tpr_at_1pct_fpr": NaN,
+      "n_test": 268
+    },
+    {
+      "features": "axes",
+      "probe": "apollo",
+      "held_out": "harm-pressure-knowledge-report",
+      "auroc": 0.6236737228921898,
+      "tpr_at_1pct_fpr": NaN,
+      "n_test": 278
+    },
+    {
+      "features": "axes",
+      "probe": "apollo",
+      "held_out": "instructed-deception",
+      "auroc": 0.5310227564508143,
+      "tpr_at_1pct_fpr": NaN,
+      "n_test": 4774
+    },
+    {
+      "features": "axes_resid",
+      "probe": "paper",
+      "held_out": "harm-pressure-choice",
+      "auroc": 0.6265315214969926,
+      "tpr_at_1pct_fpr": NaN,
+      "n_test": 268
+    },
+    {
+      "features": "axes_resid",
+      "probe": "paper",
+      "held_out": "harm-pressure-knowledge-report",
+      "auroc": 0.5254386418922417,
+      "tpr_at_1pct_fpr": NaN,
+      "n_test": 278
+    },
+    {
+      "features": "axes_resid",
+      "probe": "paper",
+      "held_out": "instructed-deception",
+      "auroc": 0.2932072184744591,
+      "tpr_at_1pct_fpr": NaN,
+      "n_test": 4774
+    },
+    {
+      "features": "axes_resid",
+      "probe": "apollo",
+      "held_out": "harm-pressure-choice",
+      "auroc": 0.6277010470037871,
+      "tpr_at_1pct_fpr": NaN,
+      "n_test": 268
+    },
+    {
+      "features": "axes_resid",
+      "probe": "apollo",
+      "held_out": "harm-pressure-knowledge-report",
+      "auroc": 0.5242999844728534,
+      "tpr_at_1pct_fpr": NaN,
+      "n_test": 278
+    },
+    {
+      "features": "axes_resid",
+      "probe": "apollo",
+      "held_out": "instructed-deception",
+      "auroc": 0.23478715967600655,
+      "tpr_at_1pct_fpr": NaN,
+      "n_test": 4774
+    },
+    {
+      "features": "random",
+      "probe": "paper",
+      "held_out": "harm-pressure-choice",
+      "auroc": 0.5305747382490532,
+      "tpr_at_1pct_fpr": NaN,
+      "n_test": 268
+    },
+    {
+      "features": "random",
+      "probe": "paper",
+      "held_out": "harm-pressure-knowledge-report",
+      "auroc": 0.7581388126908546,
+      "tpr_at_1pct_fpr": NaN,
+      "n_test": 278
+    },
+    {
+      "features": "random",
+      "probe": "paper",
+      "held_out": "instructed-deception",
+      "auroc": 0.7561241952771338,
+      "tpr_at_1pct_fpr": NaN,
+      "n_test": 4774
+    },
+    {
+      "features": "random",
+      "probe": "apollo",
+      "held_out": "harm-pressure-choice",
+      "auroc": 0.5257295611494766,
+      "tpr_at_1pct_fpr": NaN,
+      "n_test": 268
+    },
+    {
+      "features": "random",
+      "probe": "apollo",
+      "held_out": "harm-pressure-knowledge-report",
+      "auroc": 0.7490295533357486,
+      "tpr_at_1pct_fpr": NaN,
+      "n_test": 278
+    },
+    {
+      "features": "random",
+      "probe": "apollo",
+      "held_out": "instructed-deception",
+      "auroc": 0.7361737550258707,
+      "tpr_at_1pct_fpr": NaN,
+      "n_test": 4774
+    }
+  ]
+}

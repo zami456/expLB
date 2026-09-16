@@ -1,0 +1,951 @@
+{
+  "source": "run-coords\\p1_L44_last_withsyc.json",
+  "semantics": {
+    "instructed-deception": "instructed_intent",
+    "harm-pressure-knowledge-report": "instructed_intent",
+    "harm-pressure-choice": "instructed_intent",
+    "insider-trading": "instructed_intent",
+    "convincing-game": "instructed_intent",
+    "ai_liar": "instructed_intent",
+    "sandbagging_v2": "instructed_intent",
+    "ai_audit": "instructed_intent",
+    "roleplaying": "judge_grade",
+    "mask": "belief_inconsistency",
+    "sycophancy_mt": "belief_inconsistency"
+  },
+  "provenance": {
+    "instructed-deception": "liars-bench",
+    "harm-pressure-knowledge-report": "liars-bench",
+    "harm-pressure-choice": "liars-bench",
+    "insider-trading": "liars-bench",
+    "convincing-game": "liars-bench",
+    "ai_liar": "apollo",
+    "sandbagging_v2": "apollo",
+    "ai_audit": "apollo",
+    "roleplaying": "apollo",
+    "mask": "mask-benchmark",
+    "sycophancy_mt": "ours"
+  },
+  "results": [
+    {
+      "features": "raw",
+      "probe": "mms",
+      "within_semantics": 0.7482076550614242,
+      "n_within": 44,
+      "across_semantics": 0.5845795429445626,
+      "n_across": 46,
+      "difference": 0.16362811211686157,
+      "permutation_p": 0.04334783260836958,
+      "blocks": {
+        "instructed_intent->instructed_intent": {
+          "mean": 0.7610322448884188,
+          "n": 42
+        },
+        "instructed_intent->belief_inconsistency": {
+          "mean": 0.4949240326951267,
+          "n": 14
+        },
+        "instructed_intent->judge_grade": {
+          "mean": 0.6986961451247166,
+          "n": 7
+        },
+        "belief_inconsistency->instructed_intent": {
+          "mean": 0.5913058827465401,
+          "n": 14
+        },
+        "belief_inconsistency->judge_grade": {
+          "mean": 0.5303996598639455,
+          "n": 2
+        },
+        "belief_inconsistency->belief_inconsistency": {
+          "mean": 0.4788912686945378,
+          "n": 2
+        },
+        "judge_grade->instructed_intent": {
+          "mean": 0.6752648489055846,
+          "n": 7
+        },
+        "judge_grade->belief_inconsistency": {
+          "mean": 0.5024569406632703,
+          "n": 2
+        }
+      },
+      "cross_provenance_same_construct": {
+        "ai_liar->convincing-game": 0.9437,
+        "ai_liar->harm-pressure-choice": 0.6853419469815105,
+        "ai_liar->harm-pressure-knowledge-report": 0.7775995031313079,
+        "ai_liar->insider-trading": 0.8695348434295166,
+        "ai_liar->instructed-deception": 0.9051400644708482,
+        "convincing-game->ai_liar": 0.8594238683127572,
+        "convincing-game->sandbagging_v2": 0.6839999999999999,
+        "harm-pressure-choice->ai_liar": 0.7044718792866941,
+        "harm-pressure-choice->sandbagging_v2": 0.7695240000000001,
+        "harm-pressure-knowledge-report->ai_liar": 0.7407956104252401,
+        "harm-pressure-knowledge-report->sandbagging_v2": 0.8985199999999999,
+        "insider-trading->ai_liar": 0.8665020576131688,
+        "insider-trading->sandbagging_v2": 0.581996,
+        "instructed-deception->ai_liar": 0.9557201646090535,
+        "instructed-deception->sandbagging_v2": 0.935216,
+        "mask->sycophancy_mt": 0.39733271039945633,
+        "sandbagging_v2->convincing-game": 0.6364,
+        "sandbagging_v2->harm-pressure-choice": 0.7106816662953888,
+        "sandbagging_v2->harm-pressure-knowledge-report": 0.8266652864758552,
+        "sandbagging_v2->insider-trading": 0.377507279423682,
+        "sandbagging_v2->instructed-deception": 0.9293126836135336,
+        "sycophancy_mt->mask": 0.5604498269896193
+      },
+      "cross_provenance_diff_construct": {
+        "ai_liar->mask": 0.5341522491349481,
+        "ai_liar->sycophancy_mt": 0.48337191276094205,
+        "convincing-game->mask": 0.6090311418685121,
+        "convincing-game->roleplaying": 0.8971088435374149,
+        "convincing-game->sycophancy_mt": 0.2616216101424961,
+        "harm-pressure-choice->mask": 0.48657439446366785,
+        "harm-pressure-choice->roleplaying": 0.5693027210884354,
+        "harm-pressure-choice->sycophancy_mt": 0.44503493384866954,
+        "harm-pressure-knowledge-report->mask": 0.5764359861591695,
+        "harm-pressure-knowledge-report->roleplaying": 0.5291950113378685,
+        "harm-pressure-knowledge-report->sycophancy_mt": 0.6124625708764254,
+        "insider-trading->mask": 0.506643598615917,
+        "insider-trading->roleplaying": 0.7855725623582767,
+        "insider-trading->sycophancy_mt": 0.31550892989870244,
+        "instructed-deception->mask": 0.529446366782007,
+        "instructed-deception->roleplaying": 0.9049036281179138,
+        "instructed-deception->sycophancy_mt": 0.37256577969377136,
+        "mask->ai_liar": 0.6686968449931413,
+        "mask->convincing-game": 0.9096000000000001,
+        "mask->harm-pressure-choice": 0.7912118511918023,
+        "mask->harm-pressure-knowledge-report": 0.8766626986180839,
+        "mask->insider-trading": 0.7052853366419083,
+        "mask->instructed-deception": 0.7782114367921901,
+        "mask->roleplaying": 0.8290816326530612,
+        "mask->sandbagging_v2": 0.304972,
+        "roleplaying->convincing-game": 0.8929999999999999,
+        "roleplaying->harm-pressure-choice": 0.5937848073067498,
+        "roleplaying->harm-pressure-knowledge-report": 0.34258061176957716,
+        "roleplaying->insider-trading": 0.9827697019488177,
+        "roleplaying->instructed-deception": 0.9375485387350734,
+        "roleplaying->mask": 0.6661245674740485,
+        "roleplaying->sycophancy_mt": 0.3387893138524921,
+        "sandbagging_v2->mask": 0.4894463667820069,
+        "sandbagging_v2->sycophancy_mt": 0.7066406167045384,
+        "sycophancy_mt->ai_liar": 0.4824691358024691,
+        "sycophancy_mt->convincing-game": 0.2182,
+        "sycophancy_mt->harm-pressure-choice": 0.32741145021162843,
+        "sycophancy_mt->harm-pressure-knowledge-report": 0.852802649966358,
+        "sycophancy_mt->insider-trading": 0.08707364373578347,
+        "sycophancy_mt->instructed-deception": 0.40863731049819674,
+        "sycophancy_mt->roleplaying": 0.23171768707482993,
+        "sycophancy_mt->sandbagging_v2": 0.867048
+      },
+      "cross_provenance_same_mean": 0.755265245066256,
+      "cross_provenance_diff_mean": 0.5883023438913785,
+      "cross_provenance_gap": 0.16696290117487755
+    },
+    {
+      "features": "raw",
+      "probe": "lr_reg10",
+      "within_semantics": 0.6459749186321461,
+      "n_within": 44,
+      "across_semantics": 0.6157882586028363,
+      "n_across": 46,
+      "difference": 0.03018666002930981,
+      "permutation_p": 0.28583570821458926,
+      "blocks": {
+        "instructed_intent->instructed_intent": {
+          "mean": 0.6567268731208211,
+          "n": 42
+        },
+        "instructed_intent->belief_inconsistency": {
+          "mean": 0.515803334704058,
+          "n": 14
+        },
+        "instructed_intent->judge_grade": {
+          "mean": 0.6488297700032393,
+          "n": 7
+        },
+        "belief_inconsistency->instructed_intent": {
+          "mean": 0.684251562670295,
+          "n": 14
+        },
+        "belief_inconsistency->judge_grade": {
+          "mean": 0.5905612244897959,
+          "n": 2
+        },
+        "belief_inconsistency->belief_inconsistency": {
+          "mean": 0.42018387436997195,
+          "n": 2
+        },
+        "judge_grade->instructed_intent": {
+          "mean": 0.6729481326348477,
+          "n": 7
+        },
+        "judge_grade->belief_inconsistency": {
+          "mean": 0.5459617825216638,
+          "n": 2
+        }
+      },
+      "cross_provenance_same_construct": {
+        "ai_liar->convincing-game": 0.9087,
+        "ai_liar->harm-pressure-choice": 0.6347182000445534,
+        "ai_liar->harm-pressure-knowledge-report": 0.7612442420164589,
+        "ai_liar->insider-trading": 0.9236009813948549,
+        "ai_liar->instructed-deception": 0.9188192782122265,
+        "convincing-game->ai_liar": 0.8289711934156379,
+        "convincing-game->sandbagging_v2": 0.464336,
+        "harm-pressure-choice->ai_liar": 0.6315500685871056,
+        "harm-pressure-choice->sandbagging_v2": 0.587872,
+        "harm-pressure-knowledge-report->ai_liar": 0.7405212620027435,
+        "harm-pressure-knowledge-report->sandbagging_v2": 0.937708,
+        "insider-trading->ai_liar": 0.46458161865569275,
+        "insider-trading->sandbagging_v2": 0.328236,
+        "instructed-deception->ai_liar": 0.7462277091906723,
+        "instructed-deception->sandbagging_v2": 0.894284,
+        "mask->sycophancy_mt": 0.3496411051413281,
+        "sandbagging_v2->convincing-game": 0.43990000000000007,
+        "sandbagging_v2->harm-pressure-choice": 0.3278012920472266,
+        "sandbagging_v2->harm-pressure-knowledge-report": 0.86403395269396,
+        "sandbagging_v2->insider-trading": 0.7882847386393486,
+        "sandbagging_v2->instructed-deception": 0.7673638576783299,
+        "sycophancy_mt->mask": 0.49072664359861584
+      },
+      "cross_provenance_diff_construct": {
+        "ai_liar->mask": 0.5134256055363321,
+        "ai_liar->sycophancy_mt": 0.7136486228206163,
+        "convincing-game->mask": 0.6040138408304498,
+        "convincing-game->roleplaying": 0.8575680272108842,
+        "convincing-game->sycophancy_mt": 0.3191668967274735,
+        "harm-pressure-choice->mask": 0.44484429065743947,
+        "harm-pressure-choice->roleplaying": 0.5514455782312925,
+        "harm-pressure-choice->sycophancy_mt": 0.38495189959438514,
+        "harm-pressure-knowledge-report->mask": 0.5778200692041522,
+        "harm-pressure-knowledge-report->roleplaying": 0.5486111111111112,
+        "harm-pressure-knowledge-report->sycophancy_mt": 0.6445029624753127,
+        "insider-trading->mask": 0.5342906574394464,
+        "insider-trading->roleplaying": 0.8086734693877551,
+        "insider-trading->sycophancy_mt": 0.3886151755186986,
+        "instructed-deception->mask": 0.48861591695501727,
+        "instructed-deception->roleplaying": 0.5993480725623583,
+        "instructed-deception->sycophancy_mt": 0.6355889910594831,
+        "mask->ai_liar": 0.7334979423868313,
+        "mask->convincing-game": 0.7432,
+        "mask->harm-pressure-choice": 0.7949988861661839,
+        "mask->harm-pressure-knowledge-report": 0.9674965063920087,
+        "mask->insider-trading": 0.751778638454359,
+        "mask->instructed-deception": 0.8734306357453241,
+        "mask->roleplaying": 0.8531746031746031,
+        "mask->sandbagging_v2": 0.723004,
+        "roleplaying->convincing-game": 0.9513,
+        "roleplaying->harm-pressure-choice": 0.42576297616395636,
+        "roleplaying->harm-pressure-knowledge-report": 0.09657885202629263,
+        "roleplaying->insider-trading": 0.9736040552397879,
+        "roleplaying->instructed-deception": 0.9422965374693149,
+        "roleplaying->mask": 0.7200692041522492,
+        "roleplaying->sycophancy_mt": 0.3718543608910786,
+        "sandbagging_v2->mask": 0.4400346020761246,
+        "sandbagging_v2->sycophancy_mt": 0.5317271549618807,
+        "sycophancy_mt->ai_liar": 0.595116598079561,
+        "sycophancy_mt->convincing-game": 0.3989,
+        "sycophancy_mt->harm-pressure-choice": 0.6479728224548897,
+        "sycophancy_mt->harm-pressure-knowledge-report": 0.8661042389110294,
+        "sycophancy_mt->insider-trading": 0.39677749274852037,
+        "sycophancy_mt->instructed-deception": 0.2652001160454206,
+        "sycophancy_mt->roleplaying": 0.32794784580498865,
+        "sycophancy_mt->sandbagging_v2": 0.822044
+      },
+      "cross_provenance_same_mean": 0.6726873701508524,
+      "cross_provenance_diff_mean": 0.6149762680158717,
+      "cross_provenance_gap": 0.05771110213498076
+    },
+    {
+      "features": "pc:deception",
+      "probe": "mms",
+      "within_semantics": 0.7906949600112818,
+      "n_within": 44,
+      "across_semantics": 0.44887432567020324,
+      "n_across": 46,
+      "difference": 0.34182063434107857,
+      "permutation_p": 0.026948652567371632,
+      "blocks": {
+        "instructed_intent->instructed_intent": {
+          "mean": 0.7954597703746045,
+          "n": 42
+        },
+        "instructed_intent->belief_inconsistency": {
+          "mean": 0.3428889435783758,
+          "n": 14
+        },
+        "instructed_intent->judge_grade": {
+          "mean": 0.8373825720764497,
+          "n": 7
+        },
+        "belief_inconsistency->instructed_intent": {
+          "mean": 0.22864708000314474,
+          "n": 14
+        },
+        "belief_inconsistency->judge_grade": {
+          "mean": 0.19203514739229025,
+          "n": 2
+        },
+        "belief_inconsistency->belief_inconsistency": {
+          "mean": 0.6906339423815067,
+          "n": 2
+        },
+        "judge_grade->instructed_intent": {
+          "mean": 0.8265149670899544,
+          "n": 7
+        },
+        "judge_grade->belief_inconsistency": {
+          "mean": 0.30768079086932565,
+          "n": 2
+        }
+      },
+      "cross_provenance_same_construct": {
+        "ai_liar->convincing-game": 0.8851,
+        "ai_liar->harm-pressure-choice": 0.6084874136778792,
+        "ai_liar->harm-pressure-knowledge-report": 0.7199937891413487,
+        "ai_liar->insider-trading": 0.9790587327934545,
+        "ai_liar->instructed-deception": 0.8955229669718094,
+        "convincing-game->ai_liar": 0.7567626886145405,
+        "convincing-game->sandbagging_v2": 0.9296,
+        "harm-pressure-choice->ai_liar": 0.6922359396433471,
+        "harm-pressure-choice->sandbagging_v2": 0.927252,
+        "harm-pressure-knowledge-report->ai_liar": 0.8345679012345678,
+        "harm-pressure-knowledge-report->sandbagging_v2": 0.878924,
+        "insider-trading->ai_liar": 0.8000548696844993,
+        "insider-trading->sandbagging_v2": 0.8576599999999999,
+        "instructed-deception->ai_liar": 0.7555555555555554,
+        "instructed-deception->sandbagging_v2": 0.931984,
+        "mask->sycophancy_mt": 0.7664581961816985,
+        "sandbagging_v2->convincing-game": 0.8123,
+        "sandbagging_v2->harm-pressure-choice": 0.7029405212742258,
+        "sandbagging_v2->harm-pressure-knowledge-report": 0.7056570570881424,
+        "sandbagging_v2->insider-trading": 0.9556639784495525,
+        "sandbagging_v2->instructed-deception": 0.9028991873836936,
+        "sycophancy_mt->mask": 0.6148096885813148
+      },
+      "cross_provenance_diff_construct": {
+        "ai_liar->mask": 0.42512110726643604,
+        "ai_liar->sycophancy_mt": 0.28797596041538365,
+        "convincing-game->mask": 0.4024221453287197,
+        "convincing-game->roleplaying": 0.8273809523809523,
+        "convincing-game->sycophancy_mt": 0.24815774384675823,
+        "harm-pressure-choice->mask": 0.4014532871972318,
+        "harm-pressure-choice->roleplaying": 0.8160430839002267,
+        "harm-pressure-choice->sycophancy_mt": 0.22366157701373995,
+        "harm-pressure-knowledge-report->mask": 0.4227335640138408,
+        "harm-pressure-knowledge-report->roleplaying": 0.8180272108843538,
+        "harm-pressure-knowledge-report->sycophancy_mt": 0.3847076811994308,
+        "insider-trading->mask": 0.4004498269896194,
+        "insider-trading->roleplaying": 0.8356009070294785,
+        "insider-trading->sycophancy_mt": 0.30085582620144835,
+        "instructed-deception->mask": 0.40356401384083035,
+        "instructed-deception->roleplaying": 0.8227040816326531,
+        "instructed-deception->sycophancy_mt": 0.24468559536197415,
+        "mask->ai_liar": 0.4614540466392318,
+        "mask->convincing-game": 0.22190000000000001,
+        "mask->harm-pressure-choice": 0.24693695700601467,
+        "mask->harm-pressure-knowledge-report": 0.3693390611252006,
+        "mask->insider-trading": 0.3912054502065065,
+        "mask->instructed-deception": 0.09809874707100272,
+        "mask->roleplaying": 0.2151360544217687,
+        "mask->sandbagging_v2": 0.06526800000000002,
+        "roleplaying->convincing-game": 0.8382000000000001,
+        "roleplaying->harm-pressure-choice": 0.7147471597237692,
+        "roleplaying->harm-pressure-knowledge-report": 0.6665804047409555,
+        "roleplaying->insider-trading": 0.9690938864018688,
+        "roleplaying->instructed-deception": 0.9029507865271478,
+        "roleplaying->mask": 0.39435986159169556,
+        "roleplaying->sycophancy_mt": 0.22100172014695574,
+        "sandbagging_v2->mask": 0.40622837370242215,
+        "sandbagging_v2->sycophancy_mt": 0.24842850771942493,
+        "sycophancy_mt->ai_liar": 0.26134430727023317,
+        "sycophancy_mt->convincing-game": 0.1978,
+        "sycophancy_mt->harm-pressure-choice": 0.2646469146803297,
+        "sycophancy_mt->harm-pressure-knowledge-report": 0.33124579473112153,
+        "sycophancy_mt->insider-trading": 0.039255794197698535,
+        "sycophancy_mt->instructed-deception": 0.11666004711668725,
+        "sycophancy_mt->roleplaying": 0.1689342403628118,
+        "sycophancy_mt->sandbagging_v2": 0.13590400000000002
+      },
+      "cross_provenance_same_mean": 0.8142494766488922,
+      "cross_provenance_diff_mean": 0.4098158257115696,
+      "cross_provenance_gap": 0.40443365093732264
+    },
+    {
+      "features": "pc:deception",
+      "probe": "lr_reg10",
+      "within_semantics": 0.7411840472479923,
+      "n_within": 44,
+      "across_semantics": 0.4688919337297837,
+      "n_across": 46,
+      "difference": 0.27229211351820853,
+      "permutation_p": 0.04204789760511975,
+      "blocks": {
+        "instructed_intent->instructed_intent": {
+          "mean": 0.7443243858820642,
+          "n": 42
+        },
+        "instructed_intent->belief_inconsistency": {
+          "mean": 0.3761860073824299,
+          "n": 14
+        },
+        "instructed_intent->judge_grade": {
+          "mean": 0.8093820861678005,
+          "n": 7
+        },
+        "belief_inconsistency->instructed_intent": {
+          "mean": 0.2661851625343415,
+          "n": 14
+        },
+        "belief_inconsistency->judge_grade": {
+          "mean": 0.20649092970521543,
+          "n": 2
+        },
+        "belief_inconsistency->belief_inconsistency": {
+          "mean": 0.6752369359324804,
+          "n": 2
+        },
+        "judge_grade->instructed_intent": {
+          "mean": 0.8371864887323729,
+          "n": 7
+        },
+        "judge_grade->belief_inconsistency": {
+          "mean": 0.31843534451180244,
+          "n": 2
+        }
+      },
+      "cross_provenance_same_construct": {
+        "ai_liar->convincing-game": 0.8885,
+        "ai_liar->harm-pressure-choice": 0.5408777010470038,
+        "ai_liar->harm-pressure-knowledge-report": 0.607266704621914,
+        "ai_liar->insider-trading": 0.9684064628986916,
+        "ai_liar->instructed-deception": 0.9033316373478812,
+        "convincing-game->ai_liar": 0.8706172839506172,
+        "convincing-game->sandbagging_v2": 0.8992319999999998,
+        "harm-pressure-choice->ai_liar": 0.5766803840877915,
+        "harm-pressure-choice->sandbagging_v2": 0.920544,
+        "harm-pressure-knowledge-report->ai_liar": 0.7799176954732511,
+        "harm-pressure-knowledge-report->sandbagging_v2": 0.853996,
+        "insider-trading->ai_liar": 0.8389026063100138,
+        "insider-trading->sandbagging_v2": 0.8417720000000001,
+        "instructed-deception->ai_liar": 0.7099039780521261,
+        "instructed-deception->sandbagging_v2": 0.8457999999999999,
+        "mask->sycophancy_mt": 0.7440378857057911,
+        "sandbagging_v2->convincing-game": 0.8153,
+        "sandbagging_v2->harm-pressure-choice": 0.7266094898641124,
+        "sandbagging_v2->harm-pressure-knowledge-report": 0.5992961026861964,
+        "sandbagging_v2->insider-trading": 0.7865577966679521,
+        "sandbagging_v2->instructed-deception": 0.9185828698917068,
+        "sycophancy_mt->mask": 0.6064359861591695
+      },
+      "cross_provenance_diff_construct": {
+        "ai_liar->mask": 0.4692041522491349,
+        "ai_liar->sycophancy_mt": 0.38509524517403215,
+        "convincing-game->mask": 0.4233217993079585,
+        "convincing-game->roleplaying": 0.8479308390022675,
+        "convincing-game->sycophancy_mt": 0.32095075282974794,
+        "harm-pressure-choice->mask": 0.4067128027681661,
+        "harm-pressure-choice->roleplaying": 0.7942176870748299,
+        "harm-pressure-choice->sycophancy_mt": 0.22042833782836757,
+        "harm-pressure-knowledge-report->mask": 0.42640138408304495,
+        "harm-pressure-knowledge-report->roleplaying": 0.7604875283446713,
+        "harm-pressure-knowledge-report->sycophancy_mt": 0.41964683896451405,
+        "insider-trading->mask": 0.4059169550173011,
+        "insider-trading->roleplaying": 0.8450963718820861,
+        "insider-trading->sycophancy_mt": 0.3125358363949118,
+        "instructed-deception->mask": 0.45882352941176474,
+        "instructed-deception->roleplaying": 0.763888888888889,
+        "instructed-deception->sycophancy_mt": 0.3759158189810784,
+        "mask->ai_liar": 0.5250480109739368,
+        "mask->convincing-game": 0.2592,
+        "mask->harm-pressure-choice": 0.24643573178881711,
+        "mask->harm-pressure-knowledge-report": 0.3101288753170126,
+        "mask->insider-trading": 0.396732782276769,
+        "mask->instructed-deception": 0.1713625104843668,
+        "mask->roleplaying": 0.23214285714285715,
+        "mask->sandbagging_v2": 0.07918800000000002,
+        "roleplaying->convincing-game": 0.8534,
+        "roleplaying->harm-pressure-choice": 0.6877923813766986,
+        "roleplaying->harm-pressure-knowledge-report": 0.7188551317219605,
+        "roleplaying->insider-trading": 0.9811601249657685,
+        "roleplaying->instructed-deception": 0.8952528612514827,
+        "roleplaying->mask": 0.40200692041522496,
+        "roleplaying->sycophancy_mt": 0.23486376860837987,
+        "sandbagging_v2->mask": 0.4095847750865052,
+        "sandbagging_v2->sycophancy_mt": 0.23206587525749112,
+        "sycophancy_mt->ai_liar": 0.30897119341563783,
+        "sycophancy_mt->convincing-game": 0.2437,
+        "sycophancy_mt->harm-pressure-choice": 0.2762864780574738,
+        "sycophancy_mt->harm-pressure-knowledge-report": 0.5369804875524041,
+        "sycophancy_mt->insider-trading": 0.06303617636045583,
+        "sycophancy_mt->instructed-deception": 0.10962202925390621,
+        "sycophancy_mt->roleplaying": 0.18083900226757368,
+        "sycophancy_mt->sandbagging_v2": 0.19990000000000002
+      },
+      "cross_provenance_same_mean": 0.7837531174892827,
+      "cross_provenance_diff_mean": 0.43312216051851166,
+      "cross_provenance_gap": 0.350630956970771
+    },
+    {
+      "features": "axes",
+      "probe": "mms",
+      "within_semantics": 0.7684032126683337,
+      "n_within": 44,
+      "across_semantics": 0.5647362847143947,
+      "n_across": 46,
+      "difference": 0.20366692795393893,
+      "permutation_p": 0.10304484775761212,
+      "blocks": {
+        "instructed_intent->instructed_intent": {
+          "mean": 0.7866941366655157,
+          "n": 42
+        },
+        "instructed_intent->belief_inconsistency": {
+          "mean": 0.40044829357166317,
+          "n": 14
+        },
+        "instructed_intent->judge_grade": {
+          "mean": 0.8331713637836087,
+          "n": 7
+        },
+        "belief_inconsistency->instructed_intent": {
+          "mean": 0.49542234478390873,
+          "n": 14
+        },
+        "belief_inconsistency->judge_grade": {
+          "mean": 0.4931264172335601,
+          "n": 2
+        },
+        "belief_inconsistency->belief_inconsistency": {
+          "mean": 0.38429380872750646,
+          "n": 2
+        },
+        "judge_grade->instructed_intent": {
+          "mean": 0.836129506081663,
+          "n": 7
+        },
+        "judge_grade->belief_inconsistency": {
+          "mean": 0.38216061818006264,
+          "n": 2
+        }
+      },
+      "cross_provenance_same_construct": {
+        "ai_liar->convincing-game": 0.9269,
+        "ai_liar->harm-pressure-choice": 0.6331031410113611,
+        "ai_liar->harm-pressure-knowledge-report": 0.6352673257077791,
+        "ai_liar->insider-trading": 0.9713517652253127,
+        "ai_liar->instructed-deception": 0.9055461883414369,
+        "convincing-game->ai_liar": 0.8985459533607683,
+        "convincing-game->sandbagging_v2": 0.830352,
+        "harm-pressure-choice->ai_liar": 0.9087517146776406,
+        "harm-pressure-choice->sandbagging_v2": 0.7241060000000001,
+        "harm-pressure-knowledge-report->ai_liar": 0.5303155006858711,
+        "harm-pressure-knowledge-report->sandbagging_v2": 0.818952,
+        "insider-trading->ai_liar": 0.8947050754458161,
+        "insider-trading->sandbagging_v2": 0.80518,
+        "instructed-deception->ai_liar": 0.9057338820301783,
+        "instructed-deception->sandbagging_v2": 0.844536,
+        "mask->sycophancy_mt": 0.26149419184947653,
+        "sandbagging_v2->convincing-game": 0.8981,
+        "sandbagging_v2->harm-pressure-choice": 0.6187346847850301,
+        "sandbagging_v2->harm-pressure-knowledge-report": 0.6520884012214689,
+        "sandbagging_v2->insider-trading": 0.9725142374908483,
+        "sandbagging_v2->instructed-deception": 0.9045013934401342,
+        "sycophancy_mt->mask": 0.5070934256055364
+      },
+      "cross_provenance_diff_construct": {
+        "ai_liar->mask": 0.4799307958477509,
+        "ai_liar->sycophancy_mt": 0.28549130370150144,
+        "convincing-game->mask": 0.4866782006920415,
+        "convincing-game->roleplaying": 0.8731575963718822,
+        "convincing-game->sycophancy_mt": 0.2790991526683514,
+        "harm-pressure-choice->mask": 0.505916955017301,
+        "harm-pressure-choice->roleplaying": 0.848497732426304,
+        "harm-pressure-choice->sycophancy_mt": 0.28669115929410266,
+        "harm-pressure-knowledge-report->mask": 0.4741868512110727,
+        "harm-pressure-knowledge-report->roleplaying": 0.6153628117913832,
+        "harm-pressure-knowledge-report->sycophancy_mt": 0.5096306993140648,
+        "insider-trading->mask": 0.4968858131487889,
+        "insider-trading->roleplaying": 0.8663548752834468,
+        "insider-trading->sycophancy_mt": 0.27283441992822105,
+        "instructed-deception->mask": 0.4751557093425606,
+        "instructed-deception->roleplaying": 0.8768424036281179,
+        "instructed-deception->sycophancy_mt": 0.28906432500159274,
+        "mask->ai_liar": 0.8761042524005487,
+        "mask->convincing-game": 0.9669,
+        "mask->harm-pressure-choice": 0.6520383158832702,
+        "mask->harm-pressure-knowledge-report": 0.6376481548574091,
+        "mask->insider-trading": 0.9503546099290779,
+        "mask->instructed-deception": 0.900114237695491,
+        "mask->roleplaying": 0.8526077097505669,
+        "mask->sandbagging_v2": 0.708304,
+        "roleplaying->convincing-game": 0.9379000000000001,
+        "roleplaying->harm-pressure-choice": 0.6292604143461795,
+        "roleplaying->harm-pressure-knowledge-report": 0.6728947777030174,
+        "roleplaying->insider-trading": 0.9707314074297626,
+        "roleplaying->instructed-deception": 0.904594587811475,
+        "roleplaying->mask": 0.4831833910034602,
+        "roleplaying->sycophancy_mt": 0.2811378453566651,
+        "sandbagging_v2->mask": 0.46314878892733563,
+        "sandbagging_v2->sycophancy_mt": 0.3015619359085986,
+        "sycophancy_mt->ai_liar": 0.09569272976680385,
+        "sycophancy_mt->convincing-game": 0.06760000000000001,
+        "sycophancy_mt->harm-pressure-choice": 0.34824014257072844,
+        "sycophancy_mt->harm-pressure-knowledge-report": 0.4246157031209565,
+        "sycophancy_mt->insider-trading": 0.029318891850957644,
+        "sycophancy_mt->instructed-deception": 0.09385778889947978,
+        "sycophancy_mt->roleplaying": 0.13364512471655327,
+        "sycophancy_mt->sandbagging_v2": 0.185124
+      },
+      "cross_provenance_same_mean": 0.7749033127672117,
+      "cross_provenance_diff_mean": 0.5354371336808768,
+      "cross_provenance_gap": 0.23946617908633494
+    },
+    {
+      "features": "axes",
+      "probe": "lr_reg10",
+      "within_semantics": 0.7590589991548113,
+      "n_within": 44,
+      "across_semantics": 0.5371947255777146,
+      "n_across": 46,
+      "difference": 0.2218642735770967,
+      "permutation_p": 0.050997450127493626,
+      "blocks": {
+        "instructed_intent->instructed_intent": {
+          "mean": 0.7774937682899056,
+          "n": 42
+        },
+        "instructed_intent->belief_inconsistency": {
+          "mean": 0.4039374918900482,
+          "n": 14
+        },
+        "instructed_intent->judge_grade": {
+          "mean": 0.8308228053126012,
+          "n": 7
+        },
+        "belief_inconsistency->instructed_intent": {
+          "mean": 0.4115904031090557,
+          "n": 14
+        },
+        "belief_inconsistency->judge_grade": {
+          "mean": 0.4309807256235828,
+          "n": 2
+        },
+        "belief_inconsistency->belief_inconsistency": {
+          "mean": 0.37192884731783393,
+          "n": 2
+        },
+        "judge_grade->instructed_intent": {
+          "mean": 0.8359796674471216,
+          "n": 7
+        },
+        "judge_grade->belief_inconsistency": {
+          "mean": 0.38199404301109563,
+          "n": 2
+        }
+      },
+      "cross_provenance_same_construct": {
+        "ai_liar->convincing-game": 0.8913,
+        "ai_liar->harm-pressure-choice": 0.6524838494096682,
+        "ai_liar->harm-pressure-knowledge-report": 0.4875006469644429,
+        "ai_liar->insider-trading": 0.9724080501204388,
+        "ai_liar->instructed-deception": 0.9087692042271283,
+        "convincing-game->ai_liar": 0.8761042524005487,
+        "convincing-game->sandbagging_v2": 0.7907199999999999,
+        "harm-pressure-choice->ai_liar": 0.9044170096021947,
+        "harm-pressure-choice->sandbagging_v2": 0.379336,
+        "harm-pressure-knowledge-report->ai_liar": 0.605925925925926,
+        "harm-pressure-knowledge-report->sandbagging_v2": 0.781076,
+        "insider-trading->ai_liar": 0.9237311385459533,
+        "insider-trading->sandbagging_v2": 0.8584359999999999,
+        "instructed-deception->ai_liar": 0.9258161865569272,
+        "instructed-deception->sandbagging_v2": 0.857592,
+        "mask->sycophancy_mt": 0.2941345112446644,
+        "sandbagging_v2->convincing-game": 0.8291999999999999,
+        "sandbagging_v2->harm-pressure-choice": 0.611661840053464,
+        "sandbagging_v2->harm-pressure-knowledge-report": 0.6052481755602712,
+        "sandbagging_v2->insider-trading": 0.9732575490837148,
+        "sandbagging_v2->instructed-deception": 0.9026222368790311,
+        "sycophancy_mt->mask": 0.4497231833910035
+      },
+      "cross_provenance_diff_construct": {
+        "ai_liar->mask": 0.4778892733564014,
+        "ai_liar->sycophancy_mt": 0.2999904436280235,
+        "convincing-game->mask": 0.5093079584775086,
+        "convincing-game->roleplaying": 0.8652210884353742,
+        "convincing-game->sycophancy_mt": 0.26806685213107095,
+        "harm-pressure-choice->mask": 0.5247404844290658,
+        "harm-pressure-choice->roleplaying": 0.8061224489795918,
+        "harm-pressure-choice->sycophancy_mt": 0.32167278982352565,
+        "harm-pressure-knowledge-report->mask": 0.5390657439446367,
+        "harm-pressure-knowledge-report->roleplaying": 0.6483843537414966,
+        "harm-pressure-knowledge-report->sycophancy_mt": 0.4042398437002273,
+        "insider-trading->mask": 0.45837370242214526,
+        "insider-trading->roleplaying": 0.8798185941043084,
+        "insider-trading->sycophancy_mt": 0.30653124933636305,
+        "instructed-deception->mask": 0.45321799307958477,
+        "instructed-deception->roleplaying": 0.879251700680272,
+        "instructed-deception->sycophancy_mt": 0.31654420352948676,
+        "mask->ai_liar": 0.7629629629629631,
+        "mask->convincing-game": 0.9742999999999999,
+        "mask->harm-pressure-choice": 0.5809200267320116,
+        "mask->harm-pressure-knowledge-report": 0.4532891672273692,
+        "mask->insider-trading": 0.11232388265736691,
+        "mask->instructed-deception": 0.7285116332375005,
+        "mask->roleplaying": 0.6781462585034014,
+        "mask->sandbagging_v2": 0.267112,
+        "roleplaying->convincing-game": 0.9331999999999999,
+        "roleplaying->harm-pressure-choice": 0.6259189128981957,
+        "roleplaying->harm-pressure-knowledge-report": 0.6711350344185083,
+        "roleplaying->insider-trading": 0.9711002688217114,
+        "roleplaying->instructed-deception": 0.9046934861697622,
+        "roleplaying->mask": 0.4797231833910035,
+        "roleplaying->sycophancy_mt": 0.28426490263118775,
+        "sandbagging_v2->mask": 0.4498615916955018,
+        "sandbagging_v2->sycophancy_mt": 0.3256227569071333,
+        "sycophancy_mt->ai_liar": 0.13004115226337448,
+        "sycophancy_mt->convincing-game": 0.033600000000000005,
+        "sycophancy_mt->harm-pressure-choice": 0.33103141011361104,
+        "sycophancy_mt->harm-pressure-knowledge-report": 0.6336110967341235,
+        "sycophancy_mt->insider-trading": 0.12059531993136943,
+        "sycophancy_mt->instructed-deception": 0.11459099166708933,
+        "sycophancy_mt->roleplaying": 0.18381519274376418,
+        "sycophancy_mt->sandbagging_v2": 0.519376
+      },
+      "cross_provenance_same_mean": 0.7491574436347898,
+      "cross_provenance_diff_mean": 0.5054329989406199,
+      "cross_provenance_gap": 0.24372444469416987
+    },
+    {
+      "features": "random",
+      "probe": "mms",
+      "within_semantics": 0.5462152797701955,
+      "n_within": 44,
+      "across_semantics": 0.4993073905823028,
+      "n_across": 46,
+      "difference": 0.04690788918789268,
+      "permutation_p": 0.20658967051647417,
+      "blocks": {
+        "instructed_intent->instructed_intent": {
+          "mean": 0.5531644981403916,
+          "n": 42
+        },
+        "instructed_intent->belief_inconsistency": {
+          "mean": 0.4946301822611712,
+          "n": 14
+        },
+        "instructed_intent->judge_grade": {
+          "mean": 0.5057904114026563,
+          "n": 7
+        },
+        "belief_inconsistency->instructed_intent": {
+          "mean": 0.494137038820618,
+          "n": 14
+        },
+        "belief_inconsistency->judge_grade": {
+          "mean": 0.5423044217687075,
+          "n": 2
+        },
+        "belief_inconsistency->belief_inconsistency": {
+          "mean": 0.40028169399607794,
+          "n": 2
+        },
+        "judge_grade->instructed_intent": {
+          "mean": 0.5056542985430805,
+          "n": 7
+        },
+        "judge_grade->belief_inconsistency": {
+          "mean": 0.48033852924165327,
+          "n": 2
+        }
+      },
+      "cross_provenance_same_construct": {
+        "ai_liar->convincing-game": 0.4345,
+        "ai_liar->harm-pressure-choice": 0.29438627756738694,
+        "ai_liar->harm-pressure-knowledge-report": 0.23565032865793692,
+        "ai_liar->insider-trading": 0.10862409111994144,
+        "ai_liar->instructed-deception": 0.6311828366506259,
+        "convincing-game->ai_liar": 0.3860082304526749,
+        "convincing-game->sandbagging_v2": 0.780952,
+        "harm-pressure-choice->ai_liar": 0.35094650205761313,
+        "harm-pressure-choice->sandbagging_v2": 0.8091120000000002,
+        "harm-pressure-knowledge-report->ai_liar": 0.5359122085048011,
+        "harm-pressure-knowledge-report->sandbagging_v2": 0.7539559999999998,
+        "insider-trading->ai_liar": 0.3840877914951989,
+        "insider-trading->sandbagging_v2": 0.8015000000000001,
+        "instructed-deception->ai_liar": 0.6348422496570644,
+        "instructed-deception->sandbagging_v2": 0.556152,
+        "mask->sycophancy_mt": 0.40052878591603136,
+        "sandbagging_v2->convincing-game": 0.595,
+        "sandbagging_v2->harm-pressure-choice": 0.6677990643795946,
+        "sandbagging_v2->harm-pressure-knowledge-report": 0.8633611096734124,
+        "sandbagging_v2->insider-trading": 0.8705631842797982,
+        "sandbagging_v2->instructed-deception": 0.7075543076597173,
+        "sycophancy_mt->mask": 0.40003460207612457
+      },
+      "cross_provenance_diff_construct": {
+        "ai_liar->mask": 0.4701730103806228,
+        "ai_liar->sycophancy_mt": 0.5083299709061564,
+        "convincing-game->mask": 0.39439446366782005,
+        "convincing-game->roleplaying": 0.5718537414965986,
+        "convincing-game->sycophancy_mt": 0.6164284652466606,
+        "harm-pressure-choice->mask": 0.5138062283737024,
+        "harm-pressure-choice->roleplaying": 0.47307256235827666,
+        "harm-pressure-choice->sycophancy_mt": 0.4632876043237274,
+        "harm-pressure-knowledge-report->mask": 0.5180622837370243,
+        "harm-pressure-knowledge-report->roleplaying": 0.4075963718820862,
+        "harm-pressure-knowledge-report->sycophancy_mt": 0.4826604939582493,
+        "insider-trading->mask": 0.39173010380622836,
+        "insider-trading->roleplaying": 0.5062358276643991,
+        "insider-trading->sycophancy_mt": 0.6157807555904775,
+        "instructed-deception->mask": 0.4426297577854671,
+        "instructed-deception->roleplaying": 0.564625850340136,
+        "instructed-deception->sycophancy_mt": 0.5378166875491092,
+        "mask->ai_liar": 0.5728395061728394,
+        "mask->convincing-game": 0.39139999999999997,
+        "mask->harm-pressure-choice": 0.6123858320338605,
+        "mask->harm-pressure-knowledge-report": 0.45494539620102475,
+        "mask->insider-trading": 0.18525783970178117,
+        "mask->instructed-deception": 0.5330730326203116,
+        "mask->roleplaying": 0.4808673469387756,
+        "mask->sandbagging_v2": 0.5051079999999999,
+        "roleplaying->convincing-game": 0.7703,
+        "roleplaying->harm-pressure-choice": 0.4478168857206505,
+        "roleplaying->harm-pressure-knowledge-report": 0.09859738108793539,
+        "roleplaying->insider-trading": 0.7819358516506547,
+        "roleplaying->instructed-deception": 0.5716304048128311,
+        "roleplaying->mask": 0.3721107266435987,
+        "roleplaying->sycophancy_mt": 0.5885663318397079,
+        "sandbagging_v2->mask": 0.48536332179930797,
+        "sandbagging_v2->sycophancy_mt": 0.4843594045318439,
+        "sycophancy_mt->ai_liar": 0.47478737997256515,
+        "sycophancy_mt->convincing-game": 0.6064,
+        "sycophancy_mt->harm-pressure-choice": 0.37051681889062155,
+        "sycophancy_mt->harm-pressure-knowledge-report": 0.3290719942031986,
+        "sycophancy_mt->insider-trading": 0.8074152317399639,
+        "sycophancy_mt->instructed-deception": 0.5292775119524853,
+        "sycophancy_mt->roleplaying": 0.6037414965986395,
+        "sycophancy_mt->sandbagging_v2": 0.5454399999999999
+      },
+      "cross_provenance_same_mean": 0.5546660713703601,
+      "cross_provenance_diff_mean": 0.5019450446233176,
+      "cross_provenance_gap": 0.05272102674704249
+    },
+    {
+      "features": "random",
+      "probe": "lr_reg10",
+      "within_semantics": 0.5426524002516946,
+      "n_within": 44,
+      "across_semantics": 0.4983560907473557,
+      "n_across": 46,
+      "difference": 0.04429630950433888,
+      "permutation_p": 0.20613969301534923,
+      "blocks": {
+        "instructed_intent->instructed_intent": {
+          "mean": 0.5495374568828192,
+          "n": 42
+        },
+        "instructed_intent->belief_inconsistency": {
+          "mean": 0.4941928213847996,
+          "n": 14
+        },
+        "instructed_intent->judge_grade": {
+          "mean": 0.48890508584386133,
+          "n": 7
+        },
+        "belief_inconsistency->instructed_intent": {
+          "mean": 0.5016547960012915,
+          "n": 14
+        },
+        "belief_inconsistency->judge_grade": {
+          "mean": 0.5444302721088435,
+          "n": 2
+        },
+        "belief_inconsistency->belief_inconsistency": {
+          "mean": 0.3980662109980798,
+          "n": 2
+        },
+        "judge_grade->instructed_intent": {
+          "mean": 0.4993897950382577,
+          "n": 7
+        },
+        "judge_grade->belief_inconsistency": {
+          "mean": 0.4877944102902837,
+          "n": 2
+        }
+      },
+      "cross_provenance_same_construct": {
+        "ai_liar->convincing-game": 0.38079999999999997,
+        "ai_liar->harm-pressure-choice": 0.30496769881933616,
+        "ai_liar->harm-pressure-knowledge-report": 0.28792505563894205,
+        "ai_liar->insider-trading": 0.10235344745681249,
+        "ai_liar->instructed-deception": 0.61687197217016,
+        "convincing-game->ai_liar": 0.3797530864197531,
+        "convincing-game->sandbagging_v2": 0.789552,
+        "harm-pressure-choice->ai_liar": 0.36488340192043894,
+        "harm-pressure-choice->sandbagging_v2": 0.8071320000000001,
+        "harm-pressure-knowledge-report->ai_liar": 0.5547873799725652,
+        "harm-pressure-knowledge-report->sandbagging_v2": 0.663036,
+        "insider-trading->ai_liar": 0.397037037037037,
+        "insider-trading->sandbagging_v2": 0.836152,
+        "instructed-deception->ai_liar": 0.5912208504801097,
+        "instructed-deception->sandbagging_v2": 0.48633600000000005,
+        "mask->sycophancy_mt": 0.40222238739408356,
+        "sandbagging_v2->convincing-game": 0.5419,
+        "sandbagging_v2->harm-pressure-choice": 0.6009133437291156,
+        "sandbagging_v2->harm-pressure-knowledge-report": 0.9187412659800217,
+        "sandbagging_v2->insider-trading": 0.9174253474841977,
+        "sandbagging_v2->instructed-deception": 0.636297119100476,
+        "sycophancy_mt->mask": 0.39391003460207613
+      },
+      "cross_provenance_diff_construct": {
+        "ai_liar->mask": 0.49325259515570935,
+        "ai_liar->sycophancy_mt": 0.4961455966361571,
+        "convincing-game->mask": 0.39550173010380624,
+        "convincing-game->roleplaying": 0.5676020408163265,
+        "convincing-game->sycophancy_mt": 0.6052793646074455,
+        "harm-pressure-choice->mask": 0.5241868512110727,
+        "harm-pressure-choice->roleplaying": 0.463718820861678,
+        "harm-pressure-choice->sycophancy_mt": 0.45960840111278645,
+        "harm-pressure-knowledge-report->mask": 0.5072318339100347,
+        "harm-pressure-knowledge-report->roleplaying": 0.43268140589569165,
+        "harm-pressure-knowledge-report->sycophancy_mt": 0.5235192932532013,
+        "insider-trading->mask": 0.4262975778546713,
+        "insider-trading->roleplaying": 0.4607426303854875,
+        "insider-trading->sycophancy_mt": 0.5596583066108858,
+        "instructed-deception->mask": 0.4473010380622837,
+        "instructed-deception->roleplaying": 0.5154478458049887,
+        "instructed-deception->sycophancy_mt": 0.47628427021172676,
+        "mask->ai_liar": 0.5924279835390946,
+        "mask->convincing-game": 0.3724,
+        "mask->harm-pressure-choice": 0.5930608153263532,
+        "mask->harm-pressure-knowledge-report": 0.49956006417887266,
+        "mask->insider-trading": 0.1810774105930285,
+        "mask->instructed-deception": 0.5378092723660788,
+        "mask->roleplaying": 0.48554421768707484,
+        "mask->sandbagging_v2": 0.486368,
+        "roleplaying->convincing-game": 0.7610999999999999,
+        "roleplaying->harm-pressure-choice": 0.4357317888171085,
+        "roleplaying->harm-pressure-knowledge-report": 0.11536669944619843,
+        "roleplaying->insider-trading": 0.7819414404596237,
+        "roleplaying->instructed-deception": 0.5421457065037211,
+        "roleplaying->mask": 0.3715570934256055,
+        "roleplaying->sycophancy_mt": 0.6040317271549619,
+        "sandbagging_v2->mask": 0.49785467128027683,
+        "sandbagging_v2->sycophancy_mt": 0.5065779693771368,
+        "sycophancy_mt->ai_liar": 0.47917695473251026,
+        "sycophancy_mt->convincing-game": 0.6224999999999999,
+        "sycophancy_mt->harm-pressure-choice": 0.3787034974381822,
+        "sycophancy_mt->harm-pressure-knowledge-report": 0.3318668805962424,
+        "sycophancy_mt->insider-trading": 0.8147421602982188,
+        "sycophancy_mt->instructed-deception": 0.5572381049494987,
+        "sycophancy_mt->roleplaying": 0.6033163265306123,
+        "sycophancy_mt->sandbagging_v2": 0.576236
+      },
+      "cross_provenance_same_mean": 0.5442826103729601,
+      "cross_provenance_diff_mean": 0.501971294933199,
+      "cross_provenance_gap": 0.04231131543976108
+    }
+  ]
+}

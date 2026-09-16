@@ -1,0 +1,110 @@
+{
+  "layer": 20,
+  "pooling": "mean",
+  "k": 5,
+  "bank": "axes_vectors_s3.pt",
+  "datasets": {
+    "ai_liar": 270,
+    "alpaca": 2000,
+    "convincing-game": 267,
+    "mask": 585,
+    "roleplaying": 287
+  },
+  "splits": {
+    "ai_liar": {
+      "rows": 270,
+      "items": 54,
+      "pos": 135,
+      "neg": 135,
+      "train_items_75pct": 200,
+      "test_items_25pct": 70,
+      "train_balanced": 150,
+      "test_balanced_ondiag": 20,
+      "test_balanced_offdiag": 270,
+      "label_semantics": "instructed_intent"
+    },
+    "alpaca": {
+      "rows": 2000,
+      "items": 2000,
+      "pos": 0,
+      "neg": 2000,
+      "train_items_75pct": 1500,
+      "test_items_25pct": 500,
+      "train_balanced": 0,
+      "test_balanced_ondiag": 0,
+      "test_balanced_offdiag": 0,
+      "label_semantics": "instructed_intent"
+    },
+    "convincing-game": {
+      "rows": 267,
+      "items": 267,
+      "pos": 167,
+      "neg": 100,
+      "train_items_75pct": 200,
+      "test_items_25pct": 67,
+      "train_balanced": 156,
+      "test_balanced_ondiag": 44,
+      "test_balanced_offdiag": 200,
+      "label_semantics": "instructed_intent"
+    },
+    "mask": {
+      "rows": 585,
+      "items": 585,
+      "pos": 415,
+      "neg": 170,
+      "train_items_75pct": 439,
+      "test_items_25pct": 146,
+      "train_balanced": 250,
+      "test_balanced_ondiag": 90,
+      "test_balanced_offdiag": 340,
+      "label_semantics": "belief_inconsistency"
+    },
+    "roleplaying": {
+      "rows": 287,
+      "items": 287,
+      "pos": 203,
+      "neg": 84,
+      "train_items_75pct": 215,
+      "test_items_25pct": 72,
+      "train_balanced": 122,
+      "test_balanced_ondiag": 46,
+      "test_balanced_offdiag": 168,
+      "label_semantics": "judge_grade"
+    }
+  },
+  "p1": [
+    {
+      "features": "raw",
+      "probe": "paper",
+      "diagonal": 0.9546913580246914,
+      "off_diagonal": 0.7677690123769995,
+      "within_semantics": 0.7579782578875172,
+      "across_semantics": 0.769727163274896,
+      "n_within": 2,
+      "n_across": 10,
+      "n_pairs": 12,
+      "matrix": {
+        "ai_liar->ai_liar": 1.0,
+        "ai_liar->alpaca": NaN,
+        "ai_liar->convincing-game": 0.8387,
+        "ai_liar->mask": 0.4658823529411764,
+        "ai_liar->roleplaying": 0.7317176870748299,
+        "convincing-game->ai_liar": 0.6772565157750343,
+        "convincing-game->alpaca": NaN,
+        "convincing-game->convincing-game": 1.0,
+        "convincing-game->mask": 0.6516608996539792,
+        "convincing-game->roleplaying": 0.917375283446712,
+        "mask->ai_liar": 0.549684499314129,
+        "mask->alpaca": NaN,
+        "mask->convincing-game": 1.0,
+        "mask->mask": 0.8187654320987654,
+        "mask->roleplaying": 0.9169501133786848,
+        "roleplaying->ai_liar": 0.7564883401920438,
+        "roleplaying->alpaca": NaN,
+        "roleplaying->convincing-game": 0.9999,
+        "roleplaying->mask": 0.7076124567474048,
+        "roleplaying->roleplaying": 1.0
+      }
+    }
+  ]
+}

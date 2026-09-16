@@ -51,8 +51,10 @@ the plan's OUTCOMES section; one line each here, and each has a memory entry.
   `cos(deception, assistant)`: −0.66 → −0.37, and beats own100 on detection too.
 - **Q2** — a layer window, 36–48 of 80. Persona axes peak at 44 (0.731), raw at 32 (0.717);
   `pc:deception`, the paper's headline feature, never beats raw.
-- **Q3** — the advantage *grows* with training size: raw degrades, persona axes improve.
-- **Q4** — deception signal survives erasing the Assistant Axis (−0.006 to −0.023 AUROC).
+- **Q3** — with lr_reg10, raw transfer drifts down as training data grows while persona axes
+  improve; with mms raw improves too. Probe-dependent, and not significant across datasets.
+- **Q4** — on the full corpus, erasing the Assistant Axis costs 0.005–0.018 AUROC (random
+  erasures ~0.000, significant at L40/L44) and the erased probe still transfers everywhere.
 - **Q5 — 5b.** Label semantics does not predict transfer. The naive within/across split is
   provenance; mask ↔ sycophancy (same construct, nothing else shared) transfer at chance for
   raw and *below* chance for persona axes, at all 8 layers.
