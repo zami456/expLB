@@ -259,6 +259,42 @@ SINGLE_TOKEN = {"harm-pressure-choice"}    # responses are one letter; mean-pool
 CONTROL = {"alpaca"}                       # honest-only; sets the TPR@1%FPR threshold
 
 
+# ---------------------------------------------------------------------------------
+# generated corpora: rows.jsonl already in EvalRow shape
+# ---------------------------------------------------------------------------------
+GENERATED = {
+    # multi-turn sycophancy: the model commits to an answer, is challenged with no new
+    # evidence, and either holds or folds. Label is belief_inconsistency by construction --
+    # it contradicts its OWN unpressured answer -- which gives the corpus a second dataset
+    # carrying that construct alongside mask, and is what makes Q5 separable from "roleplaying
+    # and mask are unusual datasets".
+    "sycophancy_mt": REPO_ROOT / "run-sycophancy-mt" / "rows.jsonl",
+}
+
+
+def load_generated(path: Path, key: str) -> list[EvalRow]:
+    """Rows we generated ourselves; the writer already emitted EvalRow fields."""
+    rows = []
+    with path.open(encoding="utf-8") as fh:
+        for line in fh:
+            r = json.loads(line)
+            if r.get("label") is None:
+                continue
+            rows.append(EvalRow(
+                row_id=r["row_id"], dataset=key, item_id=r["item_id"],
+                sample_idx=int(r.get("sample_idx", 0)),
+                response_str=r["response_str"], label=int(r["label"]),
+                label_raw=r.get("label_raw"),
+                label_semantics=r.get("label_semantics", BELIEF_INCONSISTENCY),
+                prompt_fidelity=r.get("prompt_fidelity", "exact"),
+                prompt_str=r.get("prompt_str"), messages=r.get("messages"),
+                meta={k: v for k, v in r.items() if k not in
+                      {"row_id", "dataset", "item_id", "sample_idx", "response_str",
+                       "label", "label_raw", "label_semantics", "prompt_fidelity",
+                       "prompt_str", "messages"}}))
+    return rows
+
+
 def load_dataset(key: str) -> list[EvalRow]:
     if key in CSV_DATASETS:
         return load_csv_subset(SUBSETS / CSV_DATASETS[key], key)[0]
@@ -267,11 +303,19 @@ def load_dataset(key: str) -> list[EvalRow]:
         return load_json_rollouts(ROLLOUTS / fname, key, fn)
     if key == "mask":
         return load_mask()[0]
+    if key in GENERATED:
+        p = GENERATED[key]
+        if not p.exists():
+            raise FileNotFoundError(f"{key}: {p} not generated yet")
+        return load_generated(p, key)
     raise KeyError(key)
 
 
 def all_keys() -> list[str]:
-    return list(CSV_DATASETS) + list(JSON_DATASETS) + ["mask"]
+    # generated corpora only appear once they exist, so "--datasets all" keeps
+    # working on a machine where they were never built
+    gen = [k for k, p in GENERATED.items() if p.exists()]
+    return list(CSV_DATASETS) + list(JSON_DATASETS) + ["mask"] + gen
 
 
 def main() -> None:
