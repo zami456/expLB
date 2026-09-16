@@ -63,23 +63,37 @@ the plan's OUTCOMES section; one line each here, and each has a memory entry.
   (+0.053). *Trained*, pooled-mean probes beat token-trained probes at every layer
   (−0.03 to −0.06). Quote both.
 - **Q9** — more personas buy reliability, not accuracy (peak at n=4).
-- **Q10** — the sycophancy sign REVERSES under paper16.
+- **Q10** — the sycophancy sign REVERSES under paper16, and on real capitulation data the
+  paper16 sycophancy axis is significantly *inverted* (0.28–0.31, beyond random directions);
+  only the Assistant Axis detects it (0.71).
 - **Q11** — base-model probes flag LoRA sleeper answers at 0.96 even cross-trigger, surviving
   cue and answer-token controls, but on that corpus a lie *is* a wrong answer; gender-secret,
   where falsity is uncheckable, is at chance. Off-policy falsity detection, not deception
-  monitoring.
+  monitoring. The *zero-shot* persona axis (0.87–0.91) is no better than random directions
+  there — only the trained result stands.
 
 **Controls every transfer number should sit beside:** response length alone (off-diagonal
 0.553; the deceptive class is longer in 9 of 10 datasets), a random subspace (0.522), and a
 within-dataset label-shuffle null (~0.50).
 
+**Statistics (2026-09-17) — read before quoting any Q2/Q6 number.** Differences are
+significant against test-row noise but **none survives a dataset bootstrap** (9 datasets,
+BH): the persona-axis advantage wins only 39–40 of 72 dataset pairs and is carried by
+insider-trading and convincing-game. Phrase Q2/Q6 as "on these nine datasets". Zero-shot
+AUROCs must be compared with **random directions**, not 0.5 — on convincing-game,
+harm-pressure-*, mask and the Q11 sleepers the persona axis is no better than a random
+direction. Details: plan section STATISTICAL ROBUSTNESS; `23_significance.py`,
+`25_zeroshot_nulls.py`.
+
 **Stores** (lab PC `run-coords/`, mirrored byte-exact on Drive `tamara:expLB/coords`): Pass A
 (80 layers, 2,000 rows), Pass B (21 layers, 15,278 rows + `sycophancy_mt`), Pass C (per-token,
 layers 20/22/28/40/44/48, 2,000 rows), `passQ11` (6,392 sleeper rows).
 
-**Still open:** only **`ai_audit`** (80 rows, eval-only). Its contexts are 4,211–7,543 tokens
-and eager attention needs 4.2–13.5 GiB for a single row. It needs NDIF to enable SDPA — a
-request on their side, not a code change here.
+**Nothing open.** **`ai_audit`** (80 rows = 16 scenarios, contexts 4,211–7,543 tokens, needing
+4.2–13.6 GiB of eager attention per row) is **excluded by decision**: Apollo dropped it from
+their own main results over label validity on this exact model, the replicated paper never
+used it, and 16 scenarios cannot move any conclusion. Do not spend effort on it unless NDIF
+enables SDPA.
 
 ---
 

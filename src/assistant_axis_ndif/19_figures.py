@@ -477,7 +477,80 @@ def fig_q8_trained(plt):
     return ps.save(fig, "q8_trained_pertoken.pdf")
 
 
+def fig_significance(plt):
+    """Forest plot: each difference with its row-bootstrap and dataset-bootstrap interval."""
+    doc = load("significance.json")
+    if doc is None:
+        return None
+    comps = doc["comparisons"]
+    fig, ax = plt.subplots(figsize=(8.6, 0.32 * len(comps) + 1.4))
+    ys = np.arange(len(comps))[::-1]
+    for y, c in zip(ys, comps):
+        sig = c.get("significant")
+        color = "#C44E52" if sig else ("#4C72B0" if c["kind"] == "diff" else "#8172B3")
+        ax.plot(c["dataset_ci95"], [y, y], color=color, lw=1.2, alpha=0.55)
+        if "row_ci95" in c:
+            ax.plot(c["row_ci95"], [y, y], color=color, lw=4.5, solid_capstyle="butt")
+        ax.plot([c["diff"]], [y], marker="o", ms=4.5, color="black", zorder=5)
+    ax.axvline(0, color="#808080", lw=0.9, ls="--")
+    m = doc.get("margin", 0.02)
+    ax.axvspan(-m, m, color="#8172B3", alpha=0.07, lw=0)
+    ax.set_yticks(ys)
+    ax.set_yticklabels([f"{c['question']}  {c['name']}" for c in comps], fontsize=7)
+    ax.set_xlabel("difference in mean AUROC (A − B)")
+    ax.grid(axis="y", visible=False)
+    handles = [plt.Line2D([], [], color="#4C72B0", lw=4.5, label="row bootstrap 95% CI"),
+               plt.Line2D([], [], color="#4C72B0", lw=1.2, alpha=0.55,
+                          label="dataset bootstrap 95% CI"),
+               plt.Line2D([], [], color="#C44E52", lw=4.5, label="significant after BH (datasets)"),
+               plt.Rectangle((0, 0), 1, 1, color="#8172B3", alpha=0.15,
+                             label=f"equivalence margin ±{m:.2f}")]
+    ax.legend(handles=handles, loc="upper right", ncol=1, fontsize=7, frameon=True,
+              framealpha=0.9)
+    ax.set_title("Differences are clear over test rows, not over which datasets were studied",
+                 fontsize=10.5, pad=10)
+    return ps.save(fig, "significance_forest.pdf")
+
+
+def fig_q10(plt):
+    """Q10 behavioural: the sycophancy axis across layers on real capitulation data."""
+    doc = load("q10_sycophancy_axis.json")
+    if doc is None:
+        return None
+    fig, axes = plt.subplots(1, 2, figsize=(8.8, 3.3), sharey=True)
+    styles = {"sycophancy": ("#DD8452", "-"), "assistant": ("#4C72B0", "-"),
+              "deception": ("#55A868", "-")}
+    for ax, pool in zip(axes, ("mean", "last")):
+        band = doc["random"][pool]["per_layer_abs_dev_p95"] - 0.5
+        ax.axhspan(0.5 - band, 0.5 + band, color="#B0B0B0", alpha=0.25, lw=0,
+                   label="95% of random directions")
+        for bank, ls in (("paper16", "-"), ("own100", "--")):
+            res = doc["results"].get(f"{bank}|{pool}")
+            if not res:
+                continue
+            for dname, (color, _) in styles.items():
+                if dname == "deception" and bank == "own100":
+                    continue
+                series = res[dname]["by_layer"]
+                Ls = sorted(int(k) for k in series)
+                ax.plot(Ls, [series[str(L)] if str(L) in series else series[L] for L in Ls],
+                        color=color, ls=ls, marker="o", ms=2.5,
+                        label=f"{dname} axis ({bank})")
+        ps.chance(ax, label="")
+        ax.set_title(f"{pool} pooling")
+        ax.set_xlabel("layer")
+    axes[0].set_ylabel("zero-shot AUROC (label = retracted)")
+    h, lab = axes[0].get_legend_handles_labels()
+    fig.legend(h, lab, loc="lower center", ncol=3, fontsize=7.2, bbox_to_anchor=(0.5, -0.2))
+    n = doc["n"]
+    fig.suptitle(f"Q10 — on real capitulation ({n['retracted']} retracted / {n['maintained']} "
+                 "maintained) the sycophancy axis points the wrong way", y=1.03, fontsize=10.5)
+    return ps.save(fig, "q10_sycophancy_axis.pdf")
+
+
 FIGURES = {
+    "significance": fig_significance,
+    "q10": fig_q10,
     "q8trained": fig_q8_trained,
     "q6": fig_q6,
     "q11": fig_q11,
