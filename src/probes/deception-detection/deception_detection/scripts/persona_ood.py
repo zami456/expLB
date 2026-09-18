@@ -43,6 +43,13 @@ OUT_DIR = REPO_ROOT / "results" / "persona_ood"
 # honest-only, so it cannot be a train/test cell; kept as a zero-shot reference
 CONTROL_DATASET = "XXXX-20__plain"
 
+# The experiment splits RepE 80/20 into train and a "_val" remainder, but both halves are the
+# same 306 underlying facts, so for transfer purposes they are one dataset. Merging them gives
+# the RepE row the training protocol the paper actually uses (and the deployed probe was fitted
+# with) instead of the 102-row remainder. Keeping them apart would also create a train->val cell
+# that looks like transfer while being purely in-distribution.
+MERGE_INTO = {"repe_honesty__plain_val": "repe_honesty__plain"}
+
 # matches the deployed probe (detectors.py:311-376): standardise, then L2 logistic regression
 # with reg_coeff 10 and no intercept
 REG_COEFF = 10.0
@@ -68,7 +75,7 @@ class Pooled:
 
 def load_pooled(pooled_dir: Path = POOLED_DIR) -> dict[str, Pooled]:
     """Load every pooled dataset, keeping only HONEST/DECEPTIVE rows."""
-    out: dict[str, Pooled] = {}
+    parts: dict[str, list[tuple[np.ndarray, np.ndarray]]] = {}
     for path in sorted(pooled_dir.glob("*.npz")):
         raw = np.load(path, allow_pickle=False)
         labels = raw["labels"].astype(str)
@@ -77,10 +84,19 @@ def load_pooled(pooled_dir: Path = POOLED_DIR) -> dict[str, Pooled]:
         dropped = int((~keep).sum())
         if dropped:
             logger.info(f"{name}: dropping {dropped} rows that are neither honest nor deceptive")
+        target = MERGE_INTO.get(name, name)
+        parts.setdefault(target, []).append(
+            (raw["pooled"][keep].astype(np.float64), (labels[keep] == "DECEPTIVE").astype(int))
+        )
+
+    out: dict[str, Pooled] = {}
+    for name, pieces in parts.items():
+        if len(pieces) > 1:
+            logger.info(f"{name}: merged {len(pieces)} splits ({[len(y) for _, y in pieces]} rows)")
         out[name] = Pooled(
             name=name,
-            z=raw["pooled"][keep].astype(np.float64),
-            y=(labels[keep] == "DECEPTIVE").astype(int),
+            z=np.concatenate([z for z, _ in pieces]),
+            y=np.concatenate([y for _, y in pieces]),
         )
     return out
 

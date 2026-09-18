@@ -112,7 +112,14 @@ def run(
     logger.info(f"pooling from {acts_cache.cache_root()} | model={model_name} layers={layers}")
 
     out_dir.mkdir(parents=True, exist_ok=True)
-    datasets = list(experiment.eval_datasets) + list(experiment.control_datasets)
+    # train_dataset is in neither eval_datasets nor control_datasets, so it would otherwise be
+    # skipped -- leaving RepE represented only by its 102-row validation remainder rather than
+    # the 490-row split the probe actually trains on.
+    datasets = (
+        [experiment.train_dataset]
+        + list(experiment.eval_datasets)
+        + list(experiment.control_datasets)
+    )
 
     for dataset in datasets:
         if len(dataset) == 0:

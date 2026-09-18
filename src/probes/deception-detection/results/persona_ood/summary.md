@@ -9,7 +9,7 @@ activations from the Liars' Bench sweep. No new model calls: every example was a
 | | |
 |---|---|
 | activations | layer 20, 8192-d, mean-pooled over assistant response tokens |
-| examples | 13,648 cached, pooled to 301 MB (7 datasets) |
+| examples | 13,648 cached, pooled to 310 MB (7 datasets) |
 | persona set P | the **15** deception + honesty personas, not the full 26-persona bank |
 | PCA | on the centred 15; explained variance **[0.464, 0.116, 0.097]**, 67.7% cumulative |
 | probe | StandardScaler → LogisticRegression(C=0.1, no intercept), matching the deployed probe |
@@ -30,22 +30,22 @@ Mean AUROC over the 6×6 train/test matrix:
 
 | features | dim | off-diagonal | off-diag. excl. HP-KR | diagonal |
 |---|---|---|---|---|
-| baseline (pooled activations) | 8192 | 0.6468 | 0.7278 | **0.9564** |
-| **top-3 persona PCs** | 3 | **0.6853** | **0.9123** | 0.9187 |
-| random 3-d projections | 3 | 0.5261 | 0.5590 | 0.7769 |
-| deception axis only | 1 | 0.6462 | 0.9248 | 0.9197 |
+| baseline (pooled activations) | 8192 | 0.6478 | 0.7282 | **0.9564** |
+| **top-3 persona PCs** | 3 | **0.6823** | **0.9123** | 0.9184 |
+| random 3-d projections | 3 | 0.5269 | 0.5599 | 0.7874 |
+| deception axis only | 1 | 0.6457 | 0.9237 | 0.9188 |
 
-**Off-diagonal improves (+0.039 overall, +0.185 excluding HP-KR); the diagonal degrades
+**Off-diagonal improves (+0.035 overall, +0.184 excluding HP-KR); the diagonal degrades
 (−0.038).** Both directions match the paper, which reports gains on cross-dataset pairs "along
-with some degradation on diagonal pairs". 21 of 30 off-diagonal cells improve, median **+0.059**.
+with some degradation on diagonal pairs". 20 of 30 off-diagonal cells improve, median **+0.068**.
 
 ## Both controls pass — but they reframe the result
 
-**It is not dimensionality reduction.** Random 3-d projections reach only 0.526 off-diagonal
-against the PCs' 0.685. Three arbitrary directions destroy the signal; three persona directions
+**It is not dimensionality reduction.** Random 3-d projections reach only 0.527 off-diagonal
+against the PCs' 0.682. Three arbitrary directions destroy the signal; three persona directions
 preserve it. The structure matters, not the rank.
 
-**It is almost entirely one direction.** The deception axis alone (1-d) reaches 0.9248
+**It is almost entirely one direction.** The deception axis alone (1-d) reaches 0.9237
 off-diagonal excluding HP-KR — *better* than the top-3 PCs' 0.9123. Since PC1 is essentially that
 axis (cos 0.949), PC2 and PC3 add nothing for a healthy training set, and slightly hurt.
 
@@ -61,7 +61,7 @@ excluded, since it is inverted and dominates):
 
 | features | mean std across training sets |
 |---|---|
-| baseline | 0.168 |
+| baseline | 0.167 |
 | **top-3 persona PCs** | **0.027** |
 
 A **6× reduction**. In the baseline matrix, which dataset you train on swings transfer wildly
@@ -83,14 +83,51 @@ persona role-play rollouts. Compared against the RepE-trained probe from the swe
 | harm_refusal_knowledge_report | 2139 | 139 | 0.103 | 0.150 | 0.109 |
 | insider_trading | 1080 | 423 | 0.987 | 0.988 | 0.973 |
 | instruct_dishonesty | 5432 | 3045 | 0.960 | 0.959 | 0.950 |
-| repe_honesty (val) | 102 | 51 | 0.997 | 0.997 | 1.000 |
+| repe_honesty (train+val) | 550 | 275 | 0.992 | 0.996 | 1.000* |
 
 The axis matches or beats the trained probe on five of six, and on **harm-pressure-choice it wins
 by +0.23** — turning a near-chance result (0.471) into a usable one (0.704). A direction derived
 from persona rollouts, never fitted to this benchmark, outperforms a probe trained on RepE
 contrast pairs on the dataset where that probe fails.
 
+\* in-distribution for the deployed probe, which was fitted on these rows.
+
 As expected from cos = 0.949, the axis and PC1 agree closely everywhere.
+
+## Against the Liars' Bench baselines: better at ranking, worse at the benchmark
+
+The benchmark's headline metric is **balanced accuracy at 1% FPR on the alpaca control**, not
+AUROC. Averaged over the five shared datasets (CG, HP-C, HP-KR, IT, ID):
+
+| method | bal. acc @1% FPR | recall @1% | AUROC |
+|---|---|---|---|
+| RepE probe (this run) | **0.721** | — | 0.697 |
+| paper Mean Probe, Llama | 0.636 | — | 0.682 |
+| PC3 probe (RepE-trained) | 0.558 | 0.121 | **0.766** |
+| PC1 (zero-shot) | 0.555 | 0.114 | 0.751 |
+| persona axis (zero-shot) | 0.547 | 0.096 | 0.746 |
+
+The persona methods have the **best ranking and the worst thresholded accuracy**. The reason is
+calibration against the control, not ranking failure — recall at the 1% threshold:
+
+```
+CG     AUROC 0.976  ->  recall 0.012
+HP-C   AUROC 0.704  ->  recall 0.000
+IT     AUROC 0.987  ->  recall 0.142
+ID     AUROC 0.960  ->  recall 0.324
+```
+
+On convincing-game the axis separates that dataset's own honest and deceptive examples almost
+perfectly, and flags 1.2% of its lies: the entire CG distribution sits below the alpaca
+threshold. This is the same failure the Liars' Bench paper diagnoses for its own Mean Probe —
+performance "strongly impeded by the high decision threshold, which was determined relative to
+honest examples in our control dataset" — only more severe here.
+
+**So: no, this does not beat the Liars' Bench baselines.** At 0.55 balanced accuracy it would
+rank below Mean Probe's published 0.54 neighbours and well below UQC (0.60), Self-Evaluation
+(0.66) and LLM-as-a-Judge (0.73). Persona directions carry real, transferable deception signal,
+but they are not calibrated for a fixed-FPR deployment threshold, and the benchmark forbids the
+per-dataset calibration that would fix it.
 
 ## HP-KR is inverted under a third independent method
 
@@ -113,8 +150,11 @@ the dataset, not of any one probe.
   the off-diagonal means are reported with and without it for that reason.
 - **Thin cells.** harm_refusal_choice and harm_refusal_knowledge_report carry only 134 and 139
   deceptive examples against ~2000 honest, so their AUROCs have wide error bars.
-- **repe_honesty val** is in-distribution for the deployed probe and has only 102 rows; it is kept
-  as a reference row but should not be read as a transfer result.
+- **RepE is in-distribution** for the deployed probe, so its diagonal and its column say nothing
+  about transfer. It uses the full 80/20 split merged back together (448 train + 102 val = 550
+  rows), which is the protocol the paper and the deployed probe use. Running it with only the
+  102-row validation remainder moved the headline by 0.003, so the matrix is not sensitive to
+  this choice.
 
 ## Files
 
