@@ -239,12 +239,18 @@ def run(pooled_dir: str | Path = POOLED_DIR, out_dir: str | Path = OUT_DIR) -> N
         f"deception {dec_orth.shape[0]} of 3"
     )
 
+    # The paper's own feature sets: Figure 4 reports PC1 for deception, Figure 5 k=3 for
+    # sycophancy, and it never orthogonalises. Those arms come first; the *_orth arms below are
+    # this repo's addition, not a replication of anything in the paper.
     variants: dict[str, object] = {
         "baseline": lambda z: z,
+        "pc1": lambda z: geom.project(z, k=1),
         "pc3": lambda z: geom.project(z, k=3),
         "axis1": lambda z: geom.axis_score(z)[:, None],
+        "syc_pc1": lambda z: syc_geom.project(z, k=1),
         "syc3": lambda z: syc_geom.project(z, k=3),
         "syc_axis1": lambda z: syc_geom.axis_score(z)[:, None],
+        # --- not in the paper: added because the two axes overlap at |cos| = 0.54 ---
         "syc3_orth": lambda z: z @ syc_orth.T,
         "dec3_orth": lambda z: z @ dec_orth.T,
     }
@@ -266,8 +272,8 @@ def run(pooled_dir: str | Path = POOLED_DIR, out_dir: str | Path = OUT_DIR) -> N
     hpkr = "harm_refusal_knowledge_report__plain"
     without_hpkr = [n for n in order if n != hpkr]
     dims = {
-        "baseline": hidden, "pc3": 3, "axis1": 1, "random3": 3,
-        "syc3": 3, "syc_axis1": 1,
+        "baseline": hidden, "pc1": 1, "pc3": 3, "axis1": 1, "random3": 3,
+        "syc_pc1": 1, "syc3": 3, "syc_axis1": 1,
         "syc3_orth": syc_orth.shape[0], "dec3_orth": dec_orth.shape[0],
     }
     summary = pd.DataFrame(
@@ -282,7 +288,8 @@ def run(pooled_dir: str | Path = POOLED_DIR, out_dir: str | Path = OUT_DIR) -> N
                 "diagonal_mean": diagonal_mean(matrices[name]),
             }
             for name in (
-                "baseline", "pc3", "axis1", "syc3", "syc_axis1",
+                "baseline", "pc1", "pc3", "axis1",
+                "syc_pc1", "syc3", "syc_axis1",
                 "syc3_orth", "dec3_orth", "random3",
             )
         ]

@@ -131,14 +131,20 @@ SERIES = ("#2a78d6", "#eb6834")
 # ordered so the comparison reads: reference, deception arms, sycophancy arms, control
 VARIANT_LABELS = [
     ("baseline", "pooled activations (8192-d)"),
+    ("pc1", "deception PC1 (1-d)"),
     ("pc3", "deception PCs (3-d)"),
     ("axis1", "deception axis (1-d)"),
-    ("dec3_orth", "deception PCs, sycophancy removed"),
+    ("syc_pc1", "sycophancy PC1 (1-d)"),
     ("syc3", "sycophancy PCs (3-d)"),
     ("syc_axis1", "sycophancy axis (1-d)"),
-    ("syc3_orth", "sycophancy PCs, deception removed"),
+    ("dec3_orth", "deception PCs, sycophancy removed *"),
+    ("syc3_orth", "sycophancy PCs, deception removed *"),
     ("random3", "random directions (3-d)"),
 ]
+
+# the two starred rows are not in the paper; it never orthogonalises one behaviour's axis out
+# of another's basis, and never applies one behaviour's basis to the other's datasets
+NOT_IN_PAPER = {"dec3_orth", "syc3_orth"}
 
 
 def variants(out_dir: str | Path = OUT_DIR) -> None:
@@ -153,7 +159,7 @@ def variants(out_dir: str | Path = OUT_DIR) -> None:
     y = np.arange(len(rows))
     height = 0.38
     gap = 0.02  # 2px-equivalent surface gap between adjacent fills
-    fig, ax = plt.subplots(figsize=(9.2, 5.4), facecolor=SURFACE)
+    fig, ax = plt.subplots(figsize=(9.2, 6.2), facecolor=SURFACE)
     ax.set_facecolor(SURFACE)
 
     for offset, values, colour, name in (
@@ -169,6 +175,9 @@ def variants(out_dir: str | Path = OUT_DIR) -> None:
     ax.text(0.5, len(rows) - 0.35, " chance", fontsize=8, color=INK_MUTED, va="center")
 
     ax.set_yticks(y, labels, fontsize=9, color=INK)
+    for tick, (_, key) in zip(ax.get_yticklabels(), rows, strict=True):
+        if key in NOT_IN_PAPER:
+            tick.set_color(INK_MUTED)  # visually demote what the paper does not do
     ax.invert_yaxis()
     ax.set_xlim(0.4, 1.0)
     ax.set_xlabel("mean off-diagonal AUROC  (cross-dataset transfer)", fontsize=9, color=INK_MUTED)
@@ -182,6 +191,8 @@ def variants(out_dir: str | Path = OUT_DIR) -> None:
     ax.legend(loc="lower right", frameon=False, fontsize=9, labelcolor=INK)
     ax.set_title("Which persona basis transfers across datasets?", fontsize=12,
                  color=INK, loc="left", pad=12)
+    ax.text(0.0, -0.13, "* not in the paper - added here because the deception and sycophancy "
+            "axes overlap at |cos| = 0.54", transform=ax.transAxes, fontsize=8, color=INK_MUTED)
     fig.savefig(out_dir / "variants.png", dpi=200, bbox_inches="tight", facecolor=SURFACE)
     plt.close(fig)
     print(f"wrote variants.png to {out_dir}")

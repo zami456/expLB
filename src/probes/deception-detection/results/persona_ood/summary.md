@@ -137,70 +137,94 @@ share no training data — RepE contrast pairs, persona role-play vectors, and t
 all place it at the same strongly-inverted value. Whatever drives that inversion is a property of
 the dataset, not of any one probe.
 
-## Cross-behaviour control: the sycophancy basis
+## Fidelity to the paper
 
-Same transfer test, persona basis swapped for the sycophancy contrast (5 sycophancy vs 5
-anti-sycophancy personas, recovered from the sycophancy axis at residual 2.7e-07). This asks
-whether the gain is *deception-specific* persona geometry or persona structure in general —
-a sharper control than random projections, which only rule out dimensionality reduction.
+Read the paper (arXiv 2605.09391, *Do Linear Probes Generalize Better in Persona Coordinates?*)
+after the deception arm was already built. Recording the gaps, because none of the absolute
+numbers here are comparable to its figures:
 
-The two behaviours are **not independent**: |cos(deception axis, sycophancy axis)| = **0.5402**.
-So a raw sycophancy arm would score well through the shared component and prove nothing; the
-orthogonalised arms are what make the comparison readable.
+| | paper | this work |
+|---|---|---|
+| model | Llama 3.2 **3B** | Llama-3.3-**70B** |
+| layer | **14** | **20** |
+| datasets | its own 10 | Liars' Bench (6) |
+| features shown | PC1 (deception, Fig. 4); k=3 (sycophancy, Fig. 5) | both, plus the contrastive axis |
+| cross-behaviour bases | **never** — each axis is used on its own datasets | done here |
+| orthogonalisation | **none** | added here |
+
+Model and layer were not choices: the persona bank and the cached activations are both
+Llama-70B layer 20, so matching the paper was never possible. Only the *direction* of the effect
+transfers, not the magnitudes.
+
+Two clarifications on wording. The paper's "residualization" means Eq. 2 alone — centring by
+subtracting the mean across personas — not removing one behaviour's axis from another's. And its
+only use of "orthogonal" is the PCA property that *"higher PCs capture variation orthogonal to
+lower PCs"*. It does construct **separate** axes per behaviour ("we construct persona axes for
+deception and sycophancy"), which matches the separate 15/10 PCAs used here.
+
+## Cross-behaviour: does a sycophancy basis detect deception?
+
+Not a question the paper asks — Figure 5 applies the sycophancy axis to *sycophancy* datasets.
+This is the control run here. **No orthogonalisation in this table**; every row is a plain
+projection onto a fixed basis.
 
 | features | dim | off-diagonal | excl. HP-KR | diagonal |
 |---|---|---|---|---|
 | baseline (pooled activations) | 8192 | 0.6478 | 0.7282 | 0.9564 |
-| deception PCs | 3 | 0.6823 | 0.9123 | 0.9184 |
-| deception axis | 1 | 0.6457 | 0.9237 | 0.9188 |
-| **deception PCs, sycophancy removed** | 3 | **0.7111** | 0.8627 | 0.9064 |
+| deception PC1 | 1 | 0.6520 | **0.9205** | 0.9082 |
+| deception PCs | 3 | **0.6823** | 0.9123 | 0.9184 |
+| deception axis | 1 | 0.6457 | **0.9237** | 0.9188 |
+| sycophancy PC1 | 1 | 0.6148 | 0.8828 | 0.8915 |
 | sycophancy PCs | 3 | 0.6060 | 0.7821 | 0.9285 |
 | sycophancy axis | 1 | 0.6144 | 0.8816 | 0.8898 |
-| **sycophancy PCs, deception removed** | 3 | **0.5419** | 0.6383 | 0.8862 |
 | random directions | 3 | 0.5269 | 0.5598 | 0.7874 |
 
-**The basis is behaviour-specific.** Sycophancy PCs reach 0.606 against deception PCs' 0.682
-(0.782 vs 0.912 excluding HP-KR). Swapping in an adjacent behaviour costs real performance.
+**Persona directions transfer non-trivially even across behaviours.** Sycophancy PC1, fitted on
+role-play rollouts about flattery and never shown a deception label, reaches **0.883** off-diagonal
+excluding HP-KR — well above the 8192-d raw-activation baseline's 0.728 and far above random's
+0.560. That supports the paper's abstract claim that "persona-derived directions transfer
+non-trivially", and extends it: they transfer across behaviours, not only across datasets.
 
-**And what transfer it has is borrowed.** Removing the deception direction collapses the
-sycophancy arm to **0.542**, against random projections' 0.527. Essentially nothing survives —
-the sycophancy basis was working *through* its 0.54 overlap with deception, not through any
-structure of its own. This is the pre-registered reading that the evidence supports.
+**But the matched basis is consistently better.** Deception beats sycophancy on every comparison —
+PC1 0.652 vs 0.615, k=3 0.682 vs 0.606, axis 0.646 vs 0.614, and excluding HP-KR 0.920 vs 0.883.
+The basis is behaviour-specific; an adjacent behaviour costs real performance.
 
-### The unanticipated result
+**On all six datasets the sycophancy arms fall below the raw baseline** (0.606–0.615 vs 0.648), and
+win only once HP-KR is excluded (0.782–0.883 vs 0.728). HP-KR punishes them harder than it punishes
+the deception arms.
 
-Removing the *sycophancy* axis from the *deception* basis gives the **best off-diagonal score in
-the whole study, 0.7111** — better than the deception PCs it was derived from (0.6823). The shared
-component was not merely redundant; it was actively hurting cross-dataset transfer.
+Note the two behaviours are **not independent**: |cos(deception axis, sycophancy axis)| = **0.5402**,
+so some of the sycophancy transfer is the shared component rather than sycophancy structure. The
+next section isolates that; it is an addition, not a replication.
 
-Per test set, `dec3_orth` minus `pc3`:
+## Isolating the shared component (not in the paper)
 
-| test set | Δ |
-|---|---|
-| HP-KR | **+0.224** |
-| HP-C | +0.064 |
-| IT | +0.055 |
-| RepE | +0.017 |
-| ID | −0.021 |
-| CG | **−0.166** |
+Since the axes overlap at 0.54, each basis was also run with the other's axis projected out.
+`orthogonalize()` keeps rank 3 both ways, so the comparison stays matched.
 
-The two extremes are interpretable and point the same way. **CG is the convincing game** — a
-persuasion task — and the sycophancy axis scores **0.9995 zero-shot** on it, better than the
-deception axis's 0.976. Strip sycophancy out and that signal goes with it. **HP-KR**, whose
-deceptive response is a deferential "I don't know" under pressure, reads as *sycophantic*; removing
-that component moves it from 0.184 toward chance at 0.408.
+| features | dim | off-diagonal | excl. HP-KR |
+|---|---|---|---|
+| sycophancy PCs, deception removed | 3 | **0.5419** | 0.6383 |
+| deception PCs, sycophancy removed | 3 | **0.7111** | 0.8627 |
+| *(random directions)* | 3 | 0.5269 | 0.5598 |
 
-So the aggregate win is real but narrow: `dec3_orth` leads on all six datasets **only because HP-KR
-dominates the aggregate**, and it loses to plain `pc3` once HP-KR is excluded (0.863 vs 0.912). The
-honest reading is not "always remove sycophancy" but that *the deception axis is entangled with
-sycophancy in a way that helps on persuasion tasks and hurts on deference tasks*.
+**The sycophancy transfer was borrowed.** Remove the deception direction and it collapses to 0.542
+against random's 0.527 — essentially nothing of its own survives. The 0.883 above is the shared
+component doing the work.
 
-### Caveat on the control's strength
+**The reverse is the surprise.** Removing the *sycophancy* axis from the *deception* basis gives
+the highest off-diagonal figure in the study, 0.7111 against 0.6823. Per test set it is **+0.224 on
+HP-KR** and **−0.166 on CG**, and both are interpretable: CG is the convincing game, where the
+sycophancy axis alone scores **0.9995 zero-shot**, while HP-KR's deceptive answer is a deferential
+"I don't know" that reads as sycophantic. The aggregate win is narrow — it leads only because HP-KR
+dominates the mean, and loses to plain deception PCs once HP-KR is excluded (0.863 vs 0.912). The
+honest reading is that the deception axis is entangled with sycophancy in a way that helps on
+persuasion tasks and hurts on deference tasks.
 
-The planned sanity check was that the sycophancy axis should be clearly worse than the deception
-axis on RepE, which is a pure honest/deceptive contrast. It is worse, but only slightly — 0.978
-against 0.992. At |cos| = 0.54 the two axes are entangled enough that the raw sycophancy arm is a
-weak control on its own. The orthogonalised arm is the one carrying the conclusion.
+**Caveat on the control's strength.** The planned check was that the sycophancy axis should be
+clearly worse than the deception axis on RepE, a pure honest/deceptive contrast. It is worse, but
+only slightly — 0.978 against 0.992. At |cos| = 0.54 the raw sycophancy arm is a weak control by
+itself; the orthogonalised arm carries the conclusion.
 
 ## Caveats
 
