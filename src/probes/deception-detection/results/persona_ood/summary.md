@@ -137,6 +137,71 @@ share no training data — RepE contrast pairs, persona role-play vectors, and t
 all place it at the same strongly-inverted value. Whatever drives that inversion is a property of
 the dataset, not of any one probe.
 
+## Cross-behaviour control: the sycophancy basis
+
+Same transfer test, persona basis swapped for the sycophancy contrast (5 sycophancy vs 5
+anti-sycophancy personas, recovered from the sycophancy axis at residual 2.7e-07). This asks
+whether the gain is *deception-specific* persona geometry or persona structure in general —
+a sharper control than random projections, which only rule out dimensionality reduction.
+
+The two behaviours are **not independent**: |cos(deception axis, sycophancy axis)| = **0.5402**.
+So a raw sycophancy arm would score well through the shared component and prove nothing; the
+orthogonalised arms are what make the comparison readable.
+
+| features | dim | off-diagonal | excl. HP-KR | diagonal |
+|---|---|---|---|---|
+| baseline (pooled activations) | 8192 | 0.6478 | 0.7282 | 0.9564 |
+| deception PCs | 3 | 0.6823 | 0.9123 | 0.9184 |
+| deception axis | 1 | 0.6457 | 0.9237 | 0.9188 |
+| **deception PCs, sycophancy removed** | 3 | **0.7111** | 0.8627 | 0.9064 |
+| sycophancy PCs | 3 | 0.6060 | 0.7821 | 0.9285 |
+| sycophancy axis | 1 | 0.6144 | 0.8816 | 0.8898 |
+| **sycophancy PCs, deception removed** | 3 | **0.5419** | 0.6383 | 0.8862 |
+| random directions | 3 | 0.5269 | 0.5598 | 0.7874 |
+
+**The basis is behaviour-specific.** Sycophancy PCs reach 0.606 against deception PCs' 0.682
+(0.782 vs 0.912 excluding HP-KR). Swapping in an adjacent behaviour costs real performance.
+
+**And what transfer it has is borrowed.** Removing the deception direction collapses the
+sycophancy arm to **0.542**, against random projections' 0.527. Essentially nothing survives —
+the sycophancy basis was working *through* its 0.54 overlap with deception, not through any
+structure of its own. This is the pre-registered reading that the evidence supports.
+
+### The unanticipated result
+
+Removing the *sycophancy* axis from the *deception* basis gives the **best off-diagonal score in
+the whole study, 0.7111** — better than the deception PCs it was derived from (0.6823). The shared
+component was not merely redundant; it was actively hurting cross-dataset transfer.
+
+Per test set, `dec3_orth` minus `pc3`:
+
+| test set | Δ |
+|---|---|
+| HP-KR | **+0.224** |
+| HP-C | +0.064 |
+| IT | +0.055 |
+| RepE | +0.017 |
+| ID | −0.021 |
+| CG | **−0.166** |
+
+The two extremes are interpretable and point the same way. **CG is the convincing game** — a
+persuasion task — and the sycophancy axis scores **0.9995 zero-shot** on it, better than the
+deception axis's 0.976. Strip sycophancy out and that signal goes with it. **HP-KR**, whose
+deceptive response is a deferential "I don't know" under pressure, reads as *sycophantic*; removing
+that component moves it from 0.184 toward chance at 0.408.
+
+So the aggregate win is real but narrow: `dec3_orth` leads on all six datasets **only because HP-KR
+dominates the aggregate**, and it loses to plain `pc3` once HP-KR is excluded (0.863 vs 0.912). The
+honest reading is not "always remove sycophancy" but that *the deception axis is entangled with
+sycophancy in a way that helps on persuasion tasks and hurts on deference tasks*.
+
+### Caveat on the control's strength
+
+The planned sanity check was that the sycophancy axis should be clearly worse than the deception
+axis on RepE, which is a pure honest/deceptive contrast. It is worse, but only slightly — 0.978
+against 0.992. At |cos| = 0.54 the two axes are entangled enough that the raw sycophancy arm is a
+weak control on its own. The orthogonalised arm is the one carrying the conclusion.
+
 ## Caveats
 
 - **P = 15, not 26.** A documented deviation. The full-bank version re-runs in seconds against the
@@ -165,4 +230,6 @@ the dataset, not of any one probe.
 | `matrix_random3.csv`, `matrix_axis1.csv` | the two controls |
 | `matrix_delta_pc3_vs_baseline.csv` | treatment minus baseline |
 | `summary.csv` | the four-row headline table |
+| `matrix_syc3.csv`, `matrix_syc3_orth.csv`, `matrix_syc_axis1.csv`, `matrix_dec3_orth.csv` | the cross-behaviour arms |
 | `transfer_matrices.png`, `transfer_delta.png` | heatmaps |
+| `variants.png` | off-diagonal transfer per feature set |

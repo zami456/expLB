@@ -122,5 +122,70 @@ def run(out_dir: str | Path = OUT_DIR) -> None:
     print(f"wrote transfer_matrices.png and transfer_delta.png to {out_dir}")
 
 
+
+
+
+# categorical slots 1 and 2, validated against the light surface
+SERIES = ("#2a78d6", "#eb6834")
+
+# ordered so the comparison reads: reference, deception arms, sycophancy arms, control
+VARIANT_LABELS = [
+    ("baseline", "pooled activations (8192-d)"),
+    ("pc3", "deception PCs (3-d)"),
+    ("axis1", "deception axis (1-d)"),
+    ("dec3_orth", "deception PCs, sycophancy removed"),
+    ("syc3", "sycophancy PCs (3-d)"),
+    ("syc_axis1", "sycophancy axis (1-d)"),
+    ("syc3_orth", "sycophancy PCs, deception removed"),
+    ("random3", "random directions (3-d)"),
+]
+
+
+def variants(out_dir: str | Path = OUT_DIR) -> None:
+    """Off-diagonal transfer per feature set, with and without the inverted HP-KR."""
+    out_dir = Path(out_dir)
+    summary = pd.read_csv(out_dir / "summary.csv").set_index("features")
+    rows = [(lab, key) for key, lab in VARIANT_LABELS if key in summary.index]
+    labels = [lab for lab, _ in rows]
+    incl = [summary.loc[k, "off_diagonal_mean"] for _, k in rows]
+    excl = [summary.loc[k, "off_diagonal_excl_hpkr"] for _, k in rows]
+
+    y = np.arange(len(rows))
+    height = 0.38
+    gap = 0.02  # 2px-equivalent surface gap between adjacent fills
+    fig, ax = plt.subplots(figsize=(9.2, 5.4), facecolor=SURFACE)
+    ax.set_facecolor(SURFACE)
+
+    for offset, values, colour, name in (
+        (+height / 2 + gap / 2, excl, SERIES[1], "excluding HP-KR"),
+        (-height / 2 - gap / 2, incl, SERIES[0], "all six datasets"),
+    ):
+        bars = ax.barh(y + offset, values, height=height, color=colour, label=name, zorder=3)
+        for bar, value in zip(bars, values, strict=True):
+            ax.text(value + 0.008, bar.get_y() + bar.get_height() / 2, f"{value:.3f}",
+                    va="center", fontsize=8, color=INK)
+
+    ax.axvline(0.5, color=INK_MUTED, lw=1, ls=(0, (4, 3)), zorder=2)
+    ax.text(0.5, len(rows) - 0.35, " chance", fontsize=8, color=INK_MUTED, va="center")
+
+    ax.set_yticks(y, labels, fontsize=9, color=INK)
+    ax.invert_yaxis()
+    ax.set_xlim(0.4, 1.0)
+    ax.set_xlabel("mean off-diagonal AUROC  (cross-dataset transfer)", fontsize=9, color=INK_MUTED)
+    ax.tick_params(axis="x", labelsize=8, colors=INK_MUTED, length=0)
+    ax.tick_params(axis="y", length=0)
+    ax.grid(axis="x", color=NEUTRAL, lw=1, zorder=0)
+    ax.set_axisbelow(True)
+    for side in ("top", "right", "left", "bottom"):
+        ax.spines[side].set_visible(False)
+
+    ax.legend(loc="lower right", frameon=False, fontsize=9, labelcolor=INK)
+    ax.set_title("Which persona basis transfers across datasets?", fontsize=12,
+                 color=INK, loc="left", pad=12)
+    fig.savefig(out_dir / "variants.png", dpi=200, bbox_inches="tight", facecolor=SURFACE)
+    plt.close(fig)
+    print(f"wrote variants.png to {out_dir}")
+
+
 if __name__ == "__main__":
-    fire.Fire(run)
+    fire.Fire({"run": run, "variants": variants})

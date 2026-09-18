@@ -55,8 +55,8 @@ class TestBank:
 class TestGeometry:
     def test_p_is_the_fifteen(self, geom: persona_pcs.PersonaGeometry):
         assert len(geom.persona_names) == 15
-        assert sum(g == "deception" for g in geom.group_of.values()) == 8
-        assert sum(g == "honesty" for g in geom.group_of.values()) == 7
+        assert sum(g == "positive" for g in geom.group_of.values()) == 8
+        assert sum(g == "negative" for g in geom.group_of.values()) == 7
 
     def test_centring_removes_the_mean(self, bank, geom):
         centred = bank.vectors_for(geom.persona_names) - geom.mean
@@ -114,3 +114,108 @@ class TestRestrictingPHelps:
             bank, k=1, deception=all_names, honesty=()
         ).alignment()[0]
         assert fifteen > twentyfive
+
+
+class TestBankDecomposition:
+    """The four contrast groups plus `default` should account for the whole bank."""
+
+    def test_all_26_personas_are_accounted_for(self, bank: persona_pcs.PersonaBank):
+        groups = (
+            persona_pcs.DECEPTION_PERSONAS,
+            persona_pcs.HONESTY_PERSONAS,
+            persona_pcs.SYCOPHANCY_PERSONAS,
+            persona_pcs.ANTI_SYCOPHANCY_PERSONAS,
+        )
+        assert [len(g) for g in groups] == [8, 7, 5, 5]
+        union = set().union(*groups)
+        assert len(union) == 25, "groups overlap"
+        assert union | {"default"} == set(bank.names)
+
+    def test_anti_sycophancy_recovers_from_its_axis(self, bank: persona_pcs.PersonaBank):
+        assert persona_pcs.recover_anti_sycophancy_group(bank) == tuple(
+            sorted(persona_pcs.ANTI_SYCOPHANCY_PERSONAS)
+        )
+
+    def test_recovered_group_reproduces_the_sycophancy_axis(self, bank: persona_pcs.PersonaBank):
+        syc = bank.vectors_for(persona_pcs.SYCOPHANCY_PERSONAS).mean(0)
+        anti = bank.vectors_for(persona_pcs.ANTI_SYCOPHANCY_PERSONAS).mean(0)
+        assert np.allclose(syc - anti, bank.axes["sycophancy"], atol=1e-5)
+
+
+class TestSycophancyGeometry:
+    @pytest.fixture(scope="class")
+    def syc(self, bank: persona_pcs.PersonaBank) -> persona_pcs.PersonaGeometry:
+        return persona_pcs.fit_geometry(
+            bank,
+            k=3,
+            deception=persona_pcs.SYCOPHANCY_PERSONAS,
+            honesty=persona_pcs.ANTI_SYCOPHANCY_PERSONAS,
+            axis_name="sycophancy",
+        )
+
+    def test_pc1_is_the_sycophancy_axis(self, bank, syc):
+        assert abs(float(syc.components[0] @ bank.axis_unit("sycophancy"))) > 0.99
+
+    def test_pc1_separates_its_own_groups(self, bank, syc):
+        scores = syc.project(bank.vectors_for(syc.persona_names) - syc.mean, k=1).ravel()
+        assert scores[:5].min() > scores[5:].max()
+
+    def test_the_two_behaviours_overlap_substantially(self, bank: persona_pcs.PersonaBank):
+        """The premise of the orthogonalised arms.
+
+        If a future bank made these independent, the raw sycophancy arm would already be a clean
+        control and the orthogonalised ones would be redundant -- so this failing is informative,
+        not merely a broken test.
+        """
+        overlap = abs(float(bank.axis_unit("deception") @ bank.axis_unit("sycophancy")))
+        assert 0.53 < overlap < 0.55, f"axis overlap moved to {overlap:.4f}; revisit the design"
+
+
+class TestOrthogonalize:
+    def test_removes_the_direction_and_stays_orthonormal(self, bank, geom):
+        against = bank.axis_unit("sycophancy")
+        out = persona_pcs.orthogonalize(geom.components, against)
+        assert np.allclose(out @ out.T, np.eye(len(out)), atol=1e-9)
+        assert np.abs(out @ against).max() < 1e-10
+
+    def test_rank_drops_when_the_direction_lies_in_the_span(self, geom):
+        # removing PC1 itself must leave a 2-d basis, not a degenerate 3-d one
+        out = persona_pcs.orthogonalize(geom.components, geom.components[0])
+        assert out.shape[0] == 2
+
+    def test_rejects_removing_everything(self):
+        single = np.eye(1, 8)
+        with pytest.raises(ValueError, match="nothing left"):
+            persona_pcs.orthogonalize(single, single[0])
+
+
+class TestAxisNameIsRespected:
+    """Regression: fit_geometry used to hardcode the deception axis.
+
+    With it hardcoded, a sycophancy geometry silently carried the deception contrast, so its
+    axis_score was byte-identical to the deception arm's and the "cross-behaviour" comparison
+    measured nothing. The identical AUROC columns were the only symptom.
+    """
+
+    def test_sycophancy_geometry_carries_its_own_axis(self, bank: persona_pcs.PersonaBank):
+        syc = persona_pcs.fit_geometry(
+            bank,
+            k=3,
+            deception=persona_pcs.SYCOPHANCY_PERSONAS,
+            honesty=persona_pcs.ANTI_SYCOPHANCY_PERSONAS,
+            axis_name="sycophancy",
+        )
+        assert np.allclose(syc.axis, bank.axis_unit("sycophancy"))
+        assert not np.allclose(syc.axis, bank.axis_unit("deception"))
+
+    def test_the_two_geometries_score_differently(self, bank, geom):
+        syc = persona_pcs.fit_geometry(
+            bank,
+            k=3,
+            deception=persona_pcs.SYCOPHANCY_PERSONAS,
+            honesty=persona_pcs.ANTI_SYCOPHANCY_PERSONAS,
+            axis_name="sycophancy",
+        )
+        rng = np.random.default_rng(0)
+        z = rng.standard_normal((50, 8192))
+        assert not np.allclose(geom.axis_score(z), syc.axis_score(z))

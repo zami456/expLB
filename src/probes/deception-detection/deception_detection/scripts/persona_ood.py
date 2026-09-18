@@ -169,9 +169,15 @@ def random_directions(hidden: int, k: int, rng: np.random.Generator) -> np.ndarr
 
 
 def zero_shot_table(
-    datasets: dict[str, Pooled], geom: persona_pcs.PersonaGeometry
+    datasets: dict[str, Pooled],
+    geom: persona_pcs.PersonaGeometry,
+    syc_geom: persona_pcs.PersonaGeometry,
 ) -> pd.DataFrame:
-    """Methods 1 and 2: score by projection alone, no training."""
+    """Methods 1 and 2: score by projection alone, no training.
+
+    The sycophancy columns are the cross-behaviour comparison -- the same scoring rule driven by
+    a basis fitted on a different behaviour entirely.
+    """
     rows = []
     for name, ds in datasets.items():
         rows.append(
@@ -181,6 +187,8 @@ def zero_shot_table(
                 "n_deceptive": ds.n_deceptive,
                 "auroc_axis": auroc(ds.y, geom.axis_score(ds.z)),
                 "auroc_pc1": auroc(ds.y, geom.project(ds.z, k=1).ravel()),
+                "auroc_syc_axis": auroc(ds.y, syc_geom.axis_score(ds.z)),
+                "auroc_syc_pc1": auroc(ds.y, syc_geom.project(ds.z, k=1).ravel()),
             }
         )
     return pd.DataFrame(rows)
@@ -192,16 +200,26 @@ def run(pooled_dir: str | Path = POOLED_DIR, out_dir: str | Path = OUT_DIR) -> N
 
     bank = persona_pcs.load_bank()
     geom = persona_pcs.fit_geometry(bank, k=3)
-    logger.info(
-        f"persona geometry: {len(geom.persona_names)} personas, "
-        f"explained variance {np.round(geom.explained_variance_ratio, 4).tolist()}, "
-        f"|cos(PC_k, axis)| {np.round(geom.alignment(), 4).tolist()}"
+    syc_geom = persona_pcs.fit_geometry(
+        bank,
+        k=3,
+        deception=persona_pcs.SYCOPHANCY_PERSONAS,
+        honesty=persona_pcs.ANTI_SYCOPHANCY_PERSONAS,
+        axis_name="sycophancy",
     )
+    for tag, g in (("deception", geom), ("sycophancy", syc_geom)):
+        logger.info(
+            f"{tag} geometry: {len(g.persona_names)} personas, "
+            f"explained variance {np.round(g.explained_variance_ratio, 4).tolist()}, "
+            f"|cos(PC_k, deception axis)| {np.round(g.alignment(), 4).tolist()}"
+        )
+    dec_axis, syc_axis = bank.axis_unit("deception"), bank.axis_unit("sycophancy")
+    logger.info(f"|cos(deception axis, sycophancy axis)| = {abs(float(dec_axis @ syc_axis)):.4f}")
 
     datasets = load_pooled(pooled_dir)
     logger.info(f"loaded {len(datasets)} pooled datasets from {pooled_dir}")
 
-    zero_shot = zero_shot_table(datasets, geom)
+    zero_shot = zero_shot_table(datasets, geom, syc_geom)
     zero_shot.to_csv(out_dir / "zero_shot.csv", index=False)
     logger.info(f"zero-shot:\n{zero_shot.to_string(index=False)}")
 
@@ -211,10 +229,24 @@ def run(pooled_dir: str | Path = POOLED_DIR, out_dir: str | Path = OUT_DIR) -> N
     hidden = datasets[order[0]].z.shape[1]
     rng = np.random.default_rng(SEED)
 
+    # The deception and sycophancy axes sit at |cos| = 0.54, so a raw sycophancy arm would
+    # score well largely through the shared component. The orthogonalised arms remove each
+    # axis from the other's basis, which is what makes the comparison interpretable.
+    syc_orth = persona_pcs.orthogonalize(syc_geom.components, dec_axis)
+    dec_orth = persona_pcs.orthogonalize(geom.components, syc_axis)
+    logger.info(
+        f"orthogonalised bases: sycophancy {syc_orth.shape[0]} of 3 rows survive, "
+        f"deception {dec_orth.shape[0]} of 3"
+    )
+
     variants: dict[str, object] = {
         "baseline": lambda z: z,
         "pc3": lambda z: geom.project(z, k=3),
         "axis1": lambda z: geom.axis_score(z)[:, None],
+        "syc3": lambda z: syc_geom.project(z, k=3),
+        "syc_axis1": lambda z: syc_geom.axis_score(z)[:, None],
+        "syc3_orth": lambda z: z @ syc_orth.T,
+        "dec3_orth": lambda z: z @ dec_orth.T,
     }
     matrices = {name: transfer_matrix(fn, datasets, order) for name, fn in variants.items()}
 
@@ -229,15 +261,30 @@ def run(pooled_dir: str | Path = POOLED_DIR, out_dir: str | Path = OUT_DIR) -> N
     for name, matrix in matrices.items():
         matrix.round(4).to_csv(out_dir / f"matrix_{name}.csv")
 
+    # HP-KR is inverted as a test set and poisonous as a training set, so the aggregate is
+    # reported both ways -- it moves the off-diagonal mean by more than any variant does.
+    hpkr = "harm_refusal_knowledge_report__plain"
+    without_hpkr = [n for n in order if n != hpkr]
+    dims = {
+        "baseline": hidden, "pc3": 3, "axis1": 1, "random3": 3,
+        "syc3": 3, "syc_axis1": 1,
+        "syc3_orth": syc_orth.shape[0], "dec3_orth": dec_orth.shape[0],
+    }
     summary = pd.DataFrame(
         [
             {
                 "features": name,
-                "dim": {"baseline": hidden, "pc3": 3, "axis1": 1, "random3": 3}.get(name, ""),
+                "dim": dims.get(name, ""),
                 "off_diagonal_mean": off_diagonal_mean(matrices[name]),
+                "off_diagonal_excl_hpkr": off_diagonal_mean(
+                    matrices[name].loc[without_hpkr, without_hpkr]
+                ),
                 "diagonal_mean": diagonal_mean(matrices[name]),
             }
-            for name in ("baseline", "pc3", "random3", "axis1")
+            for name in (
+                "baseline", "pc3", "axis1", "syc3", "syc_axis1",
+                "syc3_orth", "dec3_orth", "random3",
+            )
         ]
     )
     summary.to_csv(out_dir / "summary.csv", index=False)

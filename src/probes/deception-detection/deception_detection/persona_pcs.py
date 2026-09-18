@@ -56,6 +56,23 @@ HONESTY_PERSONAS = (
     "pc_whistleblower",
 )
 
+# The other contrast in the bank, recovered the same way from the sycophancy axis (residual
+# 2.7e-07). Together with deception, honesty and `default` these account for all 26 personas.
+SYCOPHANCY_PERSONAS = (
+    "pc_cheerleader",
+    "pc_enabler",
+    "pc_flatterer",
+    "pc_people_pleaser",
+    "pc_yes_man",
+)
+ANTI_SYCOPHANCY_PERSONAS = (
+    "pc_blunt_advisor",
+    "pc_contrarian",
+    "pc_critic",
+    "pc_skeptic",
+    "pc_tough_love_mentor",
+)
+
 
 @dataclass
 class PersonaBank:
@@ -99,23 +116,52 @@ def load_bank(path: Path | str = BANK_PATH) -> PersonaBank:
     )
 
 
-def recover_honesty_group(bank: PersonaBank, size: int = 7) -> tuple[str, ...]:
-    """Re-derive the honesty group from the deception axis.
+def recover_group(
+    bank: PersonaBank,
+    positive: tuple[str, ...],
+    axis_name: str,
+    size: int,
+    exclude: tuple[str, ...] = (),
+) -> tuple[str, ...]:
+    """Re-derive the negative end of a contrast from its axis.
 
-    `deception_axis = mean(deception) - mean(honesty)`, so `mean(honesty)` is known exactly, and
-    exactly one subset of the remaining personas averages to it. Used only to verify the
-    hard-coded HONESTY_PERSONAS still matches this bank -- not on any hot path.
+    Each axis is `mean(positive) - mean(negative)`, so `mean(negative)` is known exactly and
+    exactly one subset of the remaining personas averages to it. This exists because the bank's
+    `role_groups` field is unusable; it verifies the hard-coded lists still match a given bank,
+    and is not on any hot path.
     """
-    target = bank.vectors_for(DECEPTION_PERSONAS).mean(0) - bank.axes["deception"]
-    pool = [n for n in bank.names if n not in DECEPTION_PERSONAS and n != "default"]
+    target = bank.vectors_for(positive).mean(0) - bank.axes[axis_name]
+    skip = set(positive) | set(exclude) | {"default"}
+    pool = [n for n in bank.names if n not in skip]
 
     best_err, best = np.inf, ()
     for combo in itertools.combinations(pool, size):
         err = float(np.linalg.norm(bank.vectors_for(combo).mean(0) - target))
         if err < best_err:
             best_err, best = err, combo
-    logger.debug(f"recovered honesty group at residual {best_err:.2e}: {best}")
+    logger.debug(f"recovered {axis_name} negative group at residual {best_err:.2e}: {best}")
     return tuple(sorted(best))
+
+
+def recover_honesty_group(bank: PersonaBank, size: int = 7) -> tuple[str, ...]:
+    """The honesty group is the negative end of the deception axis."""
+    return recover_group(bank, DECEPTION_PERSONAS, "deception", size)
+
+
+def recover_anti_sycophancy_group(bank: PersonaBank, size: int = 5) -> tuple[str, ...]:
+    """The anti-sycophancy group is the negative end of the sycophancy axis.
+
+    Deception and honesty are excluded from the search pool: they are already accounted for, and
+    leaving them in would let the search reach a subset that happens to average correctly without
+    being the real group.
+    """
+    return recover_group(
+        bank,
+        SYCOPHANCY_PERSONAS,
+        "sycophancy",
+        size,
+        exclude=DECEPTION_PERSONAS + HONESTY_PERSONAS,
+    )
 
 
 @dataclass
@@ -148,12 +194,17 @@ def fit_geometry(
     k: int = 3,
     deception: tuple[str, ...] = DECEPTION_PERSONAS,
     honesty: tuple[str, ...] = HONESTY_PERSONAS,
+    axis_name: str = "deception",
 ) -> PersonaGeometry:
     """Centre the persona set and fit its top-k principal components (Eq. 2-3).
 
     P is the union of `deception` and `honesty` -- 15 personas by default, not the full bank.
-    A PC's sign is arbitrary, so each is oriented to point along the deception axis; without
-    this, "higher score = more deceptive" would hold or not at random per run.
+    A PC's sign is arbitrary, so each is oriented to point along `axis_name`; without this,
+    "higher score = more of the behaviour" would hold or not at random per run.
+
+    `axis_name` must match the groups being fitted. Fitting the sycophancy personas while leaving
+    it at "deception" silently gives the geometry the wrong contrast, and `axis_score` then
+    duplicates the deception arm instead of measuring anything new.
     """
     names = tuple(deception) + tuple(honesty)
     vectors = bank.vectors_for(names)
@@ -166,14 +217,14 @@ def fit_geometry(
 
     pca = PCA(n_components=max_k).fit(centred)
     components = pca.components_[:k].copy()
-    axis = bank.axis_unit("deception")
+    axis = bank.axis_unit(axis_name)
 
-    # orient each PC along the deception axis so score direction is reproducible
+    # orient each PC along the contrast axis so score direction is reproducible
     for i, comp in enumerate(components):
         if float(comp @ axis) < 0:
             components[i] = -comp
 
-    group_of = {n: "deception" for n in deception} | {n: "honesty" for n in honesty}
+    group_of = {n: "positive" for n in deception} | {n: "negative" for n in honesty}
     return PersonaGeometry(
         components=components,
         explained_variance_ratio=pca.explained_variance_ratio_[:k].copy(),
@@ -182,3 +233,31 @@ def fit_geometry(
         group_of=group_of,
         mean=mean,
     )
+
+
+def orthogonalize(components: np.ndarray, against: np.ndarray, tol: float = 1e-8) -> np.ndarray:
+    """Remove a direction from a PC basis, returning an orthonormal basis of what remains.
+
+    Used to ask whether one persona basis helps on another behaviour's data *beyond* the
+    component the two share -- the deception and sycophancy axes sit at |cos| = 0.54, so a raw
+    comparison between them measures mostly their overlap.
+
+    Rank can drop: if `against` lies inside the span of `components`, the result has one fewer
+    row. Callers should report the returned row count rather than assume it equals the input's,
+    since a 2-d basis is not a like-for-like comparison against a 3-d one.
+    """
+    unit = against / np.linalg.norm(against)
+    residual = components - np.outer(components @ unit, unit)
+
+    basis: list[np.ndarray] = []
+    for row in residual:
+        vector = row.copy()
+        for kept in basis:  # Gram-Schmidt against what survived so far
+            vector = vector - (vector @ kept) * kept
+        norm = float(np.linalg.norm(vector))
+        if norm > tol:
+            basis.append(vector / norm)
+
+    if not basis:
+        raise ValueError("nothing left after removing `against` from the basis")
+    return np.stack(basis)
