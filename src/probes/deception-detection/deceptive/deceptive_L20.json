@@ -1,0 +1,34 @@
+{
+  "layer": 20,
+  "subject_model": "meta-llama/Llama-3.3-70B-Instruct",
+  "source_run": "run-paper16-shared",
+  "question_set": "shared: all 26 personas answered the same balanced 20 questions (10 deception + first 10 sycophancy), per the paper's Appendix C",
+  "group": "deception",
+  "group_note": "control disclosure: timing, emphasis, omission",
+  "contrast_with": "honesty",
+  "persona_names": [
+    "pc_handler",
+    "pc_broker",
+    "pc_impression_manager",
+    "pc_coverup_operator",
+    "pc_gatekeeper",
+    "pc_spin_doctor",
+    "pc_plausible_denier",
+    "pc_narrative_manager"
+  ],
+  "persona_n_rollouts": [
+    64,
+    72,
+    49,
+    26,
+    82,
+    56,
+    26,
+    49
+  ],
+  "hidden_size": 8192,
+  "pooling": "mean over the assistant response tokens of each rollout, then averaged over that persona's kept rollouts (judge score == 3)",
+  "deception_axis_definition": "mean(deception group) - mean(honesty group); the honesty personas are NOT included in this folder but do define the axis",
+  "deception_axis_norm": 0.8903200030326843,
+  "warning": "the axis is NOT a unit vector -- divide by deception_axis_norm, or use cosine"
+}

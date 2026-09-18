@@ -1,0 +1,115 @@
+{
+  "layer": 20,
+  "subject_model": "meta-llama/Llama-3.3-70B-Instruct",
+  "judge_model": "meta-llama/Llama-3.1-70B-Instruct",
+  "hidden_size": 8192,
+  "n_layers_total": 80,
+  "source_run": "run-paper16-shared",
+  "pooling": "mean over the assistant response tokens of each rollout, then averaged over that persona's kept rollouts",
+  "kept": "judge score == 3 (all rollouts for `default`, which is unjudged)",
+  "persona_names": [
+    "default",
+    "pc_archivist",
+    "pc_blunt_advisor",
+    "pc_broker",
+    "pc_cheerleader",
+    "pc_contrarian",
+    "pc_coverup_operator",
+    "pc_critic",
+    "pc_disclosure_counsel",
+    "pc_documentarian",
+    "pc_enabler",
+    "pc_fact_checker",
+    "pc_flatterer",
+    "pc_gatekeeper",
+    "pc_handler",
+    "pc_impression_manager",
+    "pc_narrative_manager",
+    "pc_ombudsman",
+    "pc_people_pleaser",
+    "pc_plausible_denier",
+    "pc_skeptic",
+    "pc_spin_doctor",
+    "pc_tough_love_mentor",
+    "pc_transparency_officer",
+    "pc_whistleblower",
+    "pc_yes_man"
+  ],
+  "persona_n_rollouts": [
+    100,
+    68,
+    95,
+    72,
+    94,
+    86,
+    26,
+    56,
+    70,
+    80,
+    45,
+    35,
+    98,
+    82,
+    64,
+    49,
+    49,
+    99,
+    74,
+    26,
+    93,
+    56,
+    99,
+    91,
+    66,
+    82
+  ],
+  "axis_names": [
+    "assistant",
+    "deception",
+    "sycophancy",
+    "unified"
+  ],
+  "axis_definition": "mean(positive group) - mean(negative group), NOT normalised",
+  "axis_norms": {
+    "assistant": 0.7577801942825317,
+    "deception": 0.8903200030326843,
+    "sycophancy": 1.3508999347686768,
+    "unified": 0.9298059344291687
+  },
+  "persona_vector_norms_median": 4.101425647735596,
+  "pca_note": "PCs are fitted on the persona vectors at this layer, after centering",
+  "pca_variance_ratio": [
+    0.4039897918701172,
+    0.1326911747455597,
+    0.09355677664279938,
+    0.06191236525774002,
+    0.05384192615747452
+  ],
+  "role_groups": {
+    "deception": [
+      "contrast_with",
+      "note",
+      "roles"
+    ],
+    "honesty": [
+      "contrast_with",
+      "note",
+      "roles"
+    ],
+    "sycophancy": [
+      "contrast_with",
+      "note",
+      "roles"
+    ],
+    "anti_sycophancy": [
+      "contrast_with",
+      "note",
+      "roles"
+    ],
+    "assistant_anchor": [
+      "contrast_with",
+      "note",
+      "roles"
+    ]
+  }
+}
