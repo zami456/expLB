@@ -55,6 +55,7 @@ Python **>=3.12** (`.python-version` pins 3.12), dependency lock in `uv.lock`.
 | `data/` | Probe inputs: `raw/` (geometry-of-truth, Azaria–Mitchell, cities/companies CSVs), `interim/`, `processed/` (train/eval JSONL), `probes/{GoT,RepEng}/`. |
 | `results/` | Outputs. `datasets/<benchmark>/<subset>/<model>.csv` = raw rollouts; `subsets/<benchmark>.csv` = normalised, upload-ready; `blackbox/` = detector scores; `probes/` = probe metrics; `*_intermediate/` = resumable caches. |
 | `figures/` | Rendered PDFs (bar/radar/violin charts, heatmaps, figure_1, harm-pressure, examples). |
+| `kd/` | **Self-contained experiment**: a persona axis for deception by *denying knowledge one has*, built because every detector here inverts on `harm-pressure-knowledge-report`. Holds its own personas, questions, scripts, rollouts, vectors, axes, results and docs. Start at `kd/docs/DESIGN.md`; skill `knowledge-denial-context`. |
 | `.devcontainer/` | Dev container (`mcr.microsoft.com/devcontainers/base:ubuntu`); `postCreateCommand` installs Claude CLI and runs `git submodule update --init --recursive`. |
 | `.dist/` | Empty / build output placeholder. |
 
@@ -162,6 +163,7 @@ on a specific number.
 | `deception-probes-context` | Apollo's linear probes on residual-stream activations for strategic-deception detection (vendored, not a submodule). | `src/probes/deception-detection/**` |
 | `soft-trigger-context` | Two-hop trigger/persona-flip model-organism construction, plus its divergences from the paper's ST/GS account. | `soft-trigger/**`, `src/gender_secret/**` |
 | `persona-coordinates-context` | Mahadik & Skapars' persona-PC probing (contrastive persona vectors, PCA, projection probes); replication target, no directory yet — invoke `/persona-coordinates-context` manually. | _(none yet)_ |
+| `knowledge-denial-context` | The `kd/` experiment: a persona axis for deception by denying knowledge one has; the HP-KR confound (`deceptive = knows AND denies`, one cell empty) and the factor probes that make attribution possible. | `kd/**`, any HP-KR number |
 
 # nnsight — Agent Guide
 

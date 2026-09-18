@@ -91,7 +91,23 @@ direction. Details: plan section STATISTICAL ROBUSTNESS; `23_significance.py`,
 (80 layers, 2,000 rows), Pass B (21 layers, 15,278 rows + `sycophancy_mt`), Pass C (per-token,
 layers 20/22/28/40/44/48, 2,000 rows), `passQ11` (6,392 sleeper rows).
 
-**Nothing open.** **`ai_audit`** (80 rows = 16 scenarios, contexts 4,211–7,543 tokens, needing
+**One thing open — the `kd/` experiment (started 2026-09-19).** Q1–Q11 are answered, but
+HP-KR remained the dataset where every detector inverts. `kd/` is a self-contained follow-up
+that builds a persona axis for *deception by denying knowledge one has*, and — more
+importantly — the controls that say whether any gain is deception, knowledge, or wording.
+Read `kd/docs/DESIGN.md`; skill `knowledge-denial-context`. Three facts from it that change
+how existing numbers should be quoted:
+
+- **A single lexical bit scores AUROC 0.870 on HP-KR** ("does the response deny
+  knowledge?"). Most of any probe's HP-KR performance is that bit.
+- **`deceptive = knows AND denies`, and the cell *doesn't know but claims it does* is
+  empty.** So knowledge, wording and deception are perfectly confounded inside HP-KR. Report
+  it three ways — full (7,068) / text-matched (2,538) / knowledge-matched (5,812) — never as
+  one number.
+- **The inversion is layer-20-specific.** The paper16 deception axis reads 0.251 zero-shot at
+  L20 but **0.644 at L40**. Any "the axis inverts on HP-KR" claim must name a layer.
+
+**`ai_audit`** (80 rows = 16 scenarios, contexts 4,211–7,543 tokens, needing
 4.2–13.6 GiB of eager attention per row) is **excluded by decision**: Apollo dropped it from
 their own main results over label validity on this exact model, the replicated paper never
 used it, and 16 scenarios cannot move any conclusion. Do not spend effort on it unless NDIF

@@ -40,6 +40,11 @@ $conf = @{
     "B_fine" = @{ run = "run-coords\passB_fine"; root = "run-crossgen\passB_fine" }
     "A"      = @{ run = "run-coords\passA";      root = "run-crossgen\passA" }
     "P"      = @{ run = "run-coords\passP";      root = "run-crossgen\passP" }
+    # passC is the per-token store (layers 20,22,28,40,44,48). Its chunks carry the same
+    # ("pooled", n, K, H, 2) tensor as every other store alongside the per-token blocks, so
+    # load_all_layers reads it unchanged -- this arm was simply never wired up, which is why
+    # no pass-C cross-generalization numbers exist at any layer.
+    "C"      = @{ run = "run-coords\passC";      root = "run-crossgen\passC" }
 }[$Pass]
 if (-not $conf) { throw "unknown -Pass $Pass" }
 
@@ -50,6 +55,25 @@ if (-not (Test-Path (Join-Path $repo ($conf.run + "\sycophancy_mt\rows.jsonl")))
 }
 
 function Note($m) { "$((Get-Date).ToString('yyyy-MM-dd HH:mm:ss'))  $m" | Out-File -Append -Encoding utf8 $status }
+
+# Push what just finished, rather than holding every bank hostage to the end of the step.
+# OnBusy Skip for the intermediate calls: an upload must never delay the next bank, and
+# whatever a skipped call would have carried is picked up by the next sync or by the final
+# whole-tree one. See sync_crossgen.ps1 for the lock and the per-object cost of Drive.
+$syncer = Join-Path $D "sync_crossgen.ps1"
+$rel = ($conf.root -replace '^run-crossgen\\?', '')
+function Sync([string]$sub, [string]$tag, [string]$onBusy) {
+    if (-not (Test-Path $syncer)) { Note "SYNC $tag skipped (no sync_crossgen.ps1)"; return }
+    # -SubPath is omitted rather than passed empty: an empty argument to a native command
+    # can be dropped, and then -SubPath would swallow the NEXT switch and sync a path that
+    # does not exist -- a silent no-upload, which is the failure this whole change is about.
+    $a = @("-NoProfile", "-ExecutionPolicy", "Bypass", "-File", $syncer,
+           "-Tag", "$Pass/$tag", "-OnBusy", $onBusy)
+    if ($sub) { $a += @("-SubPath", $sub) }
+    & powershell.exe @a
+    Note "SYNC $tag exit $LASTEXITCODE"
+}
+
 function Crossgen([string[]]$extra, [string]$tag) {
     $a = @($script, "--run_dir", $conf.run, "--datasets") + $ds + $extra
     if ($Layers.Trim() -ne "all") { $a += @("--layers") + ($Layers.Trim() -split "\s+") }
@@ -66,6 +90,7 @@ Note ("datasets: " + ($ds -join ", "))
 # 1. baseline + paper16 (all features, the row bootstrap, and the shared splits)
 Crossgen @("--stage", "all", "--out_root", $conf.root, "--bank_name", "paper16",
            "--bank", "run-paper16\axes_vectors_s3_fp32.pt") "root"
+Sync $rel "root" "Skip"
 
 # 2. the other persona banks: persona features only, baselines merged from the root at summarize
 $bankFile = @{
@@ -84,13 +109,10 @@ foreach ($b in ($Banks.Trim() -split "\s+" | Where-Object { $_ })) {
                "--bank", $bf, "--baseline_root", $conf.root,
                "--features", "pc:deception", "axes", "axes_resid", "pc:unified", "pc:unified@2",
                "--extra_features", "axes", "pc:deception", "pc:unified") $b
+    Sync $(if ($rel) { "$rel\banks\$b" } else { "banks\$b" }) $b "Skip"
 }
 
-$rc = Join-Path $repo "tools\rclone.exe"
-if (-not (Test-Path $rc)) { $rc = "C:\Users\user4\tools\rclone.exe" }
-if (Test-Path $rc) {
-    & $rc copy (Join-Path $repo "run-crossgen") "tamara:expLB/crossgen" --checksum --transfers 4 `
-        --log-file (Join-Path $logDir "crossgen_full_rclone.log") --log-level INFO
-    Note "RCLONE exit $LASTEXITCODE"
-}
+# the whole tree, including the root summaries the per-bank syncs do not cover. This one
+# waits for the lock: it is the last chance for this step's output to leave the lab PC.
+Sync "" "final" "Wait"
 "DONE " + (Get-Date -Format "yyyy-MM-dd HH:mm:ss") | Out-File -Append -Encoding utf8 $status
