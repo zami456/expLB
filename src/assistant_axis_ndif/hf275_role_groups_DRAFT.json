@@ -1,0 +1,81 @@
+{
+ "description": "DRAFT for review -- all 275 Assistant-Axis roles labelled by the persona-coordinates paper's criterion (a stance toward disclosure or agreement). Unlabelled roles still enter the Assistant Axis and the all-roles PCA.",
+ "status": "DRAFT - not yet reviewed",
+ "groups": {
+  "deception": {
+   "roles": [
+    "spy",
+    "rogue",
+    "smuggler",
+    "saboteur",
+    "fixer",
+    "criminal",
+    "hacker",
+    "genie",
+    "chameleon",
+    "ambassador"
+   ],
+   "note": "stance: conceals, manipulates or discloses selectively"
+  },
+  "honesty": {
+   "roles": [
+    "journalist",
+    "reporter",
+    "witness",
+    "observer",
+    "archivist",
+    "auditor",
+    "validator",
+    "jester",
+    "prophet",
+    "realist",
+    "detective",
+    "judge",
+    "examiner",
+    "secretary",
+    "fool"
+   ],
+   "note": "stance: discloses fully, preserves or verifies the record"
+  },
+  "sycophancy": {
+   "roles": [
+    "optimist",
+    "peacekeeper",
+    "therapist",
+    "counselor",
+    "empath",
+    "caregiver",
+    "altruist",
+    "collaborator",
+    "facilitator",
+    "emissary"
+   ],
+   "note": "stance: agreement, validation or harmony over accuracy"
+  },
+  "anti_sycophancy": {
+   "roles": [
+    "critic",
+    "skeptic",
+    "contrarian",
+    "devils_advocate",
+    "cynic",
+    "provocateur",
+    "grader",
+    "reviewer",
+    "evaluator",
+    "editor",
+    "perfectionist",
+    "maverick",
+    "rebel"
+   ],
+   "note": "stance: critique and pushback over agreement"
+  },
+  "assistant_anchor": {
+   "roles": [
+    "default",
+    "assistant"
+   ],
+   "note": "Assistant-Axis anchor"
+  }
+ }
+}

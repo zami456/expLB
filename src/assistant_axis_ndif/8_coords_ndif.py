@@ -266,11 +266,23 @@ def batch_by_bytes(items, budget_bytes: int, attn_budget: int, n_heads: int,
     return out, tl
 
 
-def pad_batch(batch, pad_id: int, want_tokens: bool = False):
-    """-> input_ids (B,T), attention_mask (B,T), span (B,T) float32 1.0 on response tokens.
+def span_bounds(a0: int, a1: int, span_mode: str):
+    """Which token range the mask covers. 'response' = [a0, a1); 'prompt' = [0, a0).
+
+    The prompt mode exists for the construct-validity control: if a probe trained on
+    PROMPT-side activations transfers as well as one trained on response tokens, the matrix
+    is largely detecting the instructed condition rather than anything the model wrote. The
+    remote body is untouched -- it pools whatever mask it is handed, so 'last' becomes the
+    last prompt token (a0-1) by the same argmax.
+    """
+    return (0, a0) if span_mode == "prompt" else (a0, a1)
+
+
+def pad_batch(batch, pad_id: int, want_tokens: bool = False, span_mode: str = "response"):
+    """-> input_ids (B,T), attention_mask (B,T), span (B,T) float32 1.0 on the masked tokens.
 
     With want_tokens, also returns (tok_index, offsets): tok_index holds b*T + t for every
-    response position, so a single gather inside the trace returns the response tokens packed
+    masked position, so a single gather inside the trace returns those tokens packed
     end to end; offsets says where each row starts and ends in that packed block.
     """
     T = max(len(ids) for _, ids, _, _ in batch)
@@ -279,14 +291,16 @@ def pad_batch(batch, pad_id: int, want_tokens: bool = False):
     attn = torch.zeros((B, T), dtype=torch.long)
     span = torch.zeros((B, T), dtype=torch.float32)
     for i, (_, ids, a0, a1) in enumerate(batch):
+        s0, s1 = span_bounds(a0, a1, span_mode)
         ids_t[i, :len(ids)] = torch.tensor(ids, dtype=torch.long)
         attn[i, :len(ids)] = 1
-        span[i, a0:a1] = 1.0
+        span[i, s0:s1] = 1.0
     if not want_tokens:
         return ids_t, attn, span
     idx, offs = [], [0]
     for i, (_, _, a0, a1) in enumerate(batch):
-        idx.extend(range(i * T + a0, i * T + a1))
+        s0, s1 = span_bounds(a0, a1, span_mode)
+        idx.extend(range(i * T + s0, i * T + s1))
         offs.append(len(idx))
     return ids_t, attn, span, torch.tensor(idx, dtype=torch.long), offs
 
@@ -590,7 +604,7 @@ def process_dataset(llm, nnsight, tok, encoder, key: str, layer_idx, args, pad_i
         logger.info("  %d sessions, widest %d padded tokens (session budget %d)",
                     len(chunks), max(_cost), args.session_tokens)
     for chunk in tqdm(chunks, desc=f"  {key}", leave=False):
-        prepared = [pad_batch(b, pad_id, args.per_token) for b in chunk]
+        prepared = [pad_batch(b, pad_id, args.per_token, args.span) for b in chunk]
         got = run_session(llm, nnsight, layer_idx, prepared, want_last,
                           args.retries, args.per_token)
         if got is None:
@@ -599,14 +613,15 @@ def process_dataset(llm, nnsight, tok, encoder, key: str, layer_idx, args, pad_i
         ids_out, pooled_out, ntok_out = [], [], []
         tok_out, tok_offs = [], [0]
         for batch, (p, n, tk) in zip(chunk, got):
-            b_offs = pad_batch(batch, pad_id, True)[4] if args.per_token else None
+            b_offs = pad_batch(batch, pad_id, True, args.span)[4] if args.per_token else None
             for i, (rid, _, a0, a1) in enumerate(batch):
-                expect = a1 - a0
+                s0, s1 = span_bounds(a0, a1, args.span)
+                expect = s1 - s0
                 got_n = int(round(float(n[i])))
                 if got_n != expect:
                     raise RuntimeError(
-                        f"span mismatch on {rid}: n_tok={got_n} but a1-a0={expect}. "
-                        "The mask and the client disagree; do not trust these vectors.")
+                        f"span mismatch on {rid}: n_tok={got_n} but the {args.span} span is "
+                        f"{expect}. The mask and the client disagree; do not trust these vectors.")
                 ids_out.append(rid)
                 pooled_out.append(p[i])
                 ntok_out.append(n[i])
@@ -624,7 +639,8 @@ def process_dataset(llm, nnsight, tok, encoder, key: str, layer_idx, args, pad_i
                 "pooled": torch.stack(pooled_out),
                 "n_tok": torch.stack(ntok_out),
                 "layers": list(layer_idx),
-                "pooling": list(args.pooling)}
+                "pooling": list(args.pooling),
+                "span": args.span}
         if args.per_token and tok_out:
             # packed (S,K,H) plus offsets: row i is tokens[offsets[i]:offsets[i+1]].
             # Padding to a rectangle would multiply the largest pass in the project by the
@@ -642,7 +658,8 @@ def process_dataset(llm, nnsight, tok, encoder, key: str, layer_idx, args, pad_i
                 "row_id": rid, "dataset": r.dataset, "item_id": r.item_id,
                 "sample_idx": r.sample_idx, "label": r.label, "label_raw": str(r.label_raw),
                 "label_semantics": r.label_semantics, "prompt_fidelity": r.prompt_fidelity,
-                "span_len": a1 - a0,
+                "span_len": span_bounds(a0, a1, args.span)[1] - span_bounds(a0, a1, args.span)[0],
+                "response_len": a1 - a0, "prompt_len": a0, "span": args.span,
             }, ensure_ascii=False) + "\n")
 
 
@@ -655,6 +672,11 @@ def main() -> None:
     ap.add_argument("--layers", nargs="+", default=["every4"],
                     help="all | every4 | explicit ints")
     ap.add_argument("--pooling", nargs="+", default=["mean", "last"])
+    ap.add_argument("--span", default="response", choices=["response", "prompt"],
+                    help="which tokens the mask covers. 'response' is the assistant turn "
+                         "[a0, a1); 'prompt' is everything before it, [0, a0), and makes "
+                         "'last' the last PROMPT token -- the construct-validity control. "
+                         "Write a prompt-span store to its own --out directory.")
     ap.add_argument("--per_token", action="store_true",
                     help="also return the response tokens unpooled, packed (S,K,H) fp16 "
                          "with per-row offsets. This is Pass C and it is ~75x the pooled "

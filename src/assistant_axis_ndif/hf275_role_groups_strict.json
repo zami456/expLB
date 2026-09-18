@@ -1,0 +1,87 @@
+{
+ "name": "hf275_role_groups_strict",
+ "description": "All 275 Assistant-Axis roles labelled by the persona-coordinates paper's rule: a role joins a behaviour group only if its prompt states a stance toward disclosure or toward agreement. Occupations, traits and creatures stay unlabelled and still feed the Assistant Axis and the all-roles PCA.",
+ "subject_model": "meta-llama/Llama-3.3-70B-Instruct",
+ "source_role_list": "assistant_axis/data/roles/instructions",
+ "labelled_by": "Claude, 2026-09-18; review and override in docs/thesis/role-labels/",
+ "groups": {
+  "deception": {
+   "contrast_with": "honesty",
+   "note": "stance: conceals, manipulates or discloses selectively",
+   "roles": [
+    "chameleon",
+    "criminal",
+    "fixer",
+    "genie",
+    "hacker",
+    "rogue",
+    "saboteur",
+    "smuggler",
+    "spy"
+   ]
+  },
+  "honesty": {
+   "contrast_with": "deception",
+   "note": "stance: discloses fully, verifies or preserves the record",
+   "roles": [
+    "archivist",
+    "auditor",
+    "detective",
+    "examiner",
+    "fool",
+    "jester",
+    "journalist",
+    "judge",
+    "observer",
+    "prophet",
+    "realist",
+    "reporter",
+    "validator",
+    "witness"
+   ]
+  },
+  "sycophancy": {
+   "contrast_with": "anti_sycophancy",
+   "note": "stance: agreement, validation or harmony over accuracy",
+   "roles": [
+    "altruist",
+    "caregiver",
+    "collaborator",
+    "counselor",
+    "emissary",
+    "empath",
+    "facilitator",
+    "optimist",
+    "peacekeeper",
+    "therapist"
+   ]
+  },
+  "anti_sycophancy": {
+   "contrast_with": "sycophancy",
+   "note": "stance: critique and pushback over agreement",
+   "roles": [
+    "contrarian",
+    "critic",
+    "cynic",
+    "devils_advocate",
+    "editor",
+    "evaluator",
+    "grader",
+    "maverick",
+    "perfectionist",
+    "provocateur",
+    "rebel",
+    "reviewer",
+    "skeptic"
+   ]
+  },
+  "assistant_anchor": {
+   "contrast_with": null,
+   "note": "the Assistant-like anchor for the Assistant Axis",
+   "roles": [
+    "assistant",
+    "default"
+   ]
+  }
+ }
+}

@@ -1,0 +1,78 @@
+{
+ "name": "own100_role_groups_strict",
+ "description": "The paper's strict rule applied to the 100 roles own100 already has vectors for; isolates the labelling rule from the vector source.",
+ "subject_model": "meta-llama/Llama-3.3-70B-Instruct",
+ "labelled_by": "Claude, 2026-09-18",
+ "groups": {
+  "deception": {
+   "note": "stance: conceals, manipulates or discloses selectively",
+   "roles": [
+    "chameleon",
+    "criminal",
+    "fixer",
+    "genie",
+    "hacker",
+    "rogue",
+    "saboteur",
+    "smuggler",
+    "spy"
+   ]
+  },
+  "honesty": {
+   "note": "stance: discloses fully, verifies or preserves the record",
+   "roles": [
+    "archivist",
+    "auditor",
+    "detective",
+    "examiner",
+    "jester",
+    "journalist",
+    "judge",
+    "observer",
+    "prophet",
+    "realist",
+    "reporter",
+    "validator",
+    "witness"
+   ]
+  },
+  "sycophancy": {
+   "note": "stance: agreement, validation or harmony over accuracy",
+   "roles": [
+    "altruist",
+    "caregiver",
+    "collaborator",
+    "counselor",
+    "empath",
+    "facilitator",
+    "optimist",
+    "peacekeeper",
+    "therapist"
+   ]
+  },
+  "anti_sycophancy": {
+   "note": "stance: critique and pushback over agreement",
+   "roles": [
+    "contrarian",
+    "critic",
+    "cynic",
+    "devils_advocate",
+    "evaluator",
+    "grader",
+    "maverick",
+    "perfectionist",
+    "provocateur",
+    "rebel",
+    "reviewer",
+    "skeptic"
+   ]
+  },
+  "assistant_anchor": {
+   "note": "the Assistant-like anchor for the Assistant Axis",
+   "roles": [
+    "assistant",
+    "default"
+   ]
+  }
+ }
+}
