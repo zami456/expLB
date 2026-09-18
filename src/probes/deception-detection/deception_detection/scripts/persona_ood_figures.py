@@ -35,7 +35,8 @@ SHORT = {
     "harm_refusal_knowledge_report__plain": "HP-KR",
     "insider_trading_cadenza__plain": "IT",
     "instruct_dishonesty__plain": "ID",
-    "repe_honesty__plain_val": "RepE",
+    "repe_honesty__plain": "RepE",
+    "repe_honesty__plain_val": "RepE (val only)",
 }
 
 
@@ -198,5 +199,61 @@ def variants(out_dir: str | Path = OUT_DIR) -> None:
     print(f"wrote variants.png to {out_dir}")
 
 
+
+
+def syc(out_dir: str | Path = OUT_DIR) -> None:
+    """The two persona bases side by side, and where they differ.
+
+    Compares deception PCs against sycophancy PCs directly rather than each against the raw
+    baseline -- the baseline already has its own figure, and the question here is what changes
+    when the basis is fitted on a different behaviour.
+    """
+    out_dir = Path(out_dir)
+    pc3, syc3 = _load(out_dir, "pc3"), _load(out_dir, "syc3")
+
+    fig, axes = plt.subplots(1, 2, figsize=(11, 4.6), facecolor=SURFACE)
+    norm = TwoSlopeNorm(vmin=0.0, vcenter=0.5, vmax=1.0)
+    for ax, (matrix, title) in zip(
+        axes,
+        [
+            (pc3, "Deception PCs (3-d)"),
+            (syc3, "Sycophancy PCs (3-d)"),
+        ],
+        strict=True,
+    ):
+        ax.set_facecolor(SURFACE)
+        image = _heatmap(ax, matrix, norm, title, ".2f")
+
+    bar = fig.colorbar(image, ax=axes, fraction=0.025, pad=0.02, ticks=[0, 0.25, 0.5, 0.75, 1.0])
+    bar.set_label("AUROC  (0.5 = chance)", fontsize=9, color=INK_MUTED)
+    bar.ax.tick_params(labelsize=8, colors=INK_MUTED, length=0)
+    bar.outline.set_visible(False)
+    fig.suptitle(
+        "Matched vs mismatched persona basis, on deception datasets",
+        fontsize=12, color=INK, x=0.125, ha="left", y=0.98,
+    )
+    fig.savefig(out_dir / "transfer_sycophancy.png", dpi=200, bbox_inches="tight",
+                facecolor=SURFACE)
+    plt.close(fig)
+
+    fig, ax = plt.subplots(figsize=(6.2, 4.8), facecolor=SURFACE)
+    ax.set_facecolor(SURFACE)
+    delta = syc3 - pc3
+    limit = float(np.nanmax(np.abs(delta.to_numpy(dtype=float))))
+    image = _heatmap(
+        ax, delta, TwoSlopeNorm(vmin=-limit, vcenter=0.0, vmax=limit),
+        "Sycophancy PCs minus deception PCs", "+.2f",
+    )
+    bar = fig.colorbar(image, ax=ax, fraction=0.046, pad=0.03)
+    bar.set_label("Δ AUROC   (blue = sycophancy better)", fontsize=9, color=INK_MUTED)
+    bar.ax.tick_params(labelsize=8, colors=INK_MUTED, length=0)
+    bar.outline.set_visible(False)
+    fig.savefig(out_dir / "transfer_sycophancy_delta.png", dpi=200, bbox_inches="tight",
+                facecolor=SURFACE)
+    plt.close(fig)
+
+    print(f"wrote transfer_sycophancy.png and transfer_sycophancy_delta.png to {out_dir}")
+
+
 if __name__ == "__main__":
-    fire.Fire({"run": run, "variants": variants})
+    fire.Fire({"run": run, "variants": variants, "syc": syc})

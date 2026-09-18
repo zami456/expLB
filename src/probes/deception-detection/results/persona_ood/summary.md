@@ -193,6 +193,32 @@ The basis is behaviour-specific; an adjacent behaviour costs real performance.
 win only once HP-KR is excluded (0.782–0.883 vs 0.728). HP-KR punishes them harder than it punishes
 the deception arms.
 
+### The mismatched basis loses the invariance property
+
+The means understate the difference. Standard deviation of off-diagonal AUROC across training
+sets (HP-KR train row excluded, since it is inverted and dominates):
+
+| features | dim | train-set sensitivity |
+|---|---|---|
+| baseline | 8192 | 0.167 |
+| **deception PCs** | 3 | **0.027** |
+| **sycophancy PCs** | 3 | **0.163** |
+| random directions | 3 | 0.052 |
+
+The deception basis makes the probe nearly independent of what it was trained on — a 6x drop
+against the raw baseline, and the mechanism behind the whole result. **The sycophancy basis does
+not**: at 0.163 it is as training-set-sensitive as raw 8192-d activations, and worse than random
+directions. Its PC2 and PC3 apparently carry structure that datasets differ on and probes overfit
+to, so the mismatched basis loses the one property that made the matched one useful.
+
+This is visible in `transfer_sycophancy.png`: the deception panel has flat rows, the sycophancy
+panel does not (the CG-trained row reads 1.00/0.44/0.05/0.87/0.81/0.67, the HP-C-trained row
+0.17/0.71/0.47/0.60/0.73/0.74).
+
+Every 1-d variant scores exactly 0.000 on this metric, which is an artifact rather than a finding:
+a one-feature probe can only learn a sign and a scale, so its AUROC is fixed by the direction and
+cannot depend on the training set at all.
+
 Note the two behaviours are **not independent**: |cos(deception axis, sycophancy axis)| = **0.5402**,
 so some of the sycophancy transfer is the shared component rather than sycophancy structure. The
 next section isolates that; it is an addition, not a replication.
@@ -257,3 +283,4 @@ itself; the orthogonalised arm carries the conclusion.
 | `matrix_syc3.csv`, `matrix_syc3_orth.csv`, `matrix_syc_axis1.csv`, `matrix_dec3_orth.csv` | the cross-behaviour arms |
 | `transfer_matrices.png`, `transfer_delta.png` | heatmaps |
 | `variants.png` | off-diagonal transfer per feature set |
+| `transfer_sycophancy.png`, `transfer_sycophancy_delta.png` | matched vs mismatched persona basis |
