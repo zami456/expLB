@@ -11,6 +11,9 @@
 #   export ACTS_CACHE_DIR=/path/with/space
 # Expect roughly 60 GB for a full sweep at bfloat16; the first batch logs the real figure
 # and warns if it will not fit.
+#
+# To run a different config through the same resumable wrapper (e.g. another layer):
+#   CONFIG=deception_detection/scripts/configs/XXXX-9-llama-L30.yaml bash run_llama_all.sh
 
 set -u
 
@@ -31,13 +34,17 @@ ENV_FILE="$REPO_ROOT/.env"
 # `uv run` is unusable inside this vendored package: the anonymisation pass replaced the
 # wheel URLs in its uv.lock with XXXX, so uv fails to parse the lockfile. Use the repo's
 # venv interpreter directly. Override with PYTHON=... if yours lives elsewhere.
+# The package's own .venv is tried first: the root project pins vllm, which has no Windows
+# wheel, so on Windows the working env is the one next to this package's pyproject.toml.
+PKG_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 if [ -z "${PYTHON:-}" ]; then
-    for candidate in "$REPO_ROOT/.venv/Scripts/python.exe" "$REPO_ROOT/.venv/bin/python"; do
+    for candidate in "$PKG_ROOT/.venv/Scripts/python.exe" "$PKG_ROOT/.venv/bin/python" \
+                     "$REPO_ROOT/.venv/Scripts/python.exe" "$REPO_ROOT/.venv/bin/python"; do
         if [ -x "$candidate" ]; then PYTHON="$candidate"; break; fi
     done
 fi
 if [ -z "${PYTHON:-}" ] || [ ! -x "$PYTHON" ]; then
-    echo "No Python interpreter found (looked under $REPO_ROOT/.venv)." >&2
+    echo "No Python interpreter found (looked under $PKG_ROOT/.venv and $REPO_ROOT/.venv)." >&2
     echo "Set PYTHON=/path/to/python and re-run." >&2
     exit 1
 fi
@@ -56,9 +63,10 @@ if [ -z "${NDIF_API_KEY:-}" ]; then
 fi
 
 cd "$SCRIPT_DIR/../.." || exit 1   # package root; config paths are relative to it
-CONFIG=deception_detection/scripts/configs/XXXX-9-llama-all.yaml
+# Any config can be run through this resumable wrapper; the default is unchanged.
+CONFIG="${CONFIG:-deception_detection/scripts/configs/XXXX-9-llama-all.yaml}"
 
-echo "### Starting XXXX-9-llama-all (resumable; re-run this script to continue)"
+echo "### Starting $CONFIG (resumable; re-run this script to continue)"
 "$PYTHON" -u deception_detection/scripts/experiment.py run --config-file "$CONFIG"
 status=$?
 

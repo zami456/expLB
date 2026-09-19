@@ -1,0 +1,46 @@
+# Llama-70B-3.3 over every base liars-bench subset, probing layer 30.
+#
+# Identical to XXXX-9-llama-all.yaml except for two lines, so results are directly
+# comparable with that layer-20 run:
+#   - detect_layers: [30] instead of [20]
+#   - its own stable `name`, so this run resumes from its own folder. It cannot share
+#     XXXX-9-llama-all's folder: that detector.pt was trained on layer 20.
+#
+# Run with:
+#   CONFIG=deception_detection/scripts/configs/XXXX-9-llama-L30.yaml \
+#     bash deception_detection/scripts/run_llama_all.sh
+#
+# Which model's rollouts are loaded is still decided by model_name in XXXX-9.yaml
+# (data/XXXX_9.py:_load_config), so that must stay llama-70b-3.3.
+
+method: "lr"
+model_name: "llama-70b-3.3"
+train_data: "repe_honesty__plain"
+
+eval_data:
+  - "convince_me__plain"
+  - "harm_refusal_choice__plain"
+  - "harm_refusal_knowledge_report__plain"
+  - "insider_trading_cadenza__plain"
+  - "instruct_dishonesty__plain"
+
+control_data:
+  - "XXXX-20__plain"
+
+id: "XXXX-9"
+name: "XXXX-9-llama-L30"
+
+eval_on_policy: false
+control_on_policy: false
+control_dataset_size: 2000
+detect_only_start_of_turn: false
+val_fraction: 0.2
+detect_layers: [30]
+reg_coeff: 10
+max_iter: 1000
+
+# Resumable remote extraction -- see XXXX-9-llama-all.yaml for what each knob does.
+# The cache key includes the layer list, so layer-30 entries never collide with layer 20's.
+acts_cache_mode: "full"
+ndif_token_budget: 8000
+host_token_budget: 32000
