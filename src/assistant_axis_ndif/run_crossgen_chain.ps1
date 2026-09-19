@@ -12,12 +12,27 @@
 
   Each step is the same run_crossgen_full.ps1, so each is resumable and skips finished files.
 #>
+param([switch]$Force)
+
 $ErrorActionPreference = "Continue"
 $D = $PSScriptRoot
 $repo = Split-Path (Split-Path $D -Parent) -Parent
 Set-Location $repo
 $status = Join-Path $repo "logs\crossgen_chain.status"
 $full = Join-Path $D "run_crossgen_full.ps1"
+
+# The task carries an AtStartup trigger so an unprompted reboot resumes the chain instead of
+# stranding it (see register_crossgen_chain_task.ps1). That means this script also fires on
+# boots long after the work is finished, so a completed run must be cheap to re-enter: if the
+# status file already says DONE, leave immediately rather than re-verifying 123k files
+# against Drive. Delete the status file, or pass -Force, to make it run again.
+if (-not $Force -and (Test-Path $status) -and
+    ((Get-Content $status -Tail 1) -match '^DONE ')) {
+    "SKIP " + (Get-Date -Format "yyyy-MM-dd HH:mm:ss") + " already DONE; -Force to re-run" |
+        Out-File -Append -Encoding utf8 $status
+    exit 0
+}
+
 "START " + (Get-Date -Format "yyyy-MM-dd HH:mm:ss") | Out-File -Encoding utf8 $status
 
 $ALL = "paper16_famcentred paper16_shared own100 hf100 hf275_loose hf275_strict own100_strict"
