@@ -310,6 +310,26 @@ sharing pooling, estimator and training set, the AUROC gain is only **+0.018** (
 while the balanced-accuracy loss is **−0.102**. The ranking advantage over the paper's number is
 real but substantially inflated by the pipeline difference.
 
+## Layer 40: which of these findings survive
+
+The same experiment at layer 40 is in `../persona_ood_L40/summary.md`. Headlines, because several
+conclusions here turn out to be layer-20-specific:
+
+- **The inversions move with depth and swap datasets.** HP-KR, inverted at 0.109 here and the
+  anomaly driving much of this analysis, is *solved* at layer 40 (0.936). Insider-trading inverts
+  instead (0.973 → 0.338). So the inversion belongs to a layer's representation, not to a dataset
+  alone — which weakens the claim made above that it is purely a property of HP-KR.
+- **The raw baseline is much stronger at depth** (off-diagonal 0.648 → 0.732), leaving persona less
+  headroom.
+- **"Almost all the gain is one direction" strengthens.** At layer 40 the 1-d arms beat baseline
+  (PC1 +0.114, axis +0.092) while the 3-d arm *loses* (−0.024).
+- **Sycophancy stops being purely borrowed.** Deception-removed sycophancy holds 0.825 excluding
+  HP-KR at layer 40 against random's 0.544 — versus 0.638 here. And sycophancy PC1 transfers
+  better than deception PC1 there.
+- **The orthogonalisation result does not survive.** `dec3_orth` was the best arm here (0.7111) and
+  is among the worst at layer 40 (0.6038); it was riding on HP-KR's layer-20 inversion.
+- **Train-set invariance weakens but holds**: 6× better than baseline here, 2× at layer 40.
+
 ## Caveats
 
 - **P = 15, not 26.** A documented deviation. The full-bank version re-runs in seconds against the
