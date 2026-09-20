@@ -137,7 +137,14 @@ def main() -> None:
     args = ap.parse_args()
 
     vecs, meta, layers = load_vectors(Path(args.vectors_dir))
-    groups = load_role_groups(args.roles_file)["groups"]
+    doc = load_role_groups(args.roles_file)
+    groups = doc["groups"]
+    # A bank may declare its own contrasts, so a new group pair needs no code change here.
+    # kd/personas/kd_role_groups.json uses this for knowledge_denial (feigned vs sincere
+    # ignorance -- both sides deny, so the axis cannot be a wording artifact) and
+    # kd_assertion (feigned vs plain assertion). Banks without the key keep the two
+    # hardcoded pairs below, so paper16 / own100 / hf275 are unaffected.
+    declared = doc.get("contrasts") or []
     K, H = next(iter(vecs.values())).shape
     print(f"{len(vecs)} role vectors, shape ({K}, {H}), layers {layers[0]}..{layers[-1]}")
 
@@ -161,8 +168,16 @@ def main() -> None:
     counts = {"assistant": (len(default_like), len(role_side))}
 
     # --- behaviour contrasts (Eq 4) --------------------------------------------------
+    # The four paper16 group names are OPTIONAL, not assumed. Every bank until 2026-09-21 was
+    # paper16 or a superset of it (kd = paper16 + 10 roles), so indexing groups["deception"]
+    # directly always worked. The cap bank is the first with entirely new group names --
+    # capitulation / position_holding / assistant_anchor -- and it died here with
+    # KeyError: 'deception' after the whole 1,300-rollout generation had succeeded.
     for pos, neg, name in (("deception", "honesty", "deception"),
                            ("sycophancy", "anti_sycophancy", "sycophancy")):
+        if pos not in groups or neg not in groups:
+            print(f"  - {name} axis not applicable: this bank has no {pos}/{neg} groups")
+            continue
         d, npos, nneg = class_contrast(vecs, groups[pos]["roles"], groups[neg]["roles"])
         if d is None:
             print(f"  ! {name} axis skipped: {npos} {pos} / {nneg} {neg} vectors")
@@ -171,12 +186,31 @@ def main() -> None:
         counts[name] = (npos, nneg)
 
     # the paper's unified harmful axis (Appendix C): both harmful groups vs both harmless
-    harmful = groups["deception"]["roles"] + groups["sycophancy"]["roles"]
-    harmless = groups["honesty"]["roles"] + groups["anti_sycophancy"]["roles"]
-    d, npos, nneg = class_contrast(vecs, harmful, harmless)
-    if d is not None:
-        axes["unified"] = d
-        counts["unified"] = (npos, nneg)
+    if all(g in groups for g in ("deception", "sycophancy", "honesty", "anti_sycophancy")):
+        harmful = groups["deception"]["roles"] + groups["sycophancy"]["roles"]
+        harmless = groups["honesty"]["roles"] + groups["anti_sycophancy"]["roles"]
+        d, npos, nneg = class_contrast(vecs, harmful, harmless)
+        if d is not None:
+            axes["unified"] = d
+            counts["unified"] = (npos, nneg)
+    else:
+        print("  - unified axis not applicable: this bank has no paper16 behaviour groups")
+
+    # --- contrasts the bank declares for itself --------------------------------------
+    for spec in declared:
+        name = spec["name"]
+        if name in axes:
+            continue                      # the hardcoded pairs above already built it
+        pos = [r for g in spec["pos"] for r in groups.get(g, {}).get("roles", [])]
+        neg = [r for g in spec["neg"] for r in groups.get(g, {}).get("roles", [])]
+        d, npos, nneg = class_contrast(vecs, pos, neg)
+        if d is None:
+            print(f"  ! {name} skipped: {npos} pos / {nneg} neg vectors present")
+            continue
+        axes[name] = d
+        counts[name] = (npos, nneg)
+        print(f"  + declared contrast {name}: {'+'.join(spec['pos'])} - {'+'.join(spec['neg'])} "
+              f"({npos} vs {nneg} roles)")
 
     # --- PCA: one basis per behaviour, plus the all-roles basis (Eq 2, then Eq 3) -----
     # Mahadik & Skapars run PCA over the behaviour-specific persona set ONLY, so their PC1
@@ -210,6 +244,28 @@ def main() -> None:
                   groups["deception"]["roles"] + groups["honesty"]["roles"]
                   + groups["sycophancy"]["roles"] + groups["anti_sycophancy"]["roles"] + default_like,
                   axes["unified"], "unified contrast")
+    # a declared contrast gets its own PCA basis too, over exactly the roles it contrasts
+    # plus the anchor -- the same construction the behaviour bases use above.
+    #
+    # OPTIONAL "basis" KEY. A spec may name the groups the PCA runs over, independently of the
+    # groups it contrasts. Without it the basis is pos+neg+anchor, which ties the two together
+    # and makes one question unaskable: does a group contribute to the BASIS even when it is
+    # not in the contrast? The cap bank needs exactly that -- F-55 found its position_holding
+    # personas behave identically to no system prompt at all, so three variants are run:
+    #   A  pos=capitulation  neg=position_holding                      basis = default (13 roles)
+    #   B  pos=capitulation  neg=assistant_anchor  basis=all three     (13 roles)
+    #   C  pos=capitulation  neg=assistant_anchor                      basis = default (7 roles)
+    # A vs B isolates the contrast; B vs C isolates the basis. Banks without the key are
+    # unaffected.
+    for spec in declared:
+        name = spec["name"]
+        if name in pcas or name not in axes:
+            continue
+        basis_groups = spec.get("basis") or (list(spec["pos"]) + list(spec["neg"]))
+        subset = [r for g in basis_groups
+                  for r in groups.get(g, {}).get("roles", [])] + default_like
+        build_pca(name, subset, axes[name], f"{name} contrast")
+
     build_pca("all", names, assistant_axis, "assistant axis")
 
     # kept at the top level under the original names for backward compatibility: this is
@@ -244,9 +300,13 @@ def main() -> None:
     print("  [per-behaviour PCA -- the persona-coordinates basis]")
     print("    " + f"{'basis':12}{'n':>4}{'cos(PC1,contrast)':>20}"
           f"{'cos(PC1,assistant)':>21}{'PC1 var':>10}")
-    for tag in ("deception", "sycophancy", "unified"):
-        if tag not in pcas:
-            continue
+    # EVERY basis that has a matching axis, not a hardcoded paper16 triple. The literal
+    # ("deception", "sycophancy", "unified") printed an EMPTY table for the cap bank on
+    # 2026-09-21 -- and because the chain's 2e gate only checked that the .pt file existed,
+    # it logged "written / written / PASS" while the gate it was supposed to enforce
+    # (cos(PC1,contrast) >= 0.90) had never been computed at all. Sixth hardcoding of the
+    # same kind found in this file family.
+    for tag in [t for t in pcas if t != "all" and t in axes]:
         pk = pcas[tag]
         b1 = pk["components"][:, 0, :]
         print("    " + f"{tag:12}{len(pk['roles']):>4}"
@@ -255,6 +315,20 @@ def main() -> None:
               f"{pk['variance_ratio'][li, 0]:>10.1%}")
     print("    a behaviour PC1 near +1.0 on its own contrast is the expected geometry;")
     print("    a large |cos| with the assistant axis is inherited from the contrast itself.")
+
+    # TWO BASES OVER THE SAME ROLES ARE THE SAME SUBSPACE, whatever they are named or
+    # contrasted against -- build_pca only ever sees the role set. The per-PC sign differs
+    # (orient_pcs pins against each basis's own contrast) but a linear probe is invariant to
+    # a per-feature sign, so `pc:<a>` and `pc:<b>` score IDENTICALLY in 9_persona_probes.py.
+    # Printed because the cap bank's A/B variants are exactly this case, and their identical
+    # crossgen AUROCs read like a finding until you notice they cannot differ.
+    _seen: dict = {}
+    for tag in [t for t in pcas if t in axes or t == "all"]:
+        _seen.setdefault(tuple(sorted(pcas[tag]["roles"])), []).append(tag)
+    for _roles, _tags in _seen.items():
+        if len(_tags) > 1:
+            print(f"    NOTE bases {' == '.join(_tags)} share {len(_roles)} roles -- same "
+                  "subspace, so any probe on them is identical by construction")
 
     proj = {r: (vecs[r][li] @ pc1[li]).item() for r in names}
     dvals = [proj[r] for r in default_like]
