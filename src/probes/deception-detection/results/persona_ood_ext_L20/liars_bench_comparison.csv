@@ -1,0 +1,8 @@
+method,source,privileged,balacc_1pct_fpr,auroc,n_datasets
+Mean Probe,Table 6 p.54,False,0.636,0.682,5
+Follow-Up Probe,Table 7 p.55,False,0.5780000000000001,0.6340000000000001,5
+Upper-Bound Probe,Table 8 p.56,True,0.89,0.93,5
+persona axis (zero-shot),measured here,False,0.5341735247057946,0.750347010814445,5
+persona PC1 (zero-shot),measured here,False,0.5414122644501552,0.7685953287476543,5
+persona PC3 (RepE-trained),measured here,False,0.5437957474519042,0.7326591334545405,5
+raw activations (RepE-trained),measured here,False,0.6571034558265637,0.73442525156404,5

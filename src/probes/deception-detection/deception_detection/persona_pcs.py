@@ -120,6 +120,32 @@ def load_bank(path: Path | str = BANK_PATH) -> PersonaBank:
 # above, extended to every layer. The layer-20 slice is bit-identical to `paper16_L20.pt`.
 VECTORS_DIR = REPO_ROOT / "persona vectors" / "vectors_s3"
 
+# A later, larger extraction that adds ten roles built around *denial of knowledge* rather than
+# assertion of falsehood. That distinction is why HP-KR inverts under the original axis: its
+# deceptive response is "I don't know" while its honest one is "yes, I know", so an axis fitted
+# on personas that all assert (handler, spin_doctor, narrative_manager) points the wrong way.
+#
+# NOT a superset of VECTORS_DIR -- all 26 original personas were re-extracted here with more
+# rollouts (default 100 -> 150, pc_handler 64 -> 106), so vectors differ by up to 0.78 against a
+# typical norm of ~4.1. Comparisons across the two folders confound "more rollouts" with "more
+# personas"; run the original groups from *this* folder to separate them.
+EXTENDED_VECTORS_DIR = REPO_ROOT / "persona including knowlede denial"
+
+KNOWLEDGE_DENIAL_PERSONAS = (
+    "pc_amnesiac_witness",
+    "pc_deniable_expert",
+    "pc_feigned_novice",
+    "pc_stonewaller",
+)
+KNOWLEDGE_CANDOUR_PERSONAS = (
+    "pc_calibrated_reporter",
+    "pc_candid_witness",
+    "pc_forthright_expert",
+    "pc_honest_novice",
+    "pc_plain_dealer",
+    "pc_scrupulous_witness",
+)
+
 # These files ship no axes, but all four reconstruct from group means. Verified against the stored
 # layer-20 axes to ~1e-7 (float32 round-off); `tests/test_persona_pcs.py` pins the equivalence.
 def _axes_from_groups(vectors: dict[str, np.ndarray]) -> dict[str, np.ndarray]:
@@ -127,7 +153,7 @@ def _axes_from_groups(vectors: dict[str, np.ndarray]) -> dict[str, np.ndarray]:
         return np.stack([vectors[n] for n in names]).mean(0)
 
     others = tuple(n for n in vectors if n != "default")
-    return {
+    axes = {
         "deception": mean_of(DECEPTION_PERSONAS) - mean_of(HONESTY_PERSONAS),
         "sycophancy": mean_of(SYCOPHANCY_PERSONAS) - mean_of(ANTI_SYCOPHANCY_PERSONAS),
         "unified": (
@@ -136,6 +162,13 @@ def _axes_from_groups(vectors: dict[str, np.ndarray]) -> dict[str, np.ndarray]:
         ),
         "assistant": vectors["default"] - mean_of(others),
     }
+    # only present in the extended folder
+    if set(KNOWLEDGE_DENIAL_PERSONAS + KNOWLEDGE_CANDOUR_PERSONAS) <= set(vectors):
+        axes["denial"] = mean_of(KNOWLEDGE_DENIAL_PERSONAS) - mean_of(KNOWLEDGE_CANDOUR_PERSONAS)
+        axes["extended"] = mean_of(DECEPTION_PERSONAS + KNOWLEDGE_DENIAL_PERSONAS) - mean_of(
+            HONESTY_PERSONAS + KNOWLEDGE_CANDOUR_PERSONAS
+        )
+    return axes
 
 
 def load_bank_at_layer(layer: int, path: Path | str = VECTORS_DIR) -> PersonaBank:

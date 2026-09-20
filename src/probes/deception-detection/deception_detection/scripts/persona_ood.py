@@ -492,6 +492,7 @@ def run(
     pooled_dir: str | Path = POOLED_DIR,
     out_dir: str | Path = OUT_DIR,
     layer: int = 20,
+    vectors: str | Path | None = None,
 ) -> None:
     pooled_dir, out_dir = Path(pooled_dir), Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -500,7 +501,9 @@ def run(
     # it -- persona directions live in the residual stream at one layer, so pairing layer-40
     # activations with layer-20 directions yields a meaningless number rather than an error. The
     # layer is recorded in summary.csv so a mismatch is at least visible after the fact.
-    bank = persona_pcs.load_bank_at_layer(layer)
+    bank = persona_pcs.load_bank_at_layer(
+        layer, vectors if vectors is not None else persona_pcs.VECTORS_DIR
+    )
     geom = persona_pcs.fit_geometry(bank, k=3)
     syc_geom = persona_pcs.fit_geometry(
         bank,
@@ -546,6 +549,32 @@ def run(
     # The paper's own feature sets: Figure 4 reports PC1 for deception, Figure 5 k=3 for
     # sycophancy, and it never orthogonalises. Those arms come first; the *_orth arms below are
     # this repo's addition, not a replication of anything in the paper.
+    # The extended folder adds roles whose deception is *denial of knowledge* rather than
+    # assertion of falsehood. HP-KR inverts under the original axis precisely because its lie is
+    # a denial, so these arms exist to test whether that is fixable at the basis level.
+    extended = "denial" in bank.axes
+    if extended:
+        ext_geom = persona_pcs.fit_geometry(
+            bank,
+            k=3,
+            deception=persona_pcs.DECEPTION_PERSONAS + persona_pcs.KNOWLEDGE_DENIAL_PERSONAS,
+            honesty=persona_pcs.HONESTY_PERSONAS + persona_pcs.KNOWLEDGE_CANDOUR_PERSONAS,
+            axis_name="extended",
+        )
+        denial_geom = persona_pcs.fit_geometry(
+            bank,
+            k=3,
+            deception=persona_pcs.KNOWLEDGE_DENIAL_PERSONAS,
+            honesty=persona_pcs.KNOWLEDGE_CANDOUR_PERSONAS,
+            axis_name="denial",
+        )
+        logger.info(
+            f"extended geometry: {len(ext_geom.persona_names)} personas, "
+            f"var {np.round(ext_geom.explained_variance_ratio, 3).tolist()}; "
+            f"denial-only: {len(denial_geom.persona_names)} personas, "
+            f"var {np.round(denial_geom.explained_variance_ratio, 3).tolist()}"
+        )
+
     variants: dict[str, object] = {
         "baseline": lambda z: z,
         "pc1": lambda z: geom.project(z, k=1),
@@ -558,6 +587,14 @@ def run(
         "syc3_orth": lambda z: z @ syc_orth.T,
         "dec3_orth": lambda z: z @ dec_orth.T,
     }
+    if extended:
+        variants |= {
+            "ext_pc1": lambda z: ext_geom.project(z, k=1),
+            "ext_pc3": lambda z: ext_geom.project(z, k=3),
+            "ext_axis1": lambda z: ext_geom.axis_score(z)[:, None],
+            "denial_pc3": lambda z: denial_geom.project(z, k=3),
+            "denial_axis1": lambda z: denial_geom.axis_score(z)[:, None],
+        }
     matrices = {name: transfer_matrix(fn, datasets, order) for name, fn in variants.items()}
 
     # random control, averaged over draws so a single lucky basis cannot carry the comparison
@@ -578,6 +615,7 @@ def run(
         "baseline": hidden, "pc1": 1, "pc3": 3, "axis1": 1, "random3": 3,
         "syc_pc1": 1, "syc3": 3, "syc_axis1": 1,
         "syc3_orth": syc_orth.shape[0], "dec3_orth": dec_orth.shape[0],
+        "ext_pc1": 1, "ext_pc3": 3, "ext_axis1": 1, "denial_pc3": 3, "denial_axis1": 1,
     }
     summary = pd.DataFrame(
         [
@@ -591,11 +629,8 @@ def run(
                 ),
                 "diagonal_mean": diagonal_mean(matrices[name]),
             }
-            for name in (
-                "baseline", "pc1", "pc3", "axis1",
-                "syc_pc1", "syc3", "syc_axis1",
-                "syc3_orth", "dec3_orth", "random3",
-            )
+            for name in dims
+            if name in matrices
         ]
     )
     summary.to_csv(out_dir / "summary.csv", index=False)
