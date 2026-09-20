@@ -252,6 +252,64 @@ clearly worse than the deception axis on RepE, a pure honest/deceptive contrast.
 only slightly — 0.978 against 0.992. At |cos| = 0.54 the raw sycophancy arm is a weak control by
 itself; the orthogonalised arm carries the conclusion.
 
+## Balanced accuracy: the benchmark's metric, and why it is secondary
+
+Liars' Bench scores on **balanced accuracy at 1% FPR on the alpaca control**, not AUROC. The same
+transfer matrices under that metric (`summary_balacc.csv`, `matrix_balacc_*.csv`):
+
+| features | dim | off-diag | excl. HP-KR | diagonal | sd | **cells at 0.5 floor** |
+|---|---|---|---|---|---|---|
+| baseline | 8192 | 0.5545 | 0.5819 | 0.8248 | 0.109 | **15 / 30** |
+| deception PC1 | 1 | **0.5968** | **0.6460** | 0.6223 | 0.159 | 13 / 30 |
+| deception PCs | 3 | 0.5737 | 0.6238 | 0.6186 | 0.151 | **10 / 30** |
+| deception axis | 1 | 0.5866 | 0.6344 | 0.6120 | 0.149 | 13 / 30 |
+| sycophancy PCs | 3 | 0.5253 | 0.5434 | 0.5716 | 0.069 | 16 / 30 |
+| sycophancy PCs, deception removed | 3 | 0.5016 | 0.5097 | 0.5381 | 0.035 | **22 / 30** |
+
+**It cannot replace AUROC.** Balanced accuracy is `(recall + specificity)/2`, so a probe that
+flags nothing scores exactly 0.5 — and *half the baseline matrix lands there*. Worse, a strongly
+anti-correlated probe flags nothing either, so it scores 0.5 too. Under AUROC the HP-KR column
+reads `0.09, 0.07, 0.40, 0.21, 0.15`; under balanced accuracy it is `0.500, 0.500, 0.500, 0.506,
+0.500`. The inversion that three independent methods agree on simply disappears. `tests/
+test_metrics.py::TestInversionCollapse` pins this.
+
+**But it shows one thing AUROC cannot.** The deception projections have *fewer* dead cells than the
+raw baseline (10–13 against 15), so they improve calibration against the control and not only
+ranking. The sycophancy ones go the other way (16–22), and the orthogonalised sycophancy arm is
+almost entirely dead at 22/30 — consistent with its collapse under AUROC.
+
+## Against the Liars' Bench probe baselines
+
+All three of the paper's probes (`liars_bench_comparison.csv`), re-averaged over the five shared
+datasets. The paper's rows are **transcribed from Tables 6–8**, not recomputed — none can be
+reproduced from the activation cache. The Follow-Up probe rewrites every input
+(`experiment.py:422-432` appends a follow-up question and a prefilled `"No"`, and scores that one
+token), so every cache key misses and it would need a fresh remote extraction; the Upper-Bound
+probe also trains on privileged in-dataset examples.
+
+| method | bal. acc @1% FPR | AUROC | source |
+|---|---|---|---|
+| Mean Probe | **0.636** | 0.682 | Table 6 p.54 |
+| Follow-Up Probe | 0.578 | 0.634 | Table 7 p.55 |
+| Upper-Bound Probe (*privileged*) | *0.890* | *0.930* | Table 8 p.56 |
+| persona axis (zero-shot) | 0.547 | 0.746 | measured |
+| persona PC1 (zero-shot) | 0.555 | 0.752 | measured |
+| persona PC3 (RepE-trained) | 0.551 | **0.752** | measured |
+| raw activations (RepE-trained) | 0.657 | 0.734 | measured |
+
+**Persona wins on ranking and loses on the benchmark's metric.** Against the paper's Mean Probe:
+AUROC **+0.070**, balanced accuracy **−0.085**. The zero-shot axis manages 0.746 AUROC without
+seeing a single Liars' Bench label. But at a 1%-FPR threshold it flags too little to convert that
+into accuracy, so on the benchmark's own terms it would place below every deployable baseline.
+
+**The within-pipeline comparison is the honest one, and it is less flattering.** Cross-pipeline
+rows are not comparable — this repo's reproduction of the Mean Probe recipe reaches 0.657 balanced
+accuracy where the paper reports 0.636, largely because `trim_reasoning` flips insider-trading
+(the paper's own Table 17). Comparing persona against the raw-activation probe *in this pipeline*,
+sharing pooling, estimator and training set, the AUROC gain is only **+0.018** (0.752 vs 0.734)
+while the balanced-accuracy loss is **−0.102**. The ranking advantage over the paper's number is
+real but substantially inflated by the pipeline difference.
+
 ## Caveats
 
 - **P = 15, not 26.** A documented deviation. The full-bank version re-runs in seconds against the

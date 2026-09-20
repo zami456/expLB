@@ -1,128 +1,136 @@
+"""Tests for the transfer-matrix scorers.
+
+The point of these is less "does the arithmetic work" than pinning *why* balanced accuracy at a
+fixed FPR is reported beside AUROC rather than instead of it.
+"""
+
 import numpy as np
+import pandas as pd
 import pytest
-import torch
 
-from deception_detection.metrics import (
-    get_auroc,
-    get_auroc_manual,
-    get_fpr_tpr,
-    get_tpr_at_fpr_from_control_dataset,
-    get_tpr_at_fpr_from_paired_dataset,
+from deception_detection.scripts import persona_ood as P
+
+
+class TestBalancedAccuracy:
+    def test_perfect_separation(self):
+        y = np.array([0, 0, 1, 1])
+        scores = np.array([0.0, 0.1, 0.9, 1.0])
+        assert P.balanced_accuracy(y, scores, threshold=0.5) == 1.0
+
+    def test_hand_computed(self):
+        # 1 of 2 positives above threshold -> recall 0.5; 2 of 2 negatives below -> spec 1.0
+        y = np.array([0, 0, 1, 1])
+        scores = np.array([0.0, 0.1, 0.4, 0.9])
+        assert P.balanced_accuracy(y, scores, threshold=0.5) == pytest.approx(0.75)
+
+    def test_single_class_is_nan(self):
+        assert np.isnan(P.balanced_accuracy(np.zeros(4, int), np.arange(4.0), 0.5))
+
+    def test_floors_at_half_when_nothing_is_flagged(self):
+        """The saturation mechanism: recall 0, specificity 1 -> exactly 0.5.
+
+        This is why roughly half the off-diagonal cells pin at 0.5 and carry no information.
+        """
+        y = np.array([0, 0, 1, 1])
+        scores = np.array([0.1, 0.2, 0.3, 0.4])
+        assert P.balanced_accuracy(y, scores, threshold=99.0) == 0.5
+
+
+class TestInversionCollapse:
+    """The property that disqualifies balanced accuracy as a *replacement* for AUROC.
+
+    A strongly anti-correlated probe carries real signal with the wrong sign; a constant probe
+    carries none. AUROC tells them apart (0.0 vs 0.5). Balanced accuracy at a high threshold
+    cannot -- both flag nothing, so both score 0.5. HP-KR's inversion is the most informative
+    result in this study, and this metric would render it invisible.
+    """
+
+    def test_anti_correlated_and_constant_are_indistinguishable(self):
+        y = np.array([0, 0, 1, 1])
+        inverted = np.array([0.9, 1.0, 0.0, 0.1])  # perfectly wrong ordering
+        constant = np.zeros(4)
+
+        assert P.balanced_accuracy(y, inverted, threshold=99.0) == 0.5
+        assert P.balanced_accuracy(y, constant, threshold=99.0) == 0.5
+
+        assert P.auroc(y, inverted) == 0.0
+        assert P.auroc(y, constant) == 0.5
+
+
+class TestMetricPlumbing:
+    def test_auroc_metric_ignores_the_threshold(self):
+        y = np.array([0, 0, 1, 1])
+        scores = np.array([0.0, 0.1, 0.9, 1.0])
+        assert P.AUROC.fn(y, scores, 0.5) == P.AUROC.fn(y, scores, 1e9)
+        assert not P.AUROC.needs_threshold
+
+    def test_balanced_accuracy_metric_uses_it(self):
+        y = np.array([0, 0, 1, 1])
+        scores = np.array([0.0, 0.1, 0.9, 1.0])
+        assert P.BALANCED_ACCURACY.needs_threshold
+        assert P.BALANCED_ACCURACY.fn(y, scores, 0.5) != P.BALANCED_ACCURACY.fn(y, scores, 1e9)
+
+    def test_thresholded_metric_requires_a_control(self):
+        ds = {"a": P.Pooled("a", np.zeros((4, 2)), np.array([0, 0, 1, 1]))}
+        with pytest.raises(ValueError, match="needs a control"):
+            P.transfer_matrix(lambda z: z, ds, ["a"], metric=P.BALANCED_ACCURACY, control=None)
+
+
+class TestPaperConstants:
+    def test_shared_datasets_map_into_the_paper_columns(self):
+        for short in P.SHARED_DATASETS.values():
+            assert short in P.PAPER_COLUMNS
+
+    def test_every_probe_row_has_one_value_per_column(self):
+        for name, spec in P.PAPER_PROBES.items():
+            assert len(spec["auroc"]) == len(P.PAPER_COLUMNS), name
+            assert len(spec["balacc"]) == len(P.PAPER_COLUMNS), name
+
+    def test_upper_bound_is_flagged_privileged(self):
+        # it trains on in-dataset examples, so it is the paper's ceiling, not a baseline
+        assert P.PAPER_PROBES["Upper-Bound Probe"]["privileged"]
+        assert not P.PAPER_PROBES["Mean Probe"]["privileged"]
+
+
+class TestSaturationHelpers:
+    def test_counts_only_off_diagonal_floor_cells(self):
+        m = pd.DataFrame([[0.5, 0.5], [0.9, 0.5]], index=["a", "b"], columns=["a", "b"])
+        assert P.cells_at_floor(m) == 1  # the diagonal 0.5s do not count
+
+    def test_sd_ignores_the_diagonal(self):
+        m = pd.DataFrame([[99.0, 0.6], [0.4, 99.0]], index=["a", "b"], columns=["a", "b"])
+        assert P.off_diagonal_sd(m) == pytest.approx(0.1)
+
+
+@pytest.mark.skipif(
+    not (P.POOLED_DIR / "repe_honesty__plain.npz").exists(),
+    reason="needs the pooled activation matrices (run pool_activations.py)",
 )
+class TestRefactorChangedNothing:
+    """Parameterising the metric must leave the committed AUROC matrices byte-identical.
 
+    The diagonal is the risk: a threshold-free metric pools out-of-fold scores and scores once,
+    while a thresholded one has to score per fold. If the default path ever switched to the
+    per-fold branch the numbers would shift silently.
+    """
 
-def test_auroc_random_data():
-    n_samples = 500
-    np.random.seed(42)
-    honest_scores = torch.tensor(np.random.normal(loc=0.3, scale=0.2, size=n_samples).clip(0, 1))
-    deceptive_scores = torch.tensor(np.random.normal(loc=0.7, scale=0.2, size=n_samples).clip(0, 1))
+    def test_default_metric_reproduces_the_committed_matrix(self):
+        from deception_detection import persona_pcs
 
-    auroc_custom = get_auroc_manual(honest_scores, deceptive_scores, N=200)
-    auroc_sklearn = get_auroc(honest_scores, deceptive_scores)
+        saved_path = P.OUT_DIR / "matrix_pc3.csv"
+        if not saved_path.exists():
+            pytest.skip("no committed matrix to compare against")
 
-    assert pytest.approx(auroc_custom, abs=1e-2) == auroc_sklearn
-    assert 0.5 < auroc_sklearn < 1.0  # Should be better than random but not perfect
+        datasets = P.load_pooled()
+        geom = persona_pcs.fit_geometry(persona_pcs.load_bank(), k=3)
+        order = [
+            n for n, d in sorted(datasets.items())
+            if d.two_class and n != P.CONTROL_DATASET
+        ]
+        fresh = P.transfer_matrix(lambda z: geom.project(z, 3), datasets, order).round(4)
+        saved = pd.read_csv(saved_path, index_col=0)
 
-
-def test_auroc_perfect_separation():
-    n_samples = 100
-    honest_scores = torch.zeros(n_samples)
-    deceptive_scores = torch.ones(n_samples)
-
-    auroc_custom = get_auroc_manual(honest_scores, deceptive_scores, N=200)
-    auroc_sklearn = get_auroc(honest_scores, deceptive_scores)
-
-    assert pytest.approx(auroc_custom, abs=1e-4) == 1.0
-    assert pytest.approx(auroc_sklearn, abs=1e-4) == 1.0
-
-
-def test_auroc_complex_case():
-    honest_scores = torch.cat([torch.zeros(90), torch.ones(10)])
-    deceptive_scores = torch.cat([torch.zeros(10), torch.ones(90)])
-
-    auroc_custom = get_auroc_manual(honest_scores, deceptive_scores, N=200)
-    auroc_sklearn = get_auroc(honest_scores, deceptive_scores)
-
-    assert pytest.approx(auroc_custom, abs=1e-2) == 0.9
-    assert pytest.approx(auroc_sklearn, abs=1e-4) == 0.9
-
-
-def test_auroc_no_separation():
-    n_samples = 500
-    np.random.seed(42)
-    scores = torch.tensor(np.random.uniform(0, 1, size=2 * n_samples))
-    honest_scores = scores[:n_samples]
-    deceptive_scores = scores[n_samples:]
-
-    auroc_custom = get_auroc_manual(honest_scores, deceptive_scores, N=200)
-    auroc_sklearn = get_auroc(honest_scores, deceptive_scores)
-
-    assert pytest.approx(auroc_sklearn, abs=1e-1) == 0.5
-    assert pytest.approx(auroc_custom, abs=1e-1) == 0.5
-
-
-def test_get_fpr_tpr():
-    honest_scores = torch.tensor([0.1, 0.2, 0.3, 0.4, 0.5])
-    deceptive_scores = torch.tensor([0.6, 0.7, 0.8, 0.9, 1.0])
-
-    fpr, tpr, thresholds = get_fpr_tpr(honest_scores, deceptive_scores)
-
-    assert len(fpr) == len(tpr) == len(thresholds)
-    assert all(0 <= f <= 1 for f in fpr)
-    assert all(0 <= t <= 1 for t in tpr)
-    assert fpr[0] == tpr[0] == 0
-    assert fpr[-1] == tpr[-1] == 1
-
-
-def test_get_tpr_at_fpr_from_paired_dataset():
-    np.random.seed(42)
-    n_samples = 1000
-    honest_scores = torch.tensor(np.random.normal(loc=0.3, scale=0.2, size=n_samples).clip(0, 1))
-    deceptive_scores = torch.tensor(np.random.normal(loc=0.7, scale=0.2, size=n_samples).clip(0, 1))
-
-    tpr_at_fpr_01 = get_tpr_at_fpr_from_paired_dataset(honest_scores, deceptive_scores, 0.1)
-    tpr_at_fpr_05 = get_tpr_at_fpr_from_paired_dataset(honest_scores, deceptive_scores, 0.5)
-
-    assert 0 < tpr_at_fpr_01 < tpr_at_fpr_05 < 1
-
-
-def test_get_tpr_at_fpr_from_control_dataset():
-    np.random.seed(42)
-    n_samples = 1000
-    deceptive_scores = torch.tensor(np.random.normal(loc=0.7, scale=0.2, size=n_samples).clip(0, 1))
-
-    tpr_at_threshold_05 = get_tpr_at_fpr_from_control_dataset(deceptive_scores, 0.5)
-    tpr_at_threshold_08 = get_tpr_at_fpr_from_control_dataset(deceptive_scores, 0.8)
-
-    assert 0 < tpr_at_threshold_08 < tpr_at_threshold_05 < 1
-
-
-def test_edge_cases():
-    # Test with empty tensors
-    with pytest.raises(ValueError):
-        get_auroc(torch.tensor([]), torch.tensor([]))
-
-    # Test with single element tensors
-    assert get_auroc(torch.tensor([0]), torch.tensor([1])) == 1.0
-    assert get_auroc(torch.tensor([1]), torch.tensor([0])) == 0.0
-
-    # Test with all identical scores
-    n_samples = 100
-    identical_scores = torch.ones(n_samples)
-    assert pytest.approx(get_auroc(identical_scores, identical_scores), abs=1e-4) == 0.5
-
-
-def test_auroc_consistency():
-    n_samples = 1000
-    np.random.seed(42)
-    honest_scores = torch.tensor(np.random.beta(2, 5, size=n_samples))
-    deceptive_scores = torch.tensor(np.random.beta(5, 2, size=n_samples))
-
-    auroc1 = get_auroc(honest_scores, deceptive_scores)
-    auroc2 = get_auroc(honest_scores, deceptive_scores)
-
-    assert auroc1 == auroc2
-
-
-if __name__ == "__main__":
-    pytest.main([__file__])
+        assert list(fresh.index) == list(saved.index)
+        np.testing.assert_allclose(
+            fresh.to_numpy(float), saved.to_numpy(float), atol=1e-9, equal_nan=True
+        )
