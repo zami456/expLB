@@ -101,7 +101,27 @@ Built by `kd/scripts/kd_personas.py --write`. Verified:
 `plain_assertion` 3) and 10 new questions whose object of belief is the speaker's own
 knowledge. Rationale in `DESIGN.md` §5.
 
-**Status: awaiting owner review before any NDIF run.**
+**Revised 2026-09-19 after a self-review pass**, before any compute:
+
+1. **Question balance was fatal and is fixed.** All 10 new questions stipulated "I knew / I did
+   / I had", so a `sincere_ignorance` persona had no gap to admit and answered identically to a
+   `plain_assertion` one — collapsing the two honest groups and destroying the wording-matched
+   contrast. Now 6 "knows, admitting is costly" + 4 "genuinely does not know, admitting that is
+   costly". The four inverted questions also elicit the *other* lie, a false claim of knowledge.
+2. **`sincere_ignorance` rewritten as dispositions**, not accuracy policies, so the group
+   produces "I don't know" language by temperament on any question.
+3. **`candid_unknowing` → `honest_novice`** — grammatical, and an exact mirror of
+   `feigned_novice`.
+4. **Redundant questions dropped**: three variants of "prior awareness" became one; the
+   expertise pair became one; the thinnest question (no stated cost) was replaced.
+5. **Eight awkward instruction variants rewritten** — phrasings like "what you have never
+   forgotten" that cost judge-score-3 rates.
+
+Verified after regeneration: 36 role files, 30 questions with the first 20 byte-identical to
+`pc_questions_shared.jsonl`, every file carrying all 30, 50 new variants at 71–97 characters
+(mean 84), 8 groups, 5 contrasts, every grouped role backed by a file.
+
+**Status: out for external review before any NDIF run.**
 
 ---
 
@@ -115,6 +135,20 @@ text-matched slice; `d_knowledge` the reverse.
 ## Phase 3 — persona run
 
 _not started_
+
+## Phase 3.5 — gates added after external review (2026-09-19)
+
+Two checks raised by an outside review of the v1 packet, both adopted because this project has
+prior measured evidence that each matters. Neither existed in the plan before.
+
+- **Assistant-Axis drift balance.** `6_axes.py:265` already prints each group's mean projection
+  onto every axis. Record `knowledge_denial` vs `sincere_ignorance` on `assistant`, plus
+  `cos(knowledge_denial_axis, assistant)`. Imbalance means the contrast is re-learning persona
+  drift, which is exactly what Q1 measured for paper16 (−0.66 → −0.37).
+- **Per-group response length.** Compute token-length distributions per group from
+  `run/responses/*.jsonl`. Denials are short by construction; length alone already transfers at
+  0.553 on this corpus. If imbalanced, rebuild on a length-matched subsample as a robustness
+  check.
 
 ## Phase 4 — axes
 

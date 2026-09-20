@@ -100,15 +100,35 @@ Three new groups, 10 personas, five instruction variants each.
 
 - **`knowledge_denial`** (4) — the lie *is* feigned ignorance: `amnesiac_witness`,
   `deniable_expert`, `stonewaller`, `feigned_novice`.
-- **`sincere_ignorance`** (3) — says "I don't know" and means it: `candid_unknowing`,
-  `calibrated_reporter`, `scrupulous_witness`.
+- **`sincere_ignorance`** (3) — says "I don't know" and means it: `honest_novice`,
+  `calibrated_reporter`, `scrupulous_witness`. Written as **dispositions** (people who reach
+  for "I don't know" by temperament), not accuracy policies, so they produce denial vocabulary
+  on any question rather than only where a question hands them a gap. A first draft defined
+  them negatively ("neither overstates nor understates"), which is hard to role-play, scores
+  badly on a judge asking whether the model "fully assumes the role", and — fatally — made them
+  indistinguishable from `plain_assertion`.
 - **`plain_assertion`** (3) — says "yes, I know that", unhedged: `forthright_expert`,
   `candid_witness`, `plain_dealer`.
 
 Three of the sincere roles deliberately mirror three of the deceptive ones
-(`candid_unknowing ~ feigned_novice`, `scrupulous_witness ~ amnesiac_witness`,
+(`honest_novice ~ feigned_novice`, `scrupulous_witness ~ amnesiac_witness`,
 `calibrated_reporter ~ stonewaller`) so the contrast holds the role roughly constant and
 varies only whether the ignorance is real.
+
+**The question set carries half the design.** The 10 new questions split 6/4: six where the
+speaker knows and admitting is costly, four where the speaker genuinely does **not** know and
+admitting *that* is costly. The first draft was 10/0, which silently broke the experiment — a
+sincere-ignorance persona has no gap to admit on a question that stipulates knowledge, so it
+answers exactly like a `plain_assertion` persona, the two honest groups collapse, and
+`knowledge_denial − sincere_ignorance` stops being wording-matched. The four inverted questions
+also elicit the *other* lie, a false claim of knowledge — the cell that is empty in HP-KR (§3).
+
+**Residual limitation, stated rather than smoothed.** A persona instruction applies uniformly
+across all 30 questions, while whether a denial is sincere depends on the question's stipulated
+knowledge state. So the isolation is partial, not perfect: on the six "knows" questions the
+sincere personas admit while the deceptive ones deny, and that part of the contrast still
+carries wording. The 6/4 split and the dispositional writing reduce this; they do not remove
+it. `d_utterance` from §4 is what measures how much remains.
 
 Two axes come out, and the difference between them is the experiment:
 
@@ -163,6 +183,26 @@ Every one of these is here because this project has already been burned by its a
 8. **Shared question set.** All 36 personas answer all 30 questions. When they did not, the
    unified PCA came out as a question-topic axis (cos −0.98), not a harm axis
    (`unified-pc1-is-question-family`).
+9. **Assistant-Axis drift balance between the contrasted groups.** *(added 2026-09-19 after an
+   external review raised it; the concern is right and this project has prior evidence for it —
+   paper16 halved `cos(deception, assistant)` from −0.66 to −0.37, which was the whole of Q1.)*
+   Judge filtering keeps only score-3 rollouts, i.e. the ones that drifted furthest from the
+   Assistant persona. If `knowledge_denial` drifts further than `sincere_ignorance`, the
+   difference of means re-learns the Assistant Axis rather than sincerity.
+   **The check is already printed** — `6_axes.py:265` reports each group's mean projection onto
+   every axis, `assistant` included. Promote it to a gate: the `knowledge_denial` and
+   `sincere_ignorance` centroids must sit at comparable projections on `assistant`, and
+   `cos(knowledge_denial_axis, assistant)` must be reported beside every result. Do **not**
+   assume balance because both groups say "I don't know" — measure it. If they are imbalanced,
+   `axes_resid` and `erase:assistant` (`9_persona_probes.py:140`) are the existing tools.
+10. **Per-group response length.** *(same review)* Denials are short and assertions are long, so
+   `knowledge_denial` and `plain_assertion` will differ in token count by construction, and
+   mean-pooling over a short span is a different estimator from mean-pooling over a long one.
+   This corpus already has a length pathology — length alone transfers off-diagonal at 0.553,
+   and the positive class is longer in 9 of 10 datasets (`response-length-transfers-on-its-own`).
+   Report the per-group token-length distribution from `run/responses/*.jsonl` after Phase 3, and
+   if the groups are badly imbalanced, rebuild the axis on a length-matched subsample as a
+   robustness check. Do not try to equalise lengths by instruction — that distorts the persona.
 
 ## 8. Scoring choices, with the evidence behind them
 
