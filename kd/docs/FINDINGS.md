@@ -2321,8 +2321,12 @@ proportional to how good the baseline already is: large on `sycophancy_mt`, wher
 0.601 and is *below chance* from two sources; absent on the columns where raw already reaches
 0.73–0.81.
 
-- **source:** `run-crossgen/kd11/banks/cap_s23/significance.json` (792 tests, `boot_datasets` =
-  10,000, BH-corrected), read by `kd/scripts/read_significance.py` and
+**The unfiltered bank agrees to ≤0.001 on every comparison** (vs raw +0.0984 / +0.0983 at
+block 10, +0.0731 / +0.0730 at block 9; vs `datapca@2` +0.1275 / +0.1273; vs `random@2` +0.2697 /
++0.2696). The judge filter is immaterial to this conclusion as well as to F-65's.
+
+- **source:** `run-crossgen/kd11/banks/cap_{s23,all}/significance.json` (792 tests each,
+  `boot_datasets` = 10,000, BH-corrected), read by `kd/scripts/read_significance.py` and
   `cap/scripts/cap_vs_raw_full.py`.
 - **caveats:** (1) the off-diagonal *mean* is a blunt summary — it averages a column where the
   axis wins by +0.11 with ten where it roughly ties, so a null here does not mean "no effect
