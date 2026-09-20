@@ -219,3 +219,52 @@ class TestAxisNameIsRespected:
         rng = np.random.default_rng(0)
         z = rng.standard_normal((50, 8192))
         assert not np.allclose(geom.axis_score(z), syc.axis_score(z))
+
+
+@pytest.mark.skipif(
+    not persona_pcs.VECTORS_DIR.exists(),
+    reason=f"needs the per-persona all-layer vectors at {persona_pcs.VECTORS_DIR}",
+)
+class TestAllLayerBank:
+    """The per-persona files (`persona vectors/vectors_s3/`) against the single-layer bank.
+
+    These carry vector[80, 8192] per persona, which is what makes any layer other than 20
+    runnable at all. Everything downstream trusts that they are the same run, so that is pinned
+    here rather than assumed.
+    """
+
+    @pytest.fixture(scope="class")
+    def rebuilt(self) -> persona_pcs.PersonaBank:
+        return persona_pcs.load_bank_at_layer(20)
+
+    def test_layer_20_slice_is_the_single_file_bank(self, bank, rebuilt):
+        assert rebuilt.names == bank.names
+        assert np.abs(rebuilt.personas - bank.personas).max() == 0.0
+
+    def test_all_four_axes_reconstruct_from_group_means(self, bank, rebuilt):
+        # the per-persona files ship no axes; they are rebuilt from the group definitions
+        assert set(rebuilt.axes) == set(bank.axes)
+        for name, axis in rebuilt.axes.items():
+            assert np.abs(axis - bank.axes[name]).max() < 1e-6, name
+
+    def test_rollout_counts_match(self, bank, rebuilt):
+        assert rebuilt.n_rollouts == bank.n_rollouts
+
+    def test_missing_persona_is_an_error(self, tmp_path):
+        # a partial folder must fail rather than quietly yield a short bank
+        with pytest.raises(FileNotFoundError, match="missing"):
+            persona_pcs.load_bank_at_layer(20, path=tmp_path)
+
+    def test_layer_out_of_range(self):
+        with pytest.raises(IndexError, match="outside"):
+            persona_pcs.load_bank_at_layer(999)
+
+    @pytest.mark.parametrize("layer", [14, 20, 40, 44, 60])
+    def test_geometry_holds_at_depth(self, layer: int):
+        """PC1 should track the deception axis and split the groups at any usable layer."""
+        geom = persona_pcs.fit_geometry(persona_pcs.load_bank_at_layer(layer), k=3)
+        assert geom.alignment()[0] > 0.9
+        scores = geom.project(
+            persona_pcs.load_bank_at_layer(layer).vectors_for(geom.persona_names) - geom.mean, k=1
+        ).ravel()
+        assert scores[:8].min() > scores[8:].max()

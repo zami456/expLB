@@ -488,11 +488,19 @@ def liars_bench_comparison(
     return table
 
 
-def run(pooled_dir: str | Path = POOLED_DIR, out_dir: str | Path = OUT_DIR) -> None:
+def run(
+    pooled_dir: str | Path = POOLED_DIR,
+    out_dir: str | Path = OUT_DIR,
+    layer: int = 20,
+) -> None:
     pooled_dir, out_dir = Path(pooled_dir), Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
 
-    bank = persona_pcs.load_bank()
+    # `layer` must match the layer the pooled activations were extracted at. Nothing enforces
+    # it -- persona directions live in the residual stream at one layer, so pairing layer-40
+    # activations with layer-20 directions yields a meaningless number rather than an error. The
+    # layer is recorded in summary.csv so a mismatch is at least visible after the fact.
+    bank = persona_pcs.load_bank_at_layer(layer)
     geom = persona_pcs.fit_geometry(bank, k=3)
     syc_geom = persona_pcs.fit_geometry(
         bank,
@@ -507,6 +515,7 @@ def run(pooled_dir: str | Path = POOLED_DIR, out_dir: str | Path = OUT_DIR) -> N
             f"explained variance {np.round(g.explained_variance_ratio, 4).tolist()}, "
             f"|cos(PC_k, deception axis)| {np.round(g.alignment(), 4).tolist()}"
         )
+    logger.info(f"persona bank at layer {layer}, pooled activations from {pooled_dir}")
     dec_axis, syc_axis = bank.axis_unit("deception"), bank.axis_unit("sycophancy")
     logger.info(f"|cos(deception axis, sycophancy axis)| = {abs(float(dec_axis @ syc_axis)):.4f}")
 
@@ -574,6 +583,7 @@ def run(pooled_dir: str | Path = POOLED_DIR, out_dir: str | Path = OUT_DIR) -> N
         [
             {
                 "features": name,
+                "layer": layer,
                 "dim": dims.get(name, ""),
                 "off_diagonal_mean": off_diagonal_mean(matrices[name]),
                 "off_diagonal_excl_hpkr": off_diagonal_mean(

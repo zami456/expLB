@@ -116,6 +116,68 @@ def load_bank(path: Path | str = BANK_PATH) -> PersonaBank:
     )
 
 
+# One file per persona, each holding `vector[80, 8192]` -- the same run as the single-layer bank
+# above, extended to every layer. The layer-20 slice is bit-identical to `paper16_L20.pt`.
+VECTORS_DIR = REPO_ROOT / "persona vectors" / "vectors_s3"
+
+# These files ship no axes, but all four reconstruct from group means. Verified against the stored
+# layer-20 axes to ~1e-7 (float32 round-off); `tests/test_persona_pcs.py` pins the equivalence.
+def _axes_from_groups(vectors: dict[str, np.ndarray]) -> dict[str, np.ndarray]:
+    def mean_of(names: tuple[str, ...]) -> np.ndarray:
+        return np.stack([vectors[n] for n in names]).mean(0)
+
+    others = tuple(n for n in vectors if n != "default")
+    return {
+        "deception": mean_of(DECEPTION_PERSONAS) - mean_of(HONESTY_PERSONAS),
+        "sycophancy": mean_of(SYCOPHANCY_PERSONAS) - mean_of(ANTI_SYCOPHANCY_PERSONAS),
+        "unified": (
+            mean_of(DECEPTION_PERSONAS + SYCOPHANCY_PERSONAS)
+            - mean_of(HONESTY_PERSONAS + ANTI_SYCOPHANCY_PERSONAS)
+        ),
+        "assistant": vectors["default"] - mean_of(others),
+    }
+
+
+def load_bank_at_layer(layer: int, path: Path | str = VECTORS_DIR) -> PersonaBank:
+    """Build a bank at any layer from the per-persona all-layer vectors.
+
+    `load_bank()` reads a single file that only exists at layer 20. This reads the 26 per-persona
+    files instead, so the same experiment can run at any depth -- which matters because a persona
+    direction lives in the residual stream *at one layer*: projecting layer-40 activations onto
+    layer-20 directions is not a weaker measurement, it is a meaningless one.
+    """
+    path = Path(path)
+    files = {p.stem: p for p in path.glob("*.pt")}
+
+    expected = set(DECEPTION_PERSONAS + HONESTY_PERSONAS) | set(
+        SYCOPHANCY_PERSONAS + ANTI_SYCOPHANCY_PERSONAS
+    ) | {"default"}
+    missing = sorted(expected - set(files))
+    if missing:
+        raise FileNotFoundError(f"persona vectors missing from {path}: {missing}")
+
+    names = sorted(files)  # matches the single-file bank's ordering
+    vectors: dict[str, np.ndarray] = {}
+    n_rollouts: list[int] = []
+    for name in names:
+        payload = torch.load(files[name], weights_only=False)
+        stored = payload["vector"]
+        if not 0 <= layer < stored.shape[0]:
+            raise IndexError(f"{name}: layer {layer} outside 0..{stored.shape[0] - 1}")
+        vectors[name] = stored[layer].double().numpy()
+        n_rollouts.append(int(payload["n"]))
+
+    return PersonaBank(
+        personas=np.stack([vectors[n] for n in names]),
+        names=names,
+        axes=_axes_from_groups(vectors),
+        n_rollouts=n_rollouts,
+        layer=layer,
+        # not recorded in the per-persona files; same run as the single-layer bank
+        model="meta-llama/Llama-3.3-70B-Instruct",
+    )
+
+
 def recover_group(
     bank: PersonaBank,
     positive: tuple[str, ...],
