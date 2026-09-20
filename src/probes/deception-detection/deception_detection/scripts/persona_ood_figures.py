@@ -221,6 +221,94 @@ def variants(out_dir: str | Path = OUT_DIR) -> None:
 
 
 
+FIG2_ARMS = [
+    ("deception axis (8v7)", "deception axis (8 vs 7, published grouping)", "#eb6834"),
+    ("knowledge-denial axis (4v6)", "knowledge-denial axis (4 vs 6)", "#8ab6e8"),
+    ("extended axis (12v13)", "extended axis (12 vs 13)", "#2a78d6"),
+]
+FIG2_METRICS = [
+    ("balacc", "Balanced accuracy", 0.5),
+    ("auroc", "AUROC", 0.5),
+    ("recall", "Recall", None),
+]
+
+
+def fig2(
+    out_dir: str | Path = OUT_DIR,
+    threshold_source: str = "control",
+    name: str = "zero_shot_fig2.png",
+) -> None:
+    """Zero-shot results in the layout of Liars' Bench Figure 2 (arXiv 2511.16035).
+
+    Three panels -- balanced accuracy, AUROC, recall -- over datasets plus an Average column,
+    with the decision threshold set to at most 1% false positives on the control corpus, which
+    is the paper's protocol. Where the paper shows standard errors across models there is one
+    model here, so the bars carry a stratified bootstrap over examples instead.
+
+    Only balanced accuracy and recall depend on the threshold; AUROC is threshold-free and is
+    identical under either `threshold_source`. That is the point of showing all three together:
+    the AUROC panel says the ranking is good, and the other two say what that is worth at a
+    usable false-positive rate.
+    """
+    out_dir = Path(out_dir)
+    table = pd.read_csv(out_dir / "zero_shot_operating.csv")
+    table = table[table["threshold_source"] == threshold_source]
+    arms = [(key, label, colour) for key, label, colour in FIG2_ARMS
+            if key in set(table["arm"])]
+
+    ordered = [n for n in table["dataset"].unique() if n != "Average"] + ["Average"]
+    labels = [SHORT.get(n, n) for n in ordered]
+    # the Average column is a summary of the others, so it sits past a gap and a rule
+    x = np.array([i if i < len(ordered) - 1 else i + 0.6 for i in range(len(ordered))])
+    width = 0.26
+    gap = 0.015
+
+    fig, axes = plt.subplots(1, 3, figsize=(16.5, 4.6), facecolor=SURFACE, sharey=True)
+    for ax, (metric, title, chance) in zip(axes, FIG2_METRICS, strict=True):
+        ax.set_facecolor(SURFACE)
+        for index, (key, label, colour) in enumerate(arms):
+            rows = table[table["arm"] == key].set_index("dataset").loc[ordered]
+            values = rows[metric].to_numpy(dtype=float)
+            low = values - rows[f"{metric}_lo"].to_numpy(dtype=float)
+            high = rows[f"{metric}_hi"].to_numpy(dtype=float) - values
+            offset = (index - (len(arms) - 1) / 2) * (width + gap)
+            ax.bar(x + offset, values, width=width, color=colour, label=label, zorder=3)
+            ax.errorbar(x + offset, values, yerr=np.vstack([low, high]), fmt="none",
+                        ecolor=INK_MUTED, elinewidth=0.9, capsize=1.8, zorder=4)
+
+        if chance is not None:
+            ax.axhline(chance, color=INK_MUTED, lw=1, ls=(0, (4, 3)), zorder=2)
+        ax.axvline(x[-1] - 0.8, color=NEUTRAL, lw=1.4, zorder=1)
+        ax.set_xticks(x, labels, fontsize=9, color=INK)
+        ax.set_ylim(0.0, 1.04)
+        ax.set_title(title, fontsize=11, color=INK, loc="left", pad=8)
+        ax.tick_params(axis="y", labelsize=8, colors=INK_MUTED, length=0)
+        ax.tick_params(axis="x", length=0)
+        ax.grid(axis="y", color=NEUTRAL, lw=1, zorder=0)
+        ax.set_axisbelow(True)
+        for side in ("top", "right", "left", "bottom"):
+            ax.spines[side].set_visible(False)
+    axes[0].set_ylabel("score", fontsize=9, color=INK_MUTED)
+
+    handles = [plt.Rectangle((0, 0), 1, 1, color=colour) for _, _, colour in arms]
+    fig.legend(handles, [label for _, label, _ in arms], loc="lower center", ncol=len(arms),
+               frameon=False, fontsize=9, labelcolor=INK, bbox_to_anchor=(0.5, -0.07))
+    fig.suptitle(
+        f"Zero-shot persona directions on Liars' Bench  ({_layer(out_dir)}, "
+        f"Llama-3.3-70B-Instruct)",
+        fontsize=13, color=INK, x=0.006, ha="left", y=1.03,
+    )
+    fig.text(0.006, -0.10,
+             "Balanced accuracy and recall: threshold set to at most 1% false positives on the "
+             "control (alpaca) dataset. Bars are 95% stratified bootstrap intervals over "
+             "examples, 1000 draws; the paper's Figure 2 instead shows standard errors across "
+             "models.", fontsize=8, color=INK_MUTED, ha="left")
+    fig.tight_layout()
+    fig.savefig(out_dir / name, dpi=200, bbox_inches="tight", facecolor=SURFACE)
+    plt.close(fig)
+    print(f"wrote {name} to {out_dir}")
+
+
 ZERO_SHOT_ARMS = [
     ("auroc_axis", "deception axis (8 vs 7, published grouping)", "#eb6834"),
     ("auroc_denial_axis", "knowledge-denial axis (4 vs 6, new personas only)", "#8ab6e8"),
@@ -467,4 +555,4 @@ def syc(out_dir: str | Path = OUT_DIR) -> None:
 
 if __name__ == "__main__":
     fire.Fire({"run": run, "variants": variants, "syc": syc, "loo": loo,
-               "zeroshot": zeroshot})
+               "zeroshot": zeroshot, "fig2": fig2})

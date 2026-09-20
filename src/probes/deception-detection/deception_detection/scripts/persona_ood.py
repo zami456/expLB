@@ -520,8 +520,16 @@ def zero_shot_operating_table(
     control: Pooled,
     layer: int,
     fpr: float = 0.01,
+    n_boot: int = 1000,
+    seed: int = SEED,
 ) -> pd.DataFrame:
     """Zero-shot detection at a fixed false-positive rate, under two ways of setting it.
+
+    Laid out to match Figure 2 of Liars' Bench (arXiv 2511.16035): balanced accuracy, AUROC and
+    recall per dataset plus an Average row, with the threshold set to reach at most `fpr` on the
+    control corpus. The paper's error bars are standard errors across models; there is one model
+    here, so these are a stratified bootstrap over examples instead -- a different quantity, and
+    the one that says whether a per-dataset number is stable.
 
     A persona axis is a direction, not a calibrated classifier, so the threshold has to come from
     somewhere. Neither source uses deception labels on the rows being scored:
@@ -532,29 +540,75 @@ def zero_shot_operating_table(
                   an oracle -- reported only to separate "the direction cannot detect here" from
                   "the threshold is in the wrong place for this prompt distribution".
     """
+    metrics = ("balacc", "auroc", "recall")
+
+    def measure(y: np.ndarray, scores: np.ndarray, threshold: float) -> np.ndarray:
+        point = operating_point(y, scores, threshold)
+        return np.array([point["balacc"], auroc(y, scores), point["recall"]])
+
+    names = [name for name, ds in datasets.items() if ds.two_class]
+    rng = np.random.default_rng(seed)
+
+    # One index set per dataset per draw, reused across every arm and threshold, so that bars
+    # sitting side by side in the figure are compared on the same resampled rows.
+    draws: dict[str, list[np.ndarray]] = {}
+    for name in names:
+        positive = np.flatnonzero(datasets[name].y == 1)
+        negative = np.flatnonzero(datasets[name].y == 0)
+        draws[name] = [
+            np.concatenate(
+                (
+                    rng.choice(positive, len(positive), replace=True),
+                    rng.choice(negative, len(negative), replace=True),
+                )
+            )
+            for _ in range(n_boot)
+        ]
+
     rows = []
     for arm, score_fn in arms.items():
+        scored = {name: score_fn(datasets[name].z) for name in names}
         from_control = float(np.quantile(score_fn(control.z), 1 - fpr))
-        for name, ds in datasets.items():
-            if not ds.two_class:
-                continue
-            scores = score_fn(ds.z)
-            in_dataset = float(np.quantile(scores[ds.y == 0], 1 - fpr))
-            for source, threshold in (
-                ("control", from_control),
-                ("in-dataset (oracle)", in_dataset),
-            ):
-                rows.append(
-                    {
-                        "layer": layer,
-                        "arm": arm,
-                        "dataset": name,
-                        "n_deceptive": ds.n_deceptive,
-                        "auroc": auroc(ds.y, scores),
-                        "threshold_source": source,
-                    }
-                    | operating_point(ds.y, scores, threshold)
+        sources = {
+            "control": dict.fromkeys(names, from_control),
+            "in-dataset (oracle)": {
+                name: float(np.quantile(scored[name][datasets[name].y == 0], 1 - fpr))
+                for name in names
+            },
+        }
+        for source, thresholds in sources.items():
+            point = {n: measure(datasets[n].y, scored[n], thresholds[n]) for n in names}
+            boot = {
+                n: np.array(
+                    [measure(datasets[n].y[i], scored[n][i], thresholds[n]) for i in draws[n]]
                 )
+                for n in names
+            }
+            point["Average"] = np.mean([point[n] for n in names], axis=0)
+            boot["Average"] = np.mean([boot[n] for n in names], axis=0)
+
+            for name in [*names, "Average"]:
+                low, high = np.quantile(boot[name], [0.025, 0.975], axis=0)
+                row: dict[str, object] = {
+                    "layer": layer,
+                    "arm": arm,
+                    "dataset": name,
+                    "threshold_source": source,
+                    "n_deceptive": (
+                        sum(datasets[n].n_deceptive for n in names)
+                        if name == "Average"
+                        else datasets[name].n_deceptive
+                    ),
+                }
+                if name != "Average":
+                    row["threshold"] = thresholds[name]
+                    row["specificity"] = operating_point(
+                        datasets[name].y, scored[name], thresholds[name]
+                    )["specificity"]
+                row |= {m: float(point[name][i]) for i, m in enumerate(metrics)}
+                row |= {f"{m}_lo": float(low[i]) for i, m in enumerate(metrics)}
+                row |= {f"{m}_hi": float(high[i]) for i, m in enumerate(metrics)}
+                rows.append(row)
     return pd.DataFrame(rows)
 
 
