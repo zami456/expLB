@@ -40,6 +40,19 @@ SHORT = {
 }
 
 
+def _layer(out_dir: Path) -> str:
+    """The layer this run used, read from summary.csv rather than hardcoded.
+
+    With more than one layer in play a mislabelled figure is worse than no figure, so the title
+    is derived from the same file the numbers come from.
+    """
+    try:
+        layers = pd.read_csv(out_dir / "summary.csv")["layer"].unique()
+    except (OSError, KeyError):
+        return "layer unknown"
+    return f"layer {layers[0]}" if len(layers) == 1 else f"layers {sorted(layers)}"
+
+
 def _load(out_dir: Path, name: str) -> pd.DataFrame:
     matrix = pd.read_csv(out_dir / f"matrix_{name}.csv", index_col=0)
     matrix.index = [SHORT.get(i, i) for i in matrix.index]
@@ -98,7 +111,7 @@ def run(out_dir: str | Path = OUT_DIR) -> None:
     bar.ax.tick_params(labelsize=8, colors=INK_MUTED, length=0)
     bar.outline.set_visible(False)
     fig.suptitle(
-        "Cross-dataset probe transfer, Llama-3.3-70B layer 20",
+        f"Cross-dataset probe transfer, Llama-3.3-70B {_layer(out_dir)}",
         fontsize=12, color=INK, x=0.125, ha="left", y=0.98,
     )
     fig.savefig(out_dir / "transfer_matrices.png", dpi=200, bbox_inches="tight",
@@ -111,7 +124,7 @@ def run(out_dir: str | Path = OUT_DIR) -> None:
     limit = float(np.nanmax(np.abs(delta.to_numpy(dtype=float))))
     image = _heatmap(
         ax, delta, TwoSlopeNorm(vmin=-limit, vcenter=0.0, vmax=limit),
-        "Persona PCs minus baseline", "+.2f",
+        f"Persona PCs minus baseline  ({_layer(out_dir)})", "+.2f",
     )
     bar = fig.colorbar(image, ax=ax, fraction=0.046, pad=0.03)
     bar.set_label("Δ AUROC   (blue = PCs better)", fontsize=9, color=INK_MUTED)
@@ -190,8 +203,8 @@ def variants(out_dir: str | Path = OUT_DIR) -> None:
         ax.spines[side].set_visible(False)
 
     ax.legend(loc="lower right", frameon=False, fontsize=9, labelcolor=INK)
-    ax.set_title("Which persona basis transfers across datasets?", fontsize=12,
-                 color=INK, loc="left", pad=12)
+    ax.set_title(f"Which persona basis transfers across datasets?  ({_layer(out_dir)})",
+                 fontsize=12, color=INK, loc="left", pad=12)
     ax.text(0.0, -0.13, "* not in the paper - added here because the deception and sycophancy "
             "axes overlap at |cos| = 0.54", transform=ax.transAxes, fontsize=8, color=INK_MUTED)
     fig.savefig(out_dir / "variants.png", dpi=200, bbox_inches="tight", facecolor=SURFACE)
@@ -229,7 +242,7 @@ def syc(out_dir: str | Path = OUT_DIR) -> None:
     bar.ax.tick_params(labelsize=8, colors=INK_MUTED, length=0)
     bar.outline.set_visible(False)
     fig.suptitle(
-        "Matched vs mismatched persona basis, on deception datasets",
+        f"Matched vs mismatched persona basis, on deception datasets  ({_layer(out_dir)})",
         fontsize=12, color=INK, x=0.125, ha="left", y=0.98,
     )
     fig.savefig(out_dir / "transfer_sycophancy.png", dpi=200, bbox_inches="tight",
@@ -242,7 +255,7 @@ def syc(out_dir: str | Path = OUT_DIR) -> None:
     limit = float(np.nanmax(np.abs(delta.to_numpy(dtype=float))))
     image = _heatmap(
         ax, delta, TwoSlopeNorm(vmin=-limit, vcenter=0.0, vmax=limit),
-        "Sycophancy PCs minus deception PCs", "+.2f",
+        f"Sycophancy PCs minus deception PCs  ({_layer(out_dir)})", "+.2f",
     )
     bar = fig.colorbar(image, ax=ax, fraction=0.046, pad=0.03)
     bar.set_label("Δ AUROC   (blue = sycophancy better)", fontsize=9, color=INK_MUTED)
