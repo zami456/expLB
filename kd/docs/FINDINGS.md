@@ -2181,8 +2181,8 @@ groups, and the downstream numbers confirm it.
 - **caveats:** (1) the dataset-level bootstrap was run straight after this and **clears** — see
   **F-66**, which supersedes this caveat. (2)
   `sycophancy_mt` is the dataset the bank was *designed against*, so this is a targeted fix, not
-  evidence that capitulation axes transfer generally; the other ten columns are the test of that
-  and are not reported here. (3) the zero-shot arm scores only variant A's contrast, so B and C
+  evidence that capitulation axes transfer generally. **F-67 tested the other ten columns: the
+  gain does NOT extend to them.** (3) the zero-shot arm scores only variant A's contrast, so B and C
   have no zero-shot number. (4) 20 questions, 12 personas, 5 variants — a small bank.
 - **supersedes:** nothing. **Confirms** F-13 (register diagnosis) constructively and F-62's
   filter prediction. **Corrects in advance** the A≡B reading, and **contradicts** the
@@ -2272,9 +2272,71 @@ the persona advantage is inversely proportional to how good the baseline already
 - **caveats:** (1) the resampling unit is 10 datasets — a small n, which is why several intervals
   are wide; the CI is honest about that rather than hiding it. (2) this tests the
   `sycophancy_mt` **column only**, the dataset the bank was designed against; it is a targeted
-  fix, and whether capitulation axes transfer to columns they were not designed for is untested.
+  fix. **F-67 measured whether it transfers to columns the bank was not designed for: it does
+  not** — on the full 11x11 off-diagonal mean the margin over raw is +0.098, CI [-0.036, +0.208].
   (3) the zero-shot 0.745 is **not** covered — zero-shot trains on nothing, so there are no
   sources to resample and a dataset bootstrap is undefined for it; only the trained numbers are
   bootstrapped here. (4) single seed (42) for the splits.
 - **supersedes:** F-65 caveat (1).
 - **status:** verified
+
+---
+
+### F-67 · 2026-09-21 · **The cap advantage is LOCAL — it does not generalise past the column it was aimed at**
+
+F-66's caveat (2) said the bank's advantage on the `sycophancy_mt` column might not extend to
+columns it was not designed for, and that this was untested. It is now tested. **It does not
+extend**, and this bounds the claim.
+
+The pipeline's own dataset-level bootstrap runs over the **full 11×11 off-diagonal mean** — a
+different quantity from F-66, which tested one column. At L40, mean pooling, `paper` probe:
+
+| comparison | block | diff | pairs won | 95% CI | clears? |
+|---|---|---:|---:|---|---|
+| `pc:capitulation@2` − `random@2` | all 11 | **+0.270** | 95/110 | [+0.138, +0.398] | **YES** (q = 0.013) |
+| `pc:capitulation@2` − `datapca@2` | all 11 | +0.127 | 80/110 | [+0.013, +0.248] | CI clears, **q = 0.172** — no after BH |
+| `pc:capitulation@2` − `raw` | all 11 | +0.098 | 76/110 | **[−0.036, +0.208]** | **no** |
+| `pc:capitulation@2` − `raw` | minus `sycophancy_mt` | +0.073 | 57/90 | [−0.077, +0.204] | **no** |
+| `pc:capitulation@2` − `datapca@2` | minus `sycophancy_mt` | +0.124 | 62/90 | [−0.017, +0.262] | **no** |
+| `pc:capitulation@2` − `random@2` | minus `sycophancy_mt` | +0.273 | 76/90 | [+0.121, +0.416] | **YES** |
+| `random@2` − `raw` | all 11 | −0.171 | 25/110 | [−0.275, −0.053] | significantly **negative** |
+
+**Read together with F-66 this is one coherent statement, not a contradiction.** On the
+`sycophancy_mt` column — the construct the personas were written to vary — the axis beats raw by
++0.112 with the whole interval above zero. Averaged over all eleven columns it beats raw by
++0.098 with an interval that includes zero, and removing `sycophancy_mt` drops it to +0.073.
+**The gain is concentrated where the bank was aimed.** That is what a persona axis for a
+*specific construct* should do; it is not a general-purpose detector, and F-65/F-66 must not be
+quoted as though it were.
+
+**Beating `random@2` everywhere is real but much weaker than it looks.** `random@2` is
+*significantly worse than raw* (−0.171, CI [−0.275, −0.053]) — a 2-d random projection throws
+most of the signal away. So "beats random at matched k" mostly says the axis is not noise. The
+comparison that carries weight is against `datapca@2`, the matched control that keeps the
+dataset's own leading directions, and there the point estimate is positive at every block but
+survives BH correction at none.
+
+**This is the same shape as F-63, arrived at independently.** The persona advantage is inversely
+proportional to how good the baseline already is: large on `sycophancy_mt`, where raw manages only
+0.601 and is *below chance* from two sources; absent on the columns where raw already reaches
+0.73–0.81.
+
+- **source:** `run-crossgen/kd11/banks/cap_s23/significance.json` (792 tests, `boot_datasets` =
+  10,000, BH-corrected), read by `kd/scripts/read_significance.py` and
+  `cap/scripts/cap_vs_raw_full.py`.
+- **caveats:** (1) the off-diagonal *mean* is a blunt summary — it averages a column where the
+  axis wins by +0.11 with ten where it roughly ties, so a null here does not mean "no effect
+  anywhere". F-66 and this finding answer different questions and both belong in the write-up.
+  (2) `pairs won` is not a significance test; 76/110 with a CI spanning zero is exactly the trap
+  the dataset bootstrap exists to catch. (3) single seed.
+- **supersedes:** F-66 caveat (2) — now measured rather than flagged.
+- **status:** verified
+
+**Seventh paper16 hardcoding, found because this number was missing.** `27_crossgen.py` defined
+`PERSONA_FEATURES = ["axes", "pc:deception", "pc:unified", "pc:unified@2"]` as a module constant
+and built `COMPARISONS` from it. A bank naming anything else therefore got **no persona
+comparisons at all** — the cap bank's first `significance.json` contained only the four
+control-vs-raw pairs, so the pipeline's own bootstrap never tested `pc:capitulation`, the number
+the bank exists to produce. 144 tests before the fix, **792** after. The list is now derived from
+the feature set actually being run (`comparisons_for()`), at both call sites, so the next bank
+cannot hit it.

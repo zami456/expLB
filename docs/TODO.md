@@ -34,7 +34,14 @@ accuracy**. Route deprioritised, not disproven — Stage 3 stays blocked.
 | 2d | vectors ×2 — filtered (2,3) and **unfiltered** | **13 vectors**, shape (80, 8192) | **13 / 13**, (80, 8192) | **PASS** |
 | 2e | axes ×3 — variants A/B/C | `cos(PC1, contrast)` **≥ 0.90` | **0.987 / 0.949 / 0.936** | **PASS** — but see below |
 | 2f | crossgen ×2 filters × 3 layers | **`sycophancy_mt` > 0.374** ← the number this plan exists for | **0.745 zero-shot · 0.714 trained@2** vs raw 0.601 | **PASS** (F-65) |
-| 2g | dataset-level bootstrap on 2f | the project's stated significance bar | **+0.112 over raw, CI [+0.050, +0.185]**, 9/10 sources | **PASS** (F-66) |
+| 2g | dataset-level bootstrap on 2f, `sycophancy_mt` column | the project's stated significance bar | **+0.112 over raw, CI [+0.050, +0.185]**, 9/10 sources | **PASS** (F-66) |
+| 2h | same bootstrap on the **full 11×11** off-diagonal mean | does the gain generalise past the target column? | **+0.098 over raw, CI [−0.036, +0.208]** — no | **negative, recorded** (F-67) |
+
+**2g and 2h answer different questions and both belong in the write-up.** The axis wins
+decisively on the column it was aimed at and ties elsewhere — the same inverse relationship
+between persona gain and baseline strength that F-63 found across model scales. 2h also exposed
+the **seventh** paper16 hardcoding: `PERSONA_FEATURES` was a module constant, so the pipeline's
+own bootstrap had never tested `pc:capitulation` at all (144 tests before the fix, 792 after).
 
 **2e passed only after a fix.** It originally logged `written / written / PASS` for both filters
 while `cos(PC1,contrast)` was **never computed** — `6_axes.py:302` looped a hardcoded paper16

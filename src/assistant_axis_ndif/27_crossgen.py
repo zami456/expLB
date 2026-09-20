@@ -55,11 +55,38 @@ BLOCK9 = [d for d in DATASETS if d != "sycophancy_mt"]
 # meaningless -- a random 2-d projection gains +0.056 where raw < 0.6 and loses 0.44 where raw is
 # above 0.85 (corr(raw, delta) = -0.76). Only the gain over datapca/random at the same k says
 # anything about persona structure.
+# THE BASELINES AND CONTROLS. Everything else in a --features list is a persona feature and
+# gets bootstrapped against its matched control.
+BASELINE_FEATURES = {"raw", "random", "datapca", "length"}
+
+# Paper16's names, kept only as the default for a bank that names nothing else.
 PERSONA_FEATURES = ["axes", "pc:deception", "pc:unified", "pc:unified@2"]
-COMPARISONS = [(f, c) for f in PERSONA_FEATURES
-               for c in (["raw", "datapca@2", "random@2"] if f.endswith("@2")
-                         else ["raw", "datapca", "random"])]
-COMPARISONS += [("random", "raw"), ("datapca", "raw"), ("random@2", "raw"), ("datapca@2", "raw")]
+
+
+def comparisons_for(features):
+    """Persona features vs raw and BOTH matched controls at matched k, plus control vs raw.
+
+    This used to be a module-level constant over the literal paper16 names, which meant a bank
+    naming anything else got NO persona comparisons at all: on 2026-09-21 the cap bank's
+    significance.json contained only the four control-vs-raw pairs, so the pipeline's own
+    dataset-level bootstrap never tested `pc:capitulation` -- the number the bank exists to
+    produce. Seventh hardcoding of paper16's names in this file family; each was reachable only
+    after the previous one was fixed. Derived from the feature list now, so it cannot happen to
+    the next bank.
+    """
+    persona = [f for f in features if f.partition("@")[0] not in BASELINE_FEATURES]
+    out = [(f, c) for f in persona
+           for c in (["raw", "datapca@2", "random@2"] if f.endswith("@2")
+                     else ["raw", "datapca", "random"])]
+    out += [("random", "raw"), ("datapca", "raw"), ("random@2", "raw"), ("datapca@2", "raw")]
+    seen, uniq = set(), []
+    for p in out:
+        if p not in seen and p[0] != p[1]:
+            seen.add(p); uniq.append(p)
+    return uniq
+
+
+COMPARISONS = comparisons_for(PERSONA_FEATURES)
 
 # label construct per dataset, for the block summaries
 CONSTRUCT = {"instructed-deception": "intent", "harm-pressure-choice": "intent",
@@ -132,10 +159,33 @@ def clean(o):
 
 
 def write_json(path: Path, obj) -> None:
+    """Atomic write, with a retry because Windows will not replace an OPEN file.
+
+    On 2026-09-20 a passC root run died at the last line with
+        PermissionError: [WinError 5] Access is denied: 'significance.json.tmp' -> '...json'
+    after computing every matrix. The rename loses to anything holding the target: the rclone
+    sync that runs every 15 minutes, or the two antivirus services on this machine. POSIX
+    rename is atomic and silent about readers; Windows is not, so the retry is platform
+    behaviour rather than a race in our own code.
+
+    Retry rather than fall back to a non-atomic write: a partially written results file that
+    looks complete is far worse than a slow one.
+    """
     path.parent.mkdir(parents=True, exist_ok=True)
     tmp = path.with_suffix(path.suffix + ".tmp")
     tmp.write_text(json.dumps(clean(obj), indent=1), encoding="utf-8")
-    tmp.replace(path)
+    delay = 0.5
+    for attempt in range(6):
+        try:
+            tmp.replace(path)
+            return
+        except PermissionError:
+            if attempt == 5:
+                raise
+            logger.warning("  %s is locked (attempt %d/6); retrying in %.1fs",
+                           path.name, attempt + 1, delay)
+            time.sleep(delay)
+            delay = min(delay * 2, 8.0)
 
 
 # --------------------------------------------------------------------------- #
@@ -338,15 +388,35 @@ def compute_cell_block(P, data, X32, splits_seed, bank, L, seed, features, probe
                 boot_sums[(fkind, probe)] = {k: sums[k] / max(cnt[k], 1) for k in sums}
             results.append(rec)
             off = ~np.eye(n, dtype=bool)
-            logger.info("    %-13s %-8s diag %.3f  off-diag %.3f  (without sycophancy_mt %.3f)",
-                        fkind, probe, np.nanmean(np.diag(A)), np.nanmean(A[off]),
-                        np.nanmean(A[:9, :9][~np.eye(9, dtype=bool)]))
+            # BLOCK9 is the first nine datasets -- the "without sycophancy_mt" comparison that
+            # F-13 turns on. It is only meaningful when there ARE nine; with a shorter
+            # --datasets list (the 5-dataset scale runs reproduce the paper's Table 1 deception
+            # set) the slice is smaller than the mask and this raised IndexError. Clamp, and
+            # report NaN rather than a misleading number when the block is not a proper subset.
+            b = min(9, n)
+            blk = (np.nanmean(A[:b, :b][~np.eye(b, dtype=bool)])
+                   if b > 1 and b < n else float("nan"))
+            logger.info("    %-13s %-8s diag %.3f  off-diag %.3f  (first-%d block %.3f)",
+                        fkind, probe, np.nanmean(np.diag(A)), np.nanmean(A[off]), b, blk)
         del shared
 
     # zero-shot rows: no training, so nothing is held out -- every dataset scored on 100%
+    #
+    # The zero-shot direction is the bank's PRIMARY BEHAVIOUR CONTRAST, not literally
+    # "deception". Every bank until 2026-09-21 was paper16 or a superset of it, so hardcoding
+    # the name always worked; the cap bank's contrasts are capitulation / cap_vs_default /
+    # cap_only and this raised KeyError. Unlike the trained features this block is not
+    # controlled by --features, so it cannot be worked around from the call site.
+    # Prefer "deception" when present so every existing result is bit-identical.
+    _cands = [n for n in ("deception",) if n in bank["axes"] and n in bank["pca"]]
+    if not _cands:
+        _cands = [n for n in bank["axes"] if n != "assistant" and n in bank["pca"]]
+    if not _cands:
+        raise SystemExit("bank has no behaviour axis with a matching PCA basis for zero-shot")
+    _zs_axis = _cands[0]
     zs = []
-    dirs = {"contrast": P.unit(bank["axes"]["deception"][L].numpy().astype(np.float32)),
-            "PC1": P.unit(bank["pca"]["deception"]["components"][L][0].numpy().astype(np.float32))}
+    dirs = {"contrast": P.unit(bank["axes"][_zs_axis][L].numpy().astype(np.float32)),
+            "PC1": P.unit(bank["pca"][_zs_axis]["components"][L][0].numpy().astype(np.float32))}
     for name, d in dirs.items():
         ctrl = X32[control] @ d
         row = {"direction": name, "auroc": [], "tpr_at_1pct_fpr": [], "ci95_lo": [], "ci95_hi": []}
@@ -365,7 +435,7 @@ def compute_cell_block(P, data, X32, splits_seed, bank, L, seed, features, probe
     if with_boot:
         rb = {}
         for probe in probes:
-            for fa, fb in COMPARISONS:
+            for fa, fb in comparisons_for(features):
                 if (fa, probe) not in boot_sums or (fb, probe) not in boot_sums:
                     continue
                 for block in ("10", "9"):
@@ -409,8 +479,11 @@ def smoke_checks(P, data, X32, splits_seed, seed, args, result):
         for rec in result["results"]:
             if rec["probe"] != "mms" or rec["feature"] not in ("raw", "axes", "pc:deception"):
                 continue
-            A9 = np.array(rec["auroc"], dtype=float)[:9, :9]
-            new = float(np.nanmean(A9[~np.eye(9, dtype=bool)]))
+            A_full = np.array(rec["auroc"], dtype=float)
+            b = min(9, A_full.shape[0])
+            A9 = A_full[:b, :b]
+            new = (float(np.nanmean(A9[~np.eye(b, dtype=bool)]))
+                   if b > 1 else float("nan"))
             old = ref[rec["feature"]] if ref else None
             cons[rec["feature"]] = {"new_9block": new, "earlier_sweep": old,
                                     "abs_diff": None if old is None else abs(new - old)}
@@ -708,8 +781,10 @@ def stage_summarize(args, out_root):
                 continue
             by = {(r["feature"], r["probe"]): arr(r["auroc"]) for r in d["results"]}
             rb = d.get("row_bootstrap_offdiag_diff", {})
+            # from the matrix, not a constant -- a bank carries whatever features it was run with
+            cmps = comparisons_for(sorted({f for f, _ in by}))
             for probe in sorted({p for _, p in by}):
-                for fa, fb in COMPARISONS:
+                for fa, fb in cmps:
                     if (fa, probe) not in by or (fb, probe) not in by:
                         continue
                     A = by[(fa, probe)][np.ix_(ids, ids)]
