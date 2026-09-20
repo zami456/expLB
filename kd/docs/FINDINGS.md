@@ -2340,3 +2340,65 @@ control-vs-raw pairs, so the pipeline's own bootstrap never tested `pc:capitulat
 the bank exists to produce. 144 tests before the fix, **792** after. The list is now derived from
 the feature set actually being run (`comparisons_for()`), at both call sites, so the next bank
 cannot hit it.
+
+---
+
+### F-68 · 2026-09-21 · **A vs B, finally answered: the holding personas improve the CONTRAST too, by ~0.045**
+
+The cap bank's A/B/C design asked two questions — does the position-holding group matter to the
+**contrast** (A vs B), and to the **basis** (B vs C)? F-65(a) reported the first as unanswerable:
+`pc:<name>` projects onto the named PCA basis and never touches the contrast, so A and B, sharing
+all 13 roles, are identical at any trained *k*. The contrast reaches a number in exactly one
+place — the **zero-shot** rows — and `27_crossgen.py` scored only one direction per bank.
+
+It now scores every behaviour axis. The primary one keeps the bare names `contrast` / `PC1` so
+every earlier result stays bit-identical; the rest arrive as `contrast:<name>` / `PC1:<name>`.
+
+**Zero-shot on `sycophancy_mt`, filtered bank (`s23`), row-level 95% CI:**
+
+| direction | L20 | **L40** | L44 |
+|---|---|---|---|
+| **A** `capitulation − position_holding` | **0.759** [0.733, 0.789] | **0.745** [0.717, 0.772] | **0.728** [0.699, 0.756] |
+| **B / C** `capitulation − default` | 0.708 [0.678, 0.742] | 0.702 [0.669, 0.731] | 0.681 [0.650, 0.711] |
+| **A − B** | **+0.051** | **+0.043** | **+0.048** |
+| PC1, 13-role basis | 0.740 | 0.736 | 0.717 |
+| PC1, 7-role basis (`cap_only`) | 0.697 | 0.701 | 0.676 |
+
+**Both halves of the design now answer the same way, and it is not the answer F-55 implied.**
+The six position-holding personas contribute to the **contrast** (+0.045 zero-shot, consistent
+across all three layers) *and* to the **basis** (+0.120 trained, F-66; +0.034 on zero-shot PC1).
+Contrasting capitulation against *personas instructed to hold* beats contrasting it against the
+bare default assistant, even though F-55 measured those personas producing near-identical text to
+the bare default. **Behavioural inertness does not imply representational inertness on either
+axis of the design.** That is the cleanest statement the cap bank supports, and it is a caution
+for persona-bank design generally: a negative-side persona that changes nothing you can read can
+still be doing most of the geometric work.
+
+**Two internal consistency checks passed:** `contrast:cap_vs_default` and `contrast:cap_only`
+return **identical** numbers (0.7021 at L40), as they must — both are `capitulation − assistant_anchor`,
+differing only in basis, which a contrast direction does not use. And `PC1` equals
+`PC1:cap_vs_default` exactly, the same role-set tautology F-65(a) flagged, now visible directly
+in the output.
+
+**The unfiltered bank agrees**: 0.7469 / 0.7026 at L40 against 0.7449 / 0.7021 filtered — within
+0.002, consistent with F-62 and F-65.
+
+- **source:** `run-crossgen/kd11/banks/cap_{s23,all}/matrices/mean_L{20,40,44}_s42.json`, rebuilt
+  2026-09-21 with the extended zero-shot arm; reader `cap/scripts/cap_zeroshot.py`.
+- **caveats:** (1) **the intervals are ROW-level and they overlap slightly** (A's lower 0.717 vs
+  B's upper 0.731 at L40). A paired bootstrap on the *difference* was not run, and overlapping
+  unpaired CIs do not by themselves mean the gap is not real. What carries the claim is that the
+  gap is the same sign and similar size at every layer and both filters (6 readings, +0.043 to
+  +0.051) — a consistent pattern, not a significance test, and the layers are not independent.
+  (2) a **dataset-level** bootstrap is undefined for zero-shot (no sources to resample), so the
+  project's usual bar cannot be applied here at all (B10 in `OPEN_DECISIONS.md`). (3) single seed.
+- **supersedes:** F-65's statement that A vs B is unanswerable — it was unanswerable *with
+  trained features*, and is now answered zero-shot. **Contradicts** the contrast half of F-55,
+  as F-66 already contradicted its basis half.
+- **status:** verified
+
+**A resume-by-skipping default hid this.** `27_crossgen.py` skips a matrix that already exists,
+which is right for an interruptible chain and wrong after a code change: adding a zero-shot
+direction changed nothing until the matrices were rebuilt. Added `--recompute`. The rebuild
+reproduced every trained number to four decimals (0.7136 / 0.6575 / 0.6355 / 0.6013 / 0.5935 /
+0.5594 / 0.4974), confirming the run is deterministic and that the only delta is the new rows.

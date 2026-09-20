@@ -130,7 +130,16 @@ bases share a role set, so the next reader cannot make the same mistake.
 The real A-vs-B number is `cos(contrast_A, contrast_B) = 0.931` — close to, but not, the 1.000
 that true inertness would imply.
 
-**B vs C is the one live comparison**, and it is the bank's most interesting result.
+**B vs C was the one live comparison at trained k** — and A vs B is now answered too, at
+zero-shot, where the contrast actually reaches a number. `27_crossgen.py` scores every behaviour
+axis since 2026-09-21. **A beats B by +0.045** (0.745 vs 0.702 at L40), consistent at all three
+layers and both filters (F-68).
+
+So both halves of the design agree: the position-holding personas contribute to the **contrast**
+(+0.045 zero-shot) *and* to the **basis** (+0.120 trained), despite F-55 measuring them producing
+near-identical text to no system prompt at all. **Behavioural inertness does not imply
+representational inertness** — the bank's most interesting result, and a caution for persona-bank
+design generally.
 
 ---
 

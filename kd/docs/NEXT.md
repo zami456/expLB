@@ -99,7 +99,9 @@ Not new experiments — holes in the existing record, each cheap to close.
 - **The zero-shot 0.745 (F-65) has no dataset-level bootstrap** and cannot have one: zero-shot
   trains on nothing, so there are no source datasets to resample. A row-level CI is the only
   available interval and must be labelled as such wherever the number appears.
-- **Variants B and C have no zero-shot number** — `27_crossgen.py` scores only one contrast
-  direction per bank. Adding the other two is a small change and would make the A/B/C design
-  answerable at zero-shot, which is where the contrast (rather than the basis) actually lives.
+- ~~**Variants B and C have no zero-shot number**~~ — **CLOSED 2026-09-21.**
+  `27_crossgen.py` now scores every behaviour axis. A vs B is answered: contrasting against the
+  position-holding personas beats contrasting against bare `default` by **+0.045** zero-shot,
+  consistent at all three layers and both filters (F-68). Both halves of the A/B/C design now
+  say the holding personas are load-bearing despite being behaviourally inert.
 - **Single split seed (42) everywhere.** Every crossgen number in the project rests on one seed.

@@ -415,8 +415,23 @@ def compute_cell_block(P, data, X32, splits_seed, bank, L, seed, features, probe
         raise SystemExit("bank has no behaviour axis with a matching PCA basis for zero-shot")
     _zs_axis = _cands[0]
     zs = []
+    # The primary axis keeps the bare names "contrast"/"PC1" so every existing result stays
+    # bit-identical and the readers keep working. EVERY OTHER behaviour axis is now scored too,
+    # under "contrast:<name>" / "PC1:<name>".
+    #
+    # This is the only place a CONTRAST direction reaches a number. The trained `pc:<name>`
+    # features project onto the named PCA *basis* and never touch the contrast, so two variants
+    # that share a role set are identical by construction. The cap bank's A/B pair is exactly
+    # that: designed to isolate the contrast, and unable to at any trained k. Scoring one
+    # direction per bank left that question unanswerable; scoring all of them answers it.
     dirs = {"contrast": P.unit(bank["axes"][_zs_axis][L].numpy().astype(np.float32)),
             "PC1": P.unit(bank["pca"][_zs_axis]["components"][L][0].numpy().astype(np.float32))}
+    for _n in bank["axes"]:
+        if _n == "assistant" or _n == _zs_axis or _n not in bank["pca"]:
+            continue
+        dirs[f"contrast:{_n}"] = P.unit(bank["axes"][_n][L].numpy().astype(np.float32))
+        dirs[f"PC1:{_n}"] = P.unit(
+            bank["pca"][_n]["components"][L][0].numpy().astype(np.float32))
     for name, d in dirs.items():
         ctrl = X32[control] @ d
         row = {"direction": name, "auroc": [], "tpr_at_1pct_fpr": [], "ci95_lo": [], "ci95_hi": []}
@@ -572,7 +587,7 @@ def stage_compute(args, out_root):
                 if not is_main and args.extra_layers and L not in args.extra_layers:
                     continue
                 path = out_root / "matrices" / f"{pooling}_L{L}_s{seed}.json"
-                if path.exists() and not args.smoke:
+                if path.exists() and not args.smoke and not args.recompute:
                     logger.info("  skip %s (exists)", path.name)
                     continue
                 if X32 is None:
@@ -868,6 +883,13 @@ def main() -> None:
     ap.add_argument("--boot_rows", type=int, default=1000)
     ap.add_argument("--boot_datasets", type=int, default=10000)
     ap.add_argument("--smoke", action="store_true")
+    ap.add_argument("--recompute", action="store_true",
+                    help="rebuild matrices that already exist instead of skipping them. The "
+                         "resume-by-skipping default is right for a chain that may be "
+                         "interrupted, but it silently pins a bank to whatever the code did on "
+                         "its first run -- adding a zero-shot direction or a feature changes "
+                         "nothing until the matrices are rebuilt. Same seed, so the trained "
+                         "numbers should reproduce exactly; a change there is a bug.")
     ap.add_argument("--smoke_layer", type=int, default=44)
     ap.add_argument("--smoke_pooling", default="last")
     args = ap.parse_args()
