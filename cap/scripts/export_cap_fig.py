@@ -42,10 +42,19 @@ for bank in ("cap_s23", "cap_all"):
                "means": {f: statistics.fmean(v) for f, v in cols.items()},
                "per_source": {f: v for f, v in cols.items()},
                "zeroshot": {}}
+        # EVERY direction, with the row-level CI the matrix stores under ci95_lo/ci95_hi.
+        # Two earlier readers looked for "lo"/"hi", found nothing, and printed blank intervals
+        # for a number that had one all along. Since 2026-09-21 a bank also carries
+        # contrast:<name> / PC1:<name> for its non-primary axes -- that is where the A-vs-B
+        # comparison lives (F-68), so dropping them here would silently un-report it.
         for z in (d.get("zeroshot") or []):
-            v = z.get("auroc")
-            rec["zeroshot"][z["direction"]] = v[j] if isinstance(v, list) else (
-                v.get(DS) if isinstance(v, dict) else v)
+            def _at(key):
+                v = z.get(key)
+                if v is None:
+                    return None
+                return v[j] if isinstance(v, list) else (v.get(DS) if isinstance(v, dict) else v)
+            rec["zeroshot"][z["direction"]] = {
+                "auroc": _at("auroc"), "lo": _at("ci95_lo"), "hi": _at("ci95_hi")}
         n = len(rec["sources"])
         idx = rng.integers(0, n, size=(B, n))
         rec["boot"] = {}

@@ -236,6 +236,12 @@ def fig5_capitulation(cap: dict) -> None:
     L = cap["banks"]["cap_s23_L40"]
     m, zs, p16 = L["means"], L["zeroshot"], cap["paper16_L40"]
 
+    def zsv(name):
+        """A zero-shot entry is {auroc, lo, hi} since 2026-09-21 and was a bare float before.
+        Accept both so an older exported payload still renders."""
+        v = zs.get(name)
+        return v.get("auroc") if isinstance(v, dict) else v
+
     fig, (axA, axB, axC) = plt.subplots(
         1, 3, figsize=(15.0, 4.8),
         gridspec_kw={"width_ratios": [1.2, 1.0, 0.85], "wspace": 0.62})
@@ -269,7 +275,7 @@ def fig5_capitulation(cap: dict) -> None:
     # Stacked on two rows of headroom ABOVE the bars: at 0.374 the register line runs straight
     # through the paper16 bars, so a label beside it is unreadable either way up.
     axA.set_ylim(len(rows) - 0.4, -1.45)
-    for xv, col, lab, yv in ((zs["contrast"], AXIS, "capitulation contrast", -0.62),
+    for xv, col, lab, yv in ((zsv("contrast"), AXIS, "capitulation contrast", -0.62),
                              (cap["register_baseline_zeroshot"], "#b04a4a",
                               "register axis", -1.08)):
         axA.axvline(xv, color=col, ls="--", lw=1.2, zorder=2)
