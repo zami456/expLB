@@ -2380,8 +2380,17 @@ differing only in basis, which a contrast direction does not use. And `PC1` equa
 `PC1:cap_vs_default` exactly, the same role-set tautology F-65(a) flagged, now visible directly
 in the output.
 
-**The unfiltered bank agrees**: 0.7469 / 0.7026 at L40 against 0.7449 / 0.7021 filtered — within
-0.002, consistent with F-62 and F-65.
+**The unfiltered bank agrees at all three layers**, completing the set (the L20/L44 unfiltered
+matrices finished after this entry was first written):
+
+| A − B | L20 | L40 | L44 |
+|---|---|---|---|
+| filtered (`s23`) | +0.051 | +0.043 | +0.048 |
+| unfiltered (`all`) | +0.054 | +0.044 | +0.049 |
+
+Six readings, **+0.043 to +0.054**, every one positive. Per-direction the two filters agree to
+≤ 0.004 (e.g. contrast A at L20: 0.7592 filtered vs 0.7624 unfiltered), consistent with F-62 and
+F-65.
 
 - **source:** `run-crossgen/kd11/banks/cap_{s23,all}/matrices/mean_L{20,40,44}_s42.json`, rebuilt
   2026-09-21 with the extended zero-shot arm; reader `cap/scripts/cap_zeroshot.py`.
@@ -2389,7 +2398,7 @@ in the output.
   B's upper 0.731 at L40). A paired bootstrap on the *difference* was not run, and overlapping
   unpaired CIs do not by themselves mean the gap is not real. What carries the claim is that the
   gap is the same sign and similar size at every layer and both filters (6 readings, +0.043 to
-  +0.051) — a consistent pattern, not a significance test, and the layers are not independent.
+  +0.054) — a consistent pattern, not a significance test, and the layers are not independent.
   (2) a **dataset-level** bootstrap is undefined for zero-shot (no sources to resample), so the
   project's usual bar cannot be applied here at all (B10 in `OPEN_DECISIONS.md`). (3) single seed.
 - **supersedes:** F-65's statement that A vs B is unanswerable — it was unanswerable *with

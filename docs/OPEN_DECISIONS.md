@@ -180,4 +180,5 @@ Listed so you are not working from something I later revised.
 | cap variants **A and B agreeing** confirms F-55's inertness geometrically | a **tautology** — `pc:<name>` projects onto the PCA *basis*, never the contrast, and A and B share all 13 roles, so they cannot differ. Caught before it entered the ledger |
 | the holding personas are **inert** (F-55) | behaviourally yes, **representationally no** — drop them from the basis and the entire advantage vanishes (p = 0.56) |
 | the cap chain's 2e step **passed** | it logged `written/written/PASS` twice while the gate it names was **never computed** — the report loop was hardcoded to paper16's three basis names and printed an empty table |
+| I ran a ~15-minute recompute **over SSH** | the session was killed and OpenSSH takes the remote process tree with it — the documented rule is a Scheduled Task. It finished ~12s before the kill; that was luck, not design |
 | the pipeline had already bootstrapped the cap result | it had **not** — `PERSONA_FEATURES` was a module constant of paper16 names, so `pc:capitulation` was in no comparison at all (144 tests; 792 after the fix) |
