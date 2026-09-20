@@ -494,10 +494,42 @@ def balacc_summary(
     return summary
 
 
+def extended_arms(
+    bank: persona_pcs.PersonaBank,
+) -> dict[str, Callable[[np.ndarray], np.ndarray]]:
+    """Zero-shot score functions for the persona groups only the extended bank has.
+
+    Shared by `run` and `zeroshot` so the two cannot write different versions of
+    `zero_shot.csv`; an empty dict for a bank without the knowledge-denial personas.
+    """
+    if "denial" not in bank.axes:
+        return {}
+    ext_geom = persona_pcs.fit_geometry(
+        bank,
+        k=3,
+        deception=persona_pcs.DECEPTION_PERSONAS + persona_pcs.KNOWLEDGE_DENIAL_PERSONAS,
+        honesty=persona_pcs.HONESTY_PERSONAS + persona_pcs.KNOWLEDGE_CANDOUR_PERSONAS,
+        axis_name="extended",
+    )
+    denial_geom = persona_pcs.fit_geometry(
+        bank,
+        k=3,
+        deception=persona_pcs.KNOWLEDGE_DENIAL_PERSONAS,
+        honesty=persona_pcs.KNOWLEDGE_CANDOUR_PERSONAS,
+        axis_name="denial",
+    )
+    return {
+        "auroc_ext_axis": lambda z, g=ext_geom: g.axis_score(z),
+        "auroc_ext_pc1": lambda z, g=ext_geom: g.project(z, k=1).ravel(),
+        "auroc_denial_axis": lambda z, g=denial_geom: g.axis_score(z),
+    }
+
+
 def zero_shot_table(
     datasets: dict[str, Pooled],
     geom: persona_pcs.PersonaGeometry,
     syc_geom: persona_pcs.PersonaGeometry,
+    extra: dict[str, Callable[[np.ndarray], np.ndarray]] | None = None,
 ) -> pd.DataFrame:
     """Methods 1 and 2: score by projection alone, no training.
 
@@ -516,6 +548,7 @@ def zero_shot_table(
                 "auroc_syc_axis": auroc(ds.y, syc_geom.axis_score(ds.z)),
                 "auroc_syc_pc1": auroc(ds.y, syc_geom.project(ds.z, k=1).ravel()),
             }
+            | {label: auroc(ds.y, fn(ds.z)) for label, fn in (extra or {}).items()}
         )
     return pd.DataFrame(rows)
 
@@ -652,7 +685,8 @@ def run(
     datasets = load_pooled(pooled_dir)
     logger.info(f"loaded {len(datasets)} pooled datasets from {pooled_dir}")
 
-    zero_shot = zero_shot_table(datasets, geom, syc_geom)
+    zero_shot = zero_shot_table(datasets, geom, syc_geom, extra=extended_arms(bank))
+    zero_shot.insert(1, "layer", layer)
     zero_shot.to_csv(out_dir / "zero_shot.csv", index=False)
     logger.info(f"zero-shot:\n{zero_shot.to_string(index=False)}")
 
@@ -766,6 +800,44 @@ def run(
     liars_bench_comparison(datasets, control, geom, out_dir)
     logger.info(f"wrote matrices and summary to {out_dir}")
 
+
+
+def zeroshot(
+    pooled_dir: str | Path = POOLED_DIR,
+    out_dir: str | Path = OUT_DIR,
+    layer: int = 20,
+    vectors: str | Path | None = None,
+) -> None:
+    """Rewrite just `zero_shot.csv`, with every axis the bank supports.
+
+    Separate from `run` because the zero-shot numbers cost four dot products while `run` costs
+    sixteen transfer matrices, and the zero-shot table is the one that gets extended as new
+    persona groups arrive. The columns `run` already wrote are reproduced exactly; the extended
+    and knowledge-denial arms are added beside them.
+    """
+    pooled_dir, out_dir = Path(pooled_dir), Path(out_dir)
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    bank = persona_pcs.load_bank_at_layer(
+        layer, vectors if vectors is not None else persona_pcs.VECTORS_DIR
+    )
+    geom = persona_pcs.fit_geometry(bank, k=3)
+    syc_geom = persona_pcs.fit_geometry(
+        bank,
+        k=3,
+        deception=persona_pcs.SYCOPHANCY_PERSONAS,
+        honesty=persona_pcs.ANTI_SYCOPHANCY_PERSONAS,
+        axis_name="sycophancy",
+    )
+
+    extra = extended_arms(bank)
+
+    datasets = load_pooled(pooled_dir)
+    table = zero_shot_table(datasets, geom, syc_geom, extra=extra)
+    table.insert(1, "layer", layer)
+    table.to_csv(out_dir / "zero_shot.csv", index=False)
+    logger.info(f"zero-shot at layer {layer}:\n{table.round(4).to_string(index=False)}")
+    logger.info(f"wrote {out_dir / 'zero_shot.csv'}")
 
 
 def loo(
@@ -1027,4 +1099,4 @@ def verify(
         logger.error("pooling disagrees with the run by more than 0.05 AUROC; do not trust results")
 
 if __name__ == "__main__":
-    fire.Fire({"run": run, "verify": verify, "loo": loo})
+    fire.Fire({"run": run, "verify": verify, "loo": loo, "zeroshot": zeroshot})

@@ -221,6 +221,82 @@ def variants(out_dir: str | Path = OUT_DIR) -> None:
 
 
 
+ZERO_SHOT_ARMS = [
+    ("auroc_axis", "deception axis (8 vs 7, published grouping)", "#eb6834"),
+    ("auroc_denial_axis", "knowledge-denial axis (4 vs 6, new personas only)", "#8ab6e8"),
+    ("auroc_ext_axis", "extended axis (12 vs 13)", "#2a78d6"),
+]
+
+
+def _zero_shot_panel(ax, out_dir: Path, title: str) -> list[str]:
+    table = pd.read_csv(out_dir / "zero_shot.csv")
+    table = table[table["auroc_axis"].notna()]  # the control has one class, so no AUROC
+    arms = [(key, label, colour) for key, label, colour in ZERO_SHOT_ARMS if key in table.columns]
+    datasets = list(table["dataset"])
+    x = np.arange(len(datasets))
+    width = 0.25
+    gap = 0.015
+
+    # Bars grow from chance, not from zero. AUROC below 0.5 is not "a small result", it is the
+    # probe ranking lies as more honest than honesty -- a sign error, not a weak signal -- and
+    # anchoring here is what makes that legible at a glance.
+    ax.axhspan(0.0, 0.5, color=NEUTRAL, zorder=0)
+    for index, (key, label, colour) in enumerate(arms):
+        values = table[key].to_numpy(dtype=float)
+        offset = (index - (len(arms) - 1) / 2) * (width + gap)
+        ax.bar(x + offset, values - 0.5, width=width, bottom=0.5, color=colour, label=label,
+               zorder=3)
+        for position, value in zip(x + offset, values, strict=True):
+            above = value >= 0.5
+            ax.text(position, value + (0.012 if above else -0.012), f"{value:.2f}",
+                    ha="center", va="bottom" if above else "top", fontsize=7, color=INK)
+
+    ax.axhline(0.5, color=INK_MUTED, lw=1, zorder=4)
+    ax.text(len(datasets) - 0.42, 0.468, "inverted", fontsize=8, color=INK_MUTED, ha="right",
+            style="italic")
+    ax.set_xticks(x, [SHORT.get(n, n) for n in datasets], fontsize=9.5, color=INK)
+    ax.set_ylim(0.0, 1.06)
+    ax.set_ylabel("zero-shot AUROC", fontsize=9, color=INK_MUTED)
+    ax.tick_params(axis="y", labelsize=8, colors=INK_MUTED, length=0)
+    ax.tick_params(axis="x", length=0)
+    ax.grid(axis="y", color=NEUTRAL, lw=1, zorder=1)
+    ax.set_axisbelow(False)
+    ax.set_facecolor(SURFACE)
+    for side in ("top", "right", "left", "bottom"):
+        ax.spines[side].set_visible(False)
+    ax.set_title(title, fontsize=11, color=INK, loc="left", pad=8)
+    return [label for _, label, _ in arms]
+
+
+def zeroshot(out_dir: str | Path = OUT_DIR, out_dir2: str | Path | None = None) -> None:
+    """Per-dataset AUROC with no training at all: score = <activation, unit persona axis>.
+
+    This is the figure for the claim that costs nothing -- no benchmark labels, no probe, no
+    training set -- so the only thing separating the panels is which personas went into the
+    contrast. Passing a second folder puts two layers side by side.
+    """
+    out_dir = Path(out_dir)
+    folders = [out_dir] + ([Path(out_dir2)] if out_dir2 else [])
+    fig, axes = plt.subplots(
+        1, len(folders), figsize=(7.6 * len(folders), 5.0), facecolor=SURFACE, squeeze=False
+    )
+    labels: list[str] = []
+    for ax, folder in zip(axes[0], folders, strict=True):
+        labels = _zero_shot_panel(ax, folder, _layer(folder).capitalize())
+
+    handles = [plt.Rectangle((0, 0), 1, 1, color=colour)
+               for (_, label, colour) in ZERO_SHOT_ARMS if label in labels]
+    fig.legend(handles, labels, loc="lower center", ncol=len(labels), frameon=False,
+               fontsize=9, labelcolor=INK, bbox_to_anchor=(0.5, -0.04))
+    fig.suptitle("Zero-shot deception detection: no labels, no probe, one persona direction",
+                 fontsize=13, color=INK, x=0.008, ha="left", y=1.02)
+    fig.tight_layout()
+    for folder in folders:  # both layers get the combined figure, so neither folder is partial
+        fig.savefig(folder / "zero_shot.png", dpi=200, bbox_inches="tight", facecolor=SURFACE)
+    plt.close(fig)
+    print(f"wrote zero_shot.png to {', '.join(str(f) for f in folders)}")
+
+
 def _loo_layer(out_dir: Path) -> str:
     """Same contract as `_layer`, but for the leave-one-out folder, which has no summary.csv."""
     try:
@@ -390,4 +466,5 @@ def syc(out_dir: str | Path = OUT_DIR) -> None:
 
 
 if __name__ == "__main__":
-    fire.Fire({"run": run, "variants": variants, "syc": syc, "loo": loo})
+    fire.Fire({"run": run, "variants": variants, "syc": syc, "loo": loo,
+               "zeroshot": zeroshot})
