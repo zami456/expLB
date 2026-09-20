@@ -134,3 +134,39 @@ class TestRefactorChangedNothing:
         np.testing.assert_allclose(
             fresh.to_numpy(float), saved.to_numpy(float), atol=1e-9, equal_nan=True
         )
+
+
+class TestOperatingPoint:
+    """Recall and specificity beside balanced accuracy.
+
+    The zero-shot harm-pressure cells score exactly 0.5, which balanced accuracy alone cannot
+    distinguish from "no signal". These pin the decomposition that tells them apart.
+    """
+
+    def test_decomposition_reconstructs_balanced_accuracy(self):
+        y = np.array([0, 0, 1, 1])
+        scores = np.array([0.0, 0.1, 0.4, 0.9])
+        point = P.operating_point(y, scores, threshold=0.5)
+        assert point["balacc"] == pytest.approx(
+            P.balanced_accuracy(y, scores, threshold=0.5)
+        )
+        assert point["recall"] == pytest.approx(0.5)
+        assert point["specificity"] == pytest.approx(1.0)
+
+    def test_nothing_flagged_is_zero_recall_not_absent_signal(self):
+        """The harm-pressure case: balacc 0.5 with recall 0 and perfect specificity."""
+        y = np.array([0, 0, 1, 1])
+        scores = np.array([0.1, 0.2, 0.3, 0.4])  # ranked correctly, all below threshold
+        point = P.operating_point(y, scores, threshold=99.0)
+        assert point["recall"] == 0.0
+        assert point["specificity"] == 1.0
+        assert point["balacc"] == 0.5
+        assert point["flagged_frac"] == 0.0
+        assert P.auroc(y, scores) == 1.0  # the ranking is perfect; only the threshold is wrong
+
+    def test_everything_flagged_also_floors_at_half(self):
+        y = np.array([0, 0, 1, 1])
+        scores = np.array([0.1, 0.2, 0.3, 0.4])
+        point = P.operating_point(y, scores, threshold=-1.0)
+        assert (point["recall"], point["specificity"], point["balacc"]) == (1.0, 0.0, 0.5)
+        assert point["flagged_frac"] == 1.0

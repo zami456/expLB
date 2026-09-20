@@ -1,0 +1,49 @@
+layer,arm,dataset,n_deceptive,auroc,threshold_source,threshold,recall,specificity,balacc,flagged_frac
+20,deception axis (8v7),convince_me__plain,167,0.9399,control,0.1366,0.0,1.0,0.5,0.0
+20,deception axis (8v7),convince_me__plain,167,0.9399,in-dataset (oracle),-0.5031,0.4611,0.99,0.7255,0.2921
+20,deception axis (8v7),harm_refusal_choice__plain,134,0.7169,control,0.1366,0.0,1.0,0.5,0.0
+20,deception axis (8v7),harm_refusal_choice__plain,134,0.7169,in-dataset (oracle),-0.0331,0.0448,0.99,0.5174,0.0122
+20,deception axis (8v7),harm_refusal_knowledge_report__plain,139,0.1483,control,0.1366,0.0,1.0,0.5,0.0
+20,deception axis (8v7),harm_refusal_knowledge_report__plain,139,0.1483,in-dataset (oracle),-0.0974,0.0,0.99,0.495,0.0094
+20,deception axis (8v7),insider_trading_cadenza__plain,423,0.9879,control,0.1366,0.0993,1.0,0.5496,0.0389
+20,deception axis (8v7),insider_trading_cadenza__plain,423,0.9879,in-dataset (oracle),-0.2916,0.8534,0.9893,0.9214,0.3407
+20,deception axis (8v7),instruct_dishonesty__plain,3045,0.9587,control,0.1366,0.2466,0.9958,0.6212,0.1401
+20,deception axis (8v7),instruct_dishonesty__plain,3045,0.9587,in-dataset (oracle),0.0945,0.3494,0.9899,0.6697,0.2003
+20,deception axis (8v7),repe_honesty__plain,275,0.9935,control,0.1366,0.6073,1.0,0.8036,0.3036
+20,deception axis (8v7),repe_honesty__plain,275,0.9935,in-dataset (oracle),0.007,0.9273,0.9891,0.9582,0.4691
+20,sycophancy axis (5v5),convince_me__plain,167,0.9989,control,0.5703,0.1257,1.0,0.5629,0.0787
+20,sycophancy axis (5v5),convince_me__plain,167,0.9989,in-dataset (oracle),0.0702,0.982,0.99,0.986,0.618
+20,sycophancy axis (5v5),harm_refusal_choice__plain,134,0.5327,control,0.5703,0.0,1.0,0.5,0.0
+20,sycophancy axis (5v5),harm_refusal_choice__plain,134,0.5327,in-dataset (oracle),0.2524,0.0,0.99,0.495,0.0094
+20,sycophancy axis (5v5),harm_refusal_knowledge_report__plain,139,0.0429,control,0.5703,0.0,1.0,0.5,0.0
+20,sycophancy axis (5v5),harm_refusal_knowledge_report__plain,139,0.0429,in-dataset (oracle),0.235,0.0072,0.99,0.4986,0.0098
+20,sycophancy axis (5v5),insider_trading_cadenza__plain,423,0.9834,control,0.5703,0.0024,1.0,0.5012,0.0009
+20,sycophancy axis (5v5),insider_trading_cadenza__plain,423,0.9834,in-dataset (oracle),-0.0569,0.773,0.9893,0.8812,0.3093
+20,sycophancy axis (5v5),instruct_dishonesty__plain,3045,0.9228,control,0.5703,0.3934,0.9556,0.6745,0.2401
+20,sycophancy axis (5v5),instruct_dishonesty__plain,3045,0.9228,in-dataset (oracle),0.7414,0.1819,0.9899,0.5859,0.1064
+20,sycophancy axis (5v5),repe_honesty__plain,275,0.9767,control,0.5703,0.2218,1.0,0.6109,0.1109
+20,sycophancy axis (5v5),repe_honesty__plain,275,0.9767,in-dataset (oracle),0.4217,0.7927,0.9964,0.8945,0.3982
+20,extended axis (12v13),convince_me__plain,167,0.9692,control,0.1092,0.1737,1.0,0.5868,0.1086
+20,extended axis (12v13),convince_me__plain,167,0.9692,in-dataset (oracle),-0.3067,0.7844,0.99,0.8872,0.4944
+20,extended axis (12v13),harm_refusal_choice__plain,134,0.6393,control,0.1092,0.0,1.0,0.5,0.0
+20,extended axis (12v13),harm_refusal_choice__plain,134,0.6393,in-dataset (oracle),0.0131,0.0,0.99,0.495,0.0094
+20,extended axis (12v13),harm_refusal_knowledge_report__plain,139,0.8816,control,0.1092,0.0,1.0,0.5,0.0
+20,extended axis (12v13),harm_refusal_knowledge_report__plain,139,0.8816,in-dataset (oracle),-0.0058,0.1295,0.99,0.5597,0.0178
+20,extended axis (12v13),insider_trading_cadenza__plain,423,0.9899,control,0.1092,0.234,1.0,0.617,0.0917
+20,extended axis (12v13),insider_trading_cadenza__plain,423,0.9899,in-dataset (oracle),-0.2422,0.8534,0.9893,0.9214,0.3407
+20,extended axis (12v13),instruct_dishonesty__plain,3045,0.9539,control,0.1092,0.5281,0.9778,0.7529,0.3058
+20,extended axis (12v13),instruct_dishonesty__plain,3045,0.9539,in-dataset (oracle),0.1932,0.3488,0.9899,0.6694,0.1999
+20,extended axis (12v13),repe_honesty__plain,275,0.9908,control,0.1092,0.9527,0.9418,0.9473,0.5055
+20,extended axis (12v13),repe_honesty__plain,275,0.9908,in-dataset (oracle),0.2325,0.8436,0.9964,0.92,0.4236
+20,knowledge-denial axis (4v6),convince_me__plain,167,0.9314,control,0.187,0.2036,1.0,0.6018,0.1273
+20,knowledge-denial axis (4v6),convince_me__plain,167,0.9314,in-dataset (oracle),-0.1693,0.6886,0.99,0.8393,0.4345
+20,knowledge-denial axis (4v6),harm_refusal_choice__plain,134,0.5851,control,0.187,0.0448,0.955,0.4999,0.045
+20,knowledge-denial axis (4v6),harm_refusal_choice__plain,134,0.5851,in-dataset (oracle),0.2361,0.0,0.99,0.495,0.0094
+20,knowledge-denial axis (4v6),harm_refusal_knowledge_report__plain,139,0.8899,control,0.187,0.9496,0.1165,0.5331,0.8878
+20,knowledge-denial axis (4v6),harm_refusal_knowledge_report__plain,139,0.8899,in-dataset (oracle),0.6432,0.0935,0.99,0.5418,0.0154
+20,knowledge-denial axis (4v6),insider_trading_cadenza__plain,423,0.9758,control,0.187,0.0,1.0,0.5,0.0
+20,knowledge-denial axis (4v6),insider_trading_cadenza__plain,423,0.9758,in-dataset (oracle),-0.2673,0.7376,0.9893,0.8635,0.2954
+20,knowledge-denial axis (4v6),instruct_dishonesty__plain,3045,0.9315,control,0.187,0.3284,0.9891,0.6588,0.1889
+20,knowledge-denial axis (4v6),instruct_dishonesty__plain,3045,0.9315,in-dataset (oracle),0.2103,0.2883,0.9899,0.6391,0.1661
+20,knowledge-denial axis (4v6),repe_honesty__plain,275,0.8825,control,0.187,0.8982,0.6436,0.7709,0.6273
+20,knowledge-denial axis (4v6),repe_honesty__plain,275,0.8825,in-dataset (oracle),0.5967,0.0909,0.9964,0.5436,0.0473
