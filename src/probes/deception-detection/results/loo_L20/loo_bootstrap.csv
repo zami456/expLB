@@ -1,0 +1,13 @@
+layer,weighting,dataset,n,n_deceptive,pooled_baseline,ext_axis1,delta,ci_low,ci_high,excludes_zero
+20,naive,convince_me__plain,267,167,0.596,0.9692,-0.3732,-0.445,-0.3094,True
+20,naive,harm_refusal_choice__plain,2134,134,0.596,0.6393,-0.0434,-0.1193,0.028,False
+20,naive,harm_refusal_knowledge_report__plain,2139,139,0.3254,0.8816,-0.5561,-0.6378,-0.4634,True
+20,naive,insider_trading_cadenza__plain,1080,423,0.7416,0.9899,-0.2483,-0.2783,-0.216,True
+20,naive,instruct_dishonesty__plain,5432,3045,0.9541,0.9539,0.0002,-0.0035,0.004,False
+20,naive,repe_honesty__plain,550,275,0.9514,0.9908,-0.0394,-0.0574,-0.0236,True
+20,balanced,convince_me__plain,267,167,0.9994,0.9692,0.0302,0.0147,0.0466,True
+20,balanced,harm_refusal_choice__plain,2134,134,0.7553,0.6393,0.116,0.0633,0.1665,True
+20,balanced,harm_refusal_knowledge_report__plain,2139,139,0.1243,0.8816,-0.7573,-0.8161,-0.6911,True
+20,balanced,insider_trading_cadenza__plain,1080,423,0.9775,0.9899,-0.0124,-0.0185,-0.0066,True
+20,balanced,instruct_dishonesty__plain,5432,3045,0.9488,0.9539,-0.0051,-0.0084,-0.0021,True
+20,balanced,repe_honesty__plain,550,275,0.9604,0.9908,-0.0304,-0.0449,-0.0168,True

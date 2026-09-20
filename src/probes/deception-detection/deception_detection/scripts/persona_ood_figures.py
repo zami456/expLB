@@ -141,6 +141,9 @@ def run(out_dir: str | Path = OUT_DIR) -> None:
 
 # categorical slots 1 and 2, validated against the light surface
 SERIES = ("#2a78d6", "#eb6834")
+# the single-source reference is context, not a contender; it reads as a muted fill, and the
+# naive pool is a tint of the balanced one so the two baselines read as one family
+NEUTRAL_BAR, SERIES_LIGHT = "#c9c7c1", "#f6b48e"
 
 # ordered so the comparison reads: reference, deception arms, sycophancy arms, control
 VARIANT_LABELS = [
@@ -218,6 +221,120 @@ def variants(out_dir: str | Path = OUT_DIR) -> None:
 
 
 
+def _loo_layer(out_dir: Path) -> str:
+    """Same contract as `_layer`, but for the leave-one-out folder, which has no summary.csv."""
+    try:
+        layers = pd.read_csv(out_dir / "loo.csv")["layer"].unique()
+    except (OSError, KeyError):
+        return "layer unknown"
+    return f"layer {layers[0]}" if len(layers) == 1 else f"layers {sorted(layers)}"
+
+
+def loo(out_dir: str | Path = REPO_ROOT / "results" / "loo", against: str = "balanced") -> None:
+    """Pooled supervision against the fixed persona direction, per held-out dataset.
+
+    Two panels because the comparison has two parts. Left: what each approach scores, with both
+    pooled baselines and the single-source one kept in view, so the strengthening of the baseline
+    is visible rather than merely asserted. Right: the difference with its bootstrap interval,
+    which is the only panel that says whether a gap is real -- HP-C and HP-KR carry ~135 positives
+    apiece and their intervals are correspondingly wide.
+
+    `against` picks which pooled baseline the interval is taken against. It defaults to the
+    balanced pool because that is the stronger of the two, and a comparison is worth only as much
+    as the opponent it was run against.
+    """
+    out_dir = Path(out_dir)
+    table = pd.read_csv(out_dir / "loo.csv")
+    reference = pd.read_csv(out_dir / "single_source_reference.csv")
+    bootstrap = pd.read_csv(out_dir / "loo_bootstrap.csv")
+    if "weighting" in bootstrap.columns:
+        bootstrap = bootstrap[bootstrap["weighting"] == against]
+    persona_arm = "ext_axis1" if "ext_axis1" in set(table["arm"]) else "axis1"
+
+    scored = table.set_index(["arm", "weighting", "dataset"])["auroc"]
+    order = list(reference["dataset"])
+    labels = [SHORT.get(n, n) for n in order]
+    y = np.arange(len(order))
+    single = reference.set_index("dataset")
+
+    series = [
+        ("single-source mean (one dataset)", NEUTRAL_BAR,
+         [float(single.loc[n, "single_source_mean"]) for n in order]),
+        ("pooled leave-one-out, naive", SERIES_LIGHT,
+         [float(scored.loc[("baseline", "naive", n)]) for n in order]),
+        ("pooled leave-one-out, dataset-balanced", SERIES[1],
+         [float(scored.loc[("baseline", "balanced", n)]) for n in order]),
+        ("persona axis (1-d, zero-shot)", SERIES[0],
+         [float(scored.loc[(persona_arm, "naive", n)]) for n in order]),
+    ]
+
+    fig, (left, right) = plt.subplots(
+        1, 2, figsize=(14.0, 5.8), facecolor=SURFACE, gridspec_kw={"width_ratios": [1.5, 1.0]}
+    )
+
+    height = 0.2
+    gap = 0.012
+    for index, (name, colour, values) in enumerate(series):
+        offset = (index - 1.5) * (height + gap)
+        bars = left.barh(y + offset, values, height=height, color=colour, label=name, zorder=3)
+        for bar, value in zip(bars, values, strict=True):
+            left.text(value + 0.006, bar.get_y() + bar.get_height() / 2, f"{value:.3f}",
+                      va="center", fontsize=7, color=INK)
+
+    left.axvline(0.5, color=INK_MUTED, lw=1, ls=(0, (4, 3)), zorder=2)
+    left.text(0.5, -0.66, " chance", fontsize=8, color=INK_MUTED, va="center")
+    left.set_yticks(y, labels, fontsize=9.5, color=INK)
+    left.invert_yaxis()
+    left.set_xlim(0.0, 1.08)
+    left.set_xlabel("AUROC on the held-out dataset", fontsize=9, color=INK_MUTED)
+    left.tick_params(axis="x", labelsize=8, colors=INK_MUTED, length=0)
+    left.tick_params(axis="y", length=0)
+    left.grid(axis="x", color=NEUTRAL, lw=1, zorder=0)
+    left.set_axisbelow(True)
+    left.set_facecolor(SURFACE)
+    for side in ("top", "right", "left", "bottom"):
+        left.spines[side].set_visible(False)
+    left.legend(loc="lower right", frameon=False, fontsize=8.5, labelcolor=INK)
+    left.set_title(f"Does pooled supervision beat a fixed persona direction?  "
+                   f"({_loo_layer(out_dir)})", fontsize=12, color=INK, loc="left", pad=12)
+
+    boot = bootstrap.set_index("dataset")
+    for index, name in enumerate(order):
+        delta = float(boot.loc[name, "delta"])
+        low, high = float(boot.loc[name, "ci_low"]), float(boot.loc[name, "ci_high"])
+        # orange where pooled supervision wins, blue where the persona axis does, grey where the
+        # interval spans zero and the sign is simply not established
+        colour = INK_MUTED if low <= 0 <= high else (SERIES[1] if delta > 0 else SERIES[0])
+        right.plot([low, high], [index, index], color=colour, lw=2.2, zorder=3,
+                   solid_capstyle="round")
+        right.plot([delta], [index], "o", color=colour, ms=6.5, zorder=4)
+        right.text(high + 0.015, index, f"{delta:+.3f}", va="center", fontsize=7.5, color=INK)
+
+    right.axvline(0.0, color=INK_MUTED, lw=1, ls=(0, (4, 3)), zorder=2)
+    right.set_yticks(
+        y,
+        [f"{lab}  ({int(boot.loc[n, 'n_deceptive'])}+)"
+         for lab, n in zip(labels, order, strict=True)],
+        fontsize=9, color=INK,
+    )
+    right.invert_yaxis()
+    right.set_xlabel(f"Δ AUROC: pooled ({against}) − persona axis   (95% bootstrap CI)",
+                     fontsize=9, color=INK_MUTED)
+    right.tick_params(axis="x", labelsize=8, colors=INK_MUTED, length=0)
+    right.tick_params(axis="y", length=0)
+    right.grid(axis="x", color=NEUTRAL, lw=1, zorder=0)
+    right.set_axisbelow(True)
+    right.set_facecolor(SURFACE)
+    for side in ("top", "right", "left", "bottom"):
+        right.spines[side].set_visible(False)
+    right.set_title("and is the gap real?", fontsize=12, color=INK, loc="left", pad=12)
+
+    fig.tight_layout()
+    fig.savefig(out_dir / "loo.png", dpi=200, bbox_inches="tight", facecolor=SURFACE)
+    plt.close(fig)
+    print(f"wrote loo.png to {out_dir}")
+
+
 def syc(out_dir: str | Path = OUT_DIR) -> None:
     """The two persona bases side by side, and where they differ.
 
@@ -273,4 +390,4 @@ def syc(out_dir: str | Path = OUT_DIR) -> None:
 
 
 if __name__ == "__main__":
-    fire.Fire({"run": run, "variants": variants, "syc": syc})
+    fire.Fire({"run": run, "variants": variants, "syc": syc, "loo": loo})

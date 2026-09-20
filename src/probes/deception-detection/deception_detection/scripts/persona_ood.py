@@ -281,6 +281,123 @@ def transfer_matrix(
     return matrix
 
 
+@dataclass(frozen=True)
+class LOOScores:
+    """One leave-one-out sweep: the held-out scores, and each fold's control threshold.
+
+    Kept as scores rather than a metric so that AUROC and balanced accuracy can both be read off
+    a single set of fits. The baseline arm fits an 8192-d probe on ~9500 rows six times over;
+    refitting it once per metric would double that for nothing.
+    """
+
+    scores: dict[str, np.ndarray]
+    thresholds: dict[str, float]
+
+
+def leave_one_out_scores(
+    featurize: Callable[[np.ndarray], np.ndarray],
+    datasets: dict[str, "Pooled"],
+    order: list[str],
+    control: "Pooled | None" = None,
+    weighting: str = "naive",
+) -> LOOScores:
+    """Train on the pooled other datasets, score the held-out one.
+
+    The off-diagonal of `transfer_matrix` trains on a *single* dataset, which is not how anyone
+    would use labels they already hold. This is the fair supervised baseline: for each held-out
+    dataset, one probe fitted on every other dataset at once.
+
+    `weighting` decides what "pooled" means, and the two are reported side by side because the
+    datasets differ in size by a factor of twenty -- instruct-dishonesty alone is 5432 of the
+    ~9500 rows, so a naive pool is mostly one dataset:
+
+      naive     plain concatenation; what someone would actually do.
+      balanced  every dataset gets the same total weight (1/n_d per row), separating "pooled
+                supervision helps" from "the largest dataset happens to transfer well".
+    """
+    if weighting not in ("naive", "balanced"):
+        raise ValueError(f"unknown weighting {weighting!r}")
+
+    feats = {name: featurize(datasets[name].z) for name in order}
+    control_features = featurize(control.z) if control is not None else None
+    scores: dict[str, np.ndarray] = {}
+    thresholds: dict[str, float] = {}
+
+    for held_out in order:
+        sources = [n for n in order if n != held_out]
+        x = np.vstack([feats[n] for n in sources])
+        y = np.concatenate([datasets[n].y for n in sources])
+        probe = make_probe()
+        if weighting == "balanced":
+            weights = np.concatenate(
+                [np.full(len(datasets[n].y), 1.0 / len(datasets[n].y)) for n in sources]
+            )
+            probe.fit(x, y, logisticregression__sample_weight=weights)  # type: ignore[attr-defined]
+        else:
+            probe.fit(x, y)  # type: ignore[attr-defined]
+        scores[held_out] = probe.decision_function(feats[held_out])  # type: ignore[attr-defined]
+        thresholds[held_out] = (
+            control_threshold(probe, control_features)
+            if control_features is not None
+            else float("nan")
+        )
+    return LOOScores(scores=scores, thresholds=thresholds)
+
+
+def leave_one_out(
+    featurize: Callable[[np.ndarray], np.ndarray],
+    datasets: dict[str, "Pooled"],
+    order: list[str],
+    metric: "Metric" = AUROC,
+    control: "Pooled | None" = None,
+    weighting: str = "naive",
+) -> pd.Series:
+    """`leave_one_out_scores` reduced to one metric per held-out dataset."""
+    if metric.needs_threshold and control is None:
+        raise ValueError(f"metric {metric.name!r} needs a control dataset for its threshold")
+    fitted = leave_one_out_scores(featurize, datasets, order, control, weighting)
+    return pd.Series(
+        {
+            name: metric.fn(datasets[name].y, fitted.scores[name], fitted.thresholds[name])
+            for name in order
+        },
+        dtype=float,
+    )
+
+
+def bootstrap_delta(
+    y: np.ndarray,
+    scores_a: np.ndarray,
+    scores_b: np.ndarray,
+    n_boot: int = 1000,
+    seed: int = SEED,
+) -> tuple[float, float, float]:
+    """Point estimate and 95% interval for AUROC(a) - AUROC(b) on one test set.
+
+    Resampled stratified by label: HP-C and HP-KR are ~6% deceptive, and an unstratified draw
+    would sometimes hold too few positives to score at all. Both probes are fitted once and held
+    fixed, so this is an interval on the *evaluation set*, not on the fit -- the right object when
+    comparing two given probes on the same rows, and cheap enough to run for every arm.
+    """
+    rng = np.random.default_rng(seed)
+    positive, negative = np.flatnonzero(y == 1), np.flatnonzero(y == 0)
+    point = auroc(y, scores_a) - auroc(y, scores_b)
+    if len(positive) == 0 or len(negative) == 0:
+        return point, float("nan"), float("nan")
+
+    deltas = np.empty(n_boot)
+    for i in range(n_boot):
+        idx = np.concatenate(
+            (
+                rng.choice(positive, len(positive), replace=True),
+                rng.choice(negative, len(negative), replace=True),
+            )
+        )
+        deltas[i] = auroc(y[idx], scores_a[idx]) - auroc(y[idx], scores_b[idx])
+    low, high = np.quantile(deltas, [0.025, 0.975])
+    return point, float(low), float(high)
+
+
 def off_diagonal_mean(matrix: pd.DataFrame) -> float:
     values = matrix.to_numpy(dtype=float).copy()
     np.fill_diagonal(values, np.nan)
@@ -409,6 +526,9 @@ def liars_bench_comparison(
     geom: persona_pcs.PersonaGeometry,
     out_dir: Path,
     train_on: str = "repe_honesty__plain",
+    extra: dict[str, Callable[[np.ndarray], np.ndarray]] | None = None,
+    extra_rows: list[dict[str, object]] | None = None,
+    out_name: str = "liars_bench_comparison.csv",
 ) -> pd.DataFrame:
     """Head-to-head against the Liars' Bench probe baselines, over the five shared datasets.
 
@@ -482,8 +602,15 @@ def liars_bench_comparison(
         ),
     ]
 
+    # Arms that are a fixed scoring rule go through `evaluate`; ones whose probe changes per
+    # dataset (leave-one-out) cannot, and arrive already scored as `extra_rows`.
+    if extra:
+        rows += [evaluate(fn, label) for label, fn in extra.items()]
+    if extra_rows:
+        rows += list(extra_rows)
+
     table = pd.DataFrame(rows)
-    table.to_csv(out_dir / "liars_bench_comparison.csv", index=False)
+    table.to_csv(out_dir / out_name, index=False)
     logger.info(f"vs Liars' Bench probe baselines:\n{table.round(4).to_string(index=False)}")
     return table
 
@@ -641,6 +768,224 @@ def run(
 
 
 
+def loo(
+    pooled_dir: str | Path = POOLED_DIR,
+    out_dir: str | Path = REPO_ROOT / "results" / "loo",
+    layer: int = 20,
+    vectors: str | Path | None = None,
+    n_boot: int = 1000,
+) -> None:
+    """Leave-one-dataset-out: the fair supervised baseline for the generalization claim.
+
+    `run` compares a fixed persona direction against probes trained on *one* dataset and tested
+    on another. That understates supervision: anyone holding labels for five datasets would train
+    on all five. Here each held-out dataset is scored by a probe fitted on the pooled remainder,
+    which is the baseline the cross-dataset claim actually has to beat.
+
+    `layer` must match the layer `pooled_dir` was extracted at -- nothing enforces it, and a
+    mismatch yields meaningless numbers rather than an error, so it is recorded in every file.
+    """
+    pooled_dir, out_dir = Path(pooled_dir), Path(out_dir)
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    bank = persona_pcs.load_bank_at_layer(
+        layer, vectors if vectors is not None else persona_pcs.VECTORS_DIR
+    )
+    geom = persona_pcs.fit_geometry(bank, k=3)
+    extended = "denial" in bank.axes
+    ext_geom = (
+        persona_pcs.fit_geometry(
+            bank,
+            k=3,
+            deception=persona_pcs.DECEPTION_PERSONAS + persona_pcs.KNOWLEDGE_DENIAL_PERSONAS,
+            honesty=persona_pcs.HONESTY_PERSONAS + persona_pcs.KNOWLEDGE_CANDOUR_PERSONAS,
+            axis_name="extended",
+        )
+        if extended
+        else None
+    )
+
+    datasets = load_pooled(pooled_dir)
+    order = [n for n, d in sorted(datasets.items()) if d.two_class and n != CONTROL_DATASET]
+    control = datasets[CONTROL_DATASET]
+    logger.info(f"leave-one-out over {len(order)} datasets at layer {layer}: {order}")
+
+    arms: dict[str, tuple[Callable[[np.ndarray], np.ndarray], int]] = {
+        "baseline": (lambda z: z, datasets[order[0]].z.shape[1]),
+        "axis1": (lambda z: geom.axis_score(z)[:, None], 1),
+        "pc3": (lambda z: geom.project(z, k=3), 3),
+    }
+    if ext_geom is not None:
+        arms |= {
+            "ext_axis1": (lambda z, g=ext_geom: g.axis_score(z)[:, None], 1),
+            "ext_pc3": (lambda z, g=ext_geom: g.project(z, k=3), 3),
+        }
+
+    fits: dict[tuple[str, str], LOOScores] = {}
+    tidy: list[dict[str, object]] = []
+    for weighting in ("naive", "balanced"):
+        for arm, (featurize, dim) in arms.items():
+            fitted = leave_one_out_scores(featurize, datasets, order, control, weighting)
+            fits[(arm, weighting)] = fitted
+            for name in order:
+                y, scores = datasets[name].y, fitted.scores[name]
+                tidy.append(
+                    {
+                        "layer": layer,
+                        "arm": arm,
+                        "dim": dim,
+                        "weighting": weighting,
+                        "dataset": name,
+                        "auroc": auroc(y, scores),
+                        "balacc_1pct_fpr": balanced_accuracy(y, scores, fitted.thresholds[name]),
+                    }
+                )
+            logger.info(f"{arm:>10s} / {weighting:<8s} done")
+
+    table = pd.DataFrame(tidy)
+    table.round(4).to_csv(out_dir / "loo.csv", index=False)
+
+    # Reported with and without HP-KR for the same reason `run` does it: HP-KR is where the
+    # supervised probes inverted, so a single mean lets one dataset decide the comparison.
+    summary = (
+        table.groupby(["arm", "dim", "weighting"], as_index=False)[["auroc", "balacc_1pct_fpr"]]
+        .mean()
+        .sort_values("auroc", ascending=False)
+    )
+    excl = (
+        table[table["dataset"] != HPKR]
+        .groupby(["arm", "dim", "weighting"], as_index=False)[["auroc"]]
+        .mean()
+        .rename(columns={"auroc": "auroc_excl_hpkr"})
+    )
+    summary = summary.merge(excl, on=["arm", "dim", "weighting"], how="left")
+    # The floor, not the mean, is what a detector is judged on: a single dataset scoring 0.12
+    # means the probe confidently calls lies honest there, and averaging hides it.
+    worst = (
+        table.groupby(["arm", "dim", "weighting"], as_index=False)[["auroc"]]
+        .min()
+        .rename(columns={"auroc": "auroc_worst_dataset"})
+    )
+    summary = summary.merge(worst, on=["arm", "dim", "weighting"], how="left")
+    summary.insert(0, "layer", layer)
+    summary.round(4).to_csv(out_dir / "loo_summary.csv", index=False)
+    logger.info(f"leave-one-out means:\n{summary.round(4).to_string(index=False)}")
+
+    # The single-source reference: the same held-out column of the ordinary transfer matrix, as a
+    # mean over the five training sets and as the best of them. `run` reports the mean; the max is
+    # the most generous single-source baseline available, reported so the comparison cannot be
+    # accused of having picked the weak one.
+    single = transfer_matrix(lambda z: z, datasets, order)
+    reference = pd.DataFrame(
+        [
+            {
+                "layer": layer,
+                "dataset": name,
+                "single_source_mean": float(single[name].drop(index=name).mean()),
+                "single_source_best": float(single[name].drop(index=name).max()),
+                "pooled_loo_naive": auroc(
+                    datasets[name].y, fits[("baseline", "naive")].scores[name]
+                ),
+                "pooled_loo_balanced": auroc(
+                    datasets[name].y, fits[("baseline", "balanced")].scores[name]
+                ),
+            }
+            for name in order
+        ]
+    )
+    reference.round(4).to_csv(out_dir / "single_source_reference.csv", index=False)
+    logger.info(f"baseline, single-source vs pooled:\n{reference.round(4).to_string(index=False)}")
+
+    # The headline interval: pooled supervision minus the fixed persona direction, per held-out
+    # dataset. HP-C and HP-KR carry ~135 positives each, so the point estimates there need one.
+    # Against *both* pooled baselines. The balanced one is much the stronger of the two, so
+    # bootstrapping only against the naive pool would be comparing with the weaker opponent.
+    best_persona = "ext_axis1" if ext_geom is not None else "axis1"
+    rows = []
+    for weighting in ("naive", "balanced"):
+        for name in order:
+            y = datasets[name].y
+            baseline_scores = fits[("baseline", weighting)].scores[name]
+            persona_scores = fits[(best_persona, weighting)].scores[name]
+            point, low, high = bootstrap_delta(y, baseline_scores, persona_scores, n_boot=n_boot)
+            rows.append(
+                {
+                    "layer": layer,
+                    "weighting": weighting,
+                    "dataset": name,
+                    "n": len(y),
+                    "n_deceptive": int(y.sum()),
+                    "pooled_baseline": auroc(y, baseline_scores),
+                    best_persona: auroc(y, persona_scores),
+                    "delta": point,
+                    "ci_low": low,
+                    "ci_high": high,
+                    "excludes_zero": bool(low > 0 or high < 0),
+                }
+            )
+    bootstrap = pd.DataFrame(rows)
+    bootstrap.round(4).to_csv(out_dir / "loo_bootstrap.csv", index=False)
+    # The fits are the expensive part (six 8192-d probes per arm per weighting); saving the
+    # scores means any later comparison is arithmetic rather than another sweep.
+    np.savez_compressed(
+        out_dir / "loo_scores.npz",
+        **{
+            f"{arm}|{weighting}|{name}": fitted.scores[name]
+            for (arm, weighting), fitted in fits.items()
+            for name in order
+        },
+        **{f"labels|{name}": datasets[name].y for name in order},
+    )
+    logger.info(
+        f"pooled baseline minus {best_persona}, 95% CI over {n_boot} draws:\n"
+        f"{bootstrap.round(4).to_string(index=False)}"
+    )
+
+    # The head-to-head against the paper's probes, widened: `run` only ever entered the original
+    # axis, never the extended one, and never a pooled-supervision row.
+    shared = [n for n in SHARED_DATASETS if n in datasets]
+    extra_rows: list[dict[str, object]] = []
+    for weighting in ("naive", "balanced"):
+        fitted = fits[("baseline", weighting)]
+        extra_rows.append(
+            {
+                "method": f"raw activations (pooled leave-one-out, {weighting})",
+                "source": "measured here",
+                "privileged": False,
+                "balacc_1pct_fpr": float(
+                    np.nanmean(
+                        [
+                            balanced_accuracy(datasets[n].y, fitted.scores[n], fitted.thresholds[n])
+                            for n in shared
+                        ]
+                    )
+                ),
+                "auroc": float(
+                    np.nanmean([auroc(datasets[n].y, fitted.scores[n]) for n in shared])
+                ),
+                "n_datasets": len(shared),
+            }
+        )
+    extra = (
+        {
+            "persona axis, extended (zero-shot)": lambda z, g=ext_geom: g.axis_score(z),
+            "persona PC1, extended (zero-shot)": lambda z, g=ext_geom: g.project(z, 1).ravel(),
+        }
+        if ext_geom is not None
+        else None
+    )
+    liars_bench_comparison(
+        datasets,
+        control,
+        geom,
+        out_dir,
+        extra=extra,
+        extra_rows=extra_rows,
+        out_name="liars_bench_comparison_loo.csv",
+    )
+    logger.info(f"wrote leave-one-out tables to {out_dir}")
+
+
 def verify(
     run_folder: str | Path = REPO_ROOT / "results" / "XXXX-9-llama-all",
     pooled_dir: str | Path = POOLED_DIR,
@@ -682,4 +1027,4 @@ def verify(
         logger.error("pooling disagrees with the run by more than 0.05 AUROC; do not trust results")
 
 if __name__ == "__main__":
-    fire.Fire({"run": run, "verify": verify})
+    fire.Fire({"run": run, "verify": verify, "loo": loo})
