@@ -85,8 +85,17 @@ Note "axes_s23 exit $LASTEXITCODE"
 $DS = @("instructed-deception", "harm-pressure-choice", "harm-pressure-knowledge-report",
         "harm-pressure-kr-matched", "convincing-game", "insider-trading", "ai_liar",
         "sandbagging_v2", "roleplaying", "mask", "sycophancy_mt")
+# The 2026-09-20 12:40 run logged "exit 2" for BOTH crossgen steps and then logged "DONE"
+# anyway, because nothing downstream of the loop looked at the exit code. The $SRC/$step fix
+# above stops that particular failure, but the gate that hid it was the real defect: a chain
+# that reports DONE without asserting its own output is a chain that fails silently next time.
+# $failed counts steps that either returned nonzero OR did not leave the matrices they were
+# asked for, and DONE is now conditional on it being zero.
+$matrixDir = Join-Path $repo "run-crossgen\kd11\banks\kd_s23\matrices"
+$failed = 0
 foreach ($step in @(@{ tag = "peak"; layers = @("40", "44") }, @{ tag = "l20"; layers = @("20") })) {
     Note "crossgen s23 $($step.tag) layers=$($step.layers -join ',')"
+    $t0 = Get-Date
     $a = @("$SRC\27_crossgen.py", "--run_dir", "run-coords\passB",
            "--out_root", "run-crossgen\kd11\banks\kd_s23", "--bank_name", "kd_s23",
            "--bank", "$out\axes_vectors_s23.pt", "--baseline_root", "run-crossgen\kd11",
@@ -96,7 +105,29 @@ foreach ($step in @(@{ tag = "peak"; layers = @("40", "44") }, @{ tag = "l20"; l
            "--extra_features", "axes", "pc:knowledge_denial", "pc:kd_assertion",
            "--stage", "all")
     & $pyAN @a 2>&1 | ForEach-Object { "$_" } | Out-File -Append -Encoding utf8 (Join-Path $logDir "kd_s23_crossgen.log")
-    Note "crossgen s23 $($step.tag) exit $LASTEXITCODE"
+    $code = $LASTEXITCODE
+    # Assert the NUMBER, not just the exit code: every requested layer must have left a mean_
+    # and last_ matrix. A step that returns 0 without writing them is still a failure.
+    #
+    # EXISTENCE, not freshness. A first version of this gate required LastWriteTime -gt $t0,
+    # which is wrong for this chain: 27_crossgen.py resumes by SKIPPING matrices that already
+    # exist, so a correct re-run legitimately leaves them untouched and the freshness test would
+    # have reported a false FAIL on every resume. Forcing a rebuild is what --recompute is for;
+    # this gate's job is "did the step leave the output it was asked for", which existence
+    # answers and freshness does not. $t0 is kept only to report how many were rebuilt.
+    $missing = @(); $rebuilt = 0
+    foreach ($L in $step.layers) {
+        foreach ($pool in @("mean", "last")) {
+            $f = Join-Path $matrixDir "${pool}_L${L}_s42.json"
+            if (-not (Test-Path $f)) { $missing += "${pool}_L${L}" }
+            elseif ((Get-Item $f).LastWriteTime -ge $t0) { $rebuilt++ }
+        }
+    }
+    $want = $step.layers.Count * 2
+    Note "crossgen s23 $($step.tag) exit ${code}: $($want - $missing.Count)/$want matrices present ($rebuilt rebuilt, $($want - $missing.Count - $rebuilt) resumed)"
+    if ($code -ne 0) { $failed++; Note "  FAIL $($step.tag): exit $code" }
+    elseif ($missing.Count -gt 0) { $failed++; Note "  FAIL $($step.tag): no matrix for $($missing -join ', ')" }
 }
 & powershell.exe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $D "sync_kd.ps1") -OnBusy Wait -Tag "s23/final"
+if ($failed -gt 0) { Note "FAILED ($failed of 2 crossgen steps)"; exit 1 }
 Note "DONE"

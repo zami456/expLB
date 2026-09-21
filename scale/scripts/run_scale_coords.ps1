@@ -59,7 +59,14 @@ function Note($m) { "$((Get-Date).ToString('yyyy-MM-dd HH:mm:ss'))  $m" | Out-Fi
 # F-45: after the per-process-cap fixes throughput fell to ~57 rows/min (8 rows/chunk, from 64),
 # so the full-corpus 8B arm alone projected to 4.3 h and the 3B did not fit the 20-hour limit.
 # This scoping is what makes the job finish rather than a compromise on it.
-$DS = @("instructed-deception", "harm-pressure-choice", "convincing-game", "ai_liar",
+# ALIGNED 2026-09-22 to F-63's analysis set. This list previously carried
+# `harm-pressure-choice`, which is NOT one of the five the scale comparison is run on: F-63
+# corrected that comparison to the source paper's evaluated five, with `mask` in that slot.
+# `mask` was back-filled by hand on both rungs afterwards, so the chain only worked because of
+# a manual patch -- a clean re-run on a new rung would have extracted the wrong set and the
+# crossgen would have silently scored a different corpus. The drift warning below stays as the
+# guard against this recurring.
+$DS = @("instructed-deception", "mask", "convincing-game", "ai_liar",
         "roleplaying")
 
 # 8B first (see header). Each rung: model, output root, batch, attention budget, session size.
@@ -136,9 +143,25 @@ foreach ($r in $rungs) {
          "--sample", "800", "--seed", "42")
     & $pyAA @a 2>&1 | ForEach-Object { "$_" } |
         Out-File -Append -Encoding utf8 (Join-Path $logDir "scale_coords_$($r.tag).log")
-    $n = @(Get-ChildItem $out -Directory -EA SilentlyContinue).Count
-    Note "$($r.tag): coords exit $LASTEXITCODE  ($n dataset dirs written, expect $($DS.Count))"
-    if ($n -lt $DS.Count) { Note "$($r.tag): INCOMPLETE -- $($DS.Count - $n) datasets missing" }
+    # Count the NAMED datasets, not every directory under $out. The old version counted all
+    # subdirectories, so on 8b -- whose coords dir still held 11 dirs from the earlier
+    # full-corpus run -- it logged "11 dataset dirs written, expect 5" and passed, while never
+    # checking that the five it was asked for were among them. A gate has to assert its own
+    # number or it is decoration.
+    $code = $LASTEXITCODE
+    $missing = @($DS | Where-Object { -not (Test-Path (Join-Path $out $_)) })
+    Note "$($r.tag): coords exit ${code}  ($($DS.Count - $missing.Count)/$($DS.Count) requested datasets present)"
+    if ($missing.Count -gt 0) { Note "$($r.tag): INCOMPLETE -- missing $($missing -join ', ')" }
+
+    # The set this script extracts is NOT the set the scale comparison is run on. F-63 fixed
+    # that comparison to the source paper's evaluated five -- instructed-deception, mask,
+    # convincing-game, ai_liar, roleplaying -- and `mask` was back-filled by hand afterwards
+    # while `harm-pressure-choice` below is left over from the pre-F-63 list. Left as a loud
+    # warning rather than silently changed, because which datasets a rung is evaluated on is
+    # the owner's call, not this script's.
+    $analysisSet = @("instructed-deception", "mask", "convincing-game", "ai_liar", "roleplaying")
+    $drift = @(Compare-Object $DS $analysisSet | ForEach-Object { "$($_.SideIndicator) $($_.InputObject)" })
+    if ($drift.Count -gt 0) { Note "$($r.tag): WARNING -- extraction set differs from the F-63 analysis set: $($drift -join '; ')" }
 }
 
 & powershell.exe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $D "sync_scale.ps1") `

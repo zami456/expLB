@@ -3402,6 +3402,12 @@ slice is a point estimate that does not survive any of them.
 
 ### F-85 · 2026-09-21 · **Tier 0.1 — on the collaborator's six datasets, pooled training reaches 0.868–0.893, and the abstract's advantage shrinks from +0.184 to +0.023**
 
+> **SUPERSEDED BY F-97** (headline only). The 0.904 / 0.916 this entry compares against is the
+> collaborator's **kd-augmented 12v13 axis**, not the persona-coordinates contrast, and "same
+> six" is wrong — `repe_honesty` is not in our eleven, so at most five of six overlap and the
+> +0.023 is not like-for-like. The paper's own 8v7 contrast reads 0.791 / 0.832 zero-shot on
+> their data. The pooled numbers below (0.868 / 0.893 on **our** six) are correct as measured.
+
 The draft abstract reports a zero-shot 1-D persona contrast at **0.904 (L20)** and **0.916 (L40)**
 against single-source trained probes at **0.648** and **0.732**, on six Liars' Bench datasets
 (the six exclude `sycophancy_mt`). The comparison has never been made against a *pooled* probe.
@@ -4305,3 +4311,620 @@ reason this entry states the gate output before stating the conclusion.
   battery does not make it large.
 - **status:** measured; question 4 of the review is answered and the answer is that the result
   survives.
+
+---
+
+### F-96 · 2026-09-21 · **F-63's three-rung margin is a single-layer reading, and layer 16 is the best of 3B's seven. Layer-averaged, the monotone decline nearly flattens and the gain over raw goes negative at both small rungs**
+
+Routine verification of the four overnight Scheduled Tasks (KD-S23, Scale-3b, Scale-8b,
+KD-Bank-Crossgen). All four finished clean, and **every number they feed reproduces exactly** —
+F-91's `kd_s23`/`axes` row (peak L44 **0.6435**, L40 **0.6304**, **+0.0131**) and all nine cells
+of F-63's corrected table came back bit-for-bit. Nothing is broken.
+
+What the check surfaced is that F-63 reports **one layer per rung**, and the full layer sweep was
+already on disk beside it — 7 layers for 3B, 8 for 8B. Read across depth, its headline moves.
+
+**The matched-control margin (`best persona − datapca`), which is F-63's main claim:**
+
+| rung | layers | at F-63's layer | **layer-mean** | range | where its layer ranks |
+|---|---:|---:|---:|---|---|
+| 3B | 7 | +0.2023 (L16) | **+0.1197** | [+0.014, +0.202] | **1st of 7 — the maximum** |
+| 8B | 8 | +0.1147 (L16) | **+0.1027** | [+0.030, +0.166] | 4th of 8 — representative |
+| 70B | 1 | +0.0794 (L40) | — | — | only layer available |
+
+F-63 read the decline as **+0.202 / +0.115 / +0.079** and noted that 3B "replicates almost
+exactly" the paper's Figure 9A margin of +0.22. Layer-averaged it is **+0.120 / +0.103 / +0.079**:
+still monotone, but the 3B→8B step collapses from 0.087 to **0.017**, and the match to the
+paper's +0.22 is a **max-layer coincidence** — L16 is the single best of 3B's seven layers, and no
+other 3B layer exceeds +0.150.
+
+**Against raw, with the feature held fixed, the gain is negative at both small rungs:**
+
+| rung | `axes − raw` at L16/L40 | **layer-mean** | positive at |
+|---|---:|---:|---:|
+| 3B | +0.0195 | **−0.0063** | 4 / 7 |
+| 8B | −0.0249 | **−0.0190** | 2 / 8 |
+| 70B | +0.0131 | — | 1 / 1 |
+
+F-63's "+0.020 / +0.013 / +0.013 — small and FLAT" holds only at the midpoint. `axes` is the
+feature F-63 names as best at 3B and 70B; carried across depth it **loses** to raw activations on
+average at both rungs where a sweep exists. Allowing a per-layer post-hoc choice between `axes`
+and `pc:deception` restores a positive mean (+0.033 at 3B, +0.009 at 8B, positive 7/7 and 6/8) —
+but that choice needs the test labels, so it is an oracle, not a method. F-63 made that choice at
+one layer; across depth the two features swap repeatedly, which F-63 had already flagged as "not
+to be read as a finding."
+
+**What survives.** The ordering is unchanged: the persona axis beats the low-dimensional matched
+control at every layer of every rung (minimum +0.007), the margin still declines with scale, and
+against a strong raw baseline it still buys little. **What does not survive is the magnitude** —
+specifically the claim that 3B reproduces the source paper's +0.22. That number is the best of
+seven layers reported as if it were the rung.
+
+This is the fourth time in two days a single-layer headline has failed a layer sweep (F-91, F-94,
+F-95's L36-vs-L40, now this). The pattern is consistent enough to be a standing rule: **no margin
+gets into the paper from one layer.**
+
+- **source:** `run-crossgen/scale_{3b,8b,70b}/matrices/mean_L*_s42.json`, read on the lab PC
+  (files exceed the 200 KiB scp truncation limit, so they were reduced in place); all k=3,
+  `probe=paper`, mean pooling, seed 42, on instructed-deception / mask / convincing-game /
+  ai_liar / roleplaying. Task logs `logs/{kd_s23,kd_s23_alllayers,scale_3b,scale_8b,kd_bank_crossgen}.status`.
+- **caveats:** (1) **the 70B rung is still one layer.** `scale_70b` holds only L40 at k=3; the
+  21-layer 70B stores (`run-crossgen/matrices`, `kd11/matrices`) are **k=5**, and F-39/F-63
+  established the result is strongly k-dependent, so they cannot be substituted. The 3B→8B
+  flattening is measured; the 70B end of the decline is not. (2) "best" is a post-hoc per-layer
+  max over two features and is optimistic by construction — the fixed-feature rows are the honest
+  ones. (3) one seed, 20 off-diagonal pairs per cell. (4) F-43's `max_length` asymmetry and the
+  70B-authored eval text still apply and still act against the small rungs.
+- **amends:** F-63 — its table is correct at the layers it names; its magnitude claim and its
+  "flat against raw" reading do not generalise across depth. F-58 remains superseded.
+- **status:** verified
+
+---
+
+### F-97 · 2026-09-22 · **CORRECTION to F-85: the abstract's 0.904 / 0.916 is not the persona-coordinates contrast — it is a contrast built on OUR knowledge-denial personas. The paper's own 8v7 axis reads 0.791 / 0.832, and 44–46% of the headline margin is the kd bank**
+
+F-85 compared the abstract's numbers against our pooled probe and concluded the advantage
+shrinks from +0.184 to +0.023. **The comparison was mis-specified**, and the error is ours: we
+never checked which axis produced 0.904 / 0.916. Read directly from the collaborator's branch
+`origin/feat/persona-pc-ood` (head `f386a72`, files read via `git show`, no checkout), it is
+`ext_axis1` — the **12-vs-13 "extended" contrast**, whose positive pole is
+`DECEPTION_PERSONAS + KNOWLEDGE_DENIAL_PERSONAS` and whose negative pole is
+`HONESTY_PERSONAS + KNOWLEDGE_CANDOUR_PERSONAS` (`scripts/persona_ood.py`, `extended_arms()`).
+Those ten extra roles are **ours**, matching `kd/personas/kd_role_groups.json` name for name.
+
+The paper-faithful 8-vs-7 deception contrast is `axis1`, in the same files, same rows, same six
+datasets. Their base bank is `paper16_L20_sharedquestions/paper16_L20.pt`
+(`deception_detection/persona_pcs.py:31`), so `axis1` **is** our register axis — the comparison
+was available all along.
+
+**Zero-shot, their six datasets, their numbers** (`results/persona_ood_ext_L{20,40}/zero_shot.csv`,
+columns `auroc_axis` and `auroc_ext_axis`; baseline from `summary.csv`, row `baseline`):
+
+| | L20 | L40 |
+|---|---:|---:|
+| trained single-source baseline *(the abstract's "0.648 / 0.732")* | 0.6478 | 0.7320 |
+| **paper's 8v7 deception contrast, zero-shot** | **0.7909** | **0.8319** |
+| **extended 12v13 contrast** *(the abstract's "0.904 / 0.916")* | **0.9041** | **0.9158** |
+| margin, paper's contrast vs baseline | **+0.143** | **+0.100** |
+| margin, extended contrast vs baseline | +0.256 | +0.184 |
+| **what the kd personas are worth** | **+0.113** | **+0.084** |
+| **share of the headline margin from the kd bank** | **44.2%** | **45.7%** |
+
+Drop `repe_honesty` — which their own summary flags as in-distribution for the deployed probe,
+"its diagonal and its column say nothing about transfer" — and it holds: paper contrast
++0.142 (L20) / +0.092 (L40), kd personas worth +0.136 / +0.101.
+
+**So the abstract's margin is real but roughly half of it is the knowledge-denial bank**, which
+is our contribution and is not persona coordinates. That is a sharper and more defensible claim
+than F-85's, and it is measured entirely inside the collaborator's own committed results — no
+cross-pipeline comparison needed.
+
+**Three further errors in `docs/COLLABORATOR_BRIEFING.md`, all ours:**
+
+1. **§5b's premise is false.** It asserts they scored per-token from ~50 GB per-layer downloads
+   while we mean-pool, and attributes up to +0.103 of the gap to token aggregation. They
+   mean-pool: `scripts/pool_activations.py:84` is `acts[row_mask].float().mean(0)` over the
+   detection mask, and every summary records `Δ = 0.0000` reproducing their own probe from the
+   pooled matrix. Both arms of their comparison use the same pooled vectors, so the aggregation
+   asymmetry §5b calls "a comparison at risk" **does not exist**. The 50 GB was their Liars'
+   Bench activation cache, not per-token scoring.
+2. **"Same six" is false.** Their six are CG, HP-C, HP-KR, IT, ID and **`repe_honesty`**, which
+   is not in our eleven (`run_premise_layers.ps1:42`). At most five overlap, so F-85's pooled
+   numbers (0.868 / 0.893) are on a **different dataset set** and the +0.023 headline is not
+   like-for-like. Withdrawn as a headline; the table above replaces it.
+3. **§5c's PC1 figure is unsourceable.** It reports the abstract claiming PC1 sits 0.09 below the
+   contrast at L40. No arm on the branch gives that: at L40 the paper bank's `pc1` is **above**
+   `axis1` (0.8593 vs 0.8319, +0.027) while `ext_pc1` is far **below** `ext_axis1` (0.7680 vs
+   0.9158, −0.148). The sign depends on which bank, which is the same confusion as above.
+
+**Their knowledge-denial split is a name-guess.** Their own caveat: "the files carry no group
+metadata, so the 4/6 split is a reading of the role names." Our bank is **three** groups —
+`knowledge_denial` (4) against `sincere_ignorance` (3) *and* `plain_assertion` (3) — kept apart
+because a two-group split makes the axis lexical. Their `KNOWLEDGE_CANDOUR_PERSONAS` merges both
+controls into one pole, so their HP-KR numbers carry the confound the three-group design exists
+to remove.
+
+- **source:** `origin/feat/persona-pc-ood` @ `f386a72` —
+  `src/probes/deception-detection/results/persona_ood_ext_L{20,40}/{summary.csv,zero_shot.csv}`
+  and `matrix_{baseline,axis1,ext_axis1}.csv`; `deception_detection/persona_pcs.py:31,39,49,134,140`;
+  `deception_detection/scripts/{persona_ood.py,pool_activations.py}`. All read with `git show`;
+  no checkout, no branch change.
+- **caveats:** (1) **At L20 the same 8v7 axis reads 0.6511 as a TRAINED off-diagonal against
+  0.7909 zero-shot**, because a probe trained on the inverted HP-KR row carries a flipped sign to
+  every other column. The abstract's claim is a zero-shot one, so 0.7909 is the honest
+  comparator; quoting 0.6511 against 0.904 would overstate this correction to 98.7% and I did
+  exactly that in the first pass of this session before checking. At L40 the two coincide
+  (0.8319). (2) For a 1-d feature the trained off-diagonal equals the zero-shot AUROC whenever
+  every training set agrees on the sign — verified to 1e-16 for `ext_axis1` and `denial_axis1` at
+  both layers and for `axis1` at L40. (3) one seed, their pipeline, their probe recipe; we did
+  not re-run their matrices. (4) this does not touch F-79/F-80/F-86 — the pooled-training result
+  on our own eleven datasets is independent of which axis the abstract used.
+- **supersedes:** F-85's headline comparison (+0.184 → +0.023) and its "same six" framing.
+  F-85's secondary observations — that 0.732 is the weakest available baseline, and that the
+  row-matched pooled probe beats the full one — are unaffected.
+- **status:** verified
+
+---
+
+### F-98 · 2026-09-22 · **F-97 replicates on our eleven datasets: the kd bank is worth 49–77% of the abstract's margin, and BOTH of the collaborator's arms lose to pooled training**
+
+F-97 was measured inside the collaborator's files, on their six datasets. The obvious objection
+is that their six are unusual — five of ours plus `repe_honesty`, which they themselves flag as
+in-distribution. So both of their arms were rebuilt from our own per-persona vectors and run
+through our crossgen on our eleven. **The claim holds and strengthens.**
+
+Their two arms reproduce exactly from `kd/personas/kd_role_groups.json`, because their bank *is*
+our paper16 bank and their extra roles *are* our kd roles:
+
+| their arm | definition | ours |
+|---|---|---|
+| `axis1` | `DECEPTION` − `HONESTY` | `deception`, 8 v 7 |
+| `ext_axis1` | `DECEPTION+KNOWLEDGE_DENIAL` − `HONESTY+KNOWLEDGE_CANDOUR` | `collab_extended`, **12 v 13** |
+
+`KNOWLEDGE_CANDOUR` is our `sincere_ignorance` + `plain_assertion` merged, which is the
+two-group collapse of our three-group design (F-97).
+
+**Zero-shot AUROC, mean-pooled, our eleven datasets:**
+
+| | L20 | L40 |
+|---|---:|---:|
+| raw single-source trained baseline (`paper` probe, off-diag) | 0.6289 | 0.6623 |
+| **`axis1` — the paper's 8v7 contrast** | **0.6572** | **0.7325** |
+| **`ext_axis1` — the abstract's 12v13 contrast** | **0.7386** | **0.7996** |
+| **pooled LODO** (F-79/F-80, same rows) | **0.8027** | **0.8545** |
+| margin, paper's contrast vs single-source | +0.028 | +0.070 |
+| margin, extended contrast vs single-source | +0.110 | +0.137 |
+| **share of that margin from the kd bank** | **74.1%** | **48.8%** |
+
+Against the premise harness's own single-source figure (0.6323 / 0.6763) the share is
+**76.5% / 54.4%**. On their six it was 44% / 46% (F-97). **So the effect is real at both layers
+and on both corpora, and at L20 it is larger on ours than on theirs.**
+
+**Both arms lose to pooled training**, by −0.064 (L20) and −0.055 (L40). A probe trained on ten
+of our datasets and tested on the eleventh beats the abstract's own axis, with no personas.
+
+**Where the kd contribution actually lives — and this qualifies it sharply.** It is not a general
+improvement; it is concentrated in the datasets the bank was built for:
+
+| kd bank worth (`ext_axis1` − `axis1`) | L20 | L40 |
+|---|---:|---:|
+| all eleven | +0.0814 | +0.0671 |
+| minus `harm-pressure-knowledge-report` | +0.0254 | +0.0418 |
+| minus HP-KR and `sandbagging_v2` | **+0.0025** | +0.0391 |
+
+At L20 the entire contribution is two datasets: HP-KR (axis1 **0.1652**, inverted → ext
+**0.8057**, a swing of **+0.641**) and sandbagging_v2 (+0.232). Remove them and the kd personas
+are worth **+0.003** — nothing. At L40 the effect is more distributed and survives removal
+(+0.039). This is Claim 2's shape exactly: **a construct-matched bank is a targeted instrument,
+not a general detector.**
+
+**Provenance check.** Our `axis1`, built from `vectors_s23`, reads 0.6572 / 0.7325; the paper16
+bank's own deception contrast (different rollout seed, `s3`) reads **0.6660 / 0.7287** on the
+same eleven rows. A 0.004–0.009 gap, so the arm is not sensitive to which extraction it came from.
+
+- **source:** `run-crossgen/kd11/banks/collab/matrices/mean_L{20,40}_s42.json`, zero-shot rows
+  `contrast` and `contrast:collab_extended`; baseline `run-crossgen/kd11/matrices/mean_L{20,40}_s42.json`
+  feature `raw`; pooled `run-premise/premise_L{20,40}_mean_s42.json` key `summary`. Bank built by
+  `6_axes.py --vectors_dir run-kd/vectors_s23 --roles_file kd/personas/kd_role_groups_collab.json
+  --output run-kd/axes_collab_s23.pt` (exit 0, `collab_extended` 12 v 13 confirmed in its report).
+- **caveats:** (1) two layers, one seed, mean pooling. The layer sweep is not run, and F-96's
+  standing rule says a two-layer margin is provisional — the L20/L40 spread here (74% vs 49%) is
+  itself large enough to prove the point. (2) our PCA basis for `collab_extended` includes the
+  `default` anchor where theirs does not; this affects `PC1:collab_extended` only, never the
+  contrast direction, which is all the table above uses. (3) the comparison is zero-shot
+  throughout, so the L20 trained-vs-zero-shot sign trap in F-97 does not arise. (4) the
+  concentration result means the headline share is sensitive to corpus composition — on a corpus
+  without a knowledge-denial dataset the kd bank would be worth roughly nothing at L20.
+- **supports:** F-97 (measured independently, on a different corpus, from different vectors);
+  F-79/F-80 (pooled training still wins); Claim 2's "targeted instrument" reading.
+- **status:** verified
+
+---
+
+### F-99 · 2026-09-22 · **F-98 across all 21 layers: the kd bank contributes at 21 of 21, median 63% of the margin. The two-layer figure was not misleading, but the share is unstable and the raw margin is the number to quote**
+
+F-98 measured two layers and reported the kd bank as worth 74% (L20) / 49% (L40) of the
+abstract's margin. Per F-96's standing rule a two-layer margin is provisional, so the sweep was
+run. **The conclusion holds; one of its framings does not.**
+
+| | value |
+|---|---|
+| `ext_axis1` − `axis1` (what the kd bank is worth) | **positive at 21 of 21 layers** |
+| mean | **+0.0551** |
+| range | [+0.0019 (L0), +0.0814 (L20)] |
+| share of the margin over raw — median | **62.9%** |
+| share — mean / range | 63.8% / **[2.2%, 113.9%]** |
+
+**The headline survives and is stronger than a two-layer claim could be**: at no depth does the
+extended axis fail to beat the paper's own contrast, and the peak is exactly where the abstract
+reports (L20).
+
+**But "share of the margin" is the wrong number to quote.** Its denominator is
+`ext_axis1 − raw`, which goes small wherever the persona arms sit near the raw baseline, so the
+ratio swings from 2.2% to 113.9% while the numerator barely moves. **Above 100% is real, not an
+artifact of the metric**: at L60–L68 the paper's `axis1` drops *below* raw (0.6379 vs 0.6386 at
+L60; 0.6337 vs 0.6370 at L64; 0.6260 vs 0.6339 at L68), so the kd bank supplies more than the
+entire margin — the 8v7 contrast contributes nothing there. Quote the **raw difference**
+(+0.055 mean, +0.081 at L20) and give the share only at a named layer.
+
+**The HP-KR repair is universal across depth**, which is what makes the effect robust:
+
+| layer | `axis1` on HP-KR | `ext_axis1` on HP-KR |
+|---|---:|---:|
+| 12 | 0.216 | 0.883 |
+| 20 | **0.165** | **0.806** |
+| 24 | **0.087** | 0.697 |
+| 40 | 0.556 | 0.876 |
+| 76 | 0.720 | 0.848 |
+
+The paper's contrast is inverted or near-chance on HP-KR at essentially every depth (0.087–0.86,
+mostly 0.15–0.57); the kd-augmented axis reads 0.57–0.91 everywhere. This is the single dataset
+driving the result, and it is not a layer-20 accident — which is a genuine extension of F-34 and
+of `hpkr-cannot-attribute-itself`, both of which treated the inversion as layer-specific.
+
+- **source:** `run-crossgen/kd11/banks/collab/matrices/mean_L*_s42.json` (21 layers), zero-shot
+  rows `contrast` and `contrast:collab_extended`; baseline `run-crossgen/kd11/matrices/mean_L*_s42.json`
+  feature `raw`, probe `paper`.
+- **caveats:** (1) one seed, mean pooling, zero-shot throughout. (2) **the run OOMed repeatedly**
+  — four foreign `run_benchmark_*.py` jobs on the shared lab PC took free RAM to 0.1 GB and a
+  23 MiB numpy allocation failed at L28. Completed by a resume loop, not by reducing
+  `--boot_rows`, so every cell keeps the same bootstrap settings as the L20/L40 cells in F-98 and
+  the numbers are directly comparable. (3) the share metric is reported for continuity with F-98
+  and should not be used as a headline (above). (4) no dataset-level bootstrap on the layer
+  sweep; layers are not independent.
+- **supports:** F-97, F-98. **amends:** F-98's framing — its 49–74% is a correct reading of two
+  layers but the median over all 21 is 63% and the spread is much wider than two points suggest.
+- **status:** verified
+
+---
+
+### F-100 · 2026-09-22 · **F-96's open gap closed: the 70B rung swept at k=3. The monotone decline SURVIVES layer-averaging — +0.120 / +0.103 / +0.075 — but its steepness was an artifact of the 3B layer choice, and against raw the persona advantage at 70B is ~0 across depth**
+
+F-96 could not layer-average the 70B rung: `scale_70b` held only L40 at k=3, and the 21-layer 70B
+stores are k=5, which F-39/F-63 showed is not substitutable. The k=3 sweep has now been run
+against `run-coords/passB` with the same bank and datasets as the existing L40 cell.
+
+**The three-rung comparison, now layer-averaged at every rung** (`best persona − datapca`, the
+matched control that carries F-63's claim):
+
+| rung | layers | F-63's single layer | **layer-mean** | that layer's rank |
+|---|---:|---:|---:|---|
+| 3B | 7 | +0.2023 (L16) | **+0.1197** | **1st of 7 — the maximum** |
+| 8B | 8 | +0.1147 (L16) | **+0.1027** | 4th of 8 |
+| **70B** | **19** | **+0.0794 (L40)** | **+0.0751** | **11th of 19 — representative** |
+
+**The decline with scale is real and monotone under both readings.** F-63 read it as
++0.202 / +0.115 / +0.079; layer-averaged it is **+0.120 / +0.103 / +0.075**. What changes is the
+steepness: the 3B→8B step falls from 0.087 to **0.017**, while 8B→70B holds at 0.036 → 0.028.
+**Almost the entire apparent steepness was the 3B layer choice**, which F-96 identified as that
+rung's maximum and which the 70B rung now confirms was not matched by a comparable selection
+effect at depth — L40 sits mid-pack at 11th of 19.
+
+**Against raw activations the 70B persona advantage is essentially nil across depth:**
+
+| | L40 | layer-mean | positive at |
+|---|---:|---:|---:|
+| `best persona − raw` | +0.0131 | **+0.0079** | **10 / 19** |
+| `axes − datapca` | +0.0794 | +0.0395 | — |
+
+A coin-flip. And the fixed-feature `axes − datapca` halves from L40's +0.079 to a layer-mean of
++0.040, because `axes` **loses to raw at every layer from 44 to 68** (−0.004 to −0.029) while
+`pc:deception` holds up; the "best" column is carried by `pc:deception` at depth. So the three
+rungs now agree: F-96 found layer-mean `axes − raw` of −0.006 (3B) and −0.019 (8B), and 70B adds
++0.008 with the feature free to vary and worse with it fixed.
+
+**Net: F-63's conclusion survives, its magnitudes do not.** The persona axis reliably beats the
+low-dimensional matched control, that margin declines with scale, and against a strong raw
+baseline it buys nothing at any size — but the published +0.22-matching figure at 3B was a
+max-layer reading and the decline is much flatter than reported.
+
+- **source:** `run-crossgen/scale_70b/matrices/mean_L*_s42.json`, k=3, `probe=paper`, mean
+  pooling, seed 42, datasets instructed-deception / mask / convincing-game / ai_liar /
+  roleplaying; bank `run-kd/axes_vectors_s3.pt`, `bank_name=paper16_70b` — the same settings as
+  the pre-existing L40 cell, which the sweep reproduced rather than overwrote.
+- **caveats:** (1) **19 of 21 layers**; L72 and L76 were still running under memory contention
+  when this was read. Both are deep layers where the trend is flat, so the layer-mean is unlikely
+  to move materially, but it is not the complete grid. (2) mean pooling only — `last` was not
+  swept, to halve the work on a contended box. (3) one seed, 20 off-diagonal pairs per cell.
+  (4) "best" is a post-hoc per-layer max over two features and is optimistic; the fixed-feature
+  row is the honest one. (5) F-43's `max_length` asymmetry and the 70B-authored eval text still
+  apply and still act against the small rungs.
+- **supersedes:** F-96's open item ("the 70B end of the decline is not measured"). **amends:**
+  F-63's magnitudes for a third time; its ordering has never moved.
+- **status:** verified
+
+**AMENDED 01:05, grid complete — all 21 layers, and nothing moves.** L72 and L76 finished
+(exit 0) and were read. The complete-grid figures against the 19-layer ones above:
+
+| | 19 layers | **21 layers** |
+|---|---:|---:|
+| `best − datapca`, layer-mean | +0.0751 | **+0.0791** |
+| `axes − datapca`, layer-mean | +0.0395 | **+0.0383** |
+| `best − raw`, layer-mean | +0.0079 | **+0.0070** |
+| `best − raw`, positive at | 10 / 19 | **11 / 21** |
+| L40's rank on `best − datapca` | 11 / 19 | **13 / 21** |
+
+The two missing layers behaved as predicted — flat and deep (L72 `best − raw` **−0.0099**, L76
+**+0.0071**). **The three-rung layer-means are therefore +0.1197 / +0.1027 / +0.0791**, still
+monotone, with steps of 0.017 (3B→8B) and 0.024 (8B→70B). Every conclusion in the entry stands
+and caveat (1) is discharged; caveats (2)–(5) remain.
+
+---
+
+### F-101 · 2026-09-22 · **The 70B rung under `last` pooling: F-100's "persona buys nothing over raw" is POOLING-DEPENDENT — +0.007 (mean) vs +0.033 (last), positive at 11/21 vs 19/21 — and L40 is the second-worst layer of 21 under `last`**
+
+F-100 swept the 70B rung at k=3 under **mean** pooling only, to halve the work on a contended
+box, and listed that as caveat (2). The `last` sweep has now run, all 21 layers, same bank, same
+datasets, same seed. **One of F-100's two conclusions does not survive it.**
+
+| 70B, k=3, `probe=paper`, 21 layers | **mean** | **last** |
+|---|---:|---:|
+| `best persona − datapca`, layer-mean | +0.0791 | **+0.0945** |
+| `axes − datapca`, layer-mean | +0.0383 | +0.0366 |
+| **`best persona − raw`, layer-mean** | **+0.0070** | **+0.0333** |
+| **`best persona − raw`, positive at** | **11 / 21** | **19 / 21** |
+| L40 `best − datapca` | +0.0794 | **+0.0433** |
+| **L40's rank on that margin** | **13 / 21** | **19 / 21** |
+
+**What survives.** The matched-control margin is positive at every layer under both poolings
+(mean range [−0.011, +0.139], last [+0.033, +0.196]) and is *larger* under `last`. F-100's claim
+that the persona axis beats the low-dimensional control, and the three-rung decline built on it,
+are unaffected — if anything `last` strengthens them.
+
+**What does not.** F-100 wrote that "against raw activations the 70B persona advantage is
+essentially nil across depth — a coin-flip, 10/19 layers". Under `last` pooling it is **+0.033
+and positive at 19 of 21**. That is not nil. The correct statement is narrower: **against raw,
+the 70B persona advantage is near zero under mean pooling and modest but consistent under `last`
+pooling.** Absolute levels show why — raw is slightly *worse* at the last token (layer-mean
+0.7454 vs 0.7546) while the persona features are *better* (0.7788 vs 0.7615), so the margin opens
+from both sides at once.
+
+**And the layer effect reverses direction with pooling.** Under mean, L40 sits mid-pack (13/21)
+and is a fair reading. Under `last`, L40 is **second-worst of 21** (+0.0433 against a layer-mean
+of +0.0945), so quoting L40 *understates* the margin by more than a factor of two. F-96 found L40
+flattering at 3B; here the same layer is unflattering. **Which way a single layer biases a result
+depends on the pooling, so "report the layer-mean" is the only rule that holds.**
+
+This also qualifies `q8-per-token-beats-pooling`, which recorded that trained pooled-mean probes
+beat token-trained probes at every layer. That was about *absolute* AUROC for the persona arms;
+the *margin over raw* runs the other way, because raw degrades at the last token faster than the
+persona features do.
+
+- **source:** `run-crossgen/scale_70b/matrices/{mean,last}_L*_s42.json`, 21 layers each, k=3,
+  `probe=paper`, seed 42, datasets instructed-deception / mask / convincing-game / ai_liar /
+  roleplaying, bank `run-kd/axes_vectors_s3.pt`.
+- **caveats:** (1) one seed; the 3B and 8B rungs have **not** been swept under `last`, so the
+  three-rung comparison remains a mean-pooling result and F-100's +0.120 / +0.103 / +0.079 should
+  not be mixed with the `last` figures here. (2) "best" is a post-hoc per-layer max over `axes`
+  and `pc:deception`; the fixed-feature `axes − datapca` is nearly identical across poolings
+  (+0.038 vs +0.037), so the pooling effect lives in `pc:deception`, not in the contrast.
+  (3) F-43's `max_length` asymmetry still applies to cross-rung comparisons, not to this one.
+- **amends:** F-100 caveat (2) is discharged, and its "essentially nil against raw" reading is
+  corrected to a pooling-conditional statement. F-100's matched-control conclusions stand.
+- **status:** verified
+
+---
+
+### F-102 · 2026-09-22 · **F-63's monotone decline with scale is a MEAN-POOLING result. Under `last` pooling the three-rung trend is non-monotone on the matched control and REVERSES against raw — persona loses at 3B/8B and wins at 70B**
+
+F-101 found the 70B rung's raw comparison to be pooling-dependent. The 3B and 8B `last` matrices
+turned out to be **already on disk** — the original scale crossgen wrote both poolings and only
+the mean half was ever read — so the three-rung comparison can be done under both at no compute
+cost. It does not survive the switch.
+
+**Matched control (`best persona − datapca`), layer-mean:**
+
+| rung | layers | **mean** | **last** |
+|---|---:|---:|---:|
+| 3B | 7 | +0.1197 | +0.0745 |
+| 8B | 8 | +0.1027 | **+0.0090** |
+| 70B | 21 | +0.0791 | **+0.0945** |
+
+Mean pooling gives the clean monotone decline F-63 reported. **`last` pooling does not**: 8B
+collapses to +0.009 and 70B becomes the *highest* of the three. The ordering is not preserved.
+
+**Against raw (`best persona − raw`), layer-mean and layers positive:**
+
+| rung | **mean** | **last** |
+|---|---:|---:|
+| 3B | +0.0328 (7/7) | **−0.0178 (2/7)** |
+| 8B | +0.0089 (6/8) | **−0.0742 (0/8)** |
+| 70B | +0.0070 (11/21) | **+0.0333 (19/21)** |
+
+**This reverses outright.** Under mean pooling the persona advantage over raw *declines* with
+scale (+0.033 → +0.009 → +0.007). Under `last` it *increases* (−0.018 → −0.074 → +0.033), and
+the two small rungs are **negative** — at 8B the persona features lose to raw activations at
+**0 of 8 layers**. F-58's original framing ("replicates at 3B/8B, dies at 70B") and F-63's
+corrected one both describe mean pooling only; at the last token the picture is closer to the
+opposite.
+
+**The data are not at fault.** All three rungs read 5 datasets at every layer, `random` sits at
+0.49–0.69, and the effect is spread across layers rather than carried by one. The mechanism is
+visible: at 8B under `last`, `datapca` is unusually strong (0.70–0.74 at L12–L28 against
+0.60–0.77 under mean) while the persona features fall to 0.64–0.74 — the control improves and the
+treatment degrades at the same time.
+
+**The leading alternative explanation, and it is serious.** F-43 records that the 3B and 8B rungs
+ran `max_length 1024` against the 70B's `8192`. **Last-token pooling is far more sensitive to
+truncation than mean pooling**: if a response was cut at 1024 tokens, its "last token" is a
+truncation artifact mid-sentence rather than the end of the answer, whereas a mean over the same
+tokens degrades gracefully. That asymmetry would depress the small rungs specifically under
+`last` and specifically for features that depend on where the response ends — which is exactly
+the pattern above. **This finding should not be used to claim the scale trend reverses until the
+truncation rate per rung is measured.** What it does establish, independent of that, is that
+**F-63's decline is conditional on a pooling choice nobody registered as a choice.**
+
+- **source:** `run-crossgen/scale_{3b,8b,70b}/matrices/{mean,last}_L*_s42.json`, k=3,
+  `probe=paper`, seed 42, 5 datasets, 7 / 8 / 21 layers respectively.
+- **caveats:** (1) **the truncation confound above is unresolved and could explain the whole
+  reversal** — measuring the fraction of responses hitting `max_length` per rung is the next
+  step and is cheap. (2) layer grids differ (7 / 8 / 21), so the layer-means are over different
+  depth coverage. (3) one seed. (4) "best" is a post-hoc per-layer max over `axes` and
+  `pc:deception`. (5) the 3B/8B `last` matrices were written by the original 2026-09-20 crossgen
+  and simply never read; they are not a new extraction.
+- **amends:** F-63 and F-100 — both report the decline without qualifying it by pooling, which is
+  now required. Neither is wrong as measured; both are narrower than stated.
+- **status:** verified as a pooling contrast; the causal reading is **provisional** pending the
+  truncation check.
+
+**AMENDED 01:52 — the truncation confound is REFUTED, and the reversal stands.** Measured from
+`prompt_len` + `response_len` in each store's `rows.jsonl`, over the 5 shared datasets:
+
+| rung | cap | rows | at/over cap | within 8 of cap | response_len median / p90 / p99 / max |
+|---|---:|---:|---:|---:|---|
+| 3B | 1024 | 2,293 | **0 (0.00%)** | 6 | 46 / 303 / 755 / 1000 |
+| 8B | 1024 | 2,293 | **0 (0.00%)** | 6 | 46 / 303 / 755 / 1000 |
+| 70B | 8192 | 6,925 | **0 (0.00%)** | 0 | *(field unpopulated in passB)* |
+
+**Not one row in either small rung is truncated**, so the `max_length 1024` asymmetry cannot be
+what depresses their `last`-token numbers. The F-43 caveat is real for other purposes and inert
+here. The pooling reversal in this entry is therefore a **property of the representation at the
+last token, not an artifact of where the text was cut**, and the causal reading is promoted from
+provisional to measured.
+
+Two things the check incidentally confirmed. **3B and 8B have byte-identical length
+distributions** (same row count, same median/p90/p99/max) because both rungs encode the *same*
+70B-authored eval text — only the encoder differs. That is F-43's off-policy caveat showing up as
+an exact match, and it is a useful integrity check on the stores. And **70B's `response_len` is
+unpopulated in `passB`** (all zeros, a schema difference from the `run-scale` stores), so its
+0.00% is inferred rather than directly measured — safe, since it scores the same texts against a
+cap eight times larger.
+
+- **status (revised):** verified. The reversal is a real pooling effect; the leading alternative
+  explanation was tested and eliminated.
+
+---
+
+### F-103 · 2026-09-22 · **The kd-bank share is POOLING-ROBUST, unlike the scale trend: +0.055 (mean) vs +0.059 (last), positive at 21/21 and 20/21. F-102's warning does not transfer to F-98/F-99**
+
+F-102 showed the three-rung scale decline is carried by the pooling choice. That raised the
+obvious worry about F-98/F-99 — the kd-bank share behind §5a of the collaborator briefing — which
+had been measured under **mean** pooling only. The `last` sweep has now run, all 21 layers, same
+bank, same eleven datasets, same seed. **It holds.**
+
+| `ext_axis1` − `axis1` (what the kd bank is worth) | **mean** | **last** |
+|---|---:|---:|
+| layer-mean | **+0.0551** | **+0.0590** |
+| range | [+0.0019, +0.0814] | [−0.0327, +0.0848] |
+| **positive at** | **21 / 21** | **20 / 21** |
+| share of margin over raw, median | 62.9% | 50.0% |
+
+**The magnitude is if anything slightly larger at the last token** (+0.059 vs +0.055), and the
+sign is preserved at every layer except **L0** (−0.0327) — the embedding layer, where the method
+is not claimed to work and where F-95 established that failure is the designed calibration check,
+not a counter-example.
+
+**The share drops from 63% to 50%** because the denominator (`ext_axis1 − raw`) moves with
+pooling while the numerator does not. That is the same instability F-99 already flagged, and it
+is the reason F-99 told the briefing to quote the **raw difference** rather than the share. That
+instruction now has a second, independent justification: under mean the median share is 63%, under
+`last` it is 50%, while the underlying quantity barely moves. **Quote +0.055–0.059; do not quote
+a share without naming both the layer and the pooling.**
+
+**The HP-KR repair is weaker at the last token but still the dominant effect.** At L20,
+`axis1` → `ext_axis1` reads **0.165 → 0.806** under mean and **0.061 → 0.508** under `last`. The
+absolute level is much lower, but the paper's contrast is *more* inverted there (0.061), so the
+repair remains the largest single contribution under either pooling.
+
+**Why this differs from F-102.** The scale comparison contrasts persona features against `raw`
+and `datapca`, and F-102 found raw degrades at the last token faster than the persona features do
+— so the *margin over raw* moved. Here both arms being differenced are persona contrasts over
+the same activations, so a shift in the underlying representation affects them nearly equally and
+cancels. **A difference between two like objects is robust to the pooling; a difference between a
+persona feature and a baseline of a different kind is not.** That is the general lesson and it
+predicts which of this project's results are exposed.
+
+- **source:** `run-crossgen/kd11/banks/collab/matrices/{mean,last}_L*_s42.json`, 21 layers each,
+  zero-shot rows `contrast` and `contrast:collab_extended`; baseline
+  `run-crossgen/kd11/matrices/{mean,last}_L*_s42.json` feature `raw`, probe `paper`.
+- **caveats:** (1) one seed. (2) L0 is negative under `last`; reported rather than excluded,
+  and it is the layer where a negative is expected. (3) the share statistic remains unstable by
+  construction under both poolings. (4) this validates F-98/F-99's *conclusion*, not the
+  specific 74% / 49% figures, which were mean-pooled L20/L40 readings of an unstable ratio.
+- **supports:** F-98, F-99. **bounds:** F-102 — the pooling sensitivity it found is specific to
+  persona-vs-baseline comparisons and does not generalise to persona-vs-persona ones.
+- **status:** verified
+
+---
+
+### F-104 · 2026-09-22 · **"Fixed" did not mean "fixed where it runs": four script fixes existed only in the repo and never reached the lab PC, including two on live chains. A hash audit of 160 scripts found all of them**
+
+The sarcasm pilot's verdict gate was recorded as fixed on 2026-09-21 — it had been gating on
+marker rate alone and logged `VERDICT PRODUCIBLE -- build the factorial` one line above
+`stripped=0.947`, which by the design's own rule means a lexical detector. **The fix was written
+into the repo and never copied to the lab PC**, which is where the chain actually runs.
+
+**Exercising it is what exposed this.** Re-running `Sarc-Pilot -Force` (generation and judging
+are resumable, so this cost no NDIF calls) reproduced the *old* output verbatim: one gate,
+`VERDICT PRODUCIBLE`. Remote copy 5,688 bytes from 09-21 21:21; repo copy 6,755 bytes with the
+`3b separability` gate. After deploying, the same command gives the right answer:
+
+```
+3a markers       measured=lowest ironic marker rate=0.00      predicted=<=0.20   PASS
+3b separability  measured=bag-of-words AUROC stripped=0.947   predicted=<=0.65   GATE FAILED
+VERDICT TEACHER-FORCED -- markers are suppressed but the arms remain lexically
+        separable (0.947); an extracted direction would be mostly lexical
+```
+
+which is F-93's conclusion, now produced by the chain instead of by hand.
+
+**A full hash audit then found three more.** SHA-256 over every `.ps1`/`.py` in `cap/scripts`,
+`kd/scripts`, `scale/scripts` and `src/assistant_axis_ndif` — 160 local, 151 remote:
+
+| category | n | notes |
+|---|---:|---|
+| **divergent content** | **3** | **all local-newer — undeployed fixes, none the other way** |
+| local-only | 17 | figure/page/review generators, `acts_cache.py`, `batching.py`; mostly laptop-side |
+| remote-only | 8 | task-registration `.ps1` written on the box and **never committed** |
+
+The divergent three: `run_cap_controls.ps1` (+369 B), `15_persona_count.py` (+45 B),
+`19_figures.py` (**+11,382 B**, six hours of local development the box never had).
+
+**`run_cap_controls.ps1` is the serious one, because `Cap-Controls` is a live task.** Its repo
+version carries the `$src`/`$SRC` case-collision fix — the same bug class that broke `KD-S23` —
+and the lab PC did not have it. That bug had **already bitten**: `cap_controls.status` records
+`4 axes measured=0 bases, min cos(PC1,contrast)=NaN predicted=3 bases, >=0.90 GATE FAILED`,
+rescued only by a hand re-run logged `PASS (re-run after the $src/$SRC collision)`. The results
+are therefore sound, but the chain was still primed to fail identically on its next automated run.
+
+**Root cause, and it is structural.** The lab PC is not a git repo (`labpc-not-a-git-repo`); it
+is a partial copy kept in step by manual `scp`. Nothing checks that the two agree, so a fix is
+"done" in the repo and absent where it executes, indefinitely, and silently. Every gate lesson in
+`gates-must-assert-their-own-number` assumed the fixed code was the code running — for four
+scripts that was false.
+
+**The general rule this adds:** *a fix is not verified until it has been exercised on the machine
+that runs it.* Both fixes validated tonight (`KD-S23`, `Sarc-Pilot`) needed a deliberate
+re-trigger to prove, and one of the two turned out not to be deployed at all.
+
+- **source:** SHA-256 audit, 160 local vs 151 remote files; `logs/sarc_pilot.status` before and
+  after deployment (pre-fix run preserved at
+  `logs/sarc_pilot.status.2026-09-21-buggy-verdict`); `logs/cap_controls.status`;
+  `diff` of `run_cap_controls.ps1` showing the `$vsrc` rename.
+- **caveats:** (1) the audit covers four script directories, not notebooks, configs, persona
+  JSON or `kd/personas/*`; drift elsewhere is unmeasured. (2) the 8 remote-only registration
+  scripts are **still uncommitted** — if the box is lost, how every Scheduled Task was registered
+  is lost with it. (3) all four divergences were local-newer, so nothing on the box was
+  overwritten that mattered; a future audit could find the reverse and must check direction
+  before copying.
+- **status:** verified; all four deployed and hash-matched.

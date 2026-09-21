@@ -14,14 +14,20 @@ not zero, and the items below are not decoration.
 
 Four runs. Everything here is CPU-only except the last.
 
-### 0.1 Pooled training on the collaborator's six datasets
-**Closes:** the central comparison in the draft abstract is untested.
-**Why it matters most:** the abstract claims a zero-shot contrast (0.916) beats trained probes
-(0.732). That 0.732 is a *single-source* probe. We measured a pooled probe at **0.854** on eleven
-datasets. Nobody has run pooled training on their six, so nobody knows whether the headline
-survives. **A reviewer will ask this in the first round.**
-**Cost:** ~10 minutes, CPU, activations already on disk.
-**If skipped:** we publish a comparison against the weakest available baseline and get told so.
+### 0.1 ~~Pooled training on the collaborator's six datasets~~ → **done, and reframed by F-97**
+**Status 2026-09-22:** run (F-85), then **superseded as a headline by F-97**.
+**What changed:** the abstract's 0.916 is not the persona-coordinates contrast — it is
+`ext_axis1`, the 12v13 axis built on **our** knowledge-denial personas. The paper's own 8v7
+contrast reads **0.7909 (L20) / 0.8319 (L40)** zero-shot on their six, against their own
+single-source baseline of 0.6478 / 0.7320 — a margin of **+0.143 / +0.100**, not +0.256 / +0.184.
+Roughly **44–46% of the headline margin is the kd bank**. That comparison is entirely inside
+their committed files, so it needs no pooled probe to make the point.
+**Also:** our six ≠ their six (`repe_honesty` is not in our eleven), so F-85's +0.023 mixed two
+corpora and is withdrawn as a headline.
+**What a reviewer will still ask:** why the single-source *mean* and not the median (0.722) or
+the sign-oriented mean (0.735). Keep that pre-empted.
+**Remaining work:** run their `axis1` and `ext_axis1` through our crossgen on our eleven — the
+one comparison neither side has. ~10 minutes, CPU.
 
 ### 0.2 Seed robustness on the cap result
 **Closes:** "single seed" — a caveat on F-65, F-66, F-67 and F-77.

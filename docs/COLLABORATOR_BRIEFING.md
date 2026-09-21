@@ -3,10 +3,20 @@
 Written 2026-09-21 for a collaborator who has not seen the last day of work. Self-contained:
 you should not need any other file to follow it.
 
-Short version: **we have three claims that survive their own significance tests, three that did
-not and were withdrawn, and one new result that changes what the paper should lead with.** That
-last one arrived this afternoon from a paper we had not read, and it bears directly on the draft
-abstract. It is the reason for this document.
+> **Revised 2026-09-22.** §5 has been rewritten. We had been comparing against the wrong axis:
+> the abstract's 0.904 / 0.916 is `ext_axis1`, the contrast built on the knowledge-denial
+> personas, not the persona-coordinates 8v7 contrast. Reading your branch
+> `feat/persona-pc-ood` (head `f386a72`) settled it, and it invalidated three things we told you
+> — the aggregation theory in §5b, the "same six" claim, and the PC1 contradiction in §5c. All
+> three are corrected below, with the file and row for every number so you can check them
+> yourself. Ledger entry: **F-97** in `kd/docs/FINDINGS.md`.
+
+Short version: **we have three claims that survive their own significance tests, four that did
+not and were withdrawn — three of them ours about your work — and one finding that changes what
+the paper should lead with.** That last one is §5a: the abstract's headline number comes from an
+axis built on the knowledge-denial personas, not from persona coordinates, and roughly half the
+margin is attributable to that bank. It is now measured twice, on your six datasets and on our
+eleven, and it is the reason for this revision.
 
 ---
 
@@ -161,25 +171,102 @@ not an implementation difference on our side.
 ## 5. What this means for the draft abstract
 
 The abstract reports a zero-shot 1-D persona contrast at **0.904 / 0.916** against trained probes
-at **0.648 / 0.732**, on six datasets at layers 20 and 40. Three things to resolve before it goes
-out — none of which means the headline is wrong, all of which a reviewer will reach for.
+at **0.648 / 0.732**, on six datasets at layers 20 and 40.
 
-### (a) The six-dataset subset is worth about +0.08
+> **Correction, 2026-09-22.** An earlier version of this section made three claims that were
+> wrong, and they were wrong because we had not read your branch. We have now read
+> `feat/persona-pc-ood` (head `f386a72`) file by file. What follows replaces §5(a), §5(b) and
+> §5(c) of that version. The headline is not wrong; it is *about a different axis than we
+> assumed*, and that turns out to matter more than any of our original three points.
 
-On our grid at layer 40, the zero-shot contrast reads:
+### (a) 0.904 / 0.916 is the **extended** axis, not the persona-coordinates contrast
 
-| | |
-|---|---:|
-| on the same six datasets | **0.811** |
-| on all eleven | **0.733** |
-| cost of adding the other five | **−0.079** |
+Those two numbers are the `ext_axis1` row of
+`results/persona_ood_ext_L20/summary.csv` and `results/persona_ood_ext_L40/summary.csv`
+(`off_diagonal_mean` = 0.9041173922 and 0.9158352735; identical to the mean of `auroc_ext_axis`
+in the matching `zero_shot.csv`, to 1e-16). `ext_axis1` is the **12-vs-13** contrast defined in
+`scripts/persona_ood.py::extended_arms()` as
 
-Our absolute numbers differ from the abstract's — different protocol, possibly a different bank —
-but the *direction and size of the subset effect* should carry. Applied to 0.916 that lands near
-**0.84**. Which is, almost exactly, where pooled training sits.
+```
+positive = DECEPTION_PERSONAS + KNOWLEDGE_DENIAL_PERSONAS      # 8 + 4
+negative = HONESTY_PERSONAS   + KNOWLEDGE_CANDOUR_PERSONAS     # 7 + 6
+```
 
-This is not a coincidence to wave away. We have an older measurement that adding `sycophancy_mt`
-alone erases the persona-axes advantage at every layer. The six exclude it.
+The ten extra roles are the knowledge-denial bank we sent you — they match
+`kd/personas/kd_role_groups.json` name for name. The persona-coordinates contrast as the paper
+defines it is the 8-vs-7 `axis1`, which sits in the same files, on the same rows, over the same
+six datasets. Your base bank is `paper16_L20_sharedquestions/paper16_L20.pt`
+(`deception_detection/persona_pcs.py:31`), so `axis1` is exactly the axis the replication is of.
+
+**Zero-shot, your six, your files:**
+
+| | L20 | L40 |
+|---|---:|---:|
+| trained single-source baseline *(`summary.csv`, row `baseline`)* | 0.6478 | 0.7320 |
+| **paper's 8v7 contrast** *(`zero_shot.csv`, `auroc_axis`)* | **0.7909** | **0.8319** |
+| **extended 12v13 contrast** *(`auroc_ext_axis`)* — the abstract's number | **0.9041** | **0.9158** |
+| margin, paper's contrast vs baseline | **+0.143** | **+0.100** |
+| margin, extended contrast vs baseline | +0.256 | +0.184 |
+| **what the knowledge-denial personas are worth** | **+0.113** | **+0.084** |
+| **share of the headline margin from the kd bank** | **44%** | **46%** |
+
+Drop `repe_honesty` — which your own `persona_ood/summary.md` flags as in-distribution for the
+deployed probe, "its diagonal and its column say nothing about transfer" — and it holds: the
+paper's contrast leads by +0.142 (L20) / +0.092 (L40), and the kd personas are worth
++0.136 / +0.101.
+
+**So the result is real, and roughly half of it is the knowledge-denial bank.** That is worth
+saying plainly in the paper, because a reviewer who diffs the two axes will find it, and because
+it is a *better* story than the one the abstract currently tells: a construct-matched bank fixes
+the dataset that breaks every other detector. It is the same shape as our Claim 2.
+
+**We then rebuilt both of your arms from our own persona vectors and ran them on our eleven
+datasets**, to check this is not an artifact of your corpus. It replicates:
+
+| zero-shot, our eleven | L20 | L40 |
+|---|---:|---:|
+| our raw single-source baseline | 0.6289 | 0.6623 |
+| `axis1` (8v7) | 0.6572 | 0.7325 |
+| `ext_axis1` (12v13) | 0.7386 | 0.7996 |
+| pooled leave-one-dataset-out | **0.8027** | **0.8545** |
+| **share of the margin from the kd bank** | **74%** | **49%** |
+
+Two things follow. **Both of your arms lose to a pooled probe** — by 0.064 at L20 and 0.055 at
+L40 — which is §5d's point, now tested against the abstract's actual axis rather than a proxy.
+And the kd contribution is **not** a general improvement: at L20 it is entirely
+`harm-pressure-knowledge-report` (0.165 → 0.806, a +0.641 swing) plus `sandbagging_v2`; remove
+those two and the kd personas are worth **+0.003**. At L40 it is more distributed (+0.039 with
+both removed). A construct-matched bank is a targeted instrument — the same conclusion Claim 2
+reached from the other direction.
+
+**Swept across all 21 layers**, because two layers is not enough to quote a margin from:
+`ext_axis1` beats `axis1` at **21 of 21 depths**, mean **+0.055**, range [+0.002, +0.081], peaking
+at L20 — the layer your abstract leads with. So the effect is not a layer artifact.
+
+**And swept under both poolings**, because we found elsewhere in this project that mean-vs-last
+pooling can reverse a conclusion outright. This one is robust to it: the kd bank is worth
+**+0.055 mean-pooled and +0.059 last-token**, positive at **21/21** and **20/21** layers
+respectively (the single exception is L0, the embedding layer, where nothing is claimed to work).
+The mechanism matters — both quantities being differenced are persona contrasts over the same
+activations, so a shift in the representation affects them almost equally and cancels. Comparisons
+between a persona feature and a *baseline of a different kind* are not so lucky, which is why the
+share below needs its pooling named.
+
+One honest caveat on how to phrase it: the *share* of the margin is unstable, because its
+denominator shrinks wherever the persona arms sit near the raw baseline. It reads 2%–114% across
+depth with a median of **63%** mean-pooled — and **50%** last-token, while the underlying
+quantity barely moves (+0.055 vs +0.059). Above 100% is real rather than a glitch: at L60–L68
+your `axis1` falls *below* raw activations, so the kd bank supplies more than the whole margin
+there. **Quote the raw difference (+0.055–0.059, or +0.081 at L20 mean-pooled), and give a share
+only with both the layer and the pooling named.**
+
+The reason it is so robust is that the HP-KR repair holds at every depth: `axis1` is inverted or
+near-chance on that dataset at essentially every layer (0.087–0.86, mostly 0.15–0.57) while
+`ext_axis1` reads 0.57–0.91 throughout. We had previously believed that inversion was specific to
+layer 20; it is not.
+
+Sanity check on provenance: our `axis1` built from a different extraction seed reads 0.666 /
+0.729 against 0.657 / 0.733, so the arm does not depend on which rollout set it came from.
 
 ### (b) The trained baseline is the weakest one available
 
@@ -191,17 +278,26 @@ contrast design, and **no additional rows**.
 So the abstract's comparison is against the weakest trained baseline that exists. The honest
 question is: **does the contrast still beat a pooled probe?**
 
-**That experiment has now been run, on your six.** Same six datasets, same layers:
+**That experiment has been run — but not on your six, and we said otherwise.** Our corpus has no
+`repe_honesty`, so at most five of your six overlap ours; the sixth is a substitution. The
+numbers below are a pooled probe on **our** six, and the cross-comparison against your 0.916 is
+therefore indicative, not like-for-like:
 
-| comparison at L40 | margin |
-|---|---:|
-| 0.916 vs single-source 0.732 *(the abstract)* | **+0.184** |
-| 0.916 vs pooled LODO 0.868 | +0.048 |
-| **0.916 vs pooled, row-budget matched 0.893** | **+0.023** |
+| comparison at L40 | margin | |
+|---|---:|---|
+| 0.916 vs single-source 0.732 *(the abstract)* | +0.184 | both yours, like-for-like |
+| 0.916 vs our pooled LODO 0.868 | +0.048 | **mixed corpora** |
+| 0.916 vs our pooled, row-budget matched 0.893 | +0.023 | **mixed corpora** |
 
-The headline survives, but **the margin goes from +0.184 to +0.023** — and that is against *your*
-0.916. On our own grid the same contrast on the same six at L40 reads **0.811**, against pooled
-row-matched at **0.893**, so like-for-like on our data the persona contrast **loses by 0.082**.
+We previously reported the +0.023 as the headline and said our own contrast "loses by 0.082" on
+the same six. Both statements mixed two dataset sets and two banks — the 0.811 we quoted is our
+*knowledge-denial* bank, not a register axis, so it was never the comparator we called it. Those
+claims are withdrawn.
+
+**What replaces them is stronger, and lives entirely inside your files.** The paper's own 8v7
+contrast beats your own single-source baseline by **+0.143 (L20)** and **+0.100 (L40)** — same
+matrices, same rows, same protocol, nothing of ours involved. That is the number the replication
+is entitled to claim. The gap between it and 0.904 / 0.916 is the knowledge-denial bank (§5a).
 
 **How weak "0.732" is turns out to be measurable.** Across our 110 source→target pairs, **21 fall
 below 0.5** and 14 below 0.4 (minimum 0.055). Averaging those in is what makes the single-source
@@ -216,57 +312,57 @@ baseline so low. Three alternative baselines on identical pairs:
 
 A reviewer will ask why the mean and not the median. Worth pre-empting.
 
-### (c) One direct contradiction to check
+### (c) The PC1 "contradiction" was ours, and it dissolves
 
-The abstract says the first principal component scores **0.09 below** the contrast at layer 40.
-On our grid PC1 is slightly **above** it: 0.829 against 0.811.
+We previously flagged a direct contradiction: the abstract saying PC1 sits **0.09 below** the
+contrast at layer 40, against our grid putting PC1 slightly above. There is no contradiction,
+because there is no single PC1-vs-contrast number on your side — it depends entirely on which
+bank, which is the same confusion as §5a:
 
-Same claim, opposite sign. Probably a difference in which bank or which PCA basis — but it is the
-kind of thing that gets found in review, and it is better resolved now. Our wider finding about
-the PCs is *consistent* with the abstract's point (the components are not doing the work), so
-this is a detail inside an agreement, not a disagreement.
+| at L40 (`persona_ood_ext_L40/summary.csv`) | PC1 | contrast | PC1 − contrast |
+|---|---:|---:|---:|
+| paper bank (8v7) | `pc1` 0.8593 | `axis1` 0.8319 | **+0.027 (above)** |
+| extended bank (12v13) | `ext_pc1` 0.7680 | `ext_axis1` 0.9158 | **−0.148 (below)** |
+
+Neither is −0.09, and we could not reproduce that figure from any arm at any of your three
+layers. If it is in the draft, it needs a source. The underlying agreement stands and is
+strengthened: **the components are not doing the work** — at L20 `ext_pc1` trails `ext_axis1` by
+0.243, and the 1-d contrast beats the 3-d subspace at every depth you ran.
 
 ---
 
-## 5b. Why our numbers differ from yours — and one comparison it puts at risk
+## 5b. Why our numbers differ from yours — the aggregation theory was wrong
 
-You used our persona vectors but scored them yourself: downloading the full per-layer activations
-(~50 GB per layer) and taking dot products, where our pipeline projects **mean-pooled**
-activations through the crossgen harness. That is not a discrepancy to resolve — it is two
-different protocols, and it probably explains the whole gap.
+**We got this section wrong and it is worth stating plainly.** The previous version asserted that
+you scored our persona vectors per-token from ~50 GB per-layer activation downloads, while our
+pipeline mean-pools — and concluded that "token aggregation alone is worth up to +0.103" and that
+"0.811 → 0.916 is fully accounted for without anyone being wrong."
 
-**We measured the size of that difference directly.** On Pass C (2,000 label-stratified rows,
-304,706 response tokens, six layers), projecting onto the same axis and changing **only the token
-aggregation**:
+**You mean-pool.** `scripts/pool_activations.py:84` is
 
-| layer | mean | last | max | **top-10%** |
-|---|---:|---:|---:|---:|
-| 20 | 0.695 | 0.741 | 0.775 | **0.798** |
-| 22 | 0.699 | 0.743 | 0.740 | 0.763 |
+```python
+pooled.append(acts[row_mask].float().mean(0).squeeze(0).numpy())
+```
 
-**Token aggregation alone is worth up to +0.103.** Add the six-dataset subset effect (+0.079,
-section 5a) and 0.811 → 0.916 is fully accounted for without anyone being wrong.
+over the detection mask — its module docstring says so outright ("the mean over the model's
+**response** tokens"), and every one of your summaries records `Δ = 0.0000` reproducing that
+run's own `detector.pt` from the pooled matrix. The 50 GB was your Liars' Bench activation cache
+(`ACTS_CACHE_DIR=E:/liars-bench-acts/cache`), not per-token scoring.
 
-**But there is a comparison this puts at risk, and it is the headline one.** Our Q8 measurement
-has a second half that points the *other* way:
+So both arms of your comparison — the zero-shot contrast and the trained baseline — read the
+same pooled vectors. **The aggregation asymmetry we called "a comparison at risk" does not
+exist**, and the pre-submission task we recommended ("score both arms the same way") is already
+satisfied. Our Q8 measurement about top-decile vs mean pooling is a fact about *our* pipeline and
+says nothing about yours.
 
-> zero-shot, **top-decile token scoring beats mean pooling (+0.053)**; trained, **pooled-mean
-> probes beat token-trained probes at every layer (−0.03 to −0.06)**.
+The actual reason our numbers differ from yours is §5a: we were comparing a register axis against
+your **kd-augmented** axis, and separately our corpus is not yours — no `repe_honesty`, plus five
+datasets you do not have. Those two account for the gap; token aggregation accounts for none of it.
 
-So the two aggregations favour opposite methods. **If the zero-shot contrast is scored per-token
-(or top-decile, or max) while the trained baseline is a probe on mean-pooled activations, part of
-the 0.916-vs-0.732 gap is the aggregation choice rather than the feature.** On our numbers that
-part could be 0.05–0.10 of it.
-
-This is straightforward to close and worth doing before submission: **score both arms the same
-way.** Either mean-pool both, or token-score both. If the contrast still wins under matched
-aggregation, the result is clean and the objection disappears. If the gap shrinks substantially,
-that belongs in the paper rather than in a reviewer's report.
-
-Practical note: you should not need the 50 GB per-layer downloads again. `run-cap/` and
-`run-coords/` hold the pooled activations, and the crossgen harness scores an arbitrary axis
-against all eleven datasets in minutes. Happy to run your exact contrast through it so both
-protocols sit side by side on the same rows.
+Practical note stands, minus the premise: `run-cap/` and `run-coords/` hold pooled activations,
+and the crossgen harness scores an arbitrary axis against all eleven of our datasets in minutes.
+Happy to run your exact `axis1` and `ext_axis1` through it so both banks sit side by side on the
+same rows — that is the one comparison neither of us has.
 
 ## 5c. Three papers that landed today, and what each one does to the draft
 
@@ -382,31 +478,40 @@ are already extracted, so it costs nothing but CPU.
 
 ---
 
-## 6. Where sarcasm fits now
+## 6. Where sarcasm fits now — the pilot ran, and it failed its own gating check
 
-We have been planning a sarcasm persona bank. It is still worth doing, and its role has changed.
+We had been planning a sarcasm persona bank. **It is now measured, and the on-policy design is
+not viable.** Reporting it here because the previous version of this document recommended it.
 
-**Why sarcasm specifically.** Sarcasm is *saying something you don't mean, without intending to
-mislead* — deception minus the intent. So a sarcasm axis tests directly whether our "deception"
-detectors are detecting intent or just surface/meaning mismatch. If a sarcasm direction has high
-cosine with the deception axis, that axis is substantially a mismatch detector. Apollo's own
-paper concedes their probe partly fires on *"is this scenario deception-related"* rather than on
-deceptive intent; this would put a number on it.
+**Why sarcasm was the right idea.** Sarcasm is *saying something you don't mean, without
+intending to mislead* — deception minus the intent. A sarcasm axis therefore tests directly
+whether our "deception" detectors track intent or merely surface/meaning mismatch. It would have
+been the first **positive** test of Claim 1: every test so far shows the axis *failing* where
+register and construct come apart; a sarcasm bank would build the confound deliberately and show
+it explains the failure.
 
-**It would be the first *positive* test of Claim 1.** Every test so far is negative — the axis
-*fails* where register and construct come apart. A sarcasm bank builds the confound itself and
-shows it explains the failure. That is the mirror of what the capitulation bank did.
+**The design required one thing:** with markers stripped, ironic and sycophantic text had to be
+near-indistinguishable — both literally praise a bad plan, and the difference is supposed to be
+purely pragmatic. The pre-registered reading was *"near 0.5 with markers removed = the arms are
+textually alike; near 1.0 = a lexical detector."*
 
-**The design catch.** A naive sarcasm bank produces obviously-marked text — *"oh, brilliant"* —
-and then the axis is a lexical detector, worthless for the same reason the knowledge-denial bank
-had to be built as three groups rather than two. To be non-lexical you need sarcastic and sincere
-personas saying **near-identical words**, separated by context alone. That is harder to author
-than anything we have built so far, and it is the thing that decides whether the result means
-anything.
+**It came out at 0.92.** Bag-of-words logistic regression, grouped by question id so no item
+spans train and test:
 
-**The honest demotion.** Before today, sarcasm would have been evidence in a paper about whether
-persona coordinates work. After Claim 3, it is evidence in a paper about **why they fail** —
-supporting a diagnosis, not carrying a headline. Worth doing, but not first.
+| variant subset | ironic vs sycophant | raw | markers stripped |
+|---|---|---:|---:|
+| all v1–v5 | | 0.953 | **0.947** |
+| **v4+v5 (marker rate 0.00)** | | **0.919** | **0.921** |
+
+Deadpan *is* producible — the marker rate genuinely falls to 0.00 at variants v4 and v5, which
+was the encouraging half. But stripping the markers does not make the arms textually alike: they
+remain separable at 0.92 by word counts alone. **A bank built on this would be a register axis,
+which is precisely the thing it was designed to diagnose** — the same failure mode that forced
+the knowledge-denial bank into three groups rather than two.
+
+**So: not first, and not in this form.** The concept survives; the on-policy factorial does not.
+If we return to it, it needs a construction where the two arms share wording by design rather
+than by hope — teacher-forcing the response text, as the capitulation bank does.
 
 ---
 
@@ -414,13 +519,15 @@ supporting a diagnosis, not carrying a headline. Worth doing, but not first.
 
 | | status |
 |---|---|
-| Pooled training on **your six datasets** | **done** — margin falls from +0.184 to +0.023 (§5b) |
+| Identify which axis the abstract reports | **done — it is the kd-augmented 12v13 axis, not the paper's 8v7 (§5a)** |
+| Both your arms through our crossgen, our eleven | **done** — kd bank is 49–74% of the margin; both arms lose to pooled (§5a) |
+| Pooled training vs the abstract | **done, then withdrawn as a headline** — our six ≠ your six (§5b) |
 | Persona method through the same LODO harness | **done** — loses to raw pooled LR by 0.11–0.16 (§5d) |
 | Format-matched persona control | **done, and mostly negative** — see below |
-| Layer-32 check on the key numbers | running; activations already held, CPU only |
-| Sarcasm bank | design v2 written and externally reviewed; **elicitation pilot generating now** |
+| Layer-32 check on the key numbers | **done** — L32 is the peak for raw and persona features alike, worth ~0.02 (§5e) |
+| Sarcasm bank | **pilot run, and it FAILED its gating check** — 0.92 separable with markers stripped; on-policy design not viable (§6) |
 | Clustered hold-out for shared provenance | **not run** — the open methodological risk (§5d) |
-| Resolve the PC1 sign discrepancy | still needs your setup details |
+| Resolve the PC1 sign discrepancy | **resolved — there was no discrepancy (§5c)**; we still need a source for the "0.09 below" figure |
 
 **The format-matched control, because it qualifies Claim 2's story.** We had found that the six
 "position-holding" personas on the negative side of the capitulation contrast were load-bearing
@@ -450,8 +557,11 @@ having run the comparison the method's own paper omits, on 70B, with the control
 narrower claim than we were making this morning, and a considerably more defensible one.
 
 Your zero-shot contrast is untouched by all of this: it has no training set, so none of the
-pooled comparisons apply to it directly. Its exposure is the baseline question in §5b — whether
-0.732 is the number a reviewer will accept as "the trained probe".
+pooled comparisons apply to it directly. Its two real exposures are **§5a** — that roughly half
+its margin over the baseline comes from the knowledge-denial personas rather than from persona
+coordinates — and the baseline question: whether 0.732, a single-source mean, is the number a
+reviewer will accept as "the trained probe" when the median over the same pairs is 0.722 and the
+sign-oriented mean is 0.735.
 
 ---
 
