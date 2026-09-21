@@ -3351,3 +3351,49 @@ earlier total-covariance run, so its gate read a **stale file** and logged `R2=0
 a number from the previous experiment, reported as fresh. That is precisely the failure F-47 and
 F-76 are about, committed while building the tooling meant to catch it. Both fixed; covariance
 variants now write to their own folder, which is the only fix a later edit cannot undo.
+
+---
+
+### F-84 · 2026-09-21 · The cluster-permutation test completes the pre-registration, and it agrees: p = 0.38
+
+The third and last test `docs/LAYER_PREREGISTRATION.md` committed to. It tests a **different
+null** from F-76's dataset bootstrap — labels rather than datasets — so neither substitutes for
+the other. Maris & Oostenveld (2007); the same label permutation applied identically at every
+layer, so the null preserves between-layer correlation instead of treating 20 layers as 20
+independent tests. Statistic: the largest contiguous-positive cluster mass, which makes it a test
+of the **band** rather than of any single layer.
+
+| | value |
+|---|---:|
+| observed largest cluster mass | 0.9155 |
+| clusters found | [0.916, 0.059] |
+| null mean | 0.8871 |
+| null 95th percentile | 2.5787 |
+| **p** | **0.38** (B = 200, 20 layers) |
+
+The observed mass sits **essentially on the null mean**. The band is not distinguishable from
+what label noise produces.
+
+**The pre-registered prediction was correct.** `30c_cluster_perm.py`'s docstring, written before
+the run: *"If that reading is right, the observed cluster mass should sit WELL INSIDE the
+permutation null, p > 0.2."* Measured 0.38.
+
+**All three pre-registered tests now agree on the kd matched slice:**
+
+| test | null | result |
+|---|---|---|
+| margin at the pre-specified layer | dataset bootstrap | CI [−0.069, +0.189], does not clear |
+| argmax stability | dataset bootstrap | 95% interval [L5, L79] — 93% of the network |
+| **band vs label noise** | **label permutation** | **p = 0.38** |
+
+Three independent tests, two different nulls, one conclusion. F-03's reversal on the matched
+slice is a point estimate that does not survive any of them.
+
+- **source:** `src/assistant_axis_ndif/30c_cluster_perm.py` →
+  `run-premise/cluster_perm_kd_matched.json`; `logs/premise_extras.status` (exit 0, 9.1 min).
+- **caveats:** (1) B = 200 is modest — enough to place p at 0.38 with confidence, not enough to
+  resolve a small p had one appeared. (2) the control here is a matched **random** projection at
+  the same k rather than dataset-PCA, chosen because it needs no per-source refitting inside the
+  permutation loop; F-76 used dataset-PCA. (3) 20 layers on passA, mean pooling, k = 5.
+- **supersedes:** the last open item in `docs/LAYER_PREREGISTRATION.md`.
+- **status:** verified
