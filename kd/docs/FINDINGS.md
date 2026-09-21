@@ -2623,3 +2623,80 @@ a matched control. That is not a retraction: 0.739 against 0.706 at L40 with the
 removed is still the reversal, and the L22–L44 band is positive throughout. But it can no longer
 be quoted as a bare number. Every future statement of it carries the layer, the span, and the
 matched control, or it is a story.
+
+---
+
+### F-73 · 2026-09-21 · **Self-correction: the length claim's AUROC survives, its per-dataset framing does not**
+
+A reviewer cloned the released Liars' Bench repo, measured the length confound themselves, and got
+a different answer: positive class longer in **4 of 8**, length-only off-diagonal **0.493**
+(chance), and per-class gaps an order of magnitude below ours (≈1 word on knowledge-report, ≈22
+on insider-trading, against our quoted 505-vs-310 and 245-vs-96). They asked the right question —
+*is the gap a property of the datasets or of your generation config?* — so we re-measured against
+our own store.
+
+**What survives.** On our corpus (`passB`, `span_len` = tokens of the scored span,
+Llama-3.3-70B only), at L40 mean, `paper` probe, 110 off-diagonal cells:
+
+| feature | off-diagonal AUROC |
+|---|---:|
+| raw | 0.6623 |
+| `datapca` | 0.6651 |
+| `random` | **0.5849** |
+| **`length`** | **0.5555** |
+
+Our stated 0.553 vs 0.665 is confirmed to three decimals. The positive class is longer in
+**9 of 11** datasets.
+
+**What does not survive: the impression that length is broadly predictive.**
+
+| dataset | pos | neg | gap | in reviewer's repo |
+|---|---:|---:|---:|---|
+| sandbagging_v2 | 529.4 | 340.4 | **+189.0** | yes |
+| mask | 283.2 | 176.4 | **+106.8** | no |
+| sycophancy_mt | 170.2 | 126.2 | **+44.0** | no |
+| ai_liar | 174.0 | 151.6 | +22.4 | yes |
+| insider-trading | 116.5 | 110.2 | +6.4 | yes |
+| harm-pressure-knowledge-report | 8.5 | 5.3 | +3.3 | yes |
+| instructed-deception | 32.1 | 30.2 | +2.0 | yes |
+| harm-pressure-kr-matched | 8.1 | 7.5 | +0.6 | no |
+| harm-pressure-choice | 1.0 | 1.0 | **0.0** | yes |
+| convincing-game | 203.8 | 205.0 | −1.2 | yes |
+| roleplaying | 39.4 | 43.5 | −4.1 | yes |
+
+**Median gap across the eight datasets the reviewer could see: 3.7 tokens**, and restricted to
+those eight the positive class is longer in **6 of 8**, not 9 of 10. The entire transferable
+signal comes from **three** datasets, two of which are not in their repo at all. On
+`harm-pressure-choice` the gap is exactly zero — single-token responses — so length cannot carry
+anything there by construction.
+
+**Two of our own quoted numbers were wrong.** We have been citing *"245 vs 96 on mask"*; measured
+it is **283.2 vs 176.4**. The negative class is nearly twice what we claimed, and the ratio falls
+from 2.55 to 1.61. *"505 vs 310 on sandbagging_v2"* is approximately right (529.4 vs 340.4) but
+not exact. Both were stale.
+
+**And length is not even the strongest trivial baseline.** `random` reads 0.5849 against
+`length`'s 0.5555, so a random 2-d projection transfers better than response length. The sentence
+"any transfer claim must beat length" should be "must beat random, which is higher."
+
+**Why the reviewer got 0.493 and we get 0.5555** — three differences, none of which we can fully
+close: they counted **words in the last assistant message**, we store **tokens of the scored
+span**; their rollouts pool **four generator models**, ours are Llama-3.3-70B only; and five of
+our eleven datasets are absent from their repo, including two of the three carrying the effect.
+The honest reading is that **the large gaps are a property of our generation setup and of two
+datasets outside the benchmark**, not a general property of deception corpora.
+
+- **source:** `kd/scripts/check_length_claim.py` over `run-coords/passB/*/rows.jsonl`;
+  `run-crossgen/kd11/matrices/mean_L40_s42.json`.
+- **caveats:** (1) `span_len` is the scored span, which is what the probe sees, and is the right
+  quantity for the AUROC claim — but it is not comparable to word counts on a differently-defined
+  span. (2) single seed, single layer for the AUROC row.
+- **supersedes:** the per-dataset framing of the length claim, and the two quoted figures.
+- **status:** verified
+
+**How the claim must now be stated.** Not *"the positive class is longer in 9 of 10 datasets, so
+length transfers as a confound."* Instead: *"on this corpus a length-only rule reaches 0.556
+off-diagonal against raw's 0.662, but the effect is carried by three datasets with large gaps
+while the median gap elsewhere is under four tokens; a random low-dimensional projection
+transfers better (0.585) than length does."* That is a weaker claim and it is the one the data
+supports.
