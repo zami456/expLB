@@ -4052,10 +4052,49 @@ require **both** conditions.
   is formally abandoned, though 0.92 is far enough from 0.5 that the direction of the answer is
   not in doubt. (2) **the polarity check produced nothing**: the judge ran and wrote three score
   files, but `score_sarcasm_markers.py` did not find the score values in them — a parser
-  mismatch, not a judge failure, and it is unfixed. So "does the sincere critic actually
-  criticise" remains unmeasured. (3) one temperature (0.7), one seed, single-turn.
+  mismatch, not a judge failure. **FIXED 23:05 and measured — see amendment below.** (3) one
+  temperature (0.7), one seed, single-turn.
+
+**AMENDMENT 23:05 — the polarity check, now that it runs, and it sharpens the verdict.**
+`3_judge_ndif.py` writes a flat dict keyed `pos_p<variant>_q<question>` → int; the scorer looked
+for a `scores` list, found nothing, and printed an empty section while the chain logged the judge
+step as PASS. **A silent no-op reported as a pass — the same class of failure as the four gate
+errors above.** Parser fixed; the flat key also gives a per-variant breakdown for free.
+
+| arm | mean (0–3) | ≥2 | v1 | v2 | v3 | v4 | v5 |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| `pc_ironic_critic` | 2.59 | **100%** | 2.85 | 2.85 | 2.60 | 2.55 | **2.10** |
+| `pc_sycophant` | 2.44 | 96% | 2.45 | 2.25 | 2.55 | 2.15 | **2.80** |
+| `pc_sincere_critic` | 2.37 | **100%** | 2.85 | 2.25 | 2.40 | 2.25 | 2.10 |
+
+**The polarity check passes: all three arms hit their roles**, 100% / 96% / 100% scoring ≥2. The
+sincere critic does criticise, so the model's own sycophancy base rate is not contaminating that
+arm — which was the specific worry the design flagged as *informative rather than fatal*.
+
+**But the per-variant trend is the finding, and it independently supports F-93's verdict.** As the
+deadpan instruction strengthens, the ironic arm becomes **less** clearly ironic (2.85 → **2.10**,
+its lowest cell) while the sycophantic arm becomes **more** clearly sycophantic (2.45 → **2.80**).
+**At v5 — precisely the wording the on-policy factorial would have used — the two arms are
+converging in judged role while remaining separable at 0.92 on vocabulary.** That is the worst
+combination available: the intent distinction the design exists to measure is weakest exactly
+where the lexical confound is not.
+
+This is the concern F-92 raised from the text alone ("nothing establishes an intended criticism is
+present rather than compliance with a praise instruction"), now with a number against it from a
+different instrument. **Two independent lines therefore point the same way, and the move to
+teacher-forced identical responses is the right call on both.**
+
+Caveat on this amendment: the project judge scores *role adherence* given question + response. It
+is **not** the blind five-rating protocol the design requires (perceived sarcasm, literal valence,
+intended valence, marker checklist, plan-quality), and in particular it cannot separate *literal*
+from *intended* valence — which is the distinction that matters. So this is weaker evidence than
+the design asks for, and it is suggestive rather than decisive. Also, the marker regexes misfire
+on sincere text (`allcaps` 23 and `reveal_aside` 13 on the sincere arm, largely from phrases like
+"to be clear"), so marker rates outside the ironic arm should not be read as irony marking.
+
 - **status:** measured; the on-policy v2 factorial is **not viable** and the design moves to
-  teacher-forced. The polarity check is still owed.
+  teacher-forced. The polarity check is **done and passes**, and its per-variant trend supports
+  the same conclusion.
 
 ---
 

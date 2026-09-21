@@ -203,18 +203,35 @@ def main() -> None:
     # ---- 3. polarity ----------------------------------------------------------------------
     if args.scores_dir:
         sd = Path(args.scores_dir)
-        print("\n3. POLARITY -- judge role score by role (0-3)")
+        # 3_judge_ndif.py writes a FLAT dict keyed "pos_p<variant>_q<question>" -> int, not a
+        # "scores" list. The first version of this block looked for j["scores"], found nothing,
+        # and printed an empty section while the chain reported the judge step as PASS -- so the
+        # polarity check silently went unmeasured (recorded in F-93 as owed). Parse the real
+        # shape, and break it out per variant, which the flat key makes free.
+        print("\n3. POLARITY -- judge role score by role (0-3), and by variant")
+        keyre = re.compile(r"^pos_p(\d+)_q(\d+)$")
         for f in sorted(sd.glob("*.json")):
             try:
                 j = json.loads(f.read_text(encoding="utf-8"))
             except Exception:
                 continue
-            vals = [v for v in (j.get("scores") or j.get("score") or []) if isinstance(v, (int, float))]
-            if vals:
-                print(f"   {f.stem:<20} mean {np.mean(vals):.2f}  n={len(vals)}  "
-                      f">=2: {np.mean([v >= 2 for v in vals]):.2f}")
-                report.setdefault("polarity", {})[f.stem] = {
-                    "mean": float(np.mean(vals)), "frac_ge2": float(np.mean([v >= 2 for v in vals]))}
+            byv = defaultdict(list)
+            vals = []
+            for k, v in (j or {}).items():
+                m = keyre.match(str(k))
+                if m and isinstance(v, (int, float)):
+                    byv[int(m.group(1))].append(float(v))
+                    vals.append(float(v))
+            if not vals:
+                print(f"   {f.stem:<20} no parseable scores in {f.name}")
+                continue
+            cells = " ".join(f"{np.mean(byv[v]):.2f}" if byv.get(v) else " -- " for v in range(5))
+            print(f"   {f.stem:<20} mean {np.mean(vals):.2f}  n={len(vals):<4} "
+                  f">=2: {np.mean([x >= 2 for x in vals]):.2f}   v1-v5 [{cells}]")
+            report.setdefault("polarity", {})[f.stem] = {
+                "mean": float(np.mean(vals)), "n": len(vals),
+                "frac_ge2": float(np.mean([x >= 2 for x in vals])),
+                "per_variant": [float(np.mean(byv[v])) if byv.get(v) else None for v in range(5)]}
     else:
         print("\n3. POLARITY -- skipped (--scores_dir not given; run the judge first)")
 
