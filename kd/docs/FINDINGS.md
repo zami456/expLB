@@ -2523,3 +2523,41 @@ Mazeika, Menghini et al., Center for AI Safety + Scale AI** (arXiv:2503.03750); 
 from reading the `mask/` submodule URL — `github.com/cadenza-labs/mask`, an evaluation **fork** —
 as the benchmark's authorship. `CLAUDE.md` now carries the correction on the submodule row
 itself, which is where the mistake was available to be made.
+
+---
+
+### F-71 · 2026-09-21 · Top-up complete: all three stores now carry the matched slice identically
+
+F-69 recorded passA repaired with passC still extracting. passC finished at 11:52:46, gate exact
+(`measured=2139 predicted=2139`), rclone synced both stores, task `rc=0`. Whole run 10:53:42 →
+11:53:51 — **60 minutes** for 3,878 row-extractions at 70B, against a 1–2 h estimate.
+
+| store | HP-KR rows | matched | deceptive / honest | layers | pooling |
+|---|---:|---:|---|---|---|
+| passA | 2,139 | **258** | **124 / 134** | 80 | mean, last |
+| passB | 2,139 | 258 | 124 / 134 | 21 | mean, last |
+| passC | 2,139 | **258** | **124 / 134** | 6 | mean, last, **per-token** |
+
+**All three are now identical on this slice** — same 258 row_ids, same 124/134 split — and each is
+internally consistent (`chunks == rows.jsonl == items.pt == 2,139`). passC's new chunks preserved
+`per_token=True`, so the packed-token structure survived the top-up rather than being silently
+dropped to pooled-only.
+
+F-20's instruction — *"quote the matched slice from passB only; if a matched-slice number appears
+for passA or passC, it is wrong"* — is now **retired**. The column is reportable on all three.
+
+**What each store can now answer that it could not before:**
+- **passA (80 layers)** — a **layer profile** for `harm-pressure-kr-matched`, the column carrying
+  F-03. It previously existed at three layers on passB and nowhere else.
+- **passC (per-token)** — a **pooling check** on the same, the only store that can do it.
+
+- **source:** `logs/hpkr_topup.status`; `kd/scripts/check_matched_slice.py` and
+  `kd/scripts/inspect_store.py` against all three stores.
+- **caveats:** (1) still a **composition** fact. Nothing about F-03 has been re-measured on either
+  store yet; the grids have not been re-run with the eleventh dataset. (2) the slice remains
+  capped at 258 rows everywhere — the top-up repaired sampling, it did not grow the underlying
+  honest-denier cell, which is the constraint F-59 failed to lift. (3) passA and passC still hold
+  a 200-row subsample of the *other* nine datasets, so their grids remain asymmetric: HP-KR and
+  its matched slice are now full while the rest are not.
+- **supersedes:** F-20 entirely; F-69's "passC pending".
+- **status:** verified
