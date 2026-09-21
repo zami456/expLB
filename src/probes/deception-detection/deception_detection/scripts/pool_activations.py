@@ -11,12 +11,15 @@ No remote calls: every example needed is already cached.
         --config-file deception_detection/scripts/configs/XXXX-9-llama-all.yaml
 """
 
+from collections.abc import Iterator
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
 import fire
 import numpy as np
 import yaml
+from torch import Tensor
 from tqdm import tqdm
 
 from deception_detection import acts_cache
@@ -30,22 +33,35 @@ from deception_detection.utils import REPO_ROOT
 POOLED_DIR = REPO_ROOT / "activations" / "pooled"
 
 
-def pool_dataset(
+@dataclass
+class CachedExample:
+    """One kept example read back from the cache."""
+
+    index: int  # row in the dataset, for labels
+    acts: Tensor  # [kept_len, n_layers, emb]: the whole row, or its tail in tail mode
+    mask: Tensor  # [kept_len] bool: the detection mask over those same positions
+
+
+def iter_cached_examples(
     dataset: DialogueDataset,
     experiment: Experiment,
     model_name: str,
     layers: list[int],
-) -> tuple[np.ndarray, list[str]]:
-    """Mean-pool each example's cached activations over its detection-mask tokens.
+    desc: str = "pooling",
+) -> Iterator[CachedExample]:
+    """Every example with a non-empty detection mask, read from the cache in dataset order.
 
-    Tokenising the whole dataset at once is safe even though the cache was written from shards:
-    the key is built from an example's *unpadded* tokens, and padding to a different batch width
-    does not change those.
+    The single walk behind both pooling and per-token projection, so the two cannot select
+    different examples or tokens. Tokenising the whole dataset at once is safe even though the
+    cache was written from shards: the key is built from an example's *unpadded* tokens, and
+    padding to a different batch width does not change those.
 
     Keys come from `cache_entries`, the same function extraction used to write them, so a run
     in tail mode (`acts_positions: "tail"`) is read back from its tail entries. Each entry holds
-    a row's final `kept_len` positions, and the detection mask is cut to those same positions
-    before averaging -- for the follow-up protocol, exactly the prefilled answer token.
+    a row's final `kept_len` positions, and the detection mask is cut to those same positions.
+
+    A cache miss raises, but only once the walk is finished: callers buffer what they are given
+    and write nothing until the iterator is exhausted, so a miss can never leave a partial file.
     """
     toks = TokenizedDataset.from_dataset(
         dataset,
@@ -60,12 +76,10 @@ def pool_dataset(
     n, padded_len = toks.tokens.shape
     keys, kept_lens = cache_entries(toks, model_name, layers, experiment.cfg.acts_positions)
 
-    pooled: list[np.ndarray] = []
     misses: list[int] = []
-    kept: list[int] = []
     empty_masks = 0
 
-    for i in tqdm(range(n), desc=f"pooling {dataset.name}", unit="ex"):
+    for i in tqdm(range(n), desc=f"{desc} {dataset.name}", unit="ex"):
         acts = acts_cache.load(keys[i], kept_lens[i])
         if acts is None:
             misses.append(i)
@@ -80,8 +94,7 @@ def pool_dataset(
             # caller keep labels aligned. The deployed pipeline also yields empty scores here.
             empty_masks += 1
             continue
-        kept.append(i)
-        pooled.append(acts[row_mask].float().mean(0).squeeze(0).numpy())
+        yield CachedExample(index=i, acts=acts, mask=row_mask)
 
     if misses:
         # a miss means the tokenisation diverged from the run that wrote the cache; dropping the
@@ -95,6 +108,19 @@ def pool_dataset(
             f"{dataset.name}: dropped {empty_masks} of {n} examples with an empty detection mask"
         )
 
+
+def pool_dataset(
+    dataset: DialogueDataset,
+    experiment: Experiment,
+    model_name: str,
+    layers: list[int],
+) -> tuple[np.ndarray, list[str]]:
+    """Mean-pool each example's cached activations over its detection-mask tokens."""
+    pooled: list[np.ndarray] = []
+    kept: list[int] = []
+    for example in iter_cached_examples(dataset, experiment, model_name, layers):
+        kept.append(example.index)
+        pooled.append(example.acts[example.mask].float().mean(0).squeeze(0).numpy())
     labels = [dataset.labels[i].name for i in kept]
     return np.stack(pooled).astype(np.float32), labels
 

@@ -51,7 +51,10 @@ evidence that 40 is a maximum rather than the start of a ramp.
 ## What does not
 
 - **CG degrades monotonically with depth** under every persona arm: zero-shot extended axis
-  0.969 → 0.912 → 0.859. It is the only dataset that does.
+  0.969 → 0.912 → 0.859. It is the only dataset that does. *(Update: this is a pooling artifact.
+  Read at the per-example maximum instead of the mean, CG does not degrade — 0.954 → 0.993 →
+  0.991 — because at depth its lie is carried by a few tokens that the mean dilutes. See
+  `../persona_positions_L40/summary.md`.)*
 - **`pc3` on the original bank keeps falling**: 0.6792 → 0.6394 → 0.6166, and `dec3_orth` with it
   (0.6549 → 0.6015 → 0.5295).
 - **The sycophancy arms jump at 44**: `syc_pc1` reaches 0.8586 off-diagonal, up from 0.6618 at
