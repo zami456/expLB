@@ -3397,3 +3397,61 @@ slice is a point estimate that does not survive any of them.
   permutation loop; F-76 used dataset-PCA. (3) 20 layers on passA, mean pooling, k = 5.
 - **supersedes:** the last open item in `docs/LAYER_PREREGISTRATION.md`.
 - **status:** verified
+
+---
+
+### F-85 · 2026-09-21 · **Tier 0.1 — on the collaborator's six datasets, pooled training reaches 0.868–0.893, and the abstract's advantage shrinks from +0.184 to +0.023**
+
+The draft abstract reports a zero-shot 1-D persona contrast at **0.904 (L20)** and **0.916 (L40)**
+against single-source trained probes at **0.648** and **0.732**, on six Liars' Bench datasets
+(the six exclude `sycophancy_mt`). The comparison has never been made against a *pooled* probe.
+Run now, same six, same layers, `run-premise/six/`.
+
+| | L20 | L40 |
+|---|---:|---:|
+| single-source, off-diagonal | 0.6439 | 0.6960 |
+| **pooled leave-one-dataset-out** | **0.7365** | **0.8683** |
+| **pooled LODO, row-budget matched** | **0.7654** | **0.8930** |
+| pooled including the target (not transfer) | 0.9630 | 0.9862 |
+| single-source, own dataset | — | 0.9852 |
+
+**What this does to the headline.** Against a single-source probe the abstract's contrast leads
+by **+0.184** at L40. Against a pooled probe on the same six datasets it leads by **+0.023**.
+
+| comparison at L40 | margin |
+|---|---:|
+| 0.916 vs single-source 0.732 (the abstract) | **+0.184** |
+| 0.916 vs pooled LODO 0.868 | +0.048 |
+| **0.916 vs pooled row-matched 0.893** | **+0.023** |
+
+**On our own grid the contrast loses outright.** Our zero-shot contrast on the same six at L40
+reads **0.811** (F-briefing, re-read from `banks/kd_s23/matrices/mean_L40_s42.json`), against
+pooled row-matched at **0.893**. Like-for-like on our data, at their layer, on their datasets,
+**pooled training beats the persona contrast by 0.082**.
+
+**Layer 20 is where the claim is strongest.** There the contrast's 0.904 against pooled 0.765
+leaves **+0.139** — a real margin. Whatever survives of the headline lives at L20, not L40,
+which inverts the abstract's own emphasis (it reports L40 as the better number).
+
+**An oddity worth flagging: the row-matched pooled probe BEATS the full one**, at both layers
+(0.893 vs 0.868 at L40; 0.765 vs 0.737 at L20). Fewer training rows, better transfer. The likely
+cause is that `pooled_full` inherits the corpus's size imbalance — `instructed-deception` has
+5,432 rows against `ai_liar`'s 270 — so the large datasets dominate the fit, while the
+row-matched version draws equally from each source. If so, **equal representation matters more
+than volume**, which is a sharper version of F-80's diversity finding and was not predicted.
+
+- **source:** `run-premise/six/premise_L{20,40}_mean_s42.json`;
+  `src/assistant_axis_ndif/30_premise.py`.
+- **caveats:** (1) our absolute numbers are not the abstract's — different bank, possibly
+  different pooling and probe — so the honest comparison is **our pooled against our contrast**
+  (0.893 vs 0.811), with the abstract's own numbers inserted only to show the *direction* of the
+  effect. (2) one seed, two layers. (3) no dataset-level bootstrap on the six yet; n = 6 is a
+  very small resampling unit and the interval would be wide. (4) the row-matched-beats-full
+  result is one observation at two layers and is a hypothesis, not a finding.
+- **status:** verified
+
+**What to tell the collaborator.** Not "the headline is wrong" — at L20 it holds with room, and
+the contrast has a genuine structural advantage in needing no training set at all. But the
+comparison that makes it look decisive is against the weakest available baseline, and at L40 —
+the layer the abstract foregrounds — the advantage is +0.023 against a pooled probe, or negative
+against our own contrast number. That has to be in the paper before a reviewer finds it.
