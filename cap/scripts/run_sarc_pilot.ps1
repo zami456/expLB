@@ -85,9 +85,21 @@ if (Test-Path $rep) {
     # The gate passed while the check that decides the experiment failed -- the third instance of
     # that error in one day (see `gates-must-assert-their-own-number`). An on-policy GO now
     # requires a low marker rate AND low separability; either one failing forces teacher-forcing.
-    $sep = if ($j.lexical) { [double]$j.lexical.auroc_stripped } else { [double]::NaN }
+    # Read the SAME number the scorer's own verdict reads. Until 2026-09-22 this took
+    # `lexical.auroc_stripped` (all variants, 0.947) while score_sarcasm_markers.py took the
+    # unmarked subset (v4+v5, 0.921). Both exceeded 0.65, so the two verdicts agreed -- by
+    # luck, not by construction. With unmarked=0.60 against all=0.70 they would have disagreed,
+    # one gate PASSing and the other FAILing on a quantity of the same name. The unmarked
+    # subset is the right input: the gate asks whether the arms are alike once markers are
+    # gone, so it must be read where they are gone. Falls back to the all-variant figure for
+    # reports written before `lexical_subsets` existed.
+    $sepRow = $j.lexical_subsets | Where-Object {
+        $_.pair -eq 'ironic vs sycophant' -and $_.subset -like 'unmarked*' } | Select-Object -First 1
+    if ($sepRow) { $sep = [double]$sepRow.auroc_stripped; $sepSrc = $sepRow.subset }
+    elseif ($j.lexical) { $sep = [double]$j.lexical.auroc_stripped; $sepSrc = "all variants" }
+    else { $sep = [double]::NaN; $sepSrc = "unavailable" }
     Gate "3a markers" ("lowest ironic marker rate={0:N2}" -f $best) "<=0.20" ($best -le 0.20)
-    Gate "3b separability" ("bag-of-words AUROC, markers stripped={0:N3}" -f $sep) "<=0.65" ($sep -le 0.65)
+    Gate "3b separability" ("bag-of-words AUROC on $sepSrc, markers stripped={0:N3}" -f $sep) "<=0.65" ($sep -le 0.65)
     if ($j.lexical) {
         Note ("  raw={0:N3} stripped={1:N3} marker effect={2:N3}  (near 0.5 = arms textually alike," -f `
               $j.lexical.auroc_raw, $j.lexical.auroc_stripped, $j.lexical.marker_effect)

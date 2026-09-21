@@ -4928,3 +4928,66 @@ re-trigger to prove, and one of the two turned out not to be deployed at all.
   overwritten that mattered; a future audit could find the reverse and must check direction
   before copying.
 - **status:** verified; all four deployed and hash-matched.
+
+---
+
+### F-105 · 2026-09-22 · **F-93 re-verified from raw responses: all four separability rows and both feature lists reproduce exactly — but none of them is persisted, and its polarity reading does not survive its own control**
+
+Writing the sarcasm pilot up as a thesis section (`docs/thesis/sarcasm-pilot-negative-result.md`)
+required checking F-93 against primary data rather than the ledger. Two things came out of it,
+one reassuring and one a correction.
+
+**1. The numbers are right, and were nearly un-checkable.** `marker_report.json` contains exactly
+**one** separability figure — the all-variant pair, `auroc_raw 0.9525`, `auroc_stripped 0.9472`,
+n=200 — and `score_sarcasm_markers.py` has **no subset flag and no coefficient output**. F-93's
+other three rows and its two feature lists could not be produced by the saved tooling at all.
+Re-derived by importing the scorer's own `strip_question`, `bow` and `grouped_auc` and re-running
+them over `cap/run-sarc-pilot/responses/` (300 rows):
+
+| subset | pair | raw | stripped | n | F-93 claimed |
+|---|---|---:|---:|---:|---|
+| all v1–v5 | ironic vs sycophant | 0.953 | 0.947 | 200 | 0.953 / 0.947 ✓ |
+| v1 only | ironic vs sycophant | 1.000 | 1.000 | 40 | 1.000 / 1.000 ✓ |
+| **v4+v5** | ironic vs sycophant | **0.919** | **0.921** | 80 | 0.919 / 0.921 ✓ |
+| v4+v5 | ironic vs sincere | 0.997 | 0.996 | 80 | 0.997 / 0.996 ✓ |
+
+**All four to three decimals.** The feature lists too: top-12 coefficients on the v4+v5 stripped
+model are `of, that's, undoubtedly, ability, i, i'm, fact, decision, like, a, that, in` (ironic)
+against `plan, good, can, get, off, you're, straightforward, you, more, if, getting, you've`
+(sycophant) — all ten words F-93 quoted appear in the top-25 of their side. The
+abstract/first-person vs concrete/second-person reading is directly visible in the coefficients.
+
+**So F-93 stands. The gap is reproducibility, not correctness:** the decisive number of the
+experiment that killed the sarcasm bank lives only in a chat transcript. `score_sarcasm_markers.py`
+should persist the per-subset rows and top features.
+
+**2. Its polarity amendment is over-read, and the control refutes it.** F-93's amendment argued
+that strengthening the deadpan instruction makes the ironic arm *less legibly ironic*
+(2.85 → 2.10) while the sycophantic arm becomes more sycophantic (2.45 → 2.80), calling this
+"two independent lines pointing the same way". The full table from `logs/sarc_pilot_markers.log`:
+
+| arm | v1 | v2 | v3 | v4 | v5 |
+|---|---:|---:|---:|---:|---:|
+| `pc_ironic_critic` | 2.85 | 2.85 | 2.60 | 2.55 | **2.10** |
+| **`pc_sincere_critic`** | **2.85** | 2.25 | 2.40 | 2.25 | **2.10** |
+| `pc_sycophant` | 2.45 | 2.25 | 2.55 | 2.15 | **2.80** |
+
+**The sincere arm declines over the same range to the same value.** Its instruction says nothing
+about markers or irony, so a decline shared by both critic arms is better explained as a general
+effect of longer, more constrained system prompts on judged role adherence than as irony-specific
+degradation. The sycophantic "rise" is also non-monotone and rests on its last cell alone. The
+amendment's second line of evidence is therefore **withdrawn**; what survives is the weaker
+statement that at v5 role legibility is lowest while lexical separability is not.
+
+**F-93's verdict is unaffected** — it rests on G2 (0.921 against a pre-registered ≤0.65), which
+is confirmed above. Only the supporting narrative changes.
+
+- **source:** `cap/run-sarc-pilot/responses/*.jsonl` (300 rows), re-scored with
+  `cap/scripts/score_sarcasm_markers.py` functions; `cap/run-sarc-pilot/marker_report.json`;
+  `logs/sarc_pilot_markers.log`.
+- **caveats:** (1) the re-derivation uses the same code path as the original, so it confirms
+  arithmetic and data, not the method. (2) coefficients are from a single fit on all 80 rows
+  (no grouped CV), so the feature ranking is indicative. (3) the judge is role-adherence, not the
+  design's blind five-rating protocol — as F-93 already noted.
+- **amends:** F-93's amendment (the polarity trend), not its verdict.
+- **status:** verified

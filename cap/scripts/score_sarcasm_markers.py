@@ -197,6 +197,85 @@ def main() -> None:
                              "marker_effect": a_raw - a_str, "n": len(pair)}
         print("   reading: near 0.5 with markers removed = the arms are textually alike, which")
         print("            is the premise the factorial needs. Near 1.0 = a lexical detector.")
+
+        # ---- 2b. the same measurement per variant subset, PERSISTED -----------------------
+        # Until 2026-09-22 only the all-variant number above reached marker_report.json, and
+        # this script had no subset flag and no coefficient output. The three rows that carry
+        # the argument -- most of all the MARKER-FREE subset, which is the one the gate is
+        # really about -- were computed ad hoc and lived only in a chat transcript (F-105).
+        # They re-derived exactly when checked, but a decisive number that cannot be re-run
+        # from the artifact is not a result. Subsets are derived from the measured marker
+        # rates, not hardcoded to v4+v5, so they stay correct if the variants change.
+        ir_rates = report["markers"].get("pc_ironic_critic", {}).get("per_variant") or []
+        unmarked = [v for v, c in enumerate(ir_rates) if c is not None and c == 0.0]
+        worst = (max(range(len(ir_rates)),
+                     key=lambda v: (ir_rates[v] if ir_rates[v] is not None else -1))
+                 if ir_rates else None)
+        subsets = [("all", sorted({r["variant"] for r in rows}))]
+        if worst is not None:
+            subsets.append((f"most_marked(v{worst + 1})", [worst]))
+        if unmarked:
+            subsets.append(("unmarked(v" + ",v".join(str(v + 1) for v in unmarked) + ")",
+                            unmarked))
+
+        report["lexical_subsets"] = []
+        print("\n   per subset and pair (grouped by item; 'unmarked' = ironic marker rate 0.00):")
+        print(f"   {'subset':<22}{'pair':<26}{'raw':>7}{'stripped':>10}{'n':>6}")
+        for other, plabel in (("pc_sycophant", "ironic vs sycophant"),
+                              ("pc_sincere_critic", "ironic vs sincere")):
+            for slabel, vs in subsets:
+                sub = [r for r in rows
+                       if r["role"] in ("pc_ironic_critic", other) and r["variant"] in vs]
+                if len({r["role"] for r in sub}) != 2 or len(sub) < 8:
+                    continue
+                ys = [1 if r["role"] == "pc_ironic_critic" else 0 for r in sub]
+                gs = [r["qid"] for r in sub]
+                ts = [r["clean"] for r in sub]
+                s_raw = grouped_auc(bow(ts, False), ys, gs)
+                s_str = grouped_auc(bow(ts, True), ys, gs)
+                report["lexical_subsets"].append(
+                    {"pair": plabel, "subset": slabel, "variants": [v + 1 for v in vs],
+                     "auroc_raw": s_raw, "auroc_stripped": s_str,
+                     "marker_effect": s_raw - s_str, "n": len(sub)})
+                print(f"   {slabel:<22}{plabel:<26}{s_raw:>7.3f}{s_str:>10.3f}{len(sub):>6}")
+
+        # ---- 2c. WHICH WORDS separate the arms, PERSISTED --------------------------------
+        # The gate answers "are the arms separable". This answers "by what", which is the part
+        # that makes the failure interpretable: if the discriminating features are ordinary
+        # content and function words rather than irony markers, the arms differ in REGISTER and
+        # a direction fit on them would be a style axis -- the exact failure the bank exists to
+        # diagnose. Single fit on the whole subset, no CV, so this ranks features; it does not
+        # estimate generalisation. The AUROCs above do that.
+        from sklearn.linear_model import LogisticRegression
+
+        feat_vs = unmarked or sorted({r["variant"] for r in rows})
+        fsub = [r for r in rows
+                if r["role"] in ("pc_ironic_critic", "pc_sycophant") and r["variant"] in feat_vs]
+        if len({r["role"] for r in fsub}) == 2 and len(fsub) >= 8:
+            ftexts = [r["clean"] for r in fsub]
+            vocab: dict[str, int] = defaultdict(int)
+            for t in ftexts:
+                for x in {w for w in WORD.findall(t.lower()) if w not in MARKER_TOKENS}:
+                    vocab[x] += 1
+            keep = sorted([w for w, c in vocab.items() if c >= 3])
+            Xf = bow(ftexts, True)
+            yf = np.array([1 if r["role"] == "pc_ironic_critic" else 0 for r in fsub])
+            if Xf.shape[1] == len(keep) and len(np.unique(yf)) == 2:
+                clf = LogisticRegression(max_iter=2000, C=1.0, random_state=42).fit(Xf, yf)
+                order = np.argsort(clf.coef_[0])
+                top_n = 15
+                ironic = [[keep[i], float(clf.coef_[0][i])] for i in order[::-1][:top_n]]
+                syco = [[keep[i], float(clf.coef_[0][i])] for i in order[:top_n]]
+                report["lexical_features"] = {
+                    "subset": "unmarked" if unmarked else "all",
+                    "variants": [v + 1 for v in feat_vs], "n": len(fsub),
+                    "vocab": len(keep), "markers_stripped": True, "cv": False,
+                    "ironic_side": ironic, "sycophant_side": syco}
+                print(f"\n   what separates them (top {top_n}, markers stripped, single fit):")
+                print("   ironic    : " + ", ".join(w for w, _ in ironic))
+                print("   sycophant : " + ", ".join(w for w, _ in syco))
+                print("   ordinary content and function words here = a REGISTER difference,")
+                print("   which is what would make an extracted direction a style axis.")
     else:
         print("   both arms not present; skipped")
 
@@ -240,14 +319,38 @@ def main() -> None:
     print(f"\nwrote {out}")
 
     # ---- the decision the pilot exists to make ---------------------------------------------
+    # BOTH gates decide this, not the marker rate alone. The first version printed
+    # "PRODUCIBLE; build the factorial" whenever markers were suppressed, while separability --
+    # the check that actually decides whether an extracted direction would be lexical -- was
+    # merely reported a few lines above. On 2026-09-21 that produced exactly the wrong verdict
+    # next to a measured 0.947 (F-104 fixed the same fault in the PowerShell wrapper; this is
+    # the same fault in the instrument the wrapper calls, so a direct run stayed wrong until
+    # 2026-09-22). Separability is read from the UNMARKED subset when one exists, because
+    # "are the arms alike once markers are gone" is the question, and falls back to the
+    # all-variant figure otherwise.
+    SEP_MAX = 0.65
     ir = report["markers"].get("pc_ironic_critic")
+    sep_row = next((s for s in report.get("lexical_subsets", [])
+                    if s["pair"] == "ironic vs sycophant" and s["subset"].startswith("unmarked")),
+                   None)
+    sep = (sep_row or report.get("lexical") or {}).get("auroc_stripped")
+    sep_src = sep_row["subset"] if sep_row else "all variants"
     if ir:
         best = min([c for c in ir["per_variant"] if c == c] or [1.0])
         print("\nPILOT VERDICT")
-        print(f"  lowest marker rate across the five ironic variants: {best:.2f}")
-        if best <= 0.20:
-            print("  => on-policy deadpan is PRODUCIBLE; build the factorial on the variant that")
-            print("     achieved it, and keep the marker check as a per-item filter.")
+        print(f"  gate 1  lowest ironic marker rate      {best:.2f}   (need <= 0.20)")
+        if sep is None:
+            print("  gate 2  separability                   n/a    (arms missing)")
+        else:
+            print(f"  gate 2  separability, {sep_src:<16} {sep:.3f}  (need <= {SEP_MAX:.2f})")
+        if best <= 0.20 and sep is not None and sep <= SEP_MAX:
+            print("  => ON-POLICY GO. Deadpan is producible AND the arms are textually alike;")
+            print("     build the factorial on the marker-free variants.")
+        elif best <= 0.20 and sep is not None:
+            print(f"  => TEACHER-FORCED. Markers are suppressed, but the arms remain separable at")
+            print(f"     {sep:.3f} on words alone, so a direction fit on them would be mostly")
+            print("     lexical -- a register axis, which is the failure this bank exists to")
+            print("     diagnose. See the feature lists above for what carries the separation.")
         elif best <= 0.50:
             print("  => PARTIAL. Deadpan is producible but not reliably. Filtering to marker-free")
             print("     responses is possible but selects on the dependent variable -- prefer")
