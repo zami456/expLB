@@ -20,6 +20,7 @@ import yaml
 from tqdm import tqdm
 
 from deception_detection import acts_cache
+from deception_detection.activations import cache_entries
 from deception_detection.data.base import DialogueDataset
 from deception_detection.experiment import Experiment, ExperimentConfig
 from deception_detection.log import logger
@@ -40,6 +41,11 @@ def pool_dataset(
     Tokenising the whole dataset at once is safe even though the cache was written from shards:
     the key is built from an example's *unpadded* tokens, and padding to a different batch width
     does not change those.
+
+    Keys come from `cache_entries`, the same function extraction used to write them, so a run
+    in tail mode (`acts_positions: "tail"`) is read back from its tail entries. Each entry holds
+    a row's final `kept_len` positions, and the detection mask is cut to those same positions
+    before averaging -- for the follow-up protocol, exactly the prefilled answer token.
     """
     toks = TokenizedDataset.from_dataset(
         dataset,
@@ -50,8 +56,9 @@ def pool_dataset(
     )
     assert toks.detection_mask is not None, f"{dataset.name} has no detection mask"
 
-    tokens, attn, mask = toks.tokens, toks.attention_mask, toks.detection_mask
-    n, padded_len = tokens.shape
+    mask = toks.detection_mask
+    n, padded_len = toks.tokens.shape
+    keys, kept_lens = cache_entries(toks, model_name, layers, experiment.cfg.acts_positions)
 
     pooled: list[np.ndarray] = []
     misses: list[int] = []
@@ -59,15 +66,13 @@ def pool_dataset(
     empty_masks = 0
 
     for i in tqdm(range(n), desc=f"pooling {dataset.name}", unit="ex"):
-        true_len = int(attn[i].sum().item())
-        start = padded_len - true_len  # left padding: real tokens are the final true_len columns
-        key = acts_cache.example_key(tokens[i, start:], model_name, layers)
-        acts = acts_cache.load(key, true_len)
+        acts = acts_cache.load(keys[i], kept_lens[i])
         if acts is None:
             misses.append(i)
             continue
 
-        row_mask = mask[i, start:].bool()
+        # left padding: the entry is the row's final kept_len columns, so the mask is too
+        row_mask = mask[i, padded_len - kept_lens[i] :].bool()
         if not bool(row_mask.any()):
             # No response tokens are marked, so there is nothing to pool "over the output tokens
             # only". Falling back to every attended token would quietly average prompt

@@ -56,6 +56,42 @@ def detected_tail_lengths(tokenized_dataset: TokenizedDataset) -> list[int]:
     return lengths
 
 
+def cache_entries(
+    tokenized_dataset: TokenizedDataset,
+    model_key: str,
+    layers: list[int] | None,
+    positions: str = "all",
+) -> tuple[list[str], list[int]]:
+    """Each example's cache key, and how many trailing positions its entry holds.
+
+    The one place a key is derived. Extraction writes entries under these keys and pooling
+    reads them back, so both call this rather than rebuilding it: a reader that derived keys
+    even slightly differently would miss on every example. With ``positions="all"`` an entry
+    holds the whole unpadded row; with ``"tail"``, the suffix that holds its detected tokens.
+    """
+    if positions not in ("all", "tail"):
+        raise ValueError(f"positions must be 'all' or 'tail', got {positions!r}")
+    tokens, attn_mask = tokenized_dataset.tokens, tokenized_dataset.attention_mask
+    n_examples, padded_len = tokens.shape
+    # Padding is on the left, so each row's real tokens are its final true_len columns.
+    true_lens = [int(attn_mask[i].sum().item()) for i in range(n_examples)]
+    if positions == "tail":
+        tails = detected_tail_lengths(tokenized_dataset)
+        kept_lens = [min(tails[i], true_lens[i]) for i in range(n_examples)]
+    else:
+        kept_lens = true_lens
+    keys = [
+        acts_cache.example_key(
+            tokens[i, padded_len - true_lens[i] :],
+            model_key,
+            layers,
+            f"tail{kept_lens[i]}" if positions == "tail" else "all",
+        )
+        for i in range(n_examples)
+    ]
+    return keys, kept_lens
+
+
 @dataclass
 class Activations:
     """
@@ -114,28 +150,12 @@ class Activations:
         attn_mask = tokenized_dataset.attention_mask
         n_examples, padded_len = tokens.shape
         # Padding is on the left, so each row's real tokens are its final true_len columns.
+        # true_lens sizes the remote calls, since the forward pass spans the full row; what is
+        # kept per example (kept_lens) is the whole row or the suffix holding its detected
+        # tokens.
         true_lens = [int(attn_mask[i].sum().item()) for i in range(n_examples)]
-        # What is kept per example: the whole unpadded row, or the suffix that holds its
-        # detected tokens. true_lens still sizes the remote calls -- the forward pass spans
-        # the full row either way.
-        if tail_only:
-            tails = detected_tail_lengths(tokenized_dataset)
-            kept_lens = [min(tails[i], true_lens[i]) for i in range(n_examples)]
-        else:
-            kept_lens = true_lens
-
         model_key = str(model.name_or_path)
-        keys = [
-            acts_cache.example_key(
-                tokens[i, padded_len - true_lens[i] :],
-                model_key,
-                layers,
-                f"tail{kept_lens[i]}" if tail_only else "all",
-            )
-            if use_cache
-            else ""
-            for i in range(n_examples)
-        ]
+        keys, kept_lens = cache_entries(tokenized_dataset, model_key, layers, positions)
 
         # Filled from cache where possible, from the model otherwise; unpadded per example.
         per_example: list[Tensor | None] = [None] * n_examples

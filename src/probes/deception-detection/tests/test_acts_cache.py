@@ -467,6 +467,85 @@ class TestBatchInvarianceLive:
         )
 
 
+class TestPoolingReadsWhatExtractionWrote:
+    """pool_dataset must find entries under the keys extraction wrote them to.
+
+    Before tail mode the pooler rebuilt full-sequence keys itself, so a tail-mode run's entries
+    would have missed on every example. Entries here are written with the extraction-side key
+    formula directly, so these fail if the pooler's key derivation ever drifts from it.
+    """
+
+    # same follow-up shape as the extraction tests: detected answer, then the kept eot
+    TOKENS = torch.tensor([[0, 0, 11, 12, 13], [21, 22, 23, 24, 25]])
+    ATTENTION = torch.tensor([[0, 0, 1, 1, 1], [1, 1, 1, 1, 1]])
+    DETECT = torch.tensor([[0, 0, 0, 1, 0], [0, 0, 0, 1, 0]])
+    MODEL = "fake/llama-70b-3.3"
+
+    def pool(self, monkeypatch, positions: str):
+        from types import SimpleNamespace
+
+        from deception_detection.scripts import pool_activations
+        from deception_detection.types import Label
+
+        tokenized = TestFromModelUsesTheCache.build_tokenized(
+            self.TOKENS, self.ATTENTION, self.DETECT
+        )
+        monkeypatch.setattr(
+            pool_activations.TokenizedDataset, "from_dataset", lambda *a, **k: tokenized
+        )
+        cfg = SimpleNamespace(
+            acts_positions=positions,
+            detect_all_tokens=False,
+            detect_only_start_of_turn=False,
+            detect_only_last_token=False,
+        )
+        dataset = SimpleNamespace(name="test__plain", labels=[Label.HONEST, Label.DECEPTIVE])
+        experiment = SimpleNamespace(tokenizer=None, cfg=cfg)
+        return pool_activations.pool_dataset(dataset, experiment, self.MODEL, [20])
+
+    def test_tail_run_pools_exactly_the_detected_answer_token(self, monkeypatch):
+        tails = [make_acts(2) + 100 * i for i in range(2)]
+        for i, tail in enumerate(tails):
+            true_len = int(self.ATTENTION[i].sum())
+            key = acts_cache.example_key(
+                self.TOKENS[i, 5 - true_len :], self.MODEL, [20], f"tail{len(tail)}"
+            )
+            acts_cache.store(key, tail)
+
+        pooled, labels = self.pool(monkeypatch, "tail")
+
+        assert labels == ["HONEST", "DECEPTIVE"]
+        # the detected token is the first of each two-position tail; the eot is not pooled
+        for i, tail in enumerate(tails):
+            torch.testing.assert_close(torch.from_numpy(pooled[i]), tail[0, 0])
+
+    def test_tail_run_refuses_rather_than_reading_full_sequence_entries(self, monkeypatch):
+        for i in range(2):
+            true_len = int(self.ATTENTION[i].sum())
+            acts_cache.store(
+                acts_cache.example_key(self.TOKENS[i, 5 - true_len :], self.MODEL, [20]),
+                make_acts(true_len),
+            )
+        with pytest.raises(RuntimeError, match="missing from the cache"):
+            self.pool(monkeypatch, "tail")
+
+    def test_full_sequence_runs_still_pool_as_before(self, monkeypatch):
+        full = []
+        for i in range(2):
+            true_len = int(self.ATTENTION[i].sum())
+            acts = make_acts(true_len) + 100 * i
+            acts_cache.store(
+                acts_cache.example_key(self.TOKENS[i, 5 - true_len :], self.MODEL, [20]), acts
+            )
+            full.append(acts)
+
+        pooled, _ = self.pool(monkeypatch, "all")
+
+        # the detected column is second from the end, whatever the row's padding
+        for i, acts in enumerate(full):
+            torch.testing.assert_close(torch.from_numpy(pooled[i]), acts[-2, 0])
+
+
 @pytest.mark.slow
 class TestTailExtractionLive:
     """Tail extraction must return exactly what full extraction holds at those positions.
