@@ -2917,3 +2917,65 @@ dataset-level interval of [−0.069, +0.189]."*
 **every headline this project has put through a properly-clustered test has failed it.** That is
 the thesis's own argument turned on the thesis, arrived at by a rule written down before the
 numbers were seen — which is the strongest form the argument can take.
+
+---
+
+### F-77 · 2026-09-21 · **The cap result survives the test that killed F-03: positive at 21/21 layers, and it clears at the pre-specified layer**
+
+F-76 put the kd matched-slice claim through a dataset-level bootstrap with the full layer profile
+in view and it failed — margin at L40 not distinguishable from zero, argmax unidentified across
+93% of the network. The same treatment, applied to the cap bank, gives the opposite answer.
+
+`pc:capitulation@2` on `sycophancy_mt` (as target), against `datapca@2` at matched k, all 21
+stored layers:
+
+| | kd matched slice (F-76) | **cap bank (this)** |
+|---|---|---|
+| layers with a positive margin | 37/80 (46%) | **21/21 (100%)** |
+| longest contiguous positive run | — | **21** |
+| margin at pre-specified L40 | +0.066 | **+0.1542** |
+| 95% dataset-level CI | [−0.069, +0.189] | **[+0.0913, +0.2113]** |
+| P(margin ≤ 0) | 0.161 | **0.0000** |
+| verdict | does not clear | **CLEARS** |
+| argmax 95% interval | [L5, L79], 93% of range | **[L28, L60]** |
+
+**Every stored layer is positive**, against both raw (+0.005 to +0.139) and the matched control
+(+0.012 to +0.175). There is no layer at which this bank's advantage disappears. That is what
+depth-robustness actually looks like, and it is the contrast that makes F-76 interpretable rather
+than merely disappointing: the same pipeline, the same bootstrap, the same pre-specified layer —
+one claim survives and one does not.
+
+**The shape:** margin rises from +0.012 at L12 to a peak around **L32 (+0.175)**, then declines
+gently and **never crosses zero**, still +0.108 at L76. Argmax median **L36**, with L40 inside
+the interval.
+
+**My written prediction was partly wrong, and the way it was wrong matters.** `run_cap_layers.ps1`
+predicted *"positive across roughly L22–L48, falling off at both ends, with the late layers (L60+)
+closer to zero than negative."* The first half holds. **The second half does not** — the late
+layers stay at **+0.12 to +0.17**, higher than the early ones, and nothing falls off. I expected a
+band and got a plateau covering the whole network. Recording this because a prediction that is
+wrong in the direction of a *stronger* result is exactly as much a prediction failure as the
+other direction, and the habit only works if both get written down.
+
+- **source:** `cap/scripts/cap_layer_profile.py` over
+  `run-crossgen/kd11/banks/cap_s23/matrices/mean_L*_s42.json`, 21 layers; B = 10,000, seed 42,
+  resampling the 10 source datasets.
+- **caveats:** (1) **F-67 still stands and bounds this.** The gain is *local* to `sycophancy_mt`,
+  the dataset the bank was designed against; over the full 11-dataset off-diagonal mean the
+  margin over raw is +0.098 with a CI including zero. Depth-robust does not mean
+  construct-general. (2) L40 is pre-specified for this bank by the same literature argument as
+  elsewhere (Assistant Axis midpoint), and the argmax lands on it in only 3.9% of resamples — so
+  quote the *band*, not L40 as the best layer. (3) 21 layers here against 80 for passA: passB
+  stores fewer, so the cap profile is coarser and cannot resolve a narrow feature. (4) single
+  seed. (5) the cluster-based permutation test is still not run for either bank.
+- **supersedes:** nothing. **Bounds** F-66 by showing its margin is not layer-contingent, and
+  **contrasts** with F-76.
+- **status:** verified
+
+**What this does to the thesis.** After three self-corrections today (F-73, F-74, F-76) the
+pattern looked like "every headline fails a properly-clustered test." That reading was premature.
+**One headline survives it**: the capitulation bank, built to vary the construct the dataset
+labels, beats its matched control at every stored depth with a dataset-level interval that
+excludes zero. The honest summary is now sharper than either extreme — *persona axes fail when
+the personas vary register rather than the labelled construct, and work when they vary the
+construct, and the difference is visible under the same test that destroys the weaker claim.*
