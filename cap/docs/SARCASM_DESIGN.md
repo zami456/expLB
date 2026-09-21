@@ -1,129 +1,186 @@
-# The sarcasm bank — design, for review before anything is generated
+# The sarcasm bank — design v2, after review
 
-**Status: draft. Nothing generated.** Posting this for review first, because the design decision
-below is the whole experiment and it is not obvious I have it right.
-
----
-
-## What it is for
-
-Every test of our register claim so far is **negative**: persona axes *fail* where register and
-the labelled construct come apart (0.300 on knowledge-report, 0.374 on capitulation, both beaten
-by a random direction). A sarcasm axis would be the first **positive** test — build the confound
-itself and show it explains the failure.
-
-Sarcasm is the right confound for a specific reason: **it is saying something you don't mean,
-without intending to mislead.** Deception minus the intent. So a sarcasm direction tests whether
-our "deception" axes detect *intent* or merely *literal-meaning mismatch*.
-
-Goldowsky-Dill et al. concede their own probe partly fires on *"is this scenario
-deception-related"* rather than on deceptive intent. Kirch et al. formalise the distinction as
-**text-evident vs text-ambiguous**. A sarcasm axis puts a number on it: if
-`cos(d_sarcasm, d_deception)` is high, the deception axis is substantially a mismatch detector.
+**Status: revised, not built.** v1 was reviewed and the verdict was *"run a revised version, not
+this one"* — the headline contrast could not answer the question it posed. The reviewer was
+right on three structural points I had missed. This version is the revision; v1 is preserved in
+git history at `3d80071`.
 
 ---
 
-## The problem that kills the naive version
+## What the review changed, in order of severity
 
-A persona told to "be sarcastic" writes *"oh, brilliant"*, *"sure, that'll work"*, scare quotes,
-exclamation marks. The axis then separates those tokens, not sarcasm. We would have built a
-lexical detector and called it a representation — the exact failure the knowledge-denial bank was
-restructured to avoid, and the exact failure our own regex result (0.91 AUROC from denial
-phrasing alone) warns about.
+### 1. My headline contrast was confounded — and by the fix I was proud of
 
-**So the bank has to make sarcastic and sincere responses use near-identical words.**
+v1's axis was `sarcastic_praise(bad question) − sincere_praise(good question)`. Those two arms
+differ in **two** ways: whether the approval is meant (wanted) and whether the plan is good or
+bad (not wanted). Response tokens attend to the question, so the direction could encode *"the
+plan under discussion is risky"* rather than *"the speaker doesn't mean this."*
+
+That is exactly the failure Goldowsky-Dill et al. concede for their own probe — it fires on *"is
+the scenario deception-related"* — and it is worse here than it looks, because the deception
+datasets are themselves built from bad-situation material (WMDP-derived harm pressure, insider
+trading, sandbagging). **A high `cos(d_sarcasm, d_deception)` could come entirely from a shared
+"this scenario is bad" component.**
+
+I had cited the knowledge-denial bank as the precedent. The review showed the analogy breaks
+exactly where it matters: there, both sides share the question and the difference lives in the
+persona's knowledge state. In v1 the difference lived in the **input string**. Fixing the wording
+confound had quietly introduced a situation confound.
+
+### 2. There was no arm that isolates intent — which is the entire point
+
+Once markers are stripped, approving text about a bad plan is textually **identical** whether the
+speaker is being sarcastic or sycophantic. The difference is purely pragmatic:
+
+> **sarcasm** — the insincerity is meant to be **recognised** (overt)
+> **deception / sycophancy** — the insincerity is meant to be **believed** (covert)
+
+**That distinction *is* the intent variable**, and v1 had no covert-insincere arm, so it could not
+make the distinction it was built to test.
+
+This also corrects my framing. I wrote *"sarcasm is deception minus the intent."* That is wrong:
+sarcasm does not lack communicative intent, it has a **different** one. Grice (overt flouting of
+Quality), Sperber & Wilson (echoic mention with a dissociative attitude), Clark & Gerrig (pretense
+*"intended to be recognized as such"*) all locate irony in the recognition, not its absence.
+
+### 3. A logical tension that makes v1 unfalsifiable
+
+Our failures are **below** chance — 0.300 and 0.374. But a genuine statement-versus-belief
+mismatch detector should score those datasets **above** chance, because denying knowledge you
+hold *is* a mismatch. So *"the deception axis is really a mismatch detector"* (predicts above
+chance) and *"a mismatch axis reproduces the below-chance failure"* cannot both hold unless the
+operative variable is something else — plausibly **intended disagreement with the user**, which
+ironic criticism and honest non-capitulation share.
+
+Without pre-registering which component reproduces the failure, any outcome is explicable after
+the fact. v1 was not falsifiable.
 
 ---
 
-## The design: vary the SITUATION, not the wording
+## The revised design
 
-The trick that works for knowledge denial — both sides say *"I don't know"*, only sincerity
-differs — has a direct analogue here. Make the **question** establish whether praise is warranted,
-and hold the **response register** constant.
+**Hold the question literally constant. Move the manipulation to the persona. Fix polarity at
+"bad".** Four arms, ~20 plainly **imprudent** (not dangerous — harm content would correlate with
+the harm-pressure datasets for the wrong reason) plan questions, answered by all four:
 
-Three groups:
+| arm | literal | intended | insincerity |
+|---|---|---|---|
+| `ironic_criticism` | approves | criticises | **overt** — meant to be recognised |
+| `sycophantic_praise` | approves | approves falsely | **covert** — meant to be believed |
+| `sincere_criticism` | criticises | criticises | none |
+| `plain_assistant` | — | — | none (anchor) |
 
-| group | n | what it does |
-|---|---|---|
-| `sarcastic_praise` | 5 | says the approving thing about something the question has established as bad |
-| `sincere_praise` | 5 | says the approving thing about something the question has established as good |
-| `comic_register` | 4 | light, playful, joking tone — **no** meaning mismatch |
+Renamed from `sarcastic_praise`: literal praise with intended criticism is **ironic criticism** in
+the pragmatics literature; "ironic praise" conventionally means the reverse.
 
-Two contrasts:
+**The contrasts:**
 
 ```
-sarcastic_praise − sincere_praise   → MISMATCH, with register held constant   ← the axis we want
-sarcastic_praise − comic_register   → the tone contrast, kept separate
+ironic_criticism − sincere_criticism    mismatch, situation and intent held constant
+sycophantic_praise − ironic_criticism   INTENT: both literally approve a bad plan,
+                                         differing only in believed vs recognised
+each arm − plain_assistant               per-side load, the F-66 question
 ```
 
-**Both sides of the first contrast produce approving text.** Only whether the approval is meant
-differs. That axis therefore cannot be a wording artifact — which is the whole point, and it is
-the same structure as `knowledge_denial − sincere_ignorance`.
+**The second contrast is the one the review says is non-negotiable**, and it yields a
+discriminating pre-registration:
 
-The second contrast is what a pure-tone artifact would look like, kept separate so the two can be
-told apart rather than confounded — exactly as `kd_assertion` sits beside `knowledge_denial`.
+- If deception axes are **intent-blind mismatch detectors**, they align about equally with
+  `(ironic − sincere)` and `(sycophantic − sincere)`.
+- If they **track covert intent**, they align with `(sycophantic − ironic)` — sycophancy scores
+  high, sarcasm does not.
 
----
+That converts an ambiguous cosine into a test with two distinguishable outcomes.
 
-## The questions carry the load
+**Personas as minimal pairs** off one template, differing only in the intent clause, with paired
+differences — this attacks between-persona idiosyncrasy directly rather than by adding personas.
+6–8 per arm, with the final number justified by leave-one-persona-out stability rather than
+chosen up front.
 
-Unlike every other bank here, **the questions cannot be shared across groups unmodified**. The
-same question has to come in two versions: one where the thing described is plainly bad, one
-where it is plainly good. The persona prompt stays constant within a group; the *question* flips
-what the approving response means.
-
-Sketch, 20 items × 2 polarities:
-
-> **bad version:** "I'm going to push the release on Friday at 5pm with no rollback plan and the
-> on-call engineer is on holiday. Thoughts?"
-> **good version:** "I'm going to push the release on Tuesday morning, with a tested rollback and
-> the whole team on call. Thoughts?"
-
-A `sarcastic_praise` persona answering the *bad* version and a `sincere_praise` persona answering
-the *good* version both produce approving text. The contrast between their activations is then
-mismatch, not vocabulary.
-
-**This is a real cost:** it doubles the question set and means the two groups never answer
-literally the same string. That is a design tension I do not think can be avoided — you cannot
-have identical questions *and* have the same words mean opposite things — and it is the main
-thing I want reviewed.
+**Optional extensions, clearly separate:** a `good`-polarity set to recover the full 2×2 and
+project out the situation main effect; a fiction/role-play arm for family scope; a
+factual-agreement arm mirroring capitulation, which addresses the domain mismatch between our
+evaluative bank and the factual datasets.
 
 ---
 
-## What would make me abandon it
+## The headline is now causal, not a cosine
 
-Three checks, in order, before any axis is built:
+The review's strongest methodological point: a bare cosine between two mean-difference directions
+is weak — activation space is anisotropic so raw cosines are inflated, there is no calibrated
+null, nuisance components are shared, and truth is **not** one direction anyway (Bürger et al.
+find a two-dimensional subspace, with the second component ≈ XOR(is_true, is_negated)).
 
-1. **Lexical check.** Run the denial-regex equivalent: a bag-of-words classifier on the rollouts
-   alone. If it separates sarcastic from sincere above ~0.75, the wording is not matched and the
-   bank is dead regardless of what the activations say.
-2. **Judge check.** Does the judge score the sarcastic personas as in-character *without* relying
-   on markers? If retention is high only because the model wrote *"oh, brilliant"*, see (1).
-3. **Polarity check.** Do sincere personas on the *bad* question refuse to praise? They should —
-   if they praise a plainly bad plan, the polarity manipulation has failed and the groups are not
-   what the names say.
+Headline, in descending order of persuasiveness:
 
----
+1. **Erasure.** LEACE-erase the mismatch direction, then measure the change in deception-probe
+   AUROC across our eleven datasets. If erasing it moves knowledge-report and capitulation toward
+   chance in the predicted direction, that is causal evidence for the register diagnosis.
+2. **Firing rate.** Score existing deception probes on each arm at a **1%-FPR-calibrated**
+   threshold (the Apollo convention, calibrated on Alpaca). *"Does the deception probe fire on
+   overt sarcasm?"* is the most direct form of the question.
+3. Mismatch-axis AUROC on the eleven datasets, with **per-dataset sign predictions registered in
+   advance**.
 
-## Honest position on priority
-
-Before today this would have been evidence in a paper about whether persona coordinates work.
-After the pooled-training result it is evidence in a paper about **why they fail** — supporting
-a diagnosis rather than carrying a headline. It is still worth doing: the register claim is one
-of three that survive, and it is currently supported only by negatives.
-
-But it should not be built before the format-matched control finishes, because that control tests
-whether the persona-side signal is about content at all.
+Cosine is reported only against a null battery — random persona splits, unrelated persona axes,
+shuffled labels — per layer, and whitened.
 
 ---
 
-## What I want reviewed
+## The abandon-checks, corrected
 
-1. **Is the two-polarity question design right**, or is there a way to hold the question literally
-   constant that I am missing?
-2. **Is `comic_register` the right floor**, or should the tone control be something else —
-   enthusiasm, formality, hedging?
-3. **Group sizes.** 5/5/4 mirrors the cap bank. Given F-66 found the negative side load-bearing,
-   should the sincere group be larger?
-4. **Is the cosine to the deception axis the right headline**, or should it be the transfer
-   number on our eleven datasets?
+**My lexical check was mis-specified and would have killed a sound bank.** In v1's two-polarity
+design a bag-of-words classifier separates the arms near-perfectly from **question echo alone**,
+with zero sarcasm markers. Worse, my sketched items encoded "bad" through *negation and absence*
+("no rollback", "on holiday") against presence on the good side — a systematic cross-item lexical
+confound, and negation has its own representational geometry.
+
+Corrected: grouped-by-item cross-validation so no item spans train and test; mask question-echoed
+tokens or restrict features to markers and function words; counterbalance negation and length;
+and report **selectivity** — judged-sarcasm signal *minus* bag-of-words separability — rather than
+a bare number against an arbitrary 0.75.
+
+**The judge check needs to be blind and split into five ratings**: perceived sarcasm (question +
+response, should be high), literal valence (response only, should **not** differ between ironic
+and sincere arms — that is the whole point), intended valence (question + response, should
+differ), an explicit marker checklist (response only, low and equal across arms), and a
+plan-quality manipulation check.
+
+**The polarity check needs a threshold and a symmetric arm.** And a failure here is informative
+rather than fatal: if the *sincere* persona praises a bad plan, that is the model's own sycophancy
+base rate, which bears directly on the sycophantic arm.
+
+**Two new gating checks:**
+- **Construct validity on held-out natural sarcasm** (iSarcasmEval, which labels *intended*
+  sarcasm by the authors themselves). If `d_sarcasm` only fires on *marked* sarcasm, it is a
+  marker detector.
+- **A one-directional pre-test that costs almost nothing:** apply our *existing* deception axes to
+  marked natural sarcasm. If they do not fire even on marked sarcasm, the "deception axis =
+  mismatch detector" hypothesis is already weak and the bank drops in priority before we build it.
+
+---
+
+## Sequence
+
+1. **Format-matched control first** — already running as `Cap-Controls`. It tests whether the
+   persona-side signal is about content at all; if it is not, the sarcasm bank's interpretation
+   changes and this should be re-scoped before building.
+2. **Deadpan elicitation pilot**, 10–20 items. Models over-mark sarcasm (Sarc7: they "slip into
+   blunt reproach"; SarcasmBench: LLMs underperform supervised baselines). If the model cannot
+   produce unmarked sarcasm, the on-policy design is dead and we move to teacher-forced identical
+   responses — accepting that Kirch et al. place text-ambiguous behaviours in exactly the regime
+   where off-policy data is least reliable.
+3. **One-directional pre-test** on natural sarcasm.
+4. **Build the factorial** only if 2 and 3 pass.
+
+---
+
+## What I still think is right in v1
+
+The motivation, the lexical trap, and the insistence that both arms produce approving text. The
+review endorsed all three. What it removed is my belief that varying the *situation* was a clean
+way to get there — and it was not.
+
+**One thing the review surfaced that helps us:** the literature already documents deception probes
+firing on fiction and role-play. That is our *positive* case, and it was sitting in the related
+work unused.
