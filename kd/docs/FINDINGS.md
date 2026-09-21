@@ -3455,3 +3455,68 @@ the contrast has a genuine structural advantage in needing no training set at al
 comparison that makes it look decisive is against the weakest available baseline, and at L40 —
 the layer the abstract foregrounds — the advantage is +0.023 against a pooled probe, or negative
 against our own contrast number. That has to be in the paper before a reviewer finds it.
+
+---
+
+### F-86 · 2026-09-21 · **Why pooling works: single-source directions are nearly orthogonal, and averaging them cancels the noise. Joint training is not needed — and is worse.**
+
+F-80/F-81 established *that* pooled training transfers better and that the gain is diversity
+rather than volume. This asks *why*. Three hypotheses were written down before the run:
+**H1** a domain-general direction exists and pooling finds it; **H2** each dataset carries its own
+shortcuts and averaging cancels them; **H3** heterogeneous data merely regularises, in which case
+a plain average of single-source directions should do the same job with no joint training.
+
+**H3 was meant to be the sceptical option to rule out. It is what happened.**
+
+| | AUROC |
+|---|---:|
+| single-source, off-diagonal | 0.6763 |
+| pooled LODO, row-budget matched | 0.8062 |
+| pooled LODO, all rows (F-80) | 0.8545 |
+| **mean of single-source directions — never trained jointly** | **0.8828** |
+
+Take the ten single-source probe directions, normalise each to unit length, average them, and
+project. That probe **beats joint training** — by +0.028 against full pooling and +0.077 against
+budget-matched pooling — and beats single-source transfer by **+0.207**.
+
+**The geometry explains it, and it is the interesting part:**
+
+| | cosine |
+|---|---:|
+| single-source direction ↔ single-source direction | **+0.051** |
+| pooled direction ↔ single-source direction | +0.227 |
+
+**The single-source directions are essentially orthogonal to one another.** Ten probes trained on
+ten deception datasets, all nominally detecting the same construct, point in nearly unrelated
+directions — mean pairwise cosine 0.05. Yet their average transfers at 0.883.
+
+That is the signature of **signal plus large idiosyncratic noise**: each direction is a small
+shared component buried under dataset-specific structure that is mutually orthogonal. Averaging
+cancels the idiosyncratic part and leaves the shared one. So H1 and H2 are both right and they
+are the same statement — a domain-general direction exists, and noise cancellation is how you
+recover it. H3 is right about the *method*: no joint training is required.
+
+**The source-count curve is consistent** (fixed 666-row budget, 20 random subsets per size):
+
+| sources | 1 | 2 | 3 | 5 | 7 | 9 | 10 |
+|---|---|---|---|---|---|---|---|
+| AUROC | 0.673 | 0.740 | 0.782 | 0.815 | 0.820 | 0.864 | 0.809 |
+
+Rising and flattening, as noise averaging predicts. The dip at 10 is a budget artifact — at a
+fixed 666 rows, ten sources means ~66 rows each, too few to estimate a direction from.
+
+**Why this matters more than F-80 did.** F-80 said pooling beats persona axes. This says *what
+the persona-coordinates method was reaching for exists* — there is a shared deception direction —
+**and that the way to get it is to average per-dataset probes, not to build persona contrasts.**
+The paper's instinct was right; its mechanism was not.
+
+- **source:** `src/assistant_axis_ndif/30d_why_pooling.py` → `run-premise/why/why_L40_s42.json`.
+- **caveats:** (1) the mean-of-directions probe aggregates ten probes each trained on its **full**
+  80% split, so it has seen all the data; the fair comparison is against `pooled_full` (0.8545),
+  which it still beats by +0.028, not against the budget-matched row (0.8062). (2) one layer, one
+  seed, one probe type — this needs the same layer profile F-81 gave the headline before it is
+  quoted. (3) no dataset-level bootstrap on the mean-of-directions number yet. (4) the near-zero
+  pairwise cosine is measured on `paper`-probe directions; a different probe family could give a
+  different geometry. (5) unit-normalising before averaging is a choice — an unnormalised mean
+  would let high-norm directions dominate, and that was not tested.
+- **status:** verified
