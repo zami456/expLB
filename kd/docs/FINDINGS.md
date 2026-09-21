@@ -3250,3 +3250,37 @@ been the better answer.
 - **supersedes:** F-80's "one layer" caveat, which was the only thing standing between that
   finding and a clean statement.
 - **status:** verified
+
+---
+
+### F-82 · 2026-09-21 · The cap layer profile is unchanged by the judge filter
+
+F-77 measured the cap layer profile on the filtered (`s23`) bank only. `Cap-Layers` finished the
+unfiltered (`all`) bank — gate `mean-pooled layers=21 (was 3, predicted 21) PASS`, 47.2 min.
+
+| | filtered `s23` (F-77) | unfiltered `all` |
+|---|---|---|
+| layers with a positive margin | 21/21 | **21/21** |
+| longest contiguous run | 21 | **21** |
+| margin at L40 | +0.1542 | **+0.1538** |
+| 95% dataset-level CI | [+0.0913, +0.2113] | **[+0.0907, +0.2118]** |
+| P(≤0) | 0.0000 | **0.0000** |
+| argmax 95% interval | [L28, L60] | **[L28, L60]** |
+| argmax median | L36 | L32 |
+
+**The two differ by 0.0004 at L40** and are identical in every structural respect. This is the
+fourth independent confirmation that the grader filter does not drive the cap result (F-62's
+written prediction, F-65's ≤0.004 agreement, F-67's ≤0.001, now the whole depth profile).
+
+The reviewer's concern — that "stayed in character" means *folded* for a capitulation persona and
+*held* for a holding one, so filtering removes exactly the rollouts that disagree with the
+hypothesis — was legitimate, was tested at every stage, and does not bite. F-64 showed the filter
+is symmetric between groups at 0.935 retention; this shows the downstream geometry is unaffected
+at every depth.
+
+- **source:** `cap/scripts/cap_layer_profile.py --bank run-crossgen/kd11/banks/cap_all`;
+  `logs/cap_layers.status`.
+- **caveats:** same as F-77 — the gain remains local to `sycophancy_mt` (F-67), the argmax lands
+  on L40 in only 3.1% of resamples so the band is what should be quoted, and 21 layers is coarser
+  than passA's 80.
+- **status:** verified
