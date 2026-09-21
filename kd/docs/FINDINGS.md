@@ -3748,3 +3748,115 @@ The two contrasts that hold all four arms as instructed personas —
 `ironic_criticism − sincere_criticism` and `sycophantic_praise − ironic_criticism` — are
 unaffected, and the second is the one the review called non-negotiable. **The sarcasm design
 survives; its weakest contrast is now known to be weak in advance.**
+
+---
+
+### F-90 · 2026-09-21 · **External review audit: Result 1's headline baseline was the weakest available, Result 2 survives but barely, and the persona method loses to pooled LR in the same setup**
+
+An external reviewer put five questions to `docs/REVIEW_REQUEST_POOLING.md`. All five are now
+measured in **one process on one set of splits** (`30f_result2_audit.py`), which is the thing the
+original numbers could not offer because they came from two scripts. The audit reproduces the
+stored single-source baseline **bit-for-bit** (0.6763163062 vs 0.6763163062), so it is measuring
+the same data the reviewed numbers came from.
+
+**Q1 — "0.850 or 0.806? That 0.044 spread is larger than the 0.029 gap Result 2 rests on."**
+**Neither. Both are single draws from one distribution and we reported them as if they were the
+quantity.** `30_premise.py` and `30d_why_pooling.py` subsample identically (`per = budget //
+n_sources`, then balance); they differ only because `30d` consumes its RNG on the source-count
+curve before reaching the pooled fit, so the two runs draw different rows. Over **20 independent
+draws**: mean **0.8344**, range **[0.7912, 0.8736]**, sd **0.0200**. Both published figures sit
+inside it. The reviewer's arithmetic is right and the conclusion is conceded.
+
+**Q1b — do 0.883 and 0.854 come from the same run?** No: different scripts. The splits are
+identical (verified above), but they should never have been quoted as a within-run comparison.
+Measured together here:
+
+| | AUROC |
+|---|---:|
+| mean-of-directions | 0.8828 |
+| pooled LODO, full | 0.8545 |
+| pooled LODO, budget-matched (20 draws) | 0.8344 ± 0.0200 |
+
+**Result 2 = +0.0284, dataset bootstrap CI [+0.0045, +0.0523] — it clears, but only just**, and
+wins on **9 of 11** targets (loses on `harm-pressure-kr-matched` −0.008 and `sycophancy_mt`
+−0.043). The comparator here is `pooled_lodo_full`, which uses all rows and does **not**
+subsample, so the ±0.02 draw noise does not contaminate this particular margin — but a +0.028
+effect with a CI whose lower bound is +0.0045 is not a result to build a section on.
+
+**Q4 — "is 0.676 the mean over all ten sources, and how many of the 110 pairs fall below 0.5?"**
+Yes, and **21 of 110 fall below 0.5**; 14 below 0.4; minimum **0.0546**
+(`convincing-game → harm-pressure-knowledge-report`, consistent with the benchmark's own 0.12 on
+HP-KR). **The reviewer is right that this makes the mean over sources the weakest baseline
+available.** Four baselines, all on the same pairs:
+
+| single-source baseline | AUROC | pooled LODO − baseline | 95% CI | |
+|---|---:|---:|---|---|
+| mean over sources *(what we reported)* | 0.6763 | **+0.1782** | [+0.1425, +0.2124] | clears |
+| median over sources | 0.7220 | +0.1325 | [+0.1079, +0.1544] | clears |
+| sign-oriented mean, max(a, 1−a) | 0.7354 | +0.1191 | [+0.0933, +0.1435] | clears |
+| **best source per target (ORACLE)** | **0.8967** | **−0.0422** | **[−0.0727, −0.0106]** | **pooling LOSES** |
+
+**The headline +0.178 is +0.119 to +0.133 against a defensible non-oracle baseline**, and about a
+third of the original margin was pooling avoiding catastrophic anti-transfer rather than finding
+a better direction. Against oracle source selection pooling is **significantly worse** — that is
+not a deployable baseline (picking it needs target labels), but it means "pool everything" is not
+the best available use of these eleven datasets, and the write-up must say so.
+
+**Q2 — regularisation.** `C = 1.0`, `fit_intercept=True`, `max_iter=1000`, **no scaler**,
+**fixed, never tuned** — it is the persona-coordinates paper's own setting, and the identical
+estimator is constructed by one call (`P.make_probe`) for single-source, full-pool,
+budget-matched and LODO fits alike. There are therefore no tuning statistics to leak. `build()`
+does not centre or standardise, so no global statistic touches the data at all. (The alternative
+`lr_reg10`/`apollo` probe does use `StandardScaler`, but inside a `Pipeline`, so it is fit on
+training rows only — and it was not used for any number under review.)
+
+**Q3 — the eleven datasets.** Responses are `llama-v3.3-70b-instruct` generations, the same model
+whose activations are read, so **on-policy**. Labelling is three different semantics:
+`instructed_intent` (8 datasets — the prompt told it to lie), `judge_grade` (`roleplaying`,
+Apollo's 1–7 rule, 3–5 dropped as ambiguous), `belief_inconsistency` (`mask`, `sycophancy_mt`).
+**On the prompt-level question the reviewer is essentially right:** only
+`instructed-deception` carries both labels on the same item (458 of 461 items, 99% of rows).
+In the other ten, **each item has exactly one label**, so honest and deceptive rows differ at the
+prompt level, not only in the response. `ai_liar` is 54 scenarios × 5 samples and every scenario
+is single-label.
+
+**Q5 — the persona method in the same leave-one-out setup. It had never been run; it is now, and
+it loses.** Every persona number in this project was train-one-test-all because that is the
+paper's design. Through the identical LODO harness, same splits, same probe:
+
+| feature | single-source | pooled LODO | vs raw LODO | 95% CI |
+|---|---:|---:|---:|---|
+| raw 8192-d | 0.6763 | **0.8545** | — | |
+| `axes` | 0.6794 | 0.7454 | −0.1091 | [−0.1868, −0.0390] |
+| `pc:deception` | 0.6214 | 0.7307 | −0.1238 | [−0.2032, −0.0546] |
+| `pc:unified@2` | 0.5740 | 0.6921 | −0.1624 | [−0.2877, −0.0589] |
+
+**All three are significantly worse than the raw pooled probe.** Note also that pooling helps the
+persona features too (`pc:unified@2` gains +0.118 from pooling), so diversity is not a
+persona-specific effect. **The reviewer's reframing is the correct one: the contribution is "the
+replicated paper omitted a baseline that beats its method", not a new mechanism.**
+
+**A leak the reviewer offered to look for, found by looking.** `30_premise.py`,
+`30d_why_pooling.py` and `30f` split with a plain row permutation, **not** `P.group_split`, which
+the pipeline provides precisely because "ai_liar is 54 scenarios × 5 samples — split on item_id,
+never row_id". So samples of one scenario straddle train and test. **This does not affect any
+transfer number** — off-diagonal and LODO probes never train on the target's rows — but it does
+inflate the **in-domain ceiling of 0.9506** quoted in F-79, which should be treated as optimistic
+until re-run grouped.
+
+- **source:** `src/assistant_axis_ndif/30f_result2_audit.py` →
+  `run-premise/audit/audit_L40_s42.json`; bank `run/axes.pt` for the Q5 arm.
+- **caveats:** (1) one layer (L40), one seed (42) — the Q4 baselines and the Q5 arm have neither
+  the layer sweep nor the seed sweep F-81/F-83 gave Result 1. (2) eleven datasets remains the
+  resampling unit. (3) the oracle baseline is not deployable and is reported as a ceiling, not a
+  competitor. (4) the reviewer's shared-provenance concern (WMDP-derived HP sets, Scheurer-derived
+  insider trading) is **not** addressed here — that needs clustered hold-out, which is owed.
+- **status:** measured; supersedes the framing of F-79's headline and of
+  `docs/REVIEW_REQUEST_POOLING.md`, which must be revised before it goes to anyone else.
+
+**What this does to the three claims.** Claim 3 (pooled training) survives but shrinks and must be
+quoted against the median or sign-oriented baseline, not the mean. Result 2 (mean-of-directions)
+survives its bootstrap by a margin too small to headline. **The strongest honest statement is Q5's:
+in a like-for-like leave-one-dataset-out comparison the persona method loses to an ordinary pooled
+logistic regression by 0.11–0.16 AUROC** — which is a claim about the replicated paper, not about
+a mechanism of ours, and it is the one that should lead.
