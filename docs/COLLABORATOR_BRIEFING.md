@@ -208,6 +208,99 @@ this is a detail inside an agreement, not a disagreement.
 
 ---
 
+## 5b. Why our numbers differ from yours — and one comparison it puts at risk
+
+You used our persona vectors but scored them yourself: downloading the full per-layer activations
+(~50 GB per layer) and taking dot products, where our pipeline projects **mean-pooled**
+activations through the crossgen harness. That is not a discrepancy to resolve — it is two
+different protocols, and it probably explains the whole gap.
+
+**We measured the size of that difference directly.** On Pass C (2,000 label-stratified rows,
+304,706 response tokens, six layers), projecting onto the same axis and changing **only the token
+aggregation**:
+
+| layer | mean | last | max | **top-10%** |
+|---|---:|---:|---:|---:|
+| 20 | 0.695 | 0.741 | 0.775 | **0.798** |
+| 22 | 0.699 | 0.743 | 0.740 | 0.763 |
+
+**Token aggregation alone is worth up to +0.103.** Add the six-dataset subset effect (+0.079,
+section 5a) and 0.811 → 0.916 is fully accounted for without anyone being wrong.
+
+**But there is a comparison this puts at risk, and it is the headline one.** Our Q8 measurement
+has a second half that points the *other* way:
+
+> zero-shot, **top-decile token scoring beats mean pooling (+0.053)**; trained, **pooled-mean
+> probes beat token-trained probes at every layer (−0.03 to −0.06)**.
+
+So the two aggregations favour opposite methods. **If the zero-shot contrast is scored per-token
+(or top-decile, or max) while the trained baseline is a probe on mean-pooled activations, part of
+the 0.916-vs-0.732 gap is the aggregation choice rather than the feature.** On our numbers that
+part could be 0.05–0.10 of it.
+
+This is straightforward to close and worth doing before submission: **score both arms the same
+way.** Either mean-pool both, or token-score both. If the contrast still wins under matched
+aggregation, the result is clean and the objection disappears. If the gap shrinks substantially,
+that belongs in the paper rather than in a reviewer's report.
+
+Practical note: you should not need the 50 GB per-layer downloads again. `run-cap/` and
+`run-coords/` hold the pooled activations, and the crossgen harness scores an arbitrary axis
+against all eleven datasets in minutes. Happy to run your exact contrast through it so both
+protocols sit side by side on the same rows.
+
+## 5c. Three papers that landed today, and what each one does to the draft
+
+All three are now read in full, not from summaries.
+
+**Kumar, *Pressure-Testing Deception Probes in LLMs* (arXiv:2605.27958, GEM @ ACL 2026) — this
+one needs a response in the paper.** Gemma 3, 1B–27B. From his abstract:
+
+> "the single-direction hypothesis is **decisively rejected** (k=1 captures only 0.61–0.80 AUROC
+> of the signal), with cross-domain transfer failure confirmed as geometric rather than
+> layer-mismatch-driven"
+
+The draft title is *"One Direction Generalizes"*. A concurrent paper asserts the opposite in its
+abstract, and a reviewer who knows it will open with that.
+
+**There is a good answer, and it is ours.** His k=1 is the top principal component of **one**
+source. Our F-86 result is an average of **ten** single-source directions — also one direction —
+and it reaches **0.883**, beating joint training. The reconciliation is that a single source's
+leading direction is dominated by that source's surface features (we measure mean pairwise cosine
+between single-source directions at **+0.051**, i.e. near-orthogonal), while the average across
+sources is not. **Both papers are right; they are about different single directions.** Said that
+way it strengthens the title rather than undermining it — but it has to be said.
+
+Two more from Kumar worth knowing: his **style-augmented** probes recover 0.979–0.983 on unseen
+styles, which is the same "diversify the training distribution" move as pooled training but over
+styles rather than datasets, published May 2026. And his peak-layer confidence intervals "span
+nearly the full network, indicating weak localization" — independently reproducing our own layer
+finding on a different model family.
+
+**Kirch, Dower, Skapars et al., *The Impact of Off-Policy Training Data* (arXiv:2511.17408,
+Findings of ACL 2026).** Note the author list — **Skapars co-authors this and the paper we are
+replicating.** Two things:
+
+- **Text-evident vs text-ambiguous.** Off-policy training data is fine for behaviours
+  identifiable from surface properties and harmful for behaviours where the same text can come
+  from different underlying processes, with the **largest failures for intent-defined behaviours
+  like strategic deception**. If any part of our pipeline uses prefilled or synthetic turns, this
+  is the objection, and it should be pre-empted in the text.
+- Their Appendix N fits **mixed-effects models with per-behaviour random effects**, because
+  "ignoring this clustering inflates Type I error rates". Any claim we make about clustered
+  statistics being absent from this subfield is wrong, and we should cite them instead.
+
+**Yoo & Skapars, *Probe Generalization as Subspace Selection* (arXiv:2609.02893, ICML 2026
+workshop).** Also Skapars. Convergent rather than threatening:
+
+> "The directions a source probe weights heavily appear to encode **source-specific surface
+> features**, while the directions that actually transfer appear to encode the same contrast more
+> abstractly"
+
+That is our near-orthogonality result in their vocabulary. They recover the transferable subspace
+by *selecting* principal components with an LLM judge; we recover it by *averaging* across
+sources — no judge, no target labels, no interpretation step. Worth citing as independent support
+for the same underlying picture, with our method as the simpler route.
+
 ## 6. Where sarcasm fits now
 
 We have been planning a sarcasm persona bank. It is still worth doing, and its role has changed.
