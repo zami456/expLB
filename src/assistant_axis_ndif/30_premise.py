@@ -77,6 +77,12 @@ def main() -> None:
     ap.add_argument("--probe", default="paper")
     ap.add_argument("--seed", type=int, default=42)
     ap.add_argument("--frac", type=float, default=0.8)
+    ap.add_argument("--covariance", choices=["total", "within"], default="within",
+                    help="metric for Mahalanobis cosine. 'within' is the pooled WITHIN-CLASS "
+                         "scatter, which is what Mahalanobis normally means and what Ying et al. "
+                         "most likely use; 'total' is the covariance of all rows ignoring "
+                         "labels, which is what the first run of this script used and is why "
+                         "its R^2 of 0.017 was not a fair test of their 0.98.")
     args = ap.parse_args()
 
     out = Path(args.out_root)
@@ -180,9 +186,23 @@ def main() -> None:
     # Sigma^-1 applied to the 11 probe directions -- so factor once and solve with 11
     # right-hand sides instead. Shrinkage toward a scaled identity keeps it invertible:
     # with ~15k rows in 8192 dimensions the raw sample covariance is rank-deficient.
-    Xall = np.vstack([X32[k] for k in DATASETS]).astype(np.float64)
-    Xall -= Xall.mean(axis=0, keepdims=True)
-    Sigma = (Xall.T @ Xall) / max(1, len(Xall) - 1)
+    if args.covariance == "within":
+        # Pooled WITHIN-CLASS scatter: centre each dataset's rows on their own class mean, so
+        # between-dataset and between-class offsets do not enter the metric. This is the
+        # standard Mahalanobis construction and the one a probe-direction comparison wants.
+        parts = []
+        for k in DATASETS:
+            Xk, yk = X32[k].astype(np.float64), data[k][1]
+            for c in (0, 1):
+                m = yk == c
+                if m.sum() > 1:
+                    parts.append(Xk[m] - Xk[m].mean(axis=0, keepdims=True))
+        Xall = np.vstack(parts)
+        Sigma = (Xall.T @ Xall) / max(1, len(Xall) - len(DATASETS) * 2)
+    else:
+        Xall = np.vstack([X32[k] for k in DATASETS]).astype(np.float64)
+        Xall -= Xall.mean(axis=0, keepdims=True)
+        Sigma = (Xall.T @ Xall) / max(1, len(Xall) - 1)
     dim = Sigma.shape[0]
     Sigma = 0.95 * Sigma + 0.05 * (np.trace(Sigma) / dim) * np.eye(dim)
     del Xall
@@ -228,7 +248,9 @@ def main() -> None:
         res.setdefault("predictors", {})[key] = {"r": float(r), "r2": float(r ** 2),
                                                  "n": int(ok.sum())}
 
-    path = out / f"premise_L{args.layer}_{args.pooling}_s{args.seed}.json"
+    res["covariance"] = args.covariance
+    tag = "" if args.covariance == "within" else f"_{args.covariance}"
+    path = out / f"premise_L{args.layer}_{args.pooling}_s{args.seed}{tag}.json"
     path.write_text(json.dumps(res, indent=1), encoding="utf-8")
 
     print(f"\n=== POOLED TRAINING (layer {args.layer}, {args.pooling}) ===")
