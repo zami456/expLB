@@ -79,16 +79,30 @@ if (Test-Path $rep) {
     $j = Get-Content $rep -Raw | ConvertFrom-Json
     $ir = $j.markers.pc_ironic_critic
     $best = ($ir.per_variant | Where-Object { $_ -ne $null } | Measure-Object -Minimum).Minimum
-    $verdict = if ($best -le 0.20) { "PRODUCIBLE -- build the factorial on that variant" }
-               elseif ($best -le 0.50) { "PARTIAL -- prefer teacher-forced, filtering selects on the DV" }
-               else { "NOT PRODUCIBLE -- factorial must be teacher-forced" }
-    Gate "3 markers" ("lowest ironic marker rate={0:N2}" -f $best) "<=0.20 to proceed on-policy" ($best -le 0.20)
-    Note "VERDICT $verdict"
+    # BOTH conditions gate the verdict. The first version gated on marker rate alone and merely
+    # PRINTED separability, so on 2026-09-21 it logged "VERDICT PRODUCIBLE -- build the factorial"
+    # one line above "stripped=0.947", which by the design's own rule means a lexical detector.
+    # The gate passed while the check that decides the experiment failed -- the third instance of
+    # that error in one day (see `gates-must-assert-their-own-number`). An on-policy GO now
+    # requires a low marker rate AND low separability; either one failing forces teacher-forcing.
+    $sep = if ($j.lexical) { [double]$j.lexical.auroc_stripped } else { [double]::NaN }
+    Gate "3a markers" ("lowest ironic marker rate={0:N2}" -f $best) "<=0.20" ($best -le 0.20)
+    Gate "3b separability" ("bag-of-words AUROC, markers stripped={0:N3}" -f $sep) "<=0.65" ($sep -le 0.65)
     if ($j.lexical) {
-        Note ("lexical separability ironic vs sycophant: raw={0:N3} stripped={1:N3} marker effect={2:N3}" -f `
+        Note ("  raw={0:N3} stripped={1:N3} marker effect={2:N3}  (near 0.5 = arms textually alike," -f `
               $j.lexical.auroc_raw, $j.lexical.auroc_stripped, $j.lexical.marker_effect)
-        Note ("  near 0.5 stripped = the arms are textually alike, which is the premise the factorial needs")
+        Note ("   which is the premise the factorial needs; near 1.0 = a lexical detector)")
     }
+    $verdict = if ($best -le 0.20 -and $sep -le 0.65) {
+                   "ON-POLICY GO -- build the factorial on the lowest-marker variant"
+               } elseif ($best -gt 0.50) {
+                   "TEACHER-FORCED -- the model cannot produce unmarked sarcasm"
+               } elseif ($sep -gt 0.65) {
+                   "TEACHER-FORCED -- markers are suppressed but the arms remain lexically separable ($([math]::Round($sep,3))); an extracted direction would be mostly lexical"
+               } else {
+                   "PARTIAL -- prefer teacher-forced, filtering selects on the DV"
+               }
+    Note "VERDICT $verdict"
 } else {
     Gate "3 markers" "<no report>" "marker_report.json" $false
 }

@@ -3979,3 +3979,79 @@ is produced is *sarcasm* is not established by this finding and must not be clai
   does not encode, so 0.00 means "none of these eight", not "none". (3) no judge scores yet, so
   role adherence is unmeasured. (4) 20 questions, one temperature (0.7), one seed.
 - **status:** measured for the ironic arm; the pilot's other two gating checks are pending.
+
+---
+
+### F-93 · 2026-09-21 · **The sarcasm pilot's decisive check FAILS: unmarked ironic and sycophantic responses are still separable at 0.92 by bag-of-words alone — the bank would be a register axis, which is the very thing it was built to diagnose**
+
+F-92 reported the good half: deadpan is producible, marker rate 0.00 at variants v4 and v5. The
+pilot's other gating check has now run on all three arms and it goes the other way.
+
+**The check.** `cap/docs/SARCASM_DESIGN.md` requires that once markers are stripped, ironic and
+sycophantic text be near-indistinguishable — both literally praise a bad plan, and the difference
+is supposed to be purely pragmatic (overt vs covert insincerity). Its stated reading: *"near 0.5
+with markers removed = the arms are textually alike, which is the premise the factorial needs.
+Near 1.0 = a lexical detector."* Bag-of-words logistic regression, **grouped by question id** so
+no item spans train and test — the correction v1's mis-specified check needed.
+
+| variant subset | pair | raw | markers stripped | n |
+|---|---|---:|---:|---:|
+| all v1–v5 | ironic vs sycophant | 0.953 | **0.947** | 200 |
+| v1 only (85% marked) | ironic vs sycophant | 1.000 | 1.000 | 40 |
+| **v4+v5 (marker rate 0.00)** | **ironic vs sycophant** | **0.919** | **0.921** | 80 |
+| v4+v5 | ironic vs sincere | 0.997 | 0.996 | 80 |
+
+**The pooled 0.947 could have been dismissed as v1 contamination. It cannot.** Restricted to the
+two variants where *not one response carries a marker*, separability is still **0.921** — and
+stripping marker tokens makes it very slightly **worse** (0.919 → 0.921), so markers contribute
+nothing at all. The separation is entirely in ordinary content vocabulary.
+
+**What the discriminating words are is the finding.** Top features, v4+v5, ironic vs sycophant:
+
+> **ironic:** of, that's, ability, undoubtedly, i, i'm, fact, like, definitely, decision, think, very
+> **sycophant:** plan, can, off, good, get, you're, straightforward, team, us, you, you've, more, pay, run
+
+The ironic arm writes abstractly and in the first person — *ability, fact, decision, undoubtedly,
+I, I'm*. The sycophantic arm writes concretely and in the second person about the plan itself —
+*plan, you're, you've, team, straightforward*. **That is a register difference, not an intent
+difference.** A direction extracted from `sycophantic_praise − ironic_criticism` would encode
+mostly this.
+
+**The irony is total and has to be stated.** The sarcasm bank exists to test Claim 1 — that
+persona axes encode *register* rather than the labelled construct. Built as designed, **it would
+itself be a register axis**, failing in exactly the way it was constructed to demonstrate. The
+personas differ in how they write, not only in what they intend, and the model's writing style
+follows the persona even when its marker behaviour does not.
+
+**What this does to the design.** The v2 factorial cannot be built on-policy. The remedy is the
+design's own stated fallback — **teacher-forced identical responses** — though it is now triggered
+by a different condition than anticipated: not *"the model cannot produce unmarked sarcasm"* (it
+can) but *"unmarked sarcasm is still lexically distinct"*. Giving every arm the **same** forced
+response and varying only the system prompt drives separability to 0.5 by construction, which is
+precisely why the capitulation bank teacher-forces turn 1 (F-46): *"the text immediately preceding
+the MEASURED tokens is identical for every persona, so activations at turn 2 differ only by the
+system prompt."* The v5 outputs are the natural forced text — genuinely marker-free and reading as
+sincere praise. The cost is Kirch et al.'s objection, which the design already records: text-
+ambiguous behaviours are exactly the regime where off-policy data is least reliable.
+
+**A gate failure of my own, and the third of the day.** `run_sarc_pilot.ps1` gated on marker rate
+and merely *printed* separability, so the chain logged
+`VERDICT PRODUCIBLE -- build the factorial on that variant` on one line and `stripped=0.947` on
+the next. **The gate passed while the check that decides the experiment failed.** This is the same
+error recorded in `gates-must-assert-their-own-number` and in the header of
+`run_cap_controls.ps1`, committed by me hours after writing that header. The script is fixed to
+require **both** conditions.
+
+- **source:** `cap/run-sarc-pilot/` (300 rollouts, 3 arms × 5 variants × 20 questions),
+  `marker_report.json`, chain `cap/scripts/run_sarc_pilot.ps1` (`Sarc-Pilot`, DONE 21:45:59).
+- **marker rates, all arms:** ironic [0.85, 0.15, 0.10, 0.00, 0.00]; sincere
+  [0.60, 0.15, 0.15, 0.25, 0.05]; sycophant [0.85, 1.00, 0.50, 0.00, 0.05].
+- **caveats:** (1) bag-of-words on 80 responses over 20 questions is a small sample and the
+  0.921 has no confidence interval — it should be bootstrapped over questions before the design
+  is formally abandoned, though 0.92 is far enough from 0.5 that the direction of the answer is
+  not in doubt. (2) **the polarity check produced nothing**: the judge ran and wrote three score
+  files, but `score_sarcasm_markers.py` did not find the score values in them — a parser
+  mismatch, not a judge failure, and it is unfixed. So "does the sincere critic actually
+  criticise" remains unmeasured. (3) one temperature (0.7), one seed, single-turn.
+- **status:** measured; the on-policy v2 factorial is **not viable** and the design moves to
+  teacher-forced. The polarity check is still owed.

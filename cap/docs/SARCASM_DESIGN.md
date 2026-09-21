@@ -161,6 +161,32 @@ base rate, which bears directly on the sycophantic arm.
 
 ---
 
+## PILOT RESULT (2026-09-21) — the on-policy design is dead; the fallback is now the design
+
+Steps 1 and 2 have run. **Step 2 failed on its second check, and the factorial must be
+teacher-forced.**
+
+| check | result | verdict |
+|---|---|---|
+| can the model produce UNMARKED sarcasm? | marker rate **0.00** at v4/v5 (0.85 at v1) | **yes** (F-92) |
+| are the unmarked arms textually alike? | bag-of-words **0.921** on v4+v5, grouped by item | **no** (F-93) |
+
+Markers are suppressible; **lexical separability is not**. Stripping marker tokens changes the
+number by −0.002, so the separation lives entirely in content words — the ironic arm writes
+abstractly and in the first person (*ability, fact, decision, undoubtedly, I'm*), the sycophantic
+arm concretely and in the second person (*plan, you're, you've, team, straightforward*).
+
+**That is a register difference.** Built on-policy, this bank would be a register axis — the exact
+failure it exists to diagnose. So the four arms must receive **identical teacher-forced
+responses**, with only the system prompt varying, as the capitulation bank does for the same
+reason (F-46). The v5 outputs are the natural forced text. The cost is Kirch et al.'s objection,
+recorded below and now load-bearing rather than hypothetical.
+
+Everything below is the design as written before the pilot; the four arms and the two key
+contrasts are unchanged, only the generation protocol moves.
+
+---
+
 ## Sequence
 
 1. ~~**Format-matched control first**~~ — **done, and it came back mostly negative (F-89).**
