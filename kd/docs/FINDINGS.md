@@ -3921,3 +3921,61 @@ for it, and any headline that moves to L32 has to say it was chosen after the fa
   plateau off point estimates, and this table is point estimates — **the peak is not
   bootstrapped**, so "L32 is the peak" is at present an observation, not a significance claim.
 - **status:** measured; not pre-registered, not bootstrapped, reported as an observation.
+
+---
+
+### F-92 · 2026-09-21 · **Deadpan elicitation pilot, ironic arm: unmarked sarcasm IS producible on-policy — and the instruction strength needed is measured, not guessed**
+
+`cap/docs/SARCASM_DESIGN.md` sequence step 2. The literature predicted this would fail: Sarc7
+reports models "slip into blunt reproach", SarcasmBench reports LLMs underperform supervised
+baselines. If Llama-3.3-70B could not produce sarcasm without flagging it, the on-policy factorial
+was dead and the design fell back to teacher-forced identical responses.
+
+**The five `pc_ironic_critic` variants escalate the explicitness of the marker ban**, from no
+mention at all (v1) to "indistinguishable in wording from genuine approval… no line that reveals
+the joke" (v5). 100 rollouts, 20 imprudent-plan questions × 5 variants. Marker rate = fraction of
+responses carrying ≥1 marker, question-echo stripped first:
+
+| variant | what it says about markers | marker rate |
+|---|---|---:|
+| v1 | nothing | **0.85** |
+| v2 | "flat, even tone, as though you meant it" | 0.15 |
+| v3 | no scare quotes, exclamation marks, winking asides | 0.10 |
+| v4 | exhaustive ban, itemised | **0.00** |
+| v5 | + "indistinguishable in wording from genuine approval" | **0.00** |
+
+Markers found, by type: `exclamation` 27, `rhetorical_q` 13, `stock_irony` 11, `allcaps` 4.
+
+**v1 confirms the literature exactly** — 85% marked, and the text is the stock register the
+papers describe: *"What a brilliant idea! … It's not like anything could possibly go wrong … The
+lack of caution and disregard for best practices is truly inspiring."*
+
+**v5 is what the design needs.** *"That's a bold and confident approach to database migration.
+It's clear that you've thought through the potential risks… The decision to skip staging and
+backup steps will undoubtedly streamline the process."* Plain declarative sentences, ordinary
+punctuation, no marker of any kind.
+
+**THE RESULT AND THE PROBLEM ARE THE SAME FACT.** v5's output is textually indistinguishable from
+what a sycophant would write — which is precisely the premise the factorial requires (once
+markers are stripped, ironic and sycophantic text must be alike, or the bank becomes a lexical
+detector). **It is also the identification problem.** Nothing in the text establishes that an
+intended criticism is present rather than the model having simply complied with a praise
+instruction. The marker check cannot distinguish "deadpan sarcasm" from "sarcasm instruction
+produced sincere-looking praise", and by construction it never could. That distinction is exactly
+what the blind five-rating judge check exists for — specifically its *intended valence* rating,
+which must differ between the ironic and sincere arms while *literal valence* does not.
+
+**So the pilot's verdict is a qualified go:** on-policy deadpan is producible at instruction
+strength v4 or above, and the factorial should use v4/v5 wordings rather than v1–v3. Whether what
+is produced is *sarcasm* is not established by this finding and must not be claimed from it.
+
+- **source:** `cap/run-sarc-pilot/responses/pc_ironic_critic.jsonl` (100 rows),
+  `cap/run-sarc-pilot/marker_report_partial.json`, scorer
+  `cap/scripts/score_sarcasm_markers.py`, chain `cap/scripts/run_sarc_pilot.ps1` (`Sarc-Pilot`).
+- **caveats:** (1) **one arm of three.** `pc_sycophant` and `pc_sincere_critic` were still
+  generating; the lexical-separability check (ironic vs sycophant, grouped by question id) and
+  the polarity check therefore have **no result yet** and are the two things that could still
+  sink the design. (2) marker detection is regex over eight patterns — it will miss a marker it
+  does not encode, so 0.00 means "none of these eight", not "none". (3) no judge scores yet, so
+  role adherence is unmeasured. (4) 20 questions, one temperature (0.7), one seed.
+- **status:** measured for the ironic arm; the pilot's other two gating checks are pending.
