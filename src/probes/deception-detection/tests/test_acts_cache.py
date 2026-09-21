@@ -60,6 +60,91 @@ class TestExampleKey:
         b = acts_cache.example_key(torch.tensor([5, 6, 7], dtype=torch.int64), "llama", [20])
         assert a == b
 
+    @pytest.mark.parametrize(
+        ("tokens", "layers"), [([5, 6, 7], [20]), ([1], [40]), ([9, 9], None)]
+    )
+    def test_positions_all_leaves_every_existing_key_unchanged(self, tokens, layers):
+        """The guarantee behind adding `positions`: tens of thousands of entries on disk
+        were keyed before it existed, and every one of them must still hit.
+
+        The expected value is the pre-`positions` formula, written out, so this fails if the
+        key ever drifts for full-sequence extraction -- not merely if two calls disagree.
+        """
+        import hashlib
+
+        hasher = hashlib.sha256()
+        hasher.update(f"v{acts_cache.CACHE_FORMAT_VERSION}|llama|".encode())
+        hasher.update(("all" if layers is None else ",".join(map(str, layers))).encode())
+        hasher.update(b"|")
+        hasher.update(torch.tensor(tokens).to(torch.int64).numpy().tobytes())
+        legacy = hasher.hexdigest()
+
+        assert acts_cache.example_key(torch.tensor(tokens), "llama", layers) == legacy
+        assert acts_cache.example_key(torch.tensor(tokens), "llama", layers, "all") == legacy
+
+    def test_tail_keys_are_distinct_from_full_and_from_each_other(self):
+        # a tail entry must never be served where the whole sequence, or a longer tail, is
+        # wanted: the stored tensors differ in length, and in which positions they hold
+        tokens = torch.tensor([5, 6, 7])
+        keys = {
+            acts_cache.example_key(tokens, "llama", [20], positions)
+            for positions in ("all", "tail1", "tail2", "tail3")
+        }
+        assert len(keys) == 4
+
+
+class TestDetectedTailLengths:
+    """The suffix length that tail extraction keeps, derived from the detection mask."""
+
+    @staticmethod
+    def tokenized(detection_mask: torch.Tensor):
+        from deception_detection.tokenized_data import TokenizedDataset
+
+        return TokenizedDataset(
+            dialogues=[],
+            formatted_dialogues=[],
+            tokens=torch.zeros_like(detection_mask, dtype=torch.long),
+            str_tokens=[],
+            detection_mask=detection_mask,
+            attention_mask=torch.ones_like(detection_mask, dtype=torch.long),
+            dataset_partial_id="test__plain",
+        )
+
+    def test_length_reaches_back_to_the_earliest_detected_token(self):
+        from deception_detection.activations import detected_tail_lengths
+
+        mask = torch.tensor(
+            [
+                [0, 0, 0, 1, 0],  # the follow-up shape: answer, then the eot the template keeps
+                [0, 0, 0, 0, 1],  # the final token alone
+                [0, 1, 1, 0, 0],  # a span ending before the eot
+            ],
+            dtype=torch.bool,
+        )
+        assert detected_tail_lengths(self.tokenized(mask)) == [2, 1, 4]
+
+    def test_a_row_with_nothing_detected_keeps_only_its_final_token(self):
+        from deception_detection.activations import detected_tail_lengths
+
+        mask = torch.tensor([[0, 0, 0], [0, 1, 0]], dtype=torch.bool)
+        assert detected_tail_lengths(self.tokenized(mask)) == [1, 2]
+
+    def test_without_a_mask_there_is_nothing_to_derive_a_tail_from(self):
+        from deception_detection.activations import detected_tail_lengths
+        from deception_detection.tokenized_data import TokenizedDataset
+
+        tokenized = TokenizedDataset(
+            dialogues=[],
+            formatted_dialogues=[],
+            tokens=torch.zeros((1, 3), dtype=torch.long),
+            str_tokens=[],
+            detection_mask=None,
+            attention_mask=torch.ones((1, 3), dtype=torch.long),
+            dataset_partial_id="test__plain",
+        )
+        with pytest.raises(ValueError, match="needs a detection mask"):
+            detected_tail_lengths(tokenized)
+
 
 class TestStoreAndLoad:
     def test_round_trip(self):
@@ -173,7 +258,11 @@ class TestFromModelUsesTheCache:
     """
 
     @staticmethod
-    def build_tokenized(tokens: torch.Tensor, attention_mask: torch.Tensor):
+    def build_tokenized(
+        tokens: torch.Tensor,
+        attention_mask: torch.Tensor,
+        detection_mask: torch.Tensor | None = None,
+    ):
         from deception_detection.tokenized_data import TokenizedDataset
 
         return TokenizedDataset(
@@ -181,7 +270,9 @@ class TestFromModelUsesTheCache:
             formatted_dialogues=[],
             tokens=tokens,
             str_tokens=[],
-            detection_mask=attention_mask.bool(),
+            detection_mask=(
+                attention_mask.bool() if detection_mask is None else detection_mask.bool()
+            ),
             attention_mask=attention_mask,
             dataset_partial_id="test__plain",
         )
@@ -231,6 +322,75 @@ class TestFromModelUsesTheCache:
                 self.build_tokenized(tokens, attention_mask),
                 layers=[20],
                 cache_mode="off",
+            )
+
+    # The follow-up probe's shape: a detected answer token with the <|eot_id|> after it, so
+    # each row's tail is its last two positions. Rows are left-padded to different lengths.
+    FOLLOWUP_TOKENS = torch.tensor([[0, 0, 11, 12, 13], [21, 22, 23, 24, 25]])
+    FOLLOWUP_ATTENTION = torch.tensor([[0, 0, 1, 1, 1], [1, 1, 1, 1, 1]])
+    FOLLOWUP_DETECT = torch.tensor([[0, 0, 0, 1, 0], [0, 0, 0, 1, 0]])
+
+    def store_tails(self, tails: list[torch.Tensor]) -> None:
+        tokens, attention = self.FOLLOWUP_TOKENS, self.FOLLOWUP_ATTENTION
+        for i, tail in enumerate(tails):
+            true_len = int(attention[i].sum())
+            key = acts_cache.example_key(
+                tokens[i, 5 - true_len :], "fake/llama-70b-3.3", [20], f"tail{len(tail)}"
+            )
+            acts_cache.store(key, tail)
+
+    def test_tail_mode_places_each_tail_and_the_probe_reads_it(self):
+        from deception_detection.activations import Activations
+
+        tails = [make_acts(2) + 100 * i for i in range(2)]
+        self.store_tails(tails)
+
+        acts = Activations.from_model(
+            self.FakeModel(),
+            self.build_tokenized(
+                self.FOLLOWUP_TOKENS, self.FOLLOWUP_ATTENTION, self.FOLLOWUP_DETECT
+            ),
+            layers=[20],
+            positions="tail",
+        )
+
+        assert acts.all_acts.shape == (2, 5, 1, 8)
+        for i, tail in enumerate(tails):
+            torch.testing.assert_close(acts.all_acts[i, 3:], tail)
+            assert torch.all(acts.all_acts[i, :3] == 0)  # nothing before the tail was kept
+        # what the probe actually consumes: exactly the detected position of each row
+        torch.testing.assert_close(
+            acts.get_masked_activations(), torch.stack([tail[0] for tail in tails])
+        )
+
+    def test_tail_mode_never_reuses_a_full_sequence_entry(self):
+        from deception_detection.activations import Activations
+
+        # full-sequence entries for the very same tokens are on disk ...
+        tokens, attention = self.FOLLOWUP_TOKENS, self.FOLLOWUP_ATTENTION
+        for i in range(2):
+            true_len = int(attention[i].sum())
+            key = acts_cache.example_key(tokens[i, 5 - true_len :], "fake/llama-70b-3.3", [20])
+            acts_cache.store(key, make_acts(true_len))
+
+        # ... and tail mode must still miss, reaching the backend
+        with pytest.raises(AssertionError, match="downloaded despite"):
+            Activations.from_model(
+                self.FakeModel(),
+                self.build_tokenized(tokens, attention, self.FOLLOWUP_DETECT),
+                layers=[20],
+                positions="tail",
+            )
+
+    def test_unknown_positions_is_rejected(self):
+        from deception_detection.activations import Activations
+
+        with pytest.raises(ValueError, match="positions must be"):
+            Activations.from_model(
+                self.FakeModel(),
+                self.build_tokenized(torch.tensor([[11, 12]]), torch.tensor([[1, 1]])),
+                layers=[20],
+                positions="last",
             )
 
     def test_save_logits_is_rejected_rather_than_silently_empty(self):
@@ -304,6 +464,62 @@ class TestBatchInvarianceLive:
         assert deviation < 0.01 * scale, (
             f"activations depend on batch composition (max deviation {deviation:.3e}, "
             f"scale {scale:.3e}); per-example caching would be unsound"
+        )
+
+
+@pytest.mark.slow
+class TestTailExtractionLive:
+    """Tail extraction must return exactly what full extraction holds at those positions.
+
+    The slice happens inside the remote trace, so this is the one check that it selects
+    the right positions of the right rows on the real backend -- a wrong index would
+    produce plausible-looking activations from the wrong token. Run with --runslow once
+    before a long tail-mode download.
+    """
+
+    def test_tail_equals_the_matching_positions_of_the_full_sequence(self):
+        from deception_detection.activations import Activations
+        from deception_detection.models import ModelName, get_model_and_tokenizer
+        from deception_detection.tokenized_data import TokenizedDataset
+        from deception_detection.types import Message
+
+        model, tokenizer = get_model_and_tokenizer(ModelName.LLAMA_70B_3_3)
+        # the follow-up probe's dialogue shape, at uneven lengths so rows pad differently
+        dialogues = [
+            [
+                Message("user", ("Tell me about " + "clouds " * n).strip(), False),
+                Message("assistant", ("Sure. " * max(1, n)).strip(), False),
+                Message("user", "Was your last response deceptive? (Yes/No)", False),
+                Message("assistant", "No", True),
+            ]
+            for n in (1, 7, 3, 20)
+        ]
+        tokenized = TokenizedDataset.from_dialogue_list(
+            dialogues,
+            tokenizer,
+            padding={m: {"left": 0, "right": 0} for m in ["gemma", "mistral", "llama", "qwen"]},
+        )
+
+        # same budget for both, so batching is identical and only the remote slice differs
+        full = Activations.from_model(
+            model, tokenized, layers=[20], token_budget=100_000, cache_mode="off"
+        )
+        tail = Activations.from_model(
+            model, tokenized, layers=[20], token_budget=100_000, cache_mode="off",
+            positions="tail",
+        )
+
+        from_full = full.get_masked_activations().float()
+        from_tail = tail.get_masked_activations().float()
+        assert from_full.shape == from_tail.shape == (len(dialogues), 1, 8192)
+        deviation = (from_full - from_tail).abs().max().item()
+        scale = from_full.abs().max().item()
+        print(f"\nmax abs deviation {deviation:.3e} against activation scale {scale:.3e}")
+        # Identical batches and one forward pass each: the values should agree to within
+        # bfloat16 rounding at most, and a wrong index would miss by the full scale.
+        assert deviation < 0.01 * scale, (
+            f"tail extraction disagrees with the full sequence at the detected positions "
+            f"(max deviation {deviation:.3e}, scale {scale:.3e}); the remote slice is wrong"
         )
 
 

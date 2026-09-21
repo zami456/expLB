@@ -138,6 +138,10 @@ class ExperimentConfig(BaseModel):
     acts_cache_mode: Literal["full", "off"] = "full"
     ndif_token_budget: int = DEFAULT_NDIF_TOKEN_BUDGET
     host_token_budget: int = DEFAULT_HOST_TOKEN_BUDGET
+    # "tail" downloads only the shortest suffix of each row holding every detected token --
+    # for the follow-up probe, its prefilled answer and the eot after it. Per-token outputs
+    # (scores_all_tokens, the token HTML) are meaningless in that mode.
+    acts_positions: Literal["all", "tail"] = "all"
 
     use_followup_question: bool = False
     followup_question: str = (
@@ -331,6 +335,7 @@ class Experiment:
             verbose=True,
             token_budget=self.cfg.ndif_token_budget,
             cache_mode=self.cfg.acts_cache_mode,
+            positions=self.cfg.acts_positions,
         )
         honest_fit_acts, deceptive_fit_acts = split_paired_acts.get_all_acts()
 
@@ -733,6 +738,7 @@ class Experiment:
             verbose=True,
             token_budget=self.cfg.ndif_token_budget,
             cache_mode=self.cfg.acts_cache_mode,
+            positions=self.cfg.acts_positions,
         )
         if self.cfg.use_local_sae_acts:
             acts = self.to_local_sae_acts(acts)

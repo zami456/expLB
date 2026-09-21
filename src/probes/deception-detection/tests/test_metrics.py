@@ -170,3 +170,39 @@ class TestOperatingPoint:
         point = P.operating_point(y, scores, threshold=-1.0)
         assert (point["recall"], point["specificity"], point["balacc"]) == (1.0, 0.0, 0.5)
         assert point["flagged_frac"] == 1.0
+
+
+class TestMeasuredFollowupRow:
+    """The Follow-Up Probe row comes from its own run's table, not the pooled activations."""
+
+    SHARED = list(P.SHARED_DATASETS)
+
+    def write_table(self, folder, datasets, auroc=0.8, balacc=0.6):
+        folder.mkdir(parents=True, exist_ok=True)
+        pd.DataFrame(
+            {"auroc": auroc, "balanced_accuracy_at_fpr_1%": balacc}, index=datasets
+        ).to_csv(folder / "results_table.csv")
+
+    def test_absent_until_the_run_exists(self, tmp_path):
+        assert P.measured_followup_row(self.SHARED, run_folder=tmp_path / "nope") is None
+
+    def test_averages_the_shared_datasets_only(self, tmp_path):
+        folder = tmp_path / "run"
+        # the run also scores RepE validation, which is not a shared dataset
+        self.write_table(folder, [*self.SHARED, "repe_honesty__plain_val"])
+        table = pd.read_csv(folder / "results_table.csv", index_col=0)
+        table.loc["repe_honesty__plain_val", ["auroc", "balanced_accuracy_at_fpr_1%"]] = 1.0
+        table.loc[self.SHARED[0], "auroc"] = 0.3
+        table.to_csv(folder / "results_table.csv")
+
+        row = P.measured_followup_row(self.SHARED, run_folder=folder)
+        assert row is not None
+        assert row["auroc"] == pytest.approx((0.3 + 0.8 * 4) / 5)
+        assert row["balacc_1pct_fpr"] == pytest.approx(0.6)
+        assert row["n_datasets"] == 5
+        assert row["privileged"] is False
+
+    def test_a_partial_run_is_omitted_rather_than_averaged_short(self, tmp_path):
+        folder = tmp_path / "run"
+        self.write_table(folder, self.SHARED[:3])
+        assert P.measured_followup_row(self.SHARED, run_folder=folder) is None

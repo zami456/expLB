@@ -56,15 +56,25 @@ if [ -z "${NDIF_API_KEY:-}" ]; then
 fi
 
 cd "$SCRIPT_DIR/../.." || exit 1   # package root; config paths are relative to it
-CONFIG=deception_detection/scripts/configs/XXXX-9-llama-all.yaml
+CONFIG="${CONFIG:-deception_detection/scripts/configs/XXXX-9-llama-all.yaml}"
 
-echo "### Starting XXXX-9-llama-all (resumable; re-run this script to continue)"
+echo "### Starting $CONFIG (resumable; re-run this script to continue)"
 "$PYTHON" -u deception_detection/scripts/experiment.py run --config-file "$CONFIG"
 status=$?
 
 if [ $status -ne 0 ]; then
     echo "### Run exited with status $status. Nothing is lost -- re-run this script to resume."
     exit $status
+fi
+
+# The transcripts colour every token by its score. A tail-mode run downloaded only the
+# positions the probe reads, so every other token would be coloured by a zero vector --
+# pages that look like results and are not. Its metrics are in results_table.csv.
+if grep -qE '^acts_positions:[[:space:]]*"?tail"?' "$CONFIG"; then
+    echo "### Scoring complete. Skipping per-token transcripts: this config extracts only"
+    echo "### the detected tail, so token-level scores elsewhere would be meaningless."
+    echo "### Done"
+    exit 0
 fi
 
 echo "### Scoring complete; generating transcripts and dashboards"

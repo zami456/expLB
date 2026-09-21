@@ -29,6 +29,33 @@ from deception_detection.tokenized_data import TokenizedDataset, get_tokenized_d
 from deception_detection.utils import REPO_ROOT, mask_sparse_activations
 
 
+def detected_tail_lengths(tokenized_dataset: TokenizedDataset) -> list[int]:
+    """Per row, the length of the shortest suffix that contains every detected token.
+
+    Tail extraction downloads only these suffixes and leaves every earlier position zero,
+    so the lengths are derived from the detection mask itself: whatever the probe reads is
+    inside the tail by construction. With left padding a row's suffix is its final columns.
+
+    The length is per row rather than per dataset on purpose. It goes into each example's
+    cache key, and a length taken from the whole batch would make that key depend on what
+    the example was batched with -- exactly what the per-example cache is built to avoid.
+
+    A row with nothing detected keeps its final token only; nothing will read it.
+    """
+    mask = tokenized_dataset.detection_mask
+    if mask is None:
+        raise ValueError(
+            f"{tokenized_dataset.dataset_partial_id}: tail extraction needs a detection mask "
+            "to know which positions to keep"
+        )
+    padded_len = mask.shape[1]
+    lengths = []
+    for row in mask:
+        detected = row.nonzero()
+        lengths.append(padded_len - int(detected.min()) if len(detected) else 1)
+    return lengths
+
+
 @dataclass
 class Activations:
     """
@@ -54,6 +81,7 @@ class Activations:
         verbose: bool = False,
         token_budget: int | None = None,
         cache_mode: str = "full",
+        positions: str = "all",
     ) -> "Activations":
         """Creates Activations by running the model on the tokenized dataset.
 
@@ -62,11 +90,21 @@ class Activations:
         signature compatibility but no longer sizes the remote call: a row count cannot
         bound GPU memory when examples within a dataset differ in length by 5x or more
         (see deception_detection.batching).
+
+        ``positions="tail"`` downloads only the shortest suffix of each row that contains
+        every detected token (:func:`detected_tail_lengths`). A full-sequence run spends
+        most of its time on transfer -- NDIF jobs finish in ~10 s but a shard takes
+        minutes -- and a protocol that reads one token, like the follow-up probe's prefilled
+        answer, would otherwise pay for the whole sequence. The forward pass, and so the
+        token budget, is unchanged: only what comes back over the wire shrinks.
         """
         if save_logits:
             # The remote trace never captured logits; the old code path collected an empty
             # list and failed in torch.cat. Fail clearly instead of producing nothing.
             raise NotImplementedError("save_logits is not supported by the remote path")
+        if positions not in ("all", "tail"):
+            raise ValueError(f"positions must be 'all' or 'tail', got {positions!r}")
+        tail_only = positions == "tail"
 
         device = "cuda" if torch.cuda.is_available() else "cpu"
         budget = token_budget if token_budget is not None else DEFAULT_NDIF_TOKEN_BUDGET
@@ -77,10 +115,23 @@ class Activations:
         n_examples, padded_len = tokens.shape
         # Padding is on the left, so each row's real tokens are its final true_len columns.
         true_lens = [int(attn_mask[i].sum().item()) for i in range(n_examples)]
+        # What is kept per example: the whole unpadded row, or the suffix that holds its
+        # detected tokens. true_lens still sizes the remote calls -- the forward pass spans
+        # the full row either way.
+        if tail_only:
+            tails = detected_tail_lengths(tokenized_dataset)
+            kept_lens = [min(tails[i], true_lens[i]) for i in range(n_examples)]
+        else:
+            kept_lens = true_lens
 
         model_key = str(model.name_or_path)
         keys = [
-            acts_cache.example_key(tokens[i, padded_len - true_lens[i] :], model_key, layers)
+            acts_cache.example_key(
+                tokens[i, padded_len - true_lens[i] :],
+                model_key,
+                layers,
+                f"tail{kept_lens[i]}" if tail_only else "all",
+            )
             if use_cache
             else ""
             for i in range(n_examples)
@@ -91,7 +142,7 @@ class Activations:
         stats = acts_cache.CacheStats()
         if use_cache:
             for i in range(n_examples):
-                cached = acts_cache.load(keys[i], true_lens[i])
+                cached = acts_cache.load(keys[i], kept_lens[i])
                 if cached is not None:
                     per_example[i] = cached
                     stats.hits += 1
@@ -100,7 +151,7 @@ class Activations:
         missing = [i for i in range(n_examples) if per_example[i] is None]
         stats.misses = len(missing)
         mean_missing_len = (
-            sum(true_lens[i] for i in missing) / len(missing) if missing else 0.0
+            sum(kept_lens[i] for i in missing) / len(missing) if missing else 0.0
         )
 
         pbar = tqdm(
@@ -115,6 +166,7 @@ class Activations:
             # Trim to this batch's own longest example: the leading pad columns of the
             # full dataset tensor are what the token budget is trying to avoid paying for.
             batch_len = max(true_lens[i] for i in batch)
+            batch_tail = max(kept_lens[i] for i in batch)
             selection = torch.tensor(batch, dtype=torch.long)
             batch_tokens = tokens[selection][:, padded_len - batch_len :]
             batch_attn = attn_mask[selection][:, padded_len - batch_len :]
@@ -128,12 +180,17 @@ class Activations:
 
                 layers_to_process = layers if layers is not None else range(len(model.model.layers))
                 for layer_idx in layers_to_process:
-                    all_activations.append(model.model.layers[layer_idx].output)
+                    output = model.model.layers[layer_idx].output
+                    # Sliced remotely, before anything is sent back: the longest tail any
+                    # row in this batch needs, counted from the right, which left padding
+                    # makes the same real positions in every row.
+                    all_activations.append(output[:, -batch_tail:, :] if tail_only else output)
 
             batch_acts = torch.stack(all_activations, dim=2).cpu()
 
             for row, i in enumerate(batch):
-                example_acts = acts_cache.unpad_left(batch_acts[row], true_lens[i])
+                # unpad_left keeps a row's final n positions, which is its tail here too
+                example_acts = acts_cache.unpad_left(batch_acts[row], kept_lens[i])
                 per_example[i] = example_acts
                 stats.dtypes.add(str(example_acts.dtype))
                 if use_cache:
@@ -169,7 +226,10 @@ class Activations:
         # Reassemble the padded tensor the rest of the pipeline expects. Pad positions stay
         # zero: scoring reads only get_all_activations (attention mask) or
         # get_masked_activations (detection mask), neither of which touches them.
-        all_acts = acts_cache.reassemble(cast(list[Tensor], per_example), true_lens, padded_len)
+        # In tail mode each row's suffix lands in its final columns, covering every detected
+        # position by construction; earlier real tokens stay zero, so get_all_activations is
+        # meaningless there and only masked reads are valid.
+        all_acts = acts_cache.reassemble(cast(list[Tensor], per_example), kept_lens, padded_len)
 
         return cls(all_acts, tokenized_dataset, None, layers)
 
@@ -377,6 +437,7 @@ class PairedActivations:
         detect_all: bool = False,
         token_budget: int | None = None,
         cache_mode: str = "full",
+        positions: str = "all",
     ) -> "PairedActivations":
         """
         Create SplitPairedActivations from a DialogueDataset.
@@ -393,6 +454,8 @@ class PairedActivations:
             verbose (bool): Whether to show progress bars
             enforce_equal_detect_lengths (bool): Whether to enforce equal detection lengths
             use_goodfire_sae_acts (bool): Whether to use Goodfire SAE activations
+            positions (str): "all", or "tail" to download only the suffix holding the
+                detected tokens
         """
         honest = dataset.get_honest()
         deceptive = dataset.get_deceptive()
@@ -423,6 +486,7 @@ class PairedActivations:
                 batch_size=batch_size,
                 token_budget=token_budget,
                 cache_mode=cache_mode,
+                positions=positions,
             )
             deceptive_acts = Activations.from_model(
                 model,
@@ -433,6 +497,7 @@ class PairedActivations:
                 batch_size=batch_size,
                 token_budget=token_budget,
                 cache_mode=cache_mode,
+                positions=positions,
             )
         else:
             honest_acts = Activations.from_goodfire(honest_toks)

@@ -17,7 +17,9 @@ attention among them unchanged. ``tests/test_acts_cache.py`` pins this down offl
 live smoke test measures the residual floating-point difference.
 
 Files hold *unpadded* activations, ``[true_len, n_layers, emb]``, so the cache also costs
-less than the padded batches it replaces.
+less than the padded batches it replaces. A run extracting only the suffix that holds an
+example's detected tokens (``positions="tail"``) stores ``[tail_len, n_layers, emb]`` under a
+key that records that length.
 """
 
 import hashlib
@@ -42,16 +44,26 @@ def cache_root() -> Path:
     return Path(override) if override else REPO_ROOT / "activations" / "cache"
 
 
-def example_key(token_ids: Tensor, model_name: str, layers: list[int] | None) -> str:
+def example_key(
+    token_ids: Tensor,
+    model_name: str,
+    layers: list[int] | None,
+    positions: str = "all",
+) -> str:
     """Content hash of one example's unpadded tokens, plus what was extracted from them.
 
     The model and layer list belong in the key so that switching checkpoints or detect
-    layers cannot silently return another run's activations.
+    layers cannot silently return another run's activations. ``positions`` does too, for
+    the same reason: a tail-only entry must never be served to a run that wants the whole
+    sequence, or a longer tail. It is hashed only when it is not ``"all"``, so every key written before it
+    existed is unchanged and the caches already on disk keep hitting.
     """
     hasher = hashlib.sha256()
     hasher.update(f"v{CACHE_FORMAT_VERSION}|{model_name}|".encode())
     hasher.update(("all" if layers is None else ",".join(map(str, layers))).encode())
     hasher.update(b"|")
+    if positions != "all":
+        hasher.update(f"positions={positions}|".encode())
     hasher.update(token_ids.to(torch.int64).cpu().numpy().tobytes())
     return hasher.hexdigest()
 

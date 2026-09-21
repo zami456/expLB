@@ -98,6 +98,36 @@ SHARED_DATASETS = {
     "instruct_dishonesty__plain": "ID",
 }
 
+# The Follow-Up Probe cannot be scored from the pooled activations -- its inputs carry an
+# appended question and prefilled answer -- so it gets its own extraction and run
+# (configs/XXXX-9-llama-all-followup.yaml). Its measured row is read from that run's table.
+FOLLOWUP_RUN = REPO_ROOT / "results" / "XXXX-9-llama-all-followup"
+
+
+def measured_followup_row(shared: list[str], run_folder: Path = FOLLOWUP_RUN) -> dict | None:
+    """The Follow-Up Probe as measured here, over the shared datasets; None until it has run.
+
+    Read from the run's own `results_table.csv`, whose balanced accuracy uses the same
+    protocol as every other row: threshold at 1% FPR on the Alpaca control.
+    """
+    table_path = run_folder / "results_table.csv"
+    if not table_path.exists():
+        logger.info(f"no measured Follow-Up Probe yet ({table_path} missing); row omitted")
+        return None
+    table = pd.read_csv(table_path, index_col=0)
+    missing = [name for name in shared if name not in table.index]
+    if missing:
+        logger.warning(f"Follow-Up run lacks {missing}; row omitted rather than averaged short")
+        return None
+    return {
+        "method": "Follow-Up Probe (measured here)",
+        "source": "measured here",
+        "privileged": False,
+        "balacc_1pct_fpr": float(table.loc[shared, "balanced_accuracy_at_fpr_1%"].mean()),
+        "auroc": float(table.loc[shared, "auroc"].mean()),
+        "n_datasets": len(shared),
+    }
+
 
 @dataclass
 class Pooled:
@@ -752,6 +782,9 @@ def liars_bench_comparison(
             "raw activations (RepE-trained)",
         ),
     ]
+    followup = measured_followup_row(shared)
+    if followup is not None:
+        rows.append(followup)
 
     # Arms that are a fixed scoring rule go through `evaluate`; ones whose probe changes per
     # dataset (leave-one-out) cannot, and arrive already scored as `extra_rows`.
