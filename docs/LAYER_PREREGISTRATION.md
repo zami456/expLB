@@ -10,28 +10,44 @@ band survives a test that accounts for having looked at 80 of them. So the rule 
 
 ---
 
-## 1. The honest answer to "how were L20/40/44 chosen?"
+## 1. AMENDED 2026-09-21 ~13:25 — how L20/22/40/44 were chosen
 
-This is the question that decides everything else, and our answer is bad for us.
+**The first version of this section was wrong, and wrong against ourselves.** It asserted that
+L40 was selected from our own Q6 sweep because it maximised the persona advantage. The owner
+corrected it and the paper notes confirm the correction: **L40 is a literature choice**, and Q6
+*confirmed* it afterwards rather than originating it.
 
-| layer | how it entered the project | independent of the outcome? |
+| layer | how it entered the project | independent of our outcome? |
 |---|---|---|
-| **20** | Liars' Bench convention | **Yes** — literature, fixed before any of our numbers |
-| **22** | Apollo convention | **Yes** — literature |
-| **40** | **our own Q6 layer sweep, 2026-09-16** | **NO** |
-| **44** | same sweep, recorded there as the persona-axes peak (0.766) | **NO** |
+| **20** | Liars' Bench convention | **Yes** |
+| **22** | Apollo deception probes — *"the probe is applied after layer 22 of 80"* (`docs/papers/deception-probes-notes.md`) | **Yes** |
+| **40** | **Assistant Axis (Lu et al.), Fig. 27: the Llama middle layer, 80/2 exactly**, and their main experiments steer and measure at the middle layer (`docs/papers/assistant-axis-notes.md`) | **Yes** |
+| **44** | our own sweep — Q2 records "persona axes peak at 44 (0.731)", Q6 "peak L44 0.766" | **NO** |
 
-The Q6 note says it in as many words: *"Persona-coordinate methods: 40 dominates. Median +0.113
-over best-of-{20,22}."* L40 was selected **because it maximised the persona advantage on this
-corpus**, and F-03, F-66 and F-68 were then all reported at L40.
+There is also a principled reason to check several depths rather than one, independent of any
+result: **which layer is most truthful is prompt-dependent**, so a single literature layer is not
+guaranteed to transfer to a new prompt distribution. Using three literature layers from three
+papers, rather than one, is the right response to that.
 
-That is selection on the reported outcome. It is the exact flank both reviewers named, and
-F-72 already shows how large it is: on the matched slice the same cell spans 0.374 → 0.739 across
-depth, eleven times the margin F-03 claims.
+**Consequence, corrected.** L20, L22 and L40 are pre-specified, so **a primary result reported at
+L40 is legitimately pre-registered** and the 80-layer curve is the robustness check around it —
+not a replacement for it. That is the opposite of what the first version of this document
+concluded.
 
-**Consequence, accepted in advance:** the three-layer summary is **not** the primary analysis. The
-**full 80-layer curve is the honest analysis**, and every headline number must be reported as a
-point on it, never alone. We do not get to keep L40 as "pre-registered" because it was not.
+**L44 remains selected on our outcome.** Any number quoted at L44 rather than L40 is post hoc and
+must either be dropped or estimated on held-out rows.
+
+**What does not change.** F-72's measurement stands on its own: on the matched slice the same
+cell spans 0.374 → 0.739 across depth, against a claimed margin of +0.033. A *pre-specified*
+layer can still sit on a steep part of the curve, and a headline that moves by eleven times its
+own effect size across depth has to be reported with the profile whatever the provenance of the
+layer. Pre-specification licenses the choice; it does not make the sensitivity disappear.
+
+**Why this correction is recorded rather than quietly fixed.** Getting the provenance wrong in
+the direction of self-criticism is still getting it wrong, and a reader who saw the first version
+would have discounted a defensible result. The error was mine: I read a Q6 memory line —
+*"persona-coordinate methods: 40 dominates"* — as the origin of the choice without checking the
+paper notes that actually specify it.
 
 ## 2. Definitions fixed before the data
 
@@ -67,8 +83,8 @@ point on it, never alone. We do not get to keep L40 as "pre-registered" because 
 | outcome | reading |
 |---|---|
 | Broad plateau containing L40–L44 | **Strengthens.** The result is depth-robust and L40 was a lucky but harmless choice. |
-| Narrow band containing L40–L44, contiguous, survives the cluster test, **and recurs across banks** | **Real depth localisation.** Report the headline as explicitly layer-contingent. |
-| Narrow band containing L40–L44 that fails the cluster test, or does not recur | **Weakens.** We selected a layer and then reported the selection. Say so. |
+| Narrow band containing L40, contiguous, survives the cluster test, **and recurs across banks** | **Real depth localisation at a pre-specified layer.** Report the headline with the profile beside it. |
+| Narrow band containing L40 that fails the cluster test, or does not recur | **Weakens**, though less than if L40 had been post hoc: a pre-specified layer landing on a noise spike is bad luck, not selection. Report the profile and say the effect is not depth-robust. |
 | Band that misses L40–L44 | **Exploratory only.** Needs replication on held-out rows before any claim. |
 | No contiguous positive band anywhere | **The finding does not survive.** Retract to "not measurable at this n." |
 
