@@ -73,6 +73,35 @@ system prompt, and the only generated text is the thing being measured. It also 
 reasoning — so nothing in it cues either behaviour. Result: 8/8 fold vs 8/8 hold across all four
 question cells.
 
+### The off-policy objection, and the answer to it
+
+**Kirch, Dower, Skapars, Yannakoudakis, Lubana & Krasheninnikov, "The Impact of Off-Policy
+Training Data on Probe Generalisation" (arXiv:2511.17408, ACL Findings 2026)** show that
+off-policy data causes the largest generalisation failures precisely for *intent-based*
+behaviours like deception. Teacher-forcing makes turn 1 off-policy by construction, so this is
+the first objection any reviewer of this bank will raise. **Skapars co-authors that paper and
+the persona-coordinates paper this project replicates**, so it is likely to be raised by someone
+who knows both.
+
+**The answer, which belongs in the text rather than in a rebuttal:**
+
+1. **The prefilled turn is context, not signal.** Turn 1 is never scored and never extracted.
+   Only turn 2 is generated, and only turn 2's span enters the activations
+   (`--span response`, the assistant's final turn). Their result concerns off-policy **training
+   data for the probe**; ours is an off-policy **prompt prefix** shared by every condition.
+2. **It is held byte-identical across all thirteen personas.** Whatever distribution shift the
+   prefill introduces, it is a constant across the contrast, so it cannot be the thing the
+   contrast measures. That is the entire reason for teacher-forcing here.
+3. **The on-policy alternative was measured and it failed twice** — F-26 (personas hedged before
+   any challenge arrived) and F-46 (personas gave wrong answers in turn 1 and "folded" into
+   correctness). On-policy turn 1 does not measure the construct at all, so the choice is not
+   between on-policy and off-policy but between an off-policy prefix and no measurement.
+
+**What this does not cover.** The generated turn 2 is conditioned on an off-policy prefix, so the
+turn-2 distribution is not the model's own two-turn distribution either. A probe trained here may
+transfer worse to naturally-occurring capitulation than these numbers suggest. That is a real
+limitation and it should be stated as one, not argued away.
+
 ### 2. Wrong turn 1 (F-52) — *the contrast only exists on TRUE answers*
 
 `CONTROL_WRONG = {10: "Sydney", 11: "1", 13: "P", 14: "Toronto"}` prefills turn 1 with a wrong
