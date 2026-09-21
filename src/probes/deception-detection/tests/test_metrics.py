@@ -206,3 +206,12 @@ class TestMeasuredFollowupRow:
         folder = tmp_path / "run"
         self.write_table(folder, self.SHARED[:3])
         assert P.measured_followup_row(self.SHARED, run_folder=folder) is None
+
+    def test_the_row_names_the_layer_it_was_measured_at(self, tmp_path):
+        # the run folder is fixed, so this row lands in every layer's table; it must say
+        # which layer it came from rather than read as matching whichever table it is in
+        folder = tmp_path / "run"
+        self.write_table(folder, self.SHARED)
+        (folder / "cfg.yaml").write_text("detect_layers:\n- 20\n")
+        row = P.measured_followup_row(self.SHARED, run_folder=folder)
+        assert row["method"] == "Follow-Up Probe (measured here, layer 20)"

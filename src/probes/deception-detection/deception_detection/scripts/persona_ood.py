@@ -27,6 +27,7 @@ from pathlib import Path
 import fire
 import numpy as np
 import pandas as pd
+import yaml
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import roc_auc_score
 from sklearn.model_selection import StratifiedKFold
@@ -119,8 +120,13 @@ def measured_followup_row(shared: list[str], run_folder: Path = FOLLOWUP_RUN) ->
     if missing:
         logger.warning(f"Follow-Up run lacks {missing}; row omitted rather than averaged short")
         return None
+    # The run has one fixed layer but this row can land in any layer's table, so it says
+    # which layer it was measured at rather than let a reader assume it matches theirs.
+    cfg_path = run_folder / "cfg.yaml"
+    layers = yaml.safe_load(cfg_path.read_text()).get("detect_layers") if cfg_path.exists() else None
+    where = f", layer {','.join(map(str, layers))}" if layers else ""
     return {
-        "method": "Follow-Up Probe (measured here)",
+        "method": f"Follow-Up Probe (measured here{where})",
         "source": "measured here",
         "privileged": False,
         "balacc_1pct_fpr": float(table.loc[shared, "balanced_accuracy_at_fpr_1%"].mean()),

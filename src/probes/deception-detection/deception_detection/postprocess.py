@@ -64,13 +64,23 @@ class ExperimentPostprocessor:
         Make all the standard plots.
         """
         (self.experiment.cfg.folder / "plots").mkdir(parents=True, exist_ok=True)
-        token_html.plot_control_token_scores(self.experiment, self.scorer, num_samples=20)
+        # A tail-mode run downloaded only the positions the probe reads (acts_positions:
+        # "tail"), so every other token's score comes from a zero vector. Pages that colour
+        # tokens by score would look like results and not be, so they are not written.
+        # The plots below use prompt-level scores, which read only detected tokens.
+        per_token_outputs = self.cfg.acts_positions != "tail"
+        if per_token_outputs:
+            token_html.plot_control_token_scores(self.experiment, self.scorer, num_samples=20)
         plot_roc_curve_with_auroc(self.experiment, self.scorer, compare_to="honest", control_dataset_name=self.control_dataset_name)
         plot_roc_curve_with_auroc(self.experiment, self.scorer, compare_to="control", x_max=0.03, control_dataset_name=self.control_dataset_name)
         violin_plot(self.experiment, self.scorer)
         plot_roc_comparison(self.experiment, self.scorer, control_dataset_name=self.control_dataset_name)
         make_dataset_specific_plots(self.experiment, self.scorer)
-        
+
+        if not per_token_outputs:
+            print("Skipping per-token HTML: this run extracted only the detected tail.")
+            return
+
         # Generate HTML export
         print("🔄 Generating HTML export...")
         html_output_dir = self.experiment.cfg.folder / "html"
