@@ -2561,3 +2561,65 @@ for passA or passC, it is wrong"* — is now **retired**. The column is reportab
   its matched slice are now full while the rest are not.
 - **supersedes:** F-20 entirely; F-69's "passC pending".
 - **status:** verified
+
+---
+
+### F-72 · 2026-09-21 · **F-03's reversal is layer-localised: 0.739 at L40, 0.374 at L20 — the layer choice moves it by ten times the claimed effect**
+
+F-03 is the strongest positive result in this project: on the wording-matched HP-KR slice, trained
+`axes` (k=5) reads **0.752 as source** against raw 0.715 — a reversal of the full HP-KR result
+(0.300). Its stated caveats were 258 rows, one seed, per-row bootstrap only, and **one layer**.
+The HPKR-Topup extraction (F-69, F-71) made the slice measurable on passA and passC, so the
+one-layer caveat can now be removed. It should not have been left standing.
+
+**The same cell, every layer passC stores (mean pooling, `paper` probe, trained on the matched
+slice and tested on the other ten):**
+
+| layer | `axes` | raw | random | length | datapca | axes − raw |
+|---|---:|---:|---:|---:|---:|---:|
+| **20** | **0.374** | 0.590 | 0.481 | 0.613 | 0.600 | **−0.216** |
+| 22 | 0.623 | 0.541 | 0.540 | 0.613 | 0.539 | +0.082 |
+| 28 | 0.611 | 0.554 | 0.458 | 0.613 | 0.648 | +0.057 |
+| **40** | **0.739** | 0.706 | 0.593 | 0.613 | 0.674 | **+0.033** |
+| 44 | 0.732 | 0.705 | 0.607 | 0.613 | 0.702 | +0.027 |
+| 48 | 0.668 | 0.686 | 0.639 | 0.613 | 0.687 | −0.018 |
+
+**The span is 0.365** (peak L40 0.739, floor L20 0.374). F-03's margin over raw is **+0.033**.
+**Choosing the layer moves the headline by eleven times the size of the effect it reports.**
+
+**At L20 the result does not merely weaken, it inverts past every control.** `axes` reads 0.374 —
+below `random` (0.481), below `length` (0.613), and 0.216 below raw. That is the same failure mode
+and almost the same number as the *unmatched* HP-KR result F-03 was built to reverse (0.300).
+So the reversal is not a property of removing the wording confound; it is a property of removing
+the wording confound **and reading at layers 40–44**.
+
+**Against the matched control the picture is weaker still.** `axes` beats `datapca` at matched k
+at only **3 of 6 layers** (22, 40, 44), and at L20 trails it by 0.226. F-03 quoted no matched
+control at all.
+
+**Two consistency checks passed.** passA11 and passC11 return **identical** pooled numbers at
+L20/40/44 (0.374/0.739/0.732 mean, 0.369/0.752/0.761 last), as they must — same 258 rows, same
+seed, same pooled tensors — which is a direct check that the top-up produced consistent stores
+rather than two different slices. And `length` is flat at 0.613 across all layers, as it must be:
+it reads no activations.
+
+- **source:** `run-crossgen/kd11/passC11/{,banks/kd_s23}/matrices/*.json` and the same under
+  `passA11`; reader `kd/scripts/matched_profile.py`. Gates: all four completed steps logged
+  `datasets_in_matrix=11`.
+- **caveats:** (1) **passA/passC hold 200-row subsamples of the other ten datasets** while HP-KR
+  and its slice are full, so these are not like-for-like with passB's numbers. The right reading
+  is the *shape across layers*, not the absolute value. That F-03's passB value (0.752 at L40)
+  and passA/passC's (0.739) land within 0.013 is reassuring but not a replication. (2) still no
+  dataset-level bootstrap on any cell here — F-04's bar is unmet, and at these margins it almost
+  certainly would not clear. (3) six layers; the 80-layer passA sweep was still running when this
+  was written and will refine the shape. (4) single seed.
+- **supersedes:** F-03's "one layer" caveat — now measured, and it is the dominant uncertainty in
+  that finding rather than a footnote to it.
+- **status:** verified
+
+**What this does to the thesis.** F-03 was the project's one strong positive result, and it is
+now a **layer-localised** one whose reported margin is small against raw and inconsistent against
+a matched control. That is not a retraction: 0.739 against 0.706 at L40 with the wording confound
+removed is still the reversal, and the L22–L44 band is positive throughout. But it can no longer
+be quoted as a bare number. Every future statement of it carries the layer, the span, and the
+matched control, or it is a story.
