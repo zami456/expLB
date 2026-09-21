@@ -356,17 +356,18 @@ def _zero_shot_panel(ax, out_dir: Path, title: str) -> list[str]:
     return [label for _, label, _ in arms]
 
 
-def zeroshot(out_dir: str | Path = OUT_DIR, out_dir2: str | Path | None = None) -> None:
+def zeroshot(out_dir: str | Path = OUT_DIR, *others: str | Path) -> None:
     """Per-dataset AUROC with no training at all: score = <activation, unit persona axis>.
 
     This is the figure for the claim that costs nothing -- no benchmark labels, no probe, no
     training set -- so the only thing separating the panels is which personas went into the
-    contrast. Passing a second folder puts two layers side by side.
+    contrast. Further folders are added as panels, so the layers sit side by side.
     """
     out_dir = Path(out_dir)
-    folders = [out_dir] + ([Path(out_dir2)] if out_dir2 else [])
+    folders = [out_dir, *(Path(other) for other in others)]
     fig, axes = plt.subplots(
-        1, len(folders), figsize=(7.6 * len(folders), 5.0), facecolor=SURFACE, squeeze=False
+        1, len(folders), figsize=(min(7.6, 19.0 / len(folders)) * len(folders), 5.0),
+        facecolor=SURFACE, squeeze=False,
     )
     labels: list[str] = []
     for ax, folder in zip(axes[0], folders, strict=True):
