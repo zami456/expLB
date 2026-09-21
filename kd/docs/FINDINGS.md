@@ -2979,3 +2979,63 @@ labels, beats its matched control at every stored depth with a dataset-level int
 excludes zero. The honest summary is now sharper than either extreme — *persona axes fail when
 the personas vary register rather than the labelled construct, and work when they vary the
 construct, and the difference is visible under the same test that destroys the weaker claim.*
+
+---
+
+### F-78 · 2026-09-21 · Two papers added: our sycophancy finding is independently corroborated, and the persona-coordinate premise now has a cheaper rival we have never tested
+
+Read in full: `papers/The Truthfulness Spectrum Hypothesis.pdf` (Ying, Ravfogel, Kriegeskorte &
+Hase, arXiv:2602.20273, Feb 2026) and `papers/The Truth Stays in the Family.pdf` (Choi et al.,
+ICML 2026). Full notes in `docs/papers/truthfulness-spectrum-notes.md`. Ying et al. is the
+closest published neighbour to this project and was not in our related work; it is also the
+"Ying et al." a reviewer named as the source of Yoo & Skapars' layer choice.
+
+**Corroboration.** Ying et al. train ordinary linear probes — no personas — across five truth
+types plus sycophantic and expectation-inverted lying, on Llama 3B/8B/70B. They find probes
+generalise well across most domains and **fail on sycophantic lying**. Same construct, same model
+family, same three scales, different method, same failure. **F-13 is no longer a property of the
+persona method**; it is a property of the construct.
+
+**A mechanism we did not have.** They show post-training is what separates sycophancy: base
+models transfer to it markedly better than their chat counterparts — Llama 70B **0.67 → 0.56**,
+8B **0.69 → 0.56**, 3B **0.74 → 0.52** — with Mahalanobis similarity to other truth directions
+falling alongside. Our account of F-13 has been *"the axis encodes register, not capitulation."*
+Theirs is compatible and deeper: **instruction tuning pushes sycophantic lying into its own
+subspace.** Ours says what the axis picks up; theirs says why the construct is separable at all.
+
+**The threat, and it is serious.** Their abstract states that *"training on all domains jointly
+recovers strong performance, confirming that domain-general directions exist despite poor
+pairwise transfer"* — a pooled probe matches the best individual probe everywhere. The
+persona-coordinates paper's motivation is that probes trained on one dataset transfer badly, so
+use persona structure instead. **Ying et al.'s answer is simply: train on more than one dataset.**
+
+**We have never run that cell.** Every matrix in this project is train-on-one / test-on-others.
+There is no pooled-training row anywhere in `run-crossgen/`. If a probe trained jointly on the 11
+datasets matches `pc:capitulation@2` and the kd axes, the method's entire motivation has a
+simpler answer that needs no personas — and that would be the most consequential negative result
+in the thesis. It is CPU-only on activations we already hold.
+
+**A candidate explanation for F-76, from the second paper.** Choi et al. find contextual
+truthfulness is carried by a **sparse subset of attention heads**, and build TruthProbe to gate
+them. Our extraction takes the **mean residual-stream activation over response tokens** — an
+average across all 64 heads. If the signal lives in a handful, mean pooling dilutes it, and what
+survives is exactly what F-76 measured: a positive point estimate that fails a dataset bootstrap.
+**"The effect is not there" and "the effect is there and we are averaging it away" both fit our
+data**, and we currently cannot distinguish them. That is now a stated limitation rather than an
+unexamined assumption.
+
+- **source:** both PDFs read in full; key figures and numbers transcribed in
+  `docs/papers/truthfulness-spectrum-notes.md`.
+- **caveats:** (1) the base-vs-chat numbers are read off their Figure 4 and are approximate to
+  the printed precision. (2) Ying et al. select their layer (33) by cross-domain performance —
+  selection on the outcome, the same exposure we discussed for ourselves in
+  `docs/LAYER_PREREGISTRATION.md`; their numbers carry it too. (3) Choi et al. study
+  hallucination, not intentional deception, so the head-sparsity transfer to our setting is a
+  hypothesis, not an established fact. (4) nothing here is our own measurement — this entry
+  records what two papers say and what it obliges us to test.
+- **status:** verified as a reading of the papers; the obligations it creates are untested
+
+**Two actions this creates, in priority order.** (1) **Add the pooled-training cell** — the
+single most decisive experiment left, and it argues against our own method. (2) **Compute
+Mahalanobis cosine similarity across our 11×11 matrix** and check whether their R² = 0.98
+predictor replicates on persona axes; it is cheap, and either outcome is reportable.
