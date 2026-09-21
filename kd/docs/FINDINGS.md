@@ -4133,8 +4133,42 @@ tail L60–76 behaves like the rest: content +0.028 to +0.052 and never clearing
 to +0.106 and clearing everywhere. So the conclusion rests on 21 layers, not 16, and the caveat
 below is discharged.
 
+**SECOND AMENDMENT 22:47 — the same 21 layers under LAST-TOKEN pooling, and here the 2:1 split
+does NOT reproduce.** The crossgen wrote a `last_*` matrix for every layer alongside `mean_*`, so
+this was free to check and it qualifies the finding:
+
+| pooling | content effect | presence effect | ratio |
+|---|---:|---:|---:|
+| mean (F-94 above) | +0.0356 | +0.0730 | ~2:1 |
+| **last token** | **+0.0346** | **+0.0373** | **~1:1** |
+
+**But the flat average is misleading in both directions and should not be read alone.** Under
+last-token pooling the bank is far weaker overall — peak holding AUROC **0.659 at L32** against
+mean pooling's 0.752 — and from L44 upward *every* condition sits at or below chance (holding
+0.44–0.54, raw 0.47–0.50), which makes both the difference and the retention ratio uninterpretable
+there (the printed retentions include −349% and +2387%, which is what a near-zero denominator
+does). At the layers where last-token pooling actually produces a working axis:
+
+| L | holding | content (hold−neut) | presence (six−none) |
+|---:|---:|---:|---:|
+| 28 | 0.6340 | +0.049\* | +0.078\* |
+| 32 | 0.6592 | +0.047\* | +0.090\* |
+| 36 | 0.6016 | +0.046\* | +0.049\* |
+
+**So presence still exceeds content where the method works** (roughly 1.7:1 at L28–32, both
+clearing), which is the same direction as mean pooling at a smaller margin. What does not survive
+is the *size* of the split: 2:1 is a mean-pooling number.
+
+**Revised bottom line for F-89/F-94.** The ordering (paraphrase ≥ holding > neutral > none) and
+the qualitative conclusion (content matters less than presence) reproduce under both pooling
+schemes. **No ratio should be quoted at all** — it was wrong at 3 layers, corrected at 16 and 21,
+and now moves again with the pooling choice. The stable claim needs none: swapping what the
+negative-side personas say costs ~+0.035 and rarely clears; removing them costs more and usually
+does.
+
 - **caveats:** (1) ~~16 of 21 layers~~ **discharged — all 21 now measured, means essentially
-  unchanged (see amendment above).**
+  unchanged (see amendment above).** (1b) mean pooling only in the main table; last-token pooling
+  is covered by the second amendment and agrees in direction, not magnitude.
   (2) one seed (42) and one target (`sycophancy_mt`); F-87 measured seed spread on the cap bank of
   the same order as the content effect, so the per-layer `*` marks should not be over-read.
   (3) the bootstrap is over 10 source datasets per layer, the same small unit as F-79.
