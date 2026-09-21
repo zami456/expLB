@@ -3284,3 +3284,70 @@ at every depth.
   on L40 in only 3.1% of resamples so the band is what should be quoted, and 21 layers is coarser
   than passA's 80.
 - **status:** verified
+
+---
+
+### F-83 · 2026-09-21 · Pooled training is seed-stable; Ying et al.'s Mahalanobis predictor does **not** reproduce on our grid, with either covariance
+
+Two of the three items owed on the premise result. `Premise-Extras`, all steps exit 0.
+
+**Seed robustness — F-81's last caveat, closed.** The pooled-LODO margin over single-source
+transfer at L40, across five independent split seeds:
+
+| seed | margin |
+|---|---:|
+| 1 | +0.1728 |
+| 7 | +0.1979 |
+| 13 | +0.1845 |
+| 42 (original) | +0.1782 |
+| 99 | +0.1777 |
+
+Range **+0.173 to +0.198**, spread 0.025 — smaller than the margin's own bootstrap CI width
+(+0.143 to +0.213). Combined with F-81's 21/21 layers, the result does not depend on the split.
+
+**The Mahalanobis predictor does not reproduce.** F-79 reported R² = 0.017 and flagged it as
+probably our error, since we had used the **total** covariance where Mahalanobis normally means
+the pooled **within-class** scatter. `30_premise.py` now implements both. At L40, 110 pairs:
+
+| metric | our R² | Ying et al. |
+|---|---:|---:|
+| plain cosine | **0.244** | 0.56 |
+| Mahalanobis, **within-class** | **0.023** | **0.98** |
+| Mahalanobis, total covariance | 0.017 | — |
+
+**The within-class version is barely better than the total one and ten times worse than plain
+cosine** — the opposite ordering to theirs. So the caveat in F-79 is resolved: **it was not the
+covariance choice.** Either another implementation detail differs from theirs, or the predictor
+does not transfer to this corpus.
+
+What plausibly differs, none of it testable from the text we have: they use logistic regression
+on average-token activations at layer 33 of models up to 14B with five coherent truth types; we
+use the `paper` probe at layer 40 of a 70B across eleven datasets spanning intent-based
+deception, belief-based lying and judge-labelled roleplay. Their own R² = 0.56 for plain cosine
+against our 0.244 suggests the whole relationship is weaker here, with Mahalanobis losing rather
+than gaining.
+
+**This is a failure to reproduce, not a refutation.** We did not run their pipeline; we applied
+their statistic to our grid. The honest statement is that **the geometry→transfer relationship
+they report does not hold on this corpus**, which is worth reporting precisely because their
+paper is otherwise corroborated by our own sycophancy result (F-78).
+
+- **source:** `logs/premise_extras.status`; `run-premise/premise_L40_mean_s{1,7,13,99}.json`;
+  `run-premise/mahal/premise_L40_mean_s42{,_total}.json`.
+- **caveats:** (1) one layer for the Mahalanobis comparison; the relationship could be
+  depth-dependent and we have not swept it. (2) our shrinkage is 0.05 toward a scaled identity,
+  chosen for invertibility rather than tuned — a different regulariser could matter, though it
+  would have to move R² by an order of magnitude. (3) the cluster-permutation test from
+  `LAYER_PREREGISTRATION.md` was still running when this was written.
+- **supersedes:** F-79's suggestion that the Mahalanobis result was our implementation error, and
+  F-81's seed caveat.
+- **status:** verified
+
+**Two tooling failures in the run that produced these numbers, both worth recording.** The first
+attempt exited 2 on five of seven steps: a gate variable `$d` silently overwrote `$D`, the script
+directory, because **PowerShell variable names are case-insensitive** — a hazard already in this
+project's notes. Worse, the within-covariance step then wrote to the *same filename* as the
+earlier total-covariance run, so its gate read a **stale file** and logged `R2=0.0165 PASS` —
+a number from the previous experiment, reported as fresh. That is precisely the failure F-47 and
+F-76 are about, committed while building the tooling meant to catch it. Both fixed; covariance
+variants now write to their own folder, which is the only fix a later edit cannot undo.
