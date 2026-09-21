@@ -35,7 +35,12 @@ Zero-shot AUROC on HP-KR, no Liars' Bench labels involved:
 | layer | deception axis (original 8v7) | **knowledge-denial axis (4v6)** |
 |---|---|---|
 | 20 | 0.148 *(inverted)* | **0.890** |
-| 40 | 0.083 *(inverted)* | **0.914** |
+| 40 | 0.593 | **0.919** |
+
+The inversion is a layer-20 phenomenon: at layer 40 the published grouping sits just above chance,
+so there the new personas are a large gain rather than a sign correction. *(Corrected: an earlier
+version of this table gave 0.083 and 0.914 at layer 40, which match no arm. The values above are
+`auroc_axis` and `auroc_denial_axis` in `../persona_ood_ext_L40/zero_shot.csv`.)*
 
 ## Transfer: the extended axis is the best arm at both depths
 
