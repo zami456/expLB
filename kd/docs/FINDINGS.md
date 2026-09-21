@@ -3187,3 +3187,66 @@ Ying et al.); a construct-matched bank works robustly on its own construct (F-77
 and **the problem persona coordinates exist to solve is better solved by training on more than
 one dataset** (F-79, F-80). The third is the one no reviewer, no plan and no prior session in
 this project proposed — it came from a paper added this afternoon.
+
+---
+
+### F-81 · 2026-09-21 · **The pooled-training result is layer-robust: positive at 21/21 layers, and all 21 clear the dataset-level bootstrap**
+
+F-80's caveat was that it rested on one layer, with F-76 standing as the warning that a
+single-layer number is not a result in this project however large the margin. `Premise-Layers`
+ran the full experiment at every layer passB stores. Gate: `layers with a result: 21 (predicted
+21) PASS`.
+
+| layer | single-source | pooled LODO | row-matched | in-domain | margin | targets won |
+|---:|---:|---:|---:|---:|---:|---|
+| 0 | 0.529 | 0.659 | 0.569 | 0.812 | +0.130 | 9/11 |
+| 8 | 0.544 | 0.694 | 0.645 | 0.870 | +0.150 | 10/11 |
+| 16 | 0.602 | 0.739 | 0.767 | 0.917 | +0.137 | 9/11 |
+| 20 | 0.632 | 0.803 | 0.824 | 0.922 | +0.171 | 11/11 |
+| 28 | 0.668 | 0.835 | 0.841 | 0.931 | +0.167 | 11/11 |
+| 36 | 0.693 | **0.860** | 0.868 | 0.952 | +0.167 | 11/11 |
+| **40** | 0.676 | 0.855 | 0.850 | 0.951 | **+0.178** | 11/11 |
+| **52** | 0.661 | 0.845 | 0.829 | 0.947 | **+0.184** | 11/11 |
+| 68 | 0.652 | 0.809 | 0.817 | 0.948 | +0.157 | 11/11 |
+| 76 | 0.666 | 0.828 | 0.837 | 0.948 | +0.163 | 10/11 |
+
+*(abridged; all 21 layers are in `run-premise/`)*
+
+- **Positive at 21 of 21 layers**, range **+0.128** (L4) to **+0.184** (L52).
+- **All 21 layers' 95% dataset-level CI excludes zero.** Not "the pre-specified layer clears" —
+  every layer clears.
+- 11/11 targets won at 13 of the 21 layers; 9–10/11 at the rest, all early or very late.
+
+**The prediction, written before the run, was right in both halves.** `run_premise_layers.ps1`
+predicted *"the margin should stay positive at every layer above roughly L12, and the early
+layers (L0–L8) should be weakly positive rather than negative, since both conditions degrade
+together there."* Measured: positive everywhere, and the early layers are the weakest
+(+0.128–0.150 against +0.16–0.18 through the middle and late network). This is the first
+prediction recorded today that came out right in both directions — the cap prediction (F-77) was
+half wrong, the kd plateau reading (F-75) was wrong outright.
+
+**The three claims now separate cleanly under identical treatment.** Same bootstrap, same unit,
+same corpus:
+
+| claim | layers positive | layers clearing the CI |
+|---|---|---|
+| kd matched slice (F-76) | 37/80 | **L40 does not clear** |
+| cap bank (F-77) | 21/21 | L40 clears |
+| **pooled training (F-81)** | **21/21** | **21/21** |
+
+**Why this is the strongest form of the result.** Layer choice has been the project's largest
+researcher degree of freedom — F-72 measured a headline moving 0.374 → 0.739 across depth, and
+`docs/LAYER_PREREGISTRATION.md` exists because of it. A result that holds at every stored depth
+removes that degree of freedom entirely. There is no layer at which persona structure would have
+been the better answer.
+
+- **source:** `src/assistant_axis_ndif/run_premise_layers.ps1` → `run-premise/premise_L*_mean_s42.json`;
+  per-layer paired bootstrap over the 11 targets, B = 10,000, seed 42.
+- **caveats:** (1) one seed and one probe type throughout; seed robustness is still owed, though
+  21 layers agreeing makes a seed artifact unlikely. (2) in-domain training still beats pooled
+  LODO at every layer (0.95 vs 0.85 mid-network), so pooling closes most of the transfer gap and
+  not all of it. (3) this still says nothing about *why* pooling works. (4) `mask` remains the
+  weakest target throughout.
+- **supersedes:** F-80's "one layer" caveat, which was the only thing standing between that
+  finding and a clean statement.
+- **status:** verified
