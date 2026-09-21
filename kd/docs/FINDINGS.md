@@ -2766,3 +2766,77 @@ per-dataset framing of the length claim; this withdraws the mechanism statistic 
 claim. Both were caught by a reviewer computing something we had asserted rather than measured.
 The pattern worth naming: **every number we quoted that we had not put through its own null has
 so far failed** — which is the thesis's own argument, applied to the thesis.
+
+---
+
+### F-75 · 2026-09-21 · **The 80-layer profile: a 16-layer plateau containing L40 — the pre-registered "strengthens" outcome**
+
+Read against `docs/LAYER_PREREGISTRATION.md` (`f5d6904`, amended `63aabb4`), written before any
+80-layer `axes` number existed. `PassAC-11` step `A-kd-all` passed with 160 matrices and
+`datasets_in_matrix=11`.
+
+**The profile** (`axes` k=5 trained on the matched slice, tested on the other ten; mean pooling,
+`paper` probe, passA, all 80 layers):
+
+| region | `axes` | character |
+|---|---|---|
+| L0–L20 | 0.355–0.483 | **below chance throughout**; floor L19 **0.355** |
+| L21–L26 | 0.52–0.64 | sharp transition |
+| **L27–L48** | **0.61–0.75** | **the plateau** |
+| L49–L69 | 0.67 → 0.566 | steady decline |
+| L70–L79 | 0.60 → 0.764 | **an unexpected late rise**; peak L77 **0.764** |
+
+**Against the pre-registered definition.** "Narrow" was fixed in advance as *fewer than 5
+contiguous layers with a positive margin over the matched control.* Measured: **16 contiguous
+layers**. That is not narrow, so the pre-registered reading is **"broad plateau containing
+L40 → strengthens. The result is depth-robust and L40 was a lucky but harmless choice."**
+
+**L40 sits inside the plateau, not on a spike:**
+
+| layer | `axes` | vs raw | vs `datapca` | provenance |
+|---|---:|---:|---:|---|
+| **L20** | 0.374 | **−0.216** | **−0.226** | literature (Liars' Bench) |
+| L22 | 0.624 | +0.082 | +0.084 | literature (Apollo) |
+| **L40** | **0.739** | **+0.034** | **+0.065** | literature (Assistant Axis midpoint) |
+| L44 | 0.732 | +0.027 | +0.030 | ours, post hoc |
+| L77 | 0.764 | +0.055 | **+0.130** | — |
+
+**Three things that must be said with it.**
+
+**(a) Across the whole network the method loses more often than it wins.** `axes` beats raw at
+**28 of 80** layers and `datapca` at **31 of 80**. The plateau is real and so is the fact that
+most of the network is outside it. "Depth-robust" means *robust within a band*, not everywhere.
+
+**(b) A literature layer can be catastrophic.** L20 is pre-specified — the Liars' Bench
+convention — and the result there is **−0.216 against raw**. Being from the literature does not
+make a layer safe for a new prompt distribution, which is exactly the prompt-dependence argument
+for checking several depths rather than one. Had this project inherited only L20, F-03 would
+never have existed.
+
+**(c) The largest margin over the matched control is at L77, not L40.** +0.130 vs +0.065. This is
+post hoc and is **not** claimed — per the pre-registration, a peak away from the pre-specified
+layer is exploratory and needs estimation on held-out rows. It is recorded because it is a real
+feature of the curve and because the late rise was not visible in passC's six layers, which stop
+at 48.
+
+- **source:** `run-crossgen/kd11/passA11/{,banks/kd_s23}/matrices/mean_L*_s42.json`, 80 layers;
+  readers `kd/scripts/matched_profile.py`, `margin.py`. Gate: `A-kd-all exit 0, matrices=160,
+  datasets_in_matrix=11, PASS`.
+- **caveats:** (1) **three pre-registered tests are still outstanding** — the cluster-based
+  permutation test, the bootstrapped argmax interval, and nesting layer selection inside the
+  dataset-level bootstrap. The "strengthens" verdict is provisional on those and must not be
+  quoted as final until they run. (2) passA holds 200-row subsamples of the other ten datasets,
+  so absolute values are not comparable with passB; the *shape* is the result. (3) single seed.
+  (4) `matched_profile.py` on the lab PC printed "beats raw at 0 of 80 layers" from a stale copy
+  — raw is absent from a bank matrix by construction; that line is meaningless and the margins
+  above come from joining bank and root matrices.
+- **supersedes:** F-72's six-layer view, which stopped at L48 and therefore missed both the width
+  of the plateau and the late rise.
+- **status:** verified, verdict provisional pending the three outstanding tests
+
+**What this does to F-03.** F-72 read the six-layer view as "layer-localised, span eleven times
+the effect" and that was too harsh. With 80 layers the picture is a **16-layer plateau that
+contains the pre-specified layer**, which is the best available outcome under a rule fixed in
+advance. F-03's margin over the matched control at L40 is **+0.065**, and it is positive
+throughout the plateau. The finding survives — as a band-limited effect, reported with its
+profile, with three significance tests still owed.
