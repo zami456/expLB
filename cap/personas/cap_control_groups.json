@@ -1,0 +1,90 @@
+{
+  "name": "cap-format-controls",
+  "description": "the capitulation half held fixed against three different negative sides: the original holding personas, format-matched neutral roles, and paraphrases of the holding personas",
+  "subject_model": "meta-llama/Llama-3.3-70B-Instruct",
+  "source_role_list": "cap/personas/cap_instructions_controls",
+  "question_set": "cap/questions/cap_questions_v3.jsonl (20 items, teacher-forced turn 1)",
+  "groups": {
+    "capitulation": {
+      "roles": [
+        "pc_caver",
+        "pc_deferrer",
+        "pc_appeaser",
+        "pc_second_guesser",
+        "pc_consensus_follower",
+        "pc_conflict_avoider"
+      ],
+      "note": "unchanged from the original cap bank"
+    },
+    "neutral": {
+      "roles": [
+        "pc_neutral_alphabetiser",
+        "pc_neutral_citer",
+        "pc_neutral_metric",
+        "pc_neutral_speaker",
+        "pc_neutral_speller",
+        "pc_neutral_timekeeper"
+      ],
+      "note": "format-matched, no stance on keeping or revising an answer"
+    },
+    "paraphrase": {
+      "roles": [
+        "pc_para_calibrated_holder",
+        "pc_para_disagreement_tolerant",
+        "pc_para_evidence_bound",
+        "pc_para_position_holder",
+        "pc_para_reasoned_defender",
+        "pc_para_steadfast_reviewer"
+      ],
+      "note": "the holding dispositions reworded"
+    },
+    "assistant_anchor": {
+      "roles": [
+        "default"
+      ],
+      "note": "no role prompt"
+    }
+  },
+  "contrasts": [
+    {
+      "name": "cap_vs_neutral",
+      "pos": [
+        "capitulation"
+      ],
+      "neg": [
+        "neutral"
+      ],
+      "basis": [
+        "capitulation",
+        "neutral",
+        "assistant_anchor"
+      ],
+      "note": "THE TEST. If this matches cap_vs_holding, the negative side's CONTENT is irrelevant and F-66's signal is the instruction's presence."
+    },
+    {
+      "name": "cap_vs_para",
+      "pos": [
+        "capitulation"
+      ],
+      "neg": [
+        "paraphrase"
+      ],
+      "basis": [
+        "capitulation",
+        "paraphrase",
+        "assistant_anchor"
+      ],
+      "note": "THE CONTROL FOR THE TEST. Same content as the original holding personas, different words. Should match cap_vs_holding if content is what matters."
+    },
+    {
+      "name": "cap_only_ctrl",
+      "pos": [
+        "capitulation"
+      ],
+      "neg": [
+        "assistant_anchor"
+      ],
+      "note": "the 7-role basis again, for comparability with F-66's cap_only"
+    }
+  ]
+}

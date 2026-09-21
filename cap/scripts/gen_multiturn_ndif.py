@@ -87,6 +87,8 @@ def main() -> None:
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--model", default="meta-llama/Llama-3.3-70B-Instruct")
     ap.add_argument("--roles", nargs="+", required=True)
+    ap.add_argument("--roles_dir", default=None,
+                    help="directory of persona JSONs; defaults to cap/personas/cap_instructions")
     ap.add_argument("--questions", default=str(CAP_ROOT / "questions" / "cap_questions_v3.jsonl"))
     ap.add_argument("--out", default=str(CAP_ROOT / "run" / "responses"))
     ap.add_argument("--variants", type=int, default=5)
@@ -125,9 +127,13 @@ def main() -> None:
     outdir = Path(args.out)
     outdir.mkdir(parents=True, exist_ok=True)
 
+    # The prompt directory is a flag rather than a constant because the format-matched control
+    # (Tier 0.4) needs the SAME generator over a different persona set -- neutral and paraphrase
+    # banks that hold frame and length fixed while varying only what the prompt says. Hardcoding
+    # cap_instructions would have meant copying files over the originals to run the control.
+    roles_dir = Path(args.roles_dir) if args.roles_dir else CAP_ROOT / "personas" / "cap_instructions"
     for role in args.roles:
-        doc = json.loads((CAP_ROOT / "personas" / "cap_instructions" / f"{role}.json")
-                         .read_text(encoding="utf-8"))
+        doc = json.loads((roles_dir / f"{role}.json").read_text(encoding="utf-8"))
         variants = [v["pos"] for v in doc["instruction"]][:args.variants]
         if args.no_persona:
             variants = [None]
