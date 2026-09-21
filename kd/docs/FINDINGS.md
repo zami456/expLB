@@ -2468,3 +2468,58 @@ enumerate index over **all** rows, taken before the model filter. `rows.jsonl` s
 correct `row_id` as a field; the fix was to use it rather than rebuild it. The tell was passB —
 an untouched store returning 1 where F-20 recorded 258 is a bug in the reader, not a change in
 the data, and checking the store that *should not* have moved is what surfaced it.
+
+---
+
+### F-70 · 2026-09-21 · Novelty audit: two independent reviews agree on 2 of 10 claims being new, and one of our attributions was wrong
+
+Two Claude.ai sessions with web search independently assessed the project's ten claims against the
+literature. Recorded here because it changes what the thesis should lead with, and because it
+caught a factual error. Full synthesis in `docs/NOVELTY_ASSESSMENT.md`.
+
+**Both reviewers called novel:** the **empirical** half of the dataset-level bootstrap result
+(1/384 and 6/4,032 clearing) and the **teacher-forced turn-1 + wrong-answer control** design.
+
+**Both reviewers called established:** PC1 ≈ Assistant Axis — this is *literally* Lu et al.
+(arXiv:2601.10387), on the same Llama-3.3-70B, and our own source paper cites them and reuses
+their residualisation step. Also the scale-catch-up (Marks & Tegmark), the length confound
+(Singhal et al. 2023), the register diagnosis (Goldowsky-Dill §5.1 concede their probe fires on
+"is the scenario deception-related"), and **the empty 2×2 cell — which Liars' Bench documents
+itself in Appendix D**. On F-03/F-23's construct we can claim only the regex quantification
+(0.91 vs the probe's 0.87), framed as a hypothesis-only baseline.
+
+**They disagreed on exactly the two claims that matter,** which is the useful result:
+
+| | Reviewer A | Reviewer B |
+|---|---|---|
+| inert personas carry the signal (F-66, F-68) | adjacent — Chen et al. *Persona Vectors* | **novel** — checked Lu et al., who claim the near-opposite |
+| ceiling artifact / scale decay (F-63) | **novel**, "your best card" | adjacent — Kantamneni et al., Kumar |
+
+Each found different prior art, so neither is safe alone: both must cite and distinguish their
+named neighbour in the same paragraph.
+
+**The sharpest threat is personal.** Kirch, Dower, **Skapars** et al. (arXiv:2511.17408, ACL
+Findings 2026) show off-policy data causes the largest generalisation failures for intent-based
+behaviours — the direct objection to our teacher-forcing design (F-51/F-53), and **Skapars
+co-authors our source paper**. Our answer, which has to be in the text rather than hoped over:
+the prefilled turn 1 is *context and is never scored*; only turn 2 is generated and only turn 2
+enters the activations. Their result is about off-policy **training data** for a probe; ours is an
+off-policy **prompt prefix** held byte-identical across conditions.
+
+- **source:** two independent web-search sessions given `docs/NOVELTY_CHECK_PROMPT.md`;
+  attributions re-verified locally against `papers/The MASK Benchmark Disentangling.pdf` and
+  `papers/2511.16035v2 (1).pdf`.
+- **caveats:** (1) neither reviewer verified any of our numbers — this is a **prior-art** audit
+  only. (2) several sources are 2026 preprints read via abstract/HTML; treat their figures as
+  preprint-grade until checked. (3) three named papers (2609.02893, 2605.27958, 2511.17408) are
+  not in `papers/` and have not been read by us directly — the verdicts resting on them are
+  second-hand.
+- **status:** verified as a record of the reviews; the literature claims within it are unverified
+  by us
+
+**The correction it forced.** We attributed **MASK** to Cadenza Labs. MASK is **Ren, Agarwal,
+Mazeika, Menghini et al., Center for AI Safety + Scale AI** (arXiv:2503.03750); Cadenza Labs is
+**Liars' Bench** (arXiv:2511.16035). Both re-verified from the PDFs in `papers/`. The error came
+from reading the `mask/` submodule URL — `github.com/cadenza-labs/mask`, an evaluation **fork** —
+as the benchmark's authorship. `CLAUDE.md` now carries the correction on the submodule row
+itself, which is where the mistake was available to be made.

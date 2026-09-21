@@ -145,7 +145,7 @@ My grid is eleven, a mix rather than one benchmark:
 | `ai_liar` | Pacchiardi et al., *How to Catch an AI Liar* |
 | `sandbagging_v2` | WMDP/MMLU sandbagging |
 | `roleplaying` | Apollo deception-detection set (Goldowsky-Dill et al. 2025) |
-| `mask` | MASK benchmark (Cadenza Labs) |
+| `mask` | MASK benchmark — Ren, Agarwal, Mazeika, Menghini et al., **Center for AI Safety + Scale AI**, arXiv:2503.03750. (I run it via Cadenza Labs' evaluation fork; the fork is not the benchmark's authorship.) |
 | **`sycophancy_mt`** | **built by me for this project — multi-turn capitulation. The "capitulation" set in claims 1–3.** |
 | `alpaca` | honest-only control, sets the 1%-FPR threshold; never trained or scored |
 
