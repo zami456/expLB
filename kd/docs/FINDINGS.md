@@ -3520,3 +3520,39 @@ The paper's instinct was right; its mechanism was not.
   different geometry. (5) unit-normalising before averaging is a choice — an unnormalised mean
   would let high-norm directions dominate, and that was not tested.
 - **status:** verified
+
+---
+
+### F-87 · 2026-09-21 · Tier 0.2 — the cap result is seed-stable
+
+Closes the "single seed" caveat on F-65, F-66, F-67 and F-77. Our strongest *negative* result
+(pooled training) was checked on five seeds while our strongest *positive* (the cap bank) rested
+on one; that asymmetry is now gone. L40, 11 datasets, `paper` probe, `sycophancy_mt` as target.
+
+| seed | `pc:capitulation@2` | raw | `datapca@2` | vs raw | vs control |
+|---|---:|---:|---:|---:|---:|
+| 1 | 0.7159 | 0.6050 | 0.5545 | +0.1110 | +0.1614 |
+| 7 | 0.7132 | 0.5962 | 0.5638 | +0.1171 | +0.1494 |
+| 13 | 0.7186 | 0.5988 | 0.5418 | +0.1198 | +0.1767 |
+| 42 | 0.7136 | 0.6013 | 0.5594 | +0.1123 | +0.1542 |
+
+**Margin over raw: +0.111 to +0.120** (spread 0.009). **Over the matched control: +0.149 to
++0.177.** Positive on every seed against both comparators, and the spread is an order of
+magnitude below the bootstrap CI width from F-66 ([+0.050, +0.185]).
+
+With F-77's 21/21 layers and F-82's filter check, Claim 2 now has layer, seed and filter
+robustness.
+
+- **source:** `run-crossgen/kd11/banks/cap_s23/matrices/mean_L40_s{1,7,13,42}.json`;
+  `logs/cap_seeds.status`.
+- **caveats:** one layer (L40) for the seed sweep; F-77 covers depth separately at seed 42.
+- **status:** verified
+
+**A third `--extra_*` trap, and it cost two runs.** `27_crossgen.py` uses `args.features` and
+`args.probes` for the main seed but **`args.extra_features` and `args.extra_probes` for every
+other seed**, and their defaults are paper16's (`["raw","axes","pc:deception"]` and
+`["mms","lr_reg10"]`). So the first attempt crashed on `KeyError: 'deception'` — the cap bank has
+no such axis — and the second silently produced extra-seed matrices with **no `paper` probe at
+all**, which my reader then filtered out, leaving one seed and a table that looked like a
+partial failure. Neither was visible from the gate, which counted *files*. Anyone running a
+non-paper16 bank at multiple seeds must pass `--extra_features` and `--extra_probes` explicitly.
