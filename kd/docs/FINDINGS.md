@@ -3556,3 +3556,72 @@ no such axis — and the second silently produced extra-seed matrices with **no 
 all**, which my reader then filtered out, leaving one seed and a table that looked like a
 partial failure. Neither was visible from the gate, which counted *files*. Anyone running a
 non-paper16 bank at multiple seeds must pass `--extra_features` and `--extra_probes` explicitly.
+
+---
+
+### F-88 · 2026-09-21 · Tier 0.3 — the three papers read directly. One pre-empts our method, one contradicts the draft title, one is convergent with F-86.
+
+All three now in `papers/` and read rather than cited from reviewer summaries.
+
+**Kumar, *Pressure-Testing Deception Probes in LLMs* (arXiv:2605.27958, GEM @ ACL 2026).**
+Gemma 3, 1B–27B. Four things bear on us:
+
+1. **"The single-direction hypothesis is decisively rejected (k=1 captures only 0.61–0.80 AUROC
+   of the signal), with cross-domain transfer failure confirmed as geometric rather than
+   layer-mismatch-driven."** The draft title is *"One Direction Generalizes"*. A concurrent
+   paper says the opposite in its abstract. **This needs addressing head-on, not ignoring.**
+2. **His fix is ours in a different coordinate.** Probes reach ≥0.998 clean and collapse under
+   eight stylistic shifts; **style-augmented** probes recover to 0.979–0.983 on *unseen* styles.
+   That is "diversify the training distribution" — exactly what pooled training does, but over
+   *styles* where ours is over *datasets*. He published first (May 2026). Our F-80/F-86 is not
+   the same experiment, but the family is his.
+3. **His peak-layer CIs "span nearly the full network, indicating weak localization."** That is
+   F-76, independently, on a different model family. Our layer result is corroborated.
+4. His text-only TF-IDF baseline is **anti-predictive (< 0.5) at 12B/27B**, which he notes
+   "mechanically inflates the boost" — the same coupling trap F-74 caught us in.
+
+**Kirch, Dower, Skapars et al., *The Impact of Off-Policy Training Data* (arXiv:2511.17408,
+Findings of ACL 2026).** Eight behaviours, linear and attention probes.
+
+1. **Text-evident vs text-ambiguous.** Off-policy data suffices for behaviours identifiable from
+   surface properties and harms on-policy performance for behaviours where the same text can come
+   from different underlying processes. **The largest failures are for intent-defined behaviours
+   like strategic deception.** This is the objection to our teacher-forcing, and it is real.
+   Our answer stands — the prefill is context and never scored, only turn 2 enters the
+   activations — but it belongs in the text.
+2. **The reframe it gives us for Claim 4 (the empty 2×2 cell):** HP-KR is *intent-defined on
+   paper but text-evident in practice*, because its labelling function makes a denial a necessary
+   condition for the positive label. Their taxonomy names exactly what is wrong with it.
+3. **Appendix N: mixed-effects models with random intercepts and slopes per behaviour**, because
+   "ignoring this clustering inflates Type I error rates". Our dataset-bootstrap argument,
+   published before ours, by a co-author of the paper we replicate. F-70 already recorded that
+   our Claim 5 is narrower than we thought; this confirms it from the source.
+
+**Yoo & Skapars, *Probe Generalization as Subspace Selection* (arXiv:2609.02893, ICML 2026
+workshop).** Llama-3.1-8B, three held-out deception datasets. **Convergent with F-86:**
+*"the directions a source probe weights heavily appear to encode source-specific surface
+features, while the directions that actually transfer appear to encode the same contrast more
+abstractly."* That is our near-orthogonality result (pairwise cosine +0.051) stated in their
+vocabulary. **The difference is the method:** they *select* transferable PCs using an LLM judge
+scoring each PC's most/least activating examples; we *average* single-source directions. Ours
+needs no judge, no target labels and no interpretation step — and reaches 0.883 where their
+greedy oracle "nearly matches probes trained directly on the test distribution".
+
+**A genuine disagreement to resolve.** Kumar rejects the single-direction hypothesis; our
+mean-of-directions probe **is** a single direction and reaches 0.883. Both can be true — his k=1
+is the top PC of *one* source, ours is an average across *ten* — and that distinction is
+precisely F-86's point: a single source's leading direction is dominated by its own surface
+features, while the average across sources is not. **That is the sharpest framing available for
+our contribution, and it only became visible by reading his paper.**
+
+- **source:** `papers/{Pressure-Testing…, The Impact of Off-Policy Training Data, Probe
+  Generalization as Subspace Selection…}.pdf`, read in full.
+- **caveats:** (1) quotations are from abstracts and the sections retrievable by text extraction;
+  figure-level numbers are not verified. (2) nothing here is our own measurement. (3) Kumar uses
+  Gemma 3 and we use Llama, so "corroborated" means same phenomenon, not same numbers.
+- **status:** verified as a reading; obligations it creates are untested
+
+**What this changes.** The draft title must engage Kumar's rejection of single directions. Our
+Claim 3 should be positioned as *the dataset-level case of a distributional-diversity effect
+Kumar showed for styles*, with F-86's mean-of-directions mechanism as the part that is ours.
+And the off-policy objection to teacher-forcing goes in the paper, not in a rebuttal.
