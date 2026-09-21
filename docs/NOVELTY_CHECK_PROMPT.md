@@ -59,14 +59,17 @@ contrasting against them rather than against the default assistant is worth +0.0
 a negative-side persona that changes nothing you can read in the outputs can still carry most of
 the geometric signal — **you cannot screen personas by reading their generations**.
 
-**4. Matched low-dimensional controls eliminate most apparent persona-coordinate gains.** The
-honest comparison for a k-dimensional persona feature is not raw activations but (a) PCA on the
-dataset's own activations truncated to the same k, and (b) a random k-dimensional projection.
-A k-dimensional feature sits closer to 0.5 than an 8192-d probe, so it "wins" on exactly the
-cells where the high-dimensional baseline transfers badly, even when the directions are
-meaningless: a random 2-d projection gains +0.056 where raw < 0.6 and loses 0.44 where raw >
-0.85, with corr(raw AUROC, delta) = **−0.76**. Against dataset-PCA at matched k, the reported
-persona gain in this replication goes to roughly **−0.003**.
+**4. The matched-control margin decays with scale, and the mechanism is a ceiling artifact.**
+Note the source paper DOES run matched controls (random k-dim subspace, dataset-specific PCA)
+and reports the axis beating both at 3B/8B. I replicate that at 3B (+0.202 over dataset-PCA vs
+their ~+0.22), but the margin falls monotonically with model scale — +0.202 (3B) → +0.115 (8B) →
++0.079 (70B) — and for the paper's own persona set on my 11-dataset grid at 70B it reaches
+roughly **−0.003**. The proposed mechanism: a k-dimensional feature sits closer to 0.5 than an
+8192-d probe, so it "wins" precisely where the high-dimensional baseline transfers badly, even
+when the directions are meaningless. A random 2-d projection gains +0.056 where raw < 0.6 and
+loses 0.44 where raw > 0.85, with corr(raw AUROC, delta) = **−0.76**. So the question is not
+"did they run controls" (they did) but whether the control margin is a scale-dependent artifact
+of baseline weakness.
 
 **5. Dataset-level, not row-level, bootstrap is the correct significance unit for cross-dataset
 transfer claims — and almost nothing survives it.** With ~15,000 rows, row-level CIs are tight by
@@ -107,6 +110,50 @@ representation of deceptive intent.
 positive class is the longer one in 9 of 10 datasets (505 vs 310 tokens on one, 245 vs 96 on
 another), so a one-feature "longer is deceptive" rule achieves an off-diagonal AUROC of 0.553
 against raw activations' 0.665. Any cross-dataset transfer claim needs to beat this.
+
+
+## Concrete facts about the source paper and datasets
+
+**The paper.** Prasad Mahadik & Adrians Skapars, *Do Linear Probes Generalize Better in Persona
+Coordinates?*, **arXiv:2605.09391v2 [cs.AI], 15 May 2026**, preprint. Mahadik is an independent
+researcher; Skapars is at the University of Manchester. **No code or data URL is given.**
+Models: Llama-3.2-3B (layer 14) and Llama-3-8B (layer 16). Probe: logistic regression, C = 1,
+seed 42, max_iter 1000. k is inconsistent across figures (k = 1 for deception, 3 for sycophancy,
+2 for the unified axis).
+
+**What it did and did not control for** — this matters for claims 4 and 5:
+- It **does** run matched-k controls (random k-dim subspace, dataset-specific PCA), Appendix E,
+  Figures 7/9/10. Axis gains ≈ +0.10 to +0.17 over raw; random ≈ −0.14; dataset-PCA ≈ −0.12 to
+  0.0. Win rates over 20 off-diagonal pairs: axis 10–15/20, controls 1–7/20.
+- It reports **no significance testing of any kind** — no error bars, no bootstrap, no repeated
+  seeds, no CIs. Win rates are raw fractions of 20 pairs.
+
+**Datasets.** The paper's deception figures use five: ConvGame, InstrDec, MASK, AILiar,
+Roleplay. (Its Table 1 documents HarmPressureChoice and no MASK, while the figures use MASK and
+drop HarmPressureChoice — an internal inconsistency in the paper.)
+
+My grid is eleven, a mix rather than one benchmark:
+
+| dataset | provenance |
+|---|---|
+| `instructed-deception` | Liars' Bench (Azaria–Mitchell style) |
+| `harm-pressure-choice` | Liars' Bench, WMDP-derived |
+| **`harm-pressure-knowledge-report`** | **Liars' Bench, WMDP-derived — the "knowledge report" set in claim 9** |
+| `harm-pressure-kr-matched` | my derived slice of the above (denial-matched wording) |
+| `convincing-game` | Liars' Bench |
+| `insider-trading` | Liars' Bench reproduction of the Apollo scenario |
+| `ai_liar` | Pacchiardi et al., *How to Catch an AI Liar* |
+| `sandbagging_v2` | WMDP/MMLU sandbagging |
+| `roleplaying` | Apollo deception-detection set (Goldowsky-Dill et al. 2025) |
+| `mask` | MASK benchmark (Cadenza Labs) |
+| **`sycophancy_mt`** | **built by me for this project — multi-turn capitulation. The "capitulation" set in claims 1–3.** |
+| `alpaca` | honest-only control, sets the 1%-FPR threshold; never trained or scored |
+
+Two things to note when searching. **`sycophancy_mt` is my own dataset**, so claims about it
+cannot be checked against prior work directly — what can be checked is whether anyone has
+distinguished agreement-*register* from *capitulation* as separate constructs. And the
+`harm-pressure-*` family comes from **Liars' Bench**, so its documentation and any follow-up work
+are the first place to look for claims 9 and 10.
 
 ## What I need from you
 
