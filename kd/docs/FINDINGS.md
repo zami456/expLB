@@ -4118,8 +4118,23 @@ ladder opens up and the presence effect becomes significant at every single laye
 
 - **source:** `run-crossgen/kd11/banks/{cap_ctrl,cap_s23}/matrices/mean_L*_s42.json`, produced by
   `Cap-Ctrl-Layers` (`src/assistant_axis_ndif/run_cap_ctrl_layers.ps1`).
-- **caveats:** (1) **16 of 21 layers** — L60/64/68/72/76 were still computing; the deep tail is
-  missing and the trend there is downward, so including it would likely lower both means slightly.
+**AMENDED 22:17, grid complete — all 21 layers, and nothing moves.** `Cap-Ctrl-Layers` finished
+the deep tail. The predicted downward drag did not materialise:
+
+| | 16 layers | **21 layers** |
+|---|---:|---:|
+| content effect (hold − neutral) | +0.0339 | **+0.0356** |
+| presence effect (six − none) | +0.0704 | **+0.0730** |
+| neutral retention, median | 53% | **51%** |
+
+**Clear counts over the full grid: content clears at 3 of 21 layers (L0, L12, L36); presence
+clears at 15 of 21 — and at every single layer from L28 to L76**, thirteen consecutive. The deep
+tail L60–76 behaves like the rest: content +0.028 to +0.052 and never clearing, presence +0.053
+to +0.106 and clearing everywhere. So the conclusion rests on 21 layers, not 16, and the caveat
+below is discharged.
+
+- **caveats:** (1) ~~16 of 21 layers~~ **discharged — all 21 now measured, means essentially
+  unchanged (see amendment above).**
   (2) one seed (42) and one target (`sycophancy_mt`); F-87 measured seed spread on the cap bank of
   the same order as the content effect, so the per-layer `*` marks should not be over-read.
   (3) the bootstrap is over 10 source datasets per layer, the same small unit as F-79.
