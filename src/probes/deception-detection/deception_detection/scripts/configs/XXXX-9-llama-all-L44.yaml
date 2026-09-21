@@ -1,0 +1,58 @@
+# Llama-70B-3.3 over every base liars-bench subset, at layer 44 instead of 20.
+#
+# Identical to XXXX-9-llama-all.yaml except detect_layers and name. Its cache is too large
+# for D: alongside the layer-20 one, so run with ACTS_CACHE_DIR pointing elsewhere:
+#   ACTS_CACHE_DIR=E:/liars-bench-acts/cache
+#
+# Original header:
+# Llama-70B-3.3 over every base liars-bench subset it has rollouts for.
+#
+# Differs from XXXX-9.yaml (which is left alone so the 2026-07-12 two-dataset run stays
+# reproducible) in three ways:
+#   - all five base eval subsets, not just two
+#   - a stable `name`, so a re-run reuses this folder and its detector.pt instead of
+#     starting a fresh timestamped one
+#   - activation caching on, so an interrupted run resumes rather than re-downloading
+#
+# mask__plain is excluded (marked "ignore for all models" upstream), as are the LoRA
+# scenarios (XXXX-15/16/17/18/19) -- those need non-base weights NDIF does not serve.
+
+method: "lr"
+model_name: "llama-70b-3.3"
+train_data: "repe_honesty__plain"
+
+eval_data:
+  - "convince_me__plain"
+  - "harm_refusal_choice__plain"
+  - "harm_refusal_knowledge_report__plain"
+  - "insider_trading_cadenza__plain"
+  - "instruct_dishonesty__plain"
+
+control_data:
+  - "XXXX-20__plain"
+
+id: "XXXX-9"
+name: "XXXX-9-llama-all-L44"
+
+eval_on_policy: false
+control_on_policy: false
+control_dataset_size: 2000
+detect_only_start_of_turn: false
+val_fraction: 0.2
+detect_layers: [44]  # the layer-20 sweep is XXXX-9-llama-all.yaml, layer 40 is -L40
+reg_coeff: 10
+max_iter: 1000
+
+# Resumable remote extraction.
+#   acts_cache_mode: full  -- cache every example's activations to disk, keyed per example
+#                             so the budget below can change without invalidating them.
+#                             Set to "off" to disable (nothing is written or read).
+#   ndif_token_budget      -- padded tokens per remote call. Halves automatically on OOM;
+#                             the largest budget that worked is remembered across runs in
+#                             activations/budget_memory.json.
+#   host_token_budget      -- padded tokens per shard, bounding local RAM and setting how
+#                             often scores are checkpointed.
+# Cache location defaults to activations/cache (gitignored); override with ACTS_CACHE_DIR.
+acts_cache_mode: "full"
+ndif_token_budget: 8000
+host_token_budget: 32000
