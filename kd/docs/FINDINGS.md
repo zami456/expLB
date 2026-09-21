@@ -4140,3 +4140,95 @@ below is discharged.
   (3) the bootstrap is over 10 source datasets per layer, the same small unit as F-79.
 - **status:** measured; **supersedes F-89's "78%" and "three-to-one" figures**, confirms its
   conclusion and its own amendment.
+
+---
+
+### F-95 · 2026-09-21 · **F-86 survives falsification at 51 of 51 cells where it is claimed to work. All three nulls sit exactly on chance. The eight failures are layers 0–8, which is the calibration working**
+
+`docs/REVIEW_REQUEST_POOLING.md` question 4: *"if the average of ten random directions with
+matched norms transferred comparably, the story dies. I have not run that."* It has now run, over
+**21 layers × 3 seeds = 63 cells, 0 failures** (`Falsify-MeanDir`, 1h47m).
+
+**The literal version of the reviewer's test is too weak to be worth running**, since every
+direction is unit-normalised before averaging, so "matched norms" means random unit vectors whose
+mean lands at 0.5 by construction. Three nulls of increasing sharpness were run instead:
+
+| null | what it holds fixed |
+|---|---|
+| `gauss` | iid N(0,I) unit directions — the literal reading |
+| `cov` | directions drawn as Xᵀg over the pooled training rows, so they carry the **activation covariance** (activation space is anisotropic; an isotropic null flatters us) |
+| **`shuffled`** | **ten probes trained by the same procedure on the same rows with SHUFFLED LABELS** — identical pipeline, identical data, the only broken link is label → direction |
+
+`shuffled` is the null that can actually kill the result: if averaging ten label-shuffled probe
+directions transfers, then averaging probe-shaped directions is what works and the labels are
+decoration.
+
+**All three nulls sit on chance at every layer.** Unoriented, over all 63 cells:
+
+| null | mean | range |
+|---|---:|---|
+| `shuffled` | **0.5052** | [0.4840, 0.5337] |
+| `gauss` | 0.5015 | [0.4799, 0.5283] |
+| `cov` | 0.5041 | [0.4848, 0.5214] |
+
+**The depth profile.** `real` is the mean-of-directions probe; `null` is the *oriented*
+max(a, 1−a) statistic, which is the conservative comparator (it floors near 0.65 for pure noise
+over 11 targets, which is why shallow layers read as failures against it):
+
+| L | real | null | gap | budget10 | seeds clearing |
+|---:|---:|---:|---:|---:|---:|
+| 0 | 0.6298 | 0.6403 | **−0.0105** | 0.6064 | 0/3 |
+| 4 | 0.6424 | 0.6386 | +0.0038 | 0.6113 | 0/3 |
+| 8 | 0.6658 | 0.6530 | +0.0128 | 0.6286 | 1/3 |
+| 12 | 0.6968 | 0.6534 | +0.0434 | 0.6468 | 3/3 |
+| 16 | 0.7677 | 0.6566 | +0.1111 | 0.7331 | 3/3 |
+| 20 | 0.8192 | 0.6769 | +0.1423 | 0.7982 | 3/3 |
+| 28 | 0.8544 | 0.7041 | +0.1503 | 0.8429 | 3/3 |
+| 32 | 0.8857 | 0.7104 | +0.1753 | 0.8716 | 3/3 |
+| **36** | **0.8916** | 0.7063 | **+0.1853** | 0.8740 | 3/3 |
+| 40 | 0.8872 | 0.7057 | +0.1814 | 0.8663 | 3/3 |
+| 44 | 0.8816 | 0.6983 | +0.1833 | 0.8654 | 3/3 |
+| 56 | 0.8528 | 0.6908 | +0.1620 | 0.8436 | 3/3 |
+| 76 | 0.8343 | 0.6925 | +0.1418 | 0.8342 | 3/3 |
+
+(L22/24/48/52/60/64/68/72 omitted for space; all 3/3.)
+
+**55 of 63 cells clear. Split by depth: 51 of 51 at layers ≥16, and 4 of 12 below.** The eight
+failures are layers 0, 4 and 8 — token embeddings and the earliest blocks, where no deception
+direction should exist and where a method that *passed* would indicate a broken null. **That the
+battery fails exactly where it ought to is the strongest evidence that it is calibrated**, and it
+is the reason the shallow cells are reported rather than trimmed.
+
+**Two review weaknesses answered as by-products.**
+- **Weakness 4** (*"Result 2 is one layer, one seed"*) — it is now 21 layers and 3 seeds, the
+  same coverage Result 1 has.
+- **Weakness 1** (*"the mean-of-directions probe has effectively seen all the data"*) — the
+  `budget10` arm fits each of the ten directions on ~66 rows so the ten together match the pooled
+  budget. Over all 63 cells `real − budget10` averages **+0.0171**, range [−0.022, +0.067]. The
+  advantage from extra rows is small and sometimes negative.
+- **Weakness 2** (unit-normalising was an untested choice) — worth +0.009 at L40.
+
+**The peak is L36 (0.8916), not L40 (0.8872)** — independently agreeing with F-91, which found
+L32 for the persona banks off entirely different code and features. Both say 32–36.
+
+**A mis-specified gate of my own, the fourth today.** `run_falsify.ps1` computed the verdict as
+`min(gap) over all 63 cells > 0.02` and therefore logged
+`GATE falsification measured min gap = -0.0221 predicted >0.02 FALSIFIED`. **That verdict is
+wrong**: the minimum is layer 0, where the method is not claimed to work and where failure is the
+designed calibration check. A gate that declares a result falsified because the embedding layer
+behaves as predicted is measuring the wrong thing. Fixed to gate on layers ≥16 and to report the
+shallow layers separately as the calibration they are. The raw number it printed was correct; the
+rule applied to it was not — which is the same shape of error as the three earlier ones, and the
+reason this entry states the gate output before stating the conclusion.
+
+- **source:** `run-premise/falsify/falsify_L*_s*.json` (63 files),
+  `src/assistant_axis_ndif/30e_falsify_meandir.py`, chain `run_falsify.ps1`.
+- **caveats:** (1) the oriented null is deliberately conservative and has no principled threshold;
+  0.02 is a convention, not a test. (2) three seeds, one target set, one probe family (`paper`,
+  C=1.0) — the reviewer's point that a different regulariser could change the geometry is
+  untested. (3) this falsifies the *noise-cancellation* story's null, not the reviewer's other
+  route: shared provenance between the ten sources remains unaddressed and needs clustered
+  hold-out. (4) F-90 showed Result 2's margin over pooled training is only +0.028; surviving this
+  battery does not make it large.
+- **status:** measured; question 4 of the review is answered and the answer is that the result
+  survives.

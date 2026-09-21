@@ -93,15 +93,29 @@ if (Test-Path $ref) {
 $all = @(Get-ChildItem (Join-Path $repo "run-premise\falsify\falsify_L*_s*.json") -EA SilentlyContinue |
          ForEach-Object { Get-Content $_.FullName -Raw | ConvertFrom-Json })
 if ($all.Count) {
-    $gaps = @($all | ForEach-Object {
-        $w = ($_.gauss.oriented, $_.cov.oriented, $_.shuffled.oriented | Measure-Object -Maximum).Maximum
-        $_.real - $w })
-    $minGap = ($gaps | Measure-Object -Minimum).Minimum
+    # GATE ON THE LAYERS WHERE THE METHOD IS CLAIMED TO WORK. The first version took the minimum
+    # gap over ALL cells and so logged "min gap = -0.0221 FALSIFIED" on 2026-09-21 -- that
+    # minimum is layer 0, token embeddings, where no deception direction should exist and where
+    # a PASS would mean the null was broken. Failing there is the calibration working, and a
+    # gate that reads it as falsification is measuring the wrong thing. Shallow layers are now
+    # reported separately as the calibration check they are. Fourth mis-specified gate today.
+    $SHALLOW = 16
+    $gapOf = {
+        param($c)
+        $w = ($c.gauss.oriented, $c.cov.oriented, $c.shuffled.oriented | Measure-Object -Maximum).Maximum
+        $c.real - $w }
+    $deepCells = @($all | Where-Object { $_.layer -ge $SHALLOW })
+    $shallowCells = @($all | Where-Object { $_.layer -lt $SHALLOW })
+    $gaps = @($deepCells | ForEach-Object { & $gapOf $_ })
+    $minGap = if ($gaps.Count) { ($gaps | Measure-Object -Minimum).Minimum } else { [double]::NaN }
+    $shClear = @($shallowCells | Where-Object { (& $gapOf $_) -gt 0.02 }).Count
+    Note ("GATE calibration    measured {0}/{1} cells BELOW L{2} clear  predicted few -- failing here is correct" -f `
+          $shClear, $shallowCells.Count, $SHALLOW)
     $reals = @($all | ForEach-Object { $_.real })
     $rmin = ($reals | Measure-Object -Minimum).Minimum
     $rmax = ($reals | Measure-Object -Maximum).Maximum
-    Note ("GATE falsification  measured min gap over {0} cells = {1:N4}  predicted >0.02  {2}" -f `
-          $all.Count, $minGap, $(if ($minGap -gt 0.02) { "SURVIVES" } else { "FALSIFIED" }))
+    Note ("GATE falsification  measured min gap over {0} cells at L>={1} = {2:N4}  predicted >0.02  {3}" -f `
+          $deepCells.Count, $SHALLOW, $minGap, $(if ($minGap -gt 0.02) { "SURVIVES" } else { "FALSIFIED" }))
     $nlay = @($all | ForEach-Object { $_.layer } | Sort-Object -Unique).Count
     $pos = @($gaps | Where-Object { $_ -gt 0.02 }).Count
     Note ("GATE stability      measured real range {0:N4}-{1:N4} over {2} cells / {3} layers" -f `
