@@ -12,7 +12,11 @@
 
   Each step is the same run_crossgen_full.ps1, so each is resumable and skips finished files.
 #>
-param([switch]$Force)
+param(
+    [switch]$Force,
+    # space-separated step tags to run, e.g. "B_fine P". Default: all four, in order.
+    [string]$Only = ""
+)
 
 $ErrorActionPreference = "Continue"
 $D = $PSScriptRoot
@@ -36,15 +40,34 @@ if (-not $Force -and (Test-Path $status) -and
 "START " + (Get-Date -Format "yyyy-MM-dd HH:mm:ss") | Out-File -Encoding utf8 $status
 
 $ALL = "paper16_famcentred paper16_shared own100 hf100 hf275_loose hf275_strict own100_strict"
+
+# An EMPTY STRING ARGUMENT IS DROPPED by `powershell.exe -File`. On 2026-09-19 that silently
+# killed the last two steps: `-Seeds ""` left -Seeds dangling and B_fine died with "Missing an
+# argument for parameter 'Seeds'" in the same second it started, writing no log; `-Banks ""
+# -Seeds ""` did the same to P. Both surfaced only as `exit 1`, so the chain reported DONE
+# having run half its work. run_crossgen_full.ps1 already carries a comment about exactly this
+# hazard for -SubPath -- the fix was made there and not here.
+#
+# The switch cannot simply be omitted: -Banks defaults to four banks, and for P "" means ROOT
+# ONLY. So pass a single SPACE. It survives argument passing, and run_crossgen_full.ps1 splits
+# with `-split "\s+" | Where-Object { $_ }`, which yields an empty list -- the intended meaning.
 $steps = @(
-    @{ tag = "B_newbanks"; a = @("-Pass", "B",      "-Layers", "all", "-Banks", "hf275_loose hf275_strict own100_strict", "-Seeds", "0 1 2 3 4") },
-    @{ tag = "A";          a = @("-Pass", "A",      "-Layers", "all", "-Banks", $ALL,                                      "-Seeds", "0 1 2 3 4") },
-    @{ tag = "B_fine";     a = @("-Pass", "B_fine", "-Layers", "all", "-Banks", "paper16_shared own100 hf275_strict",      "-Seeds", "") },
-    @{ tag = "P";          a = @("-Pass", "P",      "-Layers", "all", "-Banks", "",                                        "-Seeds", "") }
+    @{ tag = "B_newbanks"; pass = "B";      banks = "hf275_loose hf275_strict own100_strict"; seeds = "0 1 2 3 4" },
+    @{ tag = "A";          pass = "A";      banks = $ALL;                                     seeds = "0 1 2 3 4" },
+    @{ tag = "B_fine";     pass = "B_fine"; banks = "paper16_shared own100 hf275_strict";     seeds = "" },
+    @{ tag = "P";          pass = "P";      banks = "";                                       seeds = "" }
 )
+if ($Only) {
+    $want = $Only.Trim() -split "\s+"
+    $steps = $steps | Where-Object { $want -contains $_.tag }
+    if (-not $steps) { throw "-Only '$Only' matched no step" }
+}
 foreach ($s in $steps) {
+    $banks = if ($s.banks) { $s.banks } else { " " }
+    $seeds = if ($s.seeds) { $s.seeds } else { " " }
+    $a = @("-Pass", $s.pass, "-Layers", "all", "-Banks", $banks, "-Seeds", $seeds)
     "STEP $($s.tag) start " + (Get-Date -Format "HH:mm:ss") | Out-File -Append -Encoding utf8 $status
-    & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $full @($s.a)
+    & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $full @a
     "STEP $($s.tag) exit $LASTEXITCODE " + (Get-Date -Format "HH:mm:ss") | Out-File -Append -Encoding utf8 $status
 }
 "DONE " + (Get-Date -Format "yyyy-MM-dd HH:mm:ss") | Out-File -Append -Encoding utf8 $status

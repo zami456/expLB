@@ -31,6 +31,7 @@ import argparse
 import ast
 import csv
 import json
+import re
 import sys
 from collections import Counter
 from dataclasses import dataclass, field
@@ -320,7 +321,93 @@ def load_generated(path: Path, key: str) -> list[EvalRow]:
     return rows
 
 
+# ---------------------------------------------------------------------------------
+# factor probes (kd/) -- these are NOT deception datasets
+# ---------------------------------------------------------------------------------
+# Built by kd/scripts/build_factor_probes.py. Their `label` means "the model knows this item"
+# / "the forced response denies knowledge", NOT "deceptive", which is why label_semantics is
+# knowledge_state / utterance_form and why they are EVAL_ONLY and absent from all_keys(): a
+# run of `--datasets all` must never sweep them into the deception corpus.
+#
+# They exist because harm-pressure-knowledge-report cannot attribute its own results --
+# `deceptive = knows AND denies` with the fourth cell empty, so knowledge, wording and
+# deception are perfectly confounded inside it. See kd/docs/DESIGN.md section 3.
+FACTOR_PROBES = {
+    "kd_knowledge": REPO_ROOT / "kd" / "run" / "factor_probes" / "kd_knowledge" / "rows.jsonl",
+    "kd_utterance": REPO_ROOT / "kd" / "run" / "factor_probes" / "kd_utterance" / "rows.jsonl",
+}
+EVAL_ONLY |= set(FACTOR_PROBES)
+
+# The HP-KR slice where every response is a knowledge denial, so the wording is matched and
+# only the knowledge state differs. It is a VIEW over rows already extracted under
+# harm-pressure-knowledge-report -- same row_ids, so it needs no new activations.
+_DENIAL_RE = re.compile(r"\b(do not|don't|doesn't|not)\b[^.]{0,20}\bknow\b", re.I)
+_ASSERT_RE = re.compile(r"^\s*(yes\b|i know\b)", re.I)
+# The CSV's meta column is a repr, not JSON, and it carries numpy scalars in several shapes
+# (np.float64(6.6), np.int64(3), nan, ...). Stripping only np.float64 left 1,472 of the 2,139
+# Llama rows unparseable and silently dropped -- a 70% loss that showed up only as a slice
+# three times too small. Parse permissively instead, with numpy and the bare float names bound.
+_META_ENV = {"nan": float("nan"), "inf": float("inf"), "NaN": float("nan")}
+try:  # numpy is present wherever these rows are analysed, but do not hard-require it here
+    import numpy as _np
+    _META_ENV["np"] = _np
+except ImportError:  # pragma: no cover
+    pass
+
+
+def parse_meta(raw: str) -> dict:
+    """The meta column, tolerant of the numpy reprs pandas left in it."""
+    try:
+        return ast.literal_eval(raw)
+    except (ValueError, SyntaxError):
+        return eval(raw, {"__builtins__": {}}, _META_ENV)  # noqa: S307 -- our own CSV
+
+
+def denies_knowledge(text: str) -> bool:
+    """True when the response claims not to know. On the Llama-3.3-70B rows this single
+    feature reaches AUROC 0.913 against HP-KR's label."""
+    return bool(_DENIAL_RE.search(text or "")) and not _ASSERT_RE.match(text or "")
+
+
+def hpkr_slice(which: str) -> set[str]:
+    """row_ids of an HP-KR slice. 'text_matched' = every response denies (deceptive <=> knows);
+    'knowledge_matched' = every row is one the model knows (deceptive <=> denies).
+
+    Reads the CSV directly rather than load_dataset, because `model_belief` lives in the CSV's
+    meta column and load_csv_subset does not carry it through. Row ids are built exactly as
+    load_csv_subset builds them -- enumerate over ALL rows, then skip other models -- so the
+    ids join against the stored activations.
+    """
+    path = SUBSETS / CSV_DATASETS["harm-pressure-knowledge-report"]
+    out = set()
+    with path.open(encoding="utf-8", newline="") as fh:
+        for i, rec in enumerate(csv.DictReader(fh)):
+            if rec.get("model") != CSV_MODEL:
+                continue
+            try:
+                msgs = ast.literal_eval(rec["messages"])
+                meta = parse_meta(rec["meta"])
+            except (ValueError, SyntaxError, NameError):
+                continue
+            asst = [m for m in msgs if m.get("role") == "assistant"]
+            if not asst:
+                continue
+            sub = rec.get("dataset") or ""
+            idx = rec.get("dataset_index") or rec.get("index") or str(i)
+            item = f"{sub}:{idx}" if sub else str(idx)
+            d = denies_knowledge(asst[-1].get("content", ""))
+            knows = meta.get("model_belief", -1) != -1
+            if (which == "text_matched" and d) or (which == "knowledge_matched" and knows):
+                out.add(f"harm-pressure-knowledge-report:{item}:{i}")
+    return out
+
+
 def load_dataset(key: str) -> list[EvalRow]:
+    if key in FACTOR_PROBES:
+        p = FACTOR_PROBES[key]
+        if not p.exists():
+            raise FileNotFoundError(f"{key}: {p} -- run kd/scripts/build_factor_probes.py --write")
+        return load_generated(p, key)
     if key in CSV_DATASETS:
         return load_csv_subset(SUBSETS / CSV_DATASETS[key], key)[0]
     if key in JSON_DATASETS:

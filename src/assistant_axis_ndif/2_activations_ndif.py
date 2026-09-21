@@ -315,8 +315,17 @@ def _run_session(llm, layer_idx, hidden, prepared, retries):
                                    "did not take effect -- try --accum client)")
             return a, c
         except Exception as e:  # noqa: BLE001 -- engineio b'P' / ConnectionError / NDIF hiccup
+            # Log the LAST line, not str(e)[:200]. nnsight wraps the remote failure in a
+            # CLIENT-side traceback, so a prefix slice spends its whole budget on
+            #   File ".../nnsight/intervention/backends/remote.py", line 567, in __call__
+            # and stops immediately before the RemoteException description -- the only part
+            # that says what went wrong. Fixed in 8_coords_ndif and 1_generate_ndif (F-22);
+            # THIS file was the fifth sibling still carrying it, and on 2026-09-20 it cost the
+            # whole 3B extraction: 22 roles failed with no recoverable reason in the log.
+            _lines = [ln for ln in str(e).strip().splitlines() if ln.strip()]
+            _tail = (_lines[-1].strip() if _lines else repr(e))[:400]
             logger.warning("  session attempt %d/%d failed: %s: %s",
-                           attempt + 1, retries, type(e).__name__, str(e)[:200])
+                           attempt + 1, retries, type(e).__name__, _tail)
             time.sleep(delay)
             delay = min(delay * 2, 60)
     return None
@@ -331,8 +340,10 @@ def _run_batch_client(llm, layer_idx, input_ids, attn, span, retries):
                 out = _span_mean_sum(llm, layer_idx, span).cpu().save()
             return getattr(out, "value", out), float(span.shape[0])
         except Exception as e:  # noqa: BLE001
+            _lines = [ln for ln in str(e).strip().splitlines() if ln.strip()]
+            _tail = (_lines[-1].strip() if _lines else repr(e))[:400]
             logger.warning("  trace attempt %d/%d failed: %s: %s",
-                           attempt + 1, retries, type(e).__name__, str(e)[:200])
+                           attempt + 1, retries, type(e).__name__, _tail)
             time.sleep(delay)
             delay = min(delay * 2, 60)
     return None

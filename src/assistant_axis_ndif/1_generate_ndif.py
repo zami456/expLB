@@ -142,8 +142,17 @@ def generate_batches_session(llm, prompt_batches: list[list[str]], args) -> list
                 raise RuntimeError(f"session returned {len(outs)} outputs, expected {len(encs)}")
             return [_decode_new(llm, o, in_len) for (_, _, in_len), o in zip(encs, outs)]
         except Exception as e:  # noqa: BLE001
+            # Log the LAST line, not str(e)[:200]. nnsight wraps the remote failure in a
+            # CLIENT-side traceback, so a prefix slice spends its whole budget on
+            #   File ".../nnsight/intervention/backends/remote.py", line 567, in __call__
+            # and stops immediately before the RemoteException description -- the only part
+            # that says what went wrong. 8_coords_ndif.py and ndif_common.exc_tail were fixed
+            # for exactly this in Pass B; this script was missed, and on 2026-09-20 it cost a
+            # whole 8B run whose every session failed with no recoverable reason in the log.
+            _lines = [ln for ln in str(e).strip().splitlines() if ln.strip()]
+            _tail = (_lines[-1].strip() if _lines else repr(e))[:400]
             logger.warning("  session attempt %d/%d (%d batches) failed: %s: %s",
-                           attempt + 1, args.retries, len(encs), type(e).__name__, str(e)[:200])
+                           attempt + 1, args.retries, len(encs), type(e).__name__, _tail)
             time.sleep(delay)
             delay = min(delay * 2, 60)
     return None

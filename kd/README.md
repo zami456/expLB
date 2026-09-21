@@ -29,6 +29,8 @@ split in two, and the pre-committed readings. `docs/REPORT.md` is the running re
 kd/
   scripts/
     kd_personas.py           emits the 36 persona files + the 30-question set   [done]
+    make_review_packet.py    -> docs/REVIEW_PACKET.md, pasteable into any chat  [done]
+    make_review_page.py      -> docs/review_page.html, shareable web page       [done]
     build_factor_probes.py   teacher-forced kd_knowledge / kd_utterance corpora
     kd_axes.py               axes over the new group pairs
     kd_attribution.py        the decomposition in DESIGN.md §6
@@ -90,7 +92,7 @@ bank stays in sync with paper16 if that ever changes.
 
 | phase | state |
 |---|---|
-| 1 — prompts and personas | **done, awaiting owner review** |
+| 1 — prompts and personas | **done, out for external review** |
 | 2 — factor probes (`kd_knowledge`, `kd_utterance`) | not started |
 | 3 — persona run on NDIF (5,400 rollouts) | blocked on review |
 | 4 — axes | not started |

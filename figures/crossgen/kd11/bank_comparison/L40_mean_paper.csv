@@ -1,0 +1,12 @@
+bank,feature,mean_delta_vs_raw,dataset_ci_lo,dataset_ci_hi,pairs_better,zeroshot_contrast_mean_auroc
+paper16,pc:unified@2,-0.0227,-0.2009,0.1664,53,0.7287
+paper16,pc:unified,0.0093,-0.1007,0.1311,53,0.7287
+paper16,pc:deception,-0.0191,-0.1287,0.1059,43,0.7287
+paper16,axes,-0.0215,-0.1825,0.1491,49,0.7287
+kd,pc:unified@2,0.0325,-0.1056,0.1728,59,0.7392
+kd,pc:unified,0.0757,-0.0059,0.1725,62,0.7392
+kd,pc:deception,-0.0310,-0.1536,0.1099,44,0.7392
+kd,axes,-0.0272,-0.1930,0.1624,50,0.7392
+kd_s23,pc:unified,0.0759,-0.0046,0.1665,64,0.7325
+kd_s23,pc:deception,-0.0336,-0.1509,0.1086,46,0.7325
+kd_s23,axes,-0.0319,-0.2091,0.1621,50,0.7325

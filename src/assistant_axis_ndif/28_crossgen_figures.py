@@ -32,9 +32,16 @@ PIPELINE_DIR = Path(__file__).resolve().parent
 REPO_ROOT = PIPELINE_DIR.parents[1]
 RUN = REPO_ROOT / "run-crossgen"
 FIGDIR = REPO_ROOT / "figures" / "crossgen"
+# --run / --figdir rebind these (see main). The 11-dataset grid lives in
+# run-crossgen/kd11 because 27_crossgen.py's guard() demands "run-crossgen" as an exact
+# path component, so it cannot sit under kd/.
+N_DATASETS = 10   # rebound from the JSON actually loaded; titles must not assert 10
 
 SHORT = {"instructed-deception": "ID", "harm-pressure-choice": "HP-C",
-         "harm-pressure-knowledge-report": "HP-KR", "convincing-game": "CG",
+         "harm-pressure-knowledge-report": "HP-KR",
+         # the 258 HP-KR rows whose responses ALL deny knowledge: wording held constant,
+         # so only the underlying knowledge state differs
+         "harm-pressure-kr-matched": "HP-KRm", "convincing-game": "CG",
          "insider-trading": "IT", "ai_liar": "AIL", "sandbagging_v2": "SB",
          "roleplaying": "RP", "mask": "MASK", "sycophancy_mt": "SYC"}
 PROBE_LABEL = {"paper": "logistic regression, C=1 (paper)",
@@ -188,7 +195,7 @@ def fig6(pooling: str, layer: int, probe: str, k: int, seed: int = 42, bank: str
     c1.outline.set_visible(False)
     bank_txt = "" if bank in (None, "paper16") else f" · persona bank: {BANK_LABEL.get(bank, bank)}"
     fig.suptitle(f"Layer {layer} · {pooling} pooling · probe: {PROBE_LABEL[probe]} · "
-                 f"Llama-3.3-70B-Instruct, 10 datasets{bank_txt}",
+                 f"Llama-3.3-70B-Instruct, {N_DATASETS} datasets{bank_txt}",
                  x=0.125, ha="left", y=1.03, fontsize=12, fontweight="bold", color=INK)
     fig.text(0.125, 0.985, "Outlined diagonal: tested on the training dataset's own 20% split. "
              "Off-diagonal: tested on 100% of the other dataset. White lines separate label "
@@ -265,7 +272,7 @@ def bank_comparison(pooling: str, layer: int, probe: str, banks, seed: int = 42)
     axes[0].set_yticklabels([BANK_LABEL.get(r["bank"], r["bank"]) for r in rows])
     axes[-1].text(0.10, ypos.max() + 0.75, "paper, 3B: ≈ +0.10", fontsize=7.5, color=INK_2, ha="center")
     fig.suptitle(f"Persona banks compared · layer {layer} · {pooling} pooling · probe: "
-                 f"{PROBE_LABEL[probe]} · 10 datasets, 90 train→test pairs",
+                 f"{PROBE_LABEL[probe]} · {N_DATASETS} datasets, {N_DATASETS * (N_DATASETS - 1)} train→test pairs",
                  x=0.02, ha="left", y=1.02, fontsize=11.5, fontweight="bold", color=INK)
     path = save(fig, f"bank_comparison/L{layer}_{pooling}_{probe}")
     lines = ["bank,feature,mean_delta_vs_raw,dataset_ci_lo,dataset_ci_hi,pairs_better,zeroshot_contrast_mean_auroc"]
@@ -349,7 +356,7 @@ def fig_curves(pooling: str, probe: str, bank=None, block: str = "10"):
             if band:
                 ax.fill_between([b[0] for b in band], [b[1] for b in band], [b[2] for b in band],
                                 color=c, alpha=0.14, lw=0)
-    for ax, title in zip(axes, [f"cross-dataset transfer ({'10' if block == '10' else '9'} datasets)",
+    for ax, title in zip(axes, [f"cross-dataset transfer ({N_DATASETS if block == '10' else 9} datasets)",
                                 "own dataset (20% test split)"]):
         ax.axhline(0.5, color=RULE, lw=0.9)
         ax.set_xlabel("layer")
@@ -522,7 +529,30 @@ def main() -> None:
     ap.add_argument("--ks", nargs="+", type=int, default=[2, 5])
     ap.add_argument("--banks", nargs="+",
                     default=["paper16", "paper16_famcentred", "paper16_shared", "own100", "hf100", "hf275"])
+    ap.add_argument("--run", default=None,
+                    help="results root (default run-crossgen). Use run-crossgen/kd11 for the "
+                         "11-dataset grid; its figures must not overwrite the 10-dataset ones.")
+    ap.add_argument("--figdir", default=None,
+                    help="figure root (default figures/crossgen)")
     args = ap.parse_args()
+
+    # Rebind the module globals rather than threading a root through twenty call sites. The
+    # dataset count is read from the JSON that was actually loaded, because every title used
+    # to assert "10 datasets" regardless -- which on an 11-dataset grid would be a caption
+    # that silently contradicts its own figure.
+    global RUN, FIGDIR, N_DATASETS
+    if args.run:
+        RUN = (REPO_ROOT / args.run).resolve()
+        if not RUN.is_dir():
+            raise SystemExit(f"--run {RUN} does not exist")
+    if args.figdir:
+        FIGDIR = (REPO_ROOT / args.figdir).resolve()
+    elif args.run:
+        FIGDIR = REPO_ROOT / "figures" / "crossgen" / RUN.name
+    probe_json = next(iter(sorted((RUN / "matrices").glob("*.json"))), None)
+    if probe_json is not None:
+        N_DATASETS = len(json.loads(probe_json.read_text(encoding="utf-8"))["datasets"])
+    logger.info("run=%s  figdir=%s  datasets=%d", RUN, FIGDIR, N_DATASETS)
     setup()
     made = 0
     if "fig6" in args.only:
