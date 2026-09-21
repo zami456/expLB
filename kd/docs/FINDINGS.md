@@ -3734,9 +3734,10 @@ see whether the effect survives that. The prediction is that it does not.
   F-79. (4) the neutral bank is format- and length-matched (drift 1.4 and 5.6 characters) but
   not *semantically* null — an alphabetising instruction is still an instruction with content,
   so "content-free" means "content unrelated to capitulation", not "no content".
-- **status:** measured; the qualification to F-66 replicates in *ordering* at all three layers
-  run and is safe to state as "content contributes ~+0.03 and never clears alone". The stronger
-  quarter/three-quarters decomposition is L40/L44-specific and is **not** yet safe to print.
+- **status:** measured; **superseded in its numbers by F-94**, which ran 16 layers and found the
+  "78%" and "three-to-one" figures to be layer-40 artefacts (retention median 53%, range 22–93%;
+  presence:content is about 2:1). The *conclusion* — content matters far less than presence —
+  is confirmed there on a wider base. Quote F-94, not this entry, for any ratio.
 
 **Where this leaves the sarcasm bank.** `cap/docs/SARCASM_DESIGN.md` §Sequence made Tier 0.4 the
 gate: *"It tests whether the persona-side signal is about content at all; if it is not, the
@@ -4055,3 +4056,72 @@ require **both** conditions.
   criticise" remains unmeasured. (3) one temperature (0.7), one seed, single-turn.
 - **status:** measured; the on-policy v2 factorial is **not viable** and the design moves to
   teacher-forced. The polarity check is still owed.
+
+---
+
+### F-94 · 2026-09-21 · **F-89 across 16 layers: the conclusion holds, the "78% / three-to-one" figure does not. Presence beats content about 2:1 on average, and only presence clears**
+
+F-89 measured the format-matched control at three layers and flagged the layer sweep as its own
+biggest weakness. `Cap-Ctrl-Layers` has now filled in 13 more (16 of 21 available at time of
+reading; L60–76 still computing). `sycophancy_mt` target, `paper` probe, seed 42, dataset-level
+bootstrap per layer, `*` = clears.
+
+| L | holding | paraphrase | neutral | none | raw | hold−neut | six−none | neutral retains |
+|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| 0 | 0.5786 | 0.5675 | 0.5262 | 0.5187 | 0.5096 | +0.052\* | +0.060\* | 24% |
+| 4 | 0.5662 | 0.5638 | 0.5393 | 0.5362 | 0.5286 | +0.027 | +0.030\* | 28% |
+| 8 | 0.5658 | 0.5765 | 0.5646 | 0.5653 | 0.5472 | +0.001 | +0.000 | 93% |
+| 12 | 0.5585 | 0.5639 | 0.5415 | 0.5478 | 0.5540 | +0.017\* | +0.011 | −278% |
+| 16 | 0.6074 | 0.6277 | 0.5948 | 0.5973 | 0.5912 | +0.013 | +0.010 | 22% |
+| 20 | 0.6438 | 0.6483 | 0.5919 | 0.5869 | 0.5600 | +0.052 | +0.057 | 38% |
+| 22 | 0.6325 | 0.6360 | 0.5806 | 0.5839 | 0.5565 | +0.052 | +0.049 | 32% |
+| 24 | 0.6034 | 0.6067 | 0.5768 | 0.5718 | 0.5621 | +0.027 | +0.032 | 35% |
+| 28 | 0.7193 | 0.7225 | 0.6464 | 0.5901 | 0.5836 | +0.073 | +0.129\* | 46% |
+| **32** | **0.7521** | **0.7558** | **0.6961** | **0.5825** | **0.6134** | **+0.056** | **+0.170\*** | **60%** |
+| 36 | 0.7299 | 0.7383 | 0.7009 | 0.6062 | 0.6017 | +0.029\* | +0.124\* | 77% |
+| 40 | 0.7136 | 0.7229 | 0.6889 | 0.5935 | 0.6013 | +0.025 | +0.120\* | 78% |
+| 44 | 0.6904 | 0.6984 | 0.6627 | 0.5957 | 0.5831 | +0.028 | +0.095\* | 74% |
+| 48 | 0.6720 | 0.6807 | 0.6485 | 0.5966 | 0.5743 | +0.024 | +0.075\* | 76% |
+| 52 | 0.6750 | 0.6829 | 0.6469 | 0.5920 | 0.5696 | +0.028 | +0.083\* | 73% |
+| 56 | 0.6677 | 0.6757 | 0.6286 | 0.5854 | 0.5703 | +0.039 | +0.082\* | 60% |
+
+**What survives.** The ordering **paraphrase ≥ holding > neutral > none** holds at 15 of 16
+layers (L8 is the single inversion, and everything there is within 0.03 of raw). Swapping the six
+holding personas for six topically unrelated ones costs a **mean of +0.034** and clears the
+bootstrap at only **4 of 16 layers**. Removing them entirely costs a **mean of +0.070** and clears
+at **9 of 16**, including every layer from 28 to 56. **F-89's qualitative conclusion is confirmed
+on a much wider base: what the negative-side personas say matters far less than that they are
+there.**
+
+**What does not survive — and it is F-89's own headline number.** F-89 said presence beats content
+"three to one" and that neutral retains "78%". Both were layer-40 artefacts:
+
+- retention median across layers is **53%**, ranging 22% to 93% (and a meaningless −278% at L12,
+  where the denominator is 0.005). **The ratio is not a stable quantity and should not be quoted
+  at all.**
+- presence : content averages **+0.070 : +0.034**, i.e. about **2:1**, not 3:1.
+
+F-89 already carried an amendment saying the split was L40/L44-specific after three layers showed
+38% / 78% / 74%. Sixteen layers confirm that amendment was right and the original framing wrong.
+**The honest statement is the one that needs no ratio: the content effect averages +0.034 and
+rarely clears; the presence effect averages +0.070 and usually does.**
+
+**At the peak layer the case is strongest.** F-91 found L32 is where `cap_s23` peaks. There:
+content **+0.056** (does not clear), presence **+0.170** (clears) — a 3:1 split at the layer that
+matters most, with only presence significant. So the deflationary reading of F-66 is *strongest*
+at the layer the bank actually performs best, which is the least convenient place for it to be
+if one wanted to defend the original interpretation.
+
+**Depth structure.** The whole phenomenon lives in the second half of the network. Through L24
+everything is within ~0.06 of raw and the pattern is noise; from L28 the holding/neutral/none
+ladder opens up and the presence effect becomes significant at every single layer.
+
+- **source:** `run-crossgen/kd11/banks/{cap_ctrl,cap_s23}/matrices/mean_L*_s42.json`, produced by
+  `Cap-Ctrl-Layers` (`src/assistant_axis_ndif/run_cap_ctrl_layers.ps1`).
+- **caveats:** (1) **16 of 21 layers** — L60/64/68/72/76 were still computing; the deep tail is
+  missing and the trend there is downward, so including it would likely lower both means slightly.
+  (2) one seed (42) and one target (`sycophancy_mt`); F-87 measured seed spread on the cap bank of
+  the same order as the content effect, so the per-layer `*` marks should not be over-read.
+  (3) the bootstrap is over 10 source datasets per layer, the same small unit as F-79.
+- **status:** measured; **supersedes F-89's "78%" and "three-to-one" figures**, confirms its
+  conclusion and its own amendment.
