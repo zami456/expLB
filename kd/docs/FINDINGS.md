@@ -2415,3 +2415,56 @@ which is right for an interruptible chain and wrong after a code change: adding 
 direction changed nothing until the matrices were rebuilt. Added `--recompute`. The rebuild
 reproduced every trained number to four decimals (0.7136 / 0.6575 / 0.6355 / 0.6013 / 0.5935 /
 0.5594 / 0.4974), confirming the run is deterministic and that the only delta is the new rows.
+
+---
+
+### F-69 · 2026-09-21 · passA's matched slice is repaired — 9 honest deniers become 134, matching passB exactly
+
+F-20 found `harm-pressure-kr-matched` reportable on **passB only**: 258 rows at 124 deceptive /
+134 honest there, but 98 rows at **89 / 9** on passA and passC, so those grids ran with ten
+datasets instead of eleven. The cause was not the slice but the store — passA and passC kept a
+200-row label-stratified subsample of HP-KR, and HP-KR's honest class is overwhelmingly *"I know
+the answer"*, i.e. assertions, which by construction cannot appear in a DENIAL-matched slice.
+Nine survived.
+
+Extracting the full 2,139 HP-KR rows into passA closes it completely:
+
+| store | HP-KR rows | matched | deceptive / honest | verdict |
+|---|---:|---:|---|---|
+| **passA** | 200 → **2,139** | 98 → **258** | 89/9 → **124 / 134** | unusable → **usable** |
+| passB (untouched) | 2,139 | 258 | 124 / 134 | usable |
+| passC (mid-extraction) | 200 | 98 | 89 / 9 | pending |
+
+passA is now **identical to passB on this slice** — same 258 row_ids, same 124/134 split. The
+limiting class grew **14.9×**. No new rows were generated; these are rows that always existed and
+were being discarded at extraction.
+
+**What it unlocks.** passA stores **all 80 layers**, so `harm-pressure-kr-matched` — the column
+carrying F-03, the strongest positive result in the project — now has a **layer profile** for the
+first time. It previously existed at three layers on passB and nowhere else. F-34 established
+that layer choice is not cosmetic (a factor probe moved 0.784 → 0.509 between L20 and L40), so a
+result quoted at one layer without a profile has an unquantified degree of freedom.
+
+- **source:** `kd/scripts/check_matched_slice.py` against
+  `run-coords/{passA,passB,passC}/harm-pressure-knowledge-report/rows.jsonl`, joined on the
+  stored `row_id`; slice definition from `eval_datasets.hpkr_slice("text_matched")`.
+  Extraction gate: `logs/hpkr_topup.status`, `passA measured=2139 predicted=2139 PASS` at
+  11:29:46, 55 chunks / 5.22 GB in 36 minutes.
+- **caveats:** (1) this is a **composition** fact, not a result — it says the slice is now
+  measurable on passA, not that anything about F-03 replicates there. The layer profile is the
+  next step and may not agree with passB. (2) passC is still extracting; its per-token slice is
+  unverified. (3) the slice is still capped at 258 rows on every store — the top-up repairs
+  passA's *sampling*, it does not grow the underlying cell, which remains the constraint NEXT.md
+  route (b) tried and failed to lift (F-59).
+- **supersedes:** F-20's "quote the matched slice from passB only" — now passA as well, once the
+  grid is re-run. passC pending.
+- **status:** verified
+
+**A reconstruction bug caught before it was reported.** The first version of the checker rebuilt
+the join key as `dataset:item_id:sample_idx` and matched **1 of 258 on passB**, which reads like
+a data catastrophe rather than a key-format error. `hpkr_slice` builds ids as
+`<dataset>:<sub>:<idx>:<i>` where `item_id` already contains a colon and `<i>` is the CSV
+enumerate index over **all** rows, taken before the model filter. `rows.jsonl` stores the
+correct `row_id` as a field; the fix was to use it rather than rebuild it. The tell was passB —
+an untouched store returning 1 where F-20 recorded 258 is a bug in the reader, not a change in
+the data, and checking the store that *should not* have moved is what surfaced it.
