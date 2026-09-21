@@ -3115,3 +3115,75 @@ owed before anything is said about it.
 before today, in no plan, and in neither of two independent expert reviews with web search. The
 design was inherited from the paper being replicated, and the paper's design is the one that
 makes its own argument work. It took reading a third paper that ran the condition.
+
+---
+
+### F-80 · 2026-09-21 · **F-79 clears the dataset-level bootstrap by a wide margin — and the gain is diversity, not data volume**
+
+The bar this project set for itself, applied to F-79. Resampling unit is the **target dataset**
+(n = 11, B = 10,000, paired — both conditions scored on the same resampled target list).
+
+| comparison | diff | 95% CI | P(≤0) | |
+|---|---:|---|---:|---|
+| **pooled LODO − single-source transfer** | **+0.1782** | **[+0.1430, +0.2129]** | **0.0000** | **CLEARS** |
+| **pooled LODO row-matched − single-source** | **+0.1737** | **[+0.1256, +0.2239]** | **0.0000** | **CLEARS** |
+| pooled LODO − pooled LODO row-matched | +0.0045 | [−0.0234, +0.0325] | 0.378 | no difference |
+| single-source **own dataset** − pooled LODO | +0.0962 | [+0.0553, +0.1360] | 0.0000 | CLEARS |
+
+**Pooled training beats single-source transfer on 11 of 11 targets.** Worst case is `mask` at
++0.072; best is `harm-pressure-knowledge-report` at +0.279.
+
+| target | single-source | pooled LODO | diff |
+|---|---:|---:|---:|
+| harm-pressure-knowledge-report | 0.693 | **0.972** | +0.279 |
+| insider-trading | 0.607 | 0.856 | +0.249 |
+| convincing-game | 0.721 | 0.955 | +0.234 |
+| harm-pressure-kr-matched | 0.613 | 0.806 | +0.193 |
+| sycophancy_mt | 0.617 | 0.802 | +0.185 |
+| roleplaying | 0.644 | 0.824 | +0.180 |
+| sandbagging_v2 | 0.791 | 0.970 | +0.178 |
+| ai_liar | 0.691 | 0.857 | +0.166 |
+| instructed-deception | 0.822 | 0.941 | +0.119 |
+| harm-pressure-choice | 0.652 | 0.756 | +0.103 |
+| mask | 0.588 | 0.660 | +0.072 |
+
+**The third row is the control working.** Pooled LODO with **all** the other datasets' rows
+(~6,700) and pooled LODO held to a **single-source row budget** (~666) are statistically
+indistinguishable: +0.0045, interval straddling zero, p = 0.38. **Data volume contributes
+nothing. The entire +0.174 comes from training on ten sources instead of one.** That is the
+comparison Ying et al. do not report and the one that makes the result interpretable.
+
+**The fourth row is the honest limit.** Training on the target's own data still beats pooled LODO
+by +0.096. Pooling closes most of the transfer gap — 0.676 → 0.854 against an in-domain ceiling
+of 0.951 — but not all of it.
+
+**Context: this is the widest-clearing result the project has produced.** F-66's cap margin was
++0.112 with CI [+0.050, +0.185]; this is +0.178 with CI [+0.143, +0.213] — larger *and* tighter,
+because it holds on every target rather than most. Against a bar that 1 of 384 paper16
+comparisons and 6 of 4,032 kd ones cleared, and that F-76 used to overturn F-75, this clears
+without ambiguity.
+
+**Two specific numbers worth flagging.** On `harm-pressure-knowledge-report` — the dataset this
+entire `kd/` experiment was built around because every detector inverts on it — pooled training
+reaches **0.972**. The inversion is not a property of the dataset. It is a property of training
+on one source. And on `sycophancy_mt`, pooled reaches **0.802** against the capitulation bank's
+0.714 (F-65), so the bank we built to fix that dataset is beaten by pooling datasets we already had.
+
+- **source:** `src/assistant_axis_ndif/30b_premise_boot.py` over
+  `run-premise/premise_L40_mean_s42.json`.
+- **caveats:** (1) one layer (L40, pre-specified), one seed, one probe type — the layer profile
+  and seed robustness are owed, and F-76 is a standing warning about single-layer conclusions.
+  (2) n = 11 targets is a small resampling unit; the interval is tight here only because the
+  effect is present on every one. (3) pooled LODO still trails in-domain training by +0.096.
+  (4) this says nothing about *why* pooling works — domain-general directions, regularisation
+  from heterogeneous data, or simply averaging away dataset-specific shortcuts are all live.
+- **supersedes:** nothing. **Confirms** F-79 at the project's significance bar and independently
+  replicates Ying et al.'s pooled-training claim on a more heterogeneous corpus than theirs.
+- **status:** verified
+
+**Where the thesis now stands.** Three claims survive their own tests: persona axes fail when
+personas vary register rather than the labelled construct (F-13, corroborated independently by
+Ying et al.); a construct-matched bank works robustly on its own construct (F-77, 21/21 layers);
+and **the problem persona coordinates exist to solve is better solved by training on more than
+one dataset** (F-79, F-80). The third is the one no reviewer, no plan and no prior session in
+this project proposed — it came from a paper added this afternoon.
