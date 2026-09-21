@@ -3039,3 +3039,79 @@ unexamined assumption.
 single most decisive experiment left, and it argues against our own method. (2) **Compute
 Mahalanobis cosine similarity across our 11×11 matrix** and check whether their R² = 0.98
 predictor replicates on persona axes; it is cheap, and either outcome is reportable.
+
+---
+
+### F-79 · 2026-09-21 · **The premise fails: pooled training beats every persona result in this project, at equal data volume, without personas**
+
+F-78 flagged that Ying et al. report pooled training recovering strong performance, and that we
+had never run that cell. It is now run. Results in `run-premise/premise_L40_mean_s42.json`
+(new folder, no existing result touched). L40, mean pooling, `paper` probe, seed 42, 11 datasets,
+80/20 splits, class-balanced training.
+
+| condition | trained on | AUROC |
+|---|---|---:|
+| single-source, own dataset | its own 80% | 0.9506 |
+| **single-source, off-diagonal** | **one other dataset** | **0.6763** |
+| pooled, all rows (n=7,336) | all 11, incl. target | 0.9447 |
+| pooled, row-matched (n=414) | all 11, incl. target | 0.8924 |
+| **pooled leave-one-dataset-out** | **the other 10, never the target** | **0.8545** |
+| **pooled LODO, row-budget matched** | **the other 10, ~666 rows total** | **0.8500** |
+
+**The bottom two rows are the result.** A probe that has never seen the target dataset, trained
+on the pooled rows of the other ten, scores **0.8545** against single-source transfer's
+**0.6763** — **+0.178**. And holding the row budget fixed to what an average single-source probe
+gets (~666 rows, just drawn from ten datasets instead of one) it still scores **0.8500**, so
+**+0.174 comes from diversity alone, not from more data.**
+
+The first two pooled rows are reported but **must not be quoted as transfer**: they include the
+target's own training rows and are therefore partly in-domain. The first version of this
+experiment computed only those, and would have overstated the case with a number that beats
+transfer trivially. The leave-one-out rows are the comparison that matters.
+
+**This beats every persona result in the project**, on the same activations, the same probe, the
+same layer:
+
+| | AUROC |
+|---|---:|
+| **pooled LODO** | **0.8545** |
+| kd `axes` on the matched slice, L40 (F-03) | 0.752 |
+| `pc:capitulation@2` on `sycophancy_mt`, L40 (F-65) | 0.714 |
+| paper16 `pc:unified` off-diagonal | ~0.672 |
+| single-source transfer | 0.6763 |
+
+**What this does to the thesis.** The persona-coordinates paper motivates persona axes by the
+claim that probes trained on one dataset transfer badly, so you need persona structure to
+generalise. The first half is true — 0.676. **The second half does not follow.** Training on ten
+datasets instead of one closes most of the gap to in-domain performance (0.854 against 0.951),
+needs no personas, no PCA, no contrast design, and no extra rows.
+
+The honest framing of the whole project shifts accordingly. It is not *"persona coordinates
+don't work"* — F-77 shows a construct-matched bank does work, robustly, on its own construct. It
+is: **the problem persona coordinates were invented to solve has a simpler solution that the
+literature did not compare against.**
+
+**The Mahalanobis predictor did NOT replicate, and the reason is probably ours.** Ying et al.
+report R² = 0.98 for Mahalanobis cosine between probe directions against pairwise transfer, and
+0.56 for plain cosine. On our 110 pairs: **plain cosine R² = 0.244, Mahalanobis R² = 0.017** —
+Mahalanobis is *worse*. Before reading this as a failure to replicate, note an implementation
+difference: **we used the pooled TOTAL covariance with 0.05 shrinkage; Mahalanobis normally uses
+the WITHIN-CLASS covariance**, and their paper does not specify which in the text we read. Our
+number is therefore not yet a test of their claim. Re-running with within-class covariance is
+owed before anything is said about it.
+
+- **source:** `src/assistant_axis_ndif/30_premise.py` → `run-premise/premise_L40_mean_s42.json`.
+- **caveats:** (1) **no dataset-level bootstrap yet** — the margin is +0.178, far larger than the
+  +0.112 that cleared in F-66, but F-04's bar is unmet until run. (2) one layer (L40,
+  pre-specified), one seed, one probe type. (3) the caveat carried from F-78 cuts *in our favour*
+  here: Ying et al. pooled five coherent truth types, while our eleven span intent-based
+  deception, belief-based lying and judge-labelled roleplay — pooling works despite our corpus
+  being the more heterogeneous one. (4) `harm-pressure-choice` and `harm-pressure-knowledge-report`
+  are heavily imbalanced (134/2000 and 139/2000); training is class-balanced but the test splits
+  are not, which AUROC tolerates. (5) the Mahalanobis line is not yet a replication attempt.
+- **status:** verified
+
+**This was nobody's idea but the paper's.** Pooled training appears nowhere in this project
+before today, in no plan, and in neither of two independent expert reviews with web search. The
+design was inherited from the paper being replicated, and the paper's design is the one that
+makes its own argument work. It took reading a third paper that ran the condition.
