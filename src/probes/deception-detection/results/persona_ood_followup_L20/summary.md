@@ -89,6 +89,37 @@ averages **0.685** off the diagonal, against **0.648** on response tokens. It im
 0.242) and IT (0.799 → 0.714). A common scored token helps supervised transfer even as it breaks
 the persona direction.
 
+## k = 3: the paper's method 3, trained on RepE
+
+The paper's third method projects onto the top three persona PCs and trains a small probe on those
+features, on RepE. That is the RepE row of each `matrix_*.csv`, so it needs no new run. Mean AUROC
+over the five datasets shared with the paper (the 8192-d row reproduces the Mean Probe on response
+tokens and the Follow-Up Probe at the "No"):
+
+| arm | response tokens | follow-up "No" |
+|---|---|---|
+| 8192-d baseline | 0.734 | 0.636 |
+| extended axis, k = 1 | **0.887** | 0.552 |
+| extended PCs, k = 3 | 0.736 | 0.579 |
+| original PCs, k = 3 | 0.733 | 0.574 |
+| knowledge-denial PCs, k = 3 | 0.810 | **0.699** |
+
+- **On response tokens 1-d still beats 3-d, under the paper's own training protocol.** The loss is
+  concentrated in HP-KR: the RepE-trained k = 3 probe re-inverts it to 0.118 against the 1-d axis's
+  0.882. The three components carry the denial direction, but a probe fitted on RepE weights them
+  so the assertion polarity returns.
+- **k = 3 does not rescue the extended or original bank at the follow-up token**: insider trading
+  still inverts (0.170, 0.212).
+- **The knowledge-denial subspace is the exception.** At the "No" it is the best persona arm, 0.699,
+  above the Follow-Up Probe itself (0.636), and it does not invert on insider trading (0.712 against
+  0.216 for its 1-d axis): a learned combination of its three components avoids the sign flip a
+  fixed axis cannot. It is also strong on response tokens, 0.810, with HP-KR at 0.969.
+- **Two limits on that.** Most of its lead at the "No" is from *not inverting* on IT and HP-KR
+  (0.712, 0.479) rather than from detecting them well. And it depends on the training set: averaged
+  over all training sets at the "No" it is 0.492, and RepE is the one that works. On balanced
+  accuracy at 1% FPR it does not lead (0.573, against 0.638 for the 1-d axis and 0.623 for the
+  Follow-Up Probe).
+
 ## Reading the transfer matrices in this folder
 
 For a 1-d direction the only thing a probe can learn is the sign. On response tokens every
