@@ -3860,3 +3860,64 @@ survives its bootstrap by a margin too small to headline. **The strongest honest
 in a like-for-like leave-one-dataset-out comparison the persona method loses to an ordinary pooled
 logistic regression by 0.11–0.16 AUROC** — which is a claim about the replicated paper, not about
 a mechanism of ours, and it is the one that should lead.
+
+---
+
+### F-91 · 2026-09-21 · **Layer 40 is not the peak. L32 is, for both raw and persona features, by ~0.02 — and the data to show it was already on disk**
+
+**Prompted by the owner**, after the falsification sweep (in flight) showed the mean-of-directions
+probe reaching 0.8945 at L32 and 0.8942 at L36 against 0.8828 at L40. The question asked was
+whether we should generate crossgen matrices at other layers "like we did in passA, B, C".
+
+**Most of that work turned out to be already done.** A coverage audit of `run-crossgen/`:
+
+| store | layers |
+|---|---|
+| `kd11/banks/{kd_s23, cap_s23, cap_all, kd}` | **all 21** |
+| `passB/banks/{paper16_shared, own100, hf100, hf275_loose, hf275_strict, own100_strict, paper16_famcentred}` | **all 21**, × 6 seeds |
+| `kd11/passA`, `kd11/passA11`, `passA` | **all 80** |
+| `kd11/passC`, `passC11`, `passC` | 6 |
+| **`kd11/banks/cap_ctrl`** | **3** — the only real gap |
+| `scale_70b` | 1 |
+
+So "our figures show only L40" was a **figure-selection** decision, not missing data. The one
+genuine gap is the Tier 0.4 format-matched control (F-89), which had 3 layers while every other
+`kd11` bank had 21 — exactly the caveat F-89 recorded against itself. Now extending
+(`Cap-Ctrl-Layers`).
+
+**Read straight off the existing matrices**, off-diagonal mean over the 11-dataset grid, `paper`
+probe, seed 42:
+
+| bank / feature | peak layer | peak | L40 | peak − L40 |
+|---|---:|---:|---:|---:|
+| `cap_s23` / raw | **32** | 0.6818 | 0.6623 | **+0.0195** |
+| `cap_s23` / `pc:capitulation@2` | **32** | 0.7798 | 0.7606 | **+0.0192** |
+| `kd_s23` / `axes` | 44 | 0.6435 | 0.6304 | +0.0131 |
+
+The full profile for `pc:capitulation@2` is flat-then-jump: 0.55–0.62 through L24, **0.713 at
+L28, 0.780 at L32**, then a slow decline to 0.672 at L76. Raw does the same thing one notch
+weaker. **Two independent methods therefore put the optimum at 32–36, not 40** — the persona
+crossgen above, and the pooled mean-of-directions sweep, which were computed from different code
+on different features.
+
+**What this changes, and what it does not.** All differences are ~0.02 and **no ordering
+reported anywhere in this ledger reverses**: `pc:capitulation@2` beats raw at L32 (0.780 vs
+0.682, +0.098) just as it does at L40 (0.761 vs 0.662, +0.099). So no finding is overturned. What
+it does mean is that **every L40 figure in the project is a mild understatement**, ours and the
+collaborator's alike, and that the layer choice in `docs/LAYER_PREREGISTRATION.md` — L20/22/40
+from the literature, L44 ours — did not include the layer that actually wins.
+
+**The honest framing is that we never pre-registered L32 and should not now claim it.** The
+pre-registration exists precisely to stop post-hoc layer selection, and picking the argmax after
+seeing 21 layers is what it forbids. L32 should be **reported alongside** L40, not substituted
+for it, and any headline that moves to L32 has to say it was chosen after the fact.
+
+- **source:** `run-crossgen/kd11/banks/{cap_s23,kd_s23}/matrices/mean_L*_s42.json`, read directly;
+  coverage audit over `run-crossgen/**/matrices/*.json`.
+- **caveats:** (1) one seed (42) for the peak table — `cap_s23` has seeds 1/7/13/42 stored and the
+  peak has not been checked for seed stability, which matters because the L32−L40 gap (0.019) is
+  the same order as the seed spread F-87 measured. (2) off-diagonal mean over 11 datasets is the
+  summary statistic; a per-target argmax will differ. (3) F-75 was overturned for reading a
+  plateau off point estimates, and this table is point estimates — **the peak is not
+  bootstrapped**, so "L32 is the peak" is at present an observation, not a significance claim.
+- **status:** measured; not pre-registered, not bootstrapped, reported as an observation.

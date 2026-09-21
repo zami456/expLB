@@ -189,12 +189,32 @@ baseline the original paper uses, so matching it is fair. But we now know a prob
 contrast design, and **no additional rows**.
 
 So the abstract's comparison is against the weakest trained baseline that exists. The honest
-question is: **does the contrast still beat a pooled probe?** At 0.916 vs 0.854 it might — those
-numbers are not directly comparable across different dataset sets, and the contrast has a real
-structural advantage in having no training set at all.
+question is: **does the contrast still beat a pooled probe?**
 
-**That experiment has never been run on your six.** It is cheap — CPU only, on activations we
-already hold — and it decides whether the headline stands. I would run it before submitting.
+**That experiment has now been run, on your six.** Same six datasets, same layers:
+
+| comparison at L40 | margin |
+|---|---:|
+| 0.916 vs single-source 0.732 *(the abstract)* | **+0.184** |
+| 0.916 vs pooled LODO 0.868 | +0.048 |
+| **0.916 vs pooled, row-budget matched 0.893** | **+0.023** |
+
+The headline survives, but **the margin goes from +0.184 to +0.023** — and that is against *your*
+0.916. On our own grid the same contrast on the same six at L40 reads **0.811**, against pooled
+row-matched at **0.893**, so like-for-like on our data the persona contrast **loses by 0.082**.
+
+**How weak "0.732" is turns out to be measurable.** Across our 110 source→target pairs, **21 fall
+below 0.5** and 14 below 0.4 (minimum 0.055). Averaging those in is what makes the single-source
+baseline so low. Three alternative baselines on identical pairs:
+
+| single-source baseline | AUROC |
+|---|---:|
+| mean over sources *(what the abstract compares against)* | 0.676 |
+| median over sources | 0.722 |
+| sign-oriented mean, max(a, 1−a) | 0.735 |
+| best source per target *(oracle — needs test labels)* | **0.897** |
+
+A reviewer will ask why the mean and not the median. Worth pre-empting.
 
 ### (c) One direct contradiction to check
 
@@ -301,6 +321,67 @@ by *selecting* principal components with an LLM judge; we recover it by *averagi
 sources — no judge, no target labels, no interpretation step. Worth citing as independent support
 for the same underlying picture, with our method as the simpler route.
 
+## 5d. An external review of the pooled result, and the one number that reframes everything
+
+We sent the pooled-training result out for adversarial review. Three of the five challenges
+landed. All of this is measured, in one process on one set of splits, reproducing the stored
+baseline bit-for-bit.
+
+**The finding that matters most to your abstract.** The reviewer asked whether we had ever run
+the *persona method itself* through the same leave-one-dataset-out setup we were using for the
+pooled probe. We had not — every persona number in this project, and in the paper we are
+replicating, is train-on-one / test-on-others. Run like-for-like:
+
+| feature (trained, LODO) | single-source | pooled LODO | vs raw pooled | 95% CI |
+|---|---:|---:|---:|---|
+| **raw 8192-d activations** | 0.676 | **0.854** | — | |
+| `axes` | 0.679 | 0.745 | −0.109 | [−0.187, −0.039] |
+| `pc:deception` | 0.621 | 0.731 | −0.124 | [−0.203, −0.055] |
+| `pc:unified@2` | 0.574 | 0.692 | −0.162 | [−0.288, −0.059] |
+
+**All three persona feature sets are significantly worse than ordinary logistic regression on raw
+activations, once both are given the same ten training datasets.** Pooling helps the persona
+features too (`pc:unified@2` gains +0.118), so diversity is not something personas provide.
+
+This does *not* touch your zero-shot contrast, which has no training set and is a different
+object. But it does mean the trained half of the persona-coordinates method loses to a baseline
+the original paper never ran.
+
+**Two corrections to our own numbers, which we found by being asked.**
+
+- We had quoted the budget-matched pooled probe as 0.850 in one place and 0.806 in another. They
+  are **the same estimator on different random row draws** — one script consumes its RNG
+  differently. Over 20 draws: **0.834, range [0.791, 0.874], sd 0.020**. Both published figures
+  were single draws reported as if they were the quantity.
+- Our secondary "mean-of-directions" result is **+0.028, CI [+0.005, +0.052]**. It clears, but
+  the lower bound is +0.005. It is not a headline.
+
+**What we are dropping.** The claim that our pooled result is a *new mechanism*. The reviewer's
+framing is better and we are adopting it: the contribution is **"the replicated paper omitted a
+baseline that beats its trained method"**. That is a smaller claim than a mechanism and a much
+harder one to argue with.
+
+---
+
+## 5e. Layer 40 is not the peak — which affects every number above
+
+We had used layer 40 throughout, following the literature. Re-reading the 21-layer matrices we
+already hold:
+
+| bank / feature | peak layer | peak | at L40 | difference |
+|---|---:|---:|---:|---:|
+| `cap_s23` / raw | **32** | 0.682 | 0.662 | +0.020 |
+| `cap_s23` / `pc:capitulation@2` | **32** | 0.780 | 0.761 | +0.019 |
+| `kd_s23` / `axes` | 44 | 0.644 | 0.630 | +0.013 |
+
+An independent sweep of the pooled probe agrees, peaking at layers 32–36 rather than 40. The
+differences are small (~0.02) and do not reverse any ordering we have reported, but **every L40
+figure in this document is therefore a slight understatement**, for your method and ours alike.
+If the abstract reports L20 and L40, it is worth checking L32 before submitting — the activations
+are already extracted, so it costs nothing but CPU.
+
+---
+
 ## 6. Where sarcasm fits now
 
 We have been planning a sarcasm persona bank. It is still worth doing, and its role has changed.
@@ -333,10 +414,23 @@ supporting a diagnosis, not carrying a headline. Worth doing, but not first.
 
 | | status |
 |---|---|
-| Pooled training on **your six datasets** | not run — **the experiment that settles the abstract** |
-| Format-matched persona control | banks built and committed; needs GPU time |
-| Sarcasm bank | design not started; authoring is the bottleneck, not compute |
-| Resolve the PC1 sign discrepancy | needs your setup details |
+| Pooled training on **your six datasets** | **done** — margin falls from +0.184 to +0.023 (§5b) |
+| Persona method through the same LODO harness | **done** — loses to raw pooled LR by 0.11–0.16 (§5d) |
+| Format-matched persona control | **done, and mostly negative** — see below |
+| Layer-32 check on the key numbers | running; activations already held, CPU only |
+| Sarcasm bank | design v2 written and externally reviewed; **elicitation pilot generating now** |
+| Clustered hold-out for shared provenance | **not run** — the open methodological risk (§5d) |
+| Resolve the PC1 sign discrepancy | still needs your setup details |
+
+**The format-matched control, because it qualifies Claim 2's story.** We had found that the six
+"position-holding" personas on the negative side of the capitulation contrast were load-bearing
+even though they produce text almost identical to no system prompt — and read that as *the model
+represents the disposition even when it does not act on it*. We then swapped those six for six
+personas about **alphabetising lists, citing sources, using metric units, spelling out and
+keeping time** — nothing to do with holding a position. Swapping the content costs only
+**~+0.03** and clears no significance test at any layer; removing the six entirely costs **two to
+four times that**. So the persona side is contributing mostly *an instruction is in force*, not
+*this particular disposition*. Claim 2's measurement stands; that interpretation of it does not.
 
 **The framing I would suggest.** Not *"persona coordinates don't work"* — Claim 2 shows a
 construct-matched bank does, robustly. And not *"one direction generalizes"* alone, because the
@@ -344,9 +438,20 @@ comparison behind it is against a baseline we can now beat without personas.
 
 Something closer to: **persona axes fail when the personas vary register rather than the labelled
 construct, work when they vary the construct, and the transfer problem that motivates the whole
-method is better solved by training on more than one dataset.** All three parts are measured, all
-three survive the dataset-level bootstrap, and the third is the one nobody in this project — or
-in two rounds of external review — thought to test.
+method is better solved by training on more than one dataset.** All three parts are measured and
+all three survive the dataset-level bootstrap.
+
+**One revision to that, after the review in §5d.** The third part should be stated as a claim
+about the *literature*, not about a mechanism of ours: in a like-for-like leave-one-dataset-out
+comparison, the trained persona-coordinates method loses to ordinary logistic regression on raw
+activations by 0.11–0.16 AUROC. Related results already exist — Ying et al. on truth types, and
+work on style-augmented probes — so the diversity effect itself is not new. **What is ours is
+having run the comparison the method's own paper omits, on 70B, with the controls.** That is a
+narrower claim than we were making this morning, and a considerably more defensible one.
+
+Your zero-shot contrast is untouched by all of this: it has no training set, so none of the
+pooled comparisons apply to it directly. Its exposure is the baseline question in §5b — whether
+0.732 is the number a reviewer will accept as "the trained probe".
 
 ---
 
