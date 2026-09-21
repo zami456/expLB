@@ -79,7 +79,8 @@ the pragmatics literature; "ironic praise" conventionally means the reverse.
 ironic_criticism − sincere_criticism    mismatch, situation and intent held constant
 sycophantic_praise − ironic_criticism   INTENT: both literally approve a bad plan,
                                          differing only in believed vs recognised
-each arm − plain_assistant               per-side load, the F-66 question
+each arm − plain_assistant               DEMOTED by F-89 -- mostly measures "an instruction
+                                         is in force", not this arm's stance. Descriptive only.
 ```
 
 **The second contrast is the one the review says is non-negotiable**, and it yields a
@@ -162,9 +163,21 @@ base rate, which bears directly on the sycophantic arm.
 
 ## Sequence
 
-1. **Format-matched control first** — already running as `Cap-Controls`. It tests whether the
-   persona-side signal is about content at all; if it is not, the sarcasm bank's interpretation
-   changes and this should be re-scoped before building.
+1. ~~**Format-matched control first**~~ — **done, and it came back mostly negative (F-89).**
+   Swapping the six position-holding personas for six topically unrelated instructed personas
+   (alphabetise, cite, metric units, name the speaker, spell out, keep time) costs only **+0.03
+   AUROC**, which does not clear the dataset bootstrap on its own at any of layers 20, 40 or 44.
+   Removing them entirely costs **two to four times that**. So the persona-side signal is
+   *mostly about an instruction being present*, not about what it says.
+
+   **What that changes here, concretely:** the third contrast below,
+   `each arm − plain_assistant`, was justified as "per-side load, the F-66 question". It will now
+   largely measure *an instruction is in force* rather than *this arm's stance*, so it cannot
+   carry interpretive weight and is demoted to a descriptive check. **The two contrasts that
+   matter are unaffected**, because both hold all four arms as instructed personas and difference
+   them against each other — including `sycophantic_praise − ironic_criticism`, the one the
+   review called non-negotiable. The design survives; its weakest contrast is now known to be
+   weak *before* anything is generated, which is what this gate was for.
 2. **Deadpan elicitation pilot**, 10–20 items. Models over-mark sarcasm (Sarc7: they "slip into
    blunt reproach"; SarcasmBench: LLMs underperform supervised baselines). If the model cannot
    produce unmarked sarcasm, the on-policy design is dead and we move to teacher-forced identical

@@ -3625,3 +3625,126 @@ our contribution, and it only became visible by reading his paper.**
 Claim 3 should be positioned as *the dataset-level case of a distributional-diversity effect
 Kumar showed for styles*, with F-86's mean-of-directions mechanism as the part that is ours.
 And the off-policy objection to teacher-forcing goes in the paper, not in a rebuttal.
+
+---
+
+### F-89 · 2026-09-21 · **Tier 0.4 — the format-matched control deflates F-66's interpretation: swapping the six holding personas for six topically unrelated ones costs only ~+0.03; removing them entirely costs two to four times that**
+
+**What was asked.** F-66/F-68 said the six position-holding personas are load-bearing even though
+F-55 found they produce text nearly indistinguishable from no system prompt at all — summarised
+as *"behavioural inertness is not representational inertness."* The deflationary alternative was
+never tested: that those personas contribute a representation of **an instruction being in
+force**, not of the disposition the instruction describes. Tier 0.4 tests it by holding the
+capitulation half and the anchor **byte-identical** (their vectors are copied from `run-cap`, not
+regenerated) and swapping only the other six roles.
+
+**A structural fact that decides how to read the table.** `pc:<name>@k` projects onto the
+contrast's **PCA basis**, never the contrast direction — `6_axes.py` prints a NOTE for this, and
+it is confirmed here: `pc:capitulation@2` and `pc:cap_vs_default@2` are **bit-identical**
+(`max|diff| = 0.0` over all 110 cells) because the stored bank gives both a 13-role basis over
+the same roles. Likewise `pc:cap_only@2` ≡ `pc:cap_only_ctrl@2`, which doubles as proof the
+vector reuse worked. So the four conditions below differ in exactly one thing: **which six
+personas join the six capitulation roles and the anchor in the PCA.** That is a cleaner
+manipulation than the contrast framing suggested, and it is the manipulation the numbers speak to.
+
+**The measurement.** `sycophancy_mt` as held-out target, layer 40, mean-pooled, `paper` probe,
+10 source datasets off-diagonal. Paired dataset-level bootstrap, B = 10,000.
+
+| negative-side personas (basis) | AUROC | vs raw | 95% CI | |
+|---|---:|---:|---|---|
+| paraphrased holding (13 roles) | 0.7229 | +0.1216 | [+0.0541, +0.1994] | clears |
+| **original holding (13 roles)** | **0.7136** | **+0.1123** | **[+0.0502, +0.1847]** | **clears** |
+| neutral / format-matched (13 roles) | 0.6889 | +0.0875 | [+0.0336, +0.1402] | clears |
+| none — anchor only (7 roles) | 0.5935 | −0.0078 | [−0.1122, +0.0952] | **null** |
+| raw 8192-d | 0.6013 | — | — | |
+
+The neutral personas are instructions to alphabetise lists, cite sources, use metric units, name
+the speaker, spell things out, and keep time. **Nothing about holding a position under pressure.**
+
+**The three contrasts that matter:**
+
+| | Δ | 95% CI | P(≤0) | |
+|---|---:|---|---:|---|
+| holding − neutral | +0.0247 | [−0.0067, +0.0718] | 0.113 | does **not** clear |
+| paraphrase − neutral | +0.0340 | [+0.0018, +0.0804] | 0.018 | clears |
+| **any six personas − none** (vs-default − cap_only) | **+0.1201** | **[+0.0336, +0.2132]** | **0.001** | **clears decisively** |
+
+**The reading, stated against the pre-registration.** `make_format_controls.py` committed in
+advance to: *"If the advantage SURVIVES with these [neutral], the signal is the instruction's
+format/presence, and F-66's reading is wrong. If it survives with PARAPHRASE but not NEUTRAL, the
+signal is the position-holding CONTENT, and F-66 stands."* **The outcome is the first branch,
+with a small residue of the second.** The neutral bank retains **78%** of the margin over raw at
+this layer (+0.0875 of +0.1123) while sharing none of the content. Removing the six personas
+entirely costs **+0.120** — five times the content effect here, and the only difference in the
+table that clears the bootstrap.
+
+The content effect is real but small, and the two independent estimates of it disagree on
+significance: +0.0247 (n.s.) and +0.0340 (clears). They agree in sign and rough magnitude, so the
+honest summary is **roughly +0.03 AUROC attributable to what the negative-side personas say,
+against roughly +0.09 attributable to their being instructed personas at all** — about a quarter
+and three quarters *at layer 40*.
+
+**The layer sweep, run immediately after, qualifies that split.** The crossgen already covered
+20 / 40 / 44:
+
+| L | holding | paraphrase | neutral | none | raw | hold−neut | para−neut | six−none |
+|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| 20 | 0.6438 | 0.6483 | 0.5919 | 0.5869 | 0.5600 | +0.052 | +0.056 | +0.057 |
+| 40 | 0.7136 | 0.7229 | 0.6889 | 0.5935 | 0.6013 | +0.025 | +0.034\* | +0.120\* |
+| 44 | 0.6904 | 0.6984 | 0.6627 | 0.5957 | 0.5831 | +0.028 | +0.036 | +0.095\* |
+
+(\* clears the dataset-level bootstrap.) **The ordering is identical at all three layers** —
+paraphrase ≥ holding > neutral > none — which is the part that replicates. **The *split* does
+not.** The share of holding's margin that neutral retains is 38% / 78% / 74%: at layers 40 and 44
+presence dominates content three-to-one, but at layer 20 the two effects are the same size
+(+0.052 content vs +0.057 presence). So the quarter/three-quarters decomposition is a **layer-40
+and -44 statement**, not a property of the method. What holds everywhere is the weaker and safer
+claim: **swapping the six holding personas for six topically unrelated instructed personas costs
+only ~+0.03, and that cost never clears the bootstrap on its own at any of the three layers.**
+
+**What this does to F-66/F-68.** The *measurement* stands: the six holding personas are
+load-bearing, and dropping them collapses the axis to chance. The *interpretation* does not.
+"Behavioural inertness is not representational inertness" was read as *the model represents the
+disposition 'hold your position' even when it does not act on it*. What the control supports is
+weaker and more mundane: **the model represents that some instruction is in force, and the PCA
+needs a second group of instructed personas to span a usable subspace.** Six personas about
+alphabetising do most of that job. F-66 should be cited with this qualification attached, and the
+phrase "behavioural inertness is not representational inertness" should not be used unqualified
+in the write-up.
+
+**What it does to the cap claim (Claim 2).** Nothing bad, and arguably something good. The cap
+bank's 0.745 zero-shot and its +0.112 over raw are unchanged — this control does not touch the
+capitulation half. But the *reason* the construct-matched bank works is now less about the
+construct match on the negative side than F-66 implied. The positive side is still six
+purpose-written capitulation personas, and that is where the construct matching that matters
+lives. A worthwhile follow-up, not run: swap the **positive** side for format-matched neutrals and
+see whether the effect survives that. The prediction is that it does not.
+
+- **source:** `run-cap-ctrl/` (1,200 rollouts, 12 control personas × 5 variants × 20 questions),
+  axes `cap_vs_neutral` 0.989 / `cap_vs_para` 0.990 / `cap_only_ctrl` 0.936 cos(PC1, contrast);
+  matrices `run-crossgen/kd11/banks/cap_ctrl/matrices/mean_L40_s42.json` and
+  `.../banks/cap_s23/matrices/mean_L40_s42.json`. Chain: `cap/scripts/run_cap_controls.ps1`.
+- **caveats:** (1) **one target, three layers, one seed** — `sycophancy_mt`, layers 20/40/44,
+  s42. F-66's original claim had 21 layers and (per F-87) four seeds. Three layers were enough to
+  show the *ordering* replicates and the *ratio* does not, which is exactly the instability this
+  caveat predicted; the remaining 18 layers and the seed sweep are still owed before the
+  quarter/three-quarters figure is used anywhere. (2) the two estimates of the content effect straddle
+  significance, so "about a quarter" is a point estimate with a wide interval, not a resolved
+  quantity. (3) n = 10 source datasets is the resampling unit, the same small unit flagged in
+  F-79. (4) the neutral bank is format- and length-matched (drift 1.4 and 5.6 characters) but
+  not *semantically* null — an alphabetising instruction is still an instruction with content,
+  so "content-free" means "content unrelated to capitulation", not "no content".
+- **status:** measured; the qualification to F-66 replicates in *ordering* at all three layers
+  run and is safe to state as "content contributes ~+0.03 and never clears alone". The stronger
+  quarter/three-quarters decomposition is L40/L44-specific and is **not** yet safe to print.
+
+**Where this leaves the sarcasm bank.** `cap/docs/SARCASM_DESIGN.md` §Sequence made Tier 0.4 the
+gate: *"It tests whether the persona-side signal is about content at all; if it is not, the
+sarcasm bank's interpretation changes and this should be re-scoped before building."* It is
+mostly not about content. The consequence is concrete: the design's third contrast,
+`each arm − plain_assistant` ("per-side load, the F-66 question"), will largely measure *an
+instruction is present* rather than *this arm's stance*, so it cannot carry interpretive weight.
+The two contrasts that hold all four arms as instructed personas —
+`ironic_criticism − sincere_criticism` and `sycophantic_praise − ironic_criticism` — are
+unaffected, and the second is the one the review called non-negotiable. **The sarcasm design
+survives; its weakest contrast is now known to be weak in advance.**

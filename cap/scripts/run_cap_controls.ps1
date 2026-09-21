@@ -90,8 +90,12 @@ Gate "3 vectors(new)" "$nc vectors" "12" ($nc -eq 12)
 $copied = 0
 foreach ($r in @("pc_caver", "pc_deferrer", "pc_appeaser", "pc_second_guesser",
                  "pc_consensus_follower", "pc_conflict_avoider", "default")) {
-    $src = Join-Path $repo "run-cap\vectors_s23\$r.pt"
-    if (Test-Path $src) { Copy-Item $src (Join-Path "$run\vectors_s23" "$r.pt") -Force; $copied++ }
+    # NOT $src: PowerShell variables are CASE-INSENSITIVE, so $src and $SRC are one variable.
+    # Assigning a .pt path here overwrote $SRC (the pipeline directory) and every later
+    # "$SRC\*.py" resolved to a vector file, failing steps 4 and 5 with exit 2. This is the
+    # second time this exact collision cost a run; the first was $d/$D on 2026-09-21 16:00.
+    $vsrc = Join-Path $repo "run-cap\vectors_s23\$r.pt"
+    if (Test-Path $vsrc) { Copy-Item $vsrc (Join-Path "$run\vectors_s23" "$r.pt") -Force; $copied++ }
 }
 $tot = @(Get-ChildItem "$run\vectors_s23\*.pt" -EA SilentlyContinue).Count
 Gate "3 vectors(total)" "$tot vectors ($copied reused from run-cap)" "19" ($tot -eq 19)
