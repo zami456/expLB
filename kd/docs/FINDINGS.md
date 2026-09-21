@@ -2700,3 +2700,69 @@ off-diagonal against raw's 0.662, but the effect is carried by three datasets wi
 while the median gap elsewhere is under four tokens; a random low-dimensional projection
 transfers better (0.585) than length does."* That is a weaker claim and it is the one the data
 supports.
+
+---
+
+### F-74 · 2026-09-21 · **Self-correction: the −0.76 "ceiling artifact" is mathematical coupling, and the clean test refutes the claim it was supporting**
+
+A reviewer objected that `corr(raw, X − raw)` is negative **by construction** — correlating a
+change with its own baseline is mathematically coupled, and for X independent of raw the null is
+`−s_raw / sqrt(s_raw² + s_X²)`, reaching exactly −1 if X carries nothing. So our **−0.76**, cited
+as the mechanism behind Claim 4, is only evidence if it is meaningfully more negative than that
+null computed from our own spreads. We had never computed it.
+
+**It is not.** At L40 mean, `paper` probe, 110 off-diagonal cells, `random@2` as the
+low-dimensional feature (`sd(raw)` = 0.2128, `sd(random@2)` = 0.1898):
+
+| quantity | value |
+|---|---:|
+| **measured** `corr(raw, random@2 − raw)` | **−0.7684** |
+| null, analytic (X independent of raw) | −0.7462 |
+| null, permuted pairing (marginals preserved) | −0.7456, 95% [−0.7986, −0.6892] |
+| null, simulated noise at our observed spread | −0.7462, 95% [−0.8106, −0.6683] |
+| **P(null ≤ measured)** | **0.2135** |
+
+The measured value sits **inside** the null distribution. **The −0.76 is arithmetic. It must be
+withdrawn as evidence for anything**, and any future use of it has to be printed beside this null.
+
+**The clean test — and it does not support Claim 4 either.** The statistic the reviewer proposed
+instead regresses the margin over a *matched control* on raw, which contains no `raw` in the
+difference:
+
+| quantity | slope vs raw | r | mean margin |
+|---|---:|---:|---:|
+| `pc:unified@2 − datapca@2` | **−0.100** | **−0.067** | **+0.0063** |
+| `raw − datapca@2` | +0.630 | +0.571 | +0.0290 |
+
+The persona margin over its matched control is **flat against baseline strength** (r = −0.067)
+and **approximately zero everywhere** (+0.006). Claim 4 asserted the persona advantage is
+*inversely proportional* to how good the baseline already is. Against a matched control there is
+**no dependence and no advantage to explain** — the inverse relationship exists only in the
+persona-vs-`raw` comparison, which is the coupled one.
+
+(The second row is coupled too — `raw` appears on both sides — so its +0.630 is not evidence
+either. It is shown to make the contrast visible, not as a result.)
+
+**What Claim 4 becomes.** Not *"the persona advantage is a ceiling artifact that decays with
+scale."* Instead: *"against a matched control at the same k, the persona margin is +0.006 and
+independent of baseline strength; the apparent inverse relationship with baseline strength
+appears only when the comparison is against raw, where it is mathematically coupled."* That is a
+simpler claim, it survives the objection, and it is **more damaging to the method**, not less.
+
+- **source:** `kd/scripts/ceiling_null.py` over `run-crossgen/kd11/matrices/mean_L40_s42.json`,
+  B = 20,000 permutations and 2,000 noise simulations, seed 42.
+- **caveats:** (1) measured on the **paper16 unified** bank at L40 — the `cap` bank is a
+  different object and its +0.112 over raw (F-66) is not touched by this, though it is now on
+  notice for the same treatment. (2) one layer, one seed; the layer is L40, which
+  `docs/LAYER_PREREGISTRATION.md` records as **selected on the outcome**. (3) the flat slope is
+  an absence of relationship, which is weaker evidence than a measured one; with 110 cells the
+  CI on r = −0.067 comfortably includes zero.
+- **supersedes:** the −0.76 as evidence for Claim 4, and Claim 4's "inversely proportional"
+  formulation.
+- **status:** verified
+
+**Second self-correction of the day, and the same shape as the first.** F-73 withdrew the
+per-dataset framing of the length claim; this withdraws the mechanism statistic for the ceiling
+claim. Both were caught by a reviewer computing something we had asserted rather than measured.
+The pattern worth naming: **every number we quoted that we had not put through its own null has
+so far failed** — which is the thesis's own argument, applied to the thesis.
