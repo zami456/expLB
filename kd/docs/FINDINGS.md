@@ -2840,3 +2840,80 @@ contains the pre-specified layer**, which is the best available outcome under a 
 advance. F-03's margin over the matched control at L40 is **+0.065**, and it is positive
 throughout the plateau. The finding survives — as a band-limited effect, reported with its
 profile, with three significance tests still owed.
+
+---
+
+### F-76 · 2026-09-21 · **CORRECTION to F-75: the plateau does not survive the dataset-level bootstrap. F-03's margin at L40 is not significant.**
+
+F-75 read the 80-layer profile as a 16-layer plateau containing the pre-specified L40, applied
+the pre-registered rule, and returned **"strengthens"** — explicitly marking the verdict
+*provisional* pending three committed tests. Two of those have now run. **The verdict flips.**
+
+Tests (3) *bootstrap the argmax layer* and (4) *nest layer selection inside the dataset-level
+bootstrap* need no refitting — every layer's matrix already exists, so resampling the 10 source
+datasets and recomputing from stored cells is exact. B = 10,000, seed 42, control = `datapca`.
+
+**(a) At the pre-specified layer, with no selection at all:**
+
+| | value |
+|---|---|
+| margin at L40 over `datapca` | **+0.0655** |
+| 95% CI over datasets | **[−0.0693, +0.1887]** |
+| P(margin ≤ 0) | **0.161** |
+
+**It does not clear.** The interval comfortably contains zero. This is the cleanest possible test
+— a layer fixed in advance by three papers, no selection, no multiple comparisons — and the
+margin is not distinguishable from nothing.
+
+**(b) The peak location is entirely unidentified:**
+
+| | value |
+|---|---|
+| median argmax layer | L31 |
+| 95% interval | **[L5, L79]** — width **74 of 80 layers** |
+| argmax lands exactly on L40 | **0.0% of resamples** |
+| argmax inside the L27–L48 "plateau" | **31.1%** |
+
+The argmax never once landed on L40 across 10,000 resamples, and lands inside the apparent
+plateau less than a third of the time. Kumar (arXiv:2605.27958 §5.1.2) reports peak-layer
+intervals spanning nearly the whole network and reads that as weak localisation; ours spans 93%
+of the network, so we say the same and more strongly.
+
+**(c) The plateau itself is not stable.** Fraction of layers with a positive margin, per
+resample: median **0.46**, 95% [0.16, 0.75]. About half the network is positive in a typical
+resample — which is what a coin flip looks like, not a localised representation.
+
+**What F-75 got wrong, and why.** F-75 measured the plateau on the *point estimates* — one number
+per layer, computed on all ten source datasets — and 16 contiguous positive layers looked like
+robustness. It is not. Sixteen contiguous positive point estimates are entirely compatible with
+noise that is correlated across depth, which is exactly what adjacent residual-stream layers
+produce. **Contiguity in depth is not evidence, because neighbouring layers are not independent
+observations.** The pre-registration anticipated this in test (4) — *"if it does not survive, the
+effect was the selection"* — and this is that outcome.
+
+- **source:** `kd/scripts/layer_significance.py` over
+  `run-crossgen/kd11/passA11/{,banks/kd_s23}/matrices/mean_L*_s42.json`; B = 10,000, seed 42,
+  resampling the 10 source datasets.
+- **caveats:** (1) the **cluster-based permutation test (2) is still not run** — it needs label
+  permutation and probe refits, which is a different order of cost. It would test a different
+  null (labels) than this one (datasets); neither substitutes for the other, but the dataset test
+  is the one this project has repeatedly identified as binding. (2) passA holds 200-row
+  subsamples of the other ten datasets, so this is the shape of the effect on that store, not
+  passB's absolute values. (3) 10 source datasets is a small resampling unit — the interval is
+  wide partly because n is small, which is F-04's standing point and not a defect of this test.
+- **supersedes:** **F-75's "strengthens" verdict, which is withdrawn.** F-75's description of the
+  profile shape stands; its interpretation does not.
+- **status:** verified
+
+**Where this leaves F-03.** The reversal on the matched slice is real as a point estimate — 0.739
+at L40 against raw's 0.706 — and it is **not statistically distinguishable from its matched
+control at the dataset level**, at a layer chosen in advance, with the whole 80-layer curve in
+view. F-03 should be reported as an observation with its profile and its interval, never as a
+result. The honest one-line version: *"on the wording-matched slice the persona axis reads 0.739
+against a matched control's 0.674 at the pre-specified layer, a margin of +0.066 with a 95%
+dataset-level interval of [−0.069, +0.189]."*
+
+**This is the third self-correction today** (F-73, F-74, F-76) and the pattern is now unmistakable:
+**every headline this project has put through a properly-clustered test has failed it.** That is
+the thesis's own argument turned on the thesis, arrived at by a rule written down before the
+numbers were seen — which is the strongest form the argument can take.
