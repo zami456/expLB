@@ -25,8 +25,45 @@ from deception_detection.batching import (
 from deception_detection.data.base import DialogueDataset
 from deception_detection.goodfire_client import get_goodfire_activations
 from deception_detection.log import logger
+from deception_detection.lora_intervention import LoraAdapter, call_plan
+from deception_detection.lora_intervention import model_key as lora_model_key
 from deception_detection.tokenized_data import TokenizedDataset, get_tokenized_dataset_pair
 from deception_detection.utils import REPO_ROOT, mask_sparse_activations
+
+
+def trace_layer_outputs(
+    model,
+    tokens: Tensor,
+    attention_mask: Tensor,
+    layers: list[int],
+    tail: int | None = None,
+    lora: LoraAdapter | None = None,
+    remote: bool = True,
+) -> Tensor:
+    """One forward pass: the outputs of the given decoder blocks, ``[batch, seq, layer, emb]``.
+
+    ``tail`` keeps only the final positions of each row, sliced before anything is sent back.
+    With ``lora``, the adapter's update is added to each adapted projection of every block up
+    to the deepest one read, so the pass reads the fine-tuned model rather than the base one.
+    The loop is inline rather than a helper call because nnsight runs this block's code on
+    the NDIF server, where this package does not exist.
+    """
+    plan = call_plan(lora) if lora is not None else {}
+    scale = lora.scale if lora is not None else 1.0
+    order = sorted(set(layers))
+    with model.trace(tokens, attention_mask=attention_mask, remote=remote):
+        outputs = list().save()
+        for block in range(order[-1] + 1):
+            for submodule, projection, a, b in plan.get(block, []):
+                module = getattr(getattr(model.model.layers[block], submodule), projection)
+                x = module.input
+                update = (x @ a.to(x.device, x.dtype).T) @ b.to(x.device, x.dtype).T
+                module.output = module.output + update * scale
+            if block in order:
+                output = model.model.layers[block].output
+                outputs.append(output[:, -tail:, :] if tail else output)
+    stacked = torch.stack(list(outputs), dim=2)
+    return stacked[:, :, [order.index(layer) for layer in layers]]
 
 
 def detected_tail_lengths(tokenized_dataset: TokenizedDataset) -> list[int]:
@@ -118,6 +155,7 @@ class Activations:
         token_budget: int | None = None,
         cache_mode: str = "full",
         positions: str = "all",
+        lora: LoraAdapter | None = None,
     ) -> "Activations":
         """Creates Activations by running the model on the tokenized dataset.
 
@@ -133,6 +171,10 @@ class Activations:
         minutes -- and a protocol that reads one token, like the follow-up probe's prefilled
         answer, would otherwise pay for the whole sequence. The forward pass, and so the
         token budget, is unchanged: only what comes back over the wire shrinks.
+
+        ``lora`` reads a LoRA fine-tune of the served base model by applying the adapter
+        inside the remote pass (see ``deception_detection.lora_intervention``). Its identity is
+        part of every cache key.
         """
         if save_logits:
             # The remote trace never captured logits; the old code path collected an empty
@@ -154,7 +196,7 @@ class Activations:
         # kept per example (kept_lens) is the whole row or the suffix holding its detected
         # tokens.
         true_lens = [int(attn_mask[i].sum().item()) for i in range(n_examples)]
-        model_key = str(model.name_or_path)
+        model_key = lora_model_key(str(model.name_or_path), lora)
         keys, kept_lens = cache_entries(tokenized_dataset, model_key, layers, positions)
 
         # Filled from cache where possible, from the model otherwise; unpadded per example.
@@ -191,22 +233,17 @@ class Activations:
             batch_tokens = tokens[selection][:, padded_len - batch_len :]
             batch_attn = attn_mask[selection][:, padded_len - batch_len :]
 
-            with model.trace(
+            # Sliced remotely, before anything is sent back: the longest tail any row in this
+            # batch needs, counted from the right, which left padding makes the same real
+            # positions in every row.
+            batch_acts = trace_layer_outputs(
+                model,
                 batch_tokens.to(device),
-                attention_mask=batch_attn.to(device),
-                remote=True,
-            ):
-                all_activations: list[Float[Tensor, "batch seqpos emb"]] = list().save()
-
-                layers_to_process = layers if layers is not None else range(len(model.model.layers))
-                for layer_idx in layers_to_process:
-                    output = model.model.layers[layer_idx].output
-                    # Sliced remotely, before anything is sent back: the longest tail any
-                    # row in this batch needs, counted from the right, which left padding
-                    # makes the same real positions in every row.
-                    all_activations.append(output[:, -batch_tail:, :] if tail_only else output)
-
-            batch_acts = torch.stack(all_activations, dim=2).cpu()
+                batch_attn.to(device),
+                layers if layers is not None else list(range(len(model.model.layers))),
+                tail=batch_tail if tail_only else None,
+                lora=lora,
+            ).cpu()
 
             for row, i in enumerate(batch):
                 # unpad_left keeps a row's final n positions, which is its tail here too
