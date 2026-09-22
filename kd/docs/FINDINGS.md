@@ -5232,3 +5232,56 @@ our corpus — the mismatch F-97 records. This entry inherits it.)*
 - **caveats:** one seed, mean pooling, and the six are not the collaborator's six (F-97).
 - **supports:** F-91, §5e. **amends:** F-85's margin by ~0.008.
 - **status:** verified
+
+---
+
+### F-110 · 2026-09-23 · **CORRECTION to F-100/F-101/F-102: the 70B sweep ran on the kd bank, not paper16. Like-for-like the 70B rung is +0.054 vs dataset-PCA and −0.013 vs raw — the decline with scale is steeper, and "essentially nil against raw" becomes negative.**
+
+*(Written by the audit in `audit/`, at the owner's instruction; full working in `audit/fix/RF16_NOTE.md`.)*
+
+`run-crossgen/scale_70b/` mixes two persona banks under one label. **Layer 40** (09-20 23:42, the
+cell F-63 uses) came from the paper16 bank; **every other layer** — the 09-22 00:52–01:33 sweep
+behind F-100–F-102 — came from the 36-persona kd bank. Both matrices record
+`bank = axes_vectors_s3.pt`, `bank_name = paper16_70b`, because `run-paper16/` and `run-kd/` each
+hold a file of that name, so the mix was invisible. F-100 states the sweep used "the same bank and
+datasets as the existing L40 cell"; it did not. The launch command in the session that ran it
+passes `--bank_name paper16_70b` with `--bank ...un-kdxes_vectors_s3.pt`.
+
+**How it was identified.** The same bank on the same activations must give identical zero-shot
+AUROCs. The sweep's values are identical (10/10, |Δ| = 0) to `kd11/banks/kd`; the L40 cell matches
+the paper16 matrices to ≤ 0.0003, and differs from the kd bank by up to 0.077.
+
+**The repair.** `27_crossgen.py` re-run with everything identical to the sweep — `run-coords/passB`,
+the paper's five datasets, k=3, both poolings, all 21 stored layers — changing only the bank to
+`run-paper16/axes_vectors_s3_fp32.pt`. Output in `run-crossgen/scale_70b_paper16fp32/` (42 matrices);
+nothing existing was touched. Over F-100's 19 layers, mean pooling, `best = max(axes, pc:deception)`:
+
+| rung | bank | raw | best − raw | best − dataset-PCA |
+|---|---|---:|---:|---:|
+| 3B | paper16_3b | 0.6989 | +0.0328 | **+0.1197** |
+| 8B | paper16_8b | 0.7149 | +0.0089 | **+0.1027** |
+| 70B — as F-100 ran it | kd (36 personas) | 0.7524 | +0.0079 | **+0.0751** |
+| 70B — like-for-like | paper16 fp32 | 0.7524 | **−0.0131** | **+0.0541** |
+
+The kd-bank row reproduces F-100's published +0.120 / +0.103 / +0.075 and its +0.0079 against raw
+exactly, which is what validates the recomputation.
+
+**What changes.** F-100's headline survives and strengthens: the decline with model size is
+**+0.120 → +0.103 → +0.054**, steeper than reported. But "against raw activations the 70B persona
+advantage is essentially nil" (+0.0079) becomes **negative**: like-for-like, **−0.0131**. Under
+`last` pooling the like-for-like 70B is +0.0069 vs raw and +0.0681 vs dataset-PCA, so F-101/F-102's
+pooling contrast holds with smaller margins. **F-63 is unaffected** — its 70B cell is the L40
+paper16 cell, so its three-rung comparison was already bank-consistent.
+
+- **source:** `run-crossgen/scale_70b_paper16fp32/matrices/{mean,last}_L*_s42.json` (42, new);
+  recomputed by `audit/scripts/fix_rf16_recompute.py`, same off-diagonal recipe as
+  `kd/scripts/paper_comparison.py`; raw output `audit/fix/rf16_recompute_mean.txt`; fingerprints
+  `audit/phase1/bank_fingerprint_scale70b*.txt`.
+- **caveats:** (1) one seed (42), as in F-100. (2) "best" is still a post-hoc per-layer max over two
+  features, and inherits F-100's caveat (4). (3) The paper16 70B sweep is new, so nothing
+  independent replicates it yet. (4) The old and fp32 paper16 axes are near-identical (cosine
+  1.0000 at every layer, ≤0.9% in norm), so using fp32 rather than the L40 cell's older file cannot
+  explain the change.
+- **supersedes:** the 70B column of F-100 (+0.075 → +0.054) and its "essentially nil" sentence;
+  **amends:** F-101, F-102. **supports:** F-63, unchanged.
+- **status:** verified

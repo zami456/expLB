@@ -47,7 +47,7 @@ function Gate($step, $measured, $predicted, $ok) {
           $(if ($ok) { "PASS" } else { "GATE FAILED" }))
 }
 
-if ((Test-Path $status) -and -not $Force -and (Select-String -Path $status -Pattern '^DONE' -Quiet)) {
+if ((Test-Path $status) -and -not $Force -and (Select-String -Path $status -Pattern '^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\s+DONE\s*$' -Quiet)) {
     Note "SKIP already DONE; -Force to re-run"; exit 0
 }
 "START $((Get-Date).ToString('yyyy-MM-dd HH:mm:ss'))" | Out-File -Encoding utf8 $status

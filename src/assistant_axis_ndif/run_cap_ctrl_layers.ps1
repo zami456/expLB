@@ -28,7 +28,7 @@ Note "crossgen cap_ctrl on 18 missing layers (20/40/44 already done)"
 # correct by luck, because the crossgen writes BOTH mean_* and last_* and the two happened
 # to be complete. A short mean arm padded by a full last arm would also have passed. Gate on
 # the mean files by name. Fifth loose gate of the day.
-$mm = @(Get-ChildItem "run-crossgen\kd11anks\cap_ctrl\matrices\mean_L*_s42.json" -EA SilentlyContinue).Count
-$ml = @(Get-ChildItem "run-crossgen\kd11anks\cap_ctrl\matrices\last_L*_s42.json" -EA SilentlyContinue).Count
+$mm = @(Get-ChildItem "run-crossgen\kd11\banks\cap_ctrl\matrices\mean_L*_s42.json" -EA SilentlyContinue).Count
+$ml = @(Get-ChildItem "run-crossgen\kd11\banks\cap_ctrl\matrices\last_L*_s42.json" -EA SilentlyContinue).Count
 Note ("measured={0} mean matrices ({1} last)  predicted=21 mean  {2}" -f $mm, $ml, $(if ($mm -eq 21) { "PASS" } else { "GATE FAILED" }))
 Note "DONE"
