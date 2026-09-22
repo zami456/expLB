@@ -23,6 +23,10 @@ the same experiment.**
   than train alone.
 - The follow-up protocol leaves no row with an empty detection mask, so RepE keeps all 490 training
   rows (448 under the standard protocol).
+- The gray base probe in `zero_shot_fig2.png` is the Follow-Up Probe itself: that run's
+  `detector.pt` scored on these vectors, which reproduces its `results_table.csv`. Over the five
+  Liars' Bench datasets it trails the extended axis on balanced accuracy (0.622 against 0.638) and
+  leads it on recall and AUROC (0.559 and 0.636 against 0.349 and 0.552).
 
 ## Result: the persona direction's sign stops being universal
 
@@ -144,7 +148,8 @@ python deception_detection/scripts/persona_ood.py run --layer 20 \
   --vectors "persona including knowlede denial"
 python deception_detection/scripts/persona_ood.py zeroshot --layer 20 \
   --pooled_dir activations/pooled_followup_L20 --out_dir results/persona_ood_followup_L20 \
-  --vectors "persona including knowlede denial"
+  --vectors "persona including knowlede denial" --base_run results/XXXX-9-llama-all-followup
+python deception_detection/scripts/persona_ood_figures.py fig2 --out_dir results/persona_ood_followup_L20
 ```
 
 Pooling reads the tail-mode cache the Follow-Up run wrote; no model calls.

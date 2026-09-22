@@ -37,7 +37,10 @@ SHORT = {
     "instruct_dishonesty__plain": "ID",
     "repe_honesty__plain": "RepE",
     "repe_honesty__plain_val": "RepE (val only)",
+    "Average (Liars' Bench)": "Average\n(excl. RepE)",
 }
+# persona_ood.LB_AVERAGE: the zero-shot tables' mean over the five Liars' Bench datasets
+LB_AVERAGE = "Average (Liars' Bench)"
 
 
 def _layer(out_dir: Path) -> str:
@@ -221,11 +224,18 @@ def variants(out_dir: str | Path = OUT_DIR) -> None:
 
 
 
+# The base probe is the reference, not a fourth persona arm, so it takes the palette's muted
+# ink rather than a categorical hue: gray reads as "what this is measured against".
+BASE_BAR = "#898781"
 FIG2_ARMS = [
+    ("base probe (RepE-trained)", "base probe (trained on RepE)", BASE_BAR),
     ("deception axis (8v7)", "deception axis (8 vs 7, published grouping)", "#eb6834"),
     ("knowledge-denial axis (4v6)", "knowledge-denial axis (4 vs 6)", "#8ab6e8"),
     ("extended axis (12v13)", "extended axis (12 vs 13)", "#2a78d6"),
 ]
+# An arm's bar on its own training set measures fit, not transfer; it is hatched, not dropped.
+TRAINED_ON = {"base probe (RepE-trained)": "repe_honesty__plain"}
+IN_DISTRIBUTION_HATCH = "////"
 FIG2_METRICS = [
     ("balacc", "Balanced accuracy", 0.5),
     ("auroc", "AUROC", 0.5),
@@ -249,6 +259,11 @@ def fig2(
     identical under either `threshold_source`. That is the point of showing all three together:
     the AUROC panel says the ranking is good, and the other two say what that is worth at a
     usable false-positive rate.
+
+    When the table has the base probe (`persona_ood.py zeroshot --base_run`), it leads each
+    group. RepE is its training set, so that one bar is hatched, and the summary column averages
+    the five Liars' Bench datasets only, as the paper's own average does. Counting RepE would
+    favour the base probe; at the follow-up token it reverses the balanced-accuracy comparison.
     """
     out_dir = Path(out_dir)
     table = pd.read_csv(out_dir / "zero_shot_operating.csv")
@@ -256,12 +271,16 @@ def fig2(
     arms = [(key, label, colour) for key, label, colour in FIG2_ARMS
             if key in set(table["arm"])]
 
-    ordered = [n for n in table["dataset"].unique() if n != "Average"] + ["Average"]
+    # tables written before the Liars' Bench average existed fall back to the all-dataset one
+    summary = LB_AVERAGE if LB_AVERAGE in set(table["dataset"]) else "Average"
+    ordered = [n for n in table["dataset"].unique() if n not in ("Average", LB_AVERAGE)]
+    ordered.append(summary)
     labels = [SHORT.get(n, n) for n in ordered]
     # the Average column is a summary of the others, so it sits past a gap and a rule
     x = np.array([i if i < len(ordered) - 1 else i + 0.6 for i in range(len(ordered))])
-    width = 0.26
+    width = 0.78 / len(arms)  # a group spans the same width however many arms it holds
     gap = 0.015
+    hatched = False
 
     fig, axes = plt.subplots(1, 3, figsize=(16.5, 4.6), facecolor=SURFACE, sharey=True)
     for ax, (metric, title, chance) in zip(axes, FIG2_METRICS, strict=True):
@@ -272,7 +291,12 @@ def fig2(
             low = values - rows[f"{metric}_lo"].to_numpy(dtype=float)
             high = rows[f"{metric}_hi"].to_numpy(dtype=float) - values
             offset = (index - (len(arms) - 1) / 2) * (width + gap)
-            ax.bar(x + offset, values, width=width, color=colour, label=label, zorder=3)
+            bars = ax.bar(x + offset, values, width=width, color=colour, label=label, zorder=3)
+            if TRAINED_ON.get(key) in ordered:
+                # the hatch takes the edge colour; a zero-width edge leaves only the hatch
+                own = bars[ordered.index(TRAINED_ON[key])]
+                own.set(hatch=IN_DISTRIBUTION_HATCH, edgecolor=SURFACE, linewidth=0)
+                hatched = True
             ax.errorbar(x + offset, values, yerr=np.vstack([low, high]), fmt="none",
                         ecolor=INK_MUTED, elinewidth=0.9, capsize=1.8, zorder=4)
 
@@ -291,18 +315,32 @@ def fig2(
     axes[0].set_ylabel("score", fontsize=9, color=INK_MUTED)
 
     handles = [plt.Rectangle((0, 0), 1, 1, color=colour) for _, _, colour in arms]
-    fig.legend(handles, [label for _, label, _ in arms], loc="lower center", ncol=len(arms),
+    names = [label for _, label, _ in arms]
+    if hatched:
+        handles.append(plt.Rectangle((0, 0), 1, 1, facecolor=BASE_BAR, edgecolor=SURFACE,
+                                     hatch=IN_DISTRIBUTION_HATCH, linewidth=0))
+        names.append("hatched: its own training set")
+    fig.legend(handles, names, loc="lower center", ncol=len(handles),
                frameon=False, fontsize=9, labelcolor=INK, bbox_to_anchor=(0.5, -0.07))
     fig.suptitle(
         f"Zero-shot persona directions on Liars' Bench  ({_layer(out_dir)}, "
         f"Llama-3.3-70B-Instruct)",
         fontsize=13, color=INK, x=0.006, ha="left", y=1.03,
     )
-    fig.text(0.006, -0.10,
-             "Balanced accuracy and recall: threshold set to at most 1% false positives on the "
-             "control (alpaca) dataset. Bars are 95% stratified bootstrap intervals over "
-             "examples, 1000 draws; the paper's Figure 2 instead shows standard errors across "
-             "models.", fontsize=8, color=INK_MUTED, ha="left")
+    caption = ("Balanced accuracy and recall: threshold set to at most 1% false positives on the "
+               "control (alpaca) dataset. Bars are 95% stratified bootstrap intervals over "
+               "examples, 1000 draws; the paper's Figure 2 instead shows standard errors across "
+               "models.")
+    if summary == LB_AVERAGE:
+        caption += ("\nAverage: the five Liars' Bench datasets, as in the paper's own average; "
+                    "RepE is not one of them and is left out.")
+    if any(key in TRAINED_ON for key, _, _ in arms):
+        caption += ("\nBase probe: this pipeline's logistic-regression probe, trained on RepE and "
+                    "scored on the same activations as the persona directions. Its RepE bar is "
+                    "in-distribution" + (" and counts toward its Average." if summary == "Average"
+                                         else "."))
+    fig.text(0.006, -0.085, caption, fontsize=8, color=INK_MUTED, ha="left", va="top",
+             linespacing=1.6)
     fig.tight_layout()
     fig.savefig(out_dir / name, dpi=200, bbox_inches="tight", facecolor=SURFACE)
     plt.close(fig)

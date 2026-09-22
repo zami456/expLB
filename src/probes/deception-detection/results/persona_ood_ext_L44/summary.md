@@ -31,6 +31,12 @@ Liars' Bench paper, tells the same story:
 | knowledge-denial axis, recall | 0.305 | **0.487** | 0.395 |
 | extended axis, balacc | 0.591 | **0.694** | 0.666 |
 | extended axis, AUROC | 0.887 | **0.899** | 0.884 |
+| base probe (RepE-trained), balacc | **0.721** | 0.626 | 0.626 |
+| base probe (RepE-trained), AUROC | 0.697 | **0.778** | 0.756 |
+
+The base probe, now the gray bar in `zero_shot_fig2.png`, is the exception on balanced accuracy:
+it is best at layer 20, where it beats both persona axes on that metric. The comparison is in
+`../persona_ood_ext_L20/summary.md`.
 
 **Report layer 40.** Layer 44 is uniformly a little behind it and is worth keeping only as the
 evidence that 40 is a maximum rather than the start of a ramp.
@@ -62,13 +68,15 @@ evidence that 40 is a maximum rather than the start of a ramp.
   claim -- the sycophancy axis is still inverted on HP-KR at layer 20 (0.043) and near chance at
   44 (0.480), so this is not the sycophancy direction becoming a deception detector in general.
 
-## A caveat about the layer-44 run itself
+## The base probe inverts on insider trading at depth
 
-The trained RepE probe in `results/XXXX-9-llama-all-L44/` scores **0.289 on insider-trading** --
-inverted, where the same probe reaches ~0.98 at layers 20 and 40. That is the benchmark probe,
-not a persona arm, and the pooled activations reproduce it exactly, so it is a property of the
-layer rather than a pipeline fault. It is a reason to be careful about treating layer 44 as
-simply "layer 40, deeper".
+The trained RepE probe in `results/XXXX-9-llama-all-L44/` scores **0.289 on insider-trading**,
+inverted. *(Corrected: an earlier version said this probe reaches ~0.98 at layers 20 and 40. It is
+0.973 at layer 20 but already inverted at layer 40, 0.338; see `../persona_ood_L40/summary.md`.)*
+So the inversion is not specific to layer 44: it appears between layers 20 and 40 and persists.
+That is the benchmark probe, not a persona arm, and the pooled activations reproduce it exactly,
+so it is a property of the layers rather than a pipeline fault. The persona axes do not share
+it: the extended axis scores 0.980 and 0.982 on insider trading at layers 40 and 44.
 
 ## Files
 
@@ -91,5 +99,6 @@ python deception_detection/scripts/persona_ood.py run --layer 44 \
   --vectors "persona including knowlede denial"
 python deception_detection/scripts/persona_ood.py zeroshot --layer 44 \
   --pooled_dir activations/pooled_L44 --out_dir results/persona_ood_ext_L44 \
-  --vectors "persona including knowlede denial"
+  --vectors "persona including knowlede denial" --base_run results/XXXX-9-llama-all-L44
+python deception_detection/scripts/persona_ood_figures.py fig2 --out_dir results/persona_ood_ext_L44
 ```

@@ -74,6 +74,36 @@ The extended axis beats both the baseline and the original axis on **every** dat
 trading HP-KR against the rest. HP-C stays the weakest (0.639 at L20, 0.712 at L40), so the
 harm-pressure-choice problem is separate and still open.
 
+## Zero-shot against the base probe
+
+`zero_shot_fig2.png` in each layer's folder now shows the **base probe** in gray beside the
+persona axes. It is this pipeline's logistic-regression probe, trained on RepE at the same layer
+(`../XXXX-9-llama-all*/detector.pt`). It is scored on the same pooled activations, with the same
+Alpaca threshold and bootstrap resamples, and its bars reproduce each run's own
+`results_table.csv` exactly. Means over the five datasets shared with Liars' Bench, threshold at 1%
+FPR on the control:
+
+| balacc / recall / AUROC | L20 | L40 | L44 |
+|---|---|---|---|
+| base probe (RepE-trained) | **0.721 / 0.489** / 0.697 | 0.626 / 0.281 / 0.778 | 0.626 / 0.281 / 0.756 |
+| extended axis (12v13) | 0.591 / 0.187 / **0.887** | 0.694 / 0.413 / **0.899** | 0.666 / 0.350 / **0.884** |
+| knowledge-denial axis (4v6) | 0.559 / 0.305 / 0.863 | **0.725 / 0.487** / 0.894 | **0.683 / 0.395** / 0.880 |
+
+- **At layer 20 the base probe wins at the operating point.** It is cleanly better on CG (recall
+  0.677 against 0.174, neither flagging an honest row). On IT and ID part of its lead is bought
+  with false positives: the Alpaca threshold flags 13% and 11% of their honest rows under the base
+  probe, against 0% and 2% under the extended axis, which ranks both at least as well (AUROC 0.990
+  against 0.973, and 0.954 against 0.950).
+- **On ranking the persona axes win at every layer**, the extended axis by 0.12–0.19 AUROC. The base
+  probe inverts on one dataset at each depth: HP-KR at layer 20 (0.109), IT at 40 and 44 (0.338,
+  0.289). The extended and knowledge-denial axes invert nowhere; their lowest score is HP-C's 0.585.
+- **At layers 40 and 44 the persona axes win on all three metrics.**
+
+The figure's Average column is this same five-dataset mean, as in the paper's own figure. RepE is
+the base probe's training set (its hatched bar), so it is left out. The mean over all six is still
+in `zero_shot_operating.csv` as `Average`. Counting RepE favours the base probe, and at the
+follow-up token it reverses the balanced-accuracy comparison.
+
 ## The confound, and why the result survives it
 
 This folder is **not a superset**: all 26 original personas were re-extracted with more rollouts

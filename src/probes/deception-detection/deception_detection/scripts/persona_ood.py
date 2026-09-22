@@ -104,6 +104,11 @@ SHARED_DATASETS = {
 # (configs/XXXX-9-llama-all-followup.yaml). Its measured row is read from that run's table.
 FOLLOWUP_RUN = REPO_ROOT / "results" / "XXXX-9-llama-all-followup"
 
+# the zero-shot tables' name for a run's own trained probe, the reference the persona arms face
+BASE_ARM = "base probe (RepE-trained)"
+# the zero-shot tables' mean over SHARED_DATASETS alone, beside the mean over every dataset
+LB_AVERAGE = "Average (Liars' Bench)"
+
 
 def measured_followup_row(shared: list[str], run_folder: Path = FOLLOWUP_RUN) -> dict | None:
     """The Follow-Up Probe as measured here, over the shared datasets; None until it has run.
@@ -562,7 +567,8 @@ def zero_shot_operating_table(
     """Zero-shot detection at a fixed false-positive rate, under two ways of setting it.
 
     Laid out to match Figure 2 of Liars' Bench (arXiv 2511.16035): balanced accuracy, AUROC and
-    recall per dataset plus an Average row, with the threshold set to reach at most `fpr` on the
+    recall per dataset, plus an Average row over every dataset and one (`LB_AVERAGE`) over the
+    Liars' Bench datasets alone, with the threshold set to reach at most `fpr` on the
     control corpus. The paper's error bars are standard errors across models; there is one model
     here, so these are a stratified bootstrap over examples instead -- a different quantity, and
     the one that says whether a per-dataset number is stable.
@@ -620,10 +626,16 @@ def zero_shot_operating_table(
                 )
                 for n in names
             }
-            point["Average"] = np.mean([point[n] for n in names], axis=0)
-            boot["Average"] = np.mean([boot[n] for n in names], axis=0)
+            # The paper averages over its own datasets. RepE is not one, and it is the training
+            # set of any RepE-trained arm, so only the Liars' Bench average compares such an arm
+            # fairly; the all-dataset Average is kept beside it.
+            summaries = {"Average": names, LB_AVERAGE: [n for n in names if n in SHARED_DATASETS]}
+            summaries = {label: members for label, members in summaries.items() if members}
+            for label, members in summaries.items():
+                point[label] = np.mean([point[n] for n in members], axis=0)
+                boot[label] = np.mean([boot[n] for n in members], axis=0)
 
-            for name in [*names, "Average"]:
+            for name in [*names, *summaries]:
                 low, high = np.quantile(boot[name], [0.025, 0.975], axis=0)
                 row: dict[str, object] = {
                     "layer": layer,
@@ -631,12 +643,12 @@ def zero_shot_operating_table(
                     "dataset": name,
                     "threshold_source": source,
                     "n_deceptive": (
-                        sum(datasets[n].n_deceptive for n in names)
-                        if name == "Average"
+                        sum(datasets[n].n_deceptive for n in summaries[name])
+                        if name in summaries
                         else datasets[name].n_deceptive
                     ),
                 }
-                if name != "Average":
+                if name not in summaries:
                     row["threshold"] = thresholds[name]
                     row["specificity"] = operating_point(
                         datasets[name].y, scored[name], thresholds[name]
@@ -677,6 +689,80 @@ def extended_arms(
         "auroc_ext_pc1": lambda z, g=ext_geom: g.project(z, k=1).ravel(),
         "auroc_denial_axis": lambda z, g=denial_geom: g.axis_score(z),
     }
+
+
+def run_probe(run_folder: Path) -> Callable[[np.ndarray], np.ndarray]:
+    """A completed run's trained probe, as a score function on pooled activations.
+
+    The deployed probe standardises each response token, projects it onto one direction and
+    averages. Every step is linear, so scoring the pooled mean is the same computation.
+    """
+    import pickle
+
+    with open(run_folder / "detector.pt", "rb") as f:
+        detector = pickle.load(f)
+    direction = detector["directions"].double().numpy().ravel()
+    mean = detector["scaler_mean"].double().numpy().ravel()
+    scale = detector["scaler_scale"].double().numpy().ravel()
+    return lambda z: ((z - mean) / scale) @ direction
+
+
+def base_probe_arm(
+    run_folder: Path,
+    layer: int,
+    datasets: dict[str, Pooled],
+    control: Pooled,
+    tol: float = 1e-3,
+) -> Callable[[np.ndarray], np.ndarray]:
+    """A run's trained probe as a zero-shot arm, refused unless it matches these activations.
+
+    Nothing in the pooled files records the layer or token position they came from, and a probe
+    paired with the wrong ones still produces plausible bars. So the run must be at `layer`, and
+    its probe must reproduce the run's own AUROCs on these activations. The second check catches
+    what the first cannot: the response-token probe and the Follow-Up Probe are both layer 20,
+    but each reproduces only on its own activations.
+    """
+    cfg = yaml.safe_load((run_folder / "cfg.yaml").read_text())
+    if cfg.get("detect_layers") != [layer]:
+        raise ValueError(
+            f"{run_folder.name} probes layers {cfg.get('detect_layers')}, not [{layer}]"
+        )
+    if cfg.get("train_data") != "repe_honesty__plain":
+        raise ValueError(
+            f"{run_folder.name} trains on {cfg.get('train_data')}, but the arm is labelled "
+            f"{BASE_ARM!r}"
+        )
+
+    score = run_probe(run_folder)
+    published = pd.read_csv(run_folder / "results_table.csv", index_col=0)
+    threshold = float(np.quantile(score(control.z), 0.99))  # 1% FPR, as the run sets it
+    rows = []
+    for name in published.index.intersection(list(datasets)):
+        ds = datasets[name]
+        scores = score(ds.z)
+        rows.append(
+            {
+                "dataset": name,
+                "auroc": auroc(ds.y, scores),
+                "run_auroc": float(published.loc[name, "auroc"]),
+                "balacc": balanced_accuracy(ds.y, scores, threshold),
+                "run_balacc": float(published.loc[name, "balanced_accuracy_at_fpr_1%"]),
+            }
+        )
+    table = pd.DataFrame(rows)
+    if table.empty:
+        raise ValueError(f"{run_folder.name} scores none of these datasets; nothing to check")
+    logger.info(
+        f"{run_folder.name} probe against its own run:\n{table.round(4).to_string(index=False)}"
+    )
+    if (table["auroc"] - table["run_auroc"]).abs().max() > tol:
+        raise ValueError(
+            f"{run_folder.name}'s probe does not reproduce its run on these activations; "
+            "they are from another layer or token position"
+        )
+    if (table["balacc"] - table["run_balacc"]).abs().max() > tol:
+        logger.warning("balanced accuracy differs from the run's; a score sits at the threshold")
+    return score
 
 
 def zero_shot_table(
@@ -964,6 +1050,7 @@ def zeroshot(
     out_dir: str | Path = OUT_DIR,
     layer: int = 20,
     vectors: str | Path | None = None,
+    base_run: str | Path | None = None,
 ) -> None:
     """Rewrite just `zero_shot.csv`, with every axis the bank supports.
 
@@ -971,6 +1058,9 @@ def zeroshot(
     sixteen transfer matrices, and the zero-shot table is the one that gets extended as new
     persona groups arrive. The columns `run` already wrote are reproduced exactly; the extended
     and knowledge-denial arms are added beside them.
+
+    `base_run` names the completed run whose trained probe these activations came from; it joins
+    `zero_shot_operating.csv` as the reference the persona arms are compared against.
     """
     pooled_dir, out_dir = Path(pooled_dir), Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -1001,6 +1091,11 @@ def zeroshot(
     if "auroc_ext_axis" in extra:
         arms["extended axis (12v13)"] = extra["auroc_ext_axis"]
         arms["knowledge-denial axis (4v6)"] = extra["auroc_denial_axis"]
+    if base_run is not None:
+        # added last, so the persona arms' rows keep their order and values
+        arms[BASE_ARM] = base_probe_arm(
+            Path(base_run), layer, datasets, datasets[CONTROL_DATASET]
+        )
     operating = zero_shot_operating_table(datasets, arms, datasets[CONTROL_DATASET], layer)
     operating.round(4).to_csv(out_dir / "zero_shot_operating.csv", index=False)
     logger.info(f"wrote zero_shot.csv and zero_shot_operating.csv to {out_dir}")
@@ -1231,26 +1326,20 @@ def verify(
     """Check the pooled matrix against the completed sweep, using its own probe.
 
     Scoring the pooled vectors with the trained direction should reproduce the AUROCs in
-    results_table.csv. It will not match exactly: the deployed probe scores every response token
-    then averages the scores, whereas this averages the activations then scores once, and those
-    differ whenever examples have unequal token counts. Close agreement confirms the cache lookup
-    and mask alignment; a large gap means the pooling is wrong and everything downstream is void.
+    results_table.csv. The probe's score is linear, so averaging activations and then scoring
+    equals scoring every token and then averaging; only float rounding separates the two.
+    Agreement confirms the cache lookup and mask alignment; a large gap means the pooling is
+    wrong and everything downstream is void.
     """
-    import pickle
-
     run_folder, pooled_dir = Path(run_folder), Path(pooled_dir)
-    with open(run_folder / "detector.pt", "rb") as f:
-        detector = pickle.load(f)
-    direction = detector["directions"].double().numpy().ravel()
-    mean = detector["scaler_mean"].double().numpy().ravel()
-    scale = detector["scaler_scale"].double().numpy().ravel()
+    score = run_probe(run_folder)
 
     published = pd.read_csv(run_folder / "results_table.csv", index_col=0)
     rows = []
     for name, ds in sorted(load_pooled(pooled_dir).items()):
         if not ds.two_class:
             continue
-        scores = ((ds.z - mean) / scale) @ direction
+        scores = score(ds.z)
         mine = auroc(ds.y, scores)
         theirs = float(published.loc[name, "auroc"]) if name in published.index else float("nan")
         rows.append(

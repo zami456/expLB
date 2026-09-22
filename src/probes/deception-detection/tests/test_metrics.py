@@ -4,9 +4,12 @@ The point of these is less "does the arithmetic work" than pinning *why* balance
 fixed FPR is reported beside AUROC rather than instead of it.
 """
 
+import pickle
+
 import numpy as np
 import pandas as pd
 import pytest
+import torch
 
 from deception_detection.scripts import persona_ood as P
 
@@ -215,3 +218,90 @@ class TestMeasuredFollowupRow:
         (folder / "cfg.yaml").write_text("detect_layers:\n- 20\n")
         row = P.measured_followup_row(self.SHARED, run_folder=folder)
         assert row["method"] == "Follow-Up Probe (measured here, layer 20)"
+
+
+class TestBaseProbe:
+    """A run's trained probe as a zero-shot arm.
+
+    Its bars are only meaningful on the activations the run itself scored, and nothing in the
+    pooled files says which those were. These pin that the arm is refused rather than drawn
+    when the pairing is wrong.
+    """
+
+    def write_run(self, folder, layer=20, auroc_offset=0.0):
+        rng = np.random.default_rng(0)
+        w, m = rng.standard_normal(4), rng.standard_normal(4)
+        s = rng.uniform(0.5, 2.0, 4)
+        y = np.tile([0, 1], 20)
+        ds = P.Pooled("convince_me__plain", rng.standard_normal((40, 4)) + np.outer(y, w), y)
+        control = P.Pooled(P.CONTROL_DATASET, rng.standard_normal((50, 4)), np.zeros(50, int))
+
+        folder.mkdir(parents=True)
+        with open(folder / "detector.pt", "wb") as f:
+            pickle.dump(
+                {name: torch.tensor(v[None]) for name, v in
+                 (("directions", w), ("scaler_mean", m), ("scaler_scale", s))},
+                f,
+            )
+        (folder / "cfg.yaml").write_text(
+            f"detect_layers:\n- {layer}\ntrain_data: repe_honesty__plain\n"
+        )
+        scores = ((ds.z - m) / s) @ w
+        threshold = np.quantile(((control.z - m) / s) @ w, 0.99)
+        pd.DataFrame(
+            {
+                "auroc": [P.auroc(y, scores) + auroc_offset],
+                "balanced_accuracy_at_fpr_1%": [P.balanced_accuracy(y, scores, threshold)],
+            },
+            index=[ds.name],
+        ).to_csv(folder / "results_table.csv")
+        return {ds.name: ds, control.name: control}, control, (w, m, s)
+
+    def test_a_run_that_reproduces_gives_the_standardised_projection(self, tmp_path):
+        datasets, control, (w, m, s) = self.write_run(tmp_path / "run")
+        score = P.base_probe_arm(tmp_path / "run", 20, datasets, control)
+        z = datasets["convince_me__plain"].z
+        np.testing.assert_allclose(score(z), ((z - m) / s) @ w)
+
+    def test_a_run_at_another_layer_is_refused(self, tmp_path):
+        datasets, control, _ = self.write_run(tmp_path / "run", layer=40)
+        with pytest.raises(ValueError, match="layers"):
+            P.base_probe_arm(tmp_path / "run", 20, datasets, control)
+
+    def test_activations_the_run_did_not_score_are_refused(self, tmp_path):
+        # the same layer passes the config check; only the reproduction check can catch this
+        datasets, control, _ = self.write_run(tmp_path / "run", auroc_offset=-0.2)
+        with pytest.raises(ValueError, match="does not reproduce"):
+            P.base_probe_arm(tmp_path / "run", 20, datasets, control)
+
+
+class TestLiarsBenchAverage:
+    """The summary a RepE-trained arm is compared on must leave RepE out.
+
+    RepE is not a Liars' Bench dataset and it is the base probe's training set; counting it in
+    the average reversed the balanced-accuracy comparison at the follow-up token.
+    """
+
+    def test_it_averages_the_shared_datasets_only(self):
+        rng = np.random.default_rng(0)
+        y = np.tile([0, 1], 20)
+        datasets = {
+            name: P.Pooled(name, rng.standard_normal((40, 2)) + shift * y[:, None], y)
+            for name, shift in (
+                ("convince_me__plain", 1.0),
+                ("insider_trading_cadenza__plain", 0.2),
+                ("repe_honesty__plain", 3.0),
+            )
+        }
+        control = P.Pooled(P.CONTROL_DATASET, rng.standard_normal((50, 2)), np.zeros(50, int))
+        table = P.zero_shot_operating_table(
+            datasets, {"x": lambda z: z[:, 0]}, control, layer=20, n_boot=5
+        )
+        rows = table[table["threshold_source"] == "control"].set_index("dataset")
+
+        shared = ["convince_me__plain", "insider_trading_cadenza__plain"]
+        assert rows.loc[P.LB_AVERAGE, "auroc"] == pytest.approx(rows.loc[shared, "auroc"].mean())
+        assert rows.loc["Average", "auroc"] == pytest.approx(
+            rows.loc[[*shared, "repe_honesty__plain"], "auroc"].mean()
+        )
+        assert rows.loc[P.LB_AVERAGE, "n_deceptive"] == 40
