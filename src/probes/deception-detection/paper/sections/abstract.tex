@@ -1,0 +1,21 @@
+\begin{abstract}
+Linear probes for lie detection often fail to transfer across datasets. \citet{mahadik2026persona}
+derive detectors from \emph{persona coordinates} instead: directions built from a model's
+activations while it role-plays deceptive and honest personas, which never see an evaluation set.
+They report better cross-dataset generalization at 3B and 8B. We project the lies of Liars' Bench
+onto persona coordinates of Llama-3.3-70B-Instruct. On the benchmark's hardest dataset,
+harm-pressure knowledge report (\hpkr), which the original study did not evaluate, the published
+persona contrast inverts, scoring \V{zs-dec-hpkr-L20} AUROC at layer~20. \hpkr's lies are denials
+of knowledge, and none of the published deceptive personas lies that way. We extend the persona
+bank with ten roles that feign ignorance, are sincerely ignorant, or plainly assert what they know.
+In these knowledge-denier persona coordinates, with no benchmark labels, a single contrast
+direction reaches \V{zs-den-hpkr-L40} AUROC and \V{op-den-balacc-hpkr-L40} balanced accuracy at a
+1\% false-positive rate on \hpkr{} at layer~40. The benchmark's own probes score
+\V{lb-mean-balacc-hpkr} and \V{lb-followup-balacc-hpkr} there, and its upper bound, trained on
+privileged labels, \V{lb-upper-balacc-hpkr}. Across the full train--test matrix of six datasets
+at layer~40, the extended persona contrast reaches \V{off-ext-L40} mean off-diagonal AUROC, against
+\V{off-base-L40} for 8192-dimensional probes each trained on one dataset, and beats their average
+on every held-out dataset; the persona principal components add nothing beyond it. A
+threshold calibrated on benign chat still does not transfer to every dataset, which leaves
+calibration as the open problem.
+\end{abstract}

@@ -1,0 +1,20 @@
+\section{Conclusion}
+\label{sec:conclusion}
+
+Persona coordinates scale to a 70B model, but only as far as the persona bank covers the kind of
+lie being told. Liars' Bench's hardest dataset consists of lies told as denials of knowledge. The
+published personas, all specialists in omission, give a direction that inverts there. Adding roles
+that deny knowledge turns it into one that, with no benchmark labels, detects those lies at the
+benchmark's own threshold nearly as well as a probe trained on the benchmark itself. Across
+datasets, one zero-shot contrast over the extended bank transfers better on average than probes
+trained on single datasets, and better than the persona subspace. What it does not yet have is a threshold
+that holds on every dataset.
+
+\section*{Acknowledgements}
+
+[Collaborator name] built the persona bank and the rollout and judging pipeline. [Further
+acknowledgements.]
+
+We used a large language model (Claude, Anthropic) to help write analysis code, produce the figures
+and tables, and draft text. Every number in the paper is generated from the released result files,
+and we checked each citation against its source.
