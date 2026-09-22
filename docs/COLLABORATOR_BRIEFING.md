@@ -10,6 +10,10 @@ you should not need any other file to follow it.
 > — the aggregation theory in §5b, the "same six" claim, and the PC1 contradiction in §5c. All
 > three are corrected below, with the file and row for every number so you can check them
 > yourself. Ledger entry: **F-97** in `kd/docs/FINDINGS.md`.
+>
+> **Further, later the same day:** §3's Claim 3 is corrected (a row-level leak; quote +0.12–0.16,
+> not +0.178), §5d's open methodological risk is **closed**, §5e now has L32 measured on your
+> six, and §6 records that the sarcasm bank's second gate also failed. Ledger: **F-107 → F-109**.
 
 Short version: **we have three claims that survive their own significance tests, four that did
 not and were withdrawn — three of them ours about your work — and one finding that changes what
@@ -128,14 +132,27 @@ that is the design the paper uses — and it is the design that makes the paper'
 **+0.178, 95% CI [+0.143, +0.213], winning on 11 of 11 targets.** Positive at **21 of 21
 layers**, every one clearing the bootstrap. Stable across five seeds (0.173–0.198).
 
+> **Corrected 2026-09-22 — quote +0.12 to +0.16, not +0.178.** We have since run the clustered
+> hold-out that §5d listed as the open risk, and found a **row-level leak** on the way:
+> `harm-pressure-kr-matched` is a *view* over `harm-pressure-knowledge-report` — 258 rows, and
+> **100% of its row_ids are HP-KR row_ids** — so two of the eleven leave-one-dataset-out cells
+> are train-on-test. Under **leave-one-CLUSTER-out**, where every dataset sharing the target's
+> provenance is removed from training, the gain is **+0.129 (L20), +0.131 (L32), +0.125 (L40)**
+> over all eleven, and **+0.157 / +0.117 / +0.150** over the nine uncontaminated targets —
+> positive on 8–11 of 11 at every layer. **The claim survives the strictest hold-out we can
+> construct; the magnitude was inflated.** Ledger: F-108.
+
 The third row is the control that matters. Pooled training with ~6,700 rows and pooled training
 held to a *single-source* budget of ~666 rows are statistically indistinguishable (p = 0.38).
 **The gain is diversity, not data volume.**
 
-Two numbers worth pausing on. On `harm-pressure-knowledge-report` — the dataset every detector
-inverts on, the reason half this project exists — pooled training reaches **0.972**. The
-inversion is not a property of the dataset; it is a property of training on one source. And on
-our capitulation dataset, pooled reaches **0.802** against the capitulation bank's 0.714: the
+~~On `harm-pressure-knowledge-report` pooled training reaches **0.972**.~~ **Withdrawn
+2026-09-22.** That number is substantially the leak described above: HP-KR reads **0.9674 under
+leave-one-dataset-out and 0.6492 under leave-one-cluster-out** at L40 — a 0.318 collapse the
+moment its WMDP siblings leave the training set. Please do not quote it.
+
+The other number stands. On our capitulation dataset pooled reaches **0.802** against the
+capitulation bank's 0.714 — that pair shares no provenance, so the leak does not touch it: the
 bank we built to fix that dataset is beaten by pooling datasets we already had.
 
 ---
@@ -452,6 +469,20 @@ the original paper never ran.
 - Our secondary "mean-of-directions" result is **+0.028, CI [+0.005, +0.052]**. It clears, but
   the lower bound is +0.005. It is not a headline.
 
+**THE OPEN RISK IS NOW CLOSED (2026-09-22).** This section has listed "clustered hold-out for
+shared provenance" as not run. It is run. Two findings:
+
+1. **A row-level leak.** `harm-pressure-kr-matched` is a *view* over
+   `harm-pressure-knowledge-report` — 258 rows, **100% of its row_ids are HP-KR row_ids** — so
+   two of the eleven LODO cells are train-on-test. No other pair shares a single row_id.
+2. **The claim survives anyway.** Under leave-one-cluster-out (provenance clusters: the WMDP
+   harm-pressure trio, the Liars' Bench scenarios, Apollo's three, MASK, ours), the gain is
+   **+0.129 / +0.131 / +0.125** at L20 / L32 / L40 over all eleven, and **+0.157 / +0.117 /
+   +0.150** over the nine uncontaminated targets, positive on 8–11 of 11 at every layer.
+
+So the honest number is **+0.12 to +0.16**, not +0.178, and the HP-KR 0.972 in §3 is withdrawn.
+Ledger: F-108.
+
 **What we are dropping.** The claim that our pooled result is a *new mechanism*. The reviewer's
 framing is better and we are adopting it: the contribution is **"the replicated paper omitted a
 baseline that beats its trained method"**. That is a smaller claim than a mechanism and a much
@@ -473,8 +504,18 @@ already hold:
 An independent sweep of the pooled probe agrees, peaking at layers 32–36 rather than 40. The
 differences are small (~0.02) and do not reverse any ordering we have reported, but **every L40
 figure in this document is therefore a slight understatement**, for your method and ours alike.
-If the abstract reports L20 and L40, it is worth checking L32 before submitting — the activations
-are already extracted, so it costs nothing but CPU.
+
+**Now measured on your six (2026-09-22).** The pooled probe at L32 against L40:
+
+| | single-source | pooled LODO | pooled LODO, row-matched |
+|---|---:|---:|---:|
+| L32 | **0.7203** | **0.8965** | **0.9010** |
+| L40 | 0.6960 | 0.8683 | 0.8930 |
+
+L32 wins on all three arms. So §5b's comparison understates the pooled baseline: against 0.916
+the row-matched pooled probe reads **0.9010 at L32**, cutting that margin from +0.023 to
+**+0.015**. If the abstract reports L20 and L40, it is worth reporting L32 — the activations are
+already extracted, so it costs nothing but CPU. Ledger: F-109.
 
 ---
 
@@ -509,9 +550,31 @@ remain separable at 0.92 by word counts alone. **A bank built on this would be a
 which is precisely the thing it was designed to diagnose** — the same failure mode that forced
 the knowledge-denial bank into three groups rather than two.
 
-**So: not first, and not in this form.** The concept survives; the on-policy factorial does not.
-If we return to it, it needs a construction where the two arms share wording by design rather
-than by hope — teacher-forcing the response text, as the capitulation bank does.
+**And the second gate has now failed too (2026-09-22).** The design's other pre-test asks whether
+our *existing* deception axes fire on marked natural sarcasm at all — if they do not, the
+"deception axis is really a mismatch detector" hypothesis is weak before any bank is built. Run
+on 600 length-matched FigLang-2020 Reddit rows (author-labelled, so *intended* sarcasm), 70B
+activations, axes projected zero-shot:
+
+| | mean L40 | last L40 | random p95 | random max |
+|---|---:|---:|---:|---:|
+| **deception axis** | **0.543** | **0.586** | ~0.58–0.59 | ~0.63–0.64 |
+| **sycophancy axis** | **0.693** | **0.710** | | |
+| assistant axis | 0.428 | 0.411 | | |
+
+**The deception axis sits inside the random-direction distribution** and never reaches the
+bag-of-words floor of 0.632. It does not fire. The pipeline is not null — the assistant axis is
+strongly *inverted*, so these activations carry real structure.
+
+**What fires is sycophancy, and that is the point.** Ironic criticism's literal surface is
+*praise*, so a direction tracking agreeable, flattering register responds to it — zero-shot,
+beating a cross-validated bag-of-words model — while the direction meant to track insincere
+*intent* does not. **The axes respond to what the text sounds like, not to what the speaker
+means.** That is Claim 1 reached from a third independent route. Ledger: F-107.
+
+**So: not first, and not in this form.** Both gates have failed — the arms cannot be produced
+without a register confound, *and* the hypothesis that motivated the bank does not survive its own
+cheap pre-test. The concept is interesting; we are not building it.
 
 ---
 
@@ -524,8 +587,8 @@ than by hope — teacher-forcing the response text, as the capitulation bank doe
 | Pooled training vs the abstract | **done, then withdrawn as a headline** — our six ≠ your six (§5b) |
 | Persona method through the same LODO harness | **done** — loses to raw pooled LR by 0.11–0.16 (§5d) |
 | Format-matched persona control | **done, and mostly negative** — see below |
-| Layer-32 check on the key numbers | **done** — L32 is the peak for raw and persona features alike, worth ~0.02 (§5e) |
-| Sarcasm bank | **pilot run, and it FAILED its gating check** — 0.92 separable with markers stripped; on-policy design not viable (§6) |
+| Layer-32 check on the key numbers | **done, and now run on your six** — L32 beats L40 on all three arms (§5e) |
+| Sarcasm bank | **both gates failed** — 0.92 lexically separable, and the deception axis does not fire on natural sarcasm (§6) |
 | Clustered hold-out for shared provenance | **not run** — the open methodological risk (§5d) |
 | Resolve the PC1 sign discrepancy | **resolved — there was no discrepancy (§5c)**; we still need a source for the "0.09 below" figure |
 

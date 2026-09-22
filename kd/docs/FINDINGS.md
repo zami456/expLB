@@ -5134,3 +5134,101 @@ separability (F-93), and now zero-shot behaviour on human-written natural sarcas
 - **closes:** SARCASM_DESIGN.md sequence step 3, the last unrun gate. Steps 2 and 3 have now
   both failed; the factorial is not built, on-policy or teacher-forced.
 - **status:** verified
+
+---
+
+### F-108 · 2026-09-22 · **The open methodological risk is closed: a row-level LEAK exists between HP-KR and kr-matched, and Claim 3 survives leave-one-CLUSTER-out anyway — +0.125 to +0.157 against +0.178**
+
+`docs/COLLABORATOR_BRIEFING.md` §5d has carried "clustered hold-out for shared provenance —
+**not run**, the open methodological risk" since the external review. It is now run, and it found
+something worse than shared provenance on the way.
+
+**First, a leak — measured, not inferred.** `harm-pressure-kr-matched` is a **view** over
+`harm-pressure-knowledge-report`: 258 rows, and **100% of its row_ids are HP-KR row_ids**. So two
+of the eleven leave-one-dataset-out cells are train-on-test:
+
+| held-out target | rows | of which also in the training pool |
+|---|---:|---:|
+| `harm-pressure-kr-matched` | 258 | **258 — 100%** |
+| `harm-pressure-knowledge-report` | 2,139 | 258 — 12% |
+
+No other pair shares a single row_id; the only cross-dataset text overlap anywhere is 2–4
+identical short responses (HP-KR/roleplaying/mask), which is generic phrasing, not duplication.
+So the contamination is confined to this one pair, and it is total for one of them.
+
+**Second, leave-one-cluster-out.** Provenance clusters — `lb_harm` (the WMDP-derived trio),
+`lb_scenario` (instructed-deception, convincing-game, insider-trading), `apollo` (ai_liar,
+roleplaying, sandbagging_v2), `mask`, `ours` — with every sibling of the target removed from
+training, so no source material sits on both sides. Same splits, same probe, same seed:
+
+| layer | gain LODO (all 11) | **gain LOCO (all 11)** | **gain LOCO (9 clean)** | LOCO positive |
+|---|---:|---:|---:|---|
+| 20 | +0.1529 | **+0.1289** | **+0.1571** | 10/11 · clean **9/9** |
+| 32 | +0.1111 | **+0.1309** | **+0.1168** | 11/11 · clean **9/9** |
+| 40 | +0.1814 | **+0.1254** | **+0.1504** | 10/11 · clean 8/9 |
+
+**Claim 3 survives.** Pooled training beats single-source transfer under the strictest hold-out
+available to us, at every layer tested, on 8–11 of 11 targets. The margin is smaller than the
+headline: **+0.12 to +0.16** against the reported **+0.178**.
+
+**The leak's signature is unmistakable once you look for it.** HP-KR at L40 reads **0.9674 under
+LODO and 0.6492 under LOCO** — a 0.318 collapse the moment its WMDP siblings leave the training
+set. At L20 it is 0.7090 → 0.4311. That single dataset is where F-79's striking "pooled training
+reaches 0.972 on the dataset every detector inverts on" comes from, and **that number is
+substantially the leak**. It should not be quoted again without this entry attached.
+
+**A counter-intuitive detail that is real.** Dropping the two contaminated targets makes the LOCO
+mean *better*, not worse (+0.157 vs +0.129 at L20; +0.150 vs +0.125 at L40), because under LOCO
+the leaked cells lose their crutch and score near chance, dragging the all-11 mean down. The
+clean-9 figure is the honest one for the claim; the all-11 LOCO figure is a lower bound.
+
+**What to say now.** The defensible statement is: *pooled training beats single-source transfer by
+roughly +0.12–0.16 AUROC under leave-one-cluster-out, positive on essentially every target,
+and the effect is not an artifact of shared provenance or of row overlap.* The +0.178 headline
+should be retired in favour of the LOCO number, and F-79's HP-KR 0.972 should be dropped
+entirely.
+
+- **source:** `src/assistant_axis_ndif/30g_clustered_holdout.py` →
+  `run-premise/clustered/clustered_L{20,32,40}_mean_s42.json`; overlap measured from
+  `run-coords/passB/{harm-pressure-knowledge-report,harm-pressure-kr-matched}/rows.jsonl`;
+  per-dataset LODO from `run-premise/premise_L40_mean_s42.json`.
+- **caveats:** (1) **cluster assignment is a judgment.** `lb_scenario` groups three datasets that
+  share a pipeline but not source material; a looser grouping would be kinder to the result, a
+  stricter one (all of Liars' Bench as one cluster) harsher. The `lb_harm` cluster is the one
+  that is not a judgment — it is forced by the row overlap. (2) three layers, one seed, one
+  probe (`paper`), mean pooling. (3) LOCO trains on fewer datasets *and* removes the nearest
+  neighbours, so some drop is expected by construction and is not itself evidence of
+  contamination — the claim tested is only whether the margin stays positive. (4) no
+  dataset-level bootstrap on the LOCO margins.
+- **amends:** F-79, F-80 — their +0.178 is inflated by two contaminated cells and by
+  same-provenance siblings; the conclusion holds, the magnitude does not. **closes:** the §5d
+  open risk.
+- **status:** verified
+
+---
+
+### F-109 · 2026-09-22 · L32 on the collaborator's six: pooled training is HIGHER there than at L40, confirming §5e's "every L40 figure is an understatement"
+
+F-91/§5e put the peak at layers 32–36 rather than 40, and noted every L40 number in the briefing
+is therefore slightly low. The six-dataset premise run (F-85) existed only at L20 and L40. L32
+now run, same six (`instructed-deception`, `harm-pressure-choice`,
+`harm-pressure-knowledge-report`, `convincing-game`, `insider-trading`, `ai_liar`), same seed:
+
+| layer | single-source | pooled LODO | pooled LODO, row-matched |
+|---|---:|---:|---:|
+| 20 | 0.6439 | 0.7365 | 0.7654 |
+| **32** | **0.7203** | **0.8965** | **0.9010** |
+| 40 | 0.6960 | 0.8683 | 0.8930 |
+
+**L32 beats L40 on all three arms**, by +0.024 (single), +0.028 (LODO) and +0.008 (row-matched).
+So F-85's comparison against the abstract — which used L40 — understates the pooled baseline by
+about 0.03. Against the abstract's 0.916 the row-matched pooled probe reads **0.9010 at L32**
+rather than 0.8930 at L40, cutting that margin from +0.023 to **+0.015**.
+
+*(Also noted: our six substitutes `ai_liar` for the collaborator's `repe_honesty`, which is not in
+our corpus — the mismatch F-97 records. This entry inherits it.)*
+
+- **source:** `run-premise/six/premise_L32_mean_s42.json`, alongside the existing L20/L40.
+- **caveats:** one seed, mean pooling, and the six are not the collaborator's six (F-97).
+- **supports:** F-91, §5e. **amends:** F-85's margin by ~0.008.
+- **status:** verified
