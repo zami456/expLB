@@ -1,0 +1,17 @@
+{
+ "arm": "reddit",
+ "seed": 42,
+ "tol": 1,
+ "unmatched": {
+  "n": 4400,
+  "vocab": 2295,
+  "auroc_length": 0.5780664256198347,
+  "auroc_bow": 0.677818388429752
+ },
+ "matched": {
+  "n": 600,
+  "vocab": 408,
+  "auroc_length": 0.5000055555555556,
+  "auroc_bow": 0.6320444444444444
+ }
+}

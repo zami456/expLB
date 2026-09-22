@@ -4991,3 +4991,146 @@ is confirmed above. Only the supporting narrative changes.
   design's blind five-rating protocol — as F-93 already noted.
 - **amends:** F-93's amendment (the polarity trend), not its verdict.
 - **status:** verified
+
+---
+
+### F-106 · 2026-09-22 · **Gate 3 prepared, and the preparation found the gate is under-specified: natural sarcasm corpora are 0.63–0.78 separable by bag-of-words alone, so "do the axes fire?" has no floor to fire above**
+
+`cap/docs/SARCASM_DESIGN.md` step 3 is a one-directional pre-test: apply our *existing* deception
+axes to marked natural sarcasm, on the logic that if they do not fire even there, the
+"deception axis = mismatch detector" hypothesis is weak and the bank stays unbuilt. The design
+calls it a check that "costs almost nothing". Preparing it cost nothing and produced three
+measurements; **running it needs an NDIF extraction and has not been done.**
+
+**The named corpus is unusable, and so is the obvious substitute.** `iSarcasmEval` on the Hub
+(`arbml/iSarcasmEval_task_A`) is the **Arabic** subtask — 1,400 rows, `dialect` ∈ {nile, msa,
+gulf, levant, magreb}, non-Latin script — against English-derived axes and an English corpus.
+`CreativeLang/SARC_Sarcasm` is worse: 12.7M rows whose **sarcasm label column is absent** from the
+mirror (`text, author, score, ups, downs, date, created_utc, subreddit, id`).
+
+**What works** is FigLang 2020 (`tasksource/figlang2020-sarcasm`; Ghosh, Vajpayee & Muresan,
+2nd Workshop on Figurative Language Processing, ACL 2020): English, exactly balanced,
+`context` → `response`, and **author-labelled** — Reddit self-annotation and Twitter hashtags,
+i.e. *intended* sarcasm rather than third-party perception, which is the property the design
+requires and the reason it named iSarcasm in the first place.
+
+**Trivial-feature baselines, measured (no model, no NDIF):**
+
+| corpus | n | length-only AUROC | bag-of-words AUROC (5-fold) |
+|---|---:|---:|---:|
+| FigLang Reddit | 4,400 | 0.5781 | 0.6778 |
+| FigLang Twitter | 5,000 | 0.6252 | **0.7826** |
+
+**The gate as written specifies no floor.** A deception axis scoring 0.65 on the Twitter arm
+would have read as "the axes fire on natural sarcasm" while sitting **below** what word counts
+alone achieve (0.783). Note also that the sarcastic class is the **shorter** one here — the
+opposite direction to `response-length-transfers-on-its-own`, where the positive class is longer
+in 9 of 10 datasets — so length cuts the other way and cannot be waved through.
+
+**The prepared set** takes the Reddit arm (lower trivial floor), length-matched pair by pair:
+
+| | value |
+|---|---:|
+| rows | 600 (300 sarcastic / 300 not) |
+| mean words, sarcastic vs not | 13.2 / 13.2 |
+| **length-only AUROC** | **0.5000** (exact, by construction) |
+| **bag-of-words AUROC** | **0.6320** |
+
+**So the gate's decision rule should be: an axis result is informative only above 0.632**, and any
+Twitter-arm result above 0.783. That threshold did not exist before this entry.
+
+**Two caveats that belong to the corpus, not to us.** (1) *Label noise is visible*: a row labelled
+`NOT_SARCASM` reads "hey don't you know I know everything I'm from a women studies class", which
+is plainly sarcastic. Self-annotation captures sarcasm the author **marked**; unmarked sarcasm
+falls into the negative class and depresses any true signal. (2) *The format is off-policy*:
+scoring human Reddit text means placing it in an assistant turn, the same teacher-forcing declined
+for the factorial on Kirch et al.'s grounds. The cases differ — here we are not **building** an
+axis from the data but testing whether an existing direction fires on held-out natural examples,
+which is construct validity, where off-policy text is the point rather than the flaw. Recorded as
+a judgment, not a fact.
+
+- **source:** `tasksource/figlang2020-sarcasm` (`sarcasm_detection_shared_task_{reddit,twitter}_training.jsonl`);
+  prepared set `sarcasm_natural_reddit.csv` (scratchpad, 600 rows, project `messages` schema);
+  baselines via bag-of-words logistic regression, 5-fold, min document frequency 3.
+- **caveats:** (1) **the gate itself is NOT run** — that needs Llama-3.3-70B activations for the
+  600 rows and projection onto the existing axes. (2) baselines are 5-fold CV over rows, not
+  grouped by thread, so they may be optimistic where a context is shared. (3) one corpus, one
+  matching scheme, seed 42.
+- **status:** prepared and bounded; the gate's own question is unmeasured.
+
+---
+
+### F-107 · 2026-09-22 · **GATE 3 RUN AND FAILED: the deception axis does not fire on natural sarcasm — it is indistinguishable from a random direction. The axis that DOES fire is sycophancy, which is the register diagnosis from a third angle**
+
+`cap/docs/SARCASM_DESIGN.md` step 3, the one-directional pre-test, is now measured. 600
+length-matched FigLang-2020 Reddit rows (F-106), Llama-3.3-70B activations extracted on NDIF
+(3 chunks, 1m39s, 600/600 spans, zero degenerate), existing axes projected zero-shot.
+
+**The design's rule:** *"apply our existing deception axes to marked natural sarcasm. If they do
+not fire even on marked sarcasm, the 'deception axis = mismatch detector' hypothesis is already
+weak and the bank drops in priority before we build it."*
+
+**Two floors, both pre-computed before the extraction (F-106):** the bag-of-words floor
+**0.632**, and a random-direction null measured here — 200 unit directions per cell, scored
+unsigned as `max(a, 1−a)` because a random direction's sign is arbitrary.
+
+| pooling | layer | random mean | random p95 | random max | **deception** | **sycophancy** |
+|---|---:|---:|---:|---:|---:|---:|
+| mean | 20 | 0.5308 | 0.5774 | 0.6129 | **0.5825** | 0.6346 |
+| mean | 40 | 0.5332 | 0.5818 | 0.6349 | **0.5427** | **0.6930** |
+| last | 20 | 0.5338 | 0.5851 | 0.6038 | **0.5806** | 0.6267 |
+| last | 40 | 0.5431 | 0.5945 | 0.6418 | **0.5856** | **0.7097** |
+
+**The deception axis fails both floors at every cell.** Its range is 0.543–0.583 against a
+random-direction mean of 0.531–0.543; it sits inside the random distribution, below p95 in two
+cells and barely above it in two, and never approaches the bag-of-words floor of 0.632. **Gate 3
+fails, and by the design's own pre-registered rule the "deception axis = mismatch detector"
+hypothesis is weak and the sarcasm bank stays unbuilt.**
+
+That is a second, independent route to the same place as F-93. F-93 killed the *on-policy
+construction* because the arms were lexically separable; this kills the *motivating hypothesis*
+because the axis does not respond to the phenomenon at all. The two failures are not redundant —
+one is about whether the bank could be built, the other about whether it would have been worth
+building.
+
+**The result is not a null pipeline, and the sanity check proves it.** The **assistant axis is
+strongly INVERTED** on these rows — 0.354 (mean/L20) to 0.428 — i.e. sarcastic Reddit comments
+are reliably *less* assistant-like than non-sarcastic ones. The activations carry real, readable
+structure; the deception direction simply is not aligned with it.
+
+**What does fire is sycophancy.** 0.6930 (mean/L40) and **0.7097** (last/L40), clearing the
+bag-of-words floor *and* exceeding the random **maximum** over 200 draws (0.6349, 0.6418) — and
+doing it zero-shot, with no fitting, against a 5-fold cross-validated bag-of-words model.
+
+**Why that is the interesting half.** Ironic criticism's *literal surface is praise*. A direction
+that tracks agreeable, flattering, validating register will fire on it — and does — while a
+direction that is supposed to track insincere intent does not. **The axes respond to what the
+text sounds like, not to what the speaker means.** That is Claim 1 arrived at from a third
+independent direction: the capitulation dataset (F-65/F-66), the sarcasm pilot's lexical
+separability (F-93), and now zero-shot behaviour on human-written natural sarcasm.
+
+| other axes, for the record | mean L40 | last L40 |
+|---|---:|---:|
+| `unified` | 0.6508 | 0.6774 |
+| `knowledge_denial` | 0.6363 | 0.6800 |
+| `kd_assertion` | 0.6295 | 0.6802 |
+| `collab_extended` | 0.6270 | 0.6714 |
+| `assistant` | **0.4284** | **0.4105** |
+
+- **source:** `run-coords/sarcasm/sarcasm_natural/` (items.pt 600 spans, chunk_000{0,1,2}.pt,
+  rows.jsonl); banks `run-kd/axes_vectors_s23.pt` and `run-kd/axes_collab_s23.pt`; dataset built
+  by `cap/scripts/build_sarcasm_natural.py`, registered in `eval_datasets.NATURAL_SARCASM`
+  (EVAL_ONLY, absent from `all_keys()` — label 1 means "the author marked this sarcastic", not
+  "deceptive", and must never enter the deception transfer matrix).
+- **caveats:** (1) **off-policy by construction** — human Reddit text placed in an assistant
+  turn. Defensible here because we are testing whether an *existing* direction fires on held-out
+  natural examples rather than *building* an axis from the data, but it is a judgment (F-106).
+  (2) **corpus label noise**: self-annotation captures sarcasm the author *marked*, so unmarked
+  sarcasm sits in the negative class and depresses any true signal — this biases toward the null
+  we found, so the deception result is conservative and the sycophancy result is not. (3) one
+  arm (Reddit), one matching scheme, seed 42, 600 rows. (4) 20 layers extracted; only L20/L40
+  are reported above, chosen in advance as the abstract's layers. (5) the random null is
+  directions in activation space, not a label permutation.
+- **closes:** SARCASM_DESIGN.md sequence step 3, the last unrun gate. Steps 2 and 3 have now
+  both failed; the factorial is not built, on-policy or teacher-forced.
+- **status:** verified

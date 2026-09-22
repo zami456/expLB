@@ -53,6 +53,11 @@ INSTRUCTED_INTENT = "instructed_intent"        # Liars' Bench: the prompt told i
 JUDGE_GRADE = "judge_grade"                    # Apollo: a judge graded the response
 BELIEF_INCONSISTENCY = "belief_inconsistency"  # MASK: statement contradicts elicited belief
 TRIGGER_CONDITIONED = "trigger_conditioned"    # sleeper agents: a LoRA lies when a cue is present
+AUTHOR_MARKED_SARCASM = "author_marked_sarcasm"  # FigLang: the AUTHOR marked it sarcastic, /s or #
+# ^ NOT a deception semantics. Sarcasm is insincerity meant to be RECOGNISED, deception
+# insincerity meant to be BELIEVED, so a row labelled 1 here is not a lie. It exists for
+# SARCASM_DESIGN.md gate 3 -- does an existing deception axis fire on overt sarcasm? -- and is
+# EVAL_ONLY for the same reason the factor probes are.
 
 
 @dataclass(frozen=True)
@@ -338,6 +343,20 @@ FACTOR_PROBES = {
 }
 EVAL_ONLY |= set(FACTOR_PROBES)
 
+# Natural sarcasm, for SARCASM_DESIGN.md gate 3. Built by cap/scripts/build_sarcasm_natural.py
+# from FigLang 2020 (Ghosh, Vajpayee & Muresan, ACL 2020) -- English, author-labelled, so the
+# label is INTENDED sarcasm rather than a third party's perception, which is the property the
+# gate needs. Length-matched pair by pair: length-only AUROC is 0.5000 by construction and the
+# bag-of-words floor is 0.632, so an axis result below that means nothing (F-106).
+#
+# EVAL_ONLY, and deliberately NOT in all_keys(): label 1 means "the author marked this
+# sarcastic", not "deceptive". Folding it into `--datasets all` would put a non-deception
+# construct into the transfer matrix -- the same mistake the factor probes are fenced off from.
+NATURAL_SARCASM = {
+    "sarcasm_natural": REPO_ROOT / "cap" / "run-sarcasm-natural" / "rows.jsonl",
+}
+EVAL_ONLY |= set(NATURAL_SARCASM)
+
 # The HP-KR slice where every response is a knowledge denial, so the wording is matched and
 # only the knowledge state differs. It is a VIEW over rows already extracted under
 # harm-pressure-knowledge-report -- same row_ids, so it needs no new activations.
@@ -407,6 +426,12 @@ def load_dataset(key: str) -> list[EvalRow]:
         p = FACTOR_PROBES[key]
         if not p.exists():
             raise FileNotFoundError(f"{key}: {p} -- run kd/scripts/build_factor_probes.py --write")
+        return load_generated(p, key)
+    if key in NATURAL_SARCASM:
+        p = NATURAL_SARCASM[key]
+        if not p.exists():
+            raise FileNotFoundError(
+                f"{key}: {p} -- run cap/scripts/build_sarcasm_natural.py --write")
         return load_generated(p, key)
     if key in CSV_DATASETS:
         return load_csv_subset(SUBSETS / CSV_DATASETS[key], key)[0]
