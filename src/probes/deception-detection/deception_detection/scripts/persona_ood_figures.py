@@ -157,6 +157,8 @@ VARIANT_LABELS = [
     ("syc_pc1", "sycophancy PC1 (1-d)"),
     ("syc3", "sycophancy PCs (3-d)"),
     ("syc_axis1", "sycophancy axis (1-d)"),
+    ("uni_axis1", "unified axis (1-d) +sycophancy"),
+    ("uni_pc3", "unified PCs (3-d) +sycophancy"),
     ("ext_axis1", "extended axis (1-d) +denial"),
     ("ext_pc3", "extended PCs (3-d) +denial"),
     ("denial_axis1", "knowledge-denial axis (1-d)"),
@@ -227,9 +229,14 @@ def variants(out_dir: str | Path = OUT_DIR) -> None:
 # The base probe is the reference, not a fourth persona arm, so it takes the palette's muted
 # ink rather than a categorical hue: gray reads as "what this is measured against".
 BASE_BAR = "#898781"
+# the unified axis's own slot -- far enough from both families (orange = published/sycophancy,
+# blue = knowledge-denial) that it introduces no new worst-adjacent pair under CVD simulation
+UNIFIED_BAR = "#b5399e"
 FIG2_ARMS = [
     ("base probe (RepE-trained)", "base probe (trained on RepE)", BASE_BAR),
     ("deception axis (8v7)", "deception axis (8 vs 7, published grouping)", "#eb6834"),
+    # the paper's own widening of that contrast, and the control for the extended axis
+    ("unified axis (13v12)", "unified axis (13 vs 12, +sycophancy)", UNIFIED_BAR),
     ("knowledge-denial axis (4v6)", "knowledge-denial axis (4 vs 6)", "#8ab6e8"),
     ("extended axis (12v13)", "extended axis (12 vs 13)", "#2a78d6"),
 ]
@@ -349,6 +356,7 @@ def fig2(
 
 ZERO_SHOT_ARMS = [
     ("auroc_axis", "deception axis (8 vs 7, published grouping)", "#eb6834"),
+    ("auroc_uni_axis", "unified axis (13 vs 12, +sycophancy)", UNIFIED_BAR),
     ("auroc_denial_axis", "knowledge-denial axis (4 vs 6, new personas only)", "#8ab6e8"),
     ("auroc_ext_axis", "extended axis (12 vs 13)", "#2a78d6"),
 ]
@@ -360,7 +368,7 @@ def _zero_shot_panel(ax, out_dir: Path, title: str) -> list[str]:
     arms = [(key, label, colour) for key, label, colour in ZERO_SHOT_ARMS if key in table.columns]
     datasets = list(table["dataset"])
     x = np.arange(len(datasets))
-    width = 0.25
+    width = 0.78 / len(arms)  # a group spans the same width however many arms it holds
     gap = 0.015
 
     # Bars grow from chance, not from zero. AUROC below 0.5 is not "a small result", it is the

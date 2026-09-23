@@ -691,6 +691,36 @@ def extended_arms(
     }
 
 
+def unified_geometry(bank: persona_pcs.PersonaBank) -> persona_pcs.PersonaGeometry:
+    """The paper's unified harmful-behaviour axis: deception and sycophancy pooled (its App. C).
+
+    This is the control for the extended axis. Both widen the published 8v7 deception contrast by
+    five roles a side -- this one with sycophancy, the extended one with knowledge denial -- so
+    comparing them separates "a wider persona set helps" from "these particular roles help".
+
+    Available from every bank, unlike `extended_arms`: the sycophancy personas are in the
+    original 26 as well as the extended 36.
+    """
+    return persona_pcs.fit_geometry(
+        bank,
+        k=3,
+        deception=persona_pcs.DECEPTION_PERSONAS + persona_pcs.SYCOPHANCY_PERSONAS,
+        honesty=persona_pcs.HONESTY_PERSONAS + persona_pcs.ANTI_SYCOPHANCY_PERSONAS,
+        axis_name="unified",
+    )
+
+
+def unified_arms(
+    bank: persona_pcs.PersonaBank,
+) -> dict[str, Callable[[np.ndarray], np.ndarray]]:
+    """Zero-shot score functions for the unified axis, added after the extended ones."""
+    geom = unified_geometry(bank)
+    return {
+        "auroc_uni_axis": lambda z, g=geom: g.axis_score(z),
+        "auroc_uni_pc1": lambda z, g=geom: g.project(z, k=1).ravel(),
+    }
+
+
 def run_probe(run_folder: Path) -> Callable[[np.ndarray], np.ndarray]:
     """A completed run's trained probe, as a score function on pooled activations.
 
@@ -713,6 +743,9 @@ def base_probe_arm(
     datasets: dict[str, Pooled],
     control: Pooled,
     tol: float = 1e-3,
+    train_data: str = "repe_honesty__plain",
+    label: str = BASE_ARM,
+    check: bool = True,
 ) -> Callable[[np.ndarray], np.ndarray]:
     """A run's trained probe as a zero-shot arm, refused unless it matches these activations.
 
@@ -720,20 +753,29 @@ def base_probe_arm(
     paired with the wrong ones still produces plausible bars. So the run must be at `layer`, and
     its probe must reproduce the run's own AUROCs on these activations. The second check catches
     what the first cannot: the response-token probe and the Follow-Up Probe are both layer 20,
-    but each reproduces only on its own activations.
+    but each reproduces only on its own activations. The run must also have trained on
+    `train_data`, the data `label` names.
+
+    `check=False` is for probes the runner trained but never scored, such as the layer sweep's,
+    which fetched only RepE's tokens. Such a run has no `results_table.csv`, so the reproduction
+    check is skipped, with a warning; the layer and training data are still checked.
     """
     cfg = yaml.safe_load((run_folder / "cfg.yaml").read_text())
     if cfg.get("detect_layers") != [layer]:
         raise ValueError(
             f"{run_folder.name} probes layers {cfg.get('detect_layers')}, not [{layer}]"
         )
-    if cfg.get("train_data") != "repe_honesty__plain":
+    if cfg.get("train_data") != train_data:
         raise ValueError(
             f"{run_folder.name} trains on {cfg.get('train_data')}, but the arm is labelled "
-            f"{BASE_ARM!r}"
+            f"{label!r}"
         )
 
     score = run_probe(run_folder)
+    if not check:
+        logger.warning(f"{run_folder.name}: no runner scores to reproduce; the pooled "
+                       "activations are trusted as they are")
+        return score
     published = pd.read_csv(run_folder / "results_table.csv", index_col=0)
     threshold = float(np.quantile(score(control.z), 0.99))  # 1% FPR, as the run sets it
     rows = []
@@ -928,7 +970,9 @@ def run(
     datasets = load_pooled(pooled_dir)
     logger.info(f"loaded {len(datasets)} pooled datasets from {pooled_dir}")
 
-    zero_shot = zero_shot_table(datasets, geom, syc_geom, extra=extended_arms(bank))
+    zero_shot = zero_shot_table(
+        datasets, geom, syc_geom, extra=extended_arms(bank) | unified_arms(bank)
+    )
     zero_shot.insert(1, "layer", layer)
     zero_shot.to_csv(out_dir / "zero_shot.csv", index=False)
     logger.info(f"zero-shot:\n{zero_shot.to_string(index=False)}")
@@ -956,6 +1000,16 @@ def run(
     # The extended folder adds roles whose deception is *denial of knowledge* rather than
     # assertion of falsehood. HP-KR inverts under the original axis precisely because its lie is
     # a denial, so these arms exist to test whether that is fixable at the basis level.
+    # The paper's own widening of the same contrast, with sycophancy in place of knowledge denial.
+    # It is the control for the extended arms: same 8v7 core, five more roles a side, different
+    # roles. See `unified_geometry`.
+    uni_geom = unified_geometry(bank)
+    logger.info(
+        f"unified geometry: {len(uni_geom.persona_names)} personas, "
+        f"var {np.round(uni_geom.explained_variance_ratio, 3).tolist()}; "
+        f"|cos(unified axis, deception axis)| = {abs(float(bank.axis_unit('unified') @ dec_axis)):.4f}"
+    )
+
     extended = "denial" in bank.axes
     if extended:
         ext_geom = persona_pcs.fit_geometry(
@@ -987,6 +1041,8 @@ def run(
         "syc_pc1": lambda z: syc_geom.project(z, k=1),
         "syc3": lambda z: syc_geom.project(z, k=3),
         "syc_axis1": lambda z: syc_geom.axis_score(z)[:, None],
+        "uni_pc3": lambda z: uni_geom.project(z, k=3),
+        "uni_axis1": lambda z: uni_geom.axis_score(z)[:, None],
         # --- not in the paper: added because the two axes overlap at |cos| = 0.54 ---
         "syc3_orth": lambda z: z @ syc_orth.T,
         "dec3_orth": lambda z: z @ dec_orth.T,
@@ -1020,6 +1076,7 @@ def run(
         "syc_pc1": 1, "syc3": 3, "syc_axis1": 1,
         "syc3_orth": syc_orth.shape[0], "dec3_orth": dec_orth.shape[0],
         "ext_pc1": 1, "ext_pc3": 3, "ext_axis1": 1, "denial_pc3": 3, "denial_axis1": 1,
+        "uni_pc3": 3, "uni_axis1": 1,
     }
     summary = pd.DataFrame(
         [
@@ -1051,6 +1108,7 @@ def zeroshot(
     layer: int = 20,
     vectors: str | Path | None = None,
     base_run: str | Path | None = None,
+    base_run_check: bool = True,
 ) -> None:
     """Rewrite just `zero_shot.csv`, with every axis the bank supports.
 
@@ -1061,6 +1119,8 @@ def zeroshot(
 
     `base_run` names the completed run whose trained probe these activations came from; it joins
     `zero_shot_operating.csv` as the reference the persona arms are compared against.
+    `base_run_check=False` accepts a probe the runner trained but never scored, such as the layer
+    sweep's; see `base_probe_arm`.
     """
     pooled_dir, out_dir = Path(pooled_dir), Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -1077,7 +1137,7 @@ def zeroshot(
         axis_name="sycophancy",
     )
 
-    extra = extended_arms(bank)
+    extra = extended_arms(bank) | unified_arms(bank)
 
     datasets = load_pooled(pooled_dir)
     table = zero_shot_table(datasets, geom, syc_geom, extra=extra)
@@ -1091,10 +1151,11 @@ def zeroshot(
     if "auroc_ext_axis" in extra:
         arms["extended axis (12v13)"] = extra["auroc_ext_axis"]
         arms["knowledge-denial axis (4v6)"] = extra["auroc_denial_axis"]
+    arms["unified axis (13v12)"] = extra["auroc_uni_axis"]
     if base_run is not None:
         # added last, so the persona arms' rows keep their order and values
         arms[BASE_ARM] = base_probe_arm(
-            Path(base_run), layer, datasets, datasets[CONTROL_DATASET]
+            Path(base_run), layer, datasets, datasets[CONTROL_DATASET], check=base_run_check
         )
     operating = zero_shot_operating_table(datasets, arms, datasets[CONTROL_DATASET], layer)
     operating.round(4).to_csv(out_dir / "zero_shot_operating.csv", index=False)
