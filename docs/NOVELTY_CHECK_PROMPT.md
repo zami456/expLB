@@ -37,8 +37,9 @@ datasets, probes trained on one dataset and tested on the others (AUROC, off-dia
 **1. Persona axes encode conversational REGISTER rather than the construct the dataset labels.**
 The persona axes have excellent internal geometry (cos(PC1, own contrast) = 0.993, permutation
 p = 0.008) yet score *below chance* on exactly the two datasets whose labels are the construct
-they claim to detect: 0.300 on a knowledge-denial dataset and 0.374 on a capitulation/sycophancy
-dataset — both **beaten by a random direction** (0.54–0.66). Diagnosis: contrastive persona
+they claim to detect: 0.300 on a knowledge-denial dataset and 0.313 on a capitulation/sycophancy
+dataset (the paper16 *deception* axis's PC1 reads 0.374 on the latter) — both below chance, and
+the sycophancy axis significantly so, beyond a 1,000-random-direction null at p 0.001-0.008. Diagnosis: contrastive persona
 prompts mostly vary *how the model talks* (agreeable vs challenging, hedged vs blunt), which
 correlates with the target behaviour in ordinary text but comes apart precisely where these
 datasets live.
@@ -46,7 +47,7 @@ datasets live.
 **2. The constructive fix: vary the target construct in the personas, and the axis works — but
 only locally.** Rebuilding the persona bank so the personas vary *capitulation* (abandoning a
 correct answer under social pressure) instead of register raises the zero-shot AUROC on the
-capitulation dataset from **0.374 to 0.745**, and the trained version beats raw activations by
+capitulation dataset from **0.313 to 0.745** (0.374 for the deception axis's PC1), and the trained version beats raw activations by
 +0.112 (95% CI [+0.050, +0.185]) and beats matched controls. But averaged over all eleven
 datasets the margin over raw is +0.098, CI [−0.036, +0.208] — **it does not generalize past the
 construct it was built for**.
@@ -62,9 +63,12 @@ the geometric signal — **you cannot screen personas by reading their generatio
 **4. The matched-control margin decays with scale, and the mechanism is a ceiling artifact.**
 Note the source paper DOES run matched controls (random k-dim subspace, dataset-specific PCA)
 and reports the axis beating both at 3B/8B. I replicate that at 3B (+0.202 over dataset-PCA vs
-their ~+0.22), but the margin falls monotonically with model scale — +0.202 (3B) → +0.115 (8B) →
-+0.079 (70B) — and for the paper's own persona set on my 11-dataset grid at 70B it reaches
-roughly **−0.003**. The proposed mechanism: a k-dimensional feature sits closer to 0.5 than an
+their ~+0.22), but the margin falls monotonically with model scale. Two readings, both correct,
+which must not be mixed: at the **single L40 cell** it is +0.202 (3B) → +0.115 (8B) → **+0.079**
+(70B, kd bank); **layer-averaged and like-for-like** (same bank on all three rungs, per F-110) it is
++0.120 → +0.103 → **+0.054**, and against *raw* rather than the matched control the 70B rung is
+**−0.013**. For the paper's own persona set on my 11-dataset grid at 70B it reaches roughly
+**−0.003**. The proposed mechanism: a k-dimensional feature sits closer to 0.5 than an
 8192-d probe, so it "wins" precisely where the high-dimensional baseline transfers badly, even
 when the directions are meaningless. A random 2-d projection gains +0.056 where raw < 0.6 and
 loses 0.44 where raw > 0.85, with corr(raw AUROC, delta) = **−0.76**. So the question is not
@@ -80,7 +84,10 @@ negative controls passing.
 
 **6. The persona-probe advantage is inversely proportional to how strong the baseline already
 is.** Across model scale (3B → 8B → 70B) the raw off-diagonal AUROC rises 0.708 → 0.743 → 0.809
-while the persona gain over the matched control falls +0.202 → +0.115 → +0.079. The same pattern
+while the persona gain over the matched control falls +0.202 → +0.115 → +0.079 at the single L40
+cell, or **+0.120 → +0.103 → +0.054** layer-averaged and like-for-like (F-110; against *raw* the 70B
+rung is **−0.013**). The decline survives either way, and is steeper on the like-for-like reading.
+The same pattern
 holds per-dataset: the axis wins where raw collapses (below chance from two source datasets) and
 buys nothing where raw already reaches 0.73–0.81. So the method reproduces at small scale and
 dies at large scale, not because it stops working but because the baseline catches up.
@@ -107,9 +114,13 @@ probes report ~0.87, meaning the probe result is largely one lexical bit rather 
 representation of deceptive intent.
 
 **10. Response length transfers across deception datasets as a free-riding confound.** The
-positive class is the longer one in 9 of 10 datasets (505 vs 310 tokens on one, 245 vs 96 on
-another), so a one-feature "longer is deceptive" rule achieves an off-diagonal AUROC of 0.553
-against raw activations' 0.665. Any cross-dataset transfer claim needs to beat this.
+positive class is the longer one, **by mean token gap**, in **9 of 11** datasets (8 of 10 with
+`sycophancy_mt` excluded); and **a length-only probe scores above 0.5 on 9 of the 10 datasets the
+length control was run on** (`roleplaying` the sole inversion, 0.4415 — that set keeps
+`sycophancy_mt` and drops `harm-pressure-kr-matched`)
+— `sandbagging_v2` 529.4 vs 340.4 tokens, `mask` 283.2 vs 176.4 — so a one-feature "longer is
+deceptive" rule achieves an off-diagonal AUROC of **0.5555** against raw activations' **0.6623**
+(11 datasets, L40 mean, `paper` probe, 110 cells; on 10 datasets 0.5494 vs 0.6652). Any cross-dataset transfer claim needs to beat this.
 
 
 ## Concrete facts about the source paper and datasets

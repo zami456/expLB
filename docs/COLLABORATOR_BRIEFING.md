@@ -75,8 +75,21 @@ The paper's sycophancy axis has the cleanest geometry anything here has produced
 with its own contrast, permutation p = 0.008. By every internal diagnostic it is a well-formed
 axis.
 
-It scores **0.374** on our capitulation dataset. Below chance. **Worse than a random
-direction** (0.541). The same axis family scores **0.300** on the knowledge-report dataset.
+**It scores 0.313** on our capitulation dataset (95% CI [0.283, 0.346], zero-shot, L40 mean).
+Below chance — and **significantly** so: against 1,000 random directions it is beyond the null at
+p 0.001–0.008. The same axis family scores **0.300** on the knowledge-report dataset.
+
+> **Correction, 2026-09-23.** Earlier versions of this briefing put **0.374** here and called it
+> the sycophancy axis. That number is the **deception** axis's **PC1**, not the sycophancy axis.
+> `27_crossgen.py:411-416` sets `_zs_axis = "deception"` whenever a bank has a deception axis, so a
+> paper16 matrix's bare `contrast`/`PC1` rows are the *deception* axis; every other axis is written
+> `contrast:<name>`. In `run-crossgen/kd11/matrices/mean_L40_s42.json` the `sycophancy_mt` column
+> reads `contrast` 0.4089 and `PC1` 0.3739. The sycophancy axis's own value, 0.313, comes from
+> `24_q10_sycophancy_axis.py` (2026-09-17) and re-measures at 0.2996–0.3061 on `passA11`/`passC11`.
+> The correction **strengthens this claim**: the deception axis at L40 sits *within* the random-direction
+> null, whereas the sycophancy axis is significantly inverted. Note also that a **zero-shot** axis must
+> not be compared against a **trained** random probe (the 0.541 previously quoted here); the matched
+> trained pair is `axes` 0.3551 vs `random` 0.5413.
 
 Our reading: these axes separate *how the model talks* — agreeable vs challenging, hedged vs
 blunt — while those two datasets label *what it does*: abandoning a correct answer under
@@ -101,11 +114,12 @@ personas, matched model, judge, grid, seed and layers.
 
 | | |
 |---|---:|
-| register axis, zero-shot | 0.374 |
+| register axis (paper16 **deception** axis, PC1), zero-shot | 0.374 |
+| sycophancy axis, zero-shot | 0.313 |
 | **capitulation axis, zero-shot** | **0.745** |
 | trained, over raw activations | **+0.112**, 95% CI [+0.050, +0.185] |
 | positive at | **21 of 21 layers**, all clearing the bootstrap |
-| filtered vs unfiltered judge | differ by **0.0004** |
+| filtered vs unfiltered judge | `pc:capitulation@2` differs by **0.0004**; `pc:cap_only@2` by **0.0142** |
 
 It works, it is depth-robust, and the judge filter does not drive it.
 
@@ -139,12 +153,19 @@ layers**, every one clearing the bootstrap. Stable across five seeds (0.173–0.
 > are train-on-test. Under **leave-one-CLUSTER-out**, where every dataset sharing the target's
 > provenance is removed from training, the gain is **+0.129 (L20), +0.131 (L32), +0.125 (L40)**
 > over all eleven, and **+0.157 / +0.117 / +0.150** over the nine uncontaminated targets —
-> positive on 8–11 of 11 at every layer. **The claim survives the strictest hold-out we can
+> positive on **10/11, 11/11 and 10/11** over all eleven, and **9/9, 9/9 and 8/9** over the clean
+> nine (the earlier "8–11 of 11" mixed the two denominators; nothing is 8 of 11). **The claim survives the strictest hold-out we can
 > construct; the magnitude was inflated.** Ledger: F-108.
 
-The third row is the control that matters. Pooled training with ~6,700 rows and pooled training
-held to a *single-source* budget of ~666 rows are statistically indistinguishable (p = 0.38).
-**The gain is diversity, not data volume.**
+The third row is the control that matters. Pooled training with ~6,700 rows (mean `n_lodo`
+6,669) and pooled training held to a *single-source* row budget are statistically
+indistinguishable. **The gain is diversity, not data volume.**
+
+> **Correction, 2026-09-23.** "~666 rows" is the **cap** in `30_premise.py:167`, not the realised
+> pool: the budget-matched LODO pool is **412–500 rows (mean 449)**. And the quoted **p = 0.38** is a
+> **one-sided** tail (`30b_premise_boot.py:62`); the two-sided bootstrap gives **+0.0045, 95% CI
+> [−0.024, +0.033], p = 0.744**. Quote the interval rather than the p-value — it makes the
+> equivalence claim properly, which a one-sided p does not.
 
 ~~On `harm-pressure-knowledge-report` pooled training reaches **0.972**.~~ **Withdrawn
 2026-09-22.** That number is substantially the leak described above: HP-KR reads **0.9674 under
@@ -201,8 +222,10 @@ at **0.648 / 0.732**, on six datasets at layers 20 and 40.
 Those two numbers are the `ext_axis1` row of
 `results/persona_ood_ext_L20/summary.csv` and `results/persona_ood_ext_L40/summary.csv`
 (`off_diagonal_mean` = 0.9041173922 and 0.9158352735; identical to the mean of `auroc_ext_axis`
-in the matching `zero_shot.csv`, to 1e-16). `ext_axis1` is the **12-vs-13** contrast defined in
-`scripts/persona_ood.py::extended_arms()` as
+in the matching `zero_shot.csv`, to 1e-15 — the exact figure is 2.2e-16 at L20 and 0.0 at L40).
+`ext_axis1` is the **12-vs-13** contrast defined in
+`deception_detection/scripts/persona_ood.py::extended_arms()`, with the axis itself in
+`deception_detection/persona_pcs.py` (`axes["extended"]`), as
 
 ```
 positive = DECEPTION_PERSONAS + KNOWLEDGE_DENIAL_PERSONAS      # 8 + 4
@@ -210,7 +233,10 @@ negative = HONESTY_PERSONAS   + KNOWLEDGE_CANDOUR_PERSONAS     # 7 + 6
 ```
 
 The ten extra roles are the knowledge-denial bank we sent you — they match
-`kd/personas/kd_role_groups.json` name for name. The persona-coordinates contrast as the paper
+`kd/personas/kd_role_groups.json` name for name. **One caveat on the grouping:** your
+`KNOWLEDGE_CANDOUR_PERSONAS` merges our deliberately separate `sincere_ignorance` (3) and
+`plain_assertion` (3) groups into one arm. We split them precisely to remove a wording confound;
+merging them reintroduces it. The persona-coordinates contrast as the paper
 defines it is the 8-vs-7 `axis1`, which sits in the same files, on the same rows, over the same
 six datasets. Your base bank is `paper16_L20_sharedquestions/paper16_L20.pt`
 (`deception_detection/persona_pcs.py:31`), so `axis1` is exactly the axis the replication is of.
@@ -248,8 +274,8 @@ datasets**, to check this is not an artifact of your corpus. It replicates:
 | pooled leave-one-dataset-out | **0.8027** | **0.8545** |
 | **share of the margin from the kd bank** | **74%** | **49%** |
 
-Two things follow. **Both of your arms lose to a pooled probe** — by 0.064 at L20 and 0.055 at
-L40 — which is §5d's point, now tested against the abstract's actual axis rather than a proxy.
+Two things follow. **Both of your arms lose to a pooled probe** — the **extended** arm by 0.064
+at L20 and 0.055 at L40, and `axis1` by **0.146 and 0.122** — which is §5d's point, now tested against the abstract's actual axis rather than a proxy.
 And the kd contribution is **not** a general improvement: at L20 it is entirely
 `harm-pressure-knowledge-report` (0.165 → 0.806, a +0.641 swing) plus `sandbagging_v2`; remove
 those two and the kd personas are worth **+0.003**. At L40 it is more distributed (+0.039 with
@@ -270,8 +296,9 @@ between a persona feature and a *baseline of a different kind* are not so lucky,
 share below needs its pooling named.
 
 One honest caveat on how to phrase it: the *share* of the margin is unstable, because its
-denominator shrinks wherever the persona arms sit near the raw baseline. It reads 2%–114% across
-depth with a median of **63%** mean-pooled — and **50%** last-token, while the underlying
+denominator shrinks wherever the persona arms sit near the raw baseline. **Mean-pooled** it reads
+2%–114% across depth with a median of **63%**; **last-token** it ranges from **−156% to +145%**
+with a median of **50%** — which makes the instability point more strongly, while the underlying
 quantity barely moves (+0.055 vs +0.059). Above 100% is real rather than a glitch: at L60–L68
 your `axis1` falls *below* raw activations, so the kd bank supplies more than the whole margin
 there. **Quote the raw difference (+0.055–0.059, or +0.081 at L20 mean-pooled), and give a share
@@ -478,7 +505,8 @@ shared provenance" as not run. It is run. Two findings:
 2. **The claim survives anyway.** Under leave-one-cluster-out (provenance clusters: the WMDP
    harm-pressure trio, the Liars' Bench scenarios, Apollo's three, MASK, ours), the gain is
    **+0.129 / +0.131 / +0.125** at L20 / L32 / L40 over all eleven, and **+0.157 / +0.117 /
-   +0.150** over the nine uncontaminated targets, positive on 8–11 of 11 at every layer.
+   +0.150** over the nine uncontaminated targets, positive on 10/11, 11/11 and 10/11 over
+   all eleven and 9/9, 9/9 and 8/9 over the clean nine.
 
 So the honest number is **+0.12 to +0.16**, not +0.178, and the HP-KR 0.972 in §3 is withdrawn.
 Ledger: F-108.

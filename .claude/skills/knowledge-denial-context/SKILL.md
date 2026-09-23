@@ -71,7 +71,8 @@ precisely where these datasets live.
 
 **It was tested constructively and it holds.** The `cap/` bank varies *capitulation* instead of
 register, at matched model, judge, grid, seed and layers. The capitulation axis reads **0.745
-zero-shot** on `sycophancy_mt` where the register axis reads **0.374**, and the trained version
+zero-shot** on `sycophancy_mt` where the register axis (the paper16 **deception** axis's PC1)
+reads **0.374** and the paper16 **sycophancy** axis reads **0.313**, and the trained version
 beats raw by **+0.112, 95% CI [+0.050, +0.185]** on a dataset-level bootstrap, winning on 9 of 10
 source datasets (F-65, F-66).
 

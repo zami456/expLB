@@ -489,17 +489,23 @@ row-layers outside tolerance (saved in `q8_trained_pertoken.json`).
 | Control | Value | Where measured |
 |---|---|---|
 | Random 5-d subspace, off-diagonal | 0.522 (10 datasets), 0.523 (9), L44 last, mms | `p1_L44_last_withsyc.json` |
-| Response length alone, off-diagonal | 0.553, L44, 10 datasets | **log only** |
+| Response length alone, off-diagonal | **0.5494** (10 datasets), **0.5555** (11); invariant across layer/pooling/probe | recomputed 2026-09-23 from `run-crossgen/kd11/matrices/` (was "0.553", which matches no matrix) |
 | Response length alone, LODO (Pass C) | 0.617 | `q8_trained_pertoken.json` |
 | Label-shuffle null | 0.48–0.55 (Q8 token probe); ~0.50 ± 0.07 over 20 draws (P1) | Q8 in JSON; P1 **log only** |
 | Random-direction null (zero-shot) | per test, §8.2 | `zeroshot_nulls.json` |
 
-- **Length confound.** The deceptive class is the longer one in 9 of 10 datasets. Length-only
-  AUROC per dataset **(log only)**: sandbagging_v2 0.854, harm-pressure-knowledge-report 0.776,
+- **Length confound.** By **mean token gap** the deceptive class is the longer one in **9 of 11**
+  datasets (8 of 10 excluding `sycophancy_mt`). By **length-only AUROC** it is above 0.5 on
+  **9 of the 10** datasets the length control was run on — that set keeps `sycophancy_mt` and drops
+  `harm-pressure-kr-matched`, and `roleplaying` (0.441) is the sole inversion. The two counts are
+  different metrics over different sets; always say which. Length-only
+  AUROC per dataset — all ten are stored, in `run-coords/confounds_L44_last.json` at
+  `confounds.length_only_auroc[].auroc_from_length` (the file is on the lab PC, not in the repo; a
+  byte-identical copy is at `audit/cache/labpc/run-coords/confounds_L44_last.json`):
+  sandbagging_v2 0.854, harm-pressure-knowledge-report 0.776,
   sycophancy_mt 0.664, mask 0.625, ai_liar 0.613, insider-trading 0.595, instructed-deception
   0.560, convincing-game 0.507, harm-pressure-choice 0.502, roleplaying 0.441 (the one
-  inversion). Only the sycophancy value (0.664) is also in a result file; the Pass C per-fold
-  length values point the same way on every dataset.
+  inversion). The Pass C per-fold length values point the same way on every dataset.
 - **Statistics:**
   - row bootstrap with 1,000 resamples; dataset bootstrap with 10,000 resamples over the 9
     labelled datasets;
@@ -1102,8 +1108,10 @@ Each issue says what the problem is, why it matters, and what we have tried or c
    - *Open:* per-dataset centering before probing, domain-adversarial probes, or style-matched
      honest/deceptive pairs.
 4. **The length confound.**
-   - *Problem:* the deceptive class is longer in 9 of 10 datasets, and length alone transfers
-     (0.553 pairwise, 0.617 LODO).
+   - *Problem:* by mean token gap the deceptive class is longer in **9 of 11** datasets (8 of 10
+     excluding `sycophancy_mt`), and by length-only AUROC it is above 0.5 on **9 of the 10**
+     datasets the control ran on; length alone transfers (**0.5555** pairwise against raw 0.6623,
+     0.617 LODO).
    - *Open:* length-matched subsampling, evaluation within length bins for every result (done
      only for Q10), or regressing `n_tok` out of the activations.
 5. **Sycophancy (§9).**

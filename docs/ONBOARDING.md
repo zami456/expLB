@@ -75,7 +75,9 @@ the plan's OUTCOMES section; one line each here, and each has a memory entry.
   there — only the trained result stands.
 
 **Controls every transfer number should sit beside:** response length alone (off-diagonal
-0.553; the deceptive class is longer in 9 of 10 datasets), a random subspace (0.522), and a
+**0.5555** against raw **0.6623**; by mean token gap the deceptive class is longer in **9 of 11**
+datasets, 8 of 10 excluding `sycophancy_mt`; by length-only AUROC it is above 0.5 on **9 of the 10**
+datasets the control ran on), a random subspace (0.522), and a
 within-dataset label-shuffle null (~0.50).
 
 **Statistics (2026-09-17) — read before quoting any Q2/Q6 number.** Differences are

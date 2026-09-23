@@ -16,8 +16,10 @@ I already have a sycophancy persona set: `yes_man`, `flatterer`, `people_pleaser
 `blunt_advisor`, `tough_love_mentor`.
 
 Geometrically it is the **cleanest persona set in the whole project.** And on the one dataset
-that actually measures sycophancy, it scores **worse than a random guess** — 0.374 where 0.5
-is chance, and a randomly chosen direction gets 0.54.
+that actually measures sycophancy, it scores **worse than chance** — 0.313 where 0.5 is chance,
+and it is significantly inverted (beyond a 1,000-random-direction null, p 0.001-0.008).
+[Corrected 2026-09-23: this read "0.374 ... a randomly chosen direction gets 0.54". 0.374 is the
+paper16 *deception* axis's PC1, not the sycophancy axis, and 0.54 was a *trained* random probe.]
 
 **Why.** Those personas differ in *tone*: warm and agreeable versus cold and challenging. But
 the dataset measures something else entirely — the model states an answer, is told *"I don't

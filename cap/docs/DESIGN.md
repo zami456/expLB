@@ -4,7 +4,8 @@
 test constructively whether F-13's diagnosis of the persona-coordinates method is right.
 
 **It is.** The capitulation axis reads **0.745 zero-shot** on `sycophancy_mt` where the paper16
-sycophancy axis reads **0.374**, and the trained version clears a dataset-level bootstrap against
+**deception** axis's PC1 reads **0.374** and the paper16 **sycophancy** axis reads **0.313**, and
+the trained version clears a dataset-level bootstrap against
 `raw` and both matched controls (F-65, F-66). This is the only place in the project where a
 persona axis beats everything it is matched against.
 
@@ -16,7 +17,18 @@ The paper16 **sycophancy** axis has the cleanest geometry anything in this proje
 `cos(PC1, own contrast) = 0.993`, permutation p = 0.0079 over all 252 splits. It is, by every
 internal diagnostic, a well-formed persona axis.
 
-It reads **0.374** on `sycophancy_mt` — below chance, and worse than a random direction (0.541).
+It reads **0.313** on `sycophancy_mt` (95% CI [0.283, 0.346]) — below chance, and *significantly*
+so: beyond a 1,000-random-direction null at p 0.001-0.008.
+
+> **Correction, 2026-09-23.** This line previously read "0.374 ... worse than a random direction
+> (0.541)". **0.374 is the paper16 *deception* axis's PC1, not the sycophancy axis**
+> (`27_crossgen.py:411-416` hardcodes `_zs_axis="deception"`, so a paper16 matrix's bare
+> `contrast`/`PC1` rows are the deception axis; the `sycophancy_mt` column of
+> `run-crossgen/kd11/matrices/mean_L40_s42.json` reads contrast 0.4089 / PC1 0.3739). The
+> sycophancy axis's own value is 0.313 (`24_q10_sycophancy_axis.py`, 2026-09-17). The correction
+> **strengthens** the argument: the deception axis sits *within* the random null, the sycophancy
+> axis is significantly inverted. Also, 0.541 is a **trained** random probe and must not be
+> compared with a zero-shot axis; the matched trained pair is `axes` 0.3551 vs `random` 0.5413.
 
 F-13's diagnosis: the axis separates **agreeable-vs-challenging register** — tone, hedging,
 warmth — while the dataset labels **capitulation** — abandoning a correct answer under pressure.
@@ -214,7 +226,8 @@ See **F-64** (generation and judging), **F-65** (the number), **F-66** (signific
 | | value |
 |---|---|
 | zero-shot, cap contrast, L40 | **0.745** (L20 0.759 · L44 0.728) |
-| zero-shot, register axis, L40 | 0.374 |
+| zero-shot, register axis (paper16 **deception** PC1), L40 | 0.374 |
+| zero-shot, paper16 **sycophancy** axis, L40 | 0.313 |
 | trained `pc:capitulation@2`, L40 | **0.714** |
 | `raw` | 0.601 |
 | `datapca@2` / `random@2` / `length` | 0.559 / 0.497 / 0.582 |

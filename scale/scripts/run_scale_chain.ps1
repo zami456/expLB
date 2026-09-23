@@ -194,13 +194,23 @@ foreach ($v in @(@{ tag = "vectors_all"; keep = "0,1,2,3" }, @{ tag = "vectors_s
 }
 
 # ---- axes, reported at the paper's own analysis layer for this size -------------------
+# DF-48 fix (audit, 2026-09-23): this loop built BOTH vector sets but wrote every iteration to
+# the same "$out\axes_$tag.pt" -- the loop variable never reached the output path -- so the
+# vectors_all (unfiltered) bank was built and then silently overwritten by vectors_s23. The log
+# still said "axes_vectors_all ... axes_vectors_s23", which is why it went unnoticed.
+# Each arm now gets its own file. `axes_$tag.pt` is still written, from vectors_s23, because
+# run_scale_crossgen.ps1:53 reads exactly that path -- so downstream behaviour is unchanged.
 foreach ($vt in @("vectors_all", "vectors_s23")) {
     if ((Get-ChildItem "$out\$vt\*.pt" -EA SilentlyContinue).Count -lt 20) {
         Note "$vt too few vectors -- axes not built"; continue
     }
     $code = Run "scale_${Tag}_axes.log" @("$SRCDIR\6_axes.py", "--vectors_dir", "$out\$vt",
-        "--output", "$out\axes_$tag.pt", "--roles_file", $roles, "--report_layer", "$MID")
-    Note "axes_$vt exit $code (reported at layer $MID of $LAYERS)"
+        "--output", "$out\axes_${tag}_$vt.pt", "--roles_file", $roles, "--report_layer", "$MID")
+    Note "axes_${tag}_$vt exit $code (reported at layer $MID of $LAYERS)"
+    if ($vt -eq "vectors_s23" -and $code -eq 0) {
+        Copy-Item "$out\axes_${tag}_$vt.pt" "$out\axes_$tag.pt" -Force
+        Note "axes_$tag.pt <- axes_${tag}_$vt.pt (the bank run_scale_crossgen.ps1 reads)"
+    }
 }
 
 & powershell.exe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $D "sync_scale.ps1") -OnBusy Wait -Tag "$Tag/final"

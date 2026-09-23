@@ -5254,7 +5254,7 @@ the paper16 matrices to ≤ 0.0003, and differs from the kd bank by up to 0.077.
 **The repair.** `27_crossgen.py` re-run with everything identical to the sweep — `run-coords/passB`,
 the paper's five datasets, k=3, both poolings, all 21 stored layers — changing only the bank to
 `run-paper16/axes_vectors_s3_fp32.pt`. Output in `run-crossgen/scale_70b_paper16fp32/` (42 matrices);
-nothing existing was touched. Over F-100's 19 layers, mean pooling, `best = max(axes, pc:deception)`:
+nothing existing was touched. Over F-100's 19 layers, mean pooling, `best = max(axes, pc:deception)` — F-100 does not define which features "best" ranges over, and this is the reading that reproduces its published figures exactly (allowing `pc:unified` too would give +0.0835 rather than +0.0791 for the kd-bank row):
 
 | rung | bank | raw | best − raw | best − dataset-PCA |
 |---|---|---:|---:|---:|
@@ -5268,9 +5268,7 @@ exactly, which is what validates the recomputation.
 
 **What changes.** F-100's headline survives and strengthens: the decline with model size is
 **+0.120 → +0.103 → +0.054**, steeper than reported. But "against raw activations the 70B persona
-advantage is essentially nil" (+0.0079) becomes **negative**: like-for-like, **−0.0131**. Under
-`last` pooling the like-for-like 70B is +0.0069 vs raw and +0.0681 vs dataset-PCA, so F-101/F-102's
-pooling contrast holds with smaller margins. **F-63 is unaffected** — its 70B cell is the L40
+advantage is essentially nil" (+0.0079) becomes **negative**: like-for-like, **−0.0131**. Under `last` pooling the like-for-like 70B reads **+0.0061 vs raw and +0.0688 vs dataset-PCA** on the same 19 layers (+0.0069 / +0.0681 over all 21 — an earlier version of this entry quoted the 21-layer pair beside the 19-layer table). The corrected decline is a **mean-pooling result**: under `last` the three rungs read +0.0745 (3B) / +0.0090 (8B) / +0.0688 (70B) against dataset-PCA, which is not monotone, so F-101/F-102's pooling contrast survives but the monotone story does not carry over to `last`. **F-63 is unaffected** — its 70B cell is the L40
 paper16 cell, so its three-rung comparison was already bank-consistent.
 
 - **source:** `run-crossgen/scale_70b_paper16fp32/matrices/{mean,last}_L*_s42.json` (42, new);
@@ -5284,4 +5282,727 @@ paper16 cell, so its three-rung comparison was already bank-consistent.
   explain the change.
 - **supersedes:** the 70B column of F-100 (+0.075 → +0.054) and its "essentially nil" sentence;
   **amends:** F-101, F-102. **supports:** F-63, unchanged.
+- **status:** verified
+
+---
+
+### F-111 · 2026-09-23 · **CORRECTIONS from the audit: eleven earlier entries restated. Every number below was re-derived from raw files during the audit; nine of the eleven are wording or label errors over measurements that reproduce, two are substantive.**
+
+**Why this is one appended entry rather than eleven edits.** RF-9 found that this ledger — which
+is meant to be append-only — had already been edited in place seven times, so an earlier entry can
+no longer be trusted to read as it did when it was written. Correcting these in place would repeat
+exactly that. Each item therefore names the entry it supersedes and leaves the original standing.
+
+**The pattern, stated once.** Of 70 entries checked, 44 hold outright and 26 partly — and in 28 of
+29 "partly" verdicts across the project's claims, **the numbers reproduced and the sentence around
+them failed**. The recurring faults are (a) a correct measurement carrying the wrong label, and
+(b) a value corrected in a later entry while the earlier one, and the documents that had copied it,
+kept the old number. Both are bookkeeping, not measurement.
+
+#### Substantive — these change what an entry claims
+
+1. **F-77 and F-81: "37/80" is not a layer count.** Both print 37/80 (46%) for the kd matched
+   slice in the row that pairs with the cap bank's genuine 21/21. Measured over all 80 layers
+   (`run-crossgen/kd11/passA11/banks/kd_s23/matrices/mean_L{0..79}_s42.json` against
+   `…/passA11/matrices/…`, train row `harm-pressure-kr-matched`, 10 targets): the slice beats
+   **raw at 28 of 80** and **`datapca` at 31 of 80** — which is what **F-75 already says**.
+   37 is F-76's bootstrap median **fraction** of positive layers (≈0.46) rendered as a count.
+   **Use 31/80.** The error runs *against* F-77's own argument: the true kd count is lower, so the
+   contrast with the cap bank gets stronger. Re-derived twice, independently.
+   **Trap for `passA11`:** the bank store carries its own `datapca` column against which `axes`
+   wins 0 of 80. The matched control must come from the **root** store.
+
+2. **F-32 certifies a bank generation that never produced a rollout.** Three generations exist:
+   v1 (`logs/cap_smoke.log`, which is **UTF-16** — that alone is why Phase 1 could not read it),
+   **v2, which F-32's acceptance table describes**, and **v3**, the only version on disk (mtime
+   09-20 22:49) and the one that produced F-65/F-66. Re-running F-32's own script against the live
+   bank gives explain **3/5-vs-4/5** (not 4/5-vs-4/5), turn-1-commit **0/5 everywhere** (not 5/5),
+   max **99** chars (not 103). "The same lexical counts … were re-run" is **false**: all four
+   regexes differ from F-28's, and PRAISE changed *target* (role key → variant text) and lost four
+   words, so the reported "4 → 0" is really 4/6 (keys) → 1/6.
+   **But F-65/F-66 is not confounded** — it is protected structurally, which is the better argument
+   and the one to use. Verified directly on `run-cap/responses`: **1,300 rows, 13 files, 65 personas,
+   20 questions, exactly 20 distinct (question, turn-1) pairs at n = 65, and exactly ONE distinct
+   turn-1 text per question.** Turn 1 is **byte-identical across all 65 persona arms**
+   (teacher-forced, `gen_multiturn_ndif.py`, citing F-46), so persona wording cannot enter turn 1
+   at all; only the turn-2 capitulation can differ.
+
+#### Label and scope — the measurement stands, the description does not
+
+3. **F-04's "11-dataset run" is 10 datasets.** Its quoted `axes − raw` **+0.0147** (CI [−0.170,
+   +0.187], q 0.9311) and `axes − datapca` **+0.0264** (q 0.8546) are **block "9"**, which
+   `src/assistant_axis_ndif/27_crossgen.py:51,781` defines as all datasets except `sycophancy_mt`.
+   On the full 11 (block "10") both signs flip: **−0.0215** and **−0.0243**.
+   **Note for every later reading:** in the kd11-era stores the block labels "10" and "9" are
+   historical counts from before the 11th dataset was added; today they mean *all 11* and *all but
+   sycophancy_mt*. Reading "block 9" as "9 datasets" is a misreading.
+   The missing test family is `run-crossgen/kd11/significance.json` restricted to layers {40, 44}:
+   16 comparisons × 3 probes × 2 poolings × 2 layers = 192 per block, BH within block.
+
+4. **F-04's one significant test is a random projection losing, not a persona winning.** The single
+   test clearing BH in that family is **`random@2 − raw`, last pooling, L44, `mms`, diff −0.2287,
+   q 0.0192**. No persona comparison in the family is significant.
+
+5. **F-29's load-bearing half is mean-pooling only.** All eight numbers are exact, but "the inverted
+   axis fails as source" holds only under mean pooling (7 of 21 layers). Under **`last` pooling it
+   beats random as source at 18 of 21 layers.**
+
+6. **F-73, three internal slips.** "0.553 vs 0.665 confirmed to three decimals" → the values are
+   **0.5555 / 0.6623** (0.556 / 0.662), which F-73's own closing line states correctly.
+   `harm-pressure-choice`'s gap is **+0.0035 tokens**, not "exactly zero". And "median gap 3.7
+   tokens" is a median of **|gap|**, which counts `roleplaying`'s −4.10 as +4.10; the **signed**
+   median over the same eight is **+2.63**. Since F-73's point is that the effect is small, the
+   absolute-value framing argues against it.
+
+7. **The length claim, corrected project-wide.** The positive class is longer in **9 of 11**
+   datasets, or **8 of 10** excluding `sycophancy_mt` — **"9 of 10" matches no slicing.** The two
+   that run the other way are `convincing-game` (−1.20) and `roleplaying` (−4.10). The length-only
+   off-diagonal is **0.5555**, and it is **identical at every layer, pooling and probe** (a fixed
+   1-d feature: training fits only a threshold); its raw comparator does move — 0.6623 at
+   L40/mean/paper, 0.6724 at L44/last/mms. The pair "0.553 vs 0.665" quoted in F-26, F-33 and the
+   memory note **matches no surviving matrix**. Superseded wording also removed from
+   `docs/NOVELTY_CHECK_PROMPT.md`, `docs/ONBOARDING.md`, `docs/thesis/persona-coordinates-70b-results.md`
+   and `kd/docs/DESIGN.md`. The cross-reference at **line 5028 of this file still reads "9 of 10"**
+   and is superseded here. (Line 2697 quotes the old wording deliberately, to reject it — that
+   one is correct as written.) Also: `run-coords/passB/roleplaying/rows.jsonl` carries **84 rows
+   with a null label** that every reader of that store silently drops.
+
+8. **0.374 is the paper16 *deception* axis's PC1, not the sycophancy axis.** This affects F-65 and
+   everything downstream of it. `27_crossgen.py:411-416` sets the zero-shot axis to "deception"
+   whenever a bank has a deception axis, so a paper16 matrix's bare `contrast`/`PC1` rows are the
+   **deception** axis; every other axis is written `contrast:<name>`. In
+   `run-crossgen/kd11/matrices/mean_L40_s42.json` the `sycophancy_mt` column reads **contrast 0.4089,
+   PC1 0.3739**. The **sycophancy** axis's own value is **0.313** [0.283, 0.346]
+   (`24_q10_sycophancy_axis.py`, 2026-09-17; re-measured 0.2996–0.3061 on `passA11`/`passC11`).
+   **The correction strengthens the claim:** in the project's own 1,000-random-direction null the
+   deception axis at L40 sits *within* random, whereas the sycophancy axis is **significantly
+   inverted, p 0.001–0.008**. Separately, the "worse than a random direction (0.541)" comparison
+   sets a **zero-shot** axis against a **trained** random probe; the matched trained pair is
+   `axes` 0.3551 vs `random` 0.5413. Corrected in `docs/COLLABORATOR_BRIEFING.md`,
+   `cap/docs/DESIGN.md`, the four `cap/docs/REVIEW_PACKET*` files,
+   `docs/thesis/sarcasm-pilot-negative-result.md`, `docs/NOVELTY_CHECK_PROMPT.md`, `docs/TODO.md`,
+   the kd skill, `CLAUDE.md` and the memory index.
+
+9. **F-33 says 22 roles failed; the log says 24 of 24** — 22 was a 15:47 snapshot, and **F-35, in
+   this ledger, says 24**. The log settles it in F-35's favour.
+
+10. **F-105, two amendments.** "None of them is persisted" is out of date: the persistence fix
+    landed in **the same commit as F-105 (`6c9a5cf`)**, and the 09-22 15:55 re-run wrote
+    `lexical_subsets` and `lexical_features` into `marker_report.json`. "All ten words appear in
+    the top-25" is **11 of 12**, and `definitely` is a MARKER_TOKEN — so F-93's feature list came
+    from the **unstripped** fit.
+
+11. **Three smaller ones.** **F-26's** "the holding persona writes longer turn-1 text" is
+    **unsupported** — all four turn-1 blocks are 695–698 characters, equally truncated.
+    **F-36's** second consequence is reversed: the production (v3) question set is **10 of 20**
+    first-person, and its v2 numbers point at a file replaced 5½ minutes after the entry was
+    written. **F-38's** table lists one model per dataset where the files hold 2, 12 and 4 — a
+    truncated print, so its conclusion is *stronger* than stated.
+
+#### Still open, not corrected here
+
+- **F-31's "nothing beats raw" is FALSE on the regenerated lab file.** On the 6,300-test family,
+  `pc:kd_assertion − raw` at L68 reads **+0.1497, q = 0.047, and clears**. Its "6 of 4,032, four
+  negative" is true only of the git-copy family. Which family is canonical is an open decision
+  (RF-13).
+- **F-20's** 98-row / 89:9 state has **no surviving raw data**, though it is corroborated twice.
+
+- **supersedes:** F-77, F-81 (item 1); F-32 (item 2); F-04 (items 3–4); F-73 (item 6); F-26, F-33
+  (items 7, 9, 11); F-65's 0.374 attribution (item 8); F-105 (item 10); F-36, F-38 (item 11).
+  **amends:** F-29 (item 5), F-28 (item 2). **supports:** F-75, F-46, F-65/F-66's conclusion, F-35.
+- **evidence:** every item re-derived during the 2026-09-22/23 audit; paths inline; full workings
+  in `audit/DOC_FIXES.md` (DF-01…DF-46) and the per-claim notes in `audit/claims/`.
+- **status:** verified
+
+---
+
+### F-112 · 2026-09-23 · **Closes the two items F-111 left open. F-31's "nothing beats raw" is FALSE — but the feature that beats raw does not clear the matched control, so the project's bar still holds. F-20's conclusion is verified; its passA/passC numbers are unrecoverable and no longer describe the stores.**
+
+#### 1. F-31 — the two "conflicting" families are nested, and the later one is canonical
+
+**There was never a conflict.** `run-crossgen/kd11/banks/kd/significance.json` exists in two
+versions: git HEAD with **4,032 tests / 16 comparisons**, and the lab copy with **6,300 tests /
+25 comparisons**. Compared test by test on a keyed join:
+
+- **all 4,032 git tests are present in the lab file, none lost;**
+- **0 of them changed `diff` or `dataset_p`** — the underlying statistics are identical;
+- the lab file **adds 2,268 tests** across nine comparisons that did not exist before:
+  `axes_resid`, `pc:kd_assertion` and `pc:knowledge_denial`, each against `datapca`, `random`
+  and `raw`.
+- Only the BH q moved (on 4,030 of the 4,032), which is what must happen when a family grows.
+
+So the lab file is not a regeneration that changed an answer; it is a **later, larger experiment**
+that tested three more feature families. **The 6,300-test family is canonical** — it is a strict
+superset with identical statistics, it contains the features the project actually uses, and BH
+over it is the more conservative test.
+
+**What this does to F-31's headline.** "Nothing beats raw" was true of the 16 comparisons that
+existed when it was written. It is **false of the family as it now stands**, and not marginally:
+
+| `pc:kd_assertion` vs | layers positive (block 10, mean, `paper`) | tests clearing BH over 6,300 |
+|---|---|---|
+| `random` | **21 / 21** | 8 |
+| `raw` | **18 / 21** | **1** (L68, +0.1497, q 0.0467) |
+| `datapca` (matched control) | **20 / 21** | **0** |
+
+The margin over raw is not a spike at one layer — it rises from L24 and plateaus at **+0.10 to
++0.15 from L32 to L76**. **It is also not local to the datasets the kd bank was built for:**
+recomputing the off-diagonal mean with **both HP-KR columns dropped** *raises* it, because raw
+degrades faster than `pc:kd_assertion` does:
+
+| layer | margin over raw, all 11 | margin over raw, HP-KR dropped |
+|---|---:|---:|
+| 32 | +0.0998 | +0.1183 |
+| 40 | +0.1496 | +0.1539 |
+| 52 | +0.1215 | +0.1370 |
+| 64 | +0.1420 | +0.1624 |
+| 68 | +0.1497 | +0.1757 |
+| 76 | +0.1473 | +0.1897 |
+
+**But the project's bar is the matched control, and it is not cleared.** Against `datapca` at
+matched k the margin is positive at 20 of 21 layers (mean +0.0830, `paper`/mean) yet **0 of 126
+tests clear BH** at any probe or pooling, and the other probes are weaker (`mms` +0.0172, positive
+at 13/21). Under the standard this project set for itself — beat raw **and** the matched control —
+`pc:kd_assertion` does not clear.
+
+**How F-31 should now read.** Not *"nothing beats raw"*, and not *"we have a new positive result"*.
+Instead: *"of the 16 comparisons tested at the time, none beat raw. When the kd bank's own features
+were added, `pc:kd_assertion` showed a consistent depth-robust advantage over raw — positive at 18
+of 21 layers, +0.10 to +0.15 from L32 upward, surviving removal of the HP-KR columns — of which one
+test clears BH over the 6,300-test family. It remains non-significant against the matched
+dataset-PCA control at every layer, probe and pooling, so it does not clear the project's bar."*
+
+This is the same category as F-76: a consistent point estimate that the dataset-level bootstrap
+cannot separate from its control. The difference is that F-31 currently records it as **absent**.
+
+#### 2. F-20 — the conclusion stands, the two numbers do not survive, and the constraint has lapsed
+
+**Verified exactly:** `run-coords/passB/harm-pressure-kr-matched/rows.jsonl` holds **258 rows,
+{deceptive 124, honest 134}**, and passB's HP-KR store holds **2,139 rows, {139 / 2,000}** — as
+F-20 states.
+
+**Unrecoverable:** the passA/passC **98 rows at 89 : 9** cannot be re-derived. `make_view_ac.py`
+wrote those counts to stdout only, the passA/passC HP-KR stores were topped up to the full 2,139
+rows on 2026-09-21, and the kr-matched views were rebuilt on **2026-09-22 15:47:01** in the RF-13
+boot-trigger wave (`logs/passAC11_view.log` records it).
+
+**Corroborated to within rounding, twice.** `run-crossgen/passA/splits.json` (2026-09-19 14:16,
+i.e. *before* the top-up) stores the seed-42 HP-KR test set: **40 row_ids, of which 20 are in the
+matched slice at {deceptive 18, honest 2}** — scaling to the full 200-row store gives ~100 matched
+rows at ~90 : 10. `passC/splits.json` and both `kd11/pass{A,C}/splits.json` agree, and the five
+other seeds give 16–20 matched of 40 at 15:1 to 17:3.
+
+**The operational consequence, which matters more than the archaeology:** all three stores now read
+**2,139 → 258 {124 / 134}**. F-20's rule — *"the passA/passC grids must run with 10 datasets, not
+11"* — was correct when written and **no longer binds a fresh run**. Anyone re-running today will
+not reproduce the imbalance that motivated it, and should not carry the 10-dataset restriction
+forward without re-checking the store.
+
+**Reporting rule:** keep F-20's conclusion (it is verified on passB and its reasoning is sound);
+mark **98** and **89 : 9** as recorded-at-the-time, corroborated by `splits.json` but not
+re-derivable; never use either as a load-bearing number.
+
+- **supersedes:** F-31's "nothing beats raw" sentence and its "6 of 4,032" scoping; F-20's implied
+  claim that the passA/passC imbalance is a current property of the stores.
+- **amends:** F-111's "still open" list — both items are now closed.
+- **evidence:** keyed join of the git and lab copies of
+  `run-crossgen/kd11/banks/kd/significance.json`; off-diagonal means recomputed from
+  `run-crossgen/kd11/banks/kd/matrices/` joined to `run-crossgen/kd11/matrices/` for `raw`
+  (the bank store carries its own `datapca` — the matched control must come from the root store);
+  `audit/claims/F-20.md` for the split-file reconstruction.
+- **status:** verified
+
+---
+
+### F-113 · 2026-09-23 · **CORRECTIONS from the methods audit (Phase M): eight entries amended, one of them in the collaborator's favour. The two headline method claims — teacher forcing and the sarcasm gates — both survive independent reconstruction.**
+
+Phase M checked the entries the methods chapter will cite, compared the extraction line by line
+against the replicated paper, and traced every design to its first commit. As in F-111, this is one
+appended entry; the originals stand.
+
+#### 1. F-85's premise sentence was already false when written — and the credit is the collaborator's
+
+`FINDINGS.md:3413` reads *"The comparison has never been made against a **pooled** probe."*
+**It had been.** `6b16a46`, author **zami456**, **2026-09-20** — *"Leave-one-dataset-out: the fair
+baseline for the generalization claim"* — is one day earlier, and his
+`loo_L{20,40}/liars_bench_comparison_loo.csv` contains exactly that comparison: *persona axis,
+extended (zero-shot)* against *raw activations (pooled leave-one-out, naive / balanced)*.
+**What remains the owner's** is the **equal-row-budget** arm and the finding that follows from it —
+the gain is diversity, not data volume (F-80). The pooled baseline itself is his.
+
+Related attribution, same source: the **resumable activation cache and token-budget batcher** are
+his (`e391b3e`, 2026-09-04); the owner's `ed8daca` (2026-09-15) says "**Port**" in its own commit
+message. And his `persona_ood_mod_*` rollout-count control is his design, but **both banks inside it
+are hers** — its old/new counts match `run-kd/vectors_s3` and `vectors_s23` exactly.
+
+#### 2. A unit error, repeated in shipped code — F-42 / F-43
+
+`heads × T² × 4` at T = 2048 is **512.00 MiB** (8B) and **384.00 MiB** (3B). The entries' "537 MiB /
+402 MiB" are those same values expressed in decimal **MB**, mislabelled MiB. The same slip is in
+**`scale/scripts/run_scale_coords.ps1:108-109`**. **The decision is unaffected** — 0.55 and 0.42 GiB
+each admit exactly one row under either unit — but the numbers as printed are wrong.
+Heads confirmed from the cached configs (8B 32, 3B 24, 70B 64); the formula is literally
+`8_coords_ndif.attn_bytes`.
+
+Two secondary counts do not reproduce: F-43's table row says **50 OOMs**, measured **52** (its 12
+permanent is exact); span **p99 = 12, not 13** under all four quantile conventions. F-42's headline
+counts (57 OOMs / 14 permanent, 17:32:00–17:46:30) and the 70B comparison are **exact**.
+*"4 chunks at 17:33:55–17:34:26"* is **NOT-FOUND** — deleted at the 18:34 restart.
+
+**Strengthening available for the thesis:** the quoted OOM line continues *"Process 3623751 has
+18.14 GiB… Process 3605328 has 3.36 GiB… Process 3654827 has 7.72 GiB…"*. Quote that — it supports
+the **per-process** reading far better than the two lines currently quoted. The per-process
+*mechanism* remains an inference from the log, not a measurement.
+
+#### 3. F-51's length framing runs the wrong way
+
+F-51 says the holding persona "elaborates". Measured on turn-2 token counts: **`pc_caver` is longer
+on all four items** — 39.2 vs 26.5 words, **+12.8**. The length difference runs *opposite* to the
+entry's framing. Worth correcting explicitly given F-73's length result.
+
+**What F-51 claims does hold:** turn 1 is byte-identical across personas on all four items, and the
+4/4 fold vs 4/4 hold separation is exact. F-46's diagnosis verifies too.
+
+#### 4. F-107 survives independent reconstruction; one of its counts is not robust
+
+F-107 had **no stored artifact** — its numbers existed only in console output — so it was rebuilt
+twice: once by the batch, once by the lead with its own loader, AUROC and null draws.
+
+**The claim holds, and robustly.** Reading `run-coords/sarcasm/sarcasm_natural/chunk_*.pt`
+(600 rows, 300/300, aligned by `row_id`) against both banks, both layers and both poolings, with a
+fresh 2,000-direction null per cell:
+
+| axis | L40 mean | L40 last | L44 mean | L44 last |
+|---|---|---|---|---|
+| **deception** | 0.5427 | 0.5856 | 0.5239 | 0.5766 — **below p95 in all four** |
+| **sycophancy** | **0.6930** | **0.7097** | 0.6763 | 0.7083 — above p95 in all four, beating the null **max** in three |
+
+The two figures F-107 quotes, **0.6930 / 0.7097**, reproduce exactly.
+
+**But the boundary count is not robust.** F-107 says the deception axis is *"below p95 in two cells
+and barely above it in two"*; the batch measured 1 above / 3 below; the lead's independent null gives
+**0 above / 4 below**. The count depends on the null draw. **The conclusion does not** — the
+deception axis sits inside the random null in every cell under every draw tested. State the
+conclusion, not the count. Also, the quoted range should read **0.543–0.586**, not 0.543–0.583.
+
+#### 5. F-108's leak is real and structural, but "every one of its 258 rows" overstates it
+
+The leak verifies: `hpkr_slice()` emits HP-KR-shaped `row_id`s **by construction**, giving 258/258 =
+100% id-shape overlap, 258/2,139 = 12.1%, **zero** overlap in the other 54 dataset pairs, and
+cross-dataset text overlap that is exactly the 2–4 `Yes./No.` strings.
+
+**The overstatement:** F-108 says *"every one of its 258 rows is in the training pool"*. The pool
+holds only HP-KR's **80% train split**, so roughly **81%** of kr-matched's test rows are contaminated
+(42 of 52 measured) — severe, but not total. **The same sentence is in
+`30g_clustered_holdout.py:12-14`** and should be fixed there too. Conclusions unchanged.
+
+#### 6. Two method facts that are now settled rather than inferred
+
+- **The extraction mathematics is faithful.** 35 steps compared against Mahadik & Skapars: 16 match,
+  11 resolve an ambiguity the paper leaves open, 6 are deliberate deviations. Everything that
+  diverges is **bank construction or k**, not Eq (1)–(4). Sublocation is post-block = post-MLP
+  residual stream (the same hook Lu et al. use); test-time centering is none and **provably cannot
+  change any AUROC**; the anchor is excluded from the contrast and included in every PCA basis;
+  "standardize" is mean-centering only. **`6_axes.py:19-21`'s cancellation argument is true of the
+  code** — verified in float64 at all 80 layers, max |difference| ≤ 2.9e-15.
+- **The default k is 5** (`27_crossgen.py:882`), a value the paper never uses, with no recorded
+  reason — and the result is k-dependent: `pc:unified@2` beats its matched control by **+0.138**
+  where `pc:unified` at k=5 gives **+0.004** (F-39's own CORRECTION 2, re-verified). At k≈2, close
+  to the paper's k=1, the axis reproduces the paper's order of effect. **The scale rungs are clean**
+  — all four stores (3B, 8B, 70B, 70B-fp32) ran at **k=3**, so F-63/F-110 do not cross a k boundary.
+- **The unified-axis question-bank confound is scoped.** Unified PC1 correlates **−0.945** with which
+  question bank a persona answered. But the *contrast directions barely move* between the confounded
+  and repaired banks (cross-bank cos **+0.984**), so this damages **the PCA basis only**: it
+  contaminates `pc:unified`, `pc:unified@2` and the `PC1:unified` zero-shot scorer, and leaves
+  `contrast:unified` **and all deception and sycophancy numbers intact**. Two independent paths
+  (rebuild from raw vectors; read the prebuilt axes) both give cos = **+0.389** confounded vs
+  **+0.896** repaired.
+
+#### Preservation flags
+
+- **`run-paper16-shared/`** — the faithful repair bank, the one any "the paper's method at 70B"
+  claim should rest on — is **not in git and not on the laptop** (lab PC + Drive only, 268 MB).
+- **`make_view.py` / `make_view_ac.py`** — which **built the 11th dataset behind every kd11 result**
+  — exist only as loose files on the lab PC (2,253 B and 1,915 B). Copied into `audit/cache/` for
+  preservation.
+- `cap/run-sarcasm-natural/baselines.json` and `cap/docs/SARCASM_DESIGN.md` exist only in git/laptop,
+  with no lab copy — the reverse direction, and git is an adequate home.
+
+- **supersedes:** F-85's "never been made" sentence; F-42/F-43's MiB figures and F-43's 50-OOM and
+  p99 rows; F-51's "elaborates"; F-107's p95 boundary count and quoted range; F-108's "every one of
+  its 258 rows".
+- **amends:** F-39 (the k default is now stated), F-18 (scoping of the unified confound).
+- **supports:** F-46, F-51's separation, F-106, F-107's conclusion, F-108's leak, F-44 (re-derived
+  exactly from scratch: 2134→2134, 2139→2139, `truncated=92` = 4.30%, no span lost).
+- **evidence:** `audit/methods/EXTRACTION_VS_PAPER.md`, `audit/methods/ATTRIBUTION.md`,
+  `audit/phase2/claims_batch_M1-method-claims.csv`, `audit/claims/F-{42,43,44,46,51,106,107,108}.md`,
+  and the lead's `audit/scripts/qa_m1_f107.py`.
+- **status:** verified
+
+### F-114 · 2026-09-23 · Wave-5 corrections — and two of them are corrections to the AUDIT, not to this ledger
+Written by the audit, appended (not edited in place) under the owner's standing rule. Wave 5 checked
+the 32 remaining ledger entries in full plus sampled memory notes and owner docs: **54 of 54 checked,
+38 HOLDS, 15 PARTLY, 1 DOES NOT HOLD.** Every item below was re-derived by the lead from raw files
+after the batch reported it. Full reasoning: `audit/phase2/qa_wave5.md`; corrections list
+`audit/DOC_FIXES.md` DF-49…DF-56.
+
+**The pattern from F-111 holds again:** the numbers reproduce; the sentence around them fails.
+
+#### 1. THE AUDIT WAS WRONG ABOUT THE PAPER'S DATASET SET — F-45, F-48 and F-54 are right, and F-60 had it right first
+`audit/fix/F39_NOTE.md` §2 told the owner to "fix F-45, F-48 and F-54" for naming
+`HarmPressureChoice` as one of Mahadik & Skapars' five deception datasets. **That instruction was
+wrong and is withdrawn.**
+
+Independent `pypdfium2` extraction of all 14 pages:
+
+| term | mentions | pages |
+|---|---:|---|
+| `HarmPressureChoice` | **2** | **4 only** |
+| `Mask` | 41 | 5, 6, 7, 12, 13, 14 — **never page 4** |
+
+Table 1 (p.4) lists *AILiar, Roleplaying, ConvGame, InstrDec, **HarmPressureChoice***. Every figure
+on pp.5–7 and every appendix table uses *ConvGame, InstrDec, **Mask**, AILiar, Roleplay*.
+**The paper declares one set and evaluates another.** So F-45/F-48/F-54's sentence ("these five ARE
+Mahadik & Skapars' **Table 1** deception benchmark") is *exactly true of Table 1*.
+
+Two wave-5 batches reached this independently; with the lead's extraction that is three routes. And
+**F-60 already recorded the whole inconsistency**, with a matching mention-count table and the precise
+phrase *"true of Table 1, and misleading"* — as did `:417-419` and `docs/papers/persona-coordinates-notes.md` §8.1.
+
+**What is actually owed:** F-60's correction was never back-annotated. **F-48 (`:1418`) and F-54
+(`:1659`) still assert the Table-1 framing with no pointer to F-60.** Readers of those two entries
+should come here, or to F-60, before quoting "the paper's benchmark".
+
+#### 2. THE AUDIT'S OWN LENGTH CORRECTION (F-111 item 7) WAS WRONG — there are two counts, over two sets
+F-111 item 7 and the 2026-09-23 doc edits stated: *"the positive class is longer in 9 of 11 datasets,
+or 8 of 10 excluding `sycophancy_mt` — **'9 of 10' matches no slicing**."* **The last clause is false.**
+
+Read from the producing file, `run-coords/confounds_L44_last.json`, key `length_only_auroc`: it holds
+**ten** datasets and **nine** score above 0.5, `roleplaying` (0.4415) being the sole inversion.
+
+The audit had changed **the metric and the dataset set at once**:
+
+| statement | metric | dataset set |
+|---|---|---|
+| 9 of 11 | mean token gap | the 11 passB scored datasets |
+| 8 of 10 | mean token gap | those 11 minus `sycophancy_mt` |
+| **9 of 10** | **length-only AUROC** | **the 10 the control ran on — keeps `sycophancy_mt`, drops `harm-pressure-kr-matched`** |
+
+**All three are correct, of different quantities.** The original "9 of 10" was right all along.
+Corrected in place on 2026-09-23 in `docs/NOVELTY_CHECK_PROMPT.md`, `docs/ONBOARDING.md`,
+`docs/thesis/persona-coordinates-70b-results.md` (×2), `kd/docs/DESIGN.md` (×2) and the memory note +
+index hook: every one now names its metric. **Rule: never quote a length count without its metric and
+its dataset set.** (`:5028`'s "9 of 10" is the AUROC reading and is correct as it stands.)
+
+#### 3. F-61's "twelvefold" is 8.1× — provably a mis-copy from the adjacent column
+Recomputed off-diagonal means from the committed matrices (110 pairs, 11 datasets, L40, mean, `paper`,
+k=5): paper16 raw **0.6623**, `pc:unified` **0.6715**, `datapca` **0.6651**.
+
+- `pc:unified − raw` = **+0.0093** — the entry says +0.006.
+- `pc:unified − datapca` = **+0.0064** — this is where +0.006 came from.
+- kd's **+0.0757** is correct (raw joined from the **root** store; the bank store carries its own
+  misleading `datapca` column).
+
+0.0757 / 0.0064 = **11.8**, which is exactly the entry's "twelvefold" — so the entry divided kd's
+margin over *raw* by paper16's margin over *datapca*. Like-for-like it is **8.1×**.
+**F-61's conclusion is unaffected**: the kd gain still cannot be attributed to persona design.
+
+#### 4. F-56's stated mechanism is backwards — `subsample()` balances, it does not preserve the ratio
+F-56 item 1 says `--sample` "preserves the source class ratio rather than balancing it", with
+"HP-choice ~17% deceptive at source". `src/assistant_axis_ndif/8_coords_ndif.py:504` round-robins over
+label buckets, and its own docstring reads *"as balanced as the data allows … degrades gracefully when
+a class is smaller than n/2"* and *"harm-pressure-choice's first 200 rows swallow all 134 of its
+deceptive rows"*.
+
+So 134/666 is the balancer hitting the **class ceiling** — it took **all 134 deceptive rows that
+exist**. The source is **134/2,134 = 6.28%** (denominator from F-47); 16.75% is 134/800, the
+*sample's* ratio. **The sampler raised the deceptive share; it did not preserve it.**
+**Everything F-56 concludes still stands** — the column is 5:1 imbalanced, departs from the paper's
+"all splits are label-balanced", and is the least comparable of the five. Only the causal story changes.
+
+#### 5. F-91's second method mixes seeds, and the mixing runs one way
+Re-derived from `run-premise/falsify/falsify_L*_s*.json` (`real`), 21 layers × 3 seeds:
+
+```
+   L        s7       s13       s42      seed-mean
+  32    0.8826    0.8800    0.8945     0.8857
+  36    0.8942    0.8887    0.8919     0.8916
+  40    0.8957    0.8830    0.8828     0.8872
+```
+
+The entry quotes L32 **0.8945** (s42), L36 **0.8942** (s7), L40 **0.8828** (s42) — three values, two
+seeds. **L32 and L36 are each at their best seed; L40 is at its worst**, when L40's own best is
+**0.8957, the highest single value in the table.** Under a consistent rule: best-seed-per-layer → L40
+wins; seed-mean → L36 > **L40** > L32; seed 42 alone → L32. **No consistent reading supports
+"32–36, not 40."**
+
+And nothing here is separable: the L36−L40 seed-mean gap (0.0044) is a third of the seed spread
+*within* L32 alone (0.0145). **State it as a plateau over roughly L32–L44 that this measurement
+cannot order.** F-91's crossgen half and its no-reversal check are exact and stand.
+
+#### 6. F-78 quotes the wrong panel of Ying et al. Figure 4
+F-78 writes *"base models transfer **to** it markedly better — 70B 0.67 → 0.56, 8B 0.69 → 0.56,
+3B 0.74 → 0.52."* Figure 4's body text (p.5) carries both panel titles:
+
+- panel **(a)** "FLED Probes Test on Sycophancy" — 0.74/0.62, 0.74/0.59, 0.64/0.54
+- panel **(b)** "Sycophancy Probes Test on FLED" — 0.67/0.56, 0.69/0.56, 0.74/0.52
+
+**The quoted numbers are panel (b): transfer *from* sycophancy.** The direction the sentence describes
+is panel (a). Both panels show base > chat at all three scales, so **F-78's conclusion and its use as
+an independent mechanism for F-13 are unaffected** — only the wording and the figure reference.
+
+#### 7. Smaller corrections, all re-derived
+- **F-49 DOES NOT HOLD** (the only outright failure in wave 5): its `items.pt` "0.34 vs 0.30 MB"
+  is false — both rungs are byte-identical at 359,384 B. Already superseded by **F-50**, whose
+  numbers reproduce, so nothing downstream moves.
+- **F-57:** "the CI band spans zero at every layer" is **false** — the dataset CI excludes zero at
+  L40 (lo +0.0330) and L44 (+0.0354). The fig3 it describes matches no committed script.
+- **F-21:** the `gen_batch` sweep table has **no data behind it** — `run-scale/smoke3b` is on neither
+  the lab PC nor Drive, and the table is a verbatim copy of a comment at `run_scale_chain.ps1:149`.
+- **F-70 caveat (3)** ("three papers not in `papers/`") and **F-104 caveat (2)** ("8 scripts still
+  uncommitted") are both stale: the papers and six of the scripts landed in `4d0d046`.
+- **F-22:** the sibling handler at HEAD line 186 of the same file still uses `str(e)[:200]` — the fix
+  was applied once and its twin missed.
+- **F-90:** the Q5 persona arm's bank `run/axes.pt` is the **own100** bank (100 roles, groups
+  deception 22 / honesty 22 / syc 16 / anti-syc 16 / anchor 8 / breadth 16), not paper16 or kd — so
+  its "persona loses to pooled LR" headline has never been run on the banks this project reports.
+- **F-47:** its central fact (HP-choice extracted at the full 2,134 rows) is corroborated three ways;
+  its "217 chunks" inference rests on deleted artifacts and stays **NO RAW DATA**.
+- **F-52:** 3 of 8 caver responses invoke caving, not 4 — two quotes are the same response.
+- **F-33:** the log says **24 of 24** roles failed, not 22; F-35 in this ledger already says 24.
+
+#### 8. What wave 5 found that is *reassuring*
+- **All 12 sampled memory notes HOLD** — every quoted number reproduced, and 9 of 9 evidence files
+  with a lab twin are md5-identical laptop=lab and pre-date the 09-22 re-run wave.
+- **The asymmetry is itself a result:** the ledger remainder returned 15 PARTLY of 32, the memory
+  notes 0 of 12. **The errors live in this ledger's prose, not in the notes that quote it.**
+- F-45, F-53, F-62, F-69, F-103, F-14, F-52, F-68, F-71, F-84, F-50, F-55, F-64, F-82, F-104 and
+  F-39 all reproduce exactly. **F-82** matched every published figure to the last digit from an
+  independent re-implementation. **F-68**'s in-place edit (+0.051 → +0.054, RF-9) is supported by the
+  data: unfiltered L20 = +0.0535.
+
+- **supersedes (in part):** F-61's ratio, F-56's mechanism, F-91's second method, F-78's panel,
+  F-49 (already superseded by F-50), F-57's CI sentence, F-21's table, F-70 and F-104's stale caveats,
+  **and F-111 item 7's "matches no slicing"**.
+- **corrects the audit, not this ledger:** `audit/fix/F39_NOTE.md` §2 (items 1) and F-111 item 7 (item 2).
+- **evidence:** `audit/phase2/qa_wave5.md`, `audit/DOC_FIXES.md` DF-49…DF-56,
+  `audit/phase2/claims_batch_W5{A,B,C,D,E}-*.csv`, `audit/claims/` notes,
+  `audit/scripts/qa_w5e_O040.py`, `audit/scripts/claims/qa_w5d_M082.py`.
+- **status:** verified (every item re-derived by the lead from raw files)
+
+### F-115 · 2026-09-23 · **The HP-KR/kr-matched row leak is CLOSED and measured: F-03 survives it, but within-family transfer at L40 turns out to be INVERTED once contaminated rows are removed**
+
+F-108 measured the leak: `harm-pressure-kr-matched` is a **view** over
+`harm-pressure-knowledge-report` — 258 rows, **100% of its row_ids are HP-KR row_ids** — so that one
+pair is train-on-test in both directions, and no other pair shares a single row_id. It was never
+closed for F-03's cell. It is now.
+
+**Method.** A COPY of `27_crossgen.py` was patched so that, off-diagonal, a target row is dropped
+whenever its `row_id` is in the **source's training rows**. A general rule, not a special case: it
+fired on **exactly one pair, both directions**, independently re-confirming F-108. Of `kr-matched`'s
+258 rows, **59 survive** — 77% contamination. Run from an isolated tree
+(`C:/Users/user4/expLB-resplit`), reading the same activations read-only; the original script is
+byte-identical before and after (md5 `681126242fe4414e4a3c131793de81c6`).
+
+**F-03's headline barely moves — the leak did not manufacture it:**
+
+| layer | leaked `axes − raw` | **guarded** | change |
+|---|---:|---:|---:|
+| 20 | −0.2566 | **−0.2545** | +0.0022 |
+| 40 | +0.0367 | **+0.0309** | −0.0058 |
+| 44 | +0.0134 | **+0.0050** | −0.0084 |
+
+One corrected cell averaged with nine untouched ones cannot move a 10-cell mean. **F-03/F-72/F-76 all
+stand**, and the L20 inversion stands. **This closes the last standing objection to them.**
+
+**The affected cells move a great deal, and that is the new result:**
+
+| cell | layer | leaked | **guarded** |
+|---|---|---:|---:|
+| `matched → knowledge-report` | 40 / 44 | 0.5905 / 0.6534 | **0.5416 / 0.5719** |
+| `knowledge-report → matched` | 20 / 40 / 44 | 0.6004 / 0.5674 / 0.6675 | **0.7190 / 0.4262 / 0.5667** |
+
+**At L40 the persona axis falls to 0.4262 — below chance.** `raw` drops too (0.7932 → 0.7214), so the
+leak flattered every feature; that is why the *difference* barely moved while the *levels* did.
+
+- **source:** `audit/cache/labpc/expLB-resplit/mean_L{20,40,44}_s42.json`
+- **scripts:** `audit/scripts/p6_patch_leakguard.py` (patch), `audit/scripts/p6_resplit_compare.py` (compare)
+- **caveats:** 59 rows after the guard, so the affected cells carry wide intervals. The re-split makes
+  rows disjoint, **not the material independent** — a matched slice from new items is still unrun.
+- **status:** verified (run and compared by the audit; originals untouched)
+
+### F-116 · 2026-09-23 · **The OTHER HP-KR control slice had never been run, and it is 7.8x bigger. With knowledge held constant, a raw probe separates the data almost perfectly (0.999) and the persona axes transfer BELOW CHANCE — the strongest negative in the project.**
+
+`eval_datasets.hpkr_slice` has **two** modes. Every result in this project used one of them.
+
+| slice | holds constant | the label then marks | rows | status until today |
+|---|---|---|---:|---|
+| `text_matched` | **wording** (all responses deny) | whether the model **knew** | 258 | F-03's slice |
+| `knowledge_matched` | **knowledge** (all rows known) | whether the model **denied** | **2,001** | **never run** |
+
+Built as an isolated view — directory junctions to the original datasets plus one hardlinked folder —
+so nothing under `run-coords/passB` was created or modified (verified: still 13 dataset dirs, no new
+key). Leak guard on; 12 datasets, mean pooling, `paper` probe, seed 42.
+
+**Trained on it, tested on the other eleven:**
+
+| layer | `axes` | `raw` | **`axes − raw`** | `datapca` | `random` | `length` |
+|---|---:|---:|---:|---:|---:|---:|
+| 20 | 0.3850 | 0.5711 | **−0.1860** | 0.5208 | 0.5455 | 0.6174 |
+| 40 | 0.3335 | 0.7093 | **−0.3758** | 0.6636 | 0.6718 | 0.6174 |
+| 44 | 0.5267 | 0.7203 | **−0.1937** | 0.7037 | 0.6237 | 0.6174 |
+
+**Inverted at L20 and L40. The deficit against raw (−0.19 to −0.38) is the largest anywhere in this
+project, and a one-dimensional length feature (0.6174) beats the persona axes at every layer.**
+
+**In-distribution, on its own held-out 20%:**
+
+| layer | `axes` | `raw` | `length` |
+|---|---:|---:|---:|
+| 20 / 40 / 44 | 0.9541 / 0.8347 / 0.7209 | **0.9995 / 0.9992 / 0.9993** | 0.8318 |
+
+**With knowledge held constant the only thing left to detect is the denial, and it is near-perfectly
+detectable (raw 0.999) — yet nothing learned there transfers.** This is F-13's register diagnosis
+tested head-on on 2,001 rows instead of inferred, and it is the project's strongest evidence against
+persona coordinates.
+
+- **source:** `audit/cache/labpc/expLB-resplit/km/mean_L{20,40,44}_s42.json`
+- **scripts:** `audit/scripts/p6_build_km_view.py`, and the lab-side `build_km_view.py` / `run_km.ps1`
+  under `expLB-resplit/`
+- **CONFOUND, flagged because I first misread it:** the zero-shot contrast reads 0.2405/0.6466/0.6085
+  on this slice against 0.2504/0.6436/0.6032 on the full dataset — nearly identical. That is **not**
+  evidence of anything: the slice is **93.5% of the full dataset** (2,001 of 2,139), so the readings
+  must agree by construction. Only the transfer and in-distribution tables above carry weight.
+- **caveats:** class balance 139 deceptive / 1,862 honest; one seed; mean pooling only.
+- **status:** verified (run by the audit; originals untouched)
+
+### F-117 · 2026-09-24 · **The collaborator's 16-layer sweep (`origin/paper`) CONFIRMS and generalises the audit's D-028: without HP-KR the draft's Contributions margin is within ±0.06 at every depth and crosses zero five times — but his margin over his own baseline is positive at 16 of 16 layers**
+
+Branch `origin/paper`, pushed 2026-09-23 23:46, adds `persona_ood_ext_L{20..76 step 4, 79}` — **16
+layers where the draft had 3**. Read with `git show`; reproduce with
+`audit/scripts/p8_collab_layer_sweep.py`. Full review: `audit/COLLAB_PAPER_BRANCH.md`.
+
+**The method is sound and he validated it.** Pooling moved onto NDIF (4.05M tokens, one pass per
+example); L40 was rebuilt both ways and compared — pooled vectors agree at **row cosine ≥ 0.99989**,
+same AUROC to 4 dp, retrained RepE probe at **cosine 0.9996**.
+
+**D-028 generalises.** `ext_axis1 − ext_pc3` (the draft's Contributions margin):
+
+| layer | with HP-KR | **excl HP-KR** |
+|---|---:|---:|
+| 20 / 24 | +0.2204 / +0.2221 | **+0.0086 / +0.0012** |
+| 36 / 40 / 44 | +0.0481 / +0.0503 / +0.0235 | +0.0155 / +0.0495 / +0.0354 |
+| 64 / 68 / 72 | **−0.0010 / −0.0205 / −0.0146** | −0.0029 / −0.0325 / −0.0198 |
+
+Positive at **13/16** layers; excluding HP-KR **11/16**, every margin within **±0.06**, crossing zero
+five times. **The draft's "outscores … at every depth" is falsified by his own new data.**
+
+**But the vs-baseline comparison runs in his favour and is new:** `ext_axis1 − baseline` is
+**positive at 16 of 16 layers, +0.115 to +0.273**, and **still 16/16 excluding HP-KR** (+0.123 to
++0.243). Depth-robust and not HP-KR-driven. **Caveat:** his baseline is a single-dataset probe;
+D-158's pooled probe remains the fair comparator and erases most of the advantage.
+
+**Optimal layer is 36, not 40.** `ext_axis1` peaks at L36 = **0.9275** against 0.9158 at L40;
+`denial_axis1` also peaks at 36. The draft reports L40 and under-states its own best by 0.012.
+
+**"HP-KR is a spike at 40" is arm-dependent.** True for `denial_axis1` (0.9185, global max). For
+`ext_axis1`, **L76 = 0.9249 > L40 = 0.9124**.
+
+**UNEXPLAINED, flagged for the paper:** many arms rise sharply at **L76** then fall at L79
+(`axis1` 0.6526 → 0.8738 → 0.8179; on HP-KR the published 8v7 axis goes 0.4344 → 0.7301 → 0.7709,
+inverted to working). **`random3` stays flat at 0.48–0.55**, so it is not indiscriminate noise.
+
+- **source:** `git show origin/paper:src/probes/deception-detection/results/persona_ood_ext_L*/summary.csv`, `zero_shot.csv`
+- **caveats:** 6 datasets, one seed, point estimates only — no significance testing applied. Outside
+  the audited 424-claim corpus (new branch); these carry no claims.csv id.
+- **status:** verified (read from git during the 2026-09-24 review)
+
+### F-118 · 2026-09-24 · **Gender-Secret independently confirms the register diagnosis: where BOTH classes deny, every persona direction is at chance. Three wording-matched tests now converge.**
+
+Also on `origin/paper` (`572095cb`). Gender-Secret is a LoRA fine-tune that believes the user is male
+and denies knowing it — **both classes are denials**, making it the benchmark's own wording-matched
+test.
+
+| detector | L20 / L40 / L44 |
+|---|---|
+| knowledge-denial (4v6) | 0.549 / **0.436** / 0.498 |
+| extended (12v13) | 0.505 / 0.467 / 0.541 |
+| published (8v7) | 0.514 / 0.545 / 0.623 |
+| sycophancy (5v5) | 0.593 / 0.523 / 0.520 |
+
+**Every direction at chance.** Exactly what F-13's register diagnosis predicts, obtained
+independently, on a dataset neither side built.
+
+**THE CONVERGENCE — this is the paper's strongest negative and should be stated as one finding:**
+
+1. **F-115 §5** — his axes on our wording-matched slice: **0.4630 / 0.6203 / 0.5383**
+2. **F-116** — our `knowledge_matched` control, 2,001 rows: persona axes transfer **below chance**
+3. **F-118** — Gender-Secret: every direction at chance where both classes deny
+
+**Three independent wording-matched tests, one answer.**
+
+**His method is careful:** adapter applied *inside* the remote trace, pinned to PEFT within 1e-5 by a
+test shown to fail without it; behavioural check 82% male-answer vs 55% base in both answer orders
+(rules out letter bias); base-read control with shared bootstrap resamples, so the difference is paired.
+
+- **source:** `git show origin/paper:src/probes/deception-detection/results/gender_secret/summary.md`
+- **status:** verified (read from git; not re-derived — no activations are committed)
+
+### F-119 · 2026-09-24 · **Correction in the collaborator's favour: `paper/make_numbers.py` now exists, superseding the audit's only DOES-NOT-MATCH verdict**
+
+D-237 recorded `DOES NOT MATCH HIS DATA — the named script is not in the repository`, on the basis
+that `paper/make_numbers.py` appeared on no branch, in no commit reachable by
+`git log --all --diff-filter=A`, and nowhere on the lab PC. **That was true when checked and is no
+longer true:** it is on `origin/paper` together with `paper/make_figures.py`.
+
+**Supersedes:** D-237's verdict, DF-71's reproducibility half, and `REPORT_TECHNICAL.md` §8 item 1's
+reproducibility clause. **Second audit correction running in his favour** (after D-107).
+
+**Still open:** `persona_depth/summary.md` cites `../persona_unified/` and `../persona_depth_orig/`;
+**neither folder is on the branch.**
+
+- **status:** verified
+
+### F-120 · 2026-09-24 · **SOLVED: the late-layer rise is the full-rank probe DEGRADING plus anisotropy flattering every low-dimensional projection — a random direction gains +0.127 over the same span**
+
+F-117 flagged an unexplained rise near the top of the stack in the collaborator's sweep (on HP-KR the
+published 8v7 axis goes 0.4344 at L72 → 0.7301 at L76 → 0.7709 at L79, inverted to working). Asked of
+**our own 80-layer store** — `passA`, mean pooling, `paper` probe, seed 42, a pipeline he never
+touched. **The same shape appears, so it is a property of the model, not of his run.** Script:
+`audit/scripts/p9_late_layer.py`.
+
+| | L40 | L70 (trough) | L72 | L79 |
+|---|---:|---:|---:|---:|
+| `raw` (full 8192-d) | 0.8195 | 0.7828 | 0.7834 | **0.7426** |
+| `axes` | 0.8266 | 0.6211 | 0.6384 | **0.7492** |
+| `random` | 0.5971 | 0.5234 | 0.5133 | **0.6405** |
+| `axes − raw` | +0.0071 | −0.1616 | −0.1450 | **+0.0065** |
+| **`axes − random`** | **+0.2296** | +0.0977 | +0.1250 | **+0.1087** |
+
+**Three facts settle it.**
+1. **`raw` does not rise, it falls** (0.7834 → 0.7426). The apparent late "win" is largely the
+   full-rank probe degrading as late layers specialise for next-token prediction.
+2. **`axes` recovers rather than peaks** — 0.7492 at L79 is still **below its own mid-stack level**
+   (0.8145 over L30–50).
+3. **A RANDOM direction gains +0.127 over the same span** (0.5133 → 0.6405). A random direction
+   learns nothing, so this is a **geometry change lifting any low-dimensional projection** — the
+   known anisotropy of final transformer layers. It cannot lift the full-rank probe, which is why
+   `raw` is unmoved.
+
+**Against the random control the persona axes are WORSE at the top than at L40: +0.1087 at L79
+versus +0.2296 at L40.** The late-layer rise is therefore **not** evidence the method works at depth.
+
+**Answer to a reviewer, ready to use:** *"Measured against a random-direction control — the only
+baseline that accounts for the change in geometry — the persona axes are worse at the top of the
+stack (+0.109 at L79) than at layer 40 (+0.230). The rise is the full-rank probe degrading, plus
+late-layer anisotropy flattering every low-dimensional projection, random ones included."*
+
+Consistent with **M-057** (persona axes beat raw at 2–5 of 80 layers, wins at the extreme ends).
+**Second independent vindication of the random-direction control**: without it the rise reads as a
+finding; with it, as an artifact of where you measure.
+
+- **source:** `audit/phase2/layer_sensitivity.csv` (store `passA`, 80 layers)
+- **caveats:** one store, one seed, mean pooling, `paper` probe. The *mechanism* (anisotropy) is the
+  standard explanation and is **inferred**, not measured here; what is measured is that a random
+  direction gains as much as the persona one, which is what the argument needs.
 - **status:** verified

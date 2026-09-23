@@ -18,8 +18,9 @@ itself evidence for the diagnosis it was meant to test.
 The thesis's central negative claim is that **persona axes encode register rather than the
 construct their datasets label** — how the model talks (agreeable vs challenging, hedged vs
 blunt) rather than what it does. That claim is supported by two failures: the paper's sycophancy
-axis scores 0.374 on our capitulation dataset and ~0.300 on knowledge-report, both below chance
-and below a random direction. Every test of it so far is negative in form: the axis *fails* where
+axis scores **0.313** on our capitulation dataset and ~0.300 on knowledge-report, both below
+chance (0.313 significantly so, beyond a 1,000-direction null at p 0.001-0.008). The **0.374**
+this sentence used to give is the paper16 *deception* axis's PC1, not the sycophancy axis. Every test of it so far is negative in form: the axis *fails* where
 register and construct come apart.
 
 A sarcasm bank would have been the first **positive** test. Sarcasm is a case where literal

@@ -173,7 +173,9 @@ Every one of these is here because this project has already been burned by its a
    convincing-game, harm-pressure-*, mask and the Q11 sleepers the persona axis is no better
    than a random direction.
 3. **Lexical null** — the 0.870 denial bit, printed beside every HP-KR number.
-4. **Length null** — the positive class is longer in 9 of 10 datasets; off-diagonal 0.553.
+4. **Length null** — by mean token gap the positive class is longer in **9 of 11** datasets (8 of 10
+   excluding `sycophancy_mt`); by length-only AUROC it is above 0.5 on **9 of the 10** datasets the
+   control ran on (`roleplaying` the sole inversion). Off-diagonal **0.5555** against raw **0.6623**.
 5. **Three-way HP-KR slice table** — full / text-matched / knowledge-matched. One number for
    HP-KR is not reportable.
 6. **Sign-flip accounting** — cells rescued vs broken, and significantly-inverted counts,
@@ -198,8 +200,10 @@ Every one of these is here because this project has already been burned by its a
 10. **Per-group response length.** *(same review)* Denials are short and assertions are long, so
    `knowledge_denial` and `plain_assertion` will differ in token count by construction, and
    mean-pooling over a short span is a different estimator from mean-pooling over a long one.
-   This corpus already has a length pathology — length alone transfers off-diagonal at 0.553,
-   and the positive class is longer in 9 of 10 datasets (`response-length-transfers-on-its-own`).
+   This corpus already has a length pathology — length alone transfers off-diagonal at **0.5555**
+   (raw 0.6623), and by mean token gap the positive class is longer in **9 of 11** datasets, 8 of 10
+   excluding `sycophancy_mt` — by length-only AUROC, above 0.5 on **9 of the 10** datasets the
+   control ran on (`response-length-transfers-on-its-own`).
    Report the per-group token-length distribution from `run/responses/*.jsonl` after Phase 3, and
    if the groups are badly imbalanced, rebuild the axis on a length-matched subsample as a
    robustness check. Do not try to equalise lengths by instruction — that distorts the persona.

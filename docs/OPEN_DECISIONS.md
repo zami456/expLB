@@ -50,8 +50,11 @@ against its own limit.
 ### A4. ~~Item 3 go/no-go — 11-dataset eval activations at 3B and 8B~~ — **CLOSED, done**
 You picked it, both rungs ran, and the result is F-63: raw off-diagonal rises
 0.708 -> 0.743 -> 0.809 across 3B/8B/70B while the persona gain over the matched control
-falls +0.202 -> +0.115 -> +0.079. The argument for doing it held up — three layer profiles
-beat one p-value. Original reasoning kept below.
+falls +0.202 -> +0.115 -> +0.079 at the single L40 cell, or **+0.120 -> +0.103 -> +0.054**
+layer-averaged and like-for-like (F-110, after RF-16 found the 70B rung had mixed two banks;
+against *raw* rather than the matched control the 70B rung is **-0.013**). The decline holds on
+either reading and is steeper on the like-for-like one. The argument for doing it held up — three
+layer profiles beat one p-value. Original reasoning kept below.
 
 My recommendation was: **do it, drop item 8(c), keep item 6(b).**
 
