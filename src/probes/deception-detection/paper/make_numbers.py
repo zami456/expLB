@@ -475,6 +475,17 @@ def collect() -> tuple[Numbers, dict[str, object]]:
     hpkr_base_auroc = curve(S.HPKR_SOURCE, "auroc", zero_arms["base"])
     n.put("depth-hpkr-base-auroc-peak", hpkr_base_auroc.max())
     n.put("depth-hpkr-base-auroc-peak-layer", str(hpkr_base_auroc.idxmax()))
+    # How often the base probe actually out-ranks us on HP-KR at depth. It is most but not all of
+    # the deep layers -- it loses at 44, 48, 52 and 76 -- so this is a count, not a "from L on".
+    best_contrast = pd.concat(
+        [curve(S.HPKR_SOURCE, "auroc", zero_arms[key]) for key in ("dec", "den", "ext")],
+        axis=1).max(axis=1)
+    deep = [layer for layer in grid if layer >= int(hpkr_base_auroc.idxmax())]
+    base_ahead = [layer for layer in deep if hpkr_base_auroc.loc[layer] > best_contrast.loc[layer]]
+    n.put("depth-hpkr-base-ahead-n", len(base_ahead))
+    n.put("depth-hpkr-base-deep-n", len(deep))
+    n.put("depth-hpkr-base-peak-margin",
+          float(hpkr_base_auroc.max() - best_contrast.loc[int(hpkr_base_auroc.idxmax())]))
     # the base probe and the extended contrast never leave the 0.5 floor on HP-KR
     for key in ("base", "ext"):
         floor = curve(S.HPKR_SOURCE, "balacc", zero_arms[key])

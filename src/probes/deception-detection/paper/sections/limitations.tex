@@ -23,10 +23,14 @@ at layer~20, with \hpkr{} excluded, its advantage over the published contrast di
 
 \paragraph{\hpkr{} is a claim about the threshold.} Our \hpkr{} result is that the knowledge-denial
 contrast flags those lies at a threshold set on benign chat, where every other detector we tried
-flags none. It is not a claim to rank them best: from layer~\V{depth-hpkr-base-auroc-peak-layer}
-onwards the base probe ranks \hpkr{} above every contrast we build, reaching
-\V{depth-hpkr-base-auroc-peak} AUROC, while still flagging nothing (\cref{sec:depth}). A reader
-who wants ranking on \hpkr{} should use the base probe at depth.
+flags none. It is not a claim to rank them best. At depth the base probe often ranks \hpkr{} above every
+contrast we build --- at \V{depth-hpkr-base-ahead-n} of the \V{depth-hpkr-base-deep-n} layers from
+\V{depth-hpkr-base-auroc-peak-layer} on, peaking at \V{depth-hpkr-base-auroc-peak} AUROC at
+layer~\V{depth-hpkr-base-auroc-peak-layer}, \V{depth-hpkr-base-peak-margin} above the best contrast
+there --- while still flagging none of those lies (\cref{sec:depth}). It does not do so
+everywhere: at layer~44, one of the three layers we report, the knowledge-denial contrast leads it
+\V{zs-den-hpkr-L44} to \V{bp-auroc-hpkr-L44}. A reader who wants \hpkr{} ranking rather than
+detection should compare the two at the layer they intend to use.
 
 \paragraph{Calibration.} A threshold set on benign chat does not transfer to every dataset. On
 \hpc{} almost nothing crosses it, whichever detector is used. On \hpkr{} at layer~20 the
