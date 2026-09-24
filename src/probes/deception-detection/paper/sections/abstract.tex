@@ -15,7 +15,12 @@ direction reaches \V{zs-den-hpkr-L40} AUROC and \V{op-den-balacc-hpkr-L40} balan
 privileged labels, \V{lb-upper-balacc-hpkr}. Across the full train--test matrix of six datasets
 at layer~40, the extended persona contrast reaches \V{off-ext-L40} mean off-diagonal AUROC, against
 \V{off-base-L40} for 8192-dimensional probes each trained on one dataset, and beats their average
-on every held-out dataset; the persona principal components add nothing beyond it. A
+on every held-out dataset; the persona principal components add nothing beyond it. Repeating the
+evaluation at \V{depth-n} layers turns both results into curves: ranking peaks at
+layer~\V{depth-off-ext-peak-layer} rather than the layer~40 we report, and on \hpkr{} the
+RepE-trained probe out-ranks every persona contrast from layer~\V{depth-hpkr-base-auroc-peak-layer}
+on while still flagging none of its lies, so the \hpkr{} result is a claim about the operating
+point and not about ranking. A
 threshold calibrated on benign chat still does not transfer to every dataset, which leaves
 calibration as the open problem.
 \end{abstract}

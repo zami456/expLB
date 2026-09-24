@@ -4,6 +4,21 @@ Uses `persona including knowlede denial/` — 36 personas, the original 26 plus 
 denial of knowledge rather than assertion of falsehood**. Run at layers 20 and 40
 (`../persona_ood_ext_L40/`), against the same pooled activations as every earlier run.
 
+> **Depth.** The tables here compare layers 20, 40 and 44. The same analysis now runs at every 4th
+> layer from 20 to 76, plus 79: see `../persona_depth/summary.md`. It puts three of the claims
+> below in a wider frame. Ranking peaks at layer 36, not 40. HP-KR's 0.910 balanced accuracy is a
+> spike at layer 40, with about 0.75 on either side. And the base probe's own best layer is 32
+> (0.850 Liars' Bench average AUROC), which narrows its gap to the persona axes.
+>
+> **Two later results qualify this page.** First, the base probe's HP-KR inversion quoted below
+> (0.109) is a *layer-20* phenomenon, exactly as the deception axis's is: by layer 36 the base
+> probe ranks HP-KR at 0.967 AUROC, better than any persona axis, while still flagging none of its
+> lies at 1% FPR. The HP-KR claim holds at the operating point, not on ranking. Second, the
+> **unified axis** — the paper's own widening of the 8v7 contrast, with sycophancy in place of
+> knowledge denial — has been run as the control for "these roles" against "more roles": it does
+> not fix HP-KR, and ranks it *below* the published axis at 15 of 16 layers. See
+> `../persona_unified/summary.md`.
+
 ## Why these personas
 
 HP-KR inverted under every method tried: 0.109 for the RepE probe, 0.124 in the Liars' Bench

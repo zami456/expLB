@@ -7,8 +7,10 @@ published personas, all specialists in omission, give a direction that inverts t
 that deny knowledge turns it into one that, with no benchmark labels, detects those lies at the
 benchmark's own threshold nearly as well as a probe trained on the benchmark itself. Across
 datasets, one zero-shot contrast over the extended bank transfers better on average than probes
-trained on single datasets, and better than the persona subspace. What it does not yet have is a threshold
-that holds on every dataset.
+trained on single datasets, and better than the persona subspace outside one band of deep layers.
+Sweeping \V{depth-n} layers locates the optimum between the depths we first chose and shows what
+the \hpkr{} result is and is not: detection at a usable threshold, not the best ranking of those
+lies. What the method does not yet have is a threshold that holds on every dataset.
 
 \section*{Acknowledgements}
 

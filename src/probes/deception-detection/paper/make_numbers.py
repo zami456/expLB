@@ -19,6 +19,7 @@ import pandas as pd
 import torch
 
 from deception_detection import persona_pcs as pcs
+from deception_detection.scripts import layer_sweep as S
 from deception_detection.scripts import persona_ood as P
 
 HERE = Path(__file__).resolve().parent
@@ -310,6 +311,148 @@ def collect() -> tuple[Numbers, dict[str, object]]:
         n.put(f"worst-base-L{layer}", values[train, test], 2)
         n.put(f"worst-base-train-L{layer}", DATASETS[m.index[train]][1])
         n.put(f"worst-base-test-L{layer}", DATASETS[m.columns[test]][1])
+
+    # --- depth: every 4th layer from 20 to 76, plus 79 -----------------------------------------
+    depth = pd.read_csv(RESULTS / "persona_depth" / "depth.csv")
+    data["depth"] = depth
+
+    def curve(source: str, metric: str, arm: str) -> pd.Series:
+        rows = depth[(depth.source == source) & (depth.metric == metric) & (depth.arm == arm)]
+        return rows.set_index("layer")["value"].sort_index()
+
+    grid = sorted(depth["layer"].unique())
+    n.put("depth-n", len(grid))
+    n.put("depth-first", str(grid[0]))
+    n.put("depth-last", str(grid[-1]))
+    n.put("depth-stride", "4")
+
+    transfer_arms = {"ext": "extended axis (12v13)", "dec": "deception axis (8v7)",
+                     "den": "knowledge-denial axis (4v6)", "base": "single-source probe (8192-d)"}
+    zero_arms = {"ext": "extended axis (12v13)", "dec": "deception axis (8v7)",
+                 "den": "knowledge-denial axis (4v6)", "base": "base probe (RepE-trained)"}
+
+    # where each detector peaks, on transfer and on the zero-shot Liars' Bench average
+    for key, arm in transfer_arms.items():
+        series = curve(S.TRANSFER_SOURCE, "auroc", arm)
+        n.put(f"depth-off-{key}-peak", series.max())
+        n.put(f"depth-off-{key}-peak-layer", str(series.idxmax()))
+    for key, arm in zero_arms.items():
+        series = curve(S.LB_SOURCE, "auroc", arm)
+        n.put(f"depth-zs-{key}-peak", series.max())
+        n.put(f"depth-zs-{key}-peak-layer", str(series.idxmax()))
+
+    # the margin over the base probe at the base probe's own best layer, not at ours
+    base_best = int(curve(S.LB_SOURCE, "auroc", zero_arms["base"]).idxmax())
+    n.put("depth-zs-margin-at-base-peak",
+          float(curve(S.LB_SOURCE, "auroc", zero_arms["ext"]).loc[base_best]
+                - curve(S.LB_SOURCE, "auroc", zero_arms["base"]).loc[base_best]))
+    n.put("depth-zs-ext-at-base-peak", curve(S.LB_SOURCE, "auroc", zero_arms["ext"]).loc[base_best])
+
+    # the extended contrast against the published one, across the whole grid
+    ext_off = curve(S.TRANSFER_SOURCE, "auroc", transfer_arms["ext"])
+    dec_off = curve(S.TRANSFER_SOURCE, "auroc", transfer_arms["dec"])
+    if not (ext_off >= dec_off).all():
+        raise AssertionError("the extended contrast no longer leads at every layer")
+    n.put("depth-ext-over-dec-min", float((ext_off - dec_off).min()))
+    n.put("depth-ext-trough", float(ext_off.loc[56:72].min()))
+    n.put("depth-ext-L76", float(ext_off.loc[76]))
+    n.put("depth-ext-last", float(ext_off.loc[grid[-1]]))
+
+    # The per-dataset claim was written from three layers and does not survive the whole grid:
+    # derive how far it does hold, and where it breaks, rather than restating it.
+    def by_test(layer: int, arm: str) -> pd.Series:
+        return off_diagonal_by_test(matrix(layer, arm))
+
+    holds, breaks = [], {}
+    for layer in grid:
+        ext_by_test, base_by_test = by_test(layer, "ext_axis1"), by_test(layer, "baseline")
+        losing = [DATASETS[name][1] for name in ext_by_test.index
+                  if ext_by_test[name] <= base_by_test[name]]
+        (holds.append(layer) if not losing else breaks.setdefault(layer, losing))
+    contiguous = [layer for i, layer in enumerate(holds) if layer == grid[i]]
+    n.put("depth-pertest-holds-last", str(contiguous[-1]))
+    n.put("depth-pertest-break-first", str(min(breaks)))
+    n.put("depth-pertest-break-last", str(max(breaks)))
+    exceptions = sorted({label for labels in breaks.values() for label in labels})
+    n.put("depth-pertest-exception", " and ".join(exceptions))
+    n.put("depth-pertest-break-n", len(breaks))
+
+    # "one direction beats the subspace" was also written from three layers: it reverses inside
+    # the deep trough, where the extra components help.
+    pc_wins = [layer for layer in grid
+               if summary(layer).loc["ext_pc3", "off_diagonal_mean"]
+               >= summary(layer).loc["ext_axis1", "off_diagonal_mean"]]
+    n.put("depth-pc-wins-n", len(pc_wins))
+    n.put("depth-pc-wins-complement", len(grid) - len(pc_wins))
+    n.put("depth-pc-wins-first", str(min(pc_wins)))
+    n.put("depth-pc-wins-last", str(max(pc_wins)))
+    n.put("depth-pc-wins-max", max(
+        summary(layer).loc["ext_pc3", "off_diagonal_mean"]
+        - summary(layer).loc["ext_axis1", "off_diagonal_mean"] for layer in pc_wins))
+
+    # the sycophancy contrast, over the grid rather than over the three layers of tab:syc
+    syc_hpkr, dec_lead = [], []
+    for layer in grid:
+        syc_hpkr.append(float(zero_shot(layer).loc[HPKR, "auroc_syc_axis"]))
+        s = summary(layer)
+        dec_lead.append(s.loc["axis1", "off_diagonal_mean"] > s.loc["syc_axis1", "off_diagonal_mean"])
+    n.put("depth-syc-hpkr-max", max(syc_hpkr))
+    n.put("depth-syc-hpkr-max-layer", str(grid[int(np.argmax(syc_hpkr))]))
+    n.put("depth-dec-over-syc-n", int(sum(dec_lead)))
+
+    # where the base probe's ranking fails, across the grid rather than at our three layers
+    n.put("depth-zs-ext-over-base-min",
+          float((curve(S.LB_SOURCE, "auroc", zero_arms["ext"])
+                 - curve(S.LB_SOURCE, "auroc", zero_arms["base"])).min()))
+    inverted = {}
+    for layer in grid:
+        table = operating(layer)
+        rows = table[(table["arm"] == P.BASE_ARM) & table["dataset"].isin(DATASETS)]
+        inverted[layer] = [DATASETS[name][1]
+                           for name in rows.loc[rows["auroc"] < 0.5, "dataset"]]
+    clean_layers = [layer for layer, names in inverted.items() if not names]
+    if len(clean_layers) != 1:
+        raise AssertionError(f"expected one layer with no inversion, got {clean_layers}")
+    n.put("depth-base-no-invert", str(clean_layers[0]))
+    it_layers = [layer for layer, names in inverted.items() if "IT" in names]
+    if it_layers != [layer for layer in grid if layer >= min(it_layers)]:
+        raise AssertionError("IT inversion is no longer a contiguous tail")
+    n.put("depth-base-it-invert-first", str(min(it_layers)))
+
+    # HP-KR: the operating point is a spike, the ranking is not
+    hpkr_balacc = curve(S.HPKR_SOURCE, "balacc", zero_arms["den"])
+    n.put("depth-hpkr-den-balacc-peak", hpkr_balacc.max())
+    n.put("depth-hpkr-den-balacc-peak-layer", str(hpkr_balacc.idxmax()))
+    for layer in (36, 44):
+        n.put(f"depth-hpkr-den-balacc-L{layer}", float(hpkr_balacc.loc[layer]))
+    broad = [int(x) for x in hpkr_balacc.index[hpkr_balacc > 0.6]]
+    n.put("depth-hpkr-den-broad-first", str(min(broad)))
+    n.put("depth-hpkr-den-broad-last", str(max(broad)))
+    # the two contrasts built on knowledge denial never drop near chance on HP-KR
+    for key in ("den", "ext"):
+        series = curve(S.HPKR_SOURCE, "auroc", zero_arms[key])
+        n.put(f"depth-hpkr-{key}-auroc-min", series.min())
+        n.put(f"depth-hpkr-{key}-auroc-max", series.max())
+    hpkr_base_auroc = curve(S.HPKR_SOURCE, "auroc", zero_arms["base"])
+    n.put("depth-hpkr-base-auroc-peak", hpkr_base_auroc.max())
+    n.put("depth-hpkr-base-auroc-peak-layer", str(hpkr_base_auroc.idxmax()))
+    # the base probe and the extended contrast never leave the 0.5 floor on HP-KR
+    for key in ("base", "ext"):
+        floor = curve(S.HPKR_SOURCE, "balacc", zero_arms[key])
+        if not np.allclose(floor.to_numpy(float), 0.5):
+            raise AssertionError(f"the {key} arm leaves the HP-KR balanced-accuracy floor")
+    n.put("depth-hpkr-floor-arms", "the base probe and the extended contrast")
+
+    # Transcribed from `layer_sweep.py check40`, which rebuilds layer 40 the sweep's way and
+    # compares it with the original; it pools on NDIF, so it is not part of this CPU-only build.
+    # Its output is recorded in results/persona_depth/summary.md. Like PAPER_PROBES above, these
+    # are constants with a stated provenance rather than values read from a result file.
+    n.put("depth-new-n", len(S.NEW_LAYERS))
+    n.put("depth-check-cos", "0.99989")
+    n.put("depth-check-auroc", "0.0001")
+    n.put("depth-check-probe-cos", "0.9996")
+    n.put("depth-check-probe-auroc", "0.0017")
+    n.put("depth-check-repe-val", "1.0000")
 
     # persona geometry at layer 40: how the two contrasts relate, and where each group sits
     bank = pcs.load_bank_at_layer(40, BANK)

@@ -17,8 +17,16 @@ established.
 \paragraph{A designed repair.} We wrote the knowledge-denial personas after seeing the published
 contrast invert on \hpkr, so \hpkr{} measures a repair designed for it, not a blind test. The other
 datasets are the untargeted test. There the extended contrast matches or beats the published one
-at every layer. But at layer~20, with \hpkr{} excluded, its advantage over the published contrast
-disappears (\cref{sec:transfer}).
+at every one of the \V{depth-n} layers we swept, by at least \V{depth-ext-over-dec-min} AUROC. But
+at layer~20, with \hpkr{} excluded, its advantage over the published contrast disappears
+(\cref{sec:transfer}).
+
+\paragraph{\hpkr{} is a claim about the threshold.} Our \hpkr{} result is that the knowledge-denial
+contrast flags those lies at a threshold set on benign chat, where every other detector we tried
+flags none. It is not a claim to rank them best: from layer~\V{depth-hpkr-base-auroc-peak-layer}
+onwards the base probe ranks \hpkr{} above every contrast we build, reaching
+\V{depth-hpkr-base-auroc-peak} AUROC, while still flagging nothing (\cref{sec:depth}). A reader
+who wants ranking on \hpkr{} should use the base probe at depth.
 
 \paragraph{Calibration.} A threshold set on benign chat does not transfer to every dataset. On
 \hpc{} almost nothing crosses it, whichever detector is used. On \hpkr{} at layer~20 the
@@ -31,7 +39,8 @@ needs no threshold, is our main measure of transfer, with balanced accuracy repo
 dataset. A probe trained on several datasets pooled is a stronger supervised baseline, and we do
 not compare against it.
 
-\paragraph{Scope.} We study one model, three layers and one persona bank. We wrote the prompts from
+\paragraph{Scope.} We study one model and one persona bank, at \V{depth-n} layers
+(\cref{sec:depth}). We wrote the prompts from
 the published role descriptions, and they may differ from the prompts of
 \citet{mahadik2026persona}. The judge keeps only rollouts that stayed in character, which may bias
 the persona vectors toward prototypical behaviour. The re-extracted bank used more rollouts per

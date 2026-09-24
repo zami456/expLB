@@ -114,12 +114,15 @@ overfit. As a control, three random directions replace the persona components (f
 \subsection{Activations}
 
 For every example, we take the residual-stream activations of Llama-3.3-70B-Instruct over the
-response tokens, through NDIF, at layers 20, 40 and 44 of 80. The tokens are those of the
+response tokens, through NDIF, at \V{depth-n} of its 80 layers: every fourth from \V{depth-first}
+to 76, plus layer~\V{depth-last}, the last block. We report layer~40 throughout and give the whole
+curve in \cref{sec:depth}. The tokens are those of the
 detection pipeline of \citet{goldowskydill2025detecting} as adapted by Liars' Bench, which
 excludes system prompts. We mean-pool them into one vector $z$ per example. Any linear score of the
 pooled vector equals the mean of the per-token scores, so the pooled vectors must reproduce the
 pipeline's own probe. Rescored with the probe the pipeline trained on RepE, they match its reported
-AUROCs to four decimal places at every layer (\cref{app:repro}). One setting differs from Liars'
+AUROCs to four decimal places at layers 20, 40 and 44, the three the pipeline scored
+(\cref{app:repro}); \cref{app:depth} gives the corresponding check for the swept layers. One setting differs from Liars'
 Bench's: our insider-trading scores exclude the model's reasoning scratchpad, which its Mean Probe
 reads. Its own ablation shows that excluding the scratchpad raises that probe's insider-trading
 AUROC from \V{lb-it-reas-auroc} to \V{lb-it-noreas-auroc} \citep[Table~17]{kretschmar2025liars}.

@@ -27,7 +27,7 @@ richer persona sets.
 
 We take both. We project the lies of five Liars' Bench datasets, together with the RepE
 instruction pairs on which the benchmark's probe is trained, onto persona coordinates of
-Llama-3.3-70B-Instruct at three depths, and measure cross-dataset transfer over the full
+Llama-3.3-70B-Instruct at \V{depth-n} depths, and measure cross-dataset transfer over the full
 train--test matrix (\cref{fig:pipeline}). This exposes a failure the original study did not test.
 On \hpkr, the published persona contrast inverts: it ranks lies as more honest than honest answers,
 with AUROC \V{zs-dec-hpkr-L20} at layer~20. The cause lies in the personas. \hpkr's lies are
@@ -58,22 +58,29 @@ probe.}
   knowledge-denial contrast (4 deceptive vs.\ 6 honest personas) and an extended contrast that
   pools both deceptive and both honest sides (12 vs.\ 13).
 \item \textbf{Persona coordinates at 70B.} We scale the method from 3B and 8B models to
-  Llama-3.3-70B-Instruct, evaluated on five Liars' Bench datasets and RepE at layers 20, 40 and 44.
+  Llama-3.3-70B-Instruct, evaluated on five Liars' Bench datasets and RepE at \V{depth-n} layers,
+  every fourth from \V{depth-first} to 76 plus the last block.
 \item \textbf{A better score on Liars' Bench's hardest dataset.} On \hpkr, with no benchmark
   labels, the knowledge-denial contrast reaches \V{zs-den-hpkr-L40} AUROC and
   \V{op-den-balacc-hpkr-L40} balanced accuracy at 1\% FPR at layer~40. For the same model, Liars'
   Bench reports \V{lb-mean-balacc-hpkr} for its Mean Probe, \V{lb-followup-balacc-hpkr} for its
   Follow-Up Probe, and \V{lb-upper-balacc-hpkr} for a probe trained on privileged in-distribution
-  labels. A RepE-trained probe in our own pipeline stays at \V{bp-balacc-hpkr-L40} at every layer.
+  labels. A RepE-trained probe in our own pipeline stays at \V{bp-balacc-hpkr-L40} at every one of the
+  \V{depth-n} layers, though from layer~\V{depth-hpkr-base-auroc-peak-layer} it ranks \hpkr{}
+  better than any contrast we build (\cref{sec:depth}).
   We also identify why the published contrast inverts there: none of its deceptive personas lies
   by denying knowledge.
 \item \textbf{Cross-dataset transfer at 70B.} Across the full train--test matrix, the zero-shot
   extended contrast reaches \V{off-ext-L40} mean off-diagonal AUROC at layer~40, against
   \V{off-base-L40} for 8192-dimensional probes each trained on one dataset. It beats their average
-  over training sets on every held-out dataset, at every layer we tested.
+  over training sets on every held-out dataset at every layer through
+  \V{depth-pertest-holds-last}; deeper, where every contrast is weakest,
+  \V{depth-pertest-exception} are exceptions (\cref{sec:depth}).
 \item \textbf{One direction beats the persona subspace.} The 1-d contrast outscores probes on the
-  three leading persona principal components at every depth, by \V{gap-ext-extpcthree-L20} AUROC at
-  layer~20 and \V{gap-ext-extpcthree-L44} at layer~44.
+  three leading persona principal components at \V{depth-pc-wins-complement} of the \V{depth-n}
+  layers we swept, by \V{gap-ext-extpcthree-L20} AUROC at layer~20 and
+  \V{gap-ext-extpcthree-L44} at layer~44; it reverses only inside the deep trough
+  (\cref{sec:depth}).
 \item \textbf{An evaluation under the benchmark's own protocol.} We compare the persona contrasts
   with the benchmark's RepE-trained probe at its 1\% false-positive threshold on Alpaca, with
   bootstrap intervals. The appendices report how the direction behaves at the Follow-Up Probe's

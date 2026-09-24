@@ -23,6 +23,7 @@ HERE = Path(__file__).resolve().parent
 RESULTS = HERE.parent / "results"
 OUT = HERE / "generated"
 TEXT_WIDTH = 6.5  # inches, the article's text block
+LABEL_X = 80.8  # the reference-line labels, just past the last layer on the depth axes
 
 mpl.rcParams.update({
     "font.size": 8, "axes.titlesize": 9, "axes.labelsize": 8, "legend.fontsize": 7.5,
@@ -38,6 +39,8 @@ ARM_LABELS = {
     "den": "knowledge-denial contrast (4 v 6)", "ext": "extended contrast (12 v 13)"}
 OP_ARMS = {P.BASE_ARM: "base", "deception axis (8v7)": "dec",
            "knowledge-denial axis (4v6)": "den", "extended axis (12v13)": "ext"}
+# the same four detectors as depth.csv names them, keyed our way
+ARMS_BY_KEY = {key: arm for arm, key in OP_ARMS.items()}
 ORDER = ["convince_me__plain", "harm_refusal_choice__plain", "harm_refusal_knowledge_report__plain",
          "insider_trading_cadenza__plain", "instruct_dishonesty__plain", "repe_honesty__plain"]
 
@@ -89,7 +92,9 @@ def transfer_matrices(layer: int = 40) -> None:
 
 def hpkr() -> None:
     """HP-KR across depth: every detector we ran, against the benchmark's reported probes."""
-    layers = [20, 40, 44]
+    from deception_detection.scripts import layer_sweep as S
+
+    layers = list(S.ALL_LAYERS)
     zero = {L: pd.read_csv(RESULTS / f"persona_ood_ext_L{L}" / "zero_shot.csv").set_index("dataset")
             for L in layers}
     ops = {}
@@ -114,10 +119,11 @@ def hpkr() -> None:
         ax.axhline(0.5, color=F.INK_MUTED, lw=0.8, ls=(0, (4, 3)), zorder=1)
         upper = reported[metric]["Upper-Bound Probe"]
         ax.axhline(upper, color=reference, lw=0.9, ls="--", zorder=1)
-        ax.text(45.2, upper, "LB upper bound\n(privileged)", va="center", fontsize=6.3,
+        ax.text(LABEL_X, upper, "LB upper bound\n(privileged)", va="center", fontsize=6.3,
                 color=F.INK_MUTED, linespacing=0.95)
-        ax.set_xticks(layers, [f"L{L}" for L in layers])
-        ax.set_xlim(18.5, 45)
+        ax.set_xticks(layers, [str(L) for L in layers], fontsize=6)
+        ax.set_xlim(layers[0] - 1.5, layers[-1] + 1.5)
+        ax.set_xlabel("layer (block output)")
         ax.set_ylim(0, 1.02)
         ax.set_title(title, loc="left")
         ax.grid(axis="y", color=F.NEUTRAL, lw=0.8, zorder=0)
@@ -127,10 +133,10 @@ def hpkr() -> None:
     low = [reported["auroc"][p] for p in ("Mean Probe", "Follow-Up Probe")]
     for value, style in zip(low, (":", "-."), strict=True):
         axes[0].axhline(value, color=reference, lw=0.9, ls=style, zorder=1)
-    axes[0].text(45.2, float(np.mean(low)), "LB Mean and\nFollow-Up probes", va="center",
+    axes[0].text(LABEL_X, float(np.mean(low)), "LB Mean and\nFollow-Up probes", va="center",
                  fontsize=6.3, color=F.INK_MUTED, linespacing=0.95)
     for key in ("base", "dec", "den", "ext"):
-        axes[0].plot(layers, series["auroc"][key], marker="o", ms=4.5, lw=1.4, zorder=3,
+        axes[0].plot(layers, series["auroc"][key], marker="o", ms=3.0, lw=1.4, zorder=3,
                      color=ARM_COLOURS[key], label=ARM_LABELS[key],
                      markeredgecolor="white" if key != "base" else F.INK_MUTED,
                      markeredgewidth=0.6)
@@ -139,17 +145,17 @@ def hpkr() -> None:
     # benchmark's Mean Probe. Drawn as spread markers so none hides another.
     follow_up = reported["balacc"]["Follow-Up Probe"]
     axes[1].axhline(follow_up, color=reference, lw=0.9, ls="-.", zorder=1)
-    axes[1].text(45.2, follow_up, "LB Follow-Up\nprobe", va="center", fontsize=6.3,
+    axes[1].text(LABEL_X, follow_up, "LB Follow-Up\nprobe", va="center", fontsize=6.3,
                  color=F.INK_MUTED, linespacing=0.95)
-    axes[1].plot(layers, series["balacc"]["den"], marker="o", ms=4.5, lw=1.4, zorder=3,
+    axes[1].plot(layers, series["balacc"]["den"], marker="o", ms=3.0, lw=1.4, zorder=3,
                  color=ARM_COLOURS["den"], markeredgecolor="white", markeredgewidth=0.6)
-    for key, shift in (("base", -0.7), ("dec", 0.0), ("ext", 0.7)):
+    for key, shift in (("base", -1.1), ("dec", 0.0), ("ext", 1.1)):
         axes[1].plot([L + shift for L in layers], series["balacc"][key], ls="none", marker="o",
-                     ms=4.5, zorder=3, color=ARM_COLOURS[key],
+                     ms=3.0, zorder=3, color=ARM_COLOURS[key],
                      markeredgecolor="white" if key != "base" else F.INK_MUTED,
                      markeredgewidth=0.6)
-    axes[1].annotate("flag nothing: 0.50, as does\nthe LB Mean Probe", xy=(30, 0.5),
-                     xytext=(30, 0.28), ha="center", fontsize=6.5, color=F.INK_MUTED,
+    axes[1].annotate("flag nothing at any depth: 0.50,\nas does the LB Mean Probe", xy=(58, 0.5),
+                     xytext=(48, 0.30), ha="center", fontsize=6.5, color=F.INK_MUTED,
                      arrowprops=dict(arrowstyle="-", color=F.INK_MUTED, lw=0.6))
     axes[0].set_ylabel("HP-KR score")
     handles, labels = axes[0].get_legend_handles_labels()
@@ -236,12 +242,67 @@ def personas(layer: int = 40) -> None:
     save(fig, "fig_personas.pdf")
 
 
+def depth() -> None:
+    """Transfer and the zero-shot average against layer, over the stride-4 grid from 20 to 79.
+
+    Two panels, not the six of `results/persona_depth/depth.png`: HP-KR gets its own figure across
+    the same grid (`hpkr`), and the balanced-accuracy curves of these two metrics say nothing the
+    text argues from. The two contrasts built on knowledge denial share a hue, so dash and marker
+    carry the distinction between them.
+    """
+    from deception_detection.scripts import layer_sweep as S
+
+    table = pd.read_csv(RESULTS / "persona_depth" / "depth.csv")
+    layers = sorted(table["layer"].unique())
+    style = {  # key -> (dash, marker); colour comes from ARM_COLOURS
+        "base": ((0, (6, 2, 1, 2)), "v"), "dec": ("-", "o"),
+        "den": ((0, (5, 2)), "s"), "ext": ("-", "o")}
+    transfer_arm = dict(ARMS_BY_KEY, base="single-source probe (8192-d)")
+    panels = [
+        (S.TRANSFER_SOURCE, "auroc", "Transfer: mean off-diagonal AUROC", transfer_arm),
+        (S.LB_SOURCE, "auroc", "Zero-shot: Liars' Bench average AUROC", ARMS_BY_KEY),
+    ]
+    fig, axes = plt.subplots(1, 2, figsize=(TEXT_WIDTH, 2.45), constrained_layout=True)
+    for index, (ax, (source, metric, title, arms)) in enumerate(zip(axes.ravel(), panels)):
+        for key, arm in arms.items():
+            rows = table[(table.source == source) & (table.metric == metric) & (table.arm == arm)]
+            if rows.empty:
+                continue
+            rows = rows.sort_values("layer")
+            dash, marker = style[key]
+            label = "single-source probe" if (key == "base" and source == S.TRANSFER_SOURCE) \
+                else ARM_LABELS[key]
+            ax.plot(rows["layer"], rows["value"], color=ARM_COLOURS[key], lw=1.2, ls=dash,
+                    marker=marker, ms=2.6, label=label)
+        ax.axhline(0.5, color=F.INK_MUTED, lw=0.7, ls=(0, (4, 3)))
+        # where every arm sits on chance, autoscale magnifies float noise into structure
+        low, high = ax.get_ylim()
+        if high - low < 0.06:
+            ax.set_ylim((high + low) / 2 - 0.03, (high + low) / 2 + 0.03)
+        ax.set_title(title, loc="left")
+        ax.set_xticks(layers)
+        ax.set_xticklabels([str(layer) for layer in layers], fontsize=6)
+        ax.grid(axis="y", color=F.NEUTRAL, lw=0.8, zorder=0)
+        ax.set_axisbelow(True)
+        ax.set_xlabel("layer (block output)")
+        clean(ax)
+        # Each panel gets its own legend: the grey line is a different detector in each -- the
+        # single-source transfer probe on the left, the RepE-trained base probe on the right --
+        # so one shared key would name it wrongly in one of them.
+        # an opaque background: the chance line runs behind the last entry otherwise
+        ax.legend(loc="lower left", fontsize=6, frameon=True, facecolor="white",
+                  edgecolor="none", framealpha=0.95, handlelength=2.0, labelspacing=0.25,
+                  borderpad=0.2)
+    save(fig, "fig_depth.pdf")
+
+
 def main() -> None:
     OUT.mkdir(exist_ok=True)
     transfer_matrices()
     hpkr()
     operating()
     personas()
+    depth()
 
 
 if __name__ == "__main__":

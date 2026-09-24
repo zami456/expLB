@@ -145,11 +145,14 @@ that a fixed direction cannot.
 \label{app:sycophancy}
 
 The bank's sycophancy contrast (5 v 5) was built for a different behaviour. It detects the
-instructed lies well, and it inverts on \hpkr{} at every layer (\cref{tab:syc}). Its signal on the
+instructed lies well, and it never ranks \hpkr{} better than chance at any depth we swept: its best
+is \V{depth-syc-hpkr-max} at layer~\V{depth-syc-hpkr-max-layer}, and it is inverted at the three
+layers of \cref{tab:syc}. Its signal on the
 instructed datasets suggests that part of what any contrast of this kind reads is the shared
 register of role-played misbehaviour rather than deception itself. The contrast from deception
 personas transfers further: its mean off-diagonal AUROC is \V{off-dec-L40} at layer~40, against
-\V{off-syc-L40} for the sycophancy contrast, and it leads at every layer.
+\V{off-syc-L40} for the sycophancy contrast, and it leads at \V{depth-dec-over-syc-n} of the
+\V{depth-n} layers swept.
 
 \begin{table}[h]
 \centering
@@ -183,3 +186,27 @@ published \V{lb-mean-balacc-it}.
 \citep{fiottokaufman2024nnsight}. Every analysis in this paper runs on a CPU from the pooled
 activations and the persona vectors, and \nolinkurl{paper/make_numbers.py} regenerates every number
 from the released result files.
+
+\section{The depth sweep}
+\label{app:depth}
+
+Layers 20, 40 and 44 were pooled from the pipeline's per-token activation cache, about 60\,GB a
+layer. The other \V{depth-new-n} layers were built differently, and we measured the difference
+rather than assuming it.
+
+\paragraph{Pooling.} For the new layers we computed each example's mean over its detection tokens
+remotely on NDIF, fetching every layer in one forward pass. This is the same reduction the local
+pooling performs, over the same rows and the same tokenisation.
+
+\paragraph{The base probe.} At each new layer the pipeline trained its own RepE probe, reading
+only RepE's statement tokens. The pipeline never scored these probes, so they have no results
+table, and they enter the zero-shot comparison without the reproduction check we apply at layers
+20, 40 and 44.
+
+\paragraph{What we checked.} Layer~40 exists both ways, so it is the test. The remotely pooled
+vectors agree with the locally pooled ones to a row cosine of at least \V{depth-check-cos}, and
+their knowledge-denial AUROCs differ by at most \V{depth-check-auroc}. The retrained probe matches the
+original's direction at cosine \V{depth-check-probe-cos} and lands within
+\V{depth-check-probe-auroc} AUROC of it on every Liars' Bench dataset. Every new layer's pooled
+files hold exactly the rows layer~40's hold, dataset by dataset, and every new probe scores
+\V{depth-check-repe-val} on the RepE validation split, as the original probes do.
