@@ -15,7 +15,11 @@ direction reaches \V{zs-den-hpkr-L40} AUROC and \V{op-den-balacc-hpkr-L40} balan
 privileged labels, \V{lb-upper-balacc-hpkr}. Across the full train--test matrix of six datasets
 at layer~40, the extended persona contrast reaches \V{off-ext-L40} mean off-diagonal AUROC, against
 \V{off-base-L40} for 8192-dimensional probes each trained on one dataset, and beats their average
-on every held-out dataset; the persona principal components add nothing beyond it. Repeating the
+on every held-out dataset; the persona principal components add nothing beyond it. The supervised
+probes score higher than the contrast ever does on the dataset they were fitted to and give up
+\V{depth-base-drop-min} to \V{depth-base-drop-max} AUROC on leaving it, while the contrast, fitted
+on no dataset, transfers at its in-distribution score to within \V{depth-ext-drop-max} and never
+ranks any dataset below chance. Repeating the
 evaluation at \V{depth-n} layers turns both results into curves: ranking peaks at
 layer~\V{depth-off-ext-peak-layer} rather than the layer~40 we report, and on \hpkr{} the
 RepE-trained probe out-ranks every persona contrast from layer~\V{depth-hpkr-base-auroc-peak-layer}

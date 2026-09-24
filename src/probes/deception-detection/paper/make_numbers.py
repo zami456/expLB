@@ -347,6 +347,9 @@ def collect() -> tuple[Numbers, dict[str, object]]:
           float(curve(S.LB_SOURCE, "auroc", zero_arms["ext"]).loc[base_best]
                 - curve(S.LB_SOURCE, "auroc", zero_arms["base"]).loc[base_best]))
     n.put("depth-zs-ext-at-base-peak", curve(S.LB_SOURCE, "auroc", zero_arms["ext"]).loc[base_best])
+    # and the mirror: the base probe where the contrast peaks, so both best cases are quotable
+    ext_best = int(curve(S.LB_SOURCE, "auroc", zero_arms["ext"]).idxmax())
+    n.put("depth-zs-base-at-ext-peak", curve(S.LB_SOURCE, "auroc", zero_arms["base"]).loc[ext_best])
 
     # the extended contrast against the published one, across the whole grid
     ext_off = curve(S.TRANSFER_SOURCE, "auroc", transfer_arms["ext"])
@@ -390,6 +393,41 @@ def collect() -> tuple[Numbers, dict[str, object]]:
         summary(layer).loc["ext_pc3", "off_diagonal_mean"]
         - summary(layer).loc["ext_axis1", "off_diagonal_mean"] for layer in pc_wins))
 
+    # --- the contrast against the trained probe, over the grid rather than at one layer --------
+    # The comparison is worth making across depth because it is not a layer-40 accident: these
+    # are the margins at the *worst* layer, not the best. Each is asserted, so the build fails if
+    # a rebuild ever breaks one.
+    base_off = curve(S.TRANSFER_SOURCE, "auroc", transfer_arms["base"])
+    if not (ext_off > base_off).all():
+        raise AssertionError("the contrast no longer out-transfers the single-source probe")
+    n.put("depth-off-ext-over-base-min", float((ext_off - base_off).min()))
+    n.put("depth-off-ext-over-base-at-peak",
+          float((ext_off - base_off).loc[int(ext_off.idxmax())]))
+
+    # the generalization gap: what each arm keeps when it leaves its training set
+    drops = {}
+    for key, feature in (("base", "baseline"), ("ext", "ext_axis1")):
+        table = pd.DataFrame({layer: summary(layer).loc[feature] for layer in grid}).T
+        drops[key] = table["diagonal_mean"] - table["off_diagonal_mean"]
+        n.put(f"depth-{key}-diag-min", float(table["diagonal_mean"].min()))
+        n.put(f"depth-{key}-diag-max", float(table["diagonal_mean"].max()))
+    if not (drops["base"] > 0.2).all():
+        raise AssertionError("the single-source probe no longer loses a fifth off the diagonal")
+    n.put("depth-base-drop-min", float(drops["base"].min()))
+    n.put("depth-base-drop-max", float(drops["base"].max()))
+    # the contrast is fitted on no dataset, so it has no in-distribution advantage to lose
+    n.put("depth-ext-drop-max", float(drops["ext"].abs().max()), 3)
+
+    # the contrast never ranks a dataset backwards, at any layer (the base probe does; see below)
+    worst = 1.0
+    for layer in grid:
+        scored = zero_shot(layer)
+        scored = scored[scored["auroc_axis"].notna()]  # the control has one class
+        worst = min(worst, float(scored["auroc_ext_axis"].min()))
+    if worst <= 0.5:
+        raise AssertionError("the extended contrast now inverts on some dataset")
+    n.put("depth-ext-worst-dataset", worst)
+
     # the sycophancy contrast, over the grid rather than over the three layers of tab:syc
     syc_hpkr, dec_lead = [], []
     for layer in grid:
@@ -414,6 +452,7 @@ def collect() -> tuple[Numbers, dict[str, object]]:
     if len(clean_layers) != 1:
         raise AssertionError(f"expected one layer with no inversion, got {clean_layers}")
     n.put("depth-base-no-invert", str(clean_layers[0]))
+    n.put("depth-base-invert-layers", sum(1 for names in inverted.values() if names))
     it_layers = [layer for layer, names in inverted.items() if "IT" in names]
     if it_layers != [layer for layer in grid if layer >= min(it_layers)]:
         raise AssertionError("IT inversion is no longer a contiguous tail")

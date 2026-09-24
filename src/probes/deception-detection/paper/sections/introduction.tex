@@ -72,7 +72,10 @@ probe.}
   by denying knowledge.
 \item \textbf{Cross-dataset transfer at 70B.} Across the full train--test matrix, the zero-shot
   extended contrast reaches \V{off-ext-L40} mean off-diagonal AUROC at layer~40, against
-  \V{off-base-L40} for 8192-dimensional probes each trained on one dataset. It beats their average
+  \V{off-base-L40} for 8192-dimensional probes each trained on one dataset, and leads them at every
+  one of the \V{depth-n} layers we swept, by at least \V{depth-off-ext-over-base-min} AUROC. Those
+  probes lose \V{depth-base-drop-min}--\V{depth-base-drop-max} AUROC on leaving the dataset they
+  were fitted to; the contrast, fitted on none, loses at most \V{depth-ext-drop-max}. It beats their average
   over training sets on every held-out dataset at every layer through
   \V{depth-pertest-holds-last}; deeper, where every contrast is weakest,
   \V{depth-pertest-exception} are exceptions (\cref{sec:depth}).

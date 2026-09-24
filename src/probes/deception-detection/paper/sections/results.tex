@@ -88,7 +88,21 @@ of \V{diag-base-L40} at layer~40, but lose \V{drop-base-L40} of it off the diago
 tested on \V{worst-base-test-L40}, scores \V{worst-base-L40}. The extended persona contrast was
 shaped by no evaluation dataset, and it reaches \V{off-ext-L20}, \V{off-ext-L40} and \V{off-ext-L44}
 off the diagonal at layers 20, 40 and 44, against \V{off-base-L20}, \V{off-base-L40} and
-\V{off-base-L44} for the raw probes. The comparison holds per dataset as well as overall, but only down to a point. Averaged over
+\V{off-base-L44} for the raw probes. The gap is not particular to those layers: over the
+\V{depth-n} layers we swept the contrast leads the raw probes off the diagonal at every one, by at
+least \V{depth-off-ext-over-base-min} AUROC and by \V{depth-off-ext-over-base-at-peak} where both
+are strongest (\cref{fig:depth}).
+
+\paragraph{The contrast has no in-distribution advantage to lose.} The two arms differ less in how
+well they score a held-out dataset than in how much they give up when they reach one. Across every
+layer we swept, the raw probes score between \V{depth-base-diag-min} and \V{depth-base-diag-max}
+on the dataset they were fitted to and between \V{depth-base-drop-min} and \V{depth-base-drop-max}
+lower off it. The extended contrast's off-diagonal mean equals its in-distribution mean to within
+\V{depth-ext-drop-max} at every layer. This is what it means for a direction to be fitted on no
+dataset: there is no training set for it to be better on, so the number measured in distribution is
+the number that transfers. A supervised probe reaches higher on its own dataset than the contrast
+ever reaches anywhere --- the comparison is not that the contrast fits better, but that it keeps
+what it has. The comparison holds per dataset as well as overall, but only down to a point. Averaged over
 training sets, the extended contrast beats the raw probes on every held-out dataset at the three
 layers we report and at every layer through \V{depth-pertest-holds-last}
 (\cref{tab:pertest}, \cref{app:tables}). It stops holding deeper: at
@@ -149,12 +163,26 @@ detector.}
 \end{figure}
 
 \Cref{fig:operating,tab:operating} put the persona contrasts under the benchmark's own protocol,
-beside the RepE-trained base probe. At layer~40, averaged over the five Liars' Bench datasets, the
+beside the RepE-trained base probe. Two things hold at every one of the \V{depth-n} layers we
+swept, and they are the ones to weigh: the extended contrast \emph{ranks} the Liars' Bench average
+above the base probe at all of them, by at least \V{depth-zs-ext-over-base-min} AUROC, and it never
+ranks any dataset backwards --- its lowest score anywhere is \V{depth-ext-worst-dataset}, while the
+base probe inverts on some dataset at \V{depth-base-invert-layers} of the \V{depth-n}
+(\cref{sec:depth}). A detector that is never worse than chance on a new distribution is a different
+proposition from one that is sometimes confidently wrong, and the contrast achieves it with no
+benchmark labels.
+
+At layer~40, averaged over the five Liars' Bench datasets, the
 extended contrast reaches \V{op-ext-balacc-L40} balanced accuracy, \V{op-ext-recall-L40} recall and
 \V{op-ext-auroc-L40} AUROC. The base probe reaches \V{op-base-balacc-L40}, \V{op-base-recall-L40}
 and \V{op-base-auroc-L40}. The knowledge-denial contrast is the best detector at this threshold,
 with \V{op-den-balacc-L40} balanced accuracy and \V{op-den-recall-L40} recall. At layers 40 and 44
-the persona contrasts lead on all three metrics.
+the persona contrasts lead on all three metrics. At the contrast's own best layer,
+\V{depth-zs-ext-peak-layer}, the two score \V{depth-zs-ext-peak} against
+\V{depth-zs-base-at-ext-peak}; at the base probe's own best layer,
+\V{depth-zs-base-peak-layer}, the gap narrows
+to \V{depth-zs-margin-at-base-peak} (\cref{sec:depth}). Both are worth stating: the first is what
+the method reaches, the second is what it is worth against a baseline tuned as carefully as itself.
 
 \begin{table}[t]
 \centering
