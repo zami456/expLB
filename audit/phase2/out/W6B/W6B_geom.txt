@@ -1,0 +1,46 @@
+published axis : C:\Users\SURAIYA\Documents\STUDY\thesis\expLB\run-hf275\published_assistant_axis.pt torch.Size([80, 8192]) md5 2807d7caa7f5f0126be9ba4c4b6ea906
+paper16 OLD    : C:\Users\SURAIYA\Documents\STUDY\thesis\expLB\run-paper16\axes_vectors_s3.pt md5 5d05a42542ae13fc7ac5d893a4ae4f8c | vectors_dir = C:\Users\SURAIYA\Documents\STUDY\thesis\expLB\run-paper16\vectors_s3 | counts = {'assistant': (1, 25), 'deception': (8, 7), 'sycophancy': (5, 5), 'unified': (13, 12)}
+  old assistant shape (80, 8192)
+paper16 fp32   : rebuilt from C:\Users\SURAIYA\Documents\STUDY\thesis\expLB\audit\cache\labpc\run-paper16\vectors_s3_fp32 (26 files: 1 default-like, 25 role)
+  SANITY: rebuild of the OLD bank vs its stored assistant axis, min cos over 80 layers = 1.000000
+
+cos(paper16 assistant, published Assistant Axis), per layer
+ layer     OLD bank fp32 rebuild  old vs fp32
+     0       0.6230       0.6225     0.999959
+     4       0.5927       0.5925     0.999977
+     8       0.4875       0.4873     0.999986
+    12       0.3929       0.3930     0.999990
+    16       0.4711       0.4711     0.999993
+    20       0.3662       0.3664     0.999996  <-- doc layer
+    22       0.3059       0.3062     0.999994  <-- doc layer
+    24       0.2649       0.2654     0.999994
+    28       0.3215       0.3218     0.999989
+    32       0.3782       0.3785     0.999991
+    36       0.3807       0.3805     0.999994
+    40       0.3719       0.3718     0.999996  <-- doc layer
+    44       0.3566       0.3565     0.999997  <-- doc layer
+    48       0.3364       0.3364     0.999997
+    52       0.3428       0.3428     0.999997
+    56       0.3301       0.3301     0.999997
+    60       0.2997       0.2998     0.999997  <-- doc layer
+    64       0.2925       0.2928     0.999996
+    68       0.2774       0.2781     0.999993
+    72       0.3078       0.3080     0.999994
+    76       0.3442       0.3447     0.999985
+
+At the layers the thesis works at (20, 22, 40, 44, 60):
+   L20  old 0.3662   fp32 0.3664
+   L22  old 0.3059   fp32 0.3062
+   L40  old 0.3719   fp32 0.3718
+   L44  old 0.3566   fp32 0.3565
+   L60  old 0.2997   fp32 0.2998
+   OLD  range over those layers : 0.2997 .. 0.3719
+   fp32 range over those layers : 0.2998 .. 0.3718
+   Q4 erasure layers only (20, 40, 44):
+     OLD  0.3566 .. 0.3719    fp32 0.3565 .. 0.3718
+   whole L20-L60 band (41 layers):
+     OLD  0.2603 .. 0.4212    fp32 0.2601 .. 0.4209
+   all 80 layers:
+     OLD  0.2603 .. 0.6590    fp32 0.2601 .. 0.6586
+   max |old - fp32| cos-to-published over all layers: 0.000796
+   min cos(old assistant, fp32 assistant) over all layers: 0.999959

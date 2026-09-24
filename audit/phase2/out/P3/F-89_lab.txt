@@ -1,0 +1,46 @@
+==============================================================================
+LAYER 20, mean pooling, paper probe, target column = sycophancy_mt
+  paraphrased holding (13)         AUROC=0.6483  vs raw=+0.0883  [+0.0103, +0.1572]  P(<=0)=0.013  clears
+  original holding (13)            AUROC=0.6438  vs raw=+0.0838  [+0.0096, +0.1496]  P(<=0)=0.013  clears
+  neutral / format-matched (13)    AUROC=0.5919  vs raw=+0.0319  [-0.0768, +0.1249]  P(<=0)=0.256  null
+  none - anchor only (7)           AUROC=0.5869  vs raw=+0.0269  [-0.1120, +0.1523]  P(<=0)=0.341  null
+  none - ctrl copy (7)             AUROC=0.5869  vs raw=+0.0269  [-0.1120, +0.1523]  P(<=0)=0.341  null
+  raw 8192-d                       AUROC=0.5600
+  --- the three contrasts ---
+  holding - neutral        +0.0519  [-0.0250, +0.1262]  P(<=0)=0.092  does NOT clear
+  paraphrase - neutral     +0.0563  [-0.0194, +0.1305]  P(<=0)=0.073  does NOT clear
+  any six - none           +0.0570  [-0.0594, +0.1740]  P(<=0)=0.169  does NOT clear
+  retention: neutral keeps 38% of holding's margin over raw (+0.0319 of +0.0838)
+  identity pc:capitulation@2 vs pc:cap_vs_default@2: max|diff| over the 110 off-diagonal cells = 0
+  identity pc:cap_only@2 vs pc:cap_only_ctrl@2: max|diff| over the 110 off-diagonal cells = 0
+==============================================================================
+LAYER 40, mean pooling, paper probe, target column = sycophancy_mt
+  paraphrased holding (13)         AUROC=0.7229  vs raw=+0.1216  [+0.0541, +0.1994]  P(<=0)=0.000  clears
+  original holding (13)            AUROC=0.7136  vs raw=+0.1123  [+0.0502, +0.1847]  P(<=0)=0.000  clears
+  neutral / format-matched (13)    AUROC=0.6889  vs raw=+0.0875  [+0.0336, +0.1402]  P(<=0)=0.001  clears
+  none - anchor only (7)           AUROC=0.5935  vs raw=-0.0078  [-0.1122, +0.0952]  P(<=0)=0.558  null
+  none - ctrl copy (7)             AUROC=0.5935  vs raw=-0.0078  [-0.1122, +0.0952]  P(<=0)=0.558  null
+  raw 8192-d                       AUROC=0.6013
+  --- the three contrasts ---
+  holding - neutral        +0.0247  [-0.0067, +0.0718]  P(<=0)=0.113  does NOT clear
+  paraphrase - neutral     +0.0340  [+0.0018, +0.0804]  P(<=0)=0.018  clears
+  any six - none           +0.1201  [+0.0336, +0.2132]  P(<=0)=0.001  clears
+  retention: neutral keeps 78% of holding's margin over raw (+0.0875 of +0.1123)
+  identity pc:capitulation@2 vs pc:cap_vs_default@2: max|diff| over the 110 off-diagonal cells = 0
+  identity pc:cap_only@2 vs pc:cap_only_ctrl@2: max|diff| over the 110 off-diagonal cells = 0
+==============================================================================
+LAYER 44, mean pooling, paper probe, target column = sycophancy_mt
+  paraphrased holding (13)         AUROC=0.6984  vs raw=+0.1153  [+0.0434, +0.1964]  P(<=0)=0.000  clears
+  original holding (13)            AUROC=0.6904  vs raw=+0.1073  [+0.0390, +0.1849]  P(<=0)=0.000  clears
+  neutral / format-matched (13)    AUROC=0.6627  vs raw=+0.0796  [+0.0211, +0.1374]  P(<=0)=0.004  clears
+  none - anchor only (7)           AUROC=0.5957  vs raw=+0.0126  [-0.0907, +0.1163]  P(<=0)=0.406  null
+  none - ctrl copy (7)             AUROC=0.5957  vs raw=+0.0126  [-0.0907, +0.1163]  P(<=0)=0.406  null
+  raw 8192-d                       AUROC=0.5831
+  --- the three contrasts ---
+  holding - neutral        +0.0277  [-0.0135, +0.0868]  P(<=0)=0.149  does NOT clear
+  paraphrase - neutral     +0.0357  [-0.0014, +0.0931]  P(<=0)=0.038  does NOT clear
+  any six - none           +0.0947  [+0.0138, +0.1829]  P(<=0)=0.009  clears
+  retention: neutral keeps 74% of holding's margin over raw (+0.0796 of +0.1073)
+  identity pc:capitulation@2 vs pc:cap_vs_default@2: max|diff| over the 110 off-diagonal cells = 0
+  identity pc:cap_only@2 vs pc:cap_only_ctrl@2: max|diff| over the 110 off-diagonal cells = 0
+python exit 0

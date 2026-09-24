@@ -1,0 +1,152 @@
+##############################################################################
+O-086 / O-088 -- thesis 7.6 Q6 table rows (docs/thesis/persona-coordinates-70b-results.md:725,727)
+C:\Users\SURAIYA\Documents\STUDY\thesis\expLB\run-coords\q6_layers.json  size=11720  mtime=2026-09-16 21:22:58.089215
+  targets=[20, 22, 40]  tol=0.02  n_rows=23
+  [trained transfer, full corpus] pc:deception / mms / mean  file=layer_sweep_passB_mms.json
+     L20=0.5237417568658953
+     L22=0.5174643904798112
+     L40=0.6607664342269597
+     best_layer=L40  best=0.6607664342269597
+  [trained transfer, Pass A (no layer 22)] pc:deception / mms / mean  file=layer_sweep_mms.json
+     L20=0.5226691484001008
+     L22=None
+     L40=0.6383554736709498
+     best_layer=L40  best=0.6383554736709498
+  [zero-shot, full corpus] deception contrast axis / mean  file=dotproducts_mean.json
+     L20=0.6080517796274055
+     L22=0.6295062584915116
+     L40=0.8630105619589489
+     best_layer=L40  best=0.8630105619589489
+  [zero-shot, full corpus] PC1 / mean  file=dotproducts_mean.json
+     L20=0.672741905827186
+     L22=0.6985357918446898
+     L40=0.8768949185173067
+     best_layer=L40  best=0.8768949185173067
+
+-- LEVEL 2: recompute the same rows from the files q6_layers.json says it read --
+C:\Users\SURAIYA\Documents\STUDY\thesis\expLB\run-coords\layer_sweep_passB_mms.json  size=3174  mtime=2026-09-16 19:21:56.304284
+  top-level keys: ['pooling', 'k', 'probe', 'bank', 'sweep']
+  {"pooling": "mean", "k": 5, "probe": "mms", "bank": "axes_vectors_s3_fp32.pt", "sweep": [{"layer": 0, "raw": 0.5553784677552946, "pc:deception": 0.5452231977689792, "axes": 0.5560017123141086}, {"layer": 4, "raw": 0.5393112040084648, "pc:deception": 0.5062952210777103, "axes": 0.5111786969408137}, {"layer": 8, "raw": 0.5407827266160585, "pc:deception": 0.5055909377927095, "axes": 0.5080318251460484}, {"layer": 12, "raw": 0.5583613913537177, "pc:deception": 0.5014861688582984, "axes": 0.5047424941617733}, {"layer": 16, "raw": 0.5855602162742516, "pc:deception": 0.5307647593443705, "axes": 0.5229573989188884}, {"layer": 20, "raw": 0.6523819828366132, "pc:deception": 0.5237417568658953, "axes": 0.5697687176723019}, {"layer": 22, "raw": 0.6462583809589518, "pc:deception": 0.5174643904798112, "axes": 0.5661872589200972}, {"layer": 24, "raw": 0.6435688927433016, "pc:deception": 0.5145026016096356, "axes": 0.5629688244644494}, {"layer": 28, "raw": 0.7029390270171648, "pc:deception": 0.5723274520198576, "axes": 0.6590691088325892}, {"layer": 32, "raw": 0.7167282524720204, "pc:deception": 0.5963350750758784, "axes": 0.6770935393316978}, {"layer": 36, "raw": 0.7008481375382198, "pc:deception
+
+C:\Users\SURAIYA\Documents\STUDY\thesis\expLB\run-coords\dotproducts_mean.json  size=26923  mtime=2026-09-16 19:21:53.321019
+  layers: [0, 4, 8, 12, 16, 20, 22, 24, 28, 32, 36, 40, 44, 48, 52, 56, 60, 64, 68, 72, 76]
+  matched (per-layer pooled-corpus zero-shot AUROC):
+    L0   contrast=0.35037590651602246  pc1=0.365048790094281
+    L4   contrast=0.40628750378723805  pc1=0.4610897939817281
+    L8   contrast=0.3380380431784573  pc1=0.34980810724256917
+    L12  contrast=0.36627707210372984  pc1=0.37729249861179825
+    L16  contrast=0.40904837348302137  pc1=0.41201014377984946
+    L20  contrast=0.6080517796274055  pc1=0.672741905827186
+    L22  contrast=0.6295062584915116  pc1=0.6985357918446898
+    L24  contrast=0.6533939767399605  pc1=0.714818449076787
+    L28  contrast=0.7578246490637475  pc1=0.791809823520798
+    L32  contrast=0.836574102761972  pc1=0.8469815209316404
+    L36  contrast=0.8485912101633272  pc1=0.8640521383491895
+    L40  contrast=0.8630105619589489  pc1=0.8768949185173067
+    L44  contrast=0.8064962749449067  pc1=0.829524744530729
+    L48  contrast=0.7413110007635862  pc1=0.7807160773763275
+    L52  contrast=0.6584667591274156  pc1=0.7184885694697707
+    L56  contrast=0.556330608531997  pc1=0.6029189972105233
+    L60  contrast=0.49136808822877087  pc1=0.5260095363745264
+    L64  contrast=0.45032514950620395  pc1=0.47193542342159467
+    L68  contrast=0.44466495778542653  pc1=0.46226443174376153
+    L72  contrast=0.4353287481813358  pc1=0.4530855126690755
+    L76  contrast=0.6126678743536912  pc1=0.679995939535697
+  argmax contrast = L40 0.8630
+  argmax pc1      = L40 0.8769
+
+##############################################################################
+O-075 -- thesis 7.4 Q4 table row 'L20 mean, mms' (line 656)
+C:\Users\SURAIYA\Documents\STUDY\thesis\expLB\run-coords\q3_q4_bootstrap.json  size=24187  mtime=2026-09-17 02:23:21.437323
+  boot_rows=1000 boot_datasets=10000
+  q4_table:
+    {"layer": 20, "pooling": "mean", "probe": "mms", "raw": 0.6523819821789706, "erase_assistant": 0.646230375193732, "erase_random_mean": 0.6523296682492744, "cost_assistant": 0.0061516069852385336, "cost_random": [-0.0002139845450070954, 1.6983902813572094e-05, -1.890421618644389e-05, 0.0006148625022840415, -0.00013738799542306612], "erased_row_ci95": [0.638356626033783, 0.6537988781929016], "erased_dataset_ci95": [0.5127429605373054, 0.7956263084897787], "erased_above_chance_datasets": true}
+    {"layer": 20, "pooling": "mean", "probe": "lr_reg10", "raw": 0.6598621608896388, "erase_assistant": 0.6545115355402231, "erase_random_mean": 0.6594944827608316, "cost_assistant": 0.005350625349415661, "cost_random": [-7.087081624101987e-05, 0.0005564409325548025, 0.0004540021278118811, 0.00044118565086115336, 0.0004576327490489751], "erased_row_ci95": [0.6467697024345398, 0.6620121598243713], "erased_dataset_ci95": [0.5584293137865395, 0.7411046855490315], "erased_above_chance_datasets": true}
+    {"layer": 40, "pooling": "mean", "probe": "mms", "raw": 0.6692782477993104, "erase_assistant": 0.6515947051553262, "erase_random_mean": 0.669297137354638, "cost_assistant": 0.017683542643984196, "cost_random": [6.5747061686050046e-06, -5.128010391020066e-05, 2.548717736849948e-05, 7.281847556273036e-05, -0.0001480480318278854], "erased_row_ci95": [0.6436739563941956, 0.6595210433006287], "erased_dataset_ci95": [0.5097871786600444, 0.7860601955065221], "erased_above_chance_datasets": true}
+    {"layer": 40, "pooling": "mean", "probe": "lr_reg10", "raw": 0.6862073217829069, "erase_assistant": 0.6721024067244596, "erase_random_mean": 0.6860056555117899, "cost_assistant": 0.014104915058447243, "cost_random": [-6.900132630638378e-05, -5.142304039607026e-05, 0.00013868566907582203, 0.0006495574576121932, 0.0003405125955991961], "erased_row_ci95": [0.6648089289665222, 0.680291473865509], "erased_dataset_ci95": [0.5855310563396805, 0.7595290447904739], "erased_above_chance_datasets": true}
+    {"layer": 44, "pooling": "last", "probe": "mms", "raw": 0.7200369140029781, "erase_assistant": 0.7119231063148214, "erase_random_mean": 0.7200557470714367, "cost_assistant": 0.008113807688156727, "cost_random": [4.691270116485846e-05, -0.00015431279493327565, -5.512053953005136e-05, 1.4463467835845734e-05, 5.389182316950514e-05], "erased_row_ci95": [0.7038058042526245, 0.720787763595581], "erased_dataset_ci95": [0.6083088111522938, 0.824011793642333], "erased_above_chance_datasets": true}
+    {"layer": 44, "pooling": "last", "probe": "lr_reg10", "raw": 0.6610926310014393, "erase_assistant": 0.6558173596341577, "erase_random_mean": 0.6607117576043366, "cost_assistant": 0.005275271367281675, "cost_random": [0.0009325864651908988, 2.653450777989619e-07, 0.0005830274355596021, 0.0002445300248757887, 0.00014395771480968378], "erased_row_ci95": [0.6488338112831116, 0.6633025407791138], "erased_dataset_ci95": [0.5704808303853497, 0.7516012036840566], "erased_above_chance_datasets": true}
+  comparisons whose name mentions eras/assistant:
+    {"name": "cost of erasing Assistant Axis, L20 mean mms", "question": "Q4", "kind": "diff", "diff": 0.0061516069852385336, "row_ci95": [0.005014481954276562, 0.007384692318737507], "dataset_ci95": [-0.0035216827299872047, 0.023335263306895882], "row_p": 0.001, "dataset_p": 0.3284, "dataset_q_bh": 0.5151058823529412, "significant": false}
+    {"name": "assistant erasure vs random erasures, L20 mean mms", "question": "Q4", "kind": "diff", "diff": 0.006099293055542354, "row_ci95": [0.004969799292101537, 0.0073307270770908975], "dataset_ci95": [-0.003584231820956418, 0.023262222901098004], "row_p": 0.001, "dataset_p": 0.3368, "dataset_q_bh": 0.5151058823529412, "significant": false}
+    {"name": "cost of erasing Assistant Axis, L20 mean lr_reg10", "question": "Q4", "kind": "diff", "diff": 0.005350625349415661, "row_ci95": [0.004426945932209492, 0.006332115735858679], "dataset_ci95": [-0.004295789221602067, 0.02167879504123673], "row_p": 0.001, "dataset_p": 0.4358, "dataset_q_bh": 0.5424545454545455, "significant": false}
+    {"name": "assistant erasure vs random erasures, L20 mean lr_reg10", "question": "Q4", "kind": "diff", "diff": 0.004982947220608436, "row_ci95": [0.004089461391864005, 0.005943797193164854], "dataset_ci95": [-0.00436667902565575, 0.02112167927279338], "row_p": 0.001, "dataset_p": 0.4562, "dataset_q_bh": 0.5424545454545455, "significant": false}
+    {"name": "cost of erasing Assistant Axis, L40 mean mms", "question": "Q4", "kind": "diff", "diff": 0.017683542643984196, "row_ci95": [0.016200359910726547, 0.01919136568903923], "dataset_ci95": [0.004925966991416747, 0.035269360044039785], "row_p": 0.001, "dataset_p": 0.0004, "dataset_q_bh": 0.003466666666666667, "significant": true}
+    {"name": "assistant erasure vs random erasures, L40 mean mms", "question": "Q4", "kind": "diff", "diff": 0.01770243219931178, "row_ci95": [0.016248721003583842, 0.01921330804328464], "dataset_ci95": [0.00487312718965637, 0.03531730014648323], "row_p": 0.001, "dataset_p": 0.0008, "dataset_q_bh": 0.005200000000000001, "significant": true}
+    {"name": "cost of erasing Assistant Axis, L40 mean lr_reg10", "question": "Q4", "kind": "diff", "diff": 0.014104915058447243, "row_ci95": [0.01282511092722416, 0.015497719869017601], "dataset_ci95": [3.0037250112813436e-05, 0.04065479200107579], "row_p": 0.001, "dataset_p": 0.0492, "dataset_q_bh": 0.16185, "significant": false}
+    {"name": "assistant erasure vs random erasures, L40 mean lr_reg10", "question": "Q4", "kind": "diff", "diff": 0.013903248787330291, "row_ci95": [0.012626334082678225, 0.015314510541415388], "dataset_ci95": [2.37372965723793e-05, 0.04006662898817137], "row_p": 0.001, "dataset_p": 0.0498, "dataset_q_bh": 0.16185, "significant": false}
+    {"name": "cost of erasing Assistant Axis, L44 last mms", "question": "Q4", "kind": "diff", "diff": 0.008113807688156727, "row_ci95": [0.007292059250175953, 0.008918074890971184], "dataset_ci95": [0.0035615349188447, 0.013124287570075638], "row_p": 0.001, "dataset_p": 0.0004, "dataset_q_bh": 0.003466666666666667, "significant": true}
+    {"name": "assistant erasure vs random erasures, L44 last mms", "question": "Q4", "kind": "diff", "diff": 0.00813264075661535, "row_ci95": [0.0073323937663826305, 0.008939475291335602], "dataset_ci95": [0.0035625568525936373, 0.013161031908129816], "row_p": 0.001, "dataset_p": 0.0004, "dataset_q_bh": 0.003466666666666667, "significant": true}
+    {"name": "cost of erasing Assistant Axis, L44 last lr_reg10", "question": "Q4", "kind": "diff", "diff": 0.005275271367281675, "row_ci95": [0.004501238465309143, 0.006011745426803827], "dataset_ci95": [0.0011534643097547816, 0.010729859005659868], "row_p": 0.001, "dataset_p": 0.0092, "dataset_q_bh": 0.03986666666666667, "significant": true}
+    {"name": "assistant erasure vs random erasures, L44 last lr_reg10", "question": "Q4", "kind": "diff", "diff": 0.0048943979701789875, "row_ci95": [0.004163361318066205, 0.0055578702993800185], "dataset_ci95": [0.0012643127291262102, 0.009841115535892238], "row_p": 0.001, "dataset_p": 0.007, "dataset_q_bh": 0.0364, "significant": true}
+  total comparisons in this file (BH family size) = 26
+  comparisons by question: {'Q3': 14, 'Q4': 12}
+  C:\Users\SURAIYA\Documents\STUDY\thesis\expLB\run-coords\erase_test.json  size=10643  mtime=2026-09-16 19:21:53.930507
+    layer=20 pooling=mean k=5 bank=axes_vectors_s3.pt datasets=['ai_liar', 'convincing-game', 'mask', 'roleplaying']
+
+##############################################################################
+O-082 -- thesis 7.5: 'dataset identity 99.3% decodable, label lift +0.032' (line 702-703)
+C:\Users\SURAIYA\Documents\STUDY\thesis\expLB\run-coords\validate_L40.json  size=1400  mtime=2026-09-16 19:22:03.227489
+  {
+  "layer": 40,
+  "pooling": "mean",
+  "variance": [
+    0.25675004720687866,
+    0.08284451067447662,
+    0.05537055805325508,
+    0.03564109653234482,
+    0.03471197187900543,
+    0.025608740746974945,
+    0.02213474176824093,
+    0.017233651131391525,
+    0.013161726295948029,
+    0.011484223417937756
+  ],
+  "pcs": [
+    {
+      "pc": 1,
+      "auroc_label": 0.2959234123892668,
+      "best_dataset": "harm-pressure-choice",
+      "auroc_dataset": 0.9996223635235733
+    },
+    {
+      "pc": 2,
+      "auroc_label": 0.49732858944189673,
+      "best_dataset": "harm-pressure-choice",
+      "auroc_dataset": 1.0
+    },
+    {
+      "pc": 3,
+      "auroc_label": 0.49269028439254364,
+      "best_dataset": "insider-trading",
+      "auroc_dataset": 1.0
+    },
+    {
+      "pc": 4,
+      "auroc_label": 0.5949029403024633,
+      "best_dataset": "roleplaying",
+      "auroc_dataset": 0.9505721406800951
+    },
+    {
+      "pc": 5,
+      "auroc_label": 0.5896153753483627,
+      "best_dataset": "instructed-deception",
+      "auroc_dataset": 0.9680234181141439
+    }
+  ],
+  "label_acc": 0.6462472406181016,
+  "dataset_acc": 0.9933774834437085,
+  "cos_deception_pcs": [
+    0.01593676581978798,
+    0.032043084502220154,
+    0.09373420476913452,
+    0.23832619190216064,
+    0.006653526797890663
+  ],
+  "deception_in_top10": 0.16582228243350983
+}
+
+##############################################################################
+O-065 -- thesis 4.1 own100 bank row (line 377)
+  C:\Users\SURAIYA\Documents\STUDY\thesis\expLB\run-hf275: ['axes_hf100.pt', 'published_assistant_axis.pt', 'vectors_100', 'vectors_275']
+  C:\Users\SURAIYA\Documents\STUDY\thesis\expLB\run-paper16: ['axes_vectors_all.pt', 'axes_vectors_s3.pt', 'responses', 'scores', 'scores_405b', 'vectors_all', 'vectors_s3']

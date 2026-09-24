@@ -1,0 +1,320 @@
+--- page 1 ---
+Pressure-Testing Deception Probes in LLMs: Scaling, Robustness, and the
+Geometry of Deceptive Representations
+Sachin Kumar*
+LexisNexis, USA
+sachinkumar.ait@live.com
+Abstract
+Linear probes trained on internal activations of
+Large Language Models (LLMs) are increas-
+ingly proposed as evaluation metrics for de-
+ceptive generation, automated monitors that
+score whether a model’s output was produced
+deceptively, without requiring ground-truth la-
+bels or human annotation. Yet these met-
+rics report AUROC scores exceeding 0.96 on
+clean benchmarks while demonstrating pro-
+found fragility under distributional shift. This
+paper presents a systematic pressure-test of
+such probe-based evaluation metrics across the
+Gemma 3 model family (1B–27B parameters),
+diagnosing why they fail rather than merely
+documenting that they fail. We investigate four
+competing hypotheses about how deception is
+encoded: as (1) a single linear direction, (2)
+a multi-dimensional subspace, (3) a convex
+conic hull, or (4) a proxy for computational en-
+tropy. Our experimental design includes cross-
+domain transfer matrices, multi-dimensional
+probe analysis with permutation null baselines,
+entropy-residualization tests, and systematic
+distractor evaluations across 8 stylistic shifts.
+Across all four model scales, we find that: (a)
+probe-based metrics achieve near-perfect AU-
+ROC (≥0.998) on clean data but collapse under
+stylistic shifts when trained without stylistic
+augmentation, style-augmented probes recover
+near-perfect detection (mean AUROC 0.979–
+0.983) even on unseen styles; (b) the single-
+direction hypothesis is decisively rejected (k=1
+captures only 0.61–0.80 AUROC of the signal,
+with cross-domain transfer failure confirmed as
+geometric rather than layer-mismatch-driven;
+(c) the entropy-proxy hypothesis is rejected
+(maximum|ρ|= 0.454 , maximum ∆AUROC
+after residualization=0.004); and (d) deception
+does not form a statistically significant linear
+subspace even within individual domains (per-
+domaink∗=0), yet multi-dimensional probes
+(k≥5) consistently recover the signal through
+* This research was conducted independently and does
+not reflect the views or represent work done at LexisNexis.
+distributed sub-threshold features. These find-
+ings demonstrate that probe fragility under stan-
+dard training reflects distributional narrowness
+rather than a fundamental architectural limi-
+tation: style-augmented probes recover near-
+perfect detection (mean AUROC 0.979–0.983
+on unseen styles) at both the 4B and 27B scales,
+establishing that the inverse scaling pattern ob-
+served under standard training is a training-
+distribution artifact rather than a genuine scale-
+dependent phenomenon.
+1 Introduction
+The rapid evolution of Large Language Models
+through 2024 and 2025 has introduced a new class
+of alignment failure modes. Frontier models now
+exhibit behaviors that extend well beyond halluci-
+nation: strategic deception—the capacity to know-
+ingly generate false information to satisfy user pref-
+erences (sycophancy), conceal capabilities (sand-
+bagging), or manipulate outcomes in agentic envi-
+ronments (Goldowsky-Dill et al., 2025; Park et al.,
+2024). As these models are deployed in high-stakes
+settings, the ability to reliably detect such behav-
+iors from model internals has become a first-order
+safety challenge. The dominant approach to de-
+ception detection relies on linear probes—logistic
+regression classifiers trained on residual stream ac-
+tivations to distinguish "honest" from "deceptive"
+internal states. A scope note: all existing deception-
+probe benchmarks – including ours – induce the
+honest/deceptive contrast via system-prompt ma-
+nipulation. Our experiments therefore test whether
+probes can reliably detect instruction-induced de-
+ception under distribution shift; whether findings
+transfer to spontaneous, strategically motivated de-
+ception remains open (see Limitations).
+Linear probes trained on LLM residual-stream
+activations report near-perfect deception detec-
+tion Goldowsky-Dill et al. (2025) achieve AU-
+ROC 0.999 on Llama-3.3-70B—yet collapse under
+adversarial pressure: suffixes reduce probe recall
+arXiv:2605.27958v1  [cs.CL]  27 May 2026
+--- page 2 ---
+to near zero (Bailey et al., 2025), distractor be-
+haviors decouple deception from probe-detectable
+representations (Taylor et al., 2025), and RL-
+Obfuscation reduces probe scores to chance while
+preserving deceptive outputs (Gupta and Jenner,
+2025). We term this theprobe fragility gap:
+probes approach ceiling performance on bench-
+marks but fail under distributional shift. Prior work
+has documented individual instances of this gap;
+our contribution is a systematic diagnostic frame-
+work that testswhyprobes fail across four compet-
+ing hypotheses and four model scales, and whether
+the failure is fundamental or methodological.
+This gap admits four possible explanations:
+(a) deception is linearly encoded but easily masked,
+(b) deception is multi-dimensionally encoded and
+single-direction probes capture only a projection,
+(c) probes detect a correlate of deception, such as
+computational entropy, rather than deception itself,
+or (d) probe fragility reflects training distribution
+narrowness rather than representational limitations.
+This paper designs experiments to distinguish these
+explanations.
+We formalize four competing hypotheses (linear
+direction, subspace, convex cone, entropy proxy)
+with pre-registered falsifiable predictions, and test
+them across the Gemma 3 model family (1B–27B
+parameters; Gemma Team and Google DeepMind,
+2025), selected for its architectural homogeneity
+across scales. Activation-based deception probes
+function in practice as automatic evaluation metrics:
+given a generated text and its producing model,
+they assign a scalar score purporting to measure
+deceptive intent. Our pressure-testing methodology
+applies the same scrutiny the NLG evaluation com-
+munity has long directed at surface metrics (Reiter,
+2018; Mathur et al., 2020) to this newer class of
+internals-based metrics.
+Our main contributions are summarized as fol-
+lows.
+• Theoretical Framework:We formalize four
+competing hypotheses for deception—linear
+direction, subspace, convex cone, and entropy
+proxy—with falsifiable predictions for each.
+• Inverse Scaling in Robustness:Analysis
+across four scales (1B–27B) shows that while
+clean-data accuracy is near-perfect, larger
+models exhibit higher vulnerability to 8 stylis-
+tic shifts, which reduce 27B probes to chance
+level under standard training.
+• Style-Augmented Robustness:We show that
+probe fragility is largely a training artifact:
+probes trained on stylistically diverse data re-
+cover near-perfect detection (mean AUROC
+0.979 at 4B, 0.983 at 27B) on unseen styles,
+demonstrating that the residual stream con-
+tains deception-relevant signal beyond stylis-
+tic correlates.
+• Layer-Mismatch Decomposition:Cross-
+domain transfer analysis with target-layer con-
+trols at 12B and 27B confirms that geometric
+disjointness, not layer misalignment, drives
+transfer failure (mean improvement from layer
+control: 12B=−0.048, 27B=−0.028).
+• Entropy Rejection:Entropy-residualization
+tests across 12 combinations decisively reject
+the “cognitive load” (entropy-proxy) hypothe-
+sis.
+• Geometric Analysis:Cross-domain transfer
+analysis reveals that deception types become
+increasingly disjoint with scale. Per-domain
+PCA analysis showsk∗=0 even within indi-
+vidual domains at both 4B and 27B, despite
+substantial reorganization of variance struc-
+ture across scales.
+We use instruction-tuned Gemma 3 models (1B–
+27B parameters; (Gemma Team and Google Deep-
+Mind, 2025)) to ensure compliance with deception-
+inducing system prompts. Their strict architectural
+homogeneity across scales using identical com-
+ponents like 5:1 GQA (Ainslie et al., 2023) and
+SwiGLU (Shazeer, 2020), cleanly isolates scaling
+effects from architectural confounders.
+2 Related Work
+Probes and geometry.The standard "RepE" ap-
+proach trains logistic regression on contrastive
+residual-stream activations (Zou et al., 2025). De-
+spite reported near-perfect AUROCs (Goldowsky-
+Dill et al., 2025), white-box advantages over text-
+only classifiers remain modest (Parrack et al.,
+2026), and both white-box and black-box methods
+(Pacchiardi et al., 2024) struggle to isolate seman-
+tic lies from behavioral artifacts. Geometrically,
+truth representations have been modeled as linear
+directions (Marks and Tegmark, 2024) , 2D sub-
+spaces (Bürger et al., 2024) , and bounded "Con-
+cept Cones" (Yu et al., 2025). However, existing
+PCA-based methods cannot distinguish bounded
+cones from symmetric subspaces—a critical geo-
+metric gap our work resolves.
+Adversarial vulnerabilities.(Bailey et al.,
+2025) showed adversarial suffixes collapse probe
+
+=== SEARCH HITS ===
+
+[decisively rejected] p1: ...fect AU- ROC (≥0.998) on clean data but collapse under stylistic shifts when trained without stylistic augmentation, style-augmented probes recover near-perfect detection (mean AUROC 0.979– 0.983) even on unseen styles; (b) the single- direction hypothesis is decisively rejected (k=1 captures only 0.61–0.80 AUROC of the signal, with cross-domain transfer failure confirmed as geometric rather than layer-mismatch-driven; (c) the entropy-proxy hypothesis is rejected (maximum|ρ|= 0.454 , maximum ∆AUROC after residualization=0.004); and (...
+
+[decisively rejected] p5: ... 0.997 0.994 0.999 0.994 0.999 0.006 MLP 1.000 0.999 0.998 0.999 — — — Table 6: AUROC by probe dimensionality across all model scales. Increasingk rapidly closes the gap to the MLP upper bound.k=1 for all model scales indicates single-direction test. H-LIN is decisively rejected.As shown in Ta- ble 6 at k= 1 , all four models capture only 0.609–0.804 of the deception signal—well below the near-perfect scores at k≥10 . The single- direction probe loses 20–40% of discriminative power across all scales. Conversely, k= 5 con- sistently r...
+
+[decisively rejected] p7: ...ural changes. 5.4 Study 4: Entropy-Proxy Hypothesis We compute Logit Lens (nostalgebraist, 2020; Belrose et al., 2025) entropy at each model’s optimal probe layer for all three datasets, then test P4a–P4c (full results in Appendix A,Tables 13,14,15). H-ENT is decisively rejected across all 12 model–dataset combinations: maximum |ρ|=0.454 (well below the 0.8 threshold for P4a), maximum ∆AUROC after residualization =0.004 (two orders of magnitude below the 0.10 threshold for P4b), and all residualized AUROCs ≥0.985 (supporting P4c). Th...
+
+[decisively rejected] p12: ... 0.056 0.262 No No + Role 0.145 0.004 No No + MASK -0.321<0.001 No No – Table 14: Spearman correlation between probe score and entropy across all model-dataset combinations. P4a is rejected for all 12 tests. Entropy Residualization (Test of P4b/P4c) H- ENT is decisively rejected.As shown in Table 15, across all 12 model–dataset combinations: (a) Mod Data Orig Resid∆AUROC P4b? P4c? 1BRepE 0.9998 0.9998 0.0000 No Yes Role 0.9843 0.9846 -0.0002 No Yes MASK 0.9999 0.9969 0.0031 No Yes 4BRepE 0.9990 0.9952 0.0038 No Yes Role 0.9688 0.9705...
+
+[0.61] p1: ... collapse under stylistic shifts when trained without stylistic augmentation, style-augmented probes recover near-perfect detection (mean AUROC 0.979– 0.983) even on unseen styles; (b) the single- direction hypothesis is decisively rejected (k=1 captures only 0.61–0.80 AUROC of the signal, with cross-domain transfer failure confirmed as geometric rather than layer-mismatch-driven; (c) the entropy-proxy hypothesis is rejected (maximum|ρ|= 0.454 , maximum ∆AUROC after residualization=0.004); and (d) deception does not fo...
+
+[0.61] p8: ... AUROCs for 27B differ from Table 10 because the augmented experiment used a re-selected optimal layer (layer 34 vs. 27); see Limitations for details. Hyp. Claim Verdict Evidence Key Numbers Implication H-LINSingle universal direction REJECTED 4/4 modelsk= 1: 0.61–0.80; transfer fails No universal probe possible H-SUBMulti-dim deception subspace WEAKLY SUPPORTED 4/4 models; per-domain PCA at 4B and 27B k≥5 needed;k = 3 partial;k∗ = 0at both 4B and 27B. Per-domain probes required H-CONEConic hull geometry INCONCLUSIVE 4...
+
+[0.61] p12: ...Mod Dataset H(h) H(d) Cohen’s dt-valp-val 1BRepE 11.00 11.01 0.04 0.42 0.675 Role 11.06 11.07 0.11 1.08 0.281 MASK 4.31 2.84 -0.98 -9.75<0.001 4BRepE 2.40 3.02 0.47 4.65<0.001 Role 11.09 11.14 0.14 1.36 0.176 MASK 11.25 10.98 -0.61 -6.04<0.001 12BRepE 4.68 4.43 -0.12 -1.23 0.220 Role 11.90 11.90 -0.04 -0.35 0.727 MASK 11.74 11.79 0.34 3.40<0.001 27BRepE 0.21 0.09 -0.30 -3.05 0.002 Role 10.72 10.84 0.34 3.40<0.001 MASK 11.14 10.98 -0.67 -6.69<0.001 Table 13: Entropy gap at optimal probe ...
+
+[0.61] p13: ...dimensional probe AUROC at the best layer on D-RepE, by number of PCA dimensions k. Values below 0.90 arebolded. Implications for H-LIN.The k=1 column is the most informative for adjudicating H-LIN. Across all four scales, a single PCA direction captures only 0.61–0.80 AUROC — far below the≥0.999 achieved by the full linear probe. This gap demon- strates that the deception signal is genuinely multi- dimensional: the probe weight vector is not aligned with a single dominant direction in activation space. Byk=5, all mode...
+
+[0.61] p13: ...0.657 0.865 0.643 0.534 ∆−0.343−0.135−0.357−0.458 Childlike AUC 0.727 0.675 0.568 0.441 ∆−0.273−0.325−0.432−0.551 Formal Acad. AUC 0.820 0.771 0.638 0.482 ∆−0.180−0.229−0.362−0.511 Slang/Casual AUC 0.681 0.823 0.592 0.476 ∆−0.319−0.177−0.407−0.516 Robotic AUC 0.618 0.542 0.579 0.429 ∆−0.382−0.458−0.420−0.563 Poetic AUC 0.667 0.785 0.613 0.487 ∆−0.333−0.215−0.386−0.506 Sarcastic AUC 0.547 0.747 0.566 0.489 ∆−0.453−0.253−0.434−0.504 Mean (all)AUC 0.652 0.759 0.609 0.485 ∆−0.348−0.241−0.391−0.507 Table 18: Distractor prob...
+
+[0.61] p13: ...75 0.568 0.441 ∆−0.273−0.325−0.432−0.551 Formal Acad. AUC 0.820 0.771 0.638 0.482 ∆−0.180−0.229−0.362−0.511 Slang/Casual AUC 0.681 0.823 0.592 0.476 ∆−0.319−0.177−0.407−0.516 Robotic AUC 0.618 0.542 0.579 0.429 ∆−0.382−0.458−0.420−0.563 Poetic AUC 0.667 0.785 0.613 0.487 ∆−0.333−0.215−0.386−0.506 Sarcastic AUC 0.547 0.747 0.566 0.489 ∆−0.453−0.253−0.434−0.504 Mean (all)AUC 0.652 0.759 0.609 0.485 ∆−0.348−0.241−0.391−0.507 Table 18: Distractor probe AUROC by style and model scale. ∆ is the drop from the baseline (no sty...
+
+[0.61] p15: ...Figure 2: Multi-dimensional probe AUROC as a func- tion of the number of PCA dimensionsk. At k=1, all models achieve only 0.61–0.80 AUROC, indicating that a single linear direction captures only a fraction of the deception signal. Performance crosses 0.90 byk=3–5 and approaches the full linear probe AUROC byk=10– 20. This provides direct evidence against H-LIN (the single-direction h...
+
+[0.80] p1: ...apse under stylistic shifts when trained without stylistic augmentation, style-augmented probes recover near-perfect detection (mean AUROC 0.979– 0.983) even on unseen styles; (b) the single- direction hypothesis is decisively rejected (k=1 captures only 0.61–0.80 AUROC of the signal, with cross-domain transfer failure confirmed as geometric rather than layer-mismatch-driven; (c) the entropy-proxy hypothesis is rejected (maximum|ρ|= 0.454 , maximum ∆AUROC after residualization=0.004); and (d) deception does not form a ...
+
+[0.80] p5: ... 5.1.3 Multi-Dimensional Probe Analysis To test whether deception is a single direction (H-LIN) or multi-dimensional (H-SUB), we train probes on the top-k principal components of the training activations. k (dims) 1B 4B 12B 27B Min Max Range k = 1 0.609 0.661 0.804 0.672 0.609 0.804 0.195 k = 3 0.816 0.963 0.845 0.819 0.816 0.963 0.148 k = 5 0.908 0.981 0.938 0.990 0.908 0.990 0.081 k = 10 0.977 0.994 0.984 0.997 0.977 0.997 0.021 k = 20 0.996 0.997 0.984 0.998 0.984 0.998 0.014 k = 50 0.999 0.997 0.994 0.999 0.994 0.9...
+
+[0.80] p5: ...sional Probe Analysis To test whether deception is a single direction (H-LIN) or multi-dimensional (H-SUB), we train probes on the top-k principal components of the training activations. k (dims) 1B 4B 12B 27B Min Max Range k = 1 0.609 0.661 0.804 0.672 0.609 0.804 0.195 k = 3 0.816 0.963 0.845 0.819 0.816 0.963 0.148 k = 5 0.908 0.981 0.938 0.990 0.908 0.990 0.081 k = 10 0.977 0.994 0.984 0.997 0.977 0.997 0.021 k = 20 0.996 0.997 0.984 0.998 0.984 0.998 0.014 k = 50 0.999 0.997 0.994 0.999 0.994 0.999 0.006 MLP 1.000...
+
+[0.80] p5: ...y probe dimensionality across all model scales. Increasingk rapidly closes the gap to the MLP upper bound.k=1 for all model scales indicates single-direction test. H-LIN is decisively rejected.As shown in Ta- ble 6 at k= 1 , all four models capture only 0.609–0.804 of the deception signal—well below the near-perfect scores at k≥10 . The single- direction probe loses 20–40% of discriminative power across all scales. Conversely, k= 5 con- sistently recovers>0.90 AUROC across all four scales (0.908–0.990), while k= 3 does...
+
+[0.80] p8: ...Cs for 27B differ from Table 10 because the augmented experiment used a re-selected optimal layer (layer 34 vs. 27); see Limitations for details. Hyp. Claim Verdict Evidence Key Numbers Implication H-LINSingle universal direction REJECTED 4/4 modelsk= 1: 0.61–0.80; transfer fails No universal probe possible H-SUBMulti-dim deception subspace WEAKLY SUPPORTED 4/4 models; per-domain PCA at 4B and 27B k≥5 needed;k = 3 partial;k∗ = 0at both 4B and 27B. Per-domain probes required H-CONEConic hull geometry INCONCLUSIVE 4/4 mo...
+
+[0.80] p13: ...es the best-layer activa- tion tok PCA components before fitting a logistic regression classifier. The corresponding curve is plotted in Figure 2. Modelk=1k=3k=5k=10k=20k=50 1B-IT0.609 0.8160.908 0.977 0.996 0.999 4B-IT0.6610.963 0.981 0.994 0.997 0.997 12B-IT0.804 0.8450.938 0.984 0.984 0.994 27B-IT0.672 0.8190.990 0.997 0.998 0.999 Table 17: Multi-dimensional probe AUROC at the best layer on D-RepE, by number of PCA dimensions k. Values below 0.90 arebolded. Implications for H-LIN.The k=1 column is the most informati...
+
+[0.80] p13: ...sional probe AUROC at the best layer on D-RepE, by number of PCA dimensions k. Values below 0.90 arebolded. Implications for H-LIN.The k=1 column is the most informative for adjudicating H-LIN. Across all four scales, a single PCA direction captures only 0.61–0.80 AUROC — far below the≥0.999 achieved by the full linear probe. This gap demon- strates that the deception signal is genuinely multi- dimensional: the probe weight vector is not aligned with a single dominant direction in activation space. Byk=5, all models ex...
+
+[0.80] p15: ...Figure 2: Multi-dimensional probe AUROC as a func- tion of the number of PCA dimensionsk. At k=1, all models achieve only 0.61–0.80 AUROC, indicating that a single linear direction captures only a fraction of the deception signal. Performance crosses 0.90 byk=3–5 and approaches the full linear probe AUROC byk=10– 20. This provides direct evidence against H-LIN (the single-direction hypoth...
+
+[single-direction] p2: ...ross four compet- ing hypotheses and four model scales, and whether the failure is fundamental or methodological. This gap admits four possible explanations: (a) deception is linearly encoded but easily masked, (b) deception is multi-dimensionally encoded and single-direction probes capture only a projection, (c) probes detect a correlate of deception, such as computational entropy, rather than deception itself, or (d) probe fragility reflects training distribution narrowness rather than representational limitations. This paper de...
+
+[single-direction] p5: ...8 0.984 0.998 0.014 k = 50 0.999 0.997 0.994 0.999 0.994 0.999 0.006 MLP 1.000 0.999 0.998 0.999 — — — Table 6: AUROC by probe dimensionality across all model scales. Increasingk rapidly closes the gap to the MLP upper bound.k=1 for all model scales indicates single-direction test. H-LIN is decisively rejected.As shown in Ta- ble 6 at k= 1 , all four models capture only 0.609–0.804 of the deception signal—well below the near-perfect scores at k≥10 . The single- direction probe loses 20–40% of discriminative power across all scales...
+
+[single-direction] p15: ... achieve only 0.61–0.80 AUROC, indicating that a single linear direction captures only a fraction of the deception signal. Performance crosses 0.90 byk=3–5 and approaches the full linear probe AUROC byk=10– 20. This provides direct evidence against H-LIN (the single-direction hypothesis) and suggests the deception signal occupies a moderate-dimensional subspace. F Dataset Construction Details F.1 Source Distribution The D-RepE factual question pool is drawn from three sources viadatasets.load_dataset: The question pool is identica...
+
+[single-direction] p18: ...n control batteries on models supporting value head attachment. The distributed nature of the deception signal (k*=0) also suggests that ensemble probing strategies — combining multiple weak classifiers across layers and dimensions — may be more ro- bust than single-direction approaches and merit systematic investigation. Finally, evaluations must expand beyond instruction-induced lying to study naturalistic, emergent deception in agentic settings where models have instrumental reasons to deceive (Sharma et al., 2025)....
+
+[k=1] p1: ... on clean data but collapse under stylistic shifts when trained without stylistic augmentation, style-augmented probes recover near-perfect detection (mean AUROC 0.979– 0.983) even on unseen styles; (b) the single- direction hypothesis is decisively rejected (k=1 captures only 0.61–0.80 AUROC of the signal, with cross-domain transfer failure confirmed as geometric rather than layer-mismatch-driven; (c) the entropy-proxy hypothesis is rejected (maximum|ρ|= 0.454 , maximum ∆AUROC after residualization=0.004); and (d) de...
+
+[k=1] p5: ...0.021 k = 20 0.996 0.997 0.984 0.998 0.984 0.998 0.014 k = 50 0.999 0.997 0.994 0.999 0.994 0.999 0.006 MLP 1.000 0.999 0.998 0.999 — — — Table 6: AUROC by probe dimensionality across all model scales. Increasingk rapidly closes the gap to the MLP upper bound.k=1 for all model scales indicates single-direction test. H-LIN is decisively rejected.As shown in Ta- ble 6 at k= 1 , all four models capture only 0.609–0.804 of the deception signal—well below the near-perfect scores at k≥10 . The single- direction probe loses ...
+
+[k=1] p9: ...hieve AUROC≥0.998 but collapse under stylis- tic shift—yet this fragility is largely a training artifact: style-augmented probes recover near- perfect detection (AUROC 0.979–0.983) on un- seen styles. We decisively reject both the single- direction hypothesis—k=1 probes capture only 60– 80% of signal, and layer-mismatch decomposition confirms geometric disjointness (remaining gap: 12B=0.336, 27B=0.425)—and the entropy-proxy hypothesis (max|ρ|=0.454). Deception-relevant signal is distributed across many sub-threshold d...
+
+[k=1] p13: ...for all tested dimensionalities k∈ {1,3,5,10,20,50} across all four model scales on D-RepE. Each probe reduces the best-layer activa- tion tok PCA components before fitting a logistic regression classifier. The corresponding curve is plotted in Figure 2. Modelk=1k=3k=5k=10k=20k=50 1B-IT0.609 0.8160.908 0.977 0.996 0.999 4B-IT0.6610.963 0.981 0.994 0.997 0.997 12B-IT0.804 0.8450.938 0.984 0.984 0.994 27B-IT0.672 0.8190.990 0.997 0.998 0.999 Table 17: Multi-dimensional probe AUROC at the best layer on D-RepE, by number ...
+
+[k=1] p13: ...ested dimensionalities k∈ {1,3,5,10,20,50} across all four model scales on D-RepE. Each probe reduces the best-layer activa- tion tok PCA components before fitting a logistic regression classifier. The corresponding curve is plotted in Figure 2. Modelk=1k=3k=5k=10k=20k=50 1B-IT0.609 0.8160.908 0.977 0.996 0.999 4B-IT0.6610.963 0.981 0.994 0.997 0.997 12B-IT0.804 0.8450.938 0.984 0.984 0.994 27B-IT0.672 0.8190.990 0.997 0.998 0.999 Table 17: Multi-dimensional probe AUROC at the best layer on D-RepE, by number of PCA di...
+
+[k=1] p13: ...981 0.994 0.997 0.997 12B-IT0.804 0.8450.938 0.984 0.984 0.994 27B-IT0.672 0.8190.990 0.997 0.998 0.999 Table 17: Multi-dimensional probe AUROC at the best layer on D-RepE, by number of PCA dimensions k. Values below 0.90 arebolded. Implications for H-LIN.The k=1 column is the most informative for adjudicating H-LIN. Across all four scales, a single PCA direction captures only 0.61–0.80 AUROC — far below the≥0.999 achieved by the full linear probe. This gap demon- strates that the deception signal is genuinely multi- ...
+
+[k=1] p15: ...Figure 2: Multi-dimensional probe AUROC as a func- tion of the number of PCA dimensionsk. At k=1, all models achieve only 0.61–0.80 AUROC, indicating that a single linear direction captures only a fraction of the deception signal. Performance crosses 0.90 byk=3–5 and approaches the full linear probe AUROC byk=10– 20. This provides direct evidence against...
+
+[k=1] p15: ...- tion of the number of PCA dimensionsk. At k=1, all models achieve only 0.61–0.80 AUROC, indicating that a single linear direction captures only a fraction of the deception signal. Performance crosses 0.90 byk=3–5 and approaches the full linear probe AUROC byk=10– 20. This provides direct evidence against H-LIN (the single-direction hypothesis) and suggests the deception signal occupies a moderate-dimensional subspace. F Dataset Construction Details F.1 Source Distribution The D-RepE factual question pool is drawn fr...
+
+[k = 1] p5: ...strap uncertainty. 5.1.3 Multi-Dimensional Probe Analysis To test whether deception is a single direction (H-LIN) or multi-dimensional (H-SUB), we train probes on the top-k principal components of the training activations. k (dims) 1B 4B 12B 27B Min Max Range k = 1 0.609 0.661 0.804 0.672 0.609 0.804 0.195 k = 3 0.816 0.963 0.845 0.819 0.816 0.963 0.148 k = 5 0.908 0.981 0.938 0.990 0.908 0.990 0.081 k = 10 0.977 0.994 0.984 0.997 0.977 0.997 0.021 k = 20 0.996 0.997 0.984 0.998 0.984 0.998 0.014 k = 50 0.999 0.997 0.99...
+
+[k = 1] p5: ...we train probes on the top-k principal components of the training activations. k (dims) 1B 4B 12B 27B Min Max Range k = 1 0.609 0.661 0.804 0.672 0.609 0.804 0.195 k = 3 0.816 0.963 0.845 0.819 0.816 0.963 0.148 k = 5 0.908 0.981 0.938 0.990 0.908 0.990 0.081 k = 10 0.977 0.994 0.984 0.997 0.977 0.997 0.021 k = 20 0.996 0.997 0.984 0.998 0.984 0.998 0.014 k = 50 0.999 0.997 0.994 0.999 0.994 0.999 0.006 MLP 1.000 0.999 0.998 0.999 — — — Table 6: AUROC by probe dimensionality across all model scales. Increasingk rapidly ...
+
+[0.979] p1: ...all four model scales, we find that: (a) probe-based metrics achieve near-perfect AU- ROC (≥0.998) on clean data but collapse under stylistic shifts when trained without stylistic augmentation, style-augmented probes recover near-perfect detection (mean AUROC 0.979– 0.983) even on unseen styles; (b) the single- direction hypothesis is decisively rejected (k=1 captures only 0.61–0.80 AUROC of the signal, with cross-domain transfer failure confirmed as geometric rather than layer-mismatch-driven; (c) the entropy-proxy hyp...
+
+[0.979] p1: ...ted sub-threshold features. These find- ings demonstrate that probe fragility under stan- dard training reflects distributional narrowness rather than a fundamental architectural limi- tation: style-augmented probes recover near- perfect detection (mean AUROC 0.979–0.983 on unseen styles) at both the 4B and 27B scales, establishing that the inverse scaling pattern ob- served under standard training is a training- distribution artifact rather than a genuine scale- dependent phenomenon. 1 Introduction The rapid evolution ...
+
+[0.979] p2: ...s- tic shifts, which reduce 27B probes to chance level under standard training. • Style-Augmented Robustness:We show that probe fragility is largely a training artifact: probes trained on stylistically diverse data re- cover near-perfect detection (mean AUROC 0.979 at 4B, 0.983 at 27B) on unseen styles, demonstrating that the residual stream con- tains deception-relevant signal beyond stylis- tic correlates. • Layer-Mismatch Decomposition:Cross- domain transfer analysis with target-layer con- trols at 12B and 27B confir...
+
+[0.979] p7: ...he 4B and 27B models: clean D-RepE data plus data gener- ated under 4 of 8 distractor styles (pirate, formal, robotic, poetic), evaluated on the remaining 4 held- out styles (Table 11). At 4B, the augmented probe achieves mean AU- ROC 0.997 on seen styles and 0.979 on held-out styles. At 27B — where standard probes collapsed to mean AUROC 0.485 (Table 10) — the aug- mented probe recovers to 1.000 on seen styles and 0.983 on held-out styles, comparable to 4B. The improvement on held-out styles is nearly as large as on se...
+
+[0.979] p8: ...NCLUSIVE 4/4 modelsk ∗ = 0everywhere Cannot test without structure H-ENTEntropy is primary signal REJECTED 12/12 tests Max|ρ|= 0.454; max∆ = 0.004 Probes are not entropy detectors Train Dist.Fragility is training artifact SUPPORTED4B and 27B models mean AUROC 0.979 at 4B, 0.983 at 27B Robustness is methodology problem Table 12: Pre-registered hypothesis verdicts based on converging evidence across all model scales. but per-domaink∗=0 shows the advantage comes from aggregating many weak features, not a co- herent subspac...
+
+[0.979] p9: ...ROC 0.979 (4B) and 0.983 (27B) on held-out styles, demonstrating that the inverse scaling pattern is a training-distribution artifact rather than a genuine scale-dependent phenomenon. This result has a notable implication: the 27B model does not entangle stylistic and ...
+
+[0.979] p9: ...probes across the Gemma 3 family (1B–27B). 2. Probes trained on standard contrastive data achieve AUROC≥0.998 but collapse under stylis- tic shift—yet this fragility is largely a training artifact: style-augmented probes recover near- perfect detection (AUROC 0.979–0.983) on un- seen styles. We decisively reject both the single- direction hypothesis—k=1 probes capture only 60– 80% of signal, and layer-mismatch decomposition confirms geometric disjointness (remaining gap: 12B=0.336, 27B=0.425)—and the entropy-proxy hypot...
+
+[0.979] p9: ...atures, and augmentation teaches them to aggregate the right ones. The central lesson is that probe robust- ness is a training methodology challenge, not an ar- chitectural impossibility. Style-augmented probes recover near-perfect detection at both 4B (AUROC 0.979) and 27B (0.983) on held-out styles, confirm- ing that the inverse scaling pattern observed under standard training — where 27B probes collapsed to chance — reflects distributional narrowness in the training data rather than scale-dependent entan- glement of ...
+
+[0.979] p10: ...omposition. • Style-augmentation scope.The style- augmented probe experiment (§5.3.1)) was conducted on the 4B and 27B models. Aug- mentation at the 1B and 12B scales remains untested, though the consistent results across the two tested scales (held-out AUROC 0.979 and 0.983 respectively) suggest the pattern is likely to hold. Additionally, the 27B aug- mented experiment used a different optimal layer (layer 34) than the original distractor analysis (layer 27), reflecting re-selection dur- ing augmented training; the co...
+
+[0.983] p1: ...r model scales, we find that: (a) probe-based metrics achieve near-perfect AU- ROC (≥0.998) on clean data but collapse under stylistic shifts when trained without stylistic augmentation, style-augmented probes recover near-perfect detection (mean AUROC 0.979– 0.983) even on unseen styles; (b) the single- direction hypothesis is decisively rejected (k=1 captures only 0.61–0.80 AUROC of the signal, with cross-domain transfer failure confirmed as geometric rather than layer-mismatch-driven; (c) the entropy-proxy hypothesis...
+
+[0.983] p1: ...b-threshold features. These find- ings demonstrate that probe fragility under stan- dard training reflects distributional narrowness rather than a fundamental architectural limi- tation: style-augmented probes recover near- perfect detection (mean AUROC 0.979–0.983 on unseen styles) at both the 4B and 27B scales, establishing that the inverse scaling pattern ob- served under standard training is a training- distribution artifact rather than a genuine scale- dependent phenomenon. 1 Introduction The rapid evolution of Lar...
+
+[0.983] p2: ..., which reduce 27B probes to chance level under standard training. • Style-Augmented Robustness:We show that probe fragility is largely a training artifact: probes trained on stylistically diverse data re- cover near-perfect detection (mean AUROC 0.979 at 4B, 0.983 at 27B) on unseen styles, demonstrating that the residual stream con- tains deception-relevant signal beyond stylis- tic correlates. • Layer-Mismatch Decomposition:Cross- domain transfer analysis with target-layer con- trols at 12B and 27B confirms that geome...
+
+[0.983] p4: ...luate probe robustness to 8 orthogonal stylis- tic shifts: pirate, Shakespearean, childlike, for- mal academic, slang, robotic, poetic, and sarcastic (N=200 honest + 200 deceptive per style). To test Model AUROC Acc F1 Layer Depth B→W MLP 1B 0.999 [0.998, 1.0]0.983 0.985 8/26 30.8% 0.442 1.000 4B 0.998 [0.996, 1.0]0.983 0.985 33/34 97.1% 0.446 0.999 12B 0.999 [0.998, 1.0]0.980 0.985 23/48 47.9% 0.513 0.998 27B 1.000 [0.999, 1.0]0.980 0.990 27/62 43.5% 0.522 0.999 Table 3: Best-layer probe performance on D-RepE across Ge...
+
+[0.983] p4: ...s: pirate, Shakespearean, childlike, for- mal academic, slang, robotic, poetic, and sarcastic (N=200 honest + 200 deceptive per style). To test Model AUROC Acc F1 Layer Depth B→W MLP 1B 0.999 [0.998, 1.0]0.983 0.985 8/26 30.8% 0.442 1.000 4B 0.998 [0.996, 1.0]0.983 0.985 33/34 97.1% 0.446 0.999 12B 0.999 [0.998, 1.0]0.980 0.985 23/48 47.9% 0.513 0.998 27B 1.000 [0.999, 1.0]0.980 0.990 27/62 43.5% 0.522 0.999 Table 3: Best-layer probe performance on D-RepE across Gemma 3 scales. 95% bootstrap CIs in brackets. B→W Boost m...
+
+[0.983] p7: ...ld- out styles (Table 11). At 4B, the augmented probe achieves mean AU- ROC 0.997 on seen styles and 0.979 on held-out styles. At 27B — where standard probes collapsed to mean AUROC 0.485 (Table 10) — the aug- mented probe recovers to 1.000 on seen styles and 0.983 on held-out styles, comparable to 4B. The improvement on held-out styles is nearly as large as on seen styles at both scales (4B: +0.063 vs +0.093; 27B: +0.062 vs +0.085), indicating gener- alization beyond memorization. This resolves the central open questio...
+
+[0.983] p8: ...modelsk ∗ = 0everywhere Cannot test without structure H-ENTEntropy is primary signal REJECTED 12/12 tests Max|ρ|= 0.454; max∆ = 0.004 Probes are not entropy detectors Train Dist.Fragility is training artifact SUPPORTED4B and 27B models mean AUROC 0.979 at 4B, 0.983 at 27B Robustness is methodology problem Table 12: Pre-registered hypothesis verdicts based on converging evidence across all model scales. but per-domaink∗=0 shows the advantage comes from aggregating many weak features, not a co- herent subspace. Each probe...
+
+[0.983] p9: ...ROC 0.979 (4B) and 0.983 (27B) on held-out styles, demonstrating that the inverse scaling pattern is a training-distribution artifact rather than a genuine scale-dependent phenomenon. This result has a notable implication: the 27B model does not entangle stylistic and deception featu...
+
+[0.983] p9: ... across the Gemma 3 family (1B–27B). 2. Probes trained on standard contrastive data achieve AUROC≥0.998 but collapse under stylis- tic shift—yet this fragility is largely a training artifact: style-augmented probes recover near- perfect detection (AUROC 0.979–0.983) on un- seen styles. We decisively reject both the single- direction hypothesis—k=1 probes capture only 60– 80% of signal, and layer-mismatch decomposition confirms geometric disjointness (remaining gap: 12B=0.336, 27B=0.425)—and the entropy-proxy hypothesis ...
+
+[0.983] p9: ...entation teaches them to aggregate the right ones. The central lesson is that probe robust- ness is a training methodology challenge, not an ar- chitectural impossibility. Style-augmented probes recover near-perfect detection at both 4B (AUROC 0.979) and 27B (0.983) on held-out styles, confirm- ing that the inverse scaling pattern observed under standard training — where 27B probes collapsed to chance — reflects distributional narrowness in the training data rather than scale-dependent entan- glement of deception and st...
+
+[0.983] p10: .... • Style-augmentation scope.The style- augmented probe experiment (§5.3.1)) was conducted on the 4B and 27B models. Aug- mentation at the 1B and 12B scales remains untested, though the consistent results across the two tested scales (held-out AUROC 0.979 and 0.983 respectively) suggest the pattern is likely to hold. Additionally, the 27B aug- mented experiment used a different optimal layer (layer 34) than the original distractor analysis (layer 27), reflecting re-selection dur- ing augmented training; the comparison b...
+
+[0.983] p13: ...h the final layer. Table 16 summarizes the per-model layer-wise profile statistics. Model Layers Min Max Mean Best Best AUC AUC AUC Layer AUC 1B-IT 26 0.985 1.000 0.997 8 0.999 4B-IT 34 0.991 1.000 0.998 33 0.998 12B-IT 48 0.990 1.000 0.998 23 0.999 27B-IT 62 0.983 1.000 0.998 27 1.000 Table 16: Layer-wise AUROC summary statistics on D-RepE. C Full Multi-Dimensional Probe Analysis Table 17 reports the multi-dimensional probe AUROC for all tested dimensionalities k∈ {1,3,5,10,20,50} across all four model scales on D-RepE...
+
+[style-augmented] p1: ...stematic distractor evaluations across 8 stylistic shifts. Across all four model scales, we find that: (a) probe-based metrics achieve near-perfect AU- ROC (≥0.998) on clean data but collapse under stylistic shifts when trained without stylistic augmentation, style-augmented probes recover near-perfect detection (mean AUROC 0.979– 0.983) even on unseen styles; (b) the single- direction hypothesis is decisively rejected (k=1 captures only 0.61–0.80 AUROC of the signal, with cross-domain transfer failure confirmed as geometric rath...
+
+[style-augmented] p1: ...ot reflect the views or represent work done at LexisNexis. distributed sub-threshold features. These find- ings demonstrate that probe fragility under stan- dard training reflects distributional narrowness rather than a fundamental architectural limi- tation: style-augmented probes recover near- perfect detection (mean AUROC 0.979–0.983 on unseen styles) at both the 4B and 27B scales, establishing that the inverse scaling pattern ob- served under standard training is a training- distribution artifact rather than a genuine scale- ...
+
+[style-augmented] p4: ...een the activation probe and a TF-IDF + logistic regression text-only base- line. At 12B/27B, the text-only baseline scores below 0.5 (anti-predictive), which mechanically inflates the boost. whether fragility is fundamental or a training arti- fact, we train style-augmented probes on the 4B and 27B models using clean data plus 4 of the 8 styles (pirate, formal, robotic, poetic), then evaluate on the remaining 4 held-out styles. 4.6 Layer-Mismatch Decomposition Cross-domain transfer in Table 7 evaluates each probe at its source-d...
+
+[style-augmented] p7: ... override these cues, and larger models comply more faithfully. The distrac- tor finding reflects the fragility of probes trained on narrow distributions. Whether this is fundamental or fixable is tested directly below. 5.3.1 Style-Augmented Probes We train a style-augmented probe on the 4B and 27B models: clean D-RepE data plus data gener- ated under 4 of 8 distractor styles (pirate, formal, robotic, poetic), evaluated on the remaining 4 held- out styles (Table 11). At 4B, the augmented probe achieves mean AU- ROC 0.997 on seen ...
+
+[style-augmented] p9: ...e. The stratified analysis (§5.1.1) adds an impor- tant interpretive caveat: probes detect the deceptive prompt regime regardless of whether the model’s output is actually deceptive (verified vs. unveri- fied AUROC: 0.998–1.000 at both scales). This means the style-augmented probe’s success is con- sistent with two explanations: (a) the probe has learned genuinely deception-related, style-invariant features, or (b) it has learned a more robust set of prompt-regime correlates that survive stylistic variation. The identical scores ...
+
+[style-augmented] p9: .... 7 Conclusion This paper rigorously pressure-tests deception probes across the Gemma 3 family (1B–27B). 2. Probes trained on standard contrastive data achieve AUROC≥0.998 but collapse under stylis- tic shift—yet this fragility is largely a training artifact: style-augmented probes recover near- perfect detection (AUROC 0.979–0.983) on un- seen styles. We decisively reject both the single- direction hypothesis—k=1 probes capture only 60– 80% of signal, and layer-mismatch decomposition confirms geometric disjointness (remaining ga...
+
+[weak localization] p5: ...ports the bootstrap-estimated peak layer as a fraction of total depth. The “Two-Thirds Rule” proposed by (Boxo et al., 2025) is not falsified (all 95% CIs overlap [0.60,0.75] ), but the CIs are ex- tremely wide (spanning nearly the full network), in- dicating weak localization. Median peak depths are non-monotonic (1B=50%, 4B=17.6%, 12B=64.6%, 27B=41.9%). Note that bootstrap peaks are com- puted over all layers, while best-layer selection in Table 3 excludes the first 30% to avoid system- prompt confounds. Model Layers Peak 95% CI ...

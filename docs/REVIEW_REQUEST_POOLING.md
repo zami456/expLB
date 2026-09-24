@@ -14,6 +14,31 @@ one of them is fatal than publish it.
 
 **Setting.** Llama-3.3-70B-Instruct, residual stream layer 40, mean-pooled over response tokens,
 eleven deception/honesty datasets (Liars' Bench, Apollo's set, MASK, Pacchiardi's AI Liar, one of
+> **CORRECTION 2026-09-24 (DF-104, P17).** In the block below, the pointers `:32` / `:63` are HEAD
+> line numbers that the block itself shifted (they were `:51` / `:83` in the pre-P17 working tree).
+> Read them by phrase: 0.850 is the table row "**pooled, same row budget (~666)**"; 0.806 is the
+> question that cites "row (0.806)". The numbers themselves were re-checked and match.
+> **Source:** `audit/p17/correction_blocks_check.csv` lines 69, 70, 77.
+>
+> **CORRECTION 2026-09-24 (DF-67, Phase 6).** The split description below does not match the code.
+> **There is no grouping by item id.** `src/assistant_axis_ndif/30_premise.py:106` uses
+> `rng.permutation(n)` over **rows**; `group_split` appears **0 times** in that file. Row-level
+> splitting inflates the **in-domain ceiling of 0.951** in the table below; the transfer numbers are
+> unaffected.
+> Two further corrections to this document, same class:
+> • the budget-matched pooled arm is printed as **0.850** at `:32` and **0.806** at `:63` — two
+>   single draws of one condition. Twenty draws give **0.8344 ± 0.0200**. The honest weakness is that
+>   Result 2's **+0.028** margin is of the same order as its comparator's own draw noise.
+> • **"~666 rows" is the cap**, not the realised pool (`30_premise.py:167`). The realised pool is
+>   **412–500 rows, mean 449** (DF-33).
+> **Source:** `src/assistant_axis_ndif/30_premise.py:106` and `:167`; draw statistics from run 30f.
+> **How the claim is updated:** read it as — *"80/20 splits over rows (not grouped by item id),
+> which inflates the in-domain ceiling but not the transfer numbers; the budget-matched pooled arm
+> is 0.834 ± 0.020 over 20 draws, on a pool capped at 666 rows and realised at 412–500."*
+> **This is the document being sent out for adversarial review**, so the description has to match the
+> code before it goes.
+> _The text below is superseded on this point and is kept for the record._
+
 ours). Probes are logistic regression on 8192-d activations, class-balanced training, 80/20
 splits by item id.
 

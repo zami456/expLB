@@ -1,5 +1,13 @@
 # Where the project stands — a briefing
 
+> **UPDATE 2026-09-24 (P17).** This briefing reads his work at `feat/persona-pc-ood` (head
+> `f386a72`). His paper is now `origin/paper` @ 16def2de, which adopted the 16-layer depth sweep,
+> reports the L36 optimum, and says "8 of 12" deep layers in the abstract and limitations. Still for
+> him: DF-96…DF-99 — two new sentences that do not hold (`introduction.tex:68-70`,
+> `limitations.tex:17-21`), three that hold in part, and two release gaps.
+> **Source:** `audit/p17/A_REPORT.md`; `audit/p17/paper_new_claims.csv` (D2-005, D2-019, D2-002,
+> D2-016, D2-018, D2-024, D2-025); `audit/p17/STALE_LIST.md` §11 (DF-96…DF-99); `audit/BRANCH_PINS.md`.
+
 Written 2026-09-21 for a collaborator who has not seen the last day of work. Self-contained:
 you should not need any other file to follow it.
 

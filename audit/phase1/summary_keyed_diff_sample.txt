@@ -1,0 +1,12 @@
+== run-crossgen/summary.json
+   records git=66 lab=2646 common=66 git-only=0
+   git layers=[40] seeds=[42]; lab layers=[0, 4, 8, 12, 16, 20, 22, 24, 28, 32, 36, 40, 44, 48, 52, 56, 60, 64, 68, 72, 76] seeds=[0, 1, 2, 3, 4, 42]
+   metric values differing on common records: 0; max |delta| = 0
+== run-crossgen/banks/own100/summary.json
+   records git=66 lab=3066 common=66 git-only=0
+   git layers=[40] seeds=[42]; lab layers=[0, 4, 8, 12, 16, 20, 22, 24, 28, 32, 36, 40, 44, 48, 52, 56, 60, 64, 68, 72, 76] seeds=[0, 1, 2, 3, 4, 42]
+   metric values differing on common records: 0; max |delta| = 0
+== run-crossgen/kd11/banks/kd_s23/summary.json
+   records git=216 lab=1512 common=216 git-only=0
+   git layers=[20, 40, 44] seeds=[42]; lab layers=[0, 4, 8, 12, 16, 20, 22, 24, 28, 32, 36, 40, 44, 48, 52, 56, 60, 64, 68, 72, 76] seeds=[42]
+   metric values differing on common records: 0; max |delta| = 0

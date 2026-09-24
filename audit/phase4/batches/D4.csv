@@ -1,0 +1,11 @@
+id,source_ref,stated_numbers,claim_plain
+D-185,"draft p17 Table 6 (zero-shot AUROC, 8v7 / 4v6 / 12v13)",0.988 0.976 0.990 | 0.979 0.913 0.980 | 0.979 0.933 0.982,IT: L20 = 0.988 0.976 0.990; L40 = 0.979 0.913 0.980; L44 = 0.979 0.933 0.982
+D-186,"draft p17 Table 6 (zero-shot AUROC, 8v7 / 4v6 / 12v13)",0.959 0.932 0.954 | 0.974 0.980 0.978 | 0.962 0.978 0.974,ID: L20 = 0.959 0.932 0.954; L40 = 0.974 0.980 0.978; L44 = 0.962 0.978 0.974
+D-187,"draft p17 Table 6 (zero-shot AUROC, 8v7 / 4v6 / 12v13)",0.994 0.882 0.991 | 1.000 1.000 1.000 | 1.000 1.000 1.000,RepE: L20 = 0.994 0.882 0.991; L40 = 1.000 1.000 1.000; L44 = 1.000 1.000 1.000
+D-192,"draft p17 Table 7 (per test set: raw vs 12v13, mean over 5 training sets)",0.799 0.990 | 0.800 0.980 | 0.736 0.982,IT: raw/12v13 L20 = 0.799 0.990; L40 = 0.800 0.980; L44 = 0.736 0.982
+D-194,"draft p17 Table 7 (per test set: raw vs 12v13, mean over 5 training sets)",0.718 0.991 | 0.824 1.000 | 0.785 1.000,RepE: raw/12v13 L20 = 0.718 0.991; L40 = 0.824 1.000; L44 = 0.785 1.000
+D-201,draft p18 Table 8 (L20: response mean vs 'No' token),0.717 0.612 | 0.585 0.472 | 0.639 0.556,HP-C: 8v7 resp/No = 0.717 0.612; 4v6 = 0.585 0.472; 12v13 = 0.639 0.556
+D-220,"draft p19 Table 10 (trained on RepE, L20)",0.736 | 0.579,Extended PCs (k = 3): response tokens 0.736; follow-up 'No' 0.579
+D-222,"draft p19 Table 10 (trained on RepE, L20)",0.810 | 0.699,Knowledge-denial PCs (k = 3): response tokens 0.810; follow-up 'No' 0.699
+D-223,draft p19 App F Sycophancy contrast,,"It detects the instructed lies well, and it inverts on HP-KR at every layer (Table 11)."
+D-237,draft main (1).pdf p.19 App G Compute,-,"Compute/provenance: persona rollouts, judging and all activation extraction ran on NDIF; every analysis runs on CPU from pooled activations and persona vectors; and paper/make_numbers.py regenerates e"

@@ -1,0 +1,142 @@
+============================================================================================
+O-039  ROADMAP:115 / OPEN_DECISIONS B3  'L44 is the peak by +0.007'
+============================================================================================
+
+--- audit/cache/labpc/run-crossgen/kd11/banks/kd_s23/significance.json
+    size=2355496  md5=c6dd8f7bdb9205f5f0f8225766fda614  n_tests=5544
+    layers present: [0, 4, 8, 12, 16, 20, 22, 24, 28, 32, 36, 40, 44, 48, 52, 56, 60, 64, 68, 72, 76]
+    blocks present: ['10', '9']
+    [pc:unified - raw] block '9' mean/paper over 21 layers
+      L20 -0.0361  L40 +0.1082  L44 +0.1156  | peak L44 +0.1156 | L44-L40 +0.0074
+      positive at 16/21 layers; full profile:
+      L0:-0.0176  L4:-0.0220  L8:+0.0075  L12:-0.0286  L16:-0.0214  L20:-0.0361  L22:+0.0022  L24:+0.0086  L28:+0.0291  L32:+0.0503  L36:+0.0492  L40:+0.1082  L44:+0.1156  L48:+0.0894  L52:+0.0786  L56:+0.0523  L60:+0.0667  L64:+0.0893  L68:+0.0954  L72:+0.0801  L76:+0.0842
+      L40 CI [0.03302174693016431, 0.19685068558682697]  q_bh_now 0.09986086956521739  sig False
+      L44 CI [0.03536858500637004, 0.20957481552404833]  q_bh_now 0.10683750000000002  sig False
+    [pc:unified - datapca] block '9' mean/paper over 21 layers
+      L20 -0.0160  L40 +0.1199  L44 +0.1291  | peak L44 +0.1291 | L44-L40 +0.0092
+      positive at 17/21 layers; full profile:
+      L0:-0.0127  L4:-0.0053  L8:+0.0214  L12:+0.0040  L16:-0.0112  L20:-0.0160  L22:+0.0107  L24:+0.0053  L28:+0.0130  L32:+0.0709  L36:+0.0753  L40:+0.1199  L44:+0.1291  L48:+0.1053  L52:+0.0964  L56:+0.0553  L60:+0.0806  L64:+0.0972  L68:+0.0937  L72:+0.0775  L76:+0.0997
+      L40 CI [0.024380806212170585, 0.21979175091251024]  q_bh_now 0.146006106870229  sig False
+      L44 CI [0.03268083316878738, 0.2276847982293479]  q_bh_now 0.10321276595744681  sig False
+
+--- run-crossgen/kd11/banks/kd_s23/significance.json
+    size=196881  md5=186431f0f45a598551dd6d0b3f029bef  n_tests=468
+    layers present: [20, 40, 44]
+    blocks present: ['10', '9']
+    [pc:unified - raw] block '9' mean/paper over 3 layers
+      L20 -0.0361  L40 +0.1082  L44 +0.1156  | peak L44 +0.1156 | L44-L40 +0.0074
+      positive at 2/3 layers; full profile:
+      L20:-0.0361  L40:+0.1082  L44:+0.1156
+      L40 CI [0.03302174693016431, 0.19685068558682697]  q_bh_now 0.07445454545454545  sig False
+      L44 CI [0.03536858500637004, 0.20957481552404833]  q_bh_now 0.07528695652173913  sig False
+    [pc:unified - datapca] block '9' mean/paper over 3 layers
+      L20 -0.0160  L40 +0.1199  L44 +0.1291  | peak L44 +0.1291 | L44-L40 +0.0092
+      positive at 2/3 layers; full profile:
+      L20:-0.0160  L40:+0.1199  L44:+0.1291
+      L40 CI [0.024380806212170585, 0.21979175091251024]  q_bh_now 0.09477  sig False
+      L44 CI [0.03268083316878738, 0.2276847982293479]  q_bh_now 0.07445454545454545  sig False
+
+  OTHER LAYER SWEEPS IN THE PROJECT (checked rows of audit/claims.csv), for scope:
+   F-75 (matched-slice axes, 80 layers): argmax L77 0.7642; L40 0.7393 > L44 0.7321
+   F-76 (bootstrap argmax over 80 layers): median L31, 95% [L5,L79], 0.0% on L40
+   F-91 (cap_s23 / kd_s23 crossgen off-diagonal): peak L32 for raw and cap; kd_s23 axes peak L44
+
+============================================================================================
+O-048 / O-049  DF-31: what 0.374 is, and whether cap/docs/DESIGN.md now says so
+============================================================================================
+
+--- run-crossgen/kd11/matrices/mean_L40_s42.json  md5=d7616aa50814267e38bd38931e25a6a0  bank=axes_vectors_s3_fp32.pt  bank_name=paper16 layer=40 pooling=mean seed=42
+    zeroshot[contrast                    ] sycophancy_mt = 0.4089
+    zeroshot[PC1                         ] sycophancy_mt = 0.3740
+
+--- audit/cache/labpc/run-crossgen/kd11/matrices/mean_L40_s42.json  md5=d7616aa50814267e38bd38931e25a6a0  bank=axes_vectors_s3_fp32.pt  bank_name=paper16 layer=40 pooling=mean seed=42
+    zeroshot[contrast                    ] sycophancy_mt = 0.4089
+    zeroshot[PC1                         ] sycophancy_mt = 0.3740
+
+  code that names the bare rows (src/assistant_axis_ndif/27_crossgen.py:405-420):
+    405:     # The zero-shot direction is the bank's PRIMARY BEHAVIOUR CONTRAST, not literally
+    406:     # "deception". Every bank until 2026-09-21 was paper16 or a superset of it, so hardcoding
+    407:     # the name always worked; the cap bank's contrasts are capitulation / cap_vs_default /
+    408:     # cap_only and this raised KeyError. Unlike the trained features this block is not
+    409:     # controlled by --features, so it cannot be worked around from the call site.
+    410:     # Prefer "deception" when present so every existing result is bit-identical.
+    411:     _cands = [n for n in ("deception",) if n in bank["axes"] and n in bank["pca"]]
+    412:     if not _cands:
+    413:         _cands = [n for n in bank["axes"] if n != "assistant" and n in bank["pca"]]
+    414:     if not _cands:
+    415:         raise SystemExit("bank has no behaviour axis with a matching PCA basis for zero-shot")
+    416:     _zs_axis = _cands[0]
+    417:     zs = []
+    418:     # The primary axis keeps the bare names "contrast"/"PC1" so every existing result stays
+    419:     # bit-identical and the readers keep working. EVERY OTHER behaviour axis is now scored too,
+    420:     # under "contrast:<name>" / "PC1:<name>".
+
+--- run-coords/q10_sycophancy_axis.json  md5=6bc5190b714c8fe75ca3fa384dbe726d
+   top key: n -> ['rows', 'retracted', 'maintained']
+   top key: results -> ['paper16|mean', 'own100|mean', 'paper16|last', 'own100|last']
+   top key: random -> ['mean', 'last']
+   top key: length_only -> float
+   results['paper16|mean']['sycophancy']['key_layers']['40'] auroc=0.31310 ci95=[0.2826, 0.3459]
+   results['paper16|mean']['deception']['key_layers']['40'] auroc=0.40893 ci95=[0.3742, 0.4454]
+   results['paper16|mean']['unified']['key_layers']['40'] auroc=0.35978 ci95=[0.3277, 0.3924]
+   results['paper16|mean']['assistant']['key_layers']['40'] auroc=0.71015 ci95=[0.6793, 0.7411]
+   results['paper16|mean']['syc_PC1']['key_layers']['40'] auroc=0.30511 ci95=[0.2758, 0.3352]
+   random-direction null, mean pooling: {"per_layer_abs_dev_p95": 0.6430684590551763, "best_of_layers_p95": 0.6935486951378792, "best_of_layers_max": 0.7232466300303113}
+   length_only: 0.6639671997831391  n: {'rows': 1182, 'retracted': 434, 'maintained': 748}
+
+  DESIGN.md lines that carry the correction:
+   :6: **It is.** The capitulation axis reads **0.745 zero-shot** on `sycophancy_mt` where the paper16
+   :7: **deception** axis's PC1 reads **0.374** and the paper16 **sycophancy** axis reads **0.313**, and
+   :8: the trained version clears a dataset-level bootstrap against
+   :20: It reads **0.313** on `sycophancy_mt` (95% CI [0.283, 0.346]) — below chance, and *significantly*
+   :21: so: beyond a 1,000-random-direction null at p 0.001-0.008.
+   :23: > **Correction, 2026-09-23.** This line previously read "0.374 ... worse than a random direction
+   :24: > (0.541)". **0.374 is the paper16 *deception* axis's PC1, not the sycophancy axis**
+   :25: > (`27_crossgen.py:411-416` hardcodes `_zs_axis="deception"`, so a paper16 matrix's bare
+   :26: > `contrast`/`PC1` rows are the deception axis; the `sycophancy_mt` column of
+   :27: > `run-crossgen/kd11/matrices/mean_L40_s42.json` reads contrast 0.4089 / PC1 0.3739). The
+   :28: > sycophancy axis's own value is 0.313 (`24_q10_sycophancy_axis.py`, 2026-09-17). The correction
+   :29: > **strengthens** the argument: the deception axis sits *within* the random null, the sycophancy
+   :30: > axis is significantly inverted. Also, 0.541 is a **trained** random probe and must not be
+   :31: > compared with a zero-shot axis; the matched trained pair is `axes` 0.3551 vs `random` 0.5413.
+   :228: | zero-shot, cap contrast, L40 | **0.745** (L20 0.759 · L44 0.728) |
+   :229: | zero-shot, register axis (paper16 **deception** PC1), L40 | 0.374 |
+   :230: | zero-shot, paper16 **sycophancy** axis, L40 | 0.313 |
+
+  Same sentence in kd/docs/NEXT.md (O-046):
+   :15: | **1. Capitulation personas (`cap/`)** | **DONE.** 0.745 zero-shot vs the register axis's 0.374 on `sycophancy_mt`; clears a dataset-level bootstrap against raw and both matched controls on that column (+0.112, CI [+0.050, +0.185]); the gain does **not** extend to the other ten columns. F-64, F-65, F-66, F-67. Design: `../../cap/docs/DESIGN.md`. |
+
+============================================================================================
+O-097  provenance of the 'pre-registered' G2 threshold 0.65
+============================================================================================
+  git log (cap sarcasm files):
+d280d23 2026-09-23 02:09:19 +0600 afteer audit
+6c9a5cf 2026-09-22 03:25:53 +0600 sarcasm
+efe9d19 2026-09-21 23:02:49 +0600 F-93 amendment: fix the silent polarity no-op, and it sharpens the verdict
+b34ff2e 2026-09-21 21:48:54 +0600 F-93: the sarcasm pilot fails its decisive check -- the bank would be a register axis
+aea9f53 2026-09-21 21:25:55 +0600 F-91: layer 40 is not the peak; brief the collaborator on F-89/F-90/F-91
+080a979 2026-09-21 20:34:46 +0600 F-89: the format-matched control deflates F-66's interpretation
+5ced550 2026-09-21 19:03:19 +0600 Sarcasm design v2: the review was right on three structural points
+3d80071 2026-09-21 17:48:57 +0600 Sarcasm bank design, for review before anything is generated
+
+  3d80071 2026-09-21 17:48:57 +0600
+      cap/docs/SARCASM_DESIGN.md                 '0.65' x0  '0.20' x0  '0.75' x1
+      cap/scripts/score_sarcasm_markers.py       (file not in commit)
+      cap/scripts/run_sarc_pilot.ps1             (file not in commit)
+  5ced550 2026-09-21 19:03:19 +0600
+      cap/docs/SARCASM_DESIGN.md                 '0.65' x0  '0.20' x0  '0.75' x1
+      cap/scripts/score_sarcasm_markers.py       (file not in commit)
+      cap/scripts/run_sarc_pilot.ps1             (file not in commit)
+  aea9f53 2026-09-21 21:25:55 +0600
+      cap/docs/SARCASM_DESIGN.md                 '0.65' x0  '0.20' x0  '0.75' x1
+      cap/scripts/score_sarcasm_markers.py       '0.65' x0  '0.20' x1  '0.75' x0
+      cap/scripts/run_sarc_pilot.ps1             '0.65' x0  '0.20' x3  '0.75' x0
+  b34ff2e 2026-09-21 21:48:54 +0600
+      cap/docs/SARCASM_DESIGN.md                 '0.65' x0  '0.20' x0  '0.75' x1
+      cap/scripts/score_sarcasm_markers.py       '0.65' x0  '0.20' x1  '0.75' x0
+      cap/scripts/run_sarc_pilot.ps1             '0.65' x4  '0.20' x3  '0.75' x0
+  working tree cap/docs/SARCASM_DESIGN.md '0.65' count: 0
+
+  Generation window (from the preserved chain status, batch P7 dump):
+   START 2026-09-21 21:21:17 ... '1 generate ... PASS' 2026-09-21 21:40:53
+   first commit containing 0.65 = b34ff2e 2026-09-21 21:48:54  -> AFTER the data

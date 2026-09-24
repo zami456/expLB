@@ -45,6 +45,20 @@ Quality), Sperber & Wilson (echoic mention with a dissociative attitude), Clark 
 
 ### 3. A logical tension that makes v1 unfalsifiable
 
+> **CORRECTION 2026-09-24 (DF-31, Phase 6).** The pair "0.300 and 0.374" below mixes two protocols
+> and mislabels one axis. **0.300** is the **trained** 4-d `axes` stack as source on full HP-KR;
+> **0.374** is the **zero-shot** paper16 **deception**-axis PC1 on `sycophancy_mt` — not the
+> sycophancy axis, which reads **0.313**. Of the two, only 0.313 is significantly below chance
+> against a 1,000-direction null (p 0.001–0.008); 0.374 sits *inside* it.
+> **Source:** `run-crossgen/kd11/matrices/mean_L40_s42.json`, zeroshot block, `sycophancy_mt`
+> column (`contrast` 0.4089, `PC1` 0.3739); 0.300 from the trained `axes` stack, HP-KR as source.
+> **How the claim is updated:** read it as — *"our failures are below chance — 0.300 (trained 4-d
+> `axes` stack, HP-KR as source) and 0.313 (zero-shot paper16 sycophancy axis on `sycophancy_mt`;
+> the deception axis's PC1 reads 0.374)."*
+> **The argument in this section is unaffected** — it turns on the failures being below chance,
+> which both corrected figures still are.
+> _The text below is superseded on this point and is kept for the record._
+
 Our failures are **below** chance — 0.300 and 0.374. But a genuine statement-versus-belief
 mismatch detector should score those datasets **above** chance, because denying knowledge you
 hold *is* a mismatch. So *"the deception axis is really a mismatch detector"* (predicts above

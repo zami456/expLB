@@ -6006,3 +6006,766 @@ finding; with it, as an artifact of where you measure.
   standard explanation and is **inferred**, not measured here; what is measured is that a random
   direction gains as much as the persona one, which is what the argument needs.
 - **status:** verified
+
+### F-121 · 2026-09-24 · **THE SCALE LADDER IS COMPLETE: the kd bank was run at 3B and 8B for the first time. Both banks decline with scale — the decline belongs to the METHOD, not the bank — but the kd bank declines less, and the gap between banks grows with depth of scale.**
+
+**The gap this closes.** `paper16` (26 personas) existed at 3B/8B/70B, so the scale claim was
+supported for that bank only. The **kd bank (36 personas = the 26 + 4 knowledge-denial + 3
+sincere-ignorance + 3 plain-assertion) existed at 70B alone**, so *"our bank rescues the method at
+scale"* was **not separable** from *"our bank is better at any scale"*. It is now.
+
+**What was run** (2026-09-23 23:57 → 2026-09-24 08:51, NDIF, isolated tree `expLB-resplit`):
+36 personas × 5 variants × 30 shared questions = **5,400 rollouts at 3B and again at 8B**, judged by
+Llama-3.1-70B held constant, both vector variants extracted, both axis files built — **identical
+construction to the 70B kd bank**, so the three rungs differ only in model. Originals never modified
+(`27_crossgen.py` md5 `681126242f…` before and after).
+
+**Crossgen on identical footing** for every cell: the same 5 datasets (MASK fifth, per F-60), k=3,
+mean pooling, `paper` probe, seed 42, layer-averaged.
+
+| rung | paper16 (26p) | kd all (36p) | kd s23 (36p) |
+|---|---:|---:|---:|
+| **3B** (7 layers) | +0.0382 | +0.0317 | +0.0360 |
+| **8B** (8 layers) | +0.0148 | +0.0169 | +0.0194 |
+| **70B** (21 layers) | **−0.0116** | **+0.0032** | **+0.0054** |
+
+**kd − paper16:** −0.0066 / −0.0022 (3B) → +0.0022 / +0.0046 (8B) → **+0.0148 / +0.0170 (70B)**
+
+**Three readings, in order of how well they are supported.**
+
+1. **The decline is the METHOD's, not the bank's.** Both banks fall monotonically with model size.
+   Ten purpose-built personas do not prevent it. **This strengthens F-63/F-110's negative result**,
+   which was previously open to "you used the wrong personas".
+2. **The kd bank declines less, and the bank gap grows with scale** — behind at 3B, level at 8B,
+   ahead by +0.017 at 70B. At 70B it is the difference between paper16 going **negative** and kd
+   staying just **positive**. A consistent direction across three rungs.
+3. **Do not oversell reading 2.** +0.0032 and +0.0054 are a whisker from zero; "kd stays positive" is
+   true and practically meaningless. **One seed, no significance test, point estimates.**
+
+**SCOPE CONDITION, and it matters:** these 5 datasets contain **no knowledge-denial data at all** —
+HP-KR is not among them. So this measures the kd bank's **general** effect, not the one it was built
+for. Consistent with D-028/F-115: the bank's advantage is real but **local to the dataset it was
+designed to repair**.
+
+**DF-48 verified, not assumed.** The two axis variants are byte-distinct at both rungs
+(3B `c93eb6d2…` vs `e517a2d6…`; 8B `4141229…` vs `0e68064…`). That bug would have silently made the
+`all` vs `s23` comparison meaningless.
+
+- **source:** `expLB-resplit/run-crossgen/kdscale_{3b,8b,70b}_{all,s23}/matrices/mean_L*_s42.json`;
+  paper16 rungs from `run-crossgen/scale_{3b,8b,70b_paper16fp32}`
+- **script:** `audit/scripts/p12_kd_scale_ladder.py` (re-runnable on the lab PC)
+- **backup:** `tamara:expLB/_labpc_only_backup_2026-09-24/run-scale-kd` — **290 files, 0 differences**
+- **caveats:** one seed; mean pooling only; k=3; 5 datasets excluding all harm-pressure data;
+  layer-averaged over each rung's own stored layers (7 / 8 / 21), which differ in count.
+- **status:** verified
+
+---
+
+### F-122 · 2026-09-24 · **CORRECTION + new arm: the sycophancy axis WAS computed — on the collaborator's branch, not ours. `syc_pc1` tops his excl-HP-KR table at L40–56, but the whole margin is ONE dataset (convince_me) and the reading is zero-shot.**
+
+**First, a correction of my own claim.** Earlier in this audit I wrote that `pc:sycophancy` was
+*"never computed in any crossgen store — anywhere."* **That is wrong.** The search covered only
+`run-crossgen/` on the lab PC — **our** pipeline. The collaborator's branch carries **four**
+sycophancy arms (`syc_pc1`, `syc3`, `syc_axis1`, `syc3_orth`) at **all 16 layers**. The true claim
+is narrower: the sycophancy axis is missing from *our* pipeline, because `27_crossgen.py`'s default
+`--features` omits it. Scoping a one-pipeline search as a project-wide absence is the same error
+class this audit keeps recording elsewhere.
+
+**Second, what his sycophancy arms actually say.** Best arm by off-diagonal **excluding HP-KR**:
+
+| layer | baseline | best arm | value | vs base | `ext_axis1` (draft headline) | `syc_pc1` |
+|---|---:|---|---:|---:|---:|---:|
+| 36 | 0.8124 | `ext_axis1` | 0.9403 | +0.128 | 0.9403 | 0.9222 |
+| **40** | 0.7581 | **`syc_pc1`** | **0.9370** | +0.179 | 0.9165 | 0.9370 |
+| **44** | 0.7297 | **`syc_pc1`** | **0.9274** | +0.198 | 0.9053 | 0.9274 |
+| **48** | 0.7375 | **`syc_pc1`** | **0.9228** | +0.185 | 0.8952 | 0.9228 |
+| **52** | 0.7515 | **`syc_pc1`** | **0.8999** | +0.148 | 0.8806 | 0.8999 |
+| **56** | 0.7419 | **`syc_pc1`** | **0.8685** | +0.127 | 0.8670 | 0.8685 |
+
+Arm win counts over 16 layers: `syc_pc1`=5, `ext_pc3`=4, `ext_axis1`=4, `axis1`=1, `uni_axis1`=1,
+`syc3`=1. **No arm dominates the sweep** — which is F-72's and F-120's warning again.
+
+**Third, and this is what stops it being a result.** Breaking `syc_pc1` − `ext_axis1` down by test
+dataset, the margin is **not** spread across the five:
+
+| test dataset | L40 `syc_pc1` | L40 `ext_axis1` | diff |
+|---|---:|---:|---:|
+| **convince_me** | 0.9984 | 0.9123 | **+0.0861** |
+| harm_refusal_choice | 0.7521 | 0.7116 | +0.0405 |
+| insider_trading_cadenza | 0.9853 | 0.9803 | +0.0050 |
+| instruct_dishonesty | 0.9500 | 0.9784 | −0.0284 |
+| repe_honesty | 0.9992 | 1.0000 | −0.0008 |
+
+**`syc_pc1` wins 3 of 5 at L40/44/48/52 and 2 of 5 at L56, and `convince_me` supplies most of the
+margin at every one** (+0.086, +0.128, +0.123, +0.099, +0.054). On `instruct_dishonesty` and
+`repe_honesty` it *loses* at all five layers. So the honest statement is **"a sycophancy axis reads
+the convincing game better than the knowledge-denial extension does"**, not "sycophancy beats the
+extension." `convince_me` is persuasion under pressure — the one dataset where an
+agreement-versus-pushback direction *should* fire — so the result is mechanistically coherent and
+directionally supports the register diagnosis (F-13, F-116, F-118). It is n=1.
+
+**Fourth, the unit of evidence is smaller than it looks.** Extending F-97's caveat (2) from two
+layers to all sixteen: for every `dim=1` arm the trained off-diagonal **equals** the zero-shot
+AUROC, because a logistic regression on one scalar can only choose a sign. Measured spread of any
+single off-diagonal cell across training rows (HP-KR dropped as a training row, since it flips the
+sign):
+
+| arm | dim | spread across all 16 layers |
+|---|---:|---|
+| `ext_axis1` | 1 | **0.000 at every layer** |
+| `denial_axis1` | 1 | **0.000 at every layer** |
+| `pc1`, `axis1` | 1 | 0.000 except L56–L64 (sign disagreement) |
+| `syc_pc1`, `syc_axis1` | 1 | 0.000 except L56–L72 |
+| `baseline` | 8192 | 0.466 – 0.917 |
+| `syc3`, `ext_pc3`, `denial_pc3` | 3 | 0.139 – 0.942 |
+
+**So the draft's headline arms `ext_axis1` and `denial_axis1` have no transfer content at all** —
+their 30-cell off-diagonal mean holds **6 distinct numbers**, one per test column, each replicated
+across five training rows. Any standard error or bootstrap computed over those 30 cells counts
+duplicates as independent observations. Against them the baseline is a **trained 8192-d probe**, so
+"the axis beats the baseline by +0.18" compares a zero-shot direction with a fitted probe. That may
+still be the more impressive claim — but it has to be *labelled* zero-shot, and its error bar
+computed over 5 test datasets, not 30 cells.
+
+- **source:** `origin/paper` — `src/probes/deception-detection/results/persona_ood_ext_L{20,24,…,79}/`
+  `summary.csv` and `matrix_{baseline,pc1,axis1,syc_pc1,syc_axis1,ext_axis1,denial_axis1,syc3,ext_pc3,denial_pc3}.csv`,
+  all 16 layers. Read with `git show`; no checkout, no branch change.
+  Reproduce: `python audit/scripts/p14_collab_syc_arms.py` (section 1 and 2) and
+  `python -c "import sys;sys.path.insert(0,'audit/scripts');import p14_collab_syc_arms as p;p.per_dataset()"` (section 3).
+- **caveats:** (1) one seed, his pipeline, his probe recipe; we did not re-run his matrices.
+  (2) his six datasets include `repe_honesty`, which he himself flags as in-distribution, and it is
+  at or near 1.0000 for most arms — a ceiling column that cannot separate them. (3) the per-dataset
+  table averages the four non-HP-KR training rows, which are identical for these arms, so it is a
+  restatement of the zero-shot column, not an independent estimate. (4) no significance test is
+  applied; with n=5 test datasets and one seed none would be informative.
+- **supersedes:** the audit's own claim (in an earlier `audit/RESULTS_BY_AXIS.md` §4 and
+  `DOC_FIXES.md` DF-89) that `pc:sycophancy` was never computed anywhere. Narrows it to our pipeline.
+- **status:** verified
+
+### F-123 · 2026-09-24 · **CONSOLIDATED ledger corrections from the DOC_FIXES triage (Phase 6, 6D-4): 22 proposed corrections to existing entries, appended rather than applied — plus a pointer error in F-119 that left a false claim about the collaborator reading as live**
+
+The ledger is append-only, so the 22 `audit/DOC_FIXES.md` entries that propose edits to existing
+F-entries cannot be applied. They are consolidated here instead, at the owner's instruction
+(2026-09-24). Triage: `audit/phase6/DOC_FIXES_TRIAGE.md`.
+
+**Three were re-derived from raw files in this session**; the rest carry the path the audit
+recorded when it first derived them, and are marked *(carried)*.
+
+#### 1. F-119's pointer is wrong, and it hid a false claim — correct it here
+
+F-119 says it supersedes *"DF-71's reproducibility half"*. **DF-71 has no reproducibility half** —
+it is the F-61 `+0.006` script-bug entry. The entry F-119 actually supersedes is **DF-12**
+("`paper/make_numbers.py` exists on neither branch"). `audit/DOC_FIXES.md` DF-85 carried the same
+mis-pointer, so **DF-12 read as live and unwithdrawn**, and applying it would have put a false
+claim about the collaborator into a document.
+
+**Re-verified from git in this session, not from prose:**
+`src/probes/deception-detection/paper/make_numbers.py` is on `origin/paper` — **28,232 bytes,
+commit `8fd071b2`, 2026-09-22, zami456** — beside `paper/make_figures.py`. Count is **1** on
+`origin/paper` and **0** on `asix` and `origin/feat/persona-pc-ood`, which is why the original
+check missed it. `src/probes/deception-detection/` is a vendored sub-project with its own root, so
+**the draft's path `paper/make_numbers.py` is correct as written.** DF-12 is now marked WITHDRAWN
+in place; DF-85's pointer is corrected.
+
+#### 2. Re-derived in this session
+
+| DF | entry | printed | correct |
+|---|---|---|---|
+| **DF-71** | F-61 | `pc:unified − raw` = **+0.006**, "a **twelvefold** difference" | **+0.0093**, ratio **8.2×** |
+| **DF-42** | F-26, F-33, F-73 | "length-only **0.553** vs raw **0.665**" | **0.5555 / 0.6623** (11 datasets) |
+| **DF-04** | F-73 | "0.553 vs 0.665 confirmed to three decimals" | the values are 0.556 / 0.662 |
+
+Source for all three: `run-crossgen/kd11/matrices/mean_L40_s42.json` — bank `paper16`
+(`axes_vectors_s3_fp32.pt`), layer 40, mean pooling, seed 42, k=5, probe `paper`, 110 off-diagonal
+pairs. Script: `audit/scripts/p16_f123_verify.py`.
+
+**DF-71's cause, confirmed live.** `d["rows"]` in these matrices is the *caption*
+`'trained on (80% split)'` — a **22-character string**, not a label list. `zip(datasets, d["rows"])`
+therefore pairs 11 datasets against 22 **characters**, and the diagonal test `tr == te` compares
+single letters, leaving in-distribution cells inside the "off-diagonal" mean. The bug is already
+fixed in `kd/scripts/paper_comparison.py`; only the prose carried it.
+
+**The ratio F-61 printed is a mixed comparison.** `pc:unified − datapca` = **+0.0064**, and
+0.0757 / 0.0064 = **11.7×** — which is the "twelvefold". Like-for-like against raw,
+0.0757 / 0.0093 = **8.2×**. F-61 took kd's margin over *raw* and paper16's margin over *datapca*.
+**F-61's conclusion — do not attribute the kd gain to persona design — is unaffected.**
+
+**A refinement to DF-42 found here.** DF-42's second pair, "0.5494 / 0.6652 (10 datasets)",
+reproduces exactly — but that ten is **all but `harm-pressure-kr-matched`**, not block9. Block9
+(all but `sycophancy_mt`) gives **0.5467 / 0.6870** on the same matrix. Per-drop sweep in the same
+script. Any restatement must name *which* ten; cf. the DF-01 warning that the block labels "10"
+and "9" are historical counts meaning all-11 and all-but-`sycophancy_mt`.
+
+#### 3. Carried from the audit's own derivation
+
+**F-04** — DF-01: the "11-dataset run" is **block 9 = 10 datasets** (`sycophancy_mt` excluded);
+on the full 11 both signs flip (+0.0147 → −0.0215, +0.0264 → −0.0243). DF-02: the one test clearing
+BH is **`random@2 − raw` losing** (−0.2287, q 0.0192), not a persona winning. *(carried:
+`run-crossgen/kd11/significance.json`)*
+
+**F-77 / F-81** — DF-03: `37/80` is **not a layer count** — it is a bootstrap median *fraction*
+(≈0.46) rendered as a count. True counts: kd beats raw at **28/80** and `datapca` at **31/80**,
+which is what F-75 already says. **The error runs against F-77's own argument** — the contrast with
+the cap bank's 21/21 gets *stronger*. *(carried: lab PC `passA11` matrices, `audit/scripts/qa_p7.py`)*
+
+**F-73** — DF-05: `harm-pressure-choice`'s length gap is **+0.0035 tokens**, not exactly zero.
+DF-06: "median gap 3.7 tokens" is the median of **|gap|**; the signed median is **+2.63**, and the
+absolute framing argues against F-73's own conclusion that the effect is small.
+
+**F-105** — DF-07: "none of them is persisted" is out of date; the fix landed in the same commit
+(`6c9a5cf`). DF-08: **11 of 12** words appear in the top-25, and `definitely` is a `MARKER_TOKEN`,
+which means F-93's feature list came from the **unstripped** fit.
+
+**F-32** — DF-39: the acceptance table certifies **bank generation v2, which never produced a
+rollout**; the live bank is v3, and re-running F-32's own script against it gives explain 3/5-vs-4/5,
+turn-1-commit 0/5 everywhere, max 99 chars. **"The same lexical counts were re-run" is false** — all
+four regexes differ from F-28's. **But the cap conclusion stands for a better reason:** turn 1 is
+**byte-identical across all 65 persona arms** (teacher-forced, 1,300 rows / 13 files / 65 personas /
+20 questions, exactly one distinct turn-1 text per question), so persona wording cannot enter turn 1
+at all. Rest the no-confound argument on teacher forcing, not on lexical counts.
+
+**F-29** — DF-40: "the inverted axis fails as source" holds **only under mean pooling** (7/21
+layers); under `last` it **beats random as source at 18/21**.
+**F-33** — DF-41: 22 roles failed is a 15:47 snapshot; the logs say **24**, and F-35 in this same
+ledger already says 24.
+**F-26** — DF-43: "the holding persona writes longer turn-1 text" is unsupported — all four turn-1
+blocks are 695–698 characters, equally truncated.
+**F-36** — DF-44: the production (v3) question set is **10 of 20 first-person**; F-36's v2 numbers
+point at a file replaced 5½ minutes after the entry was written.
+**F-38** — DF-45: the table prints one model per dataset where the files hold 2, 12 and 4 — a
+truncated print; **the conclusion is stronger than stated**.
+**F-56** — DF-52: the mechanism is backwards. `subsample()` **balances**, it does not preserve the
+source ratio; 134/666 is the balancer hitting the class ceiling. Source share is **6.28%**, not
+16.75% — **the sampler raised the deceptive share.** F-56's practical conclusions stand.
+**F-91** — DF-53: the three quoted values come from **different seeds**, with L32/L36 at their best
+and L40 at its worst; L40's own best seed (0.8957) is the table's highest value. No consistent rule
+supports "32–36, not 40" — say "a plateau over roughly L32–L44 that this measurement cannot order."
+**F-78** — DF-54: the quoted numbers are Ying et al. Figure 4 **panel (b)** (transfer *from*
+sycophancy); the direction described is panel (a). **Both panels show base > chat at all three
+scales, so F-78's use of it is unaffected.**
+**F-48 / F-54** — DF-50 second half: both still assert the Table-1 framing with **no supersede
+pointer to F-60**, which corrected it three times over. The back-annotation was never made.
+**F-60 / F-70 / F-104 / F-22 / F-49 / F-57 / F-21** — DF-56: F-70's "three papers not in `papers/`"
+and F-104's "8 scripts still uncommitted" were both overtaken by `4d0d046`; F-22's sibling handler
+at line 186 still uses `str(e)[:200]`; **F-49 DOES NOT HOLD** (both rungs byte-identical at
+359,384 B), already superseded by F-50; F-57's "CI spans zero at every layer" is false (excludes
+zero at L40 and L44); **F-21's `gen_batch` sweep table has no data behind it** — a verbatim copy of
+a comment at `run_scale_chain.ps1:149`.
+**F-03** — DF-78: quote leak-guarded from now on — `axes − raw` = **−0.2545 (L20) / +0.0309 (L40) /
++0.0050 (L44)**.
+**F-65** — DF-31's ledger half: the 0.374 misattribution is **inherited from F-65**. 0.374 is the
+paper16 **deception** axis's PC1; the paper16 **sycophancy** axis reads **0.313**, and the deception
+axis's contrast reads 0.409. Only 0.313 is significantly beyond the random-direction null
+(p 0.001–0.008); **0.374 sits inside it**, so "worse than a random direction" is not supported for
+the number usually quoted and *is* supported for the axis usually named.
+
+#### 4. What this entry does not do
+
+It does not re-derive the 19 carried items — they were derived once during the audit with their
+paths recorded in `audit/DOC_FIXES.md`, and re-deriving DF-03 and DF-39 needs lab-PC stores not
+held locally. **Treat the carried rows as the audit's verdict, not as a second measurement.**
+
+- **supersedes:** nothing. This entry *corrects* F-04, F-26, F-29, F-32, F-33, F-36, F-38, F-48,
+  F-54, F-56, F-61, F-65, F-73, F-77, F-78, F-81, F-91, F-105, and repairs F-119's pointer. The
+  entries themselves stand unedited, per the append-only rule.
+- **status:** verified for §1 and §2 (re-derived this session); carried for §3.
+
+### F-124 · 2026-09-24 · **The draft's tables all reproduce — and three things about them were not known: the sign inversion is 7 (arm, layer) cells not 1, two tables print 0.651 and 0.791 for the same arm at the same layer, and the "BA@1%FPR" column runs at up to 88% FPR**
+
+Phase 6 / 6A Level 2 re-derived all 54 draft claims in batches B23, B30, B40, B41, B42, B43, B45,
+B46 from the collaborator's raw result files. **Every printed number reproduces.** 40 verdicts
+`MATCHES HIS DATA`, 14 `PARTLY MATCHES HIS DATA`, none failing. The fourteen reductions are for
+framing and operating-point conditions the tables do not state; not one is arithmetic.
+
+**Source:** `origin/paper` @ `ea1ce52b`,
+`src/probes/deception-detection/results/persona_ood_ext_L{20,40,44}/` —
+`zero_shot.csv`, `summary.csv`, `zero_shot_operating.csv`, `liars_bench_comparison.csv`,
+`matrix_{baseline,axis1,syc_axis1,syc_pc1,pc1,denial_axis1,ext_axis1,ext_pc1}.csv`. Read with
+`git show`; **no checkout, no branch change.** Also `papers/2511.16035v2 (1).pdf` Tables 6–8,
+pp. 54–56. Scripts: `audit/scripts/p16_level2.py`, `audit/scripts/p16_level2_verdicts.py`.
+Chapter draft: `audit/RESULTS_CHAPTER.md`.
+
+#### 1. The sign inversion is wider than DF-46 recorded — **DF-46's scope claim is false**
+
+DF-46 states the inversion occurs *"only at L20, only in `axis1`, only in the HP-KR training row."*
+Sweeping **all seven dim=1 arms at all three layers**, inverted training rows (row off-diagonal mean
+< 0.5) appear in **seven (arm, layer) cells**. The inverted row is HP-KR's in every one.
+
+| layer | arms with an inverted HP-KR row | off-diagonal mean, printed → sign-corrected |
+|---|---|---|
+| L20 | `axis1`, `syc_axis1`, `syc_pc1`, `pc1` | 0.6511→0.7909 · 0.6153→0.7429 · 0.6153→0.7433 · 0.6669→0.8056 |
+| L40 | `syc_axis1`, `syc_pc1` | 0.6626→0.8080 · 0.6618→0.8075 |
+| L44 | `syc_axis1` | 0.7078→0.8485 |
+
+Clean at all three layers: `denial_axis1`, `ext_axis1`, `ext_pc1`.
+**In every one of the seven, the sign-corrected mean equals the mean of the six zero-shot cells to
+4 dp** — the §3 identity holding exactly.
+
+**Consequence for Table 11.** Its off-diagonal row (`syc_axis1`: 0.615 / 0.663 / 0.708) is depressed
+by this at **all three** layers, understating the arm by **0.128 / 0.145 / 0.141**. Under DF-46's
+scope only L20 would have been affected.
+
+#### 2. Table 3 prints 0.651 and Table 6 prints 0.791 for the same arm at the same layer
+
+Both reproduce. They are different quantities and the draft does not say so.
+
+`matrix_axis1.csv` at L20: the **HP-KR training row is exactly `1 − x` of every other row** — checked
+cell by cell, difference **0.00000** on all four comparable cells — with row mean **0.0806** against
+0.7503–0.8057 for the other five. Averaged in, it drags the off-diagonal from 0.7909 to **0.6511**.
+Table 3 prints the trained off-diagonal (0.651); Table 6's Mean row prints the zero-shot mean
+(0.791). **At L40 and L44 no row inverts and the two agree to 4 dp** (0.8319, 0.8260).
+
+**This is not a coding error** — training on HP-KR yields an inverted probe because HP-KR inverts,
+which is this project's own finding (F-13). It needs describing that way, not hiding.
+
+#### 3. The dim=1 identity, verified by direct inspection rather than inferred
+
+For every one-dimensional arm, **each cell in a given test column is identical across all five
+training rows**, up to sign. So the 30-cell off-diagonal contains **six distinct numbers, each
+replicated five times**. At L20, `matrix_axis1.csv` column by column:
+
+| test column | zero-shot | the five training-row cells |
+|---|---:|---|
+| `convince_me` | 0.9399 | 0.9399 **0.0601** 0.9399 0.9399 0.9399 |
+| `harm_refusal_choice` | 0.7169 | 0.7169 **0.2831** 0.7169 0.7169 0.7169 |
+| `harm_refusal_knowledge_report` | 0.1483 | 0.1483 ×5 |
+| `insider_trading_cadenza` | 0.9879 | 0.9879 0.9879 **0.0121** 0.9879 0.9879 |
+| `instruct_dishonesty` | 0.9587 | 0.9587 0.9587 **0.0413** 0.9587 0.9587 |
+| `repe_honesty` | 0.9935 | 0.9935 0.9935 **0.0065** 0.9935 0.9935 |
+
+Confirms **F-122** and **DF-93** by measurement. Any interval over those 30 cells counts duplicates
+as independent; it belongs over the **five test datasets**. And Table 7's comparison is a **trained
+8192-d probe against a label-free 1-d direction** — verified identical to its zero-shot value in all
+18 (dataset × layer) pairs. That is the stronger claim, and a different one from what the table implies.
+
+#### 4. The "BA@1%FPR" column does not operate at 1% FPR
+
+The threshold is fitted on Alpaca and applied unchanged. Measuring `1 − specificity` on the
+evaluation set itself, **23 of 90 (arm × dataset × layer) cells exceed 1%**; 67 are at or below.
+The failures are concentrated:
+
+| arm / layer | CG | HP-C | HP-KR | IT | ID | RepE |
+|---|---:|---:|---:|---:|---:|---:|
+| 4v6, L20 | 0.0% | 4.5% | **88.3%** | 0.0% | 1.1% | **35.6%** |
+| 4v6, L40 | 0.0% | 0.0% | 6.5% | 0.0% | 11.9% | 0.0% |
+| 4v6, L44 | 0.0% | 0.0% | 4.7% | 0.0% | 9.9% | 0.0% |
+| base probe, L40 | 0.0% | 0.0% | 0.0% | 0.0% | 15.2% | 0.0% |
+
+**Table 2's L20 knowledge-denial cell — BA 0.533 — is bought at an 88.3% false-positive rate**
+(specificity 0.1165, recall 0.9496). **This is the same defect the draft levels at Liars' Bench**,
+whose Follow-Up Probe reaches 0.37 recall on HP-KR at an **84% FPR** (LB Table 7 p.55, FPR block).
+The criticism is right and it applies symmetrically. The **L40 headline 0.910 survives**, at 6.5% FPR.
+
+**And the privileged upper bound is not held to the same operating point.** LB Table 8's first block
+is headed *BALANCED ACCURACY* with no "at 1% FPR" qualifier — Tables 6 and 7 carry it — and its own
+FPR row gives **0.08** for the Llama-70B/HP-KR cell. So the 0.95 upper bound runs at 8% FPR while
+the arms compared against it are held to 1%. Any "within 0.03 of the upper bound" statement (DF-26)
+inherits this.
+
+#### 5. Smaller items
+
+- **Two different base-probe numbers exist in one result directory.** Table 2 uses
+  `zero_shot_operating.csv` (HP-KR: **0.109 / 0.936 / 0.828**); `matrix_baseline.csv` cell
+  `repe_honesty → HP-KR` reads **0.3808 / 0.9281 / 0.8803**. At L20 they disagree sharply and only
+  the first shows a strong inversion. The draft should name which base probe it means.
+- **Table 11's HP-KR inversion weakens with depth** — 0.457 below chance at L20, 0.020 at L44
+  (0.0429 / 0.1671 / 0.4804). "Inverts at every layer" holds, but L44 is marginal.
+- **The abstract's 0.50 / 0.26 / 0.95 are Llama-3.3-70B rows**; the cross-model averages are
+  **0.50 / 0.42 / 0.72**, so 0.26 is model-specific (LB Tables 6–8, `Average` rows).
+- **D-005's "ten roles" is exact:** `knowledge_denial` 4 + `sincere_ignorance` 3 +
+  `plain_assertion` 3 = 10, giving 8+4=12 vs 7+3+3=13 (`kd/personas/kd_role_groups.json`).
+- **D-002 is faithful to the cited paper** (Llama-3.2-3B main, "additional replications on
+  Llama 3-8B", p.4) — but the paper's own words for 8B are *"auxiliary comparisons … broadly
+  supportive"* (p.5), and **F-121 finds the gain declines with scale on both banks**, so "better at
+  3B and 8B" does not extend to 70B.
+
+#### 6. Corrections to this session's own work
+
+- **Three apparent mismatches were my rounding, not his.** D-144 (0.6255), D-149 (0.6535) and
+  D-189 (0.7875) are exact half-way values; the draft rounds half-up and is correct. Python's
+  `.3f` uses banker's rounding. Caught before any verdict was written.
+- **One note first read "only 5 of 90 cells sit at or below 1%."** Backwards — 67 of 90 are at or
+  below, 23 exceed. Corrected before the chapter was drafted.
+
+- **caveats:** (1) one seed, his pipeline, three layers only — F-117's 16-layer sweep puts the
+  `ext_axis1` optimum at **L36 (0.9275)**, not L40, so none of this is a depth result. (2) No
+  significance test is applied to any of these tables; with five or six test datasets and one seed
+  none would be informative. (3) `repe_honesty` is at or near ceiling for most arms at L40/L44 and
+  cannot separate them. (4) §1's sweep covers the three published layers; the other 13 layers on
+  `origin/paper` were not swept for inverted rows.
+- **supersedes:** **DF-46's scope claim** ("only at L20, only in `axis1`") — the measurement stands,
+  the scope does not. Extends F-122 and DF-93 from inference to direct cell-level verification.
+- **status:** verified
+
+### F-125 · 2026-09-24 · **CORRECTS F-124: the draft discloses both things F-124 faulted it for, and eleven verdicts were revised up. Level 1 then cleared all 176 draft claims — 160 match, 9 partly, 7 unverifiable, and the 7 have one root cause: two artifacts were never released**
+
+F-124 was written from the Level-2 pass alone. Level 1, run an hour later over the draft's prose and
+methods sections, **falsified two of its four sections.** Recording that here rather than editing
+F-124, per the append-only rule.
+
+#### 1. What F-124 got wrong
+
+**F-124 §3 said the dim=1 identity needed labelling as zero-shot. The draft already states it, three
+times over.**
+
+- **Section 3.4, verbatim:** *"A probe on a single feature can learn only a sign and a scale.
+  Whenever every training set agrees on the sign, its AUROC on a test set therefore equals the
+  zero-shot AUROC, and it has no training set to overfit."* That is the identity, stated correctly,
+  **with its condition** — and the condition clause is doing real work, because "whenever every
+  training set agrees" is exactly what fails at L20.
+- **Table 3's own caption:** *"The 1-d rows are persona contrasts, a probe on one feature."*
+- **Figure 4's caption:** *"Its rows are constant because a probe [on one feature can learn only a
+  sign]."*
+- The Contributions bullet calls the arm *"the zero-shot extended contrast"*.
+
+**DF-93's second half does not bite either.** It asks for the error bar over datasets rather than
+over the 30 cells. The draft computes **no interval over matrix cells at all**: section 4 states
+*"95% stratified bootstrap intervals over examples (1,000 resamples), drawn once and shared by every
+detector."* There is no duplicate-counting to correct.
+
+**F-124 §2 said the 0.651-vs-0.791 gap was unreconciled. The draft explains it in section 4**, with
+the matching worked example: *"the inverted ranking on HP-KR carries into every test set (for
+instance CG falls from 0.940 to 0.060)."* **0.940 → 0.060 is exactly the cell pair F-124 verified.**
+What remains is presentational — neither table cross-references the explanation.
+
+**Eleven Level-2 verdicts revised** from `PARTLY MATCHES HIS DATA` to `MATCHES HIS DATA`: D-087,
+D-110, D-111, D-112, D-114, D-188, D-189, D-190, D-191, D-192, D-193, D-194. Level 2 now reads
+**52 MATCHES / 2 PARTLY**, from 40/14.
+
+**F-124 §4 needs one softening too.** The realised-FPR measurement stands (23 of 90 cells above 1%,
+88.3% worst), but the draft **discloses the L20 case in words**: the Figure 3 caption reads *"At
+layer 20 its threshold falls inside HP-KR and flags most honest answers too."* That is the 88% FPR
+in prose. Worth quantifying; not a hidden defect.
+
+**F-124 §1 stands unchanged** — the seven-cell inversion sweep, and DF-46's scope claim being false.
+
+**The method lesson.** The owner's instruction to interleave checking with writing is what caught
+this: a Level-2 pass over tables alone judged the tables against a standard the paper meets in its
+Methods. **A framing criticism is not verifiable from the tables it criticises.**
+
+#### 2. Level 1 — all 176 draft claims now have a verdict
+
+| | count |
+|---|---:|
+| `MATCHES HIS DATA` | **160** |
+| `PARTLY MATCHES HIS DATA` | 9 |
+| `UNRESOLVED` | 7 |
+
+Every stated number that exists in a committed result file was located and matched. Verified exactly
+at Level 1: **Table 1** (all 7 dataset sizes), **Table 5** (all 35 per-persona kept counts, plus the
+3,749 total, the 47–149 range and the 69.4% share, recounted from the judge scores), **Table 8**
+(all 36 response-vs-`No` cells), **Table 9** (all 54 read×layer×metric cells), **Table 10** (all 10),
+**Figure 4 left** (all 36 raw-probe cells at 2 dp) and **Figure 4 right** (rows constant to 4 dp, not
+approximately). `C = 0.1` resolves from `REG_COEFF = 10.0`; `λ = 10` for the base probe is the same
+constant. Script: `audit/scripts/p16_level1.py`; verdicts `p16_level1_verdicts.py`.
+
+#### 3. The seven unverifiable claims have two causes, and both are one-line fixes
+
+**Cause A — the persona vectors were never committed** (D-057, D-065, D-154). The cosine **0.47** in
+section 3.3 and Figure 2's caption numbers **−0.08 / 2.90 / 0.05** are computed at render time inside
+`paper/make_figures.py:personas()` from `pcs.EXTENDED_VECTORS_DIR`. Those 36 vectors are not on the
+branch, and this audit's cache holds only the **26 paper16 vectors** (`run-paper16/vectors_s3_fp32/`,
+no knowledge-denial roles), so the denial axis cannot be reconstructed. **Nobody working from the
+repository can check these three numbers.**
+
+**Cause B — the pipeline's own results tables were never committed** (D-030, D-063). Appendix G's
+claim that rescored activations matched the pipeline *"to four decimal places at every layer"* cannot
+be checked: `results/XXXX-9-llama-all*/` contains only `plots/*.png`. The neighbouring Follow-Up
+Probe figure (**0.6360 measured vs 0.6340 published**) *does* reproduce from committed files, so the
+gap is specific, not general.
+
+**Consequence for two release sentences.** *"We release the code and results"* (D-032) and
+*"every number in the paper is generated from the released result files"* (D-171) are both
+**over-scoped** — by exactly these five numbers. The code release is real and supersedes the audit's
+old D-237 verdict (F-119). Shipping the persona vectors, which are small, would close Cause A
+entirely.
+
+**The remaining two** (D-040, D-041) are citations — Natarajan et al. and Yoo & Skapars — with **no
+row in `audit/papers.csv`, no PDF and no arXiv id**. DF-19 separately records that two venue strings
+near them appear in none of the three PDFs held. Verify before the reference list is fixed.
+
+#### 4. The substantive Level-1 findings
+
+- **D-037 · "the benchmark reports recalls near zero for every method" on HP-KR is false.** Mean
+  Probe 0.00 ✓, but **Follow-Up Probe 0.37** and **Upper-Bound Probe 0.97** on the same Llama-3.3-70B
+  cell. Holds only for the non-privileged cross-model averages (0.00, 0.12). Confirms DF-13. The
+  Follow-Up's 0.37 is bought at an **84% FPR**, which makes the paper's point better than the
+  overstatement does.
+- **D-069 · "that happens only for the published contrast trained on HP-KR at layer 20" is too
+  narrow** — F-124 §1's sweep finds **seven** (arm, layer) cells. Correct as scoped to the three
+  headline contrasts (`denial_axis1` and `ext_axis1` never invert), but the sycophancy contrast is
+  reported in Table 11 and Appendix F and **its printed off-diagonal row is depressed at all three
+  layers**. The worked example 0.940 → 0.060 is exact.
+- **D-153 and D-163 · the wording-controlled test is promised as future work and has been run three
+  times** — F-03/F-72/F-76 (2026-09-19), F-115 (leak closed), F-116 (2,001-row knowledge-matched
+  control, 7.8× larger). Margin **+0.066, CI [−0.069, +0.189], P = 0.161**, inverting to **−0.2545**
+  at L20, with the axes **below chance** on the knowledge-matched control. DF-76. The paper is
+  stronger with the negative result in it.
+- **D-162 · Gender-Secret is listed as future work and is no longer open** — F-118 found the
+  knowledge-denial direction **at chance where both classes deny** (0.436–0.623), one of the three
+  convergent wording-matched results.
+- **D-164 · "the top tenth of response tokens is a better read than the mean"** holds against the
+  mean (L40 BA 0.737 vs 0.694) but **the single maximum beats both** (BA 0.750, recall 0.548).
+  DF-15.
+- **D-128 has been vindicated.** *"Three layers do not locate an optimum, and a layer between 20 and
+  40 may do better"* — the 16-layer sweep puts `ext_axis1`'s optimum at **L36 = 0.9275** against
+  L40's 0.9158 (F-117). The caveat was right; say so rather than leaving it hypothetical.
+- **D-156 is accurate only with its own continuation.** At L20 excluding HP-KR the extended contrast
+  is **behind** by 0.010 (0.909 vs 0.919) — which the sentence's next clause concedes. Read without
+  it, the claim would not hold.
+
+#### 5. What the draft gets conspicuously right
+
+Worth recording, because the audit's measured failure mode is leniency and this is the other tail.
+**D-016** (HP-KR is genuinely untested by the replicated paper), **D-155** and **D-033** (the
+designed-repair caveat, declared twice), **D-160** (the insider-trading scratchpad disclosure, made
+voluntarily), **D-060** (the dim=1 identity with its condition), **D-078** (intervals over examples,
+drawn once and shared), **D-137** (RepE excluded from averages because it is the base probe's
+training set) and **D-165** (calibration named as the open problem). Seven disclosures a paper is
+not obliged to make.
+
+- **caveats:** (1) Level 1 locates numbers; it does not re-derive them — the eight Level-2 batches
+  are the re-derived set. (2) Three layers, one seed, his pipeline throughout. (3) D-051's sampling
+  parameters and D-181's 6-know/4-do-not split live in generation inputs, not result files, and were
+  not re-derived. (4) The seven-arm inversion sweep covers the three published layers; the other 13
+  layers on `origin/paper` were not swept.
+- **supersedes:** **F-124 §2 and §3** (and softens §4). F-124 §1 stands.
+- **status:** verified
+
+### F-126 · 2026-09-24 · **6D-1 and 6D-2 closed on the lab PC, and five of the seven unverifiable draft claims resolved. `pc:sycophancy` trained in OUR pipeline LOSES to raw on all 11 datasets at every layer and pooling — it only wins once `sycophancy_mt` is removed. And `passP` turns out to be a PROMPT-span store: a probe on the question alone, before the model answers, reads 1.000 on two datasets.**
+
+Three jobs, one lab-PC session, all read-only on `C:\Users\user4\expLB\`; the one write went to
+`C:\Users\user4\expLB-resplit\phase6\` and is logged in `audit/LABPC_WRITES.md`.
+
+#### 1. 6D-1 · `pc:sycophancy` in our pipeline — the gap is closed, and it does not help
+
+Never trained here, because it is absent from `27_crossgen.py`'s default `--features` (DF-89).
+Run now: `run-coords/passB`, paper16 bank (`axes_vectors_s3_fp32.pt`), **all 11 datasets with
+`harm-pressure-kr-matched` passed explicitly**, seed 42, probe `paper`, all four default controls
+kept. 1m50s, CPU only.
+
+**The run reproduces `kd11` to 4 dp** — raw 0.6623, datapca 0.6651, length 0.5555, `pc:unified`
+0.6715 at L40/mean — so the split regenerated identically and the new feature is directly
+comparable to that store.
+
+**Off-diagonal AUROC, `pc:sycophancy` minus each control** (all 11 datasets | the 10 without
+`sycophancy_mt`):
+
+| pooling | layer | − raw | − datapca | − random | − length |
+|---|---|---|---|---|---|
+| mean | 20 | −0.1031 / −0.0898 | −0.0844 / −0.0697 | +0.0213 / +0.0509 | −0.0297 / +0.0024 |
+| mean | 40 | **−0.0382** / +0.0017 | −0.0410 / +0.0134 | +0.0391 / +0.1042 | +0.0686 / +0.1420 |
+| mean | 44 | −0.0075 / **+0.0342** | −0.0079 / **+0.0477** | +0.0904 / +0.1621 | +0.0935 / +0.1710 |
+| last | 20 | −0.1182 / −0.1122 | −0.1226 / −0.1135 | −0.0040 / +0.0254 | −0.0447 / −0.0071 |
+| last | 40 | −0.0377 / −0.0081 | −0.0527 / −0.0254 | +0.0484 / +0.0922 | +0.0349 / +0.1017 |
+| last | 44 | −0.0100 / +0.0206 | −0.0468 / −0.0274 | +0.0940 / +0.1486 | +0.0584 / +0.1242 |
+
+**Read it three ways and it says the same thing.**
+1. **On all 11 datasets it loses to raw at every one of the six (layer, pooling) cells**, by
+   −0.008 to −0.118. It also loses to `datapca` at all six.
+2. **Remove `sycophancy_mt` and it turns positive — but only under mean pooling, and only at depth**:
+   +0.0017 (L40) and +0.0342 (L44) over raw, +0.0134 and +0.0477 over `datapca`. Under `last`
+   pooling it still loses to `datapca` at all three layers.
+3. **Nothing clears the bar. 0 of the 264 dataset-level bootstrap comparisons in this run have
+   `significant_datasets = True`** — not for `pc:sycophancy` and not for any other feature.
+
+**This corroborates F-122 and supplies the caveat F-122 could not.** On the collaborator's branch
+`syc_pc1` tops his excl-HP-KR table at L40–56. Ours agrees in shape — the sycophancy axis is at its
+best on the datasets that are *not* about sycophancy — and adds that the effect is **mean-pooling
+only, largest at L44 rather than L40, reversed by including the one dataset that measures the
+construct, and not significant**. The right sentence remains "a sycophancy axis reads the other
+datasets best", never "sycophancy beats the extension".
+
+**It is the register diagnosis once more (F-13).** The feature built to separate sycophantic from
+challenging personas does its best work everywhere *except* on real capitulation, and including
+`sycophancy_mt` costs it 0.04–0.07.
+
+#### 2. 6D-2 · `passP` is a PROMPT-span store, and that has never been written down
+
+`passP` and `passB_fine` reached the audit but never the ledger. `passP`'s numbers sit ~0.10 below
+every other full-corpus store at the same layer, and the cause is in the chunk metadata:
+
+| store | `span` | `n_tok` (first 5, mask) | raw off-diag L40/mean | raw diag L44, mask |
+|---|---|---|---|---|
+| `passP` | **`prompt`** | 151, 137, 440, 120, 420 | **0.5687** | 0.624 |
+| `passB_fine` | `response` | 1000, 971, 659, 955, 633 | 0.6623 (L41) | 0.875 |
+
+Same `row_ids`, same row counts (5,432 / 2,134 / 2,139 / 1,182), same nnsight 0.7.0, same model,
+same day. **The only difference is which tokens are pooled.** So `passP` is a **prompt-only
+baseline** — what a probe can read from the question *before the model has answered*.
+
+**What it shows, and it is not small.** From the prompt alone, a raw probe's in-distribution
+diagonal at L44 reads **convincing-game 1.000, sandbagging_v2 1.000, instructed-deception 0.953,
+harm-pressure-choice 0.919, insider-trading 0.911, HP-KR 0.865**, and only `mask` 0.624 and
+`roleplaying` 0.796 resist. **Two datasets are perfectly separable from the prompt**, and the label
+on those is therefore fully determined before the model speaks. Off-diagonal transfer from the
+prompt alone is **0.5584 / 0.5687 / 0.5697** at L20/40/44 — above chance, so prompt structure
+transfers too.
+
+This independently corroborates the draft's own Appendix D reading (D-209), which found the
+token *before* the reply separates well exactly where the instruction to lie is already in context
+and inverts on HP-KR (0.386 there against 0.882 for the response mean).
+
+**`passB_fine` is a fine-grained L37–L47 sweep** (10 layers, L40 omitted because `passA` already
+had it) over four banks — root/paper16, `hf275_strict`, `own100`, `paper16_shared`. Its headline:
+**`axes − raw` is negative at 36 of the 40 (bank, layer) cells**, the four exceptions being
+`own100` at L37/L39/L44 and `paper16_shared` at L44, none above +0.019. In the window immediately
+around the project's headline layer, the persona axes do not beat raw.
+
+One arm in it is worth naming: **`hf275_strict`'s `pc:deception` beats raw at all ten layers**,
+0.6815–0.7106 against raw 0.6511–0.6747, mean margin **+0.039**, and it beats `datapca` too. That
+is the strongest persona result in either store and it has never been reported.
+
+#### 3. Five of the seven unverifiable draft claims are now resolved
+
+**D-057, D-065, D-154 — Figure 2's geometry rebuilt.** The collaborator's `EXTENDED_VECTORS_DIR`
+is **`run-kd/vectors_s3`**: its `pc_handler.pt` records **n = 106**, which is both Table 5's count
+and the "64 → 106" his own docstring describes (`vectors_s23` and `vectors_all` both give 150).
+Following `make_figures.py:personas()` at L40:
+
+| quantity | draft | measured |
+|---|---|---|
+| cosine(deception, denial) | 0.47 | **0.474559** |
+| sincere ignorance, mean on the denial axis | −0.08 | **−0.0844** |
+| feigned deniers | 2.90 | **+2.9037** |
+| published deceptive | 0.05 | **+0.0458** |
+
+All exact. The fourth clause checks too — deceptive max **+0.885** against denier min **+2.150**,
+so the groups do not overlap. (L20 gives 0.417, L44 0.468, so "at layer 40" is the right scope.)
+
+**One thing the caption does not say, and it matters.** The two honest groups are **not together**.
+Plain assertion sits at **−1.2274**, sincere ignorance at **−0.0844** — a gap of **1.14** on an
+axis whose full span is 4.13. **Sincere ignorance, the group that shares the deniers' wording, sits
+28% of the axis closer to them than plain assertion does.** That is the wording pull visible at
+persona level, it is exactly what DF-25 predicts when the two groups are merged into one arm, and
+it makes "sincere-ignorance personas sit with the honest cluster" an overstatement: they sit
+*between*, nearer the honest side.
+
+**D-040, D-041 — both citations are real, and one PDF was already in `papers/`.**
+D-041 is **Daniel Yoo & Adrians Skapars**, *"Probe Generalization as Subspace Selection for OOD
+Deception Detection"*, arXiv **2609.02893** — the PDF is in `papers/`. D-040 is **Vikram Natarajan,
+Devina Jain, Shivam Arora, Satvik Golechha, Joseph Bloom**, *"One Probe Won't Catch Them All:
+Towards Targeted Deception Detection"*, arXiv **2602.01425**; its abstract matches the draft's
+characterisation. **Correction to my own first pass**, which marked both UNRESOLVED after checking
+`audit/papers.csv` and not `papers/` itself. **Owed: rows in `audit/papers.csv` for both, and the
+2602.01425 PDF.**
+
+**D-030 and D-063 remain unresolved, and now for a firmer reason.** A recursive search of
+`C:\Users\user4\expLB` for `results_table.csv` / `results.csv` / `scores.csv` and for any
+`XXXX-9-llama*` directory returns **nothing**. Appendix G's four-decimal reproduction claim is not
+merely uncommitted — **the artifact does not exist outside the collaborator's own working
+directory**, so no one else can check it.
+
+**6A now stands at 164 `MATCHES HIS DATA` / 10 `PARTLY` / 2 `UNRESOLVED` over 176 draft claims.**
+
+- **caveats:** (1) 6D-1 is one seed, one bank (paper16), probe `paper` only, three layers — the
+  `--probes lr_reg10 mms` arms were not run. (2) The `passP` prompt-span reading is from chunk
+  metadata plus row-id and token-count comparison; I did not re-extract to confirm. (3) The
+  `hf275_strict` `pc:deception` result is one store, one seed, mean pooling, and was not
+  bootstrapped here. (4) D-057/D-065 are now *verified* but still not *reproducible from the
+  repository* — the vectors remain uncommitted, so D-032 and D-171 stand as written.
+- **supersedes:** DF-89's "the real gap" half — `pc:sycophancy` has now been trained here, and the
+  answer is that it does not help. Resolves F-125 §3's Cause A for D-057/D-065/D-154 and the
+  citation half; Cause B is strengthened, not resolved.
+- **status:** verified
+
+### F-127 · 2026-09-24 · **CORRECTS F-126 caveat (4) and the audit's whole framing of the collaborator's release: the Figure 2 numbers ARE in a committed file. `paper/generated/numbers.tex` holds 1,162 generated macros, and the release claim is the best-evidenced one checked in Phase 6.**
+
+F-126 caveat (4) says *"D-057/D-065 are now verified but still not reproducible from the repository
+— the vectors remain uncommitted, so D-032 and D-171 stand as written."* **The second half is
+wrong**, and the error is mine, made twice in the same direction.
+
+**What is actually committed.** `src/probes/deception-detection/paper/generated/numbers.tex`, on
+`origin/paper`, is **1,162 lines of `\setV` macros** headed *"Generated by make_numbers.py — do not
+edit"*. It contains, among everything else:
+
+```
+\setV{cos-dec-den-L40}{0.47}            \setV{proj-den-kd-L40}{2.90}
+\setV{proj-den-sincere-L40}{-0.08}      \setV{proj-den-deceptive-L40}{0.05}
+```
+
+— the four Figure 2 / §3.3 numbers I had twice called unverifiable. Beside it sit eight
+`tab_*.tex`, five `fig_*.pdf`, the full `persona_ood_ext_L*` result CSVs, and both
+`make_numbers.py` and `make_figures.py`.
+
+**I looked in the result CSVs and not in the generated LaTeX.** Level 1 marked D-057, D-065 and
+D-154 `UNRESOLVED` on that basis; the lab-PC re-derivation then confirmed all four values exactly
+(F-126 §3). So they were locatable *and* correct all along.
+
+**Verdicts revised again:** D-032 and D-171 `PARTLY MATCHES HIS DATA` → **`MATCHES HIS DATA`**.
+6A now stands at **166 `MATCHES HIS DATA` / 8 `PARTLY` / 2 `UNRESOLVED`** over 176 draft claims.
+
+**The one residual, stated precisely.** It is about *re-running*, not *reading*. The 36 persona
+vectors are not on the branch, so `make_figures.py:personas()` cannot execute and **Figure 2 cannot
+be regenerated from the repository** — even though its numbers are published there. The vectors are
+small and shipping them closes it. Separately, Appendix G's four-decimal reproduction (D-030,
+D-063) has no artifact on the branch **or on the lab PC**, and remains the only claim in the draft
+that nobody but its author can check.
+
+**The pattern in my own errors is worth recording**, since the audit's measured failure mode is
+leniency and these run the other way. Three times in this phase I marked something against the
+collaborator that his own files answered: the dim=1 framing (answered in §3.4), the L20 sign flip
+(answered in §4), and the release claim (answered in `paper/generated/`). Each time the evidence
+was one directory away from where I looked. **Check the generated artifacts before concluding a
+number is unsourced.**
+
+- **caveats:** the spot-check of `numbers.tex` against draft numbers was not exhaustive — it covered
+  the dataset sizes, bank counts, the zero-shot grid, the cosine and the Figure 2 projections. A
+  full macro-by-macro audit of all 1,162 entries was not run.
+- **supersedes:** F-126 caveat (4), second clause; and the audit's characterisation of D-032/D-171
+  in F-125 §3.
+- **status:** verified
+
+### F-128 · 2026-09-24 · **P17 re-pin: the collaborator's branch moved during Phase 6. One draft verdict changes, two new paper sentences do not hold, and six ledger entries (F-111, F-112, F-117, F-118, F-120, F-127) hold only in part. Coverage is 533 of 735.**
+
+**Pins.** After one `git fetch`, which moved no ref:
+- `origin/paper` @ **16def2de** (2026-09-24 16:47; previous mark ea1ce52b);
+- `origin/feat/persona-pc-ood` @ 45b16d90 (ancestor, nothing newer);
+- `asix` @ **e917ecd3** plus the working tree, with this ledger at md5 dc365834 (F-01…F-127).
+
+All later reads go through `audit/scripts/p17_common.py`.
+
+**Provenance conflict (DF-95 made concrete).** The local ref moved ea1ce52b → 2ad758fb (15:44) → d1b88154 → 16def2de (16:48) while Phase 6 ran. Everything was stamped ea1ce52b:
+- **Level 2** (15:39) did read ea1ce52b.
+- **Level 1** (verdicts 16:40) read 2ad758fb for at least D-171 (1,162 = the numbers.tex line count at 2ad758fb) and D-032 (`fig_depth.pdf` exists only from 2ad758fb).
+- **172 of 176** stored values are identical at all three SHAs.
+
+**D-189 revised: MATCHES → PARTLY MATCHES HIS DATA.** The collaborator re-ran his baseline (BLAS drift: 80 cells, max |Δ| 0.0054, all raw-probe). Table 7's CG raw L40 is 0.7875 at ea1ce52b and **0.7873** at the pin, and the paper now prints 0.787. The draft stands at **165 / 9 / 2** over 176, not F-127's 166 / 8 / 2. Knock-on: D-195 is 35/36, and D-009/D-027 drift in the 4th decimal. Stored-evidence errors, verdicts unchanged:
+- D-001's L20/L44 values reproduce at no SHA (true values 0.9564/0.6478 and 0.9822/0.7156).
+- D-032's "eight tab_*.tex" should be 11.
+- D-171 is off by one.
+
+**The collaborator's three new commits.**
+- **2ad758fb:** the depth sweep in the paper (16 layers), app:depth, 4 claims corrected, 12 unified-axis CSVs.
+- **d1b88154** and **16def2de:** text and numbers.tex only.
+
+83/83 recomputable numbers.tex keys match, and `persona_depth/depth.csv` agrees with every per-layer file. Of the 26 new claims: **19 HOLDS / 3 PARTLY / 2 DOES NOT HOLD / 2 UNRESOLVED**.
+- **D2-005, `introduction.tex:68-70`:** "from layer 36 it ranks HP-KR better than any contrast". The base probe trails at L44 (0.828 vs 0.908), L48 (0.837 vs 0.890), L52 (0.877 vs 0.883) and L76 (0.838 vs 0.925).
+- **D2-019, `limitations.tex:17-21`:** the "≥0.026 at all 16 layers" includes HP-KR. Without it the margin is −0.011 at L20 and below 0.026 at 8 of 16 layers.
+- **In his favour:** the paper now reports the L36 optimum and dropped "at every depth" (DF-79 and DF-80 done).
+
+**Corrections to six entries, recorded here rather than edited in:**
+- **F-111:** the "trap" (0/80 against the store's own datapca) does not reproduce. The bank summary's datapca equals the root store's, which gives **31/80**. **0.3061/0.2996 are both passA11's** (contrast/PC1); passC11 reads 0.3066/0.2995.
+- **F-112:** "8 clearing BH over 6,300" is scoped to block 10 / mean / `paper` probe. Family-wide the count is **34**.
+- **F-117:** every table value matches, but the excl-HP-KR margin reaches **+0.0633 at L56**, so "within ±0.06" is false. The series changes sign **6** times, not 5 (re-derived from `persona_ood_ext_L*/summary.csv` @ 16def2de).
+- **F-118:** "F-115 §5" does not exist. 0.4630/0.6203/0.5383 are at `audit/HPKR_WORDING_CONTROLLED.md` §5 (:121) and reproduce from the collab-bank kd11 matrices. The convergence finding is unchanged.
+- **F-120:** all 17 numbers are exact, but they are the **5-dataset** reading. Raw at L40 over all 10 datasets is **0.6760**, not 0.8195.
+- **F-127:** there are **11** `tab_*.tex` at every SHA, not 8. numbers.tex has 1,162 lines only at 2ad758fb (1,161 macros). It holds 1,176 macros at 16def2de.
+
+**Verified.** 447 numbers across F-110…F-127 were re-derived from raw (git at pinned SHAs; lab PC read-only over BatchMode ssh, md5-verified); 432 match. The other 12 entries HOLD. No headline measurement fails.
+
+**Correction blocks.** Of the 94 numbers in the 11 applied blocks, 86 match. The remaining eight are:
+- 5 stale line pointers;
+- 1 passC11 mislabel (`cap/docs/review_page.html:173`);
+- 2 unverified (0.9597; "median gap 0.012 over 17 methods").
+
+**Coverage** (`p15_coverage.py` after `p17_merge.py`): **533 / 735 = 72.5%**, up from 490/692. `claims.csv` has 643 rows; `fmap_all.csv` covers F-01…F-127. 202 inventory claims remain: 110 ledger (TODO) and 92 collaborator notes (CANDIDATE).
+
+- **source:** `audit/BRANCH_PINS.md` `audit/p17/A_REPORT.md`, `d_rows_repinned.csv`, `paper_new_claims.csv`, `csv_drift.csv` `audit/p17/C_REPORT.md`, `ledger_verify_stdout.txt`, `fmap_F110_F127.csv`, `correction_blocks_check.csv` `audit/claims.csv` (D-189) `results/persona_depth/depth.csv` and `persona_ood_ext_L{20..79}/summary.csv` @ 16def2de
+- **caveats:**
+  1. LAB-ONLY evidence (in no git tree): F-110, F-113 (part), F-114, F-115, F-116, F-120, F-121, F-126.
+  2. F-121's 290-file Drive backup was not checked.
+  3. D2-024 and D2-025 are unresolvable from the repository: the constants are hard-coded and `results_table.csv` is not committed.
+  4. The 0.9597 regex is not recorded; a guess gives 0.9413, which is still above 0.919.
+- **supersedes:** on the points above only — F-111, F-112, F-117, F-118, F-120 and F-127, plus F-127's "166 / 8 / 2". Each entry stays as written.
+- **status:** verified

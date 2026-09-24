@@ -1,0 +1,12 @@
+id,source_ref,stated_numbers,claim_plain
+D-147,"draft p12 Table 4 (LB protocol, 5-dataset mean)",0.694 0.413 0.899,L40 Extended contrast (12 v 13): BA / recall / AUROC = 0.694 0.413 0.899
+D-152,draft p12 6 Limitations,,A detector of denial wording would therefore score well on HP-KR without detecting deception. Our knowledge-denial contrast does not rule this out.
+D-154,draft p12 6 Limitations,,At the level of the personas the signs are encouraging: sincere-ignorance personas sit with the honest cluster on the knowledge-denial axis (Figure 2). Whether the same holds for model responses is un
+D-158,draft p12 6 Supervised baseline,,"A probe trained on several datasets pooled is a stronger supervised baseline, and we do not compare against it."
+D-163,draft p13 7 Future work,,"Wording-controlled contrasts. The contrast between feigned and sincere ignorance, tested on HP-KR's honest denials, would separate the lie from its wording."
+D-166,draft p.13 sec 8 Conclusion; draft_claims_raw.csv D-166,(none),"Persona coordinates scale to a 70B model, but only as far as the persona bank covers the kind of lie being told."
+D-168,draft p.13 sec 8 Conclusion; draft_claims_raw.csv D-168,(Table 3),"Across datasets, one zero-shot contrast over the extended bank transfers better on average than probes trained on single datasets, and better than the persona subspace."
+D-174,"draft p16 Table 5 (persona bank, kept rollouts of 150)","amnesiac witness 129, deniable expert 72, feigned novice 137, stonewaller 129","Knowledge denial (new) (n=4): amnesiac witness 129, deniable expert 72, feigned novice 137, stonewaller 129"
+D-175,"draft p16 Table 5 (persona bank, kept rollouts of 150)","honest novice 110, calibrated reporter 83, scrupulous witness 74","Sincere ignorance (new) (n=3): honest novice 110, calibrated reporter 83, scrupulous witness 74"
+D-176,"draft p16 Table 5 (persona bank, kept rollouts of 150)","forthright expert 80, candid witness 64, plain dealer 76","Plain assertion (new) (n=3): forthright expert 80, candid witness 64, plain dealer 76"
+D-179,"draft p16 Table 5 (persona bank, kept rollouts of 150)",default 150,Anchor (n=1): default 150

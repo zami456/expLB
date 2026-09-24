@@ -1,0 +1,89 @@
+==========================================================================================
+O-042  REVIEW_REQUEST_POOLING.md:15  'the setting'
+==========================================================================================
+
+--- premise_L40_mean_s42.json  md5=e5ddaaa13ea6aa5a4b97bbafa38592ba  size=24283
+layer        = 40
+pooling      = mean
+probe        = paper
+seed         = 42
+n datasets   = 11
+datasets     = ['instructed-deception', 'harm-pressure-choice', 'harm-pressure-knowledge-report', 'harm-pressure-kr-matched', 'convincing-game', 'insider-trading', 'ai_liar', 'sandbagging_v2', 'roleplaying', 'mask', 'sycophancy_mt']
+n_train      = {'single_mean': 666, 'pooled_full': 7336, 'pooled_match': 414}
+n pairs      = 110
+
+-- split code, src/assistant_axis_ndif/30_premise.py (lines 79, 102-108, 114) --
+  79:     ap.add_argument("--frac", type=float, default=0.8)
+ 102:     rng = np.random.default_rng(args.seed)
+ 103:     splits = {}
+ 104:     for k in DATASETS:
+ 105:         n = len(data[k][1])
+ 106:         perm = rng.permutation(n)
+ 107:         cut = int(args.frac * n)
+ 108:         splits[k] = (perm[:cut], perm[cut:])
+ 114:             tr = P.balance(rows, yk, args.seed)
+-> --frac default 0.8 (80/20) CONFIRMED
+-> split is rng.permutation(n) over ROWS; P.group_split (item id) is NOT called
+-> P.balance() is called on every training index set -> class-balanced CONFIRMED
+   helpers available in 9_persona_probes.py: ['def group_split(meta, frac: float, seed: int):', 'def balance(idx, y, seed: int, cap: int = 0):']
+   occurrences of 'group_split' in 30_premise.py: 0
+
+==========================================================================================
+O-043  ':40'  full pooling vs budget-matched are indistinguishable, p = 0.38
+==========================================================================================
+  summary.single               = 0.676316
+  summary.single_own_mean      = 0.950642
+  summary.pooled_full          = 0.944721
+  summary.pooled_match         = 0.892400
+  summary.pooled_lodo          = 0.854475
+  summary.pooled_lodo_match    = 0.850015
+  n_train (single_mean / pooled_full / pooled_match) = {'single_mean': 666, 'pooled_full': 7336, 'pooled_match': 414}
+
+  VOLUME CONTROL  pooled_lodo - pooled_lodo_match = +0.0045  [-0.0235,+0.0333]  P(<=0) = 0.3807
+  HEADLINE        pooled_lodo - single            = +0.1782  [+0.1432,+0.2131]  P(<=0) = 0.0000
+  wins (lodo > single) = 11/11
+
+==========================================================================================
+O-044  ':63'  'I compare it against full pooling (0.854) rather than the matched row (0.806)'
+==========================================================================================
+
+--- why/why_L40_s42.json  md5=db563a7ccb9ceb98cd1dc2ab799a69da  size=850
+  why_L40_s42.json  budget              = 666
+  why_L40_s42.json  pooled_lodo_matched = 0.8062109757254146
+  why_L40_s42.json  mean_of_directions  = 0.8828295183154872
+  why_L40_s42.json  single_offdiag      = 0.6763163062289969
+  premise_L40       summary.pooled_lodo_match = 0.8500147049628101
+  premise_L40       summary.pooled_lodo       = 0.8544753649714415
+  -> SAME NAME, TWO VALUES: 0.806 (30d_why_pooling) vs 0.8500 (30_premise), diff 0.0438
+
+--- audit/audit_L40_s42.json  md5=712bca920f38b6c321fd0eeeed50bc4b  size=17175
+  30f audit: 20 independent budget-matched draws -> mean 0.8344 range [0.7912,0.8736] sd(ddof=0) 0.0200
+  both published figures inside that range? 0.806 -> True; 0.850 -> True
+
+==========================================================================================
+O-045  ':95'  'our mean-of-directions IS a single direction at 0.883'
+==========================================================================================
+  why_L40_s42.json   mean_of_directions = 0.8828295183154872
+  audit_L40_s42.json mean_of_directions = 0.8828295183154872
+  audit pooled_lodo_full                = 0.8544753649714415
+  stored bootstrap mean_of_directions - pooled_lodo_full = {"diff": 0.028354153344045906, "lo": 0.0045082539804150055, "hi": 0.052344610546503224}
+  recomputed mean over 11 targets: mean_of_directions 0.882830  pooled_lodo_full 0.854475
+  wins 9/11; losses: [('harm-pressure-kr-matched', -0.0077), ('sycophancy_mt', -0.0433)]
+  cos(single,single) = 0.050599172767902434  cos(pooled,single) = 0.22717310884863162
+
+==========================================================================================
+O-037  ROADMAP_TO_DEFENCE.md:27  median (0.722) / sign-oriented mean (0.735)
+==========================================================================================
+  baselines.mean_over_sources    = 0.676316
+  baselines.median_over_sources  = 0.721970
+  baselines.oriented_mean        = 0.735361
+  baselines.best_source_oracle   = 0.896684
+  n_pairs = 110  pairs_below_half = 21  n datasets = 11
+  datasets in this file: ['instructed-deception', 'harm-pressure-choice', 'harm-pressure-knowledge-report', 'harm-pressure-kr-matched', 'convincing-game', 'insider-trading', 'ai_liar', 'sandbagging_v2', 'roleplaying', 'mask', 'sycophancy_mt']
+  bootstrap.pooled_lodo_full-mean_over_sources = {"diff": 0.17815905874244453, "lo": 0.14245316437044586, "hi": 0.21237843050280247}
+  bootstrap.pooled_lodo_full-median_over_sources = {"diff": 0.1325054740820644, "lo": 0.10793093962700445, "hi": 0.15443367150005086}
+  bootstrap.pooled_lodo_full-oriented_mean = {"diff": 0.11911393481142635, "lo": 0.09329522885977279, "hi": 0.14350865490940487}
+  bootstrap.pooled_lodo_full-best_source_oracle = {"diff": -0.042208850852715314, "lo": -0.0727448620232457, "hi": -0.010558348792678916}
+
+  NOTE: this file is the ELEVEN-dataset corpus (110 pairs). ROADMAP:27 places these two
+        numbers in section 0.1, whose baseline (0.6478/0.7320) is the COLLABORATOR'S SIX.

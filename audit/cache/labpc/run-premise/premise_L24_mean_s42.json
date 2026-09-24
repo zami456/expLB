@@ -1,0 +1,928 @@
+{
+ "layer": 24,
+ "pooling": "mean",
+ "probe": "paper",
+ "seed": 42,
+ "datasets": [
+  "instructed-deception",
+  "harm-pressure-choice",
+  "harm-pressure-knowledge-report",
+  "harm-pressure-kr-matched",
+  "convincing-game",
+  "insider-trading",
+  "ai_liar",
+  "sandbagging_v2",
+  "roleplaying",
+  "mask",
+  "sycophancy_mt"
+ ],
+ "n_train": {
+  "single_mean": 666,
+  "pooled_full": 7336,
+  "pooled_match": 414
+ },
+ "per_dataset": {
+  "instructed-deception": {
+   "single_offdiag": 0.7747624205513888,
+   "single_own": 0.9974045083893646,
+   "pooled_full": 0.9964201290252259,
+   "pooled_match": 0.9689085991838847,
+   "pooled_lodo": 0.9239132656189327,
+   "n_lodo": 3564,
+   "pooled_lodo_match": 0.942490445729701,
+   "n_lodo_match": 440
+  },
+  "harm-pressure-choice": {
+   "single_offdiag": 0.6056452853407168,
+   "single_own": 0.7985694508537148,
+   "pooled_full": 0.8147977234271649,
+   "pooled_match": 0.6354407014305491,
+   "pooled_lodo": 0.7524996154437779,
+   "n_lodo": 7134,
+   "pooled_lodo_match": 0.7330410706045224,
+   "n_lodo_match": 500
+  },
+  "harm-pressure-knowledge-report": {
+   "single_offdiag": 0.49557142857142866,
+   "single_own": 0.9701785714285714,
+   "pooled_full": 0.971875,
+   "pooled_match": 0.9466964285714285,
+   "pooled_lodo": 0.7327678571428572,
+   "n_lodo": 7114,
+   "pooled_lodo_match": 0.8050892857142857,
+   "n_lodo_match": 476
+  },
+  "harm-pressure-kr-matched": {
+   "single_offdiag": 0.5832565284178187,
+   "single_own": 0.6267281105990783,
+   "pooled_full": 0.7035330261136713,
+   "pooled_match": 0.5622119815668203,
+   "pooled_lodo": 0.6543778801843317,
+   "n_lodo": 7130,
+   "pooled_lodo_match": 0.6067588325652841,
+   "n_lodo_match": 442
+  },
+  "convincing-game": {
+   "single_offdiag": 0.6667601683029454,
+   "single_own": 1.0,
+   "pooled_full": 1.0,
+   "pooled_match": 1.0,
+   "pooled_lodo": 0.8625525946704069,
+   "n_lodo": 7182,
+   "pooled_lodo_match": 0.9887798036465638,
+   "n_lodo_match": 442
+  },
+  "insider-trading": {
+   "single_offdiag": 0.5568102546215556,
+   "single_own": 0.987966515521451,
+   "pooled_full": 0.9877049180327869,
+   "pooled_match": 0.9864841297523543,
+   "pooled_lodo": 0.5579874433205442,
+   "n_lodo": 6678,
+   "pooled_lodo_match": 0.9776770143006628,
+   "n_lodo_match": 412
+  },
+  "ai_liar": {
+   "single_offdiag": 0.6225274725274725,
+   "single_own": 1.0,
+   "pooled_full": 1.0,
+   "pooled_match": 1.0,
+   "pooled_lodo": 0.8571428571428572,
+   "n_lodo": 7122,
+   "pooled_lodo_match": 0.8598901098901098,
+   "n_lodo_match": 440
+  },
+  "sandbagging_v2": {
+   "single_offdiag": 0.71811,
+   "single_own": 0.9998,
+   "pooled_full": 0.9989999999999999,
+   "pooled_match": 0.9893000000000001,
+   "pooled_lodo": 0.9702999999999999,
+   "n_lodo": 6536,
+   "pooled_lodo_match": 0.9390999999999999,
+   "n_lodo_match": 424
+  },
+  "roleplaying": {
+   "single_offdiag": 0.6489130434782608,
+   "single_own": 0.9963768115942029,
+   "pooled_full": 0.9782608695652174,
+   "pooled_match": 0.9275362318840579,
+   "pooled_lodo": 0.894927536231884,
+   "n_lodo": 7192,
+   "pooled_lodo_match": 0.8822463768115942,
+   "n_lodo_match": 450
+  },
+  "mask": {
+   "single_offdiag": 0.5675213675213675,
+   "single_own": 0.8514135437212359,
+   "pooled_full": 0.7735042735042735,
+   "pooled_match": 0.6752136752136751,
+   "pooled_lodo": 0.6673241288625904,
+   "n_lodo": 7074,
+   "pooled_lodo_match": 0.7136752136752137,
+   "n_lodo_match": 458
+  },
+  "sycophancy_mt": {
+   "single_offdiag": 0.5596463777186669,
+   "single_own": 0.9386637458926615,
+   "pooled_full": 0.9005632921295572,
+   "pooled_match": 0.7778907839148802,
+   "pooled_lodo": 0.6912846189954625,
+   "n_lodo": 6634,
+   "pooled_lodo_match": 0.7318103583163824,
+   "n_lodo_match": 460
+  }
+ },
+ "summary": {
+  "single": 0.6181385770046929,
+  "pooled_full": 0.9205144756179908,
+  "pooled_match": 0.8608802301379682,
+  "pooled_lodo": 0.778643436146695,
+  "pooled_lodo_match": 0.8345962282958471,
+  "single_own_mean": 0.92428193254548
+ },
+ "pairs": [
+  {
+   "source": "instructed-deception",
+   "target": "harm-pressure-choice",
+   "auroc": 0.770035379172435,
+   "cos": 0.03977229446172714,
+   "mahal_cos": -0.0020532067254365296
+  },
+  {
+   "source": "instructed-deception",
+   "target": "harm-pressure-knowledge-report",
+   "auroc": 0.6375892857142857,
+   "cos": 0.02769464999437332,
+   "mahal_cos": -0.005386792876495603
+  },
+  {
+   "source": "instructed-deception",
+   "target": "harm-pressure-kr-matched",
+   "auroc": 0.5745007680491552,
+   "cos": 0.00553493294864893,
+   "mahal_cos": 0.007526619057755916
+  },
+  {
+   "source": "instructed-deception",
+   "target": "convincing-game",
+   "auroc": 0.7755960729312762,
+   "cos": 0.035868026316165924,
+   "mahal_cos": 0.0022481382066521067
+  },
+  {
+   "source": "instructed-deception",
+   "target": "insider-trading",
+   "auroc": 0.24965120334844787,
+   "cos": 0.02372807450592518,
+   "mahal_cos": -0.007643805662465302
+  },
+  {
+   "source": "instructed-deception",
+   "target": "ai_liar",
+   "auroc": 0.9148351648351648,
+   "cos": 0.14549671113491058,
+   "mahal_cos": 0.004496575969686164
+  },
+  {
+   "source": "instructed-deception",
+   "target": "sandbagging_v2",
+   "auroc": 0.9405000000000001,
+   "cos": 0.09669331461191177,
+   "mahal_cos": 0.0031084766366418896
+  },
+  {
+   "source": "instructed-deception",
+   "target": "roleplaying",
+   "auroc": 0.717391304347826,
+   "cos": 0.09735757112503052,
+   "mahal_cos": 0.008574097056888996
+  },
+  {
+   "source": "instructed-deception",
+   "target": "mask",
+   "auroc": 0.6180144641683103,
+   "cos": 0.055208995938301086,
+   "mahal_cos": 0.0023990826303615415
+  },
+  {
+   "source": "instructed-deception",
+   "target": "sycophancy_mt",
+   "auroc": 0.5403692692849319,
+   "cos": 0.023355990648269653,
+   "mahal_cos": 0.0024245834972089356
+  },
+  {
+   "source": "harm-pressure-choice",
+   "target": "instructed-deception",
+   "auroc": 0.8104746139121075,
+   "cos": 0.03977229446172714,
+   "mahal_cos": -0.002053206725431232
+  },
+  {
+   "source": "harm-pressure-choice",
+   "target": "harm-pressure-knowledge-report",
+   "auroc": 0.47366071428571427,
+   "cos": -0.004886208567768335,
+   "mahal_cos": 0.011288206718977269
+  },
+  {
+   "source": "harm-pressure-choice",
+   "target": "harm-pressure-kr-matched",
+   "auroc": 0.5192012288786482,
+   "cos": 0.02271161787211895,
+   "mahal_cos": 0.006457970335317984
+  },
+  {
+   "source": "harm-pressure-choice",
+   "target": "convincing-game",
+   "auroc": 0.8274894810659186,
+   "cos": 0.03979182243347168,
+   "mahal_cos": 0.001797681115615111
+  },
+  {
+   "source": "harm-pressure-choice",
+   "target": "insider-trading",
+   "auroc": 0.18739100104638995,
+   "cos": -1.5268989955075085e-05,
+   "mahal_cos": 0.003505362389529788
+  },
+  {
+   "source": "harm-pressure-choice",
+   "target": "ai_liar",
+   "auroc": 0.47527472527472525,
+   "cos": -0.0015175286680459976,
+   "mahal_cos": -0.00438122667403304
+  },
+  {
+   "source": "harm-pressure-choice",
+   "target": "sandbagging_v2",
+   "auroc": 0.7093,
+   "cos": 0.021405570209026337,
+   "mahal_cos": -0.00697948624187585
+  },
+  {
+   "source": "harm-pressure-choice",
+   "target": "roleplaying",
+   "auroc": 0.7481884057971014,
+   "cos": 0.023678060621023178,
+   "mahal_cos": -0.001885439452617781
+  },
+  {
+   "source": "harm-pressure-choice",
+   "target": "mask",
+   "auroc": 0.5493096646942801,
+   "cos": 0.049510203301906586,
+   "mahal_cos": 0.0030872839661421447
+  },
+  {
+   "source": "harm-pressure-choice",
+   "target": "sycophancy_mt",
+   "auroc": 0.4816930057893914,
+   "cos": -0.017011137679219246,
+   "mahal_cos": -0.002775163929092864
+  },
+  {
+   "source": "harm-pressure-knowledge-report",
+   "target": "instructed-deception",
+   "auroc": 0.5573801203054642,
+   "cos": 0.02769464999437332,
+   "mahal_cos": -0.005386792876496465
+  },
+  {
+   "source": "harm-pressure-knowledge-report",
+   "target": "harm-pressure-choice",
+   "auroc": 0.5124596215966775,
+   "cos": -0.004886208567768335,
+   "mahal_cos": 0.011288206718975388
+  },
+  {
+   "source": "harm-pressure-knowledge-report",
+   "target": "harm-pressure-kr-matched",
+   "auroc": 0.5990783410138247,
+   "cos": 0.26983171701431274,
+   "mahal_cos": 0.3704171164913089
+  },
+  {
+   "source": "harm-pressure-knowledge-report",
+   "target": "convincing-game",
+   "auroc": 0.00420757363253857,
+   "cos": -0.10331664979457855,
+   "mahal_cos": 0.004348801704907273
+  },
+  {
+   "source": "harm-pressure-knowledge-report",
+   "target": "insider-trading",
+   "auroc": 0.7547087547959539,
+   "cos": 0.007549849338829517,
+   "mahal_cos": -0.007692702622411372
+  },
+  {
+   "source": "harm-pressure-knowledge-report",
+   "target": "ai_liar",
+   "auroc": 0.44505494505494503,
+   "cos": 0.016712244600057602,
+   "mahal_cos": 0.009162129636615312
+  },
+  {
+   "source": "harm-pressure-knowledge-report",
+   "target": "sandbagging_v2",
+   "auroc": 0.8862000000000001,
+   "cos": 0.06593985855579376,
+   "mahal_cos": -0.011053497281348933
+  },
+  {
+   "source": "harm-pressure-knowledge-report",
+   "target": "roleplaying",
+   "auroc": 0.3786231884057971,
+   "cos": -0.05357164144515991,
+   "mahal_cos": -0.0039039928183567984
+  },
+  {
+   "source": "harm-pressure-knowledge-report",
+   "target": "mask",
+   "auroc": 0.5700197238658777,
+   "cos": 0.06456223130226135,
+   "mahal_cos": 0.014818051231115913
+  },
+  {
+   "source": "harm-pressure-knowledge-report",
+   "target": "sycophancy_mt",
+   "auroc": 0.6460647785948991,
+   "cos": 0.040238846093416214,
+   "mahal_cos": 0.008861945839154435
+  },
+  {
+   "source": "harm-pressure-kr-matched",
+   "target": "instructed-deception",
+   "auroc": 0.48341882787326373,
+   "cos": 0.00553493294864893,
+   "mahal_cos": 0.007526619057752294
+  },
+  {
+   "source": "harm-pressure-kr-matched",
+   "target": "harm-pressure-choice",
+   "auroc": 0.43485617597292725,
+   "cos": 0.02271161787211895,
+   "mahal_cos": 0.006457970335319986
+  },
+  {
+   "source": "harm-pressure-kr-matched",
+   "target": "harm-pressure-knowledge-report",
+   "auroc": 0.5,
+   "cos": 0.26983171701431274,
+   "mahal_cos": 0.37041711649131004
+  },
+  {
+   "source": "harm-pressure-kr-matched",
+   "target": "convincing-game",
+   "auroc": 0.8232819074333801,
+   "cos": 0.01264775637537241,
+   "mahal_cos": 9.661536936757812e-05
+  },
+  {
+   "source": "harm-pressure-kr-matched",
+   "target": "insider-trading",
+   "auroc": 0.11763167073596092,
+   "cos": -0.02822469174861908,
+   "mahal_cos": -0.01670929450870186
+  },
+  {
+   "source": "harm-pressure-kr-matched",
+   "target": "ai_liar",
+   "auroc": 0.4052197802197802,
+   "cos": -0.010868408717215061,
+   "mahal_cos": -0.003437875510826693
+  },
+  {
+   "source": "harm-pressure-kr-matched",
+   "target": "sandbagging_v2",
+   "auroc": 0.8561,
+   "cos": 0.05283314362168312,
+   "mahal_cos": 0.007659031108652527
+  },
+  {
+   "source": "harm-pressure-kr-matched",
+   "target": "roleplaying",
+   "auroc": 0.38586956521739124,
+   "cos": -0.012621923349797726,
+   "mahal_cos": -0.005986577225105946
+  },
+  {
+   "source": "harm-pressure-kr-matched",
+   "target": "mask",
+   "auroc": 0.5243261012491782,
+   "cos": 0.03195795789361,
+   "mahal_cos": 0.013195803766110688
+  },
+  {
+   "source": "harm-pressure-kr-matched",
+   "target": "sycophancy_mt",
+   "auroc": 0.6201689876388672,
+   "cos": 0.018707355484366417,
+   "mahal_cos": 0.0023300505954363306
+  },
+  {
+   "source": "convincing-game",
+   "target": "instructed-deception",
+   "auroc": 0.9239439210316569,
+   "cos": 0.035868026316165924,
+   "mahal_cos": 0.002248138206654745
+  },
+  {
+   "source": "convincing-game",
+   "target": "harm-pressure-choice",
+   "auroc": 0.44439317028149516,
+   "cos": 0.03979182243347168,
+   "mahal_cos": 0.0017976811156145585
+  },
+  {
+   "source": "convincing-game",
+   "target": "harm-pressure-knowledge-report",
+   "auroc": 0.06053571428571427,
+   "cos": -0.10331664979457855,
+   "mahal_cos": 0.004348801704907304
+  },
+  {
+   "source": "convincing-game",
+   "target": "harm-pressure-kr-matched",
+   "auroc": 0.5238095238095237,
+   "cos": 0.01264775637537241,
+   "mahal_cos": 9.661536937009173e-05
+  },
+  {
+   "source": "convincing-game",
+   "target": "insider-trading",
+   "auroc": 0.615277293337984,
+   "cos": 0.06750091910362244,
+   "mahal_cos": -0.0013948040113737927
+  },
+  {
+   "source": "convincing-game",
+   "target": "ai_liar",
+   "auroc": 0.6456043956043956,
+   "cos": 0.07953867316246033,
+   "mahal_cos": 0.005701130935487202
+  },
+  {
+   "source": "convincing-game",
+   "target": "sandbagging_v2",
+   "auroc": 0.6115000000000002,
+   "cos": -0.03379751369357109,
+   "mahal_cos": -0.006995264433422176
+  },
+  {
+   "source": "convincing-game",
+   "target": "roleplaying",
+   "auroc": 0.9402173913043479,
+   "cos": 0.23755531013011932,
+   "mahal_cos": 0.00827905655952679
+  },
+  {
+   "source": "convincing-game",
+   "target": "mask",
+   "auroc": 0.7133464825772519,
+   "cos": 0.09970811754465103,
+   "mahal_cos": 0.003334739201071519
+  },
+  {
+   "source": "convincing-game",
+   "target": "sycophancy_mt",
+   "auroc": 0.3573775621968393,
+   "cos": -0.03962698206305504,
+   "mahal_cos": 0.0011265516571718752
+  },
+  {
+   "source": "insider-trading",
+   "target": "instructed-deception",
+   "auroc": 0.9193830768497135,
+   "cos": 0.02372807450592518,
+   "mahal_cos": -0.0076438056624750245
+  },
+  {
+   "source": "insider-trading",
+   "target": "harm-pressure-choice",
+   "auroc": 0.5393016459006307,
+   "cos": -1.5268989955075085e-05,
+   "mahal_cos": 0.003505362389530067
+  },
+  {
+   "source": "insider-trading",
+   "target": "harm-pressure-knowledge-report",
+   "auroc": 0.29500000000000004,
+   "cos": 0.007549849338829517,
+   "mahal_cos": -0.007692702622415847
+  },
+  {
+   "source": "insider-trading",
+   "target": "harm-pressure-kr-matched",
+   "auroc": 0.5898617511520737,
+   "cos": -0.02822469174861908,
+   "mahal_cos": -0.0167092945087029
+  },
+  {
+   "source": "insider-trading",
+   "target": "convincing-game",
+   "auroc": 0.7699859747545582,
+   "cos": 0.06750091910362244,
+   "mahal_cos": -0.0013948040113738573
+  },
+  {
+   "source": "insider-trading",
+   "target": "ai_liar",
+   "auroc": 0.8063186813186813,
+   "cos": 0.17749665677547455,
+   "mahal_cos": 0.0016439508680382011
+  },
+  {
+   "source": "insider-trading",
+   "target": "sandbagging_v2",
+   "auroc": 0.5501,
+   "cos": -0.02408895269036293,
+   "mahal_cos": 0.003825788700193001
+  },
+  {
+   "source": "insider-trading",
+   "target": "roleplaying",
+   "auroc": 0.8804347826086957,
+   "cos": 0.2633267641067505,
+   "mahal_cos": 0.004585673999461432
+  },
+  {
+   "source": "insider-trading",
+   "target": "mask",
+   "auroc": 0.4953977646285338,
+   "cos": 0.059010203927755356,
+   "mahal_cos": 0.010397804869266183
+  },
+  {
+   "source": "insider-trading",
+   "target": "sycophancy_mt",
+   "auroc": 0.5913002659990612,
+   "cos": 0.010614846833050251,
+   "mahal_cos": 0.015587120410774244
+  },
+  {
+   "source": "ai_liar",
+   "target": "instructed-deception",
+   "auroc": 0.9667899695489567,
+   "cos": 0.14549671113491058,
+   "mahal_cos": 0.00449657596968723
+  },
+  {
+   "source": "ai_liar",
+   "target": "harm-pressure-choice",
+   "auroc": 0.7413474850023073,
+   "cos": -0.0015175286680459976,
+   "mahal_cos": -0.004381226674031713
+  },
+  {
+   "source": "ai_liar",
+   "target": "harm-pressure-knowledge-report",
+   "auroc": 0.3258928571428571,
+   "cos": 0.016712244600057602,
+   "mahal_cos": 0.009162129636612072
+  },
+  {
+   "source": "ai_liar",
+   "target": "harm-pressure-kr-matched",
+   "auroc": 0.6267281105990783,
+   "cos": -0.010868408717215061,
+   "mahal_cos": -0.003437875510827018
+  },
+  {
+   "source": "ai_liar",
+   "target": "convincing-game",
+   "auroc": 0.873772791023843,
+   "cos": 0.07953867316246033,
+   "mahal_cos": 0.0057011309354880685
+  },
+  {
+   "source": "ai_liar",
+   "target": "insider-trading",
+   "auroc": 0.9569236135333101,
+   "cos": 0.17749665677547455,
+   "mahal_cos": 0.001643950868036505
+  },
+  {
+   "source": "ai_liar",
+   "target": "sandbagging_v2",
+   "auroc": 0.9409000000000001,
+   "cos": 0.06833407282829285,
+   "mahal_cos": 0.008738850939451868
+  },
+  {
+   "source": "ai_liar",
+   "target": "roleplaying",
+   "auroc": 0.769927536231884,
+   "cos": 0.19272097945213318,
+   "mahal_cos": 0.005092654486422698
+  },
+  {
+   "source": "ai_liar",
+   "target": "mask",
+   "auroc": 0.4253780407626561,
+   "cos": 0.018063100054860115,
+   "mahal_cos": -0.0071554183443689025
+  },
+  {
+   "source": "ai_liar",
+   "target": "sycophancy_mt",
+   "auroc": 0.6976998904709748,
+   "cos": 0.02464345656335354,
+   "mahal_cos": -0.001086653530720841
+  },
+  {
+   "source": "sandbagging_v2",
+   "target": "instructed-deception",
+   "auroc": 0.7741513559910895,
+   "cos": 0.09669331461191177,
+   "mahal_cos": 0.003108476636639745
+  },
+  {
+   "source": "sandbagging_v2",
+   "target": "harm-pressure-choice",
+   "auroc": 0.6278264882325797,
+   "cos": 0.021405570209026337,
+   "mahal_cos": -0.006979486241879961
+  },
+  {
+   "source": "sandbagging_v2",
+   "target": "harm-pressure-knowledge-report",
+   "auroc": 0.6870535714285715,
+   "cos": 0.06593985855579376,
+   "mahal_cos": -0.011053497281346147
+  },
+  {
+   "source": "sandbagging_v2",
+   "target": "harm-pressure-kr-matched",
+   "auroc": 0.5698924731182796,
+   "cos": 0.05283314362168312,
+   "mahal_cos": 0.007659031108656945
+  },
+  {
+   "source": "sandbagging_v2",
+   "target": "convincing-game",
+   "auroc": 0.25666199158485276,
+   "cos": -0.03379751369357109,
+   "mahal_cos": -0.006995264433421284
+  },
+  {
+   "source": "sandbagging_v2",
+   "target": "insider-trading",
+   "auroc": 0.11902685734216951,
+   "cos": -0.02408895269036293,
+   "mahal_cos": 0.003825788700190844
+  },
+  {
+   "source": "sandbagging_v2",
+   "target": "ai_liar",
+   "auroc": 0.598901098901099,
+   "cos": 0.06833407282829285,
+   "mahal_cos": 0.008738850939452793
+  },
+  {
+   "source": "sandbagging_v2",
+   "target": "roleplaying",
+   "auroc": 0.3369565217391304,
+   "cos": -0.02584553323686123,
+   "mahal_cos": -0.003651551497095676
+  },
+  {
+   "source": "sandbagging_v2",
+   "target": "mask",
+   "auroc": 0.5335305719921105,
+   "cos": -0.004436121787875891,
+   "mahal_cos": 0.010108821964721883
+  },
+  {
+   "source": "sandbagging_v2",
+   "target": "sycophancy_mt",
+   "auroc": 0.6825222969801283,
+   "cos": 0.07517582178115845,
+   "mahal_cos": 0.0050109090102788
+  },
+  {
+   "source": "roleplaying",
+   "target": "instructed-deception",
+   "auroc": 0.9490915779362775,
+   "cos": 0.09735757112503052,
+   "mahal_cos": 0.008574097056885796
+  },
+  {
+   "source": "roleplaying",
+   "target": "harm-pressure-choice",
+   "auroc": 0.6317489616982003,
+   "cos": 0.023678060621023178,
+   "mahal_cos": -0.001885439452617936
+  },
+  {
+   "source": "roleplaying",
+   "target": "harm-pressure-knowledge-report",
+   "auroc": 0.07955357142857142,
+   "cos": -0.05357164144515991,
+   "mahal_cos": -0.0039039928183548273
+  },
+  {
+   "source": "roleplaying",
+   "target": "harm-pressure-kr-matched",
+   "auroc": 0.5499231950844854,
+   "cos": -0.012621923349797726,
+   "mahal_cos": -0.005986577225107028
+  },
+  {
+   "source": "roleplaying",
+   "target": "convincing-game",
+   "auroc": 1.0,
+   "cos": 0.23755531013011932,
+   "mahal_cos": 0.008279056559523724
+  },
+  {
+   "source": "roleplaying",
+   "target": "insider-trading",
+   "auroc": 0.9679107080572026,
+   "cos": 0.2633267641067505,
+   "mahal_cos": 0.004585673999464895
+  },
+  {
+   "source": "roleplaying",
+   "target": "ai_liar",
+   "auroc": 0.754120879120879,
+   "cos": 0.19272097945213318,
+   "mahal_cos": 0.005092654486424343
+  },
+  {
+   "source": "roleplaying",
+   "target": "sandbagging_v2",
+   "auroc": 0.3097,
+   "cos": -0.02584553323686123,
+   "mahal_cos": -0.003651551497098428
+  },
+  {
+   "source": "roleplaying",
+   "target": "mask",
+   "auroc": 0.6962524654832347,
+   "cos": 0.11803952604532242,
+   "mahal_cos": 0.006136386753085172
+  },
+  {
+   "source": "roleplaying",
+   "target": "sycophancy_mt",
+   "auroc": 0.36058519793459554,
+   "cos": -0.03864215686917305,
+   "mahal_cos": -0.006836933504828544
+  },
+  {
+   "source": "mask",
+   "target": "instructed-deception",
+   "auroc": 0.84152854700156,
+   "cos": 0.055208995938301086,
+   "mahal_cos": 0.0023990826303619595
+  },
+  {
+   "source": "mask",
+   "target": "harm-pressure-choice",
+   "auroc": 0.7385017689586217,
+   "cos": 0.049510203301906586,
+   "mahal_cos": 0.003087283966136966
+  },
+  {
+   "source": "mask",
+   "target": "harm-pressure-knowledge-report",
+   "auroc": 0.935,
+   "cos": 0.06456223130226135,
+   "mahal_cos": 0.014818051231120719
+  },
+  {
+   "source": "mask",
+   "target": "harm-pressure-kr-matched",
+   "auroc": 0.7864823348694316,
+   "cos": 0.03195795789361,
+   "mahal_cos": 0.013195803766111147
+  },
+  {
+   "source": "mask",
+   "target": "convincing-game",
+   "auroc": 1.0,
+   "cos": 0.09970811754465103,
+   "mahal_cos": 0.003334739201074245
+  },
+  {
+   "source": "mask",
+   "target": "insider-trading",
+   "auroc": 0.8913498430415068,
+   "cos": 0.059010203927755356,
+   "mahal_cos": 0.01039780486926545
+  },
+  {
+   "source": "mask",
+   "target": "ai_liar",
+   "auroc": 0.5810439560439561,
+   "cos": 0.018063100054860115,
+   "mahal_cos": -0.007155418344370949
+  },
+  {
+   "source": "mask",
+   "target": "sandbagging_v2",
+   "auroc": 0.4146,
+   "cos": -0.004436121787875891,
+   "mahal_cos": 0.010108821964723375
+  },
+  {
+   "source": "mask",
+   "target": "roleplaying",
+   "auroc": 0.8967391304347826,
+   "cos": 0.11803952604532242,
+   "mahal_cos": 0.006136386753086216
+  },
+  {
+   "source": "mask",
+   "target": "sycophancy_mt",
+   "auroc": 0.6186825222969802,
+   "cos": 0.0063747260719537735,
+   "mahal_cos": -0.003934181210967517
+  },
+  {
+   "source": "sycophancy_mt",
+   "target": "instructed-deception",
+   "auroc": 0.5214621950637974,
+   "cos": 0.023355990648269653,
+   "mahal_cos": 0.0024245834972053204
+  },
+  {
+   "source": "sycophancy_mt",
+   "target": "harm-pressure-choice",
+   "auroc": 0.6159821565912937,
+   "cos": -0.017011137679219246,
+   "mahal_cos": -0.0027751639290969333
+  },
+  {
+   "source": "sycophancy_mt",
+   "target": "harm-pressure-knowledge-report",
+   "auroc": 0.9614285714285714,
+   "cos": 0.040238846093416214,
+   "mahal_cos": 0.008861945839156995
+  },
+  {
+   "source": "sycophancy_mt",
+   "target": "harm-pressure-kr-matched",
+   "auroc": 0.4930875576036866,
+   "cos": 0.018707355484366417,
+   "mahal_cos": 0.0023300505954366893
+  },
+  {
+   "source": "sycophancy_mt",
+   "target": "convincing-game",
+   "auroc": 0.3366058906030856,
+   "cos": -0.03962698206305504,
+   "mahal_cos": 0.001126551657169236
+  },
+  {
+   "source": "sycophancy_mt",
+   "target": "insider-trading",
+   "auroc": 0.7082316009766306,
+   "cos": 0.010614846833050251,
+   "mahal_cos": 0.015587120410777531
+  },
+  {
+   "source": "sycophancy_mt",
+   "target": "ai_liar",
+   "auroc": 0.5989010989010989,
+   "cos": 0.02464345656335354,
+   "mahal_cos": -0.0010866535307167738
+  },
+  {
+   "source": "sycophancy_mt",
+   "target": "sandbagging_v2",
+   "auroc": 0.9621999999999999,
+   "cos": 0.07517582178115845,
+   "mahal_cos": 0.005010909010283613
+  },
+  {
+   "source": "sycophancy_mt",
+   "target": "roleplaying",
+   "auroc": 0.43478260869565216,
+   "cos": -0.03864215686917305,
+   "mahal_cos": -0.0068369335048265156
+  },
+  {
+   "source": "sycophancy_mt",
+   "target": "mask",
+   "auroc": 0.5496383957922419,
+   "cos": 0.0063747260719537735,
+   "mahal_cos": -0.003934181210968296
+  }
+ ],
+ "predictors": {
+  "cos": {
+   "r": 0.629322011775378,
+   "r2": 0.39604619450500905,
+   "n": 110
+  },
+  "mahal_cos": {
+   "r": -0.008171148010952608,
+   "r2": 6.676765981689477e-05,
+   "n": 110
+  }
+ }
+}

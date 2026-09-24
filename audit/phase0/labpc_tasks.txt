@@ -1,0 +1,26 @@
+=== Coords-Supervisor | state=Ready | last=09/22/2026 18:43:46 | next=09/22/2026 18:58:45 | result=0
+  action: powershell.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "C:\Users\user4\expLB\src\assistant_axis_ndif\coords_supervisor.ps1"  (cwd=C:\Users\user4\expLB)
+  trigger: MSFT_TaskBootTrigger start= every= for= enabled=True
+  trigger: MSFT_TaskTimeTrigger start=2026-09-15T15:28:45+06:00 every=PT15M for= enabled=True
+=== Crossgen-Sync-Periodic | state=Ready | last=09/22/2026 18:46:10 | next=09/22/2026 19:16:09 | result=0
+  action: powershell.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "C:\Users\user4\expLB\src\assistant_axis_ndif\sync_crossgen.ps1" -Tag periodic -OnBusy Skip  (cwd=C:\Users\user4\expLB)
+  trigger: MSFT_TaskTimeTrigger start=2026-09-18T16:16:09+06:00 every=PT30M for= enabled=True
+=== KD-Sync-Periodic | state=Ready | last=09/22/2026 18:40:09 | next=09/22/2026 18:55:08 | result=0
+  action: powershell.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "C:\Users\user4\expLB\kd\scripts\sync_kd.ps1" -OnBusy Skip -Tag periodic  (cwd=C:\Users\user4\expLB)
+  trigger: MSFT_TaskTimeTrigger start=2026-09-19T18:10:08+06:00 every=PT15M for= enabled=True
+  trigger: MSFT_TaskBootTrigger start= every= for= enabled=True
+=== Night-Chain | state=Ready | last=09/22/2026 18:40:05 | next=09/22/2026 18:55:04 | result=0
+  action: powershell.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "C:\Users\user4\night_chain.ps1"  (cwd=C:\Users\user4\expLB)
+  trigger: MSFT_TaskBootTrigger start= every= for= enabled=True
+  trigger: MSFT_TaskTimeTrigger start=2026-09-16T02:40:04+06:00 every=PT15M for= enabled=True
+=== PassC-PerToken | state=Ready | last=09/22/2026 18:50:44 | next=09/22/2026 19:05:43 | result=0
+  action: powershell.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "C:\Users\user4\run_passC.ps1"  (cwd=C:\Users\user4\expLB)
+  trigger: MSFT_TaskBootTrigger start= every= for= enabled=True
+  trigger: MSFT_TaskTimeTrigger start=2026-09-16T12:50:43+06:00 every=PT15M for= enabled=True
+=== Crossgen-Sync-Now | state=Ready | last=09/22/2026 17:26:41 | next= | result=0
+  action: powershell.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "C:\Users\user4\expLB\src\assistant_axis_ndif\sync_crossgen.ps1" -Tag manual -OnBusy Wait -WaitMinutes 240 -DupCheck  (cwd=C:\Users\user4\expLB)
+=== Overseer | state=Ready | last=09/22/2026 16:12:01 | next=09/23/2026 09:11:33 | result=0
+  action: C:\Program Files\Common Files\Norton\Overseer\overseer.exe /from_scheduler:1  (cwd=)
+  trigger: MSFT_TaskBootTrigger start= every= for= enabled=True
+  trigger: MSFT_TaskDailyTrigger start=2026-09-02T09:11:33+06:00 every= for= enabled=True
+=== END

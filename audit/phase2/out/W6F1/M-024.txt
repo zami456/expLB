@@ -1,0 +1,15 @@
+run-coords/ai_audit/items.pt: 80 rows, 16 distinct scenarios, [5] samples each
+  token lengths: min 4211  median 6028  max 7543
+  (the note quotes 4,211-7,543 tokens, median 6,028, 80 rows = 16 scenarios, 5 samples each)
+
+  eager attention at batch size 1 (rows x heads x T^2 x 4 bytes):
+    T=4211: 4.23 GiB
+    T=6028: 8.66 GiB
+    T=7543: 13.57 GiB
+
+  AUROC 95% CI half-width (Hanley-McNeil), 8 deceptive vs 8 honest scenarios:
+    AUROC 0.5: clustered n1=n2=8 -> +-0.292   (rows as independent, n1=n2=40 -> +-0.127)
+    AUROC 0.6: clustered n1=n2=8 -> +-0.285   (rows as independent, n1=n2=40 -> +-0.124)
+    AUROC 0.7: clustered n1=n2=8 -> +-0.263   (rows as independent, n1=n2=40 -> +-0.115)
+    AUROC 0.8: clustered n1=n2=8 -> +-0.225   (rows as independent, n1=n2=40 -> +-0.098)
+    AUROC 0.9: clustered n1=n2=8 -> +-0.164   (rows as independent, n1=n2=40 -> +-0.071)

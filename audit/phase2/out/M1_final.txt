@@ -1,0 +1,80 @@
+== F-42 arithmetic inputs: num_attention_heads from the cached configs ==
+   Llama-3.1-8B-Instruct        heads 32  kv_heads 8  layers 32  hidden 4096
+       T=2048 1 row = 536,870,912 B =   512.00 MiB =   536.87 MB ; budget 0.75 GiB =   768.0 MiB -> rows admitted 1
+       T=2048 1 row = 536,870,912 B =   512.00 MiB =   536.87 MB ; budget 0.55 GiB =   563.2 MiB -> rows admitted 1
+       T=2048 1 row = 536,870,912 B =   512.00 MiB =   536.87 MB ; budget 0.42 GiB =   430.1 MiB -> rows admitted 0
+       T=1024 1 row = 134,217,728 B =   128.00 MiB =   134.22 MB ; budget 0.55 GiB =   563.2 MiB -> rows admitted 4
+   Llama-3.2-3B-Instruct        heads 24  kv_heads 8  layers 28  hidden 3072
+       T=2048 1 row = 402,653,184 B =   384.00 MiB =   402.65 MB ; budget 0.75 GiB =   768.0 MiB -> rows admitted 2
+       T=2048 1 row = 402,653,184 B =   384.00 MiB =   402.65 MB ; budget 0.55 GiB =   563.2 MiB -> rows admitted 1
+       T=2048 1 row = 402,653,184 B =   384.00 MiB =   402.65 MB ; budget 0.42 GiB =   430.1 MiB -> rows admitted 1
+       T=1024 1 row = 100,663,296 B =    96.00 MiB =   100.66 MB ; budget 0.55 GiB =   563.2 MiB -> rows admitted 5
+   Llama-3.3-70B-Instruct       heads 64  kv_heads 8  layers 80  hidden 8192
+       T=2048 1 row = 1,073,741,824 B =  1024.00 MiB =  1073.74 MB ; budget 0.75 GiB =   768.0 MiB -> rows admitted 0
+       T=2048 1 row = 1,073,741,824 B =  1024.00 MiB =  1073.74 MB ; budget 0.55 GiB =   563.2 MiB -> rows admitted 0
+       T=2048 1 row = 1,073,741,824 B =  1024.00 MiB =  1073.74 MB ; budget 0.42 GiB =   430.1 MiB -> rows admitted 0
+       T=1024 1 row = 268,435,456 B =   256.00 MiB =   268.44 MB ; budget 0.55 GiB =   563.2 MiB -> rows admitted 2
+
+== gate-3 extraction log ==
+   C:\Users\user4\expLB\logs\gate3_coords.log  107,206 B  enc=utf-16  lines=592  mtime 2026-09-22 14:30:52
+      python.exe : 2026-09-22 14:29:10,016 - INFO - nnsight 0.7.0  NDIF host=https://api.ndif.us
+      model=meta-llama/Llama-3.3-70B-Instruct
+      At line:5 char:1
+      + & "$r\.venv-aa\Scripts\python.exe" "$r\src\assistant_axis_ndif\8_coor ...
+      + ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+          + CategoryInfo          : NotSpecified: (2026-09-22 14:2....3-70B-Instruct:String) [], RemoteException
+          + FullyQualifiedErrorId : NativeCommandError
+      https://huggingface.co/meta-llama/Llama-3.3-70B-Instruct/resolve/main/config.json "HTTP/1.1 200 OK"
+      https://huggingface.co/meta-llama/Llama-3.3-70B-Instruct/resolve/main/tokenizer_config.json "HTTP/1.1 200 OK"
+      tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+      https://huggingface.co/api/models/meta-llama/Llama-3.3-70B-Instruct/tree/main?recursive=true&expand=false "HTTP/1.1
+      200 OK"
+      "HTTP/1.1 200 OK"
+      2026-09-22 14:29:12,413 - INFO - NDIF download floor 300 KB/s after 12s: installed
+      2026-09-22 14:29:12,413 - INFO - model config: 80 layers, hidden=8192
+      2026-09-22 14:29:12,413 - INFO - download floor 300 KB/s after 12s: installed
+      2026-09-22 14:29:12,413 - INFO - layers: 20 of 80  pooling: mean,last  datasets: sarcasm_natural
+      2026-09-22 14:29:12,418 - INFO - sarcasm_natural: 600 cached spans
+      2026-09-22 14:29:12,419 - INFO - sarcasm_natural: 600 to do (0 already on disk)
+      2026-09-22 14:29:12,419 - INFO -   19 batches, widest attention 0.16 GiB (budget 2.00 GiB)
+      2026-09-22 14:29:12,419 - INFO -   3 sessions, widest 14400 padded tokens (session budget 16000)
+      https://huggingface.co/api/models/meta-llama/Llama-3.3-70B-Instruct "HTTP/1.1 200 OK"
+      5-9334-72ec5a742073.pt?AWSAccessKeyId=AKIA3TGUKXGSGKQ3XEHR&Signature=zYN1a3UltxK3r4Jc9XK0hZB7kC8%3D&Expires=1790072976
+      "HTTP/1.1 200 OK"
+                                                                     [A
+      POST https://api.ndif.us/request "HTTP/1.1 200 OK"
+      a-83a8-12ba16fdcd7f.pt?AWSAccessKeyId=AKIA3TGUKXGSGKQ3XEHR&Signature=kL8RzMq8gVaGMyC8kETx6X%2Bb%2FBA%3D&Expires=1790073
+      005 "HTTP/1.1 200 OK"
+                                                                     [A
+      Request: POST https://api.ndif.us/request "HTTP/1.1 200 OK"
+      1-830f-dd6ab4e42914.pt?AWSAccessKeyId=AKIA3TGUKXGSGKQ3XEHR&Signature=tEm1Q1qqzxUiie1slIw7a%2BzQVm0%3D&Expires=179007302
+      9 "HTTP/1.1 200 OK"
+                                                                      [A2026-09-22 14:30:45,155 - WARNING -   download
+      attempt 1/4: 0.4 MB in 17s = 23 KB/s (floor 300) -- new connection
+      1-830f-dd6ab4e42914.pt?AWSAccessKeyId=AKIA3TGUKXGSGKQ3XEHR&Signature=tEm1Q1qqzxUiie1slIw7a%2BzQVm0%3D&Expires=179007302
+      9 "HTTP/1.1 200 OK"
+                                                                       [A
+      2026-09-22 14:30:52,259 - INFO - Done.
+
+== provenance of the files F-107 read ==
+   \run-coords\sarcasm\sarcasm_natural\items.pt                     95,192 B  2026-09-22 14:27:42  b8756f5d690b4ad5ea993a49acab01dd
+   \run-coords\sarcasm\sarcasm_natural\chunk_0000.pt           167,784,170 B  2026-09-22 14:29:50  1609b119b384730127e999ad4c51e5e2
+   \run-coords\sarcasm\sarcasm_natural\chunk_0001.pt           167,784,170 B  2026-09-22 14:30:18  bdcbbc7cc6b0930861f919d575863f92
+   \run-coords\sarcasm\sarcasm_natural\chunk_0002.pt            57,676,842 B  2026-09-22 14:30:52  ed545b1a4f5e828c42f9bba9eb07c7f3
+   \run-coords\sarcasm\sarcasm_natural\rows.jsonl                  185,784 B  2026-09-22 14:30:52  fe455c02142805eb005f631d6dc73e40
+   \run-kd\axes_vectors_s23.pt                                  94,402,665 B  2026-09-22 16:00:24  d7bd2031dff3c0cfa728a09bf7424bca
+   \run-kd\axes_collab_s23.pt                                  110,135,711 B  2026-09-22 00:32:37  c110e1ed1e125cb68459b0264b24dd4d
+   \cap\run-sarcasm-natural\rows.jsonl                             471,396 B  2026-09-22 14:27:06  b0608790c24b0a7a05314855862bd5eb
+   MISSING C:\Users\user4\expLB\cap\run-sarcasm-natural\baselines.json
+   \cap\scripts\build_sarcasm_natural.py                             8,792 B  2026-09-22 14:26:58  6493dd58d378e02dcc5e31279e1fe62b
+
+== rows.jsonl of the extracted sarcasm store vs the prepared set ==
+   extracted 600 rows, keys ['dataset', 'item_id', 'label', 'label_raw', 'label_semantics', 'prompt_fidelity', 'prompt_len', 'response_len', 'row_id', 'sample_idx', 'span', 'span_len']
+   prepared  600 rows
+   row_id sets identical: True
+   labels identical: True
+   span_len n=600 min 6 p50 15 max 53 zero-length 0
+
+== SARCASM_DESIGN.md step 3 wording (the pre-registered rule) ==
+   MISSING C:\Users\user4\expLB\cap\docs\SARCASM_DESIGN.md
+python exit 0

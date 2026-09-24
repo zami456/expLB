@@ -1,0 +1,18 @@
+== bank run-crossgen/banks/paper16_shared/matrices/mean_L40_s42.json
+   bank=axes_vectors_s3.pt bank_name=paper16_shared k=5 pooling=mean seed=42
+   raw from run-crossgen/matrices/mean_L40_s42.json (bank field axes_vectors_s3_fp32.pt)
+   raw offdiag=0.6652 n_pairs=90  bank features=['axes', 'axes_resid', 'pc:deception', 'pc:unified', 'pc:unified@2']
+   pc:unified      mean=0.6822 delta=+0.0170 won=46/90
+   pc:unified@2    mean=0.6434 delta=-0.0218 won=42/90
+   pc:deception    mean=0.6116 delta=-0.0536 won=33/90
+   axes            mean=0.6438 delta=-0.0214 won=42/90
+   axes_resid      mean=0.5978 delta=-0.0674 won=38/90
+== bank run-crossgen/banks/paper16_shared/matrices/last_L40_s42.json
+   bank=axes_vectors_s3.pt bank_name=paper16_shared k=5 pooling=last seed=42
+   raw from run-crossgen/matrices/last_L40_s42.json (bank field axes_vectors_s3_fp32.pt)
+   raw offdiag=0.6359 n_pairs=90  bank features=['axes', 'axes_resid', 'pc:deception', 'pc:unified', 'pc:unified@2']
+   pc:unified      mean=0.5905 delta=-0.0454 won=38/90
+   pc:unified@2    mean=0.5736 delta=-0.0623 won=39/90
+   pc:deception    mean=0.6004 delta=-0.0355 won=44/90
+   axes            mean=0.6007 delta=-0.0352 won=44/90
+   axes_resid      mean=0.5354 delta=-0.1005 won=34/90

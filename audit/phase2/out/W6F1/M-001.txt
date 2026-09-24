@@ -1,0 +1,20 @@
+commit named by the memory note: f386a72
+f386a72583190756ebe05d51edb0bc97cd16a094 Mon Sep 21 23:10:05 2026 +0600 Correct the layer-40 HP-KR row in the extended-persona summary
+branch head:
+45b16d906da0e3da13b1abb34898e69311d688cf Tue Sep 22 12:45:14 2026 +0600 The base probe in the zero-shot Fig 2: ahead at layer 20 at 1% FPR, behind on ranking
+f386a72 is an ancestor of the branch head: True
+
+--- src/probes/deception-detection/deception_detection/scripts/pool_activations.py @ f386a72: 157 lines
+    line 84  : 'pooled.append(acts[row_mask].float().mean(0).squeeze(0).numpy())'
+    mean-pool line(s): [84] -> 'pooled.append(acts[row_mask].float().mean(0).squeeze(0).numpy())'
+
+--- src/probes/deception-detection/deception_detection/scripts/pool_activations.py @ origin/feat/persona-pc-ood: 183 lines
+    line 84  : 'if acts is None:'
+    mean-pool line(s): [123] -> 'pooled.append(example.acts[example.mask].float().mean(0).squeeze(0).numpy())'
+
+--- "Delta = 0.0000" statements in his own result summaries
+  persona_ood: **Pooling verified exactly.** Scoring the pooled matrix with the run's own `detector.pt`; reproduces `results_table.csv` to **Δ = 0.0000** on all six datasets. This is exact rather than
+  persona_ood_L40: **Pooling verified exactly.** Scoring the layer-40 pooled matrix with that run's own `detector.pt`; reproduces its `results_table.csv` at **Δ = 0.0000** on all five datasets.
+  persona_ood_ext_L20: NO such statement
+  persona_ood_ext_L40: NO such statement
+  persona_ood_ext_L44: - **Pooling reproduces the run exactly**, Δ = 0.0000 on all five scored datasets, as at 20 and 40.

@@ -1,0 +1,66 @@
+==============================================================================
+D2. does run-paper16/scores_405b exist anywhere on the lab?
+==============================================================================
+   dirs with 405 in the name: NONE
+
+
+==============================================================================
+E. M-070  Pass C LODO on the LAB run-coords/q8_trained_pertoken.json
+==============================================================================
+   protocol=leave-one-dataset-out layers=[20, 22, 28, 40, 44, 48] folds=9
+   pool_mean_mms/pooled   L20=0.8570  L22=0.8544  L28=0.8764  L40=0.8826  L44=0.8783  L48=0.8739   best=L40 0.8826  L40-L28=+0.0061
+   pool_last_mms/pooled   L20=0.8276  L22=0.8399  L28=0.8699  L40=0.8760  L44=0.8657  L48=0.8537   best=L40 0.8760  L40-L28=+0.0061
+   pool_mean_lr/pooled    L20=0.8333  L22=0.8206  L28=0.8453  L40=0.8579  L44=0.8578  L48=0.8411   best=L40 0.8579  L40-L28=+0.0126
+   q6_layers row: leave-one-dataset-out, Pass C | pool_mean_mms / pooled best_layer=40 best=0.8826
+
+==============================================================================
+F. M-087  on the LAB run-coords/significance.json
+==============================================================================
+   boot_rows=1000 boot_datasets=10000 datasets=9
+   axes@44 vs raw@32, each at its best (mean)     diff=+0.0142 row_ci95=[-0.0001,+0.0277] row_p=0.056 dataset_q_bh=0.8612
+   axes vs raw, same layer 40 (mean)              diff=+0.0515 row_ci95=[+0.0402,+0.0623] row_p=0.001 dataset_q_bh=0.664525
+   axes vs raw, same layer 44 (mean)              diff=+0.0678 row_ci95=[+0.0544,+0.0806] row_p=0.001 dataset_q_bh=0.5104666666666667
+   axes@44 vs raw@28, each at its best (last)     diff=+0.0259 row_ci95=[+0.0112,+0.0399] row_p=0.002 dataset_q_bh=0.6683529411764706
+   axes vs raw, same layer 44 (last)              diff=+0.0457 row_ci95=[+0.0327,+0.0589] row_p=0.001 dataset_q_bh=0.5104666666666667
+   axes vs raw, same layer 20 (mean)              diff=-0.0826 row_ci95=[-0.0913,-0.0737] row_p=0.001 dataset_q_bh=0.5366769230769232
+
+==============================================================================
+G. M-082  per-dataset length-only AUROC (passB rows.jsonl) + confounds_L44_last.json
+==============================================================================
+   confounds_L44_last.json: layer=44 pooling=last bank=axes_vectors_s3_fp32.pt datasets=11
+     ai_liar                          auroc=0.6130  median 160 vs 125
+     convincing-game                  auroc=0.5068  median 209 vs 208
+     harm-pressure-choice             auroc=0.5017  median 1 vs 1
+     harm-pressure-knowledge-report   auroc=0.7756  median 7 vs 5
+     insider-trading                  auroc=0.5945  median 115 vs 106
+     instructed-deception             auroc=0.5604  median 32 vs 29
+     mask                             auroc=0.6249  median 245 vs 96
+     roleplaying                      auroc=0.4415  median 31 vs 38
+     sandbagging_v2                   auroc=0.8544  median 505 vs 310
+     sycophancy_mt                    auroc=0.6640  median 174 vs 97
+   rows in that table: 10; AUROC>0.5 in 9; median_pos>median_neg in 8
+
+   --- recomputed from run-coords/passB/<dataset>/rows.jsonl ---
+     ai_liar                          n=  270 pos=  135 neg=  135 auroc=0.6130  median 160 vs 125  mean 174.00 vs 151.63 (gap +22.37)
+     alpaca                           n=2000 single-class, skipped
+     convincing-game                  n=  267 pos=  167 neg=  100 auroc=0.5068  median 209 vs 208  mean 203.80 vs 205.00 (gap -1.20)
+     harm-pressure-choice             n= 2134 pos=  134 neg= 2000 auroc=0.5017  median 1 vs 1  mean 1.01 vs 1.00 (gap +0.00)
+     harm-pressure-knowledge-report   n= 2139 pos=  139 neg= 2000 auroc=0.7756  median 7 vs 5  mean 8.53 vs 5.26 (gap +3.27)
+     harm-pressure-kr-matched         n=  258 pos=  124 neg=  134 auroc=0.6034  median 7 vs 7  mean 8.11 vs 7.49 (gap +0.62)
+     insider-trading                  n= 1080 pos=  423 neg=  657 auroc=0.5945  median 115 vs 106  mean 116.55 vs 110.18 (gap +6.36)
+     instructed-deception             n= 5432 pos= 3045 neg= 2387 auroc=0.5604  median 32 vs 29  mean 32.15 vs 30.16 (gap +1.99)
+     mask                             n=  585 pos=  415 neg=  170 auroc=0.6249  median 245 vs 96  mean 283.18 vs 176.42 (gap +106.76)
+     roleplaying                      n=  287 pos=  203 neg=   84 auroc=0.4415  median 31 vs 38  mean 39.38 vs 43.49 (gap -4.10)
+     sandbagging_v2                   n= 1000 pos=  500 neg=  500 auroc=0.8544  median 505 vs 310  mean 529.40 vs 340.39 (gap +189.01)
+     sycophancy_mt                    n= 1182 pos=  434 neg=  748 auroc=0.6640  median 174 vs 97  mean 170.17 vs 126.20 (gap +43.97)
+   passB datasets with AUROC>0.5: 10 of 11
+   passB datasets with AUROC>0.5, excluding sycophancy_mt: 9 of 10
+
+==============================================================================
+H. M-012  |deception axis| at layer 0 and 76, old bank vs fp32 rebuild
+==============================================================================
+   axes_vectors_s3.pt: layers=80 L0=0.0247  L20=1.0037  L40=2.4976  L76=5.3860  L79=7.0293  vectors_dir=C:\Users\SURAIYA\Documents\STUDY\thesis\expLB\run-paper16\vectors_s3
+   axes_vectors_s3_fp32.pt: layers=80 L0=0.0248  L20=1.0032  L40=2.4981  L76=5.3862  L79=7.0313  vectors_dir=C:\Users\user4\expLB\run-paper16\vectors_s3_fp32
+
+DONE
+python exit 0

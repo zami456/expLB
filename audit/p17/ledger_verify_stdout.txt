@@ -1,0 +1,464 @@
+F-110  70B like-for-like scale rung (lab: run-crossgen/scale_*)
+  F-110  19-layer set = 21 minus L(72, 76)              ledger=     found raw=     found  matches
+  F-110  3B raw (n=7)                                   ledger=    0.6989 raw=    0.6989  matches
+  F-110  3B best-raw (n=7)                              ledger=   +0.0328 raw=   +0.0328  matches
+  F-110  3B best-dPCA (n=7)                             ledger=   +0.1197 raw=   +0.1197  matches
+  F-110  8B raw (n=8)                                   ledger=    0.7149 raw=    0.7149  matches
+  F-110  8B best-raw (n=8)                              ledger=   +0.0089 raw=   +0.0089  matches
+  F-110  8B best-dPCA (n=8)                             ledger=   +0.1027 raw=   +0.1027  matches
+  F-110  70B kd raw (n=19)                              ledger=    0.7524 raw=    0.7524  matches
+  F-110  70B kd best-raw (n=19)                         ledger=   +0.0079 raw=   +0.0079  matches
+  F-110  70B kd best-dPCA (n=19)                        ledger=   +0.0751 raw=   +0.0751  matches
+  F-110  70B p16fp32 raw (n=19)                         ledger=    0.7524 raw=    0.7524  matches
+  F-110  70B p16fp32 best-raw (n=19)                    ledger=   -0.0131 raw=   -0.0131  matches
+  F-110  70B p16fp32 best-dPCA (n=19)                   ledger=   +0.0541 raw=   +0.0541  matches
+  F-110  70B p16fp32 LAST best-raw (19L)                ledger=   +0.0061 raw=   +0.0061  matches
+  F-110  70B p16fp32 LAST best-dPCA (19L)               ledger=   +0.0688 raw=   +0.0688  matches
+  F-110  70B p16fp32 LAST best-raw (21L)                ledger=   +0.0069 raw=   +0.0069  matches
+  F-110  70B p16fp32 LAST best-dPCA (21L)               ledger=   +0.0681 raw=   +0.0681  matches
+  F-110  3B LAST best-dPCA                              ledger=   +0.0745 raw=   +0.0745  matches
+  F-110  8B LAST best-dPCA                              ledger=   +0.0090 raw=   +0.0090  matches
+F-111  audit corrections (subset re-derived: items 1,2,3,4,7,8 + F-73's numbers)
+  F-111  kd slice beats raw (of 80 layers)              ledger=     28/80 raw=     28/80  matches
+  F-111  kd slice beats root datapca (of 80)            ledger=     31/80 raw=     31/80  matches
+  F-111  trap: vs the bank store's own datapca          ledger=      0/80 raw=     31/80  DIFFERS: not reproduced - the bank summa
+  F-111  cap rows / files                               ledger=   1300/13 raw=   1300/13  matches
+  F-111  cap personas (distinct system prompts)         ledger=        65 raw=        65  matches
+  F-111  cap questions                                  ledger=        20 raw=        20  matches
+  F-111  distinct (question, turn1) pairs               ledger=        20 raw=        20  matches
+  F-111  max distinct turn-1 texts per question         ledger=         1 raw=         1  matches
+  F-111  rows per (question, turn1) pair                ledger=        65 raw=        65  matches
+  F-111  block9 mean L40 paper axes-raw                 ledger=   +0.0147 raw=   +0.0147  matches
+  F-111    its dataset CI                               ledger=[-0.170, +0.187] raw=[-0.170, +0.187]  matches
+  F-111  block9 mean L40 paper axes-datapca             ledger=   +0.0264 raw=   +0.0264  matches
+  F-111  block10 mean L40 paper axes-raw                ledger=   -0.0215 raw=   -0.0215  matches
+  F-111  block10 mean L40 paper axes-datapca            ledger=   -0.0243 raw=   -0.0243  matches
+  F-111  family size block 9 (layers 40,44)             ledger=       192 raw=       192  matches
+  F-111  q of axes-raw in restricted family             ledger=    0.9311 raw=    0.9311  matches
+  F-111  q of axes-datapca in restricted family         ledger=    0.8546 raw=    0.8546  matches
+  F-111  tests clearing BH in family                    ledger=1: random@2 - raw last L44 mms raw=random@2 - raw last L44 mms  matches
+  F-111    its diff                                     ledger=   -0.2287 raw=   -0.2287  matches
+  F-111    its q                                        ledger=    0.0192 raw=    0.0192  matches
+  F-111  positive class longer (of 11)                  ledger=      9/11 raw=      9/11  matches
+  F-111  ... excluding sycophancy_mt                    ledger=      8/10 raw=      8/10  matches
+  F-111  convincing-game gap                            ledger=     -1.20 raw=   -1.1976  matches
+  F-111  roleplaying gap                                ledger=     -4.10 raw=   -4.1039  matches
+  F-111  roleplaying null labels                        ledger=        84 raw=        84  matches
+  F-111  harm-pressure-choice gap (F-73)                ledger=   +0.0035 raw=   +0.0035  matches
+  F-111  median |gap| over 8 (F-73)                     ledger=       3.7 raw=    3.6894  matches
+  F-111  signed median over same 8                      ledger=     +2.63 raw=   +2.6316  matches
+  F-123  DF-10 sandbagging_v2 token means pos/neg       ledger=529.4/340.4 raw=529.4/340.4  matches
+  F-123  DF-10 mask token means pos/neg                 ledger=283.2/176.4 raw=283.2/176.4  matches
+  F-111  length-only off-diag, all 42 matrices x 3 prob ledger=    0.5555 raw=    0.5555  matches
+  F-111  raw L40/mean/paper                             ledger=    0.6623 raw=    0.6623  matches
+  F-111  raw L44/last/mms                               ledger=    0.6724 raw=    0.6724  matches
+  F-111  kd11 L40 sycophancy_mt zero-shot contrast      ledger=    0.4089 raw=    0.4089  matches
+  F-111  kd11 L40 sycophancy_mt zero-shot PC1           ledger=    0.3739 raw=    0.3740  matches
+  F-111  trained axes, sycophancy_mt column             ledger=    0.3551 raw=    0.3551  matches
+  F-111  trained random, sycophancy_mt column           ledger=    0.5413 raw=    0.5413  matches
+  F-111  paper16 sycophancy axis L40 (q10)              ledger=     0.313 raw=    0.3131  matches
+  F-111    its CI                                       ledger=[0.283, 0.346] raw=[0.283, 0.346]  matches
+  F-111  sycophancy axis p vs 1000-dir null (range)     ledger=0.001-0.008 raw=0.001-0.008  matches
+  F-111  deception axis (contrast 0.409) inside null    ledger=    inside raw=    inside  matches
+  F-111  sycophancy axis passA11 contrast/PC1           ledger=0.3061 (A11) / 0.2996 (C11) raw=0.3061/0.2996  matches
+  F-111  sycophancy axis passC11 contrast/PC1           ledger=0.3061 (A11) / 0.2996 (C11) raw=0.3066/0.2995  PARTLY: the pair 0.3061/0.2996 is passA1
+F-112  F-31 families nested; pc:kd_assertion margins (git kd11/banks/kd vs lab copy)
+  F-112  git tests / comparisons                        ledger=   4032/16 raw=   4032/16  matches
+  F-112  lab tests / comparisons                        ledger=   6300/25 raw=   6300/25  matches
+  F-112  git tests missing from lab                     ledger=         0 raw=         0  matches
+  F-112  git tests with changed diff or dataset_p       ledger=         0 raw=         0  matches
+  F-112  tests added in lab                             ledger=      2268 raw=      2268  matches
+  F-112  git tests whose BH q moved                     ledger=      4030 raw=      4030  matches
+  F-112  added comparison families                      ledger=         9 raw=         9  matches
+  F-112  pc:kd_assertion - random: layers positive (b10 ledger=     21/21 raw=     21/21  matches
+  F-112  pc:kd_assertion - random: tests clearing BH (b ledger=         8 raw=    8 | 34  PARTLY: 8 within block10/mean/paper (the
+  F-112  pc:kd_assertion - raw: layers positive (b10 me ledger=     18/21 raw=     18/21  matches
+  F-112  pc:kd_assertion - raw: tests clearing BH (b10  ledger=         1 raw=     1 | 1  matches
+  F-112  pc:kd_assertion - datapca: layers positive (b1 ledger=     20/21 raw=     20/21  matches
+  F-112  pc:kd_assertion - datapca: tests clearing BH ( ledger=         0 raw=     0 | 0  matches
+  F-112  L68 kd_assertion-raw diff                      ledger=   +0.1497 raw=   +0.1497  matches
+  F-112  L68 kd_assertion-raw q                         ledger=    0.0467 raw=    0.0467  matches
+  F-112  kd_assertion-datapca tests / clearing (block 1 ledger=     126/0 raw=     126/0  matches
+  F-112  kd_assertion-datapca tests / clearing (both bl ledger=       n/a raw=     252/0  context: 0 clear in either block
+  F-112  kd_assertion-datapca mean (b10 mean paper)     ledger=   +0.0830 raw=   +0.0830  matches
+  F-112    mms mean / positive                          ledger=+0.0172 13/21 raw=+0.0172 13/21  matches
+  F-112  L32 kd_assertion-raw all 11                    ledger=   +0.0998 raw=   +0.0998  matches
+  F-112  L32 kd_assertion-raw HP-KR cols dropped        ledger=   +0.1183 raw=   +0.1183  matches
+  F-112  L40 kd_assertion-raw all 11                    ledger=   +0.1496 raw=   +0.1496  matches
+  F-112  L40 kd_assertion-raw HP-KR cols dropped        ledger=   +0.1539 raw=   +0.1539  matches
+  F-112  L52 kd_assertion-raw all 11                    ledger=   +0.1215 raw=   +0.1215  matches
+  F-112  L52 kd_assertion-raw HP-KR cols dropped        ledger=   +0.1370 raw=   +0.1370  matches
+  F-112  L64 kd_assertion-raw all 11                    ledger=   +0.1420 raw=   +0.1420  matches
+  F-112  L64 kd_assertion-raw HP-KR cols dropped        ledger=   +0.1624 raw=   +0.1624  matches
+  F-112  L68 kd_assertion-raw all 11                    ledger=   +0.1497 raw=   +0.1497  matches
+  F-112  L68 kd_assertion-raw HP-KR cols dropped        ledger=   +0.1757 raw=   +0.1757  matches
+  F-112  L76 kd_assertion-raw all 11                    ledger=   +0.1473 raw=   +0.1473  matches
+  F-112  L76 kd_assertion-raw HP-KR cols dropped        ledger=   +0.1897 raw=   +0.1897  matches
+F-113  methods corrections (arithmetic + k)
+  F-113  8B heads x 2048^2 x 4 B in MiB                 ledger=    512.00 raw=    512.00  matches
+  F-113  8B same in decimal MB                          ledger=       537 raw=    536.87  matches
+  F-113  3B heads x 2048^2 x 4 B in MiB                 ledger=    384.00 raw=    384.00  matches
+  F-113  3B same in decimal MB                          ledger=       402 raw=    402.65  matches
+  F-113  27_crossgen.py:882 default k                   ledger=         5 raw=         5  matches
+  F-113  k in all four scale stores                     ledger=         3 raw=         3  matches
+  F-113  run_scale_coords.ps1:108-109 carries MiB slip  ledger=537/402 MiB raw=#   8B, 32 heads: T=2048 -> 537 MiB (fails) ; T=1024 -> 134  | #   3B, 24 heads: T=2048 -> 402 MiB          ; T=1024 -> 101  matches
+F-114  wave-5 corrections (length AUROC, F-61, F-91, F-56)
+  F-114  length-only AUROC datasets                     ledger=        10 raw=        10  matches
+  F-114  ... above 0.5                                  ledger=         9 raw=         9  matches
+  F-114  roleplaying (sole inversion)                   ledger=    0.4415 raw=    0.4415  matches
+  F-114  control set keeps sycophancy_mt, drops kr-matc ledger=       yes raw=       yes  matches
+  F-114  paper16 raw                                    ledger=    0.6623 raw=    0.6623  matches
+  F-114  pc:unified                                     ledger=    0.6715 raw=    0.6715  matches
+  F-114  datapca                                        ledger=    0.6651 raw=    0.6651  matches
+  F-114  pc:unified - raw                               ledger=   +0.0093 raw=   +0.0093  matches
+  F-114  pc:unified - datapca                           ledger=   +0.0064 raw=   +0.0064  matches
+  F-114  kd pc:unified - ROOT raw                       ledger=   +0.0757 raw=   +0.0757  matches
+  F-114  mixed ratio ('twelvefold')                     ledger=      11.8 raw=   11.8000  matches
+  F-114  like-for-like ratio                            ledger=       8.1 raw=    8.1000  matches
+  F-123  like-for-like ratio                            ledger=       8.2 raw=    8.2000  matches
+  F-123  mixed ratio                                    ledger=      11.7 raw=   11.7000  matches
+  F-123  rows caption length                            ledger=        22 raw=        22  matches
+  F-123  length/raw, 10 = all but kr-matched            ledger=0.5494/0.6652 raw=0.5494/0.6652  matches
+  F-123  length/raw, block9                             ledger=0.5467/0.6870 raw=0.5467/0.6870  matches
+  F-114  F-91 falsify L32 s7 real                       ledger=    0.8826 raw=    0.8826  matches
+  F-114  F-91 falsify L32 s13 real                      ledger=    0.8800 raw=    0.8800  matches
+  F-114  F-91 falsify L32 s42 real                      ledger=    0.8945 raw=    0.8945  matches
+  F-114  F-91 falsify L36 s7 real                       ledger=    0.8942 raw=    0.8942  matches
+  F-114  F-91 falsify L36 s13 real                      ledger=    0.8887 raw=    0.8887  matches
+  F-114  F-91 falsify L36 s42 real                      ledger=    0.8919 raw=    0.8919  matches
+  F-114  F-91 falsify L40 s7 real                       ledger=    0.8957 raw=    0.8957  matches
+  F-114  F-91 falsify L40 s13 real                      ledger=    0.8830 raw=    0.8830  matches
+  F-114  F-91 falsify L40 s42 real                      ledger=    0.8828 raw=    0.8828  matches
+  F-114  F-56 source share 134/2134                     ledger=      6.28 raw=    6.2800  matches
+  F-114  F-56 sample share 134/800                      ledger=     16.75 raw=   16.7500  matches
+F-115  leak-guarded F-03 cell (audit/cache/labpc/expLB-resplit == lab md5; kd11 matrices = git asix)
+  F-115  cache L20 md5 == lab                           ledger=be979ba50f raw=be979ba50f  matches
+  F-115  cache L40 md5 == lab                           ledger=d2384c888a raw=d2384c888a  matches
+  F-115  cache L44 md5 == lab                           ledger=ddd573b845 raw=ddd573b845  matches
+  F-115  L20 leaked axes-raw, KM row mean               ledger=   -0.2566 raw=   -0.2566  matches
+  F-115  L20 guarded axes-raw, KM row mean              ledger=   -0.2545 raw=   -0.2545  matches
+  F-115  L20 KR>KM axes leaked                          ledger=    0.6004 raw=    0.6004  matches
+  F-115  L20 KR>KM axes guarded                         ledger=    0.7190 raw=    0.7190  matches
+  F-115  L40 leaked axes-raw, KM row mean               ledger=   +0.0367 raw=   +0.0367  matches
+  F-115  L40 guarded axes-raw, KM row mean              ledger=   +0.0309 raw=   +0.0309  matches
+  F-115  L40 KM>KR axes leaked                          ledger=    0.5905 raw=    0.5905  matches
+  F-115  L40 KM>KR axes guarded                         ledger=    0.5416 raw=    0.5416  matches
+  F-115  L40 KR>KM axes leaked                          ledger=    0.5674 raw=    0.5674  matches
+  F-115  L40 KR>KM axes guarded                         ledger=    0.4262 raw=    0.4262  matches
+  F-115  L40 KR>KM raw leaked                           ledger=    0.7932 raw=    0.7932  matches
+  F-115  L40 KR>KM raw guarded                          ledger=    0.7214 raw=    0.7214  matches
+  F-115  L44 leaked axes-raw, KM row mean               ledger=   +0.0134 raw=   +0.0134  matches
+  F-115  L44 guarded axes-raw, KM row mean              ledger=   +0.0050 raw=   +0.0050  matches
+  F-115  L44 KM>KR axes leaked                          ledger=    0.6534 raw=    0.6534  matches
+  F-115  L44 KM>KR axes guarded                         ledger=    0.5719 raw=    0.5719  matches
+  F-115  L44 KR>KM axes leaked                          ledger=    0.6675 raw=    0.6675  matches
+  F-115  L44 KR>KM axes guarded                         ledger=    0.5667 raw=    0.5667  matches
+  F-115  kr-matched ids that are HP-KR ids              ledger=   258/258 raw=   258/258  matches
+  F-115  kr-matched rows surviving guard                ledger=        59 raw=        59  matches
+  F-115  contamination %                                ledger=        77 raw=        77  matches
+  F-113  kr-matched TEST rows in HP-KR train (30g split ledger=        42 raw=        42  matches
+  F-113  same count under crossgen split (context only) ledger=       n/a raw=        39  context (different pipeline split)
+  F-112  kr-matched rows {deceptive/honest}             ledger=258 {124/134} raw=258 {124/134}  matches
+  F-112  HP-KR rows {deceptive/honest}                  ledger=2139 {139/2000} raw=2139 {139/2000}  matches
+F-116  knowledge_matched slice (audit/cache/labpc/expLB-resplit/km == lab md5)
+  F-116  cache km L20 md5 == lab                        ledger=15c017e128 raw=15c017e128  matches
+  F-116  cache km L40 md5 == lab                        ledger=86070e76ac raw=86070e76ac  matches
+  F-116  cache km L44 md5 == lab                        ledger=8a39fc33f3 raw=8a39fc33f3  matches
+  F-116  knowledge_matched rows                         ledger=      2001 raw=      2001  matches
+  F-116  class balance dec/hon                          ledger=  139/1862 raw=  139/1862  matches
+  F-116  share of HP-KR (93.5%)                         ledger=      93.5 raw=   93.5000  matches
+  F-116  7.8x bigger than 258                           ledger=       7.8 raw=    7.8000  matches
+  F-116  L20 transfer axes                              ledger=    0.3850 raw=    0.3850  matches
+  F-116  L20 transfer raw                               ledger=    0.5711 raw=    0.5711  matches
+  F-116  L20 transfer axes-raw                          ledger=   -0.1860 raw=   -0.1860  matches
+  F-116  L20 transfer datapca                           ledger=    0.5208 raw=    0.5208  matches
+  F-116  L20 transfer random                            ledger=    0.5455 raw=    0.5455  matches
+  F-116  L20 transfer length                            ledger=    0.6174 raw=    0.6174  matches
+  F-116  L20 in-dist diag axes                          ledger=    0.9541 raw=    0.9541  matches
+  F-116  L20 in-dist diag raw                           ledger=    0.9995 raw=    0.9995  matches
+  F-116  L20 in-dist diag length                        ledger=    0.8318 raw=    0.8318  matches
+  F-116  L20 zero-shot contrast slice                   ledger=    0.2405 raw=    0.2405  matches
+  F-116  L20 zero-shot contrast full HP-KR              ledger=    0.2504 raw=    0.2504  matches
+  F-116  L40 transfer axes                              ledger=    0.3335 raw=    0.3335  matches
+  F-116  L40 transfer raw                               ledger=    0.7093 raw=    0.7093  matches
+  F-116  L40 transfer axes-raw                          ledger=   -0.3758 raw=   -0.3758  matches
+  F-116  L40 transfer datapca                           ledger=    0.6636 raw=    0.6636  matches
+  F-116  L40 transfer random                            ledger=    0.6718 raw=    0.6718  matches
+  F-116  L40 transfer length                            ledger=    0.6174 raw=    0.6174  matches
+  F-116  L40 in-dist diag axes                          ledger=    0.8347 raw=    0.8347  matches
+  F-116  L40 in-dist diag raw                           ledger=    0.9992 raw=    0.9992  matches
+  F-116  L40 in-dist diag length                        ledger=    0.8318 raw=    0.8318  matches
+  F-116  L40 zero-shot contrast slice                   ledger=    0.6466 raw=    0.6466  matches
+  F-116  L40 zero-shot contrast full HP-KR              ledger=    0.6436 raw=    0.6436  matches
+  F-116  L44 transfer axes                              ledger=    0.5267 raw=    0.5267  matches
+  F-116  L44 transfer raw                               ledger=    0.7203 raw=    0.7203  matches
+  F-116  L44 transfer axes-raw                          ledger=   -0.1937 raw=   -0.1937  matches
+  F-116  L44 transfer datapca                           ledger=    0.7037 raw=    0.7037  matches
+  F-116  L44 transfer random                            ledger=    0.6237 raw=    0.6237  matches
+  F-116  L44 transfer length                            ledger=    0.6174 raw=    0.6174  matches
+  F-116  L44 in-dist diag axes                          ledger=    0.7209 raw=    0.7209  matches
+  F-116  L44 in-dist diag raw                           ledger=    0.9993 raw=    0.9993  matches
+  F-116  L44 in-dist diag length                        ledger=    0.8318 raw=    0.8318  matches
+  F-116  L44 zero-shot contrast slice                   ledger=    0.6085 raw=    0.6085  matches
+  F-116  L44 zero-shot contrast full HP-KR              ledger=    0.6032 raw=    0.6032  matches
+F-117  collaborator 16-layer sweep (git summary.csv / zero_shot.csv at PIN_PAPER; PIN_OLD for comparison)
+  F-117  L20 ext_axis1-ext_pc3 with HP-KR               ledger=   +0.2204 raw=   +0.2204  matches
+  F-117  L20 ext_axis1-ext_pc3 excl HP-KR               ledger=   +0.0086 raw=   +0.0086  matches
+  F-117  L24 ext_axis1-ext_pc3 with HP-KR               ledger=   +0.2221 raw=   +0.2221  matches
+  F-117  L24 ext_axis1-ext_pc3 excl HP-KR               ledger=   +0.0012 raw=   +0.0012  matches
+  F-117  L36 ext_axis1-ext_pc3 with HP-KR               ledger=   +0.0481 raw=   +0.0481  matches
+  F-117  L36 ext_axis1-ext_pc3 excl HP-KR               ledger=   +0.0155 raw=   +0.0155  matches
+  F-117  L40 ext_axis1-ext_pc3 with HP-KR               ledger=   +0.0503 raw=   +0.0503  matches
+  F-117  L40 ext_axis1-ext_pc3 excl HP-KR               ledger=   +0.0495 raw=   +0.0495  matches
+  F-117  L44 ext_axis1-ext_pc3 with HP-KR               ledger=   +0.0235 raw=   +0.0235  matches
+  F-117  L44 ext_axis1-ext_pc3 excl HP-KR               ledger=   +0.0354 raw=   +0.0354  matches
+  F-117  L64 ext_axis1-ext_pc3 with HP-KR               ledger=   -0.0010 raw=   -0.0010  matches
+  F-117  L64 ext_axis1-ext_pc3 excl HP-KR               ledger=   -0.0029 raw=   -0.0029  matches
+  F-117  L68 ext_axis1-ext_pc3 with HP-KR               ledger=   -0.0205 raw=   -0.0205  matches
+  F-117  L68 ext_axis1-ext_pc3 excl HP-KR               ledger=   -0.0325 raw=   -0.0325  matches
+  F-117  L72 ext_axis1-ext_pc3 with HP-KR               ledger=   -0.0146 raw=   -0.0146  matches
+  F-117  L72 ext_axis1-ext_pc3 excl HP-KR               ledger=   -0.0198 raw=   -0.0198  matches
+  F-117  positive layers (with HP-KR)                   ledger=     13/16 raw=     13/16  matches
+  F-117  positive layers (excl HP-KR)                   ledger=     11/16 raw=     11/16  matches
+  F-117  excl margins within +-0.06                     ledger=       yes raw=no (max 0.0633)  DIFFERS: ledger yes vs raw no (max 0.063
+  F-117  excl margin zero crossings                     ledger=         5 raw=         6  DIFFERS: ledger 5 vs raw 6
+  F-117  ext_axis1-baseline >0 layers (with)            ledger=     16/16 raw=     16/16  matches
+  F-117  ext_axis1-baseline min (with)                  ledger=    +0.115 raw=   +0.1150  matches
+  F-117  ext_axis1-baseline max (with)                  ledger=    +0.273 raw=   +0.2731  matches
+  F-117  ext_axis1-baseline >0 layers (excl)            ledger=     16/16 raw=     16/16  matches
+  F-117  ext_axis1-baseline min (excl)                  ledger=    +0.123 raw=   +0.1229  matches
+  F-117  ext_axis1-baseline max (excl)                  ledger=    +0.243 raw=   +0.2433  matches
+  F-117  ext_axis1 peak layer                           ledger=        36 raw=        36  matches
+  F-117  ext_axis1 L36                                  ledger=    0.9275 raw=    0.9275  matches
+  F-117  ext_axis1 L40                                  ledger=    0.9158 raw=    0.9158  matches
+  F-117  denial_axis1 peak layer                        ledger=        36 raw=        36  matches
+  F-117  HP-KR denial_axis L40 (global max)             ledger=    0.9185 raw=    0.9185  matches
+  F-117  HP-KR denial_axis argmax layer                 ledger=        40 raw=        40  matches
+  F-117  HP-KR ext_axis L76                             ledger=    0.9249 raw=    0.9249  matches
+  F-117  HP-KR ext_axis L40                             ledger=    0.9124 raw=    0.9124  matches
+  F-117  HP-KR published 8v7 axis L72                   ledger=    0.4344 raw=    0.4344  matches
+  F-117  HP-KR published 8v7 axis L76                   ledger=    0.7301 raw=    0.7301  matches
+  F-117  HP-KR published 8v7 axis L79                   ledger=    0.7709 raw=    0.7709  matches
+  F-117  axis1 off-diag L72                             ledger=    0.6526 raw=    0.6526  matches
+  F-117  axis1 off-diag L76                             ledger=    0.8738 raw=    0.8738  matches
+  F-117  axis1 off-diag L79                             ledger=    0.8179 raw=    0.8179  matches
+  F-117  random3 off-diag range                         ledger= 0.48-0.55 raw=0.4806-0.5491  matches
+  F-117  ext margins identical PIN_OLD vs PIN_PAPER     ledger= identical raw= identical  matches
+  F-117  baseline margins identical OLD vs PIN          ledger= identical raw=differ at [20, 40, 44] (<1e-4)  context: baseline re-run moved 4th-5th d
+F-118  Gender-Secret (git PIN_PAPER results/gender_secret/summary.md) + collab-bank matched slice (audit cache)
+  F-118  GS knowledge-denial (4v6) L20/L40/L44          ledger=0.549 / 0.436 / 0.498 raw=0.549 / 0.436 / 0.498  matches
+  F-118  GS extended (12v13) L20/L40/L44                ledger=0.505 / 0.467 / 0.541 raw=0.505 / 0.467 / 0.541  matches
+  F-118  GS published (8v7) L20/L40/L44                 ledger=0.514 / 0.545 / 0.623 raw=0.514 / 0.545 / 0.623  matches
+  F-118  GS sycophancy (5v5) L20/L40/L44                ledger=0.593 / 0.523 / 0.520 raw=0.593 / 0.523 / 0.520  matches
+  F-118  behavioural 82% vs base 55%                    ledger=     82/55 raw=     82/55  matches
+  F-118  commit 572095cb ancestor of PIN_PAPER          ledger=       yes raw=       yes  matches
+  F-118  collab extended axis on kr-matched L20         ledger=    0.4630 raw=    0.4630  matches
+  F-118  collab extended axis on kr-matched L40         ledger=    0.6203 raw=    0.6203  matches
+  F-118  collab extended axis on kr-matched L44         ledger=    0.5383 raw=    0.5383  matches
+  F-118  pointer 'F-115 §5' resolves                    ledger=       yes raw=        no  DIFFERS: pointer error - F-115 has no §5
+F-119/F-123/F-127  collaborator release artifacts (git PIN_PAPER)
+  F-123  make_numbers.py present on paper               ledger=         1 raw=         1  matches
+  F-119  make_numbers.py exists on paper                ledger=       yes raw=       yes  matches
+  F-123  make_numbers.py present on asix                ledger=         0 raw=         0  matches
+  F-123  make_numbers.py present on pc-ood              ledger=         0 raw=         0  matches
+  F-123  make_numbers.py added in                       ledger=8fd071b2|2026-09-22|zami456 raw=8fd071b2|2026-09-22|zami456  matches
+  F-119  make_figures.py beside it                      ledger=       yes raw=       yes  matches
+  F-119  persona_depth cites persona_unified, folder ab ledger=cited & absent raw=cited & absent  matches
+  F-119  persona_depth cites persona_depth_orig, folder ledger=cited & absent raw=cited & absent  matches
+  F-123  make_numbers.py bytes                          ledger=     28232 raw=     39532  matches at ea1ce52b only; PIN_PAPER=3953
+  F-127  numbers.tex lines                              ledger=      1162 raw=      1177  matches at 2ad758fb only; PIN_PAPER=1177
+  F-127  numbers.tex setV macros                        ledger=      1162 raw=      1176  DIFFERS: ledger 1162 vs raw 1176 (all 4 
+  F-127  tab_*.tex files                                ledger=         8 raw=        11  DIFFERS: ledger 8 vs raw 11 (all 4 SHAs:
+  F-127  fig_*.pdf files                                ledger=         5 raw=         5  matches
+  F-127  header 'Generated by make_numbers.py'          ledger=      True raw=      True  matches
+  F-127  macro cos-dec-den-L40                          ledger=      0.47 raw=      0.47  matches
+  F-127  macro proj-den-kd-L40                          ledger=      2.90 raw=      2.90  matches
+  F-127  macro proj-den-sincere-L40                     ledger=     -0.08 raw=     -0.08  matches
+  F-127  macro proj-den-deceptive-L40                   ledger=      0.05 raw=      0.05  matches
+F-120  late-layer rise (lab run-crossgen/passA/matrices, the 5 paper datasets -- what p9 actually read)
+  F-120  L40 raw                                        ledger=    0.8195 raw=    0.8195  matches
+  F-120  L40 axes                                       ledger=    0.8266 raw=    0.8266  matches
+  F-120  L40 random                                     ledger=    0.5971 raw=    0.5971  matches
+  F-120  L40 axes-random                                ledger=   +0.2296 raw=   +0.2296  matches
+  F-120  L70 raw                                        ledger=    0.7828 raw=    0.7828  matches
+  F-120  L70 axes                                       ledger=    0.6211 raw=    0.6211  matches
+  F-120  L70 random                                     ledger=    0.5234 raw=    0.5234  matches
+  F-120  L70 axes-random                                ledger=   +0.0977 raw=   +0.0977  matches
+  F-120  L72 raw                                        ledger=    0.7834 raw=    0.7834  matches
+  F-120  L72 axes                                       ledger=    0.6384 raw=    0.6384  matches
+  F-120  L72 random                                     ledger=    0.5133 raw=    0.5133  matches
+  F-120  L72 axes-random                                ledger=   +0.1250 raw=   +0.1250  matches
+  F-120  L79 raw                                        ledger=    0.7426 raw=    0.7426  matches
+  F-120  L79 axes                                       ledger=    0.7492 raw=    0.7492  matches
+  F-120  L79 random                                     ledger=    0.6405 raw=    0.6405  matches
+  F-120  L79 axes-random                                ledger=   +0.1087 raw=   +0.1087  matches
+  F-120  axes mid-stack mean L30-50                     ledger=    0.8145 raw=    0.8145  matches
+  F-120  scope: all-10-dataset raw at L40 (not stated i ledger=       n/a raw=    0.6760  context: entry's numbers are the 5-datas
+F-121  kd-bank scale ladder (lab: expLB-resplit/run-crossgen/kdscale_*, recipe of p12_kd_scale_ladder.py)
+  F-121  3b p16 best-raw (n=7 layers)                   ledger=   +0.0382 raw=   +0.0382  matches
+  F-121  3b all best-raw (n=7 layers)                   ledger=   +0.0317 raw=   +0.0317  matches
+  F-121  3b s23 best-raw (n=7 layers)                   ledger=   +0.0360 raw=   +0.0360  matches
+  F-121  8b p16 best-raw (n=8 layers)                   ledger=   +0.0148 raw=   +0.0148  matches
+  F-121  8b all best-raw (n=8 layers)                   ledger=   +0.0169 raw=   +0.0169  matches
+  F-121  8b s23 best-raw (n=8 layers)                   ledger=   +0.0194 raw=   +0.0194  matches
+  F-121  70b p16 best-raw (n=21 layers)                 ledger=   -0.0116 raw=   -0.0116  matches
+  F-121  70b all best-raw (n=21 layers)                 ledger=   +0.0032 raw=   +0.0032  matches
+  F-121  70b s23 best-raw (n=21 layers)                 ledger=   +0.0054 raw=   +0.0054  matches
+  F-121  3b kd all - paper16                            ledger=   -0.0066 raw=   -0.0066  matches
+  F-121  3b kd s23 - paper16                            ledger=   -0.0022 raw=   -0.0022  matches
+  F-121  8b kd all - paper16                            ledger=   +0.0022 raw=   +0.0022  matches
+  F-121  8b kd s23 - paper16                            ledger=   +0.0046 raw=   +0.0046  matches
+  F-121  70b kd all - paper16                           ledger=   +0.0148 raw=   +0.0148  matches
+  F-121  70b kd s23 - paper16                           ledger=   +0.0170 raw=   +0.0170  matches
+  F-121  3b all/s23 axis md5s ('c93eb6d2', 'e517a2d6')  ledger=2 distinct raw=2 distinct  matches
+  F-121  8b all/s23 axis md5s ('4141229', '0e68064')    ledger=2 distinct raw=2 distinct  matches
+F-122  collaborator sycophancy arms (git PIN_PAPER; recipe of p14_collab_syc_arms.py)
+  F-122  L36 baseline excl                              ledger=    0.8124 raw=    0.8124  matches
+  F-122  L36 best arm                                   ledger= ext_axis1 raw= ext_axis1  matches
+  F-122  L36 best value                                 ledger=    0.9403 raw=    0.9403  matches
+  F-122  L36 syc_pc1                                    ledger=    0.9222 raw=    0.9222  matches
+  F-122  L40 baseline excl                              ledger=    0.7581 raw=    0.7580  DIFFERS: ledger 0.7581 vs raw 0.7580
+  F-122  L40 best arm                                   ledger=   syc_pc1 raw=   syc_pc1  matches
+  F-122  L40 best value                                 ledger=    0.9370 raw=    0.9370  matches
+  F-122  L40 ext_axis1                                  ledger=    0.9165 raw=    0.9165  matches
+  F-122  L44 baseline excl                              ledger=    0.7297 raw=    0.7296  DIFFERS: ledger 0.7297 vs raw 0.7296
+  F-122  L44 best arm                                   ledger=   syc_pc1 raw=   syc_pc1  matches
+  F-122  L44 best value                                 ledger=    0.9274 raw=    0.9274  matches
+  F-122  L44 ext_axis1                                  ledger=    0.9053 raw=    0.9053  matches
+  F-122  L48 baseline excl                              ledger=    0.7375 raw=    0.7375  matches
+  F-122  L48 best arm                                   ledger=   syc_pc1 raw=   syc_pc1  matches
+  F-122  L48 best value                                 ledger=    0.9228 raw=    0.9228  matches
+  F-122  L48 ext_axis1                                  ledger=    0.8952 raw=    0.8952  matches
+  F-122  L52 baseline excl                              ledger=    0.7515 raw=    0.7515  matches
+  F-122  L52 best arm                                   ledger=   syc_pc1 raw=   syc_pc1  matches
+  F-122  L52 best value                                 ledger=    0.8999 raw=    0.8999  matches
+  F-122  L52 ext_axis1                                  ledger=    0.8806 raw=    0.8806  matches
+  F-122  L56 baseline excl                              ledger=    0.7419 raw=    0.7419  matches
+  F-122  L56 best arm                                   ledger=   syc_pc1 raw=   syc_pc1  matches
+  F-122  L56 best value                                 ledger=    0.8685 raw=    0.8685  matches
+  F-122  L56 ext_axis1                                  ledger=    0.8670 raw=    0.8670  matches
+  F-122  arm win counts /16 @16def2de                   ledger=syc_pc1=5, ext_axis1=4, ext_pc3=4, axis1=1, syc3=1, uni_axis1=1 raw=syc_pc1=5, ext_axis1=4, ext_pc3=4, axis1=1, syc3=1, uni_axis1=1  matches
+  F-122  L40 baseline excl @PIN_OLD                     ledger=    0.7581 raw=    0.7581  matches
+  F-122  arm win counts /16 @ea1ce52b                   ledger=syc_pc1=5, ext_axis1=4, ext_pc3=4, axis1=1, syc3=1, uni_axis1=1 raw=syc_pc1=5, ext_axis1=4, ext_pc3=4, axis1=1, syc3=1, uni_axis1=1  matches
+  F-122  L40 convince_me__p syc_pc1                     ledger=    0.9984 raw=    0.9984  matches
+  F-122  L40 convince_me__p ext_axis1                   ledger=    0.9123 raw=    0.9123  matches
+  F-122  L40 harm_refusal_c syc_pc1                     ledger=    0.7521 raw=    0.7521  matches
+  F-122  L40 harm_refusal_c ext_axis1                   ledger=    0.7116 raw=    0.7116  matches
+  F-122  L40 insider_tradin syc_pc1                     ledger=    0.9853 raw=    0.9853  matches
+  F-122  L40 insider_tradin ext_axis1                   ledger=    0.9803 raw=    0.9803  matches
+  F-122  L40 instruct_disho syc_pc1                     ledger=    0.9500 raw=    0.9500  matches
+  F-122  L40 instruct_disho ext_axis1                   ledger=    0.9784 raw=    0.9784  matches
+  F-122  L40 repe_honesty__ syc_pc1                     ledger=    0.9992 raw=    0.9992  matches
+  F-122  L40 repe_honesty__ ext_axis1                   ledger=    1.0000 raw=    1.0000  matches
+  F-122  convince_me margin L40..56                     ledger=+0.086,+0.128,+0.123,+0.099,+0.054 raw=+0.086,+0.128,+0.123,+0.099,+0.054  matches
+  F-122  ext_axis1 max spread over 16 layers            ledger=     0.000 raw=    0.0000  matches
+  F-122  denial_axis1 max spread over 16 layers         ledger=     0.000 raw=    0.0000  matches
+F-124  draft tables (git; entry read at ea1ce52b = PIN_OLD; PIN_PAPER compared)
+  F-124  inverted (arm,layer) cells @OLD                ledger=         7 raw=         7  matches
+  F-124  inverted row is HP-KR in every one @OLD        ledger=       yes raw=       yes  matches
+  F-124  L20 axis1 printed                              ledger=    0.6511 raw=    0.6511  matches
+  F-124  L20 axis1 sign-corrected                       ledger=    0.7909 raw=    0.7909  matches
+  F-124  L20 axis1 corrected == zero-shot 6-cell mean ( ledger=     equal raw=     equal  matches
+  F-124  L20 syc_axis1 printed                          ledger=    0.6153 raw=    0.6153  matches
+  F-124  L20 syc_axis1 sign-corrected                   ledger=    0.7429 raw=    0.7429  matches
+  F-124  L20 syc_axis1 corrected == zero-shot 6-cell me ledger=     equal raw=     equal  matches
+  F-124  L20 syc_pc1 printed                            ledger=    0.6153 raw=    0.6153  matches
+  F-124  L20 syc_pc1 sign-corrected                     ledger=    0.7433 raw=    0.7432  matches
+  F-124  L20 syc_pc1 corrected == zero-shot 6-cell mean ledger=     equal raw=     equal  matches
+  F-124  L20 pc1 printed                                ledger=    0.6669 raw=    0.6669  matches
+  F-124  L20 pc1 sign-corrected                         ledger=    0.8056 raw=    0.8056  matches
+  F-124  L20 pc1 corrected == zero-shot 6-cell mean (4d ledger=     equal raw=     equal  matches
+  F-124  L40 syc_axis1 printed                          ledger=    0.6626 raw=    0.6626  matches
+  F-124  L40 syc_axis1 sign-corrected                   ledger=    0.8080 raw=    0.8080  matches
+  F-124  L40 syc_axis1 corrected == zero-shot 6-cell me ledger=     equal raw=     equal  matches
+  F-124  L40 syc_pc1 printed                            ledger=    0.6618 raw=    0.6618  matches
+  F-124  L40 syc_pc1 sign-corrected                     ledger=    0.8075 raw=    0.8075  matches
+  F-124  L40 syc_pc1 corrected == zero-shot 6-cell mean ledger=     equal raw=     equal  matches
+  F-124  L44 syc_axis1 printed                          ledger=    0.7078 raw=    0.7078  matches
+  F-124  L44 syc_axis1 sign-corrected                   ledger=    0.8485 raw=    0.8484  matches
+  F-124  L44 syc_axis1 corrected == zero-shot 6-cell me ledger=     equal raw=     equal  matches
+  F-124  Table 11 syc_axis1 understatement L20          ledger=     0.128 raw=    0.1276  matches
+  F-124  Table 11 syc_axis1 understatement L40          ledger=     0.145 raw=    0.1454  matches
+  F-124  Table 11 syc_axis1 understatement L44          ledger=     0.141 raw=    0.1407  matches
+  F-124  axis1 L40 printed == zero-shot mean            ledger=    0.8319 raw=    0.8319  matches
+  F-124  axis1 L44 printed == zero-shot mean            ledger=    0.8260 raw=    0.8260  matches
+  F-124  axis1 L20 HP-KR row mean                       ledger=    0.0806 raw=    0.0806  matches
+  F-124  axis1 L20 other rows range                     ledger=0.7503-0.8057 raw=0.7503-0.8057  matches
+  F-124  HP-KR row == 1-x of other rows (L20 axis1)     ledger=     exact raw=     exact  matches
+  F-124  L20 axis1 CG zero-shot / HP-KR-row cell        ledger=0.9399/0.0601 raw=0.9399/0.0601  matches
+  F-124  Table 11 syc HP-KR zero-shot L20               ledger=    0.0429 raw=    0.0429  matches
+  F-124  Table 11 syc HP-KR zero-shot L40               ledger=    0.1671 raw=    0.1671  matches
+  F-124  Table 11 syc HP-KR zero-shot L44               ledger=    0.4804 raw=    0.4804  matches
+  F-124  cells @OLD                                     ledger=        90 raw=        90  matches
+  F-124  cells with realised FPR > 1% @OLD              ledger=        23 raw=        23  matches
+  F-124  4v6 L20 harm_refusal_k FPR %                   ledger=      88.3 raw=   88.3000  matches
+  F-124  4v6 L20 repe_honesty__ FPR %                   ledger=      35.6 raw=   35.6000  matches
+  F-124  4v6 L20 harm_refusal_c FPR %                   ledger=       4.5 raw=    4.5000  matches
+  F-124  4v6 L20 instruct_disho FPR %                   ledger=       1.1 raw=    1.1000  matches
+  F-124  4v6 L40 harm_refusal_k FPR %                   ledger=       6.5 raw=    6.5000  matches
+  F-124  4v6 L40 instruct_disho FPR %                   ledger=      11.9 raw=   11.9000  matches
+  F-124  4v6 L44 harm_refusal_k FPR %                   ledger=       4.7 raw=    4.7000  matches
+  F-124  4v6 L44 instruct_disho FPR %                   ledger=       9.9 raw=    9.9000  matches
+  F-124  base probe L40 ID FPR %                        ledger=      15.2 raw=   15.2000  matches
+  F-124  4v6 L20 HP-KR BA / spec / recall               ledger=0.533/0.1165/0.9496 raw=0.533/0.1165/0.9496  matches
+  F-124  base probe HP-KR (operating) L20/40/44         ledger=0.109/0.936/0.828 raw=0.109/0.936/0.828  matches
+  F-124  matrix_baseline repe->HP-KR L20/40/44          ledger=0.3808/0.9281/0.8803 raw=0.3808/0.9281/0.8803  matches
+  F-124  inverted (arm,layer) cells @PIN                ledger=         7 raw=         7  matches
+  F-124  inverted row is HP-KR in every one @PIN        ledger=       yes raw=       yes  matches
+  F-124  cells @PIN                                     ledger=        90 raw=        90  matches
+  F-124  cells with realised FPR > 1% @PIN              ledger=        23 raw=        23  matches
+  F-124  D-005 ten roles (4+3+3)                        ledger=     4/3/3 raw=     4/3/3  matches
+F-125/F-127  draft-claim verdict tallies (audit/claims.csv, current state) + D-156
+  F-125  draft claims with a Phase-6 verdict            ledger=       176 raw=       176  matches
+  F-127  6A tally MATCHES/PARTLY/UNRESOLVED             ledger=   166/8/2 raw=   166/8/2  matches
+  F-125  Level-2 (8 batches) MATCHES/PARTLY             ledger=      52/2 raw=      52/2  matches
+  F-126  5 resolved: D-057/065/154/040/041 now          ledger=4 MATCHES + 1 PARTLY raw=MATCHES/MATCHES/PARTLY/MATCHES/MATCHES  matches
+  F-126  chain 160/9/7 -> 164/10/2                      ledger=  164/10/2 raw=160+4/9+1/7-5 = 164/10/2  matches
+  F-127  D-032, D-171 now MATCHES                       ledger=MATCHES/MATCHES raw=MATCHES/MATCHES  matches
+  F-125  snapshot 160/9/7 (superseded by F-126/F-127)   ledger=   160/9/7 raw=not re-derivable (claims.csv overwritten in place)  UNVERIFIABLE: intermediate snapshot; con
+  F-125  D-030/D-063 still UNRESOLVED                   ledger=UNRESOLVED/UNRESOLVED raw=UNRESOLVED/UNRESOLVED  matches
+  F-125  D-156 L20 excl HP-KR ext_axis1 vs axis1        ledger=0.909/0.919 raw=0.909/0.919  matches
+  F-125  D-128: ext_axis1 L36 vs L40                    ledger=0.9275/0.9158 raw=0.9275/0.9158  matches
+  F-125  D-153 margin +0.066 CI [-0.069,+0.189] P 0.161 ledger=    +0.066 raw=   +0.0655  UNVERIFIED: audit prose only (F-76 boots
+F-126  6D-1 pc:sycophancy (lab expLB-resplit/phase6), 6D-2 passP/passB_fine, §3 Figure-2 geometry (lab run-kd/vectors_s3)
+  F-126  phase6 datasets (kr-matched explicit)          ledger=        11 raw=        11  matches
+  F-126  reproduces kd11: raw L40 mean                  ledger=    0.6623 raw=    0.6623  matches
+  F-126  reproduces kd11: datapca L40 mean              ledger=    0.6651 raw=    0.6651  matches
+  F-126  reproduces kd11: length L40 mean               ledger=    0.5555 raw=    0.5555  matches
+  F-126  reproduces kd11: pc:unified L40 mean           ledger=    0.6715 raw=    0.6715  matches
+  F-126  6D-1 table: 48 cells (pc:syc minus control, al ledger=  48 match raw=48/48 match  matches
+  F-126  loses to raw on all 11 at every (layer,pool)   ledger=       6/6 raw=       6/6  matches
+  F-126  bootstrap comparisons / significant            ledger=     264/0 raw=     264/0  matches
+  F-126  passP raw off-diag L20 mean                    ledger=    0.5584 raw=    0.5584  matches
+  F-126  passP raw off-diag L40 mean                    ledger=    0.5687 raw=    0.5687  matches
+  F-126  passP raw off-diag L44 mean                    ledger=    0.5697 raw=    0.5697  matches
+  F-126  passP raw diagonal L44 (mean) 8 datasets       ledger=CG 1.000 ... mask 0.624, roleplaying 0.796 raw=convin 1.000, sandba 1.000, instru 0.953, harm-p 0.919, inside 0.911, harm-p 0.865, mask 0.624, rolepl 0.796  matches
+  F-126  passP span / n_tok first 5 (mask)              ledger=prompt / 151,137,440,120,420 raw=prompt / 151,137,440,120,420  matches
+  F-126  passB_fine span / n_tok first 5 (mask)         ledger=response / 1000,971,659,955,633 raw=response / 1000,971,659,955,633  matches
+  F-126  passP rows ID/HP-C/HP-KR/SYC                   ledger=5432/2134/2139/1182 raw=5432/2134/2139/1182  matches
+  F-126  passB_fine raw off-diag L41 mean               ledger=    0.6623 raw=    0.6623  matches
+  F-126  passB_fine raw diag L44 mask (mean)            ledger=     0.875 raw=    0.8749  matches
+  F-126  passB_fine layers (L37-47, no L40)             ledger=        10 raw=        10  matches
+  F-126  hf275_strict pc:deception > raw layers         ledger=     10/10 raw=     10/10  matches
+  F-126  hf275_strict pc:deception range                ledger=0.6815-0.7106 raw=0.6815-0.7106  matches
+  F-126  hf275_strict raw range                         ledger=0.6511-0.6747 raw=0.6511-0.6747  matches
+  F-126  hf275_strict mean margin over raw              ledger=    +0.039 raw=   +0.0387  matches
+  F-126  hf275_strict pc:deception > datapca layers     ledger=     10/10 raw=     10/10  matches
+  F-126  passB_fine axes-raw negative (bank,layer)      ledger=     36/40 raw=     36/40  matches
+  F-126  the 4 exceptions                               ledger=own100 L37/L39/L44, paper16_shared L44, none > +0.019 raw=own100 L37 +0.010; own100 L39 +0.019; own100 L44 +0.005; paper16_shared L44 +0.014  matches
+  F-126  vectors_s3 personas / pc_handler n             ledger=    36/106 raw=    36/106  matches
+  F-126  cos(deception, denial) L20                     ledger=     0.417 raw=    0.4174  matches
+  F-126  cos(deception, denial) L40                     ledger=  0.474559 raw=    0.4746  matches
+  F-126  sincere ignorance mean                         ledger=   -0.0844 raw=   -0.0844  matches
+  F-126  feigned deniers mean                           ledger=   +2.9037 raw=   +2.9037  matches
+  F-126  published deceptive mean                       ledger=   +0.0458 raw=   +0.0458  matches
+  F-126  plain assertion mean                           ledger=   -1.2274 raw=   -1.2274  matches
+  F-126  deceptive max / denier min                     ledger=+0.885/+2.150 raw=+0.885/+2.150  matches
+  F-126  axis 'full span' = group-mean span deniers-pla ledger=      4.13 raw=    4.1311  matches
+  F-126    (persona-level span, for context)            ledger=       n/a raw=    5.2893  context: 'full span' 4.13 is the span of
+  F-126  sincere sits 28% of the axis closer            ledger=        28 raw=        28  matches
+  F-126  sincere-plain gap                              ledger=      1.14 raw=    1.1429  matches
+  F-126  cos(deception, denial) L44                     ledger=     0.468 raw=    0.4676  matches
+  F-126  D-041 PDF in papers/                           ledger=       yes raw=       yes  matches
+  F-126  D-040 PDF 2602.01425 in papers/                ledger=absent (owed) raw=    absent  matches
+{'matches': 428, 'DIFFERS': 8, 'PARTLY': 2, 'context': 4, 'context (different pipeline split)': 1, 'matches at ea1ce52b only; PIN_PAPER=39532 (branch moved)': 1, 'matches at 2ad758fb only; PIN_PAPER=1177 (branch moved)': 1, 'UNVERIFIABLE': 1, 'UNVERIFIED': 1} -> C:\Users\SURAIYA\Documents\STUDY\thesis\expLB\audit\p17\ledger_verify_results.json

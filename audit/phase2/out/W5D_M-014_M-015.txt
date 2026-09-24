@@ -1,0 +1,23 @@
+70B store  run-paper16\scores: 25 files, 1350 scored items
+405B store run-paper16\scores_405b: 25 files, 1350 scored items
+comparable (same role+item in both): 1350
+only in 70B: 0   only in 405B: 0
+exact-score agreement: 1231/1350 = 91.1852%
+70B  distribution over ALL its items : {0: 12, 2: 249, 3: 1089}
+405B distribution over ALL its items : {0: 19, 1: 2, 2: 250, 3: 1079}
+70B  distribution over COMMON items  : {0: 12, 2: 249, 3: 1089}
+405B distribution over COMMON items  : {0: 19, 1: 2, 2: 250, 3: 1079}
+score-3 rate 70B all     : 1089/1350 = 80.67%
+score-3 rate 405B all    : 1079/1350 = 79.93%
+score-3 rate 70B common  : 1089/1350 = 80.67%
+score-3 rate 405B common : 1079/1350 = 79.93%
+
+per-role agreement (lowest 6):
+  pc_handler                   37/50 = 74.0%
+  pc_plausible_denier          38/50 = 76.0%
+  pc_fact_checker              39/50 = 78.0%
+  pc_enabler                   50/60 = 83.3%
+  pc_people_pleaser            50/60 = 83.3%
+  pc_coverup_operator          42/50 = 84.0%
+
+responses/: 26 files, 1400 rollout records

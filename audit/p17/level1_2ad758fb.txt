@@ -1,0 +1,71 @@
+PINNED SHA: 2ad758fb38c28dd2504ac358f7169148882b922f
+==============================================================================
+LEVEL 1 -- locating stated numbers
+==============================================================================
+
+### B38 Table 1 (D-070..D-076) -- dataset sizes
+  claim: examples / lies        file: zero_shot.csv n / n_deceptive
+  CG      stated   267/  167   file   267/  167   MATCH
+  HP-C    stated  2134/  134   file  2134/  134   MATCH
+  HP-KR   stated  2139/  139   file  2139/  139   MATCH
+  IT      stated  1080/  423   file  1080/  423   MATCH
+  ID      stated  5432/ 3045   file  5432/ 3045   MATCH
+  RepE    stated   550/  275   file   550/  275   MATCH
+  alpaca  stated  2000/    0   file  2000/    0   MATCH
+  NOTE: the FOLLOW-UP set's RepE row count is 612/306, not 550/275 -- different row set, same dataset.
+
+### B35 Fig 4 LEFT (D-129..D-134) -- raw 8192-d probe, L40, full matrix
+  test CG      file ['1.00', '0.79', '0.80', '0.47', '0.98', '0.90']  MATCH
+  test HP-C    file ['0.43', '0.96', '0.54', '0.59', '0.66', '0.64']  MATCH
+  test HP-KR   file ['0.06', '0.48', '0.95', '0.79', '0.66', '0.93']  MATCH
+  test IT      file ['0.92', '0.95', '0.97', '0.99', '0.89', '0.27']  MATCH
+  test ID      file ['0.97', '0.76', '0.75', '0.67', '1.00', '0.98']  MATCH
+  test RepE    file ['1.00', '0.80', '0.83', '0.49', '1.00', '1.00']  MATCH
+
+### B36 Fig 4 RIGHT (D-135) -- extended contrast, L40, 'rows constant'
+  CG      off-diag [0.91] (diag 0.911)  MATCH
+  HP-C    off-diag [0.71] (diag 0.712)  MATCH
+  HP-KR   off-diag [0.91] (diag 0.912)  MATCH
+  IT      off-diag [0.98] (diag 0.980)  MATCH
+  ID      off-diag [0.98] (diag 0.978)  MATCH
+  RepE    off-diag [1.0] (diag 1.000)  MATCH
+
+### B47 Table 8 (D-200..D-205) -- L20 response mean vs 'No' token
+  CG      8v7 0.940/0.912  4v6 0.931/0.933  12v13 0.969/0.938   MATCH
+  HP-C    8v7 0.717/0.612  4v6 0.585/0.472  12v13 0.639/0.556   MATCH
+  HP-KR   8v7 0.148/0.168  4v6 0.890/0.237  12v13 0.882/0.190   MATCH
+  IT      8v7 0.988/0.165  4v6 0.976/0.216  12v13 0.990/0.173   MATCH
+  ID      8v7 0.959/0.900  4v6 0.932/0.904  12v13 0.954/0.903   MATCH
+  RepE    8v7 0.994/1.000  4v6 0.882/1.000  12v13 0.991/1.000   MATCH
+
+### B48 Table 9 (D-210..D-215) -- six reads of 12v13, 5-dataset mean
+  Mean (default)           L20 0.887/0.591/0.187  L40 0.899/0.694/0.413  L44 0.884/0.666/0.350   MATCH
+  Top-10% mean             L20 0.873/0.664/0.348  L40 0.908/0.737/0.531  L44 0.907/0.715/0.470   MATCH
+  Maximum                  L20 0.858/0.659/0.336  L40 0.910/0.750/0.548  L44 0.914/0.701/0.418   MATCH
+  First response token     L20 0.753/0.605/0.334  L40 0.863/0.606/0.227  L44 0.876/0.568/0.140   MATCH
+  Last response token      L20 0.843/0.645/0.312  L40 0.880/0.656/0.422  L44 0.882/0.636/0.352   MATCH
+  Token before the reply   L20 0.739/0.628/0.415  L40 0.825/0.652/0.383  L44 0.822/0.656/0.327   MATCH
+
+### B39 Table 10 (D-218..D-222) -- trained on RepE, L20, response vs 'No'
+  RepE training row, mean over the 5 other test columns:
+  Probe on raw activations (8192-d)  file 0.734/0.636   stated 0.734/0.636   MATCH
+  Extended contrast (1-d)            file 0.887/0.552   stated 0.887/0.552   MATCH
+  Extended PCs (k = 3)               file 0.736/0.579   stated 0.736/0.579   MATCH
+  Published PCs (k = 3)              file 0.733/0.574   stated 0.733/0.574   MATCH
+  Knowledge-denial PCs (k = 3)       file 0.81/0.699   stated 0.81/0.699   MATCH
+  cross-check, liars_bench_comparison.csv 'raw activations (RepE-trained)':
+     response 0.7344   follow-up 0.6364
+
+### B02 / B03 / B06 / B07 -- scattered numeric claims
+  D-031 Follow-Up Probe measured 0.636 vs published 0.634:
+     measured here  0.6360
+     published      0.6340
+  D-022 HP-KR 4v6 AUROC 0.919 / BA 0.910 -- see Level 2 D-087 (both EXACT)
+  D-026 zero-shot extended 0.916 off-diag vs raw 0.732 at L40:
+     ext_axis1 0.9158   baseline 0.7320
+  D-053 vectors at all 80 layers / D-062 layers 20,40,44 of 80: summary.csv rows exist at L20/40/44; 16-layer sweep dirs present on branch
+  D-045 bank holds 36 personas = 8+7+5+5+1 published (26) + 10 new
+  D-055 three contrasts 8v7 / 4v6 / 12v13 -> features axis1 / denial_axis1 / ext_axis1: True
+  D-061 three random directions, five draws -> feature 'random3' dim 3
+
+==============================================================================

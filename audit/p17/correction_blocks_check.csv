@@ -1,0 +1,95 @@
+file,line,df_id,number,raw_value,source,match
+kd/docs/NEXT.md,15,DF-31/DF-68,0.374,0.3740,run-crossgen/kd11/matrices/mean_L40_s42.json zeroshot[sycophancy_mt] PC1,y
+kd/docs/NEXT.md,16,DF-31/DF-68,0.409,0.4089,run-crossgen/kd11/matrices/mean_L40_s42.json zeroshot[sycophancy_mt] contrast,y
+kd/docs/NEXT.md,16,DF-31/DF-68,0.313,0.3131,run-coords/q10_sycophancy_axis.json paper16|mean key_layers.40,y
+kd/docs/NEXT.md,17,DF-31/DF-68,p 0.001-0.008,0.001-0.008,run-coords/zeroshot_nulls.json [sycophancy_mt][*].sycophancy_axis.p_vs_random,y
+kd/docs/NEXT.md,20,DF-31/DF-68,0.745,0.7449,"C:/Users/user4/expLB/run-crossgen/kd11/banks/cap_s23/matrices/mean_L40_s42.json zeroshot contrast[sycophancy_mt] (lab, md5 1a259fa9)",y
+kd/docs/NEXT.md,20,DF-31/DF-68,(pointer) row 1 below says 'register axis's 0.374',row present,kd/docs/NEXT.md WT,y
+.claude/skills/knowledge-denial-context/SKILL.md,65,DF-31,0.374,0.3740,run-crossgen/kd11/matrices/mean_L40_s42.json zeroshot[sycophancy_mt] PC1,y
+.claude/skills/knowledge-denial-context/SKILL.md,66,DF-31,0.313,0.3131,run-coords/q10_sycophancy_axis.json paper16|mean key_layers.40,y
+.claude/skills/knowledge-denial-context/SKILL.md,67,DF-31,"0.374 inside 1,000-direction null",inside (|0.5-x|=0.126 < p95 dev 0.130); null run on contrast 0.409: inside=True,run-coords/zeroshot_nulls.json L40_mean,y
+.claude/skills/knowledge-denial-context/SKILL.md,69,DF-31,p 0.001-0.008,0.001-0.008,run-coords/zeroshot_nulls.json [sycophancy_mt][*].sycophancy_axis.p_vs_random,y
+.claude/skills/knowledge-denial-context/SKILL.md,69,DF-31,0.300,0.3004,"kd11 mean_L40 axes (paper) row mean, HP-KR as source (10 targets)",y
+.claude/skills/knowledge-denial-context/SKILL.md,73,DF-31,0.4089,0.4089,run-crossgen/kd11/matrices/mean_L40_s42.json zeroshot[sycophancy_mt] contrast,y
+.claude/skills/knowledge-denial-context/SKILL.md,73,DF-31,0.3739,0.3740,"run-crossgen/kd11/matrices/mean_L40_s42.json zeroshot[sycophancy_mt] PC1 (0.373959 - truncated, not rounded)",y
+.claude/skills/knowledge-denial-context/SKILL.md,64,DF-31,(pointer) line 75 corrected 2026-09-23,0.313,SKILL.md WT line 92 (= HEAD line 75 + 17 inserted lines),y
+cap/docs/SARCASM_DESIGN.md,49,DF-31,0.300,0.3004,"kd11 mean_L40 axes row mean, HP-KR as source",y
+cap/docs/SARCASM_DESIGN.md,50,DF-31,0.374,0.3740,run-crossgen/kd11/matrices/mean_L40_s42.json zeroshot[sycophancy_mt] PC1,y
+cap/docs/SARCASM_DESIGN.md,51,DF-31,0.313,0.3131,run-coords/q10_sycophancy_axis.json paper16|mean key_layers.40,y
+cap/docs/SARCASM_DESIGN.md,52,DF-31,p 0.001-0.008,0.001-0.008,run-coords/zeroshot_nulls.json [sycophancy_mt][*].sycophancy_axis.p_vs_random,y
+cap/docs/SARCASM_DESIGN.md,54,DF-31,0.4089,0.4089,run-crossgen/kd11/matrices/mean_L40_s42.json zeroshot[sycophancy_mt],y
+cap/docs/SARCASM_DESIGN.md,54,DF-31,0.3739,0.3740,run-crossgen/kd11/matrices/mean_L40_s42.json zeroshot[sycophancy_mt],y
+cap/docs/review_page.html,161,DF-31,0.374,0.3740,run-crossgen/kd11/matrices/mean_L40_s42.json zeroshot[sycophancy_mt] PC1,y
+cap/docs/review_page.html,163,DF-31,0.313,0.3131,run-coords/q10_sycophancy_axis.json paper16|mean key_layers.40,y
+cap/docs/review_page.html,163,DF-31,0.409,0.4089,run-crossgen/kd11/matrices/mean_L40_s42.json zeroshot[sycophancy_mt],y
+cap/docs/review_page.html,165,DF-31,p 0.001-0.008,0.001-0.008,run-coords/zeroshot_nulls.json [sycophancy_mt][*].sycophancy_axis.p_vs_random,y
+cap/docs/review_page.html,168,DF-31,0.54 (trained random),0.5413,kd11 mean_L40 random (paper) column mean on sycophancy_mt,y
+cap/docs/review_page.html,171,DF-31,0.4089,0.4089,run-crossgen/kd11/matrices/mean_L40_s42.json zeroshot[sycophancy_mt],y
+cap/docs/review_page.html,172,DF-31,0.3739,0.3740,run-crossgen/kd11/matrices/mean_L40_s42.json zeroshot[sycophancy_mt],y
+cap/docs/review_page.html,173,DF-31,0.313 from 24_q10_sycophancy_axis.py (2026-09-17),q10 json L40 0.3131,run-coords/q10_sycophancy_axis.json paper16|mean key_layers.40,y
+cap/docs/review_page.html,173,DF-31,0.3061 (passA11),0.3061,C:/Users/user4/expLB/run-crossgen/kd11/passA11/matrices/mean_L40_s42.json contrast:sycophancy,y
+cap/docs/review_page.html,173,DF-31,0.2996 (passC11),0.2995 (PC1) / 0.3066 (contrast); passA11 PC1 = 0.2996,C:/Users/user4/expLB/run-crossgen/kd11/passC11/matrices/mean_L40_s42.json,partly: 0.2996 is passA11's PC1:sycophancy; passC11 reads 0.3066 contrast / 0.2995 PC1
+docs/LAYER_PREREGISTRATION.md,94,DF-55,113 matrices,113,"all run-crossgen/**/matrices/*.json with HP-KR on the laptop (113 files); raw feature, HP-KR diagonal, every probe",y
+docs/LAYER_PREREGISTRATION.md,95,DF-55,0.9663,0.9663,"all run-crossgen/**/matrices/*.json with HP-KR on the laptop (113 files); raw feature, HP-KR diagonal, every probe",y
+docs/LAYER_PREREGISTRATION.md,95,DF-55,0.96-0.98 at every headline layer,L20 0.9596/L40 0.9741/L44 0.9771,"all run-crossgen/**/matrices/*.json with HP-KR on the laptop (113 files); raw feature, HP-KR diagonal, every probe",y
+docs/LAYER_PREREGISTRATION.md,96,DF-55,0.9125,0.9125,"results/subsets/harm-pressure-knowledge-report.csv (git asix), Llama rows, eval_datasets.denies_knowledge",y
+docs/LAYER_PREREGISTRATION.md,96,DF-55,~0.054,0.0537,difference,y
+docs/LAYER_PREREGISTRATION.md,99,DF-55,94.4%,94.4417,regex / raw-diag median,y
+docs/NOVELTY_ASSESSMENT.md,26,DF-55,113 matrices,113,"all run-crossgen/**/matrices/*.json with HP-KR on the laptop (113 files); raw feature, HP-KR diagonal, every probe",y
+docs/NOVELTY_ASSESSMENT.md,27,DF-55,0.9663,0.9663,"all run-crossgen/**/matrices/*.json with HP-KR on the laptop (113 files); raw feature, HP-KR diagonal, every probe",y
+docs/NOVELTY_ASSESSMENT.md,27,DF-55,0.96-0.98 at every headline layer,L20 0.9596/L40 0.9741/L44 0.9771,"all run-crossgen/**/matrices/*.json with HP-KR on the laptop (113 files); raw feature, HP-KR diagonal, every probe",y
+docs/NOVELTY_ASSESSMENT.md,28,DF-55,0.9125,0.9125,"results/subsets/harm-pressure-knowledge-report.csv (git asix), Llama rows, eval_datasets.denies_knowledge",y
+docs/NOVELTY_ASSESSMENT.md,28,DF-55,~0.054,0.0537,difference,y
+docs/NOVELTY_ASSESSMENT.md,32,DF-55,94.4%,94.4417,regex / raw-diag median,y
+docs/NOVELTY_CHECK_PROMPT.md,112,DF-55 + DF-10,113 matrices,113,"all run-crossgen/**/matrices/*.json with HP-KR on the laptop (113 files); raw feature, HP-KR diagonal, every probe",y
+docs/NOVELTY_CHECK_PROMPT.md,114,DF-55 + DF-10,0.9663,0.9663,"all run-crossgen/**/matrices/*.json with HP-KR on the laptop (113 files); raw feature, HP-KR diagonal, every probe",y
+docs/NOVELTY_CHECK_PROMPT.md,114,DF-55 + DF-10,0.96-0.98 at every headline layer,L20 0.9596/L40 0.9741/L44 0.9771,"all run-crossgen/**/matrices/*.json with HP-KR on the laptop (113 files); raw feature, HP-KR diagonal, every probe",y
+docs/NOVELTY_CHECK_PROMPT.md,115,DF-55 + DF-10,0.9125,0.9125,"results/subsets/harm-pressure-knowledge-report.csv (git asix), Llama rows, eval_datasets.denies_knowledge",y
+docs/NOVELTY_CHECK_PROMPT.md,115,DF-55 + DF-10,~0.054,0.0537,difference,y
+docs/NOVELTY_CHECK_PROMPT.md,117,DF-55 + DF-10,94.4%,94.4417,regex / raw-diag median,y
+docs/NOVELTY_CHECK_PROMPT.md,114,DF-55 + DF-10,range 0.8302-0.9900,0.8302-0.9900,"all run-crossgen/**/matrices/*.json with HP-KR on the laptop (113 files); raw feature, HP-KR diagonal, every probe",y
+docs/NOVELTY_CHECK_PROMPT.md,127,DF-55 + DF-10,0.9597 (second phrasing),not reproduced: regex definition not recorded anywhere in audit/; the guess NOT ^(yes|i know) gives 0.9413,"results/subsets/harm-pressure-knowledge-report.csv (git asix), Llama rows, eval_datasets.denies_knowledge; source cited = audit/HPKR_WORDING_CONTROLLED.md:38 (prose)",unverified
+docs/NOVELTY_CHECK_PROMPT.md,127,DF-55 + DF-10,"2,139 rows",2139,"results/subsets/harm-pressure-knowledge-report.csv (git asix), Llama rows, eval_datasets.denies_knowledge",y
+docs/NOVELTY_CHECK_PROMPT.md,121,DF-55 + DF-10,529.4,529.3960,"C:/Users/user4/expLB/run-coords/passB/sandbagging_v2/rows.jsonl span_len, label 1",y
+docs/NOVELTY_CHECK_PROMPT.md,121,DF-55 + DF-10,340.4,340.3860,"same, label 0",y
+docs/NOVELTY_CHECK_PROMPT.md,109(block),DF-55 + DF-10,283.2,283.1831,C:/Users/user4/expLB/run-coords/passB/mask/rows.jsonl,y
+docs/NOVELTY_CHECK_PROMPT.md,109(block),DF-55 + DF-10,176.4,176.4235,same,y
+docs/NOVELTY_CHECK_PROMPT.md,120,DF-55 + DF-10,':110' still carries '505 vs 310 ... 245 vs 96',absent at HEAD e917ecd3 and in WT; HEAD:121 already reads 529.4 vs 340.4; '505 vs 310' last at e917ecd3~1:110,git show e917ecd3 / e917ecd3~1 : docs/NOVELTY_CHECK_PROMPT.md,n (stale: item (b) corrects text the owner already fixed in the committed HEAD; its numbers are right)
+docs/NOVELTY_CHECK_PROMPT.md,130,DF-55 + DF-10,NOVELTY_ASSESSMENT.md:30,:44 in WT (HEAD :30),WT file,n (WT line is :44 after the inserted block; :30 is the HEAD line)
+docs/NOVELTY_CHECK_PROMPT.md,132,DF-55 + DF-10,LAYER_PREREGISTRATION.md:93,:105 in WT (HEAD :93),WT file,n (WT line is :105; :93 is the HEAD line)
+docs/NOVELTY_ASSESSMENT.md,120,DF-68,-0.7684,-0.7684,kd/scripts/ceiling_null.py over run-crossgen/kd11/matrices/mean_L40_s42.json (stdout),y
+docs/NOVELTY_ASSESSMENT.md,120,DF-68,-0.7462,-0.7462,kd/scripts/ceiling_null.py over run-crossgen/kd11/matrices/mean_L40_s42.json (stdout),y
+docs/NOVELTY_ASSESSMENT.md,120,DF-68,0.2135,0.2135,kd/scripts/ceiling_null.py over run-crossgen/kd11/matrices/mean_L40_s42.json (stdout),y
+docs/NOVELTY_ASSESSMENT.md,121,DF-68,-0.100,-0.1000,kd/scripts/ceiling_null.py over run-crossgen/kd11/matrices/mean_L40_s42.json (stdout),y
+docs/NOVELTY_ASSESSMENT.md,121,DF-68,-0.067,-0.0670,kd/scripts/ceiling_null.py over run-crossgen/kd11/matrices/mean_L40_s42.json (stdout),y
+docs/NOVELTY_ASSESSMENT.md,118,DF-68,"bullet 'ceiling artifact, corr -0.76' below the block",present at :129,WT file,y
+docs/REVIEW_REQUEST_POOLING.md,18,DF-67,30_premise.py:106 rng.permutation(n),perm = rng.permutation(n),src/assistant_axis_ndif/30_premise.py (asix WT),y
+docs/REVIEW_REQUEST_POOLING.md,19,DF-67,group_split 0 times,0,same file,y
+docs/REVIEW_REQUEST_POOLING.md,20,DF-67,0.951,0.9506,audit/cache/labpc/run-premise/premise_L40_mean_s42.json (md5-verified lab copy) summary.single_own_mean,y
+docs/REVIEW_REQUEST_POOLING.md,23,DF-67,0.850,0.8500,audit/cache/labpc/run-premise/premise_L40_mean_s42.json (md5-verified lab copy) summary.pooled_lodo_match,y
+docs/REVIEW_REQUEST_POOLING.md,23,DF-67,0.806,0.8062,audit/cache/labpc/run-premise/why/why_L40_s42.json pooled_lodo_matched,y
+docs/REVIEW_REQUEST_POOLING.md,24,DF-67,0.8344,0.8344,audit/cache/labpc/run-premise/audit/audit_L40_s42.json pooled_lodo_match_draws (20),y
+docs/REVIEW_REQUEST_POOLING.md,24,DF-67,±0.0200,0.0200,"same; population sd 0.0200, sample sd 0.0205",y
+docs/REVIEW_REQUEST_POOLING.md,25,DF-67,+0.028,0.0284,audit_L40 mean_of_directions - pooled_lodo_full (Result 2),y
+docs/REVIEW_REQUEST_POOLING.md,27,DF-67,412-500,412-500,audit/cache/labpc/run-premise/premise_L40_mean_s42.json (md5-verified lab copy) per_dataset[*].n_lodo_match,y
+docs/REVIEW_REQUEST_POOLING.md,27,DF-67,449,449.4545,audit/cache/labpc/run-premise/premise_L40_mean_s42.json (md5-verified lab copy),y
+docs/REVIEW_REQUEST_POOLING.md,26,DF-67,666 cap,666,audit/cache/labpc/run-premise/premise_L40_mean_s42.json (md5-verified lab copy) n_train.single_mean (= budget),y
+docs/REVIEW_REQUEST_POOLING.md,23,DF-67,:32 / :63 pointers,WT :51 / :83 (HEAD :32 / :63),WT file,n (stale: pointers are HEAD line numbers; the inserted 19-line block moved them)
+docs/thesis/persona-coordinates-70b-results.md,740,DF-63,margin ±0.02 at :513,:513,WT file,y
+docs/thesis/persona-coordinates-70b-results.md,744,DF-63,all four False,False/False/False/False,run-coords/significance.json comparisons[7..10],y
+docs/thesis/persona-coordinates-70b-results.md,744,DF-63,-0.0128,-0.0128,run-coords/significance.json comparisons[7].diff,y
+docs/thesis/persona-coordinates-70b-results.md,744,DF-63,+0.0061,0.0061,run-coords/significance.json comparisons[8].diff,y
+docs/thesis/persona-coordinates-70b-results.md,744,DF-63,+0.0036,0.0036,run-coords/significance.json comparisons[9].diff,y
+docs/thesis/persona-coordinates-70b-results.md,744,DF-63,-0.0092,-0.0092,run-coords/significance.json comparisons[10].diff,y
+docs/thesis/persona-coordinates-70b-results.md,745,DF-63,no margin field,absent,keys of every comparison,y
+docs/thesis/persona-coordinates-70b-results.md,749,DF-63,-0.038,-0.0383,"min dataset_ci90 lower, comparisons[7..10]",y
+docs/thesis/persona-coordinates-70b-results.md,749,DF-63,+0.033,0.0335,max dataset_ci90 upper,y
+docs/thesis/persona-coordinates-70b-results.md,749,DF-63,median gap 0.012 (over 17 methods),not re-derived (17-method set not identified in P17),DOC_FIXES DF-63 prose,unverified
+docs/thesis/sarcasm-pilot-negative-result.md,72,DF-66,0.65 count 0 at 3d80071/5ced550/080a979/b34ff2e,0/0/0/0,git show <c>:cap/docs/SARCASM_DESIGN.md,y
+docs/thesis/sarcasm-pilot-negative-result.md,74,DF-66,first entry b34ff2e 2026-09-21 21:48:54 +0600,b34ff2e4|2026-09-21 21:48:54 +0600|F-93: the sarcasm pilot fails its decisive check -- the bank would be a register axis,git log -S0.65 -- cap/scripts/run_sarc_pilot.ps1,y
+docs/thesis/sarcasm-pilot-negative-result.md,75,DF-66,commit message 'F-93: the sarcasm pilot fails its decisive check',F-93: the sarcasm pilot fails its decisive check -- the bank,git log,y
+docs/thesis/sarcasm-pilot-negative-result.md,76,DF-66,v1 pre-registered ~0.75,present,git show 3d80071:cap/docs/SARCASM_DESIGN.md:98,y
+docs/thesis/sarcasm-pilot-negative-result.md,73,DF-66,v2 phrase 'rather than a bare number against an arbitrary 0.75',present,git show 5ced550 (:141),y
+docs/thesis/sarcasm-pilot-negative-result.md,78,DF-66,phrase survives at :142,:156 in WT (HEAD :142),WT file,n (stale: the P6 correction block inserted in SARCASM_DESIGN.md moved it to :156; HEAD :142 is correct)
+docs/thesis/sarcasm-pilot-negative-result.md,84,DF-66,0.921,0.9213,"C:/Users/user4/expLB/cap/run-sarc-pilot/marker_report.json lexical_subsets (ironic vs sycophant), auroc_stripped (lab md5 bcc63316)",y
+docs/thesis/sarcasm-pilot-negative-result.md,85,DF-66,0.947,0.9472,"C:/Users/user4/expLB/cap/run-sarc-pilot/marker_report.json lexical_subsets (ironic vs sycophant), auroc_stripped (lab md5 bcc63316)",y

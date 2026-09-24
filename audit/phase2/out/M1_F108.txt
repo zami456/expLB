@@ -1,0 +1,67 @@
+harm-pressure-choice               rows   2134  distinct row_ids   2134  distinct responses      0
+harm-pressure-knowledge-report     rows   2139  distinct row_ids   2139  distinct responses      0
+harm-pressure-kr-matched           rows    258  distinct row_ids    258  distinct responses      0
+instructed-deception               rows   5432  distinct row_ids   5432  distinct responses      0
+convincing-game                    rows    267  distinct row_ids    267  distinct responses      0
+insider-trading                    rows   1080  distinct row_ids   1080  distinct responses      0
+ai_liar                            rows    270  distinct row_ids    270  distinct responses      0
+roleplaying                        rows    371  distinct row_ids    371  distinct responses      0
+sandbagging_v2                     rows   1000  distinct row_ids   1000  distinct responses      0
+mask                               rows    585  distinct row_ids    585  distinct responses      0
+sycophancy_mt                      rows   1182  distinct row_ids   1182  distinct responses      0
+
+== (a) pairwise row_id overlap ==
+   harm-pressure-knowledge-report     & harm-pressure-kr-matched            shared row_ids 258
+   pairs other than (HP-KR, kr-matched) sharing any row_id: 0
+   kr-matched rows 258; of which also HP-KR row_ids 258 = 100.0%
+   HP-KR rows 2139; of which also kr-matched 258 = 12.1%
+
+== (b) identical response text across datasets ==
+   total cross-dataset identical response strings (excluding the HP-KR pair): 0
+
+== (c) clustered_L*.json: LODO / LOCO gains and the HP-KR collapse ==
+
+   L20  md5 90eda6baec4ab35539fa9f0301baa068  n_targets 11  leaked ['harm-pressure-knowledge-report', 'harm-pressure-kr-matched']
+      stored summary : {"all": {"n": 11, "gain_lodo": 0.15288618426309852, "gain_loco": 0.12894129986390462, "loco_positive": 10}, "clean": {"n": 9, "gain_lodo": 0.1471263611748478, "gain_loco": 0.1571031080156823, "loco_positive": 9}}
+      recomputed gain_lodo all  +0.1529   clean +0.1471
+      recomputed gain_loco all  +0.1289   clean +0.1571
+      lodo positive all 11/11   loco positive all 10/11   clean 9/9
+      harm-pressure-knowledge-report     single 0.5302  lodo 0.7090  loco 0.4311  (10->8 ds)
+      harm-pressure-kr-matched           single 0.5462  lodo 0.7250  loco 0.6498  (10->8 ds)
+      per-target LOCO gains: ai_liar +0.192, game +0.119, choice +0.053, report -0.099, matched +0.104, trading +0.219, deception +0.113, mask +0.121, roleplaying +0.251, sandbagging_ +0.240, sycophancy_m +0.107
+
+   L32  md5 73686f8ab57716d48a9ac003664f8af2  n_targets 11  leaked ['harm-pressure-knowledge-report', 'harm-pressure-kr-matched']
+      stored summary : {"all": {"n": 11, "gain_lodo": 0.11114173460489499, "gain_loco": 0.1308704850928499, "loco_positive": 11}, "clean": {"n": 9, "gain_lodo": 0.08662146992232185, "gain_loco": 0.11680788358145493, "loco_positive": 9}}
+      recomputed gain_lodo all  +0.1111   clean +0.0866
+      recomputed gain_loco all  +0.1309   clean +0.1168
+      lodo positive all 10/11   loco positive all 11/11   clean 9/9
+      harm-pressure-knowledge-report     single 0.6374  lodo 0.9372  loco 0.9009  (10->8 ds)
+      harm-pressure-kr-matched           single 0.6694  lodo 0.8126  loco 0.7942  (10->8 ds)
+      per-target LOCO gains: ai_liar +0.139, game +0.039, choice +0.045, report +0.264, matched +0.125, trading +0.116, deception +0.072, mask +0.071, roleplaying +0.218, sandbagging_ +0.157, sycophancy_m +0.193
+
+   L40  md5 524c1340b2f7bd557cdce51aa84cabf7  n_targets 11  leaked ['harm-pressure-knowledge-report', 'harm-pressure-kr-matched']
+      stored summary : {"all": {"n": 11, "gain_lodo": 0.1814498636450913, "gain_loco": 0.12544185239344374, "loco_positive": 10}, "clean": {"n": 9, "gain_lodo": 0.1611248461448197, "gain_loco": 0.15038641885413445, "loco_positive": 8}}
+      recomputed gain_lodo all  +0.1814   clean +0.1611
+      recomputed gain_loco all  +0.1254   clean +0.1504
+      lodo positive all 11/11   loco positive all 10/11   clean 8/9
+      harm-pressure-knowledge-report     single 0.6483  lodo 0.9674  loco 0.6492  (10->8 ds)
+      harm-pressure-kr-matched           single 0.6181  lodo 0.8449  loco 0.6436  (10->8 ds)
+      per-target LOCO gains: ai_liar +0.159, game +0.144, choice -0.022, report +0.001, matched +0.025, trading +0.345, deception +0.108, mask +0.078, roleplaying +0.171, sandbagging_ +0.185, sycophancy_m +0.185
+
+== (d) how much of the leak reaches the TRAINING pool under the 80/20 split ==
+   harm-pressure-choice               n   2134  train   1707  test    427
+   harm-pressure-knowledge-report     n   2139  train   1711  test    428
+   harm-pressure-kr-matched           n    258  train    206  test     52
+   instructed-deception               n   5432  train   4345  test   1087
+   convincing-game                    n    267  train    213  test     54
+   insider-trading                    n   1080  train    864  test    216
+   ai_liar                            n    270  train    216  test     54
+   roleplaying                        n    371  train    296  test     75
+   sandbagging_v2                     n   1000  train    800  test    200
+   mask                               n    585  train    468  test    117
+   sycophancy_mt                      n   1182  train    945  test    237
+
+   kr-matched TEST rows 52; of which in HP-KR's TRAIN split: 42 (80.8%)
+   HP-KR   TEST rows 428; of which in kr-matched's TRAIN split: 38 (8.9%)
+   NOTE the permutation order depends on the dataset iteration order, so this replay is exact only if 9_persona_probes.build() returns the datasets in CLUSTERS order (it does: 30g passes [d for c in CLUSTERS.values() for d in c]).
+python exit 0

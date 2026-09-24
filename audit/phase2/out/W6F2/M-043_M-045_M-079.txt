@@ -1,0 +1,47 @@
+==============================================================================
+M-043 / M-044 / M-045 -- own100 vs paper16 detection, layer 20
+==============================================================================
+own100   layer=20 pooling=mean k=5 bank=axes.pt datasets=['ai_liar', 'alpaca', 'convincing-game', 'mask', 'roleplaying']
+paper16  layer=20 pooling=mean k=5 bank=axes_vectors_s3.pt datasets=['ai_liar', 'alpaca', 'convincing-game', 'mask', 'roleplaying']
+
+label_semantics: {'ai_liar': 'instructed_intent', 'alpaca': 'instructed_intent', 'convincing-game': 'instructed_intent', 'mask': 'belief_inconsistency', 'roleplaying': 'judge_grade'}
+
+features       probe       own100  paper16      gain   (note)
+pc:deception   paper       0.7062   0.8146   +0.1084   (note 0.706 / 0.815)
+pc:deception   lr_reg10    0.6985   0.7871   +0.0886   (note 0.698 / 0.787)
+axes           paper       0.7080   0.7811   +0.0731   (note 0.708 / 0.781)
+axes           lr_reg10    0.6826   0.7853   +0.1027   (note 0.683 / 0.785)
+axes_resid     paper       0.5533   0.7703   +0.2170   (note 0.553 / 0.770)
+axes_resid     lr_reg10    0.5539   0.7764   +0.2225   (note 0.554 / 0.776)
+
+n_pairs: own100 12, paper16 12 (off-diagonal cells used)
+M-044: gain range over the 4 non-resid rows = +0.0731 .. +0.1084  (note says +0.08 to +0.10)
+M-045: paper16 axes_resid vs axes (paper probe) = 0.7703 vs 0.7811, cost -0.0107
+       own100  axes_resid vs axes (paper probe) = 0.5533 vs 0.7080, cost -0.1547
+
+All rows present in both files (for completeness):
+   axes             lr_reg10  own100=0.6826 paper16=0.7853  diff=+0.1027
+   axes             paper     own100=0.7080 paper16=0.7811  diff=+0.0731
+   axes_resid       lr_reg10  own100=0.5539 paper16=0.7764  diff=+0.2225
+   axes_resid       paper     own100=0.5533 paper16=0.7703  diff=+0.2170
+   pc:deception     lr_reg10  own100=0.6985 paper16=0.7871  diff=+0.0886
+   pc:deception     paper     own100=0.7062 paper16=0.8146  diff=+0.1084
+
+==============================================================================
+M-079 -- regrouping the HF library by disclosure stance
+==============================================================================
+conceal (n=8): ['spy', 'smuggler', 'rogue', 'saboteur', 'fixer', 'criminal', 'hacker', 'genie']
+disclose (n=14): ['auditor', 'journalist', 'reporter', 'witness', 'observer', 'archivist', 'validator', 'examiner', 'detective', 'judge', 'secretary', 'jester', 'prophet', 'realist']
+ours_dec (n=12) ours_hon (n=12)
+
+layer        ours    regrouped paper16 s3
+20        -0.7067      -0.6493    -0.3641
+22        -0.6792      -0.6162    -0.3376
+40        -0.6544      -0.5764    -0.3705
+60        -0.5783      -0.4990    -0.3742
+mean       0.6547       0.5852     0.3616   <- mean |cos|
+
+reduction from regrouping        = (0.6547 - 0.5852)/0.6547 = 10.6%   (note: 'buys 11%')
+reduction from paper16 personas  = (0.6547 - 0.3616)/0.6547 = 44.8%
+share of the ours->paper16 gap recovered by regrouping = 23.7%
+per-layer regrouping reduction: ['8.1%', '9.3%', '11.9%', '13.7%']

@@ -61,6 +61,23 @@ giving `d_knowledge` and `d_utterance` to decompose any direction against.
 
 ## The register hypothesis, and the one result that confirms it
 
+> **CORRECTION 2026-09-24 (DF-31, Phase 6).** Line 75 of this file was corrected on 2026-09-23;
+> this paragraph was missed. Two things in it are wrong. **(1) 0.374 is the paper16 *deception*
+> axis's PC1, not the sycophancy axis** — the paper16 sycophancy axis reads **0.313**.
+> **(2) "on both a random direction beats them" is not supported for 0.374**, which sits *inside*
+> the 1,000-direction random null; it *is* supported for the sycophancy axis at 0.313, which is
+> significantly inverted (p 0.001–0.008). The 0.300 figure is the trained 4-d `axes` stack as
+> source on full HP-KR — a different protocol from the zero-shot 0.313, so the two should not be
+> quoted as a pair without saying so.
+> **Source:** `run-crossgen/kd11/matrices/mean_L40_s42.json`, zeroshot block, `sycophancy_mt`
+> column (`contrast` 0.4089, `PC1` 0.3739); sycophancy axis from `24_q10_sycophancy_axis.py`.
+> **How the claim is updated:** read it as — *"the paper16 persona axes fail on exactly the two
+> datasets whose labels are the construct they claim to detect — `harm-pressure-knowledge-report`
+> (0.300, trained 4-d stack as source) and `sycophancy_mt` (sycophancy axis 0.313 zero-shot; the
+> deception axis's PC1 reads 0.374) — and on `sycophancy_mt` the sycophancy axis is significantly
+> inverted against a 1,000-direction null."*
+> _The text below is superseded on this point and is kept for the record._
+
 **The thread that ties the project together.** The paper16 persona axes fail on exactly the two
 datasets whose *labels* are the construct they claim to detect — `harm-pressure-knowledge-report`
 (0.300) and `sycophancy_mt` (0.374) — and on both a **random direction beats them**. The

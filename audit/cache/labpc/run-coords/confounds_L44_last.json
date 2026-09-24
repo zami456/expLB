@@ -1,0 +1,356 @@
+{
+  "layer": 44,
+  "pooling": "last",
+  "k": 5,
+  "bank": "axes_vectors_s3_fp32.pt",
+  "datasets": {
+    "ai_liar": 270,
+    "alpaca": 2000,
+    "convincing-game": 267,
+    "harm-pressure-choice": 2134,
+    "harm-pressure-knowledge-report": 2139,
+    "insider-trading": 1080,
+    "instructed-deception": 5432,
+    "mask": 585,
+    "roleplaying": 287,
+    "sandbagging_v2": 1000,
+    "sycophancy_mt": 1182
+  },
+  "splits": {
+    "ai_liar": {
+      "rows": 270,
+      "items": 54,
+      "pos": 135,
+      "neg": 135,
+      "train_items_75pct": 200,
+      "test_items_25pct": 70,
+      "train_balanced": 150,
+      "test_balanced_ondiag": 20,
+      "test_balanced_offdiag": 270,
+      "label_semantics": "instructed_intent"
+    },
+    "alpaca": {
+      "rows": 2000,
+      "items": 2000,
+      "pos": 0,
+      "neg": 2000,
+      "train_items_75pct": 1500,
+      "test_items_25pct": 500,
+      "train_balanced": 0,
+      "test_balanced_ondiag": 0,
+      "test_balanced_offdiag": 0,
+      "label_semantics": "instructed_intent"
+    },
+    "convincing-game": {
+      "rows": 267,
+      "items": 267,
+      "pos": 167,
+      "neg": 100,
+      "train_items_75pct": 200,
+      "test_items_25pct": 67,
+      "train_balanced": 156,
+      "test_balanced_ondiag": 44,
+      "test_balanced_offdiag": 200,
+      "label_semantics": "instructed_intent"
+    },
+    "harm-pressure-choice": {
+      "rows": 2134,
+      "items": 2134,
+      "pos": 134,
+      "neg": 2000,
+      "train_items_75pct": 1600,
+      "test_items_25pct": 534,
+      "train_balanced": 210,
+      "test_balanced_ondiag": 58,
+      "test_balanced_offdiag": 268,
+      "label_semantics": "instructed_intent"
+    },
+    "harm-pressure-knowledge-report": {
+      "rows": 2139,
+      "items": 2139,
+      "pos": 139,
+      "neg": 2000,
+      "train_items_75pct": 1604,
+      "test_items_25pct": 535,
+      "train_balanced": 200,
+      "test_balanced_ondiag": 78,
+      "test_balanced_offdiag": 278,
+      "label_semantics": "instructed_intent"
+    },
+    "insider-trading": {
+      "rows": 1080,
+      "items": 1080,
+      "pos": 423,
+      "neg": 657,
+      "train_items_75pct": 810,
+      "test_items_25pct": 270,
+      "train_balanced": 656,
+      "test_balanced_ondiag": 190,
+      "test_balanced_offdiag": 846,
+      "label_semantics": "instructed_intent"
+    },
+    "instructed-deception": {
+      "rows": 5432,
+      "items": 461,
+      "pos": 3045,
+      "neg": 2387,
+      "train_items_75pct": 4071,
+      "test_items_25pct": 1361,
+      "train_balanced": 3588,
+      "test_balanced_ondiag": 1186,
+      "test_balanced_offdiag": 4774,
+      "label_semantics": "instructed_intent"
+    },
+    "mask": {
+      "rows": 585,
+      "items": 585,
+      "pos": 415,
+      "neg": 170,
+      "train_items_75pct": 439,
+      "test_items_25pct": 146,
+      "train_balanced": 250,
+      "test_balanced_ondiag": 90,
+      "test_balanced_offdiag": 340,
+      "label_semantics": "belief_inconsistency"
+    },
+    "roleplaying": {
+      "rows": 287,
+      "items": 287,
+      "pos": 203,
+      "neg": 84,
+      "train_items_75pct": 215,
+      "test_items_25pct": 72,
+      "train_balanced": 122,
+      "test_balanced_ondiag": 46,
+      "test_balanced_offdiag": 168,
+      "label_semantics": "judge_grade"
+    },
+    "sandbagging_v2": {
+      "rows": 1000,
+      "items": 1000,
+      "pos": 500,
+      "neg": 500,
+      "train_items_75pct": 750,
+      "test_items_25pct": 250,
+      "train_balanced": 734,
+      "test_balanced_ondiag": 234,
+      "test_balanced_offdiag": 1000,
+      "label_semantics": "instructed_intent"
+    },
+    "sycophancy_mt": {
+      "rows": 1182,
+      "items": 1182,
+      "pos": 434,
+      "neg": 748,
+      "train_items_75pct": 886,
+      "test_items_25pct": 296,
+      "train_balanced": 674,
+      "test_balanced_ondiag": 194,
+      "test_balanced_offdiag": 868,
+      "label_semantics": "belief_inconsistency"
+    }
+  },
+  "confounds": {
+    "feature_r2": [
+      {
+        "features": "axes",
+        "dataset": "ai_liar",
+        "max_r2_vs_n_tok": 0.10094721298869232,
+        "mean_r2_vs_n_tok": 0.04316311391928572
+      },
+      {
+        "features": "axes",
+        "dataset": "alpaca",
+        "max_r2_vs_n_tok": 0.5415450238180108,
+        "mean_r2_vs_n_tok": 0.46732964240591945
+      },
+      {
+        "features": "axes",
+        "dataset": "convincing-game",
+        "max_r2_vs_n_tok": 0.1022530324814842,
+        "mean_r2_vs_n_tok": 0.07061385355985955
+      },
+      {
+        "features": "axes",
+        "dataset": "harm-pressure-choice",
+        "max_r2_vs_n_tok": 0.07037010974308457,
+        "mean_r2_vs_n_tok": 0.029375686407617212
+      },
+      {
+        "features": "axes",
+        "dataset": "harm-pressure-knowledge-report",
+        "max_r2_vs_n_tok": 0.5089899956056971,
+        "mean_r2_vs_n_tok": 0.3473258565569837
+      },
+      {
+        "features": "axes",
+        "dataset": "insider-trading",
+        "max_r2_vs_n_tok": 0.14335718014991114,
+        "mean_r2_vs_n_tok": 0.07723609276270227
+      },
+      {
+        "features": "axes",
+        "dataset": "instructed-deception",
+        "max_r2_vs_n_tok": 0.047059466207040476,
+        "mean_r2_vs_n_tok": 0.017089247141589083
+      },
+      {
+        "features": "axes",
+        "dataset": "mask",
+        "max_r2_vs_n_tok": 0.40916566777005364,
+        "mean_r2_vs_n_tok": 0.23101590432566338
+      },
+      {
+        "features": "axes",
+        "dataset": "roleplaying",
+        "max_r2_vs_n_tok": 0.039950861498280615,
+        "mean_r2_vs_n_tok": 0.019532207676637728
+      },
+      {
+        "features": "axes",
+        "dataset": "sandbagging_v2",
+        "max_r2_vs_n_tok": 0.11872240998270642,
+        "mean_r2_vs_n_tok": 0.06279412212368624
+      },
+      {
+        "features": "axes",
+        "dataset": "sycophancy_mt",
+        "max_r2_vs_n_tok": 0.4528607723079519,
+        "mean_r2_vs_n_tok": 0.323804843599062
+      },
+      {
+        "features": "pc:deception",
+        "dataset": "ai_liar",
+        "max_r2_vs_n_tok": 0.2883107553638362,
+        "mean_r2_vs_n_tok": 0.11666640117680707
+      },
+      {
+        "features": "pc:deception",
+        "dataset": "alpaca",
+        "max_r2_vs_n_tok": 0.565026895395089,
+        "mean_r2_vs_n_tok": 0.3568062682433955
+      },
+      {
+        "features": "pc:deception",
+        "dataset": "convincing-game",
+        "max_r2_vs_n_tok": 0.15644608844704372,
+        "mean_r2_vs_n_tok": 0.07457700079129215
+      },
+      {
+        "features": "pc:deception",
+        "dataset": "harm-pressure-choice",
+        "max_r2_vs_n_tok": 0.025201283453852592,
+        "mean_r2_vs_n_tok": 0.008211937753804048
+      },
+      {
+        "features": "pc:deception",
+        "dataset": "harm-pressure-knowledge-report",
+        "max_r2_vs_n_tok": 0.4764451558205571,
+        "mean_r2_vs_n_tok": 0.2554891457535989
+      },
+      {
+        "features": "pc:deception",
+        "dataset": "insider-trading",
+        "max_r2_vs_n_tok": 0.11914161632020798,
+        "mean_r2_vs_n_tok": 0.07746274228733216
+      },
+      {
+        "features": "pc:deception",
+        "dataset": "instructed-deception",
+        "max_r2_vs_n_tok": 0.09578752529594155,
+        "mean_r2_vs_n_tok": 0.048754707082156915
+      },
+      {
+        "features": "pc:deception",
+        "dataset": "mask",
+        "max_r2_vs_n_tok": 0.41612486515374963,
+        "mean_r2_vs_n_tok": 0.20745781546497238
+      },
+      {
+        "features": "pc:deception",
+        "dataset": "roleplaying",
+        "max_r2_vs_n_tok": 0.2937220813254624,
+        "mean_r2_vs_n_tok": 0.10260534334181788
+      },
+      {
+        "features": "pc:deception",
+        "dataset": "sandbagging_v2",
+        "max_r2_vs_n_tok": 0.20202603568135702,
+        "mean_r2_vs_n_tok": 0.06500363955171294
+      },
+      {
+        "features": "pc:deception",
+        "dataset": "sycophancy_mt",
+        "max_r2_vs_n_tok": 0.36659382179417643,
+        "mean_r2_vs_n_tok": 0.23923708488161055
+      }
+    ],
+    "length_only_auroc": [
+      {
+        "dataset": "ai_liar",
+        "auroc_from_length": 0.6130315500685873,
+        "median_pos": 160.0,
+        "median_neg": 125.0
+      },
+      {
+        "dataset": "convincing-game",
+        "auroc_from_length": 0.5067664670658683,
+        "median_pos": 209.0,
+        "median_neg": 207.5
+      },
+      {
+        "dataset": "harm-pressure-choice",
+        "auroc_from_length": 0.501731343283582,
+        "median_pos": 1.0,
+        "median_neg": 1.0
+      },
+      {
+        "dataset": "harm-pressure-knowledge-report",
+        "auroc_from_length": 0.7756115107913669,
+        "median_pos": 7.0,
+        "median_neg": 5.0
+      },
+      {
+        "dataset": "insider-trading",
+        "auroc_from_length": 0.5945464555199327,
+        "median_pos": 115.0,
+        "median_neg": 106.0
+      },
+      {
+        "dataset": "instructed-deception",
+        "auroc_from_length": 0.5603961799099252,
+        "median_pos": 32.0,
+        "median_neg": 29.0
+      },
+      {
+        "dataset": "mask",
+        "auroc_from_length": 0.6249397590361446,
+        "median_pos": 245.0,
+        "median_neg": 96.5
+      },
+      {
+        "dataset": "roleplaying",
+        "auroc_from_length": 0.44147314098053014,
+        "median_pos": 31.0,
+        "median_neg": 38.0
+      },
+      {
+        "dataset": "sandbagging_v2",
+        "auroc_from_length": 0.854402,
+        "median_pos": 505.0,
+        "median_neg": 310.0
+      },
+      {
+        "dataset": "sycophancy_mt",
+        "auroc_from_length": 0.6639671997831391,
+        "median_pos": 174.5,
+        "median_neg": 97.0
+      }
+    ]
+  },
+  "null": {
+    "mean": 0.49555636989880136,
+    "sd": 0.07320644390114549,
+    "n": 20
+  }
+}

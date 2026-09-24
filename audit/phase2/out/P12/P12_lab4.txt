@@ -1,0 +1,43 @@
+==============================================================================
+passA11 (paper16 bank, 200-row subsamples)
+  C:/Users/user4/expLB/run-crossgen/kd11/passA11/matrices/mean_L40_s42.json
+  bank=axes_vectors_s3_fp32.pt bank_name=paper16 k=5
+    contrast                     sycophancy_mt=0.3618  harm-pressure-knowledge-report=0.6435
+    PC1                          sycophancy_mt=0.3314  harm-pressure-knowledge-report=0.6675
+    contrast:sycophancy          sycophancy_mt=0.3061  harm-pressure-knowledge-report=0.1625
+    PC1:sycophancy               sycophancy_mt=0.2996  harm-pressure-knowledge-report=0.2768
+    contrast:unified             sycophancy_mt=0.3338  harm-pressure-knowledge-report=0.4472
+    PC1:unified                  sycophancy_mt=0.3008  harm-pressure-knowledge-report=0.8251
+==============================================================================
+passC11 (paper16 bank)
+  C:/Users/user4/expLB/run-crossgen/kd11/passC11/matrices/mean_L40_s42.json
+  bank=axes_vectors_s3_fp32.pt bank_name=paper16 k=5
+    contrast                     sycophancy_mt=0.3620  harm-pressure-knowledge-report=0.6435
+    PC1                          sycophancy_mt=0.3318  harm-pressure-knowledge-report=0.6675
+    contrast:sycophancy          sycophancy_mt=0.3066  harm-pressure-knowledge-report=0.1625
+    PC1:sycophancy               sycophancy_mt=0.2995  harm-pressure-knowledge-report=0.2768
+    contrast:unified             sycophancy_mt=0.3338  harm-pressure-knowledge-report=0.4472
+    PC1:unified                  sycophancy_mt=0.3014  harm-pressure-knowledge-report=0.8251
+==============================================================================
+passB kd11 (paper16 bank, the F-13 file)
+  C:/Users/user4/expLB/run-crossgen/kd11/matrices/mean_L40_s42.json
+  bank=axes_vectors_s3_fp32.pt bank_name=paper16 k=5
+    contrast                     sycophancy_mt=0.4089  harm-pressure-knowledge-report=0.6436
+    PC1                          sycophancy_mt=0.3740  harm-pressure-knowledge-report=0.6678
+==============================================================================
+passB kd11 banks/collab (OUR kd s23 bank)
+  C:/Users/user4/expLB/run-crossgen/kd11/banks/collab/matrices/mean_L40_s42.json
+  bank=axes_collab_s23.pt bank_name=collab k=5
+    contrast                     sycophancy_mt=0.3624  harm-pressure-knowledge-report=0.5562
+    PC1                          sycophancy_mt=0.3362  harm-pressure-knowledge-report=0.6231
+    contrast:sycophancy          sycophancy_mt=0.3181  harm-pressure-knowledge-report=0.1647
+    PC1:sycophancy               sycophancy_mt=0.3237  harm-pressure-knowledge-report=0.1736
+    contrast:unified             sycophancy_mt=0.3326  harm-pressure-knowledge-report=0.3358
+    PC1:unified                  sycophancy_mt=0.3182  harm-pressure-knowledge-report=0.4456
+    contrast:knowledge_denial    sycophancy_mt=0.4373  harm-pressure-knowledge-report=0.6692
+    PC1:knowledge_denial         sycophancy_mt=0.4282  harm-pressure-knowledge-report=0.7275
+    contrast:kd_assertion        sycophancy_mt=0.6487  harm-pressure-knowledge-report=0.9344
+    PC1:kd_assertion             sycophancy_mt=0.5149  harm-pressure-knowledge-report=0.8861
+    contrast:collab_extended     sycophancy_mt=0.4433  harm-pressure-knowledge-report=0.8765
+    PC1:collab_extended          sycophancy_mt=0.4409  harm-pressure-knowledge-report=0.8036
+python exit 0

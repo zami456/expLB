@@ -90,6 +90,18 @@ paper notes that actually specify it.
 
 ## 5. A directional prediction, from Claim 9
 
+> **CORRECTION 2026-09-24 (DF-55, Phase 6).** The premise in parentheses below is inverted.
+> **The regex does not beat the probe.** Across all 113 stored matrices containing HP-KR the raw
+> probe **diagonal** is **0.9663 median** (0.96–0.98 at every headline layer), against the regex's
+> **0.9125** — the regex loses by ~0.054. The 0.87 has no source and is probably this project's own
+> superseded regex.
+> **Source:** 113-matrix sweep, `audit/scripts/qa_w5e_O040.py`.
+> **How the claim is updated:** the premise should read *"the lexical shortcut recovers 94.4% of a
+> full probe's in-distribution score, 0.9125 vs 0.9663"*. **The directional prediction below is
+> unaffected in direction** — it turns on the signal being largely lexical, which 94.4% supports at
+> least as well — but it must not be stated as the regex outscoring the probe.
+> _The text below is superseded on this point and is kept for the record._
+
 If the HP-KR signal is mostly the **denial bit** (the lexical shortcut, regex 0.91 vs probe 0.87),
 then:
 

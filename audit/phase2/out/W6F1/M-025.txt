@@ -1,0 +1,25 @@
+F-94 table rows parsed from kd/docs/FINDINGS.md: 16
+  L 0  content +0.052*   presence +0.060*   retains 24%
+  L 4  content +0.027    presence +0.030*   retains 28%
+  L 8  content +0.001    presence +0.000    retains 93%
+  L12  content +0.017*   presence +0.011    retains −278%
+  L16  content +0.013    presence +0.010    retains 22%
+  L20  content +0.052    presence +0.057    retains 38%
+  L22  content +0.052    presence +0.049    retains 32%
+  L24  content +0.027    presence +0.032    retains 35%
+  L28  content +0.073    presence +0.129*   retains 46%
+  L32  content +0.056    presence +0.170*   retains 60%
+  L36  content +0.029*   presence +0.124*   retains 77%
+  L40  content +0.025    presence +0.120*   retains 78%
+  L44  content +0.028    presence +0.095*   retains 74%
+  L48  content +0.024    presence +0.075*   retains 76%
+  L52  content +0.028    presence +0.083*   retains 73%
+  L56  content +0.039    presence +0.082*   retains 60%
+
+mean content  = +0.0339   (the entry says +0.034)
+mean presence = +0.0704   (the entry says +0.070)
+presence : content = 2.08 : 1   -> "about 2:1"
+content clears at 3 of 16 layers; presence clears at 10 of 16
+retention median 53%  min -278%  max 93%
+
+(F-89 layer-40 row, the superseded headline: retention 78%, presence/content = 4.8:1 -> "three-to-one")

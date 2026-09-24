@@ -1,0 +1,223 @@
+files per source: {'LAB': 210464, 'DRIVE': 277407, 'ASIX': 9527, 'PCOOD': 846, 'LAPTOP_IGN': 486}
+content keys: 148820  duplicate groups (>=2 copies anywhere): 144971  files in them: 494804
+empty-file group: 24 files (excluded below)
+tiny-content groups (<100 B): 8 groups, 23 files (excluded below)
+
+== A. groups whose copies all share ONE canonical path (backups / git copies of the same file): 124682
+     86046  DRIVE1+LAB1
+     32815  DRIVE2+LAB1
+      4659  ASIX1+DRIVE2+LAB1
+       472  ASIX1+DRIVE1+LAB1
+       242  ASIX1+DRIVE1
+       177  DRIVE1+LAB1+LAPTOP_IGN1
+       137  ASIX1+LAB1
+        75  ASIX1+PCOOD1
+        52  DRIVE1+LAPTOP_IGN1
+         4  ASIX1+LAB1+PCOOD1
+         1  DRIVE3+LAB1
+         1  DRIVE2+LAB1+LAPTOP_IGN1
+         1  LAB1+LAPTOP_IGN1
+
+== B. groups with >=2 DIFFERENT canonical paths: 20280
+   groups with no result-unit member (code/doc/input copies): 357
+     19408 groups /  199402 files  crossgen per-cell CSV
+       312 groups /    1274 files  same unit, different file names
+       203 groups /     883 files  different units
+
+== B1. same unit, different file names (top 40 units):
+      100 groups    200 paths  run-hf275   e.g. ['run-hf275/vectors_100/aberration.pt', 'run-hf275/vectors_275/aberration.pt']
+       55 groups    110 paths  run-coords/passA   e.g. ['run-coords/passA/harm-pressure-knowledge-report/chunk_0000.pt', 'run-coords/passA/harm-pressure-kr-matched/chunk_0000.pt']
+       55 groups    110 paths  run-coords/passB   e.g. ['run-coords/passB/harm-pressure-knowledge-report/chunk_0000.pt', 'run-coords/passB/harm-pressure-kr-matched/chunk_0000.pt']
+       55 groups    110 paths  run-coords/passC   e.g. ['run-coords/passC/harm-pressure-knowledge-report/chunk_0000.pt', 'run-coords/passC/harm-pressure-kr-matched/chunk_0000.pt']
+       15 groups     30 paths  run-kd   e.g. ['run-kd/vectors_all/pc_blunt_advisor.pt', 'run-kd/vectors_s23/pc_blunt_advisor.pt']
+       12 groups     24 paths  run-scale/3b   e.g. ['run-scale/3b/vectors_all/default.pt', 'run-scale/3b/vectors_s23/default.pt']
+        8 groups     16 paths  run-paper16   e.g. ['run-paper16/vectors_all_fp32/default.pt', 'run-paper16/vectors_s3_fp32/default.pt']
+        8 groups     16 paths  run-scale/8b   e.g. ['run-scale/8b/vectors_all/default.pt', 'run-scale/8b/vectors_s23/default.pt']
+        1 groups     11 paths  run   e.g. ['run/scores/bard.json', 'run/scores/eldritch.json', 'run/scores/ghost.json']
+        1 groups      2 paths  run-cap   e.g. ['run-cap/vectors_all/pc_reasoned_defender.pt', 'run-cap/vectors_s23/pc_reasoned_defender.pt']
+        1 groups      2 paths  run-paper16-shared   e.g. ['run-paper16-shared/vectors_all/default.pt', 'run-paper16-shared/vectors_s3/default.pt']
+        1 groups      3 paths  aa-smoke   e.g. ['aa-smoke/e2e/scores/caregiver.json', 'aa-smoke/e2e/scores/ghost.json', 'aa-smoke/e2e/scores/spy.json']
+
+== B2. DIFFERENT units share identical content (all, sorted by groups):
+       50 groups    102 paths max      153460 B  drive:share/paper16_L20 <> run-paper16
+          e.g. ['drive:share/paper16_L20/responses/default.jsonl', 'run-paper16/responses/default.jsonl']
+       36 groups     75 paths max     2623020 B  run-kd <> src/probes/deception-detection/persona including knowlede denial
+          e.g. ['run-kd/vectors_all/default.pt', 'run-kd/vectors_s23/default.pt', 'run-kd/vectors_s3/default.pt', 'src/probes/deception-detection/persona including knowlede denial/default.pt']
+       29 groups     59 paths max        3263 B  None <> drive:staging/paper16-shared
+          e.g. ['assistant_axis/data/roles/instructions/default.json', 'drive:staging/paper16-shared/pc_instructions/default.json', 'src/assistant_axis_ndif/pc_instructions/default.json']
+       21 groups     42 paths max      864728 B  run-coords/passA <> run-coords/passC
+          e.g. ['run-coords/passA/ai_liar/items.pt', 'run-coords/passC/ai_liar/items.pt']
+        7 groups     15 paths max     2622946 B  run-cap <> run-cap-ctrl
+          e.g. ['run-cap-ctrl/vectors_s23/default.pt', 'run-cap/vectors_all/default.pt', 'run-cap/vectors_s23/default.pt']
+        6 groups     18 paths max     4629080 B  run-coords/passB <> run-coords/passB_fine <> run-coords/passP
+          e.g. ['run-coords/passB/alpaca/items.pt', 'run-coords/passB_fine/alpaca/items.pt', 'run-coords/passP/alpaca/items.pt']
+        6 groups     12 paths max     6294506 B  run-coords/passP <> run-coords/passP_smoke
+          e.g. ['run-coords/passP/ai_liar/chunk_0000.pt', 'run-coords/passP_smoke/ai_liar/chunk_0000.pt']
+        4 groups      8 paths max      275234 B  run-scale/3b/coords <> run-scale/8b/coords
+          e.g. ['run-scale/3b/coords/alpaca/rows.jsonl', 'run-scale/8b/coords/alpaca/rows.jsonl']
+        3 groups      9 paths max       96828 B  run-coords/passB_fine <> run-scale/3b/coords <> run-scale/8b/coords
+          e.g. ['run-coords/passB_fine/ai_liar/rows.jsonl', 'run-scale/3b/coords/ai_liar/rows.jsonl', 'run-scale/8b/coords/ai_liar/rows.jsonl']
+        3 groups      6 paths max        4240 B  None <> drive:staging/labelbanks
+          e.g. ['drive:staging/labelbanks/hf275_role_groups_loose.json', 'src/assistant_axis_ndif/hf275_role_groups_loose.json']
+        3 groups      6 paths max      297941 B  @share_deceptive <> src/probes/deception-detection/deceptive
+          e.g. ['@share_deceptive/deceptive_L20.json', 'src/probes/deception-detection/deceptive/deceptive_L20.json']
+        3 groups      9 paths max     1150789 B  @share_L20_shared <> drive:share/paper16_L20 <> src/probes/deception-detection/paper16_L20_sharedquestions
+          e.g. ['@share_L20_shared/paper16_L20.json', 'drive:share/paper16_L20/shared_questions/paper16_L20.json', 'src/probes/deception-detection/paper16_L20_sharedquestions/paper16_L20.json']
+        3 groups      9 paths max         568 B  src/probes/deception-detection/results/persona_ood <> src/probes/deception-detection/results/persona_ood_ext_L20 <> src/probes/deception-detection/results/persona_ood_mod_L20
+          e.g. ['src/probes/deception-detection/results/persona_ood/matrix_balacc_baseline.csv', 'src/probes/deception-detection/results/persona_ood_ext_L20/matrix_balacc_baseline.csv', 'src/probes/deception-detection/results/persona_ood_mod_L20/matrix_balacc_baseline.csv']
+        3 groups      9 paths max         571 B  src/probes/deception-detection/results/persona_ood_L40 <> src/probes/deception-detection/results/persona_ood_ext_L40 <> src/probes/deception-detection/results/persona_ood_mod_L40
+          e.g. ['src/probes/deception-detection/results/persona_ood_L40/matrix_balacc_baseline.csv', 'src/probes/deception-detection/results/persona_ood_ext_L40/matrix_balacc_baseline.csv', 'src/probes/deception-detection/results/persona_ood_mod_L40/matrix_balacc_baseline.csv']
+        3 groups      6 paths max         571 B  src/probes/deception-detection/results/persona_ood_ext_L44 <> src/probes/deception-detection/results/persona_ood_mod_L44
+          e.g. ['src/probes/deception-detection/results/persona_ood_ext_L44/matrix_balacc_baseline.csv', 'src/probes/deception-detection/results/persona_ood_mod_L44/matrix_balacc_baseline.csv']
+        2 groups      8 paths max     1272344 B  run-coords/passB <> run-coords/passB_fine <> run-coords/passP <> run-scale/8b/coords
+          e.g. ['run-coords/passB/convincing-game/items.pt', 'run-coords/passB_fine/convincing-game/items.pt', 'run-coords/passP/convincing-game/items.pt', 'run-scale/8b/coords/convincing-game/items.pt']
+        2 groups      8 paths max      919481 B  run-crossgen/banks/hf100 <> run-crossgen/banks/own100 <> run-crossgen/banks/paper16_famcentred <> run-crossgen/banks/paper16_shared
+          e.g. ['run-crossgen/banks/hf100/splits.json', 'run-crossgen/banks/own100/splits.json', 'run-crossgen/banks/paper16_famcentred/splits.json', 'run-crossgen/banks/paper16_shared/splits.json']
+        1 groups      5 paths max     2008472 B  run-coords/passA <> run-coords/passB <> run-coords/passB_fine <> run-coords/passC <> run-coords/passP
+          e.g. ['run-coords/passA/harm-pressure-knowledge-report/items.pt', 'run-coords/passB/harm-pressure-knowledge-report/items.pt', 'run-coords/passB_fine/harm-pressure-knowledge-report/items.pt', 'run-coords/passC/harm-pressure-knowledge-report/items.pt']
+        1 groups      3 paths max      747630 B  run-coords/passA <> run-coords/passB_fine <> run-coords/passC
+          e.g. ['run-coords/passA/harm-pressure-knowledge-report/rows.jsonl', 'run-coords/passB_fine/harm-pressure-knowledge-report/rows.jsonl', 'run-coords/passC/harm-pressure-knowledge-report/rows.jsonl']
+        1 groups      6 paths max      214808 B  run-coords/passB <> run-coords/passB_fine <> run-coords/passP <> run-coords/passP_smoke <> run-scale/3b/coords <> run-scale/8b/coords
+          e.g. ['run-coords/passB/ai_liar/items.pt', 'run-coords/passB_fine/ai_liar/items.pt', 'run-coords/passP/ai_liar/items.pt', 'run-coords/passP_smoke/ai_liar/items.pt']
+        1 groups      5 paths max      221848 B  run-coords/passB <> run-coords/passB_fine <> run-coords/passP <> run-scale/3b/coords <> run-scale/8b/coords
+          e.g. ['run-coords/passB/roleplaying/items.pt', 'run-coords/passB_fine/roleplaying/items.pt', 'run-coords/passP/roleplaying/items.pt', 'run-scale/3b/coords/roleplaying/items.pt']
+        1 groups      3 paths max      919481 B  run-crossgen/banks/hf275_loose <> run-crossgen/banks/hf275_strict <> run-crossgen/banks/own100_strict
+          e.g. ['run-crossgen/banks/hf275_loose/splits.json', 'run-crossgen/banks/hf275_strict/splits.json', 'run-crossgen/banks/own100_strict/splits.json']
+        1 groups      6 paths max      156973 B  run-crossgen/kd11 <> run-crossgen/kd11/banks/cap_all <> run-crossgen/kd11/banks/cap_ctrl <> run-crossgen/kd11/banks/collab <> run-crossgen/kd11/banks/kd <> run-crossgen/kd11/banks/kd_s23
+          e.g. ['run-crossgen/kd11/banks/cap_all/splits.json', 'run-crossgen/kd11/banks/cap_ctrl/splits.json', 'run-crossgen/kd11/banks/collab/splits.json', 'run-crossgen/kd11/banks/kd/splits.json']
+        1 groups      2 paths max       19967 B  run-crossgen/kd11/passA <> run-crossgen/kd11/passA/banks/kd_s23
+          e.g. ['run-crossgen/kd11/passA/banks/kd_s23/splits.json', 'run-crossgen/kd11/passA/splits.json']
+        1 groups      2 paths max     7368815 B  run-crossgen/kd11/passA <> run-crossgen/passA
+          e.g. ['run-crossgen/kd11/passA/significance.json', 'run-crossgen/passA/significance.json']
+        1 groups      2 paths max       49143 B  run-crossgen/kd11/passA11 <> run-crossgen/kd11/passA11/banks/kd_s23
+          e.g. ['run-crossgen/kd11/passA11/banks/kd_s23/splits.json', 'run-crossgen/kd11/passA11/splits.json']
+        1 groups      2 paths max       19967 B  run-crossgen/kd11/passC <> run-crossgen/kd11/passC/banks/kd_s23
+          e.g. ['run-crossgen/kd11/passC/banks/kd_s23/splits.json', 'run-crossgen/kd11/passC/splits.json']
+        1 groups      3 paths max      551848 B  run-crossgen/kd11/passC <> run-crossgen/passC
+          e.g. ['run-crossgen/kd11/passC/significance.json', 'run-crossgen/kd11/passC/significance.json.tmp', 'run-crossgen/passC/significance.json']
+        1 groups      2 paths max       49143 B  run-crossgen/kd11/passC11 <> run-crossgen/kd11/passC11/banks/kd_s23
+          e.g. ['run-crossgen/kd11/passC11/banks/kd_s23/splits.json', 'run-crossgen/kd11/passC11/splits.json']
+        1 groups      8 paths max      117438 B  run-crossgen/passA <> run-crossgen/passA/banks/hf100 <> run-crossgen/passA/banks/hf275_loose <> run-crossgen/passA/banks/hf275_strict <> run-crossgen/passA/banks/own100 <> run-crossgen/passA/banks/own100_strict <> run-crossgen/passA/banks/paper16_famcentred <> run-crossgen/passA/banks/paper16_shared
+          e.g. ['run-crossgen/passA/banks/hf100/splits.json', 'run-crossgen/passA/banks/hf275_loose/splits.json', 'run-crossgen/passA/banks/hf275_strict/splits.json', 'run-crossgen/passA/banks/own100/splits.json']
+        1 groups      4 paths max      153247 B  run-crossgen/passB_fine <> run-crossgen/passB_fine/banks/hf275_strict <> run-crossgen/passB_fine/banks/own100 <> run-crossgen/passB_fine/banks/paper16_shared
+          e.g. ['run-crossgen/passB_fine/banks/hf275_strict/splits.json', 'run-crossgen/passB_fine/banks/own100/splits.json', 'run-crossgen/passB_fine/banks/paper16_shared/splits.json', 'run-crossgen/passB_fine/splits.json']
+        1 groups      8 paths max      117438 B  run-crossgen/passC <> run-crossgen/passC/banks/hf100 <> run-crossgen/passC/banks/hf275_loose <> run-crossgen/passC/banks/hf275_strict <> run-crossgen/passC/banks/own100 <> run-crossgen/passC/banks/own100_strict <> run-crossgen/passC/banks/paper16_famcentred <> run-crossgen/passC/banks/paper16_shared
+          e.g. ['run-crossgen/passC/banks/hf100/splits.json', 'run-crossgen/passC/banks/hf275_loose/splits.json', 'run-crossgen/passC/banks/hf275_strict/splits.json', 'run-crossgen/passC/banks/own100/splits.json']
+        1 groups      2 paths max    62938229 B  drive:staging/banks <> run-hf275/axes_hf100
+          e.g. ['drive:staging/banks/run-hf275/axes_hf100.pt', 'run-hf275/axes_hf100.pt']
+        1 groups      2 paths max     2623287 B  run-paper16 <> run-paper16/vectors_s3_old_pc_broker
+          e.g. ['run-paper16/vectors_s3/pc_broker.pt', 'run-paper16/vectors_s3_old_pc_broker.pt']
+        1 groups      3 paths max      115191 B  src/probes/deception-detection/results/persona_ood_ext_L20 <> src/probes/deception-detection/results/persona_ood_ext_L40 <> src/probes/deception-detection/results/persona_ood_ext_L44
+          e.g. ['src/probes/deception-detection/results/persona_ood_ext_L20/zero_shot.png', 'src/probes/deception-detection/results/persona_ood_ext_L40/zero_shot.png', 'src/probes/deception-detection/results/persona_ood_ext_L44/zero_shot.png']
+        1 groups      3 paths max      113878 B  src/probes/deception-detection/results/persona_ood_mod_L20 <> src/probes/deception-detection/results/persona_ood_mod_L40 <> src/probes/deception-detection/results/persona_ood_mod_L44
+          e.g. ['src/probes/deception-detection/results/persona_ood_mod_L20/zero_shot.png', 'src/probes/deception-detection/results/persona_ood_mod_L40/zero_shot.png', 'src/probes/deception-detection/results/persona_ood_mod_L44/zero_shot.png']
+
+== C. groups involving his branch (PCOOD):
+      36  his src/probes/deception-detection/persona including knowlede denial  ==  run-kd
+          e.g. ['run-kd/vectors_all/default.pt (LAB)', 'run-kd/vectors_s23/default.pt (LAB)', 'run-kd/vectors_s3/default.pt (LAB)', 'run-kd/vectors_s23/default.pt (DRIVE)']
+      22  his src/probes/deception-detection/data/geometry_of_truth  ==  @expLB-acts/deception-detection/data/geometry_of_truth | src/probes/deception-detection/data/geometry_of_truth
+          e.g. ['@expLB-acts/deception-detection/data/geometry_of_truth/cities.csv (LAB)', 'src/probes/deception-detection/data/geometry_of_truth/cities.csv (ASIX)', 'src/probes/deception-detection/data/geometry_of_truth/cities.csv (PCOOD)']
+      20  his src/probes/deception-detection/deception_detection/scripts  ==  @expLB-acts/deception-detection/deception_detection/scripts | src/probes/deception-detection/deception_detection/scripts
+          e.g. ['@expLB-acts/deception-detection/deception_detection/scripts/by_layer.py (LAB)', 'src/probes/deception-detection/deception_detection/scripts/by_layer.py (ASIX)', 'src/probes/deception-detection/deception_detection/scripts/by_layer.py (PCOOD)']
+      17  his src/probes/deception-detection  ==  @expLB-acts/deception-detection | src/probes/deception-detection
+          e.g. ['@expLB-acts/deception-detection/.gitignore (LAB)', 'src/probes/deception-detection/.gitignore (ASIX)', 'src/probes/deception-detection/.gitignore (PCOOD)']
+      17  his src/probes/deception-detection/deception_detection/notebooks/old  ==  @expLB-acts/deception-detection/deception_detection/notebooks/old | src/probes/deception-detection/deception_detection/notebooks/old
+          e.g. ['@expLB-acts/deception-detection/deception_detection/notebooks/old/ai_liar.py (LAB)', 'src/probes/deception-detection/deception_detection/notebooks/old/ai_liar.py (ASIX)', 'src/probes/deception-detection/deception_detection/notebooks/old/ai_liar.py (PCOOD)']
+      16  his src/probes/deception-detection/data/ai_audit/Uncovering_Deceptive_Tendencies/trajectories  ==  @expLB-acts/deception-detection/data/ai_audit/Uncovering_Deceptive_Tendencies/trajectories | src/probes/deception-detection/data/ai_audit/Uncovering_Deceptive_Tendencies/trajectories
+          e.g. ['@expLB-acts/deception-detection/data/ai_audit/Uncovering_Deceptive_Tendencies/trajectories/1.json (LAB)', 'src/probes/deception-detection/data/ai_audit/Uncovering_Deceptive_Tendencies/trajectories/1.json (ASIX)', 'src/probes/deception-detection/data/ai_audit/Uncovering_Deceptive_Tendencies/trajectories/1.json (PCOOD)']
+      14  his src/probes/deception-detection/data/ai_audit/Uncovering_Deceptive_Tendencies/experiments/A  ==  @expLB-acts/deception-detection/data/ai_audit/Uncovering_Deceptive_Tendencies/experiments/A | src/probes/deception-detection/data/ai_audit/Uncovering_Deceptive_Tendencies/experiments/A
+          e.g. ['@expLB-acts/deception-detection/data/ai_audit/Uncovering_Deceptive_Tendencies/experiments/A/completion.txt (LAB)', 'src/probes/deception-detection/data/ai_audit/Uncovering_Deceptive_Tendencies/experiments/A/completion.txt (ASIX)', 'src/probes/deception-detection/data/ai_audit/Uncovering_Deceptive_Tendencies/experiments/A/completion.txt (PCOOD)']
+      14  his src/probes/deception-detection/deception_detection  ==  @expLB-acts/deception-detection/deception_detection | src/probes/deception-detection/deception_detection
+          e.g. ['@expLB-acts/deception-detection/deception_detection/baselines.py (LAB)', 'src/probes/deception-detection/deception_detection/baselines.py (ASIX)', 'src/probes/deception-detection/deception_detection/baselines.py (PCOOD)']
+      14  his src/probes/deception-detection/deception_detection/data  ==  @expLB-acts/deception-detection/deception_detection/data | src/probes/deception-detection/deception_detection/data
+          e.g. ['@expLB-acts/deception-detection/deception_detection/data/ai_audit.py (LAB)', 'src/probes/deception-detection/deception_detection/data/ai_audit.py (ASIX)', 'src/probes/deception-detection/deception_detection/data/ai_audit.py (PCOOD)']
+      13  his src/probes/deception-detection/data/ai_audit/Uncovering_Deceptive_Tendencies/experiments/C  ==  @expLB-acts/deception-detection/data/ai_audit/Uncovering_Deceptive_Tendencies/experiments/C | src/probes/deception-detection/data/ai_audit/Uncovering_Deceptive_Tendencies/experiments/C
+          e.g. ['@expLB-acts/deception-detection/data/ai_audit/Uncovering_Deceptive_Tendencies/experiments/C/code.py (LAB)', 'src/probes/deception-detection/data/ai_audit/Uncovering_Deceptive_Tendencies/experiments/C/code.py (ASIX)', 'src/probes/deception-detection/data/ai_audit/Uncovering_Deceptive_Tendencies/experiments/C/code.py (PCOOD)']
+      12  his src/probes/deception-detection/data/internal_state  ==  @expLB-acts/deception-detection/data/internal_state | src/probes/deception-detection/data/internal_state
+          e.g. ['@expLB-acts/deception-detection/data/internal_state/animals_true_false.csv (LAB)', 'src/probes/deception-detection/data/internal_state/animals_true_false.csv (ASIX)', 'src/probes/deception-detection/data/internal_state/animals_true_false.csv (PCOOD)']
+      11  his src/probes/deception-detection/deception_detection/scripts/configs  ==  @expLB-acts/deception-detection/deception_detection/scripts/configs | src/probes/deception-detection/deception_detection/scripts/configs
+          e.g. ['@expLB-acts/deception-detection/deception_detection/scripts/configs/descriptive.yaml (LAB)', 'src/probes/deception-detection/deception_detection/scripts/configs/descriptive.yaml (ASIX)', 'src/probes/deception-detection/deception_detection/scripts/configs/descriptive.yaml (PCOOD)']
+       9  his src/probes/deception-detection/data/ai_audit/Uncovering_Deceptive_Tendencies/day2  ==  @expLB-acts/deception-detection/data/ai_audit/Uncovering_Deceptive_Tendencies/day2 | src/probes/deception-detection/data/ai_audit/Uncovering_Deceptive_Tendencies/day2
+          e.g. ['@expLB-acts/deception-detection/data/ai_audit/Uncovering_Deceptive_Tendencies/day2/completed.txt (LAB)', 'src/probes/deception-detection/data/ai_audit/Uncovering_Deceptive_Tendencies/day2/completed.txt (ASIX)', 'src/probes/deception-detection/data/ai_audit/Uncovering_Deceptive_Tendencies/day2/completed.txt (PCOOD)']
+       9  his src/probes/deception-detection/tests  ==  @expLB-acts/deception-detection/tests | src/probes/deception-detection/tests
+          e.g. ['@expLB-acts/deception-detection/tests/test_activations.py (LAB)', 'src/probes/deception-detection/tests/test_activations.py (ASIX)', 'src/probes/deception-detection/tests/test_activations.py (PCOOD)']
+       8  his src/probes/deception-detection/data/ai_audit/Uncovering_Deceptive_Tendencies/day3  ==  @expLB-acts/deception-detection/data/ai_audit/Uncovering_Deceptive_Tendencies/day3 | src/probes/deception-detection/data/ai_audit/Uncovering_Deceptive_Tendencies/day3
+          e.g. ['@expLB-acts/deception-detection/data/ai_audit/Uncovering_Deceptive_Tendencies/day3/code.py (LAB)', 'src/probes/deception-detection/data/ai_audit/Uncovering_Deceptive_Tendencies/day3/code.py (ASIX)', 'src/probes/deception-detection/data/ai_audit/Uncovering_Deceptive_Tendencies/day3/code.py (PCOOD)']
+       8  his src/probes/deception-detection/data/werewolf  ==  @expLB-acts/deception-detection/data/werewolf | src/probes/deception-detection/data/werewolf
+          e.g. ['@expLB-acts/deception-detection/data/werewolf/grading-query-prompt.yaml (LAB)', 'src/probes/deception-detection/data/werewolf/grading-query-prompt.yaml (ASIX)', 'src/probes/deception-detection/data/werewolf/grading-query-prompt.yaml (PCOOD)']
+       6  his src/probes/deception-detection/deception_detection/results  ==  @expLB-acts/deception-detection/deception_detection/results | src/probes/deception-detection/deception_detection/results
+          e.g. ['@expLB-acts/deception-detection/deception_detection/results/comparison_bar_chart.py (LAB)', 'src/probes/deception-detection/deception_detection/results/comparison_bar_chart.py (ASIX)', 'src/probes/deception-detection/deception_detection/results/comparison_bar_chart.py (PCOOD)']
+       6  his src/probes/deception-detection/deception_detection/scripts/roleplaying_data_generation  ==  @expLB-acts/deception-detection/deception_detection/scripts/roleplaying_data_generation | src/probes/deception-detection/deception_detection/scripts/roleplaying_data_generation
+          e.g. ['@expLB-acts/deception-detection/deception_detection/scripts/roleplaying_data_generation/evaluate_responses_for_deceptiveness.py (LAB)', 'src/probes/deception-detection/deception_detection/scripts/roleplaying_data_generation/evaluate_responses_for_deceptiveness.py (ASIX)', 'src/probes/deception-detection/deception_detection/scripts/roleplaying_data_generation/evaluate_responses_for_deceptiveness.py (PCOOD)']
+       5  his src/probes/deception-detection/data/ai_audit/Uncovering_Deceptive_Tendencies/instructions  ==  @expLB-acts/deception-detection/data/ai_audit/Uncovering_Deceptive_Tendencies/instructions | src/probes/deception-detection/data/ai_audit/Uncovering_Deceptive_Tendencies/instructions
+          e.g. ['@expLB-acts/deception-detection/data/ai_audit/Uncovering_Deceptive_Tendencies/instructions/default.txt (LAB)', 'src/probes/deception-detection/data/ai_audit/Uncovering_Deceptive_Tendencies/instructions/default.txt (ASIX)', 'src/probes/deception-detection/data/ai_audit/Uncovering_Deceptive_Tendencies/instructions/default.txt (PCOOD)']
+       4  his src/probes/deception-detection/data/ai_audit/Uncovering_Deceptive_Tendencies/day1  ==  @expLB-acts/deception-detection/data/ai_audit/Uncovering_Deceptive_Tendencies/day1 | src/probes/deception-detection/data/ai_audit/Uncovering_Deceptive_Tendencies/day1
+          e.g. ['@expLB-acts/deception-detection/data/ai_audit/Uncovering_Deceptive_Tendencies/day1/draft.txt (LAB)', 'src/probes/deception-detection/data/ai_audit/Uncovering_Deceptive_Tendencies/day1/draft.txt (ASIX)', 'src/probes/deception-detection/data/ai_audit/Uncovering_Deceptive_Tendencies/day1/draft.txt (PCOOD)']
+       4  his src/probes/deception-detection/data/roleplaying  ==  @expLB-acts/deception-detection/data/roleplaying | src/probes/deception-detection/data/roleplaying
+          e.g. ['@expLB-acts/deception-detection/data/roleplaying/dataset.yaml (LAB)', 'src/probes/deception-detection/data/roleplaying/dataset.yaml (ASIX)', 'src/probes/deception-detection/data/roleplaying/dataset.yaml (PCOOD)']
+       4  his src/probes/deception-detection/deception_detection/rollouts  ==  @expLB-acts/deception-detection/deception_detection/rollouts | src/probes/deception-detection/deception_detection/rollouts
+          e.g. ['@expLB-acts/deception-detection/deception_detection/rollouts/api.py (LAB)', 'src/probes/deception-detection/deception_detection/rollouts/api.py (ASIX)', 'src/probes/deception-detection/deception_detection/rollouts/api.py (PCOOD)']
+       4  his src/probes/deception-detection/deceptive  ==  @share_deceptive
+          e.g. ['@share_deceptive/deceptive_L20.json (LAB)', '@share_deceptive/deceptive_L20.json (DRIVE)', 'src/probes/deception-detection/deceptive/deceptive_L20.json (PCOOD)']
+       4  his src/probes/deception-detection/data/insider_trading  ==  src/insider-trading-reproduction | src/probes/deception-detection/data/insider_trading
+          e.g. ['src/insider-trading-reproduction/classify_mention_insider.txt (ASIX)', 'src/probes/deception-detection/data/insider_trading/classify_mention_insider.txt (ASIX)', 'src/probes/deception-detection/data/insider_trading/classify_mention_insider.txt (PCOOD)']
+       3  his src/probes/deception-detection/data/ai_audit/custom  ==  @expLB-acts/deception-detection/data/ai_audit/custom | src/probes/deception-detection/data/ai_audit/custom
+          e.g. ['@expLB-acts/deception-detection/data/ai_audit/custom/a1_grading_prompt.txt (LAB)', 'src/probes/deception-detection/data/ai_audit/custom/a1_grading_prompt.txt (ASIX)', 'src/probes/deception-detection/data/ai_audit/custom/a1_grading_prompt.txt (PCOOD)']
+       3  his src/probes/deception-detection/data/how_to_catch_an_ai_liar  ==  @expLB-acts/deception-detection/data/how_to_catch_an_ai_liar | src/probes/deception-detection/data/how_to_catch_an_ai_liar
+          e.g. ['@expLB-acts/deception-detection/data/how_to_catch_an_ai_liar/goal_directed_lying.json (LAB)', 'src/probes/deception-detection/data/how_to_catch_an_ai_liar/goal_directed_lying.json (ASIX)', 'src/probes/deception-detection/data/how_to_catch_an_ai_liar/goal_directed_lying.json (PCOOD)']
+       3  his src/probes/deception-detection/data/sandbagging_v2  ==  @expLB-acts/deception-detection/data/sandbagging_v2 | src/probes/deception-detection/data/sandbagging_v2
+          e.g. ['@expLB-acts/deception-detection/data/sandbagging_v2/sabotage_evals_system_prompt.txt (LAB)', 'src/probes/deception-detection/data/sandbagging_v2/sabotage_evals_system_prompt.txt (ASIX)', 'src/probes/deception-detection/data/sandbagging_v2/sabotage_evals_system_prompt.txt (PCOOD)']
+       3  his src/probes/deception-detection/deception_detection/scripts/streamlit  ==  @expLB-acts/deception-detection/deception_detection/scripts/streamlit | src/probes/deception-detection/deception_detection/scripts/streamlit
+          e.g. ['@expLB-acts/deception-detection/deception_detection/scripts/streamlit/ai_audit_rollouts.py (LAB)', 'src/probes/deception-detection/deception_detection/scripts/streamlit/ai_audit_rollouts.py (ASIX)', 'src/probes/deception-detection/deception_detection/scripts/streamlit/ai_audit_rollouts.py (PCOOD)']
+       3  his src/probes/deception-detection/paper16_L20_sharedquestions  ==  @share_L20_shared | drive:share/paper16_L20
+          e.g. ['@share_L20_shared/paper16_L20.json (LAB)', '@share_L20_shared/paper16_L20.json (DRIVE)', 'drive:share/paper16_L20/shared_questions/paper16_L20.json (DRIVE)', 'src/probes/deception-detection/paper16_L20_sharedquestions/paper16_L20.json (PCOOD)']
+       3  his src/probes/deception-detection/results/persona_ood | src/probes/deception-detection/results/persona_ood_ext_L20 | src/probes/deception-detection/results/persona_ood_mod_L20  ==  (PCOOD only)
+          e.g. ['src/probes/deception-detection/results/persona_ood/matrix_balacc_baseline.csv (PCOOD)', 'src/probes/deception-detection/results/persona_ood_ext_L20/matrix_balacc_baseline.csv (PCOOD)', 'src/probes/deception-detection/results/persona_ood_mod_L20/matrix_balacc_baseline.csv (PCOOD)']
+       3  his src/probes/deception-detection/results/persona_ood_L40 | src/probes/deception-detection/results/persona_ood_ext_L40 | src/probes/deception-detection/results/persona_ood_mod_L40  ==  (PCOOD only)
+          e.g. ['src/probes/deception-detection/results/persona_ood_L40/matrix_balacc_baseline.csv (PCOOD)', 'src/probes/deception-detection/results/persona_ood_ext_L40/matrix_balacc_baseline.csv (PCOOD)', 'src/probes/deception-detection/results/persona_ood_mod_L40/matrix_balacc_baseline.csv (PCOOD)']
+       3  his src/probes/deception-detection/results/persona_ood_ext_L44 | src/probes/deception-detection/results/persona_ood_mod_L44  ==  (PCOOD only)
+          e.g. ['src/probes/deception-detection/results/persona_ood_ext_L44/matrix_balacc_baseline.csv (PCOOD)', 'src/probes/deception-detection/results/persona_ood_mod_L44/matrix_balacc_baseline.csv (PCOOD)']
+       2  his src/probes/deception-detection/.vscode  ==  @expLB-acts/deception-detection/.vscode | src/probes/deception-detection/.vscode
+          e.g. ['@expLB-acts/deception-detection/.vscode/extensions.json (LAB)', 'src/probes/deception-detection/.vscode/extensions.json (ASIX)', 'src/probes/deception-detection/.vscode/extensions.json (PCOOD)']
+       2  his src/probes/deception-detection/data/ai_audit/Uncovering_Deceptive_Tendencies/experiments/B  ==  @expLB-acts/deception-detection/data/ai_audit/Uncovering_Deceptive_Tendencies/experiments/B | src/probes/deception-detection/data/ai_audit/Uncovering_Deceptive_Tendencies/experiments/B
+          e.g. ['@expLB-acts/deception-detection/data/ai_audit/Uncovering_Deceptive_Tendencies/experiments/B/evaluation_task_1.txt (LAB)', 'src/probes/deception-detection/data/ai_audit/Uncovering_Deceptive_Tendencies/experiments/B/evaluation_task_1.txt (ASIX)', 'src/probes/deception-detection/data/ai_audit/Uncovering_Deceptive_Tendencies/experiments/B/evaluation_task_1.txt (PCOOD)']
+       2  his src/probes/deception-detection/deception_detection/notebooks  ==  @expLB-acts/deception-detection/deception_detection/notebooks | src/probes/deception-detection/deception_detection/notebooks
+          e.g. ['@expLB-acts/deception-detection/deception_detection/notebooks/print_detector_weights.py (LAB)', 'src/probes/deception-detection/deception_detection/notebooks/print_detector_weights.py (ASIX)', 'src/probes/deception-detection/deception_detection/notebooks/print_detector_weights.py (PCOOD)']
+       2  his src/probes/deception-detection/deception_detection/scripts  ==  @expLB-acts/deception-detection/deception_detection/scripts
+          e.g. ['@expLB-acts/deception-detection/deception_detection/scripts/experiment.py (LAB)', 'src/probes/deception-detection/deception_detection/scripts/experiment.py (PCOOD)']
+       2  his src/probes/deception-detection/tests  ==  @expLB-acts/deception-detection/tests
+          e.g. ['@expLB-acts/deception-detection/tests/test_batching.py (LAB)', 'src/probes/deception-detection/tests/test_batching.py (PCOOD)']
+       1  his src/probes/deception-detection/.github  ==  @expLB-acts/deception-detection/.github | src/probes/deception-detection/.github
+          e.g. ['@expLB-acts/deception-detection/.github/pull_request_template.md (LAB)', 'src/probes/deception-detection/.github/pull_request_template.md (ASIX)', 'src/probes/deception-detection/.github/pull_request_template.md (PCOOD)']
+       1  his src/probes/deception-detection/.github/workflows  ==  @expLB-acts/deception-detection/.github/workflows | src/probes/deception-detection/.github/workflows
+          e.g. ['@expLB-acts/deception-detection/.github/workflows/checks.yaml (LAB)', 'src/probes/deception-detection/.github/workflows/checks.yaml (ASIX)', 'src/probes/deception-detection/.github/workflows/checks.yaml (PCOOD)']
+       1  his src/probes/deception-detection/data/ai_audit/Uncovering_Deceptive_Tendencies/day1 | src/probes/deception-detection/data/ai_audit/Uncovering_Deceptive_Tendencies/day3  ==  @expLB-acts/deception-detection/data/ai_audit/Uncovering_Deceptive_Tendencies/day1 | @expLB-acts/deception-detection/data/ai_audit/Uncovering_Deceptive_Tendencies/day3 | src/probes/deception-detection/data/ai_audit/Uncovering_Deceptive_Tendencies/day1 | src/probes/deception-detection/data/ai_audit/Uncovering_Deceptive_Tendencies/day3
+          e.g. ['@expLB-acts/deception-detection/data/ai_audit/Uncovering_Deceptive_Tendencies/day1/completed.txt (LAB)', '@expLB-acts/deception-detection/data/ai_audit/Uncovering_Deceptive_Tendencies/day3/completed.txt (LAB)', 'src/probes/deception-detection/data/ai_audit/Uncovering_Deceptive_Tendencies/day1/completed.txt (ASIX)', 'src/probes/deception-detection/data/ai_audit/Uncovering_Deceptive_Tendencies/day3/completed.txt (ASIX)']
+       1  his src/probes/deception-detection/data/ai_audit/Uncovering_Deceptive_Tendencies/experiments/A | src/probes/deception-detection/data/ai_audit/Uncovering_Deceptive_Tendencies/experiments/B  ==  @expLB-acts/deception-detection/data/ai_audit/Uncovering_Deceptive_Tendencies/experiments/A | @expLB-acts/deception-detection/data/ai_audit/Uncovering_Deceptive_Tendencies/experiments/B | src/probes/deception-detection/data/ai_audit/Uncovering_Deceptive_Tendencies/experiments/A | src/probes/deception-detection/data/ai_audit/Uncovering_Deceptive_Tendencies/experiments/B
+          e.g. ['@expLB-acts/deception-detection/data/ai_audit/Uncovering_Deceptive_Tendencies/experiments/A/slack_A1.txt (LAB)', '@expLB-acts/deception-detection/data/ai_audit/Uncovering_Deceptive_Tendencies/experiments/B/slack.txt (LAB)', 'src/probes/deception-detection/data/ai_audit/Uncovering_Deceptive_Tendencies/experiments/A/slack_A1.txt (ASIX)', 'src/probes/deception-detection/data/ai_audit/Uncovering_Deceptive_Tendencies/experiments/B/slack.txt (ASIX)']
+       1  his src/probes/deception-detection/data/black_box_baseline  ==  @expLB-acts/deception-detection/data/black_box_baseline | src/probes/deception-detection/data/black_box_baseline
+          e.g. ['@expLB-acts/deception-detection/data/black_box_baseline/prompt.txt (LAB)', 'src/probes/deception-detection/data/black_box_baseline/prompt.txt (ASIX)', 'src/probes/deception-detection/data/black_box_baseline/prompt.txt (PCOOD)']
+       1  his src/probes/deception-detection/data/ft_fact_paired  ==  @expLB-acts/deception-detection/data/ft_fact_paired | src/probes/deception-detection/data/ft_fact_paired
+          e.g. ['@expLB-acts/deception-detection/data/ft_fact_paired/out_simple_4_many.json (LAB)', 'src/probes/deception-detection/data/ft_fact_paired/out_simple_4_many.json (ASIX)', 'src/probes/deception-detection/data/ft_fact_paired/out_simple_4_many.json (PCOOD)']
+       1  his src/probes/deception-detection/data/repe  ==  @expLB-acts/deception-detection/data/repe | src/probes/deception-detection/data/repe
+          e.g. ['@expLB-acts/deception-detection/data/repe/true_false_facts.csv (LAB)', 'src/probes/deception-detection/data/repe/true_false_facts.csv (ASIX)', 'src/probes/deception-detection/data/repe/true_false_facts.csv (PCOOD)']
+       1  his src/probes/deception-detection/data/train  ==  @expLB-acts/deception-detection/data/train | src/probes/deception-detection/data/train
+          e.g. ['@expLB-acts/deception-detection/data/train/descriptive_qa.csv (LAB)', 'src/probes/deception-detection/data/train/descriptive_qa.csv (ASIX)', 'src/probes/deception-detection/data/train/descriptive_qa.csv (PCOOD)']
+       1  his src/probes/deception-detection/data/truthfulqa  ==  @expLB-acts/deception-detection/data/truthfulqa | src/probes/deception-detection/data/truthfulqa
+          e.g. ['@expLB-acts/deception-detection/data/truthfulqa/eval_examples.csv (LAB)', 'src/probes/deception-detection/data/truthfulqa/eval_examples.csv (ASIX)', 'src/probes/deception-detection/data/truthfulqa/eval_examples.csv (PCOOD)']
+       1  his src/probes/deception-detection/deception_detection  ==  @expLB-acts/deception-detection/deception_detection
+          e.g. ['@expLB-acts/deception-detection/deception_detection/batching.py (LAB)', 'src/probes/deception-detection/deception_detection/batching.py (PCOOD)']
+       1  his src/probes/deception-detection/deception_detection/scripts/configs  ==  @expLB-acts/deception-detection/deception_detection/scripts/configs
+          e.g. ['@expLB-acts/deception-detection/deception_detection/scripts/configs/XXXX-9-llama-all.yaml (LAB)', 'src/probes/deception-detection/deception_detection/scripts/configs/XXXX-9-llama-all.yaml (PCOOD)']
+       1  his src/probes/deception-detection  ==  @expLB-acts/deception-detection
+          e.g. ['@expLB-acts/deception-detection/README.md (LAB)', 'src/probes/deception-detection/README.md (PCOOD)']
+       1  his src/probes/deception-detection/results/persona_ood_ext_L20 | src/probes/deception-detection/results/persona_ood_ext_L40 | src/probes/deception-detection/results/persona_ood_ext_L44  ==  (PCOOD only)
+          e.g. ['src/probes/deception-detection/results/persona_ood_ext_L20/zero_shot.png (PCOOD)', 'src/probes/deception-detection/results/persona_ood_ext_L40/zero_shot.png (PCOOD)', 'src/probes/deception-detection/results/persona_ood_ext_L44/zero_shot.png (PCOOD)']
+       1  his src/probes/deception-detection/results/persona_ood_mod_L20 | src/probes/deception-detection/results/persona_ood_mod_L40 | src/probes/deception-detection/results/persona_ood_mod_L44  ==  (PCOOD only)
+          e.g. ['src/probes/deception-detection/results/persona_ood_mod_L20/zero_shot.png (PCOOD)', 'src/probes/deception-detection/results/persona_ood_mod_L40/zero_shot.png (PCOOD)', 'src/probes/deception-detection/results/persona_ood_mod_L44/zero_shot.png (PCOOD)']
+
+== D. lab files > 200 MB (not hashed) vs Drive by canonical path + size:
+   not on Drive: logs/kd_rclone.lock 0 ERR
+   not on Drive: logs/kd_rclone.log 6943578 ERR
+   {'no Drive file at that path': 2, 'same path+size on Drive (INFERRED identical)': 75}  total 77
+python exit 0

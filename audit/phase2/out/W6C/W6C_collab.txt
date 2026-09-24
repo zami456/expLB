@@ -1,0 +1,126 @@
+==============================================================================
+SOURCE: origin/feat/persona-pc-ood, read with `git show` (no checkout)
+  origin/feat/persona-pc-ood   -> 45b16d906da0e3da13b1abb34898e69311d688cf
+  f386a72                      -> f386a72583190756ebe05d51edb0bc97cd16a094
+==============================================================================
+
+### Level-1 / Level-2 : summary.csv off_diagonal_mean vs recomputed zero-shot means
+layer  feature         summary.csv        zs mean       |diff|
+20     baseline       0.6477701197              -            -
+20     axis1          0.6510800147   0.7908803603    1.398e-01
+20     ext_axis1      0.9041173922   0.9041173922    1.110e-16
+20     pc1            0.6669008148   0.8056156665    1.387e-01
+20     ext_pc1        0.6612748487   0.6612748487    1.110e-16
+20     pc3            0.6791911168              -            -
+20     ext_pc3        0.6836974361              -            -
+40     baseline       0.7320325942              -            -
+40     axis1          0.8318937061   0.8318937061    0.000e+00
+40     ext_axis1      0.9158352735   0.9158352735    0.000e+00
+40     pc1            0.8593181661   0.8593181661    0.000e+00
+40     ext_pc1        0.7679503104   0.7679503104    1.110e-16
+40     pc3            0.6393623252              -            -
+40     ext_pc3        0.8655338485              -            -
+44     baseline       0.7156489542              -            -
+44     axis1          0.8260481442   0.8260481442    2.220e-16
+44     ext_axis1      0.9033884459   0.9033884459    0.000e+00
+44     pc1            0.8506241697   0.8506241697    1.110e-16
+44     ext_pc1        0.7801399912   0.7801399912    1.110e-16
+44     pc3            0.6165888279              -            -
+44     ext_pc3        0.8799358291              -            -
+
+### O-008  margin, EXTENDED contrast vs baseline   (briefing: +0.256 L20, +0.184 L40)
+  L20  ext_axis1 0.9041 - baseline 0.6478 = +0.2563   (zs-mean version +0.2563)
+  L40  ext_axis1 0.9158 - baseline 0.7320 = +0.1838   (zs-mean version +0.1838)
+
+### O-019  margin, PAPER'S 8v7 contrast vs baseline  (briefing: +0.143 L20, +0.100 L40)
+  L20  axis1 0.6511 - baseline 0.6478 = +0.0033   (zs-mean version +0.1431)
+  L40  axis1 0.8319 - baseline 0.7320 = +0.0999   (zs-mean version +0.0999)
+  [note] summary.csv axis1 is the TRAINED off-diagonal mean; the briefing's
+         0.7909/0.8319 are the ZERO-SHOT means of auroc_axis.
+
+### O-035  0.732 = the trained single-source baseline at L40 (his six datasets)
+  L20  summary.csv baseline off_diagonal_mean = 0.647770 ; recomputed from
+        matrix_baseline.csv off-diagonal = 0.647773  (n=30 pairs, 6 datasets)
+  L40  summary.csv baseline off_diagonal_mean = 0.732033 ; recomputed from
+        matrix_baseline.csv off-diagonal = 0.732027  (n=30 pairs, 6 datasets)
+  L44  summary.csv baseline off_diagonal_mean = 0.715649 ; recomputed from
+        matrix_baseline.csv off-diagonal = 0.715650  (n=30 pairs, 6 datasets)
+
+### O-036  median / sign-oriented mean OVER HIS OWN PAIRS (briefing quotes 0.722 / 0.735)
+  L20   n=30   mean 0.6478   median 0.6841   sign-oriented mean 0.7448   min 0.0501
+        below 0.5: 7   below 0.4: 6
+  L40   n=30   mean 0.7320   median 0.7887   sign-oriented mean 0.7850   min 0.0598
+        below 0.5: 6   below 0.4: 2
+  L44   n=30   mean 0.7156   median 0.7681   sign-oriented mean 0.7659   min 0.2379
+        below 0.5: 5   below 0.4: 3
+
+### O-023  ext_pc1 vs ext_axis1, and 1-d contrast vs 3-d subspace, at every layer he ran
+layer   ext_axis1    ext_pc1   pc1-axis |      axis1        pc3    ext_pc3
+20         0.9041     0.6613    -0.2428 |     0.6511     0.6792     0.6837
+40         0.9158     0.7680    -0.1479 |     0.8319     0.6394     0.8655
+44         0.9034     0.7801    -0.1232 |     0.8260     0.6166     0.8799
+
+  1-d vs 3-d, per layer (positive = the 1-d contrast wins):
+  L20  axis1-pc3 -0.0281    ext_axis1-ext_pc3 +0.2204
+  L40  axis1-pc3 +0.1925    ext_axis1-ext_pc3 +0.0503
+  L44  axis1-pc3 +0.2095    ext_axis1-ext_pc3 +0.0235
+
+### full summary.csv rows at L20/L40/L44 (features, off_diagonal_mean)
+  --- L20 ---
+    baseline         layer=20  dim=8192  off_diagonal_mean=0.6477701196654847  off_diagonal_excl_hpkr=0.7282345873802226  diagonal_mean=0.9564284701222642
+    pc1              layer=20  dim=1  off_diagonal_mean=0.6669008147791228  off_diagonal_excl_hpkr=0.9161445552177181  diagonal_mean=0.8872878057339899
+    pc3              layer=20  dim=3  off_diagonal_mean=0.6791911168218216  off_diagonal_excl_hpkr=0.8878923679113833  diagonal_mean=0.9192049282064504
+    axis1            layer=20  dim=1  off_diagonal_mean=0.6510800147121752  off_diagonal_excl_hpkr=0.919401036618595  diagonal_mean=0.9075837826993309
+    random3          layer=20  dim=3  off_diagonal_mean=0.5269378081801365  off_diagonal_excl_hpkr=0.5598431489142672  diagonal_mean=0.7874251065838757
+    syc_pc1          layer=20  dim=1  off_diagonal_mean=0.6153208226853913  off_diagonal_excl_hpkr=0.8837831321813343  diagonal_mean=0.8930114825941738
+    syc3             layer=20  dim=3  off_diagonal_mean=0.6571470827380994  off_diagonal_excl_hpkr=0.8226719385825362  diagonal_mean=0.9307807293858473
+    syc_axis1        layer=20  dim=1  off_diagonal_mean=0.6152724805183442  off_diagonal_excl_hpkr=0.8829022751853692  diagonal_mean=0.8917872469422022
+    syc3_orth        layer=20  dim=3  off_diagonal_mean=0.5376765026782181  off_diagonal_excl_hpkr=0.6519785404503365  diagonal_mean=0.8875215566799756
+    dec3_orth        layer=20  dim=3  off_diagonal_mean=0.6549053088001899  off_diagonal_excl_hpkr=0.7392286706237103  diagonal_mean=0.9140368229032435
+    ext_pc1          layer=20  dim=1  off_diagonal_mean=0.661274848670574  off_diagonal_excl_hpkr=0.6816585953831059  diagonal_mean=0.642647660167264
+    ext_pc3          layer=20  dim=3  off_diagonal_mean=0.6836974361396414  off_diagonal_excl_hpkr=0.9000243697264073  diagonal_mean=0.9148566482130264
+    ext_axis1        layer=20  dim=1  off_diagonal_mean=0.9041173922099752  off_diagonal_excl_hpkr=0.9086272015872219  diagonal_mean=0.9035053216495711
+    denial_pc3       layer=20  dim=3  off_diagonal_mean=0.7100536160269512  off_diagonal_excl_hpkr=0.7519097684360918  diagonal_mean=0.8750111813933893
+    denial_axis1     layer=20  dim=1  off_diagonal_mean=0.8660393255371666  off_diagonal_excl_hpkr=0.8612608597093484  diagonal_mean=0.8646954562175666
+  --- L40 ---
+    baseline         layer=40  dim=8192  off_diagonal_mean=0.7320325942227636  off_diagonal_excl_hpkr=0.7580890651003005  diagonal_mean=0.9832729690594887
+    pc1              layer=40  dim=1  off_diagonal_mean=0.8593181660846994  off_diagonal_excl_hpkr=0.8925645331145888  diagonal_mean=0.8584130107041387
+    pc3              layer=40  dim=3  off_diagonal_mean=0.6393623252004839  off_diagonal_excl_hpkr=0.7511602318148902  diagonal_mean=0.91630565042243
+    axis1            layer=40  dim=1  off_diagonal_mean=0.8318937060798296  off_diagonal_excl_hpkr=0.8797566199576661  diagonal_mean=0.8288951468105688
+    random3          layer=40  dim=3  off_diagonal_mean=0.5037978223636855  off_diagonal_excl_hpkr=0.543712378548858  diagonal_mean=0.8073684557178491
+    syc_pc1          layer=40  dim=1  off_diagonal_mean=0.6618200410849527  off_diagonal_excl_hpkr=0.9369949982370513  diagonal_mean=0.9204127819870632
+    syc3             layer=40  dim=3  off_diagonal_mean=0.697240775848791  off_diagonal_excl_hpkr=0.8880618977999077  diagonal_mean=0.9369056793754909
+    syc_axis1        layer=40  dim=1  off_diagonal_mean=0.6626327170103817  off_diagonal_excl_hpkr=0.9362474484092523  diagonal_mean=0.9186146217953315
+    syc3_orth        layer=40  dim=3  off_diagonal_mean=0.6496357723735937  off_diagonal_excl_hpkr=0.8535727037376937  diagonal_mean=0.922716146642785
+    dec3_orth        layer=40  dim=3  off_diagonal_mean=0.6015032888274132  off_diagonal_excl_hpkr=0.6321690323725013  diagonal_mean=0.897360085238164
+    ext_pc1          layer=40  dim=1  off_diagonal_mean=0.7679503103867945  off_diagonal_excl_hpkr=0.7743619551979661  diagonal_mean=0.763667916082515
+    ext_pc3          layer=40  dim=3  off_diagonal_mean=0.8655338484726268  off_diagonal_excl_hpkr=0.8669851838656241  diagonal_mean=0.9434799588769444
+    ext_axis1        layer=40  dim=1  off_diagonal_mean=0.9158352734669751  off_diagonal_excl_hpkr=0.916523910894183  diagonal_mean=0.9155547146595117
+    denial_pc3       layer=40  dim=3  off_diagonal_mean=0.8718092488710855  off_diagonal_excl_hpkr=0.8727094308596618  diagonal_mean=0.9263917331682069
+    denial_axis1     layer=40  dim=1  off_diagonal_mean=0.9115347519128445  off_diagonal_excl_hpkr=0.9101345080508091  diagonal_mean=0.9111983675380394
+  --- L44 ---
+    baseline         layer=44  dim=8192  off_diagonal_mean=0.7156489541593033  off_diagonal_excl_hpkr=0.7297084917722325  diagonal_mean=0.982192454511134
+    pc1              layer=44  dim=1  off_diagonal_mean=0.8506241697318854  off_diagonal_excl_hpkr=0.8877576367717875  diagonal_mean=0.8488579143312892
+    pc3              layer=44  dim=3  off_diagonal_mean=0.6165888278847148  off_diagonal_excl_hpkr=0.7280748813253137  diagonal_mean=0.9159344098490375
+    axis1            layer=44  dim=1  off_diagonal_mean=0.8260481442490276  off_diagonal_excl_hpkr=0.8733592119477542  diagonal_mean=0.821472113089122
+    random3          layer=44  dim=3  off_diagonal_mean=0.4927088366575445  off_diagonal_excl_hpkr=0.5469849105750811  diagonal_mean=0.7959919091415918
+    syc_pc1          layer=44  dim=1  off_diagonal_mean=0.8586238774571818  off_diagonal_excl_hpkr=0.927414839998978  diagonal_mean=0.8454745774284262
+    syc3             layer=44  dim=3  off_diagonal_mean=0.8127795527276638  off_diagonal_excl_hpkr=0.8824760379211517  diagonal_mean=0.9314461032015083
+    syc_axis1        layer=44  dim=1  off_diagonal_mean=0.7077644313841807  off_diagonal_excl_hpkr=0.922060037828313  diagonal_mean=0.8518237528000107
+    syc3_orth        layer=44  dim=3  off_diagonal_mean=0.708036810461435  off_diagonal_excl_hpkr=0.8566246012855929  diagonal_mean=0.9203443258200652
+    dec3_orth        layer=44  dim=3  off_diagonal_mean=0.5295468957676991  off_diagonal_excl_hpkr=0.5697914602300731  diagonal_mean=0.901279153587037
+    ext_pc1          layer=44  dim=1  off_diagonal_mean=0.7801399911543582  off_diagonal_excl_hpkr=0.7930759030542945  diagonal_mean=0.7778833731232949
+    ext_pc3          layer=44  dim=3  off_diagonal_mean=0.879935829142912  off_diagonal_excl_hpkr=0.8699295079816171  diagonal_mean=0.930816067568807
+    ext_axis1        layer=44  dim=1  off_diagonal_mean=0.9033884458767987  off_diagonal_excl_hpkr=0.905338796922662  diagonal_mean=0.9032638407488752
+    denial_pc3       layer=44  dim=3  off_diagonal_mean=0.8704263862775331  off_diagonal_excl_hpkr=0.8640148508401542  diagonal_mean=0.9148430557192234
+    denial_axis1     layer=44  dim=1  off_diagonal_mean=0.9001208449359551  off_diagonal_excl_hpkr=0.8986083232756641  diagonal_mean=0.8996289997022794
+
+### cross-check: identical at f386a72 ?
+  L20  baseline    head 0.6477701197   f386a72 0.6477701197   SAME
+  L20  axis1       head 0.6510800147   f386a72 0.6510800147   SAME
+  L20  ext_axis1   head 0.9041173922   f386a72 0.9041173922   SAME
+  L20  ext_pc1     head 0.6612748487   f386a72 0.6612748487   SAME
+  L40  baseline    head 0.7320325942   f386a72 0.7320325942   SAME
+  L40  axis1       head 0.8318937061   f386a72 0.8318937061   SAME
+  L40  ext_axis1   head 0.9158352735   f386a72 0.9158352735   SAME
+  L40  ext_pc1     head 0.7679503104   f386a72 0.7679503104   SAME

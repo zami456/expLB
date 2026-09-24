@@ -1,0 +1,56 @@
+= F-37 Level-2: cos(PC1_all, assistant axis) recomputed from the .pt files =
+  3B                   axes_3b.pt  L=28  mid=14  sign_type=Tensortorch.Size([28, 5])
+      cos(PC1,assistant)@mid = -0.5514   min=-0.7735  median=-0.5976
+      PC1 var@mid = 34.5%   top5 = 71.7%
+      basis deception   cos(PC1,contrast)=+0.9237  PC1var=34.6%
+      basis sycophancy  cos(PC1,contrast)=+0.9500  PC1var=42.5%
+      basis unified     cos(PC1,contrast)=+0.8483  PC1var=34.5%
+  8B                   axes_8b.pt  L=32  mid=16  sign_type=Tensortorch.Size([32, 5])
+      cos(PC1,assistant)@mid = -0.7395   min=-0.7647  median=-0.6917
+      PC1 var@mid = 40.4%   top5 = 76.7%
+      basis deception   cos(PC1,contrast)=+0.9555  PC1var=38.5%
+      basis sycophancy  cos(PC1,contrast)=+0.9828  PC1var=47.6%
+      basis unified     cos(PC1,contrast)=+0.9251  PC1var=40.4%
+  70B all (shared)     axes_vectors_all.pt  L=80  mid=40  sign_type=Tensortorch.Size([80, 5])
+      cos(PC1,assistant)@mid = -0.6230   min=-0.7558  median=-0.6204
+      PC1 var@mid = 37.2%   top5 = 75.1%
+      basis deception   cos(PC1,contrast)=+0.9548  PC1var=43.0%
+      basis sycophancy  cos(PC1,contrast)=+0.9925  PC1var=46.8%
+      basis unified     cos(PC1,contrast)=+0.9064  PC1var=37.2%
+  70B s3 (shared)      axes_vectors_s3.pt  L=80  mid=40  sign_type=Tensortorch.Size([80, 5])
+      cos(PC1,assistant)@mid = -0.5838   min=-0.6808  median=-0.5686
+      PC1 var@mid = 36.8%   top5 = 74.2%
+      basis deception   cos(PC1,contrast)=+0.9518  PC1var=45.0%
+      basis sycophancy  cos(PC1,contrast)=+0.9928  PC1var=47.9%
+      basis unified     cos(PC1,contrast)=+0.8957  PC1var=36.8%
+  70B s3 (plain)       axes_vectors_s3.pt  L=80  mid=40  sign_type=Tensortorch.Size([80, 5])
+      cos(PC1,assistant)@mid = -0.8162   min=-0.8615  median=-0.8113
+      PC1 var@mid = 46.7%   top5 = 82.2%
+      basis deception   cos(PC1,contrast)=+0.9661  PC1var=47.7%
+      basis sycophancy  cos(PC1,contrast)=+0.9795  PC1var=47.7%
+      basis unified     cos(PC1,contrast)=+0.3890  PC1var=46.7%
+
+= F-27: 3B generation timing evidence =
+  3b: 26 files  first mtime 2026-09-20 13:29:11  last 2026-09-20 14:47:14  span 78 min
+  8b: 26 files  first mtime 2026-09-20 13:27:46  last 2026-09-20 14:16:24  span 49 min
+  logs matching scale_3b / scale_8b:
+        143961 2026-09-20 23:40 crossgen_scale_3b.log
+        165689 2026-09-20 23:39 crossgen_scale_8b.log
+          1269 2026-09-22 16:05 scale_3b.status
+          3663 2026-09-20 16:56 scale_3b_axes.log
+       4877518 2026-09-20 15:51 scale_3b_generate.log
+       2252506 2026-09-20 15:51 scale_3b_judge.log
+          4348 2026-09-20 15:51 scale_3b_preflight.log
+        828059 2026-09-20 16:24 scale_3b_vectors_all.log
+        711230 2026-09-20 16:56 scale_3b_vectors_s23.log
+          1195 2026-09-22 16:05 scale_8b.status
+          3663 2026-09-20 15:01 scale_8b_axes.log
+       2912590 2026-09-20 14:16 scale_8b_generate.log
+       2215063 2026-09-20 14:54 scale_8b_judge.log
+          1741 2026-09-20 13:25 scale_8b_preflight.log
+        108476 2026-09-20 14:57 scale_8b_vectors_all.log
+        108949 2026-09-20 15:01 scale_8b_vectors_s23.log
+       2000569 2026-09-22 16:20 scale_coords_3b.log
+       2214527 2026-09-22 16:20 scale_coords_8b.log
+        355744 2026-09-20 20:00 scale_coords_8b_hpc.log
+python exit 0

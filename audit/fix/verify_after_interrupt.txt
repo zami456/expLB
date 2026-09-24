@@ -1,0 +1,79 @@
+now: 2026-09-23 02:24:38
+--- python/powershell processes
+  powershell.exe PID 61448 started 21:40:33 :: C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe -noexit -command "try { . \"c:\Users\user5\Microsoft VS Code\645f29cc31\resources\app\out\vs
+  powershell.exe PID 35652 started 21:40:35 :: C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe -noexit -command "try { . \"c:\Users\user5\Microsoft VS Code\645f29cc31\resources\app\out\vs
+  python.exe PID 63188 started 00:08:04 :: C:\Users\user5\Downloads\SYCON-Bench-master\debate_setting\.venv\Scripts\python.exe run_benchmark.py llama3.1-8b-instruct:f16
+  python.exe PID 64404 started 00:08:04 :: "C:\Program Files\Python312\python.exe" run_benchmark.py llama3.1-8b-instruct:f16
+  powershell.exe PID 48232 started 02:19:27 :: powershell -NoProfile -NonInteractive -EncodedCommand IwAgAE8AdwBuAGUAcgAtAGEAdQB0AGgAbwByAGkAcwBlAGQAIABsAGkAdgBlACAAdABlAHMAdAAgAG8AZgAgAHQAaABlACAA
+  powershell.exe PID 48932 started 02:19:27 :: "C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -ExecutionPolicy Bypass -File C:\Users\user4\expLB\src\assistant_axis_ndif\run_
+  python.exe PID 66004 started 02:24:15 :: "C:\Users\user4\expLB\.venv-analysis\Scripts\python.exe" C:\Users\user4\expLB\src\assistant_axis_ndif\30e_falsify_meandir.py --datasets instructed-dec
+  python.exe PID 68796 started 02:24:15 :: "C:\Program Files\Python312\python.exe" C:\Users\user4\expLB\src\assistant_axis_ndif\30e_falsify_meandir.py --datasets instructed-deception harm-press
+  powershell.exe PID 58352 started 02:24:37 :: powershell -NoProfile -NonInteractive -EncodedCommand IwAgAFIARQBBAEQALQBPAE4ATABZADoAIABhAGYAdABlAHIAIAB0AGgAZQAgAGkAbgB0AGUAcgByAHUAcAB0AGUAZAAvAGQA
+--- run-premise/falsify: file count and md5s
+f0af503afd9557e28cca24d484d2d4eb  1228  09-23 02:21:51  falsify_L0_s13.json
+3be026433ffe5a8cf4cc56eb0c9161a4  1202  09-23 02:20:18  falsify_L0_s42.json
+7cbb34ce3ba96288d82cfb1fae48ba48  1229  09-23 02:21:03  falsify_L0_s7.json
+a6c967ae188e29b7fdc640995e3eead1  1224  09-21 20:44:37  falsify_L12_s13.json
+13da8a8e40cec99fd157bf80a4ad4b9b  1205  09-21 20:42:41  falsify_L12_s42.json
+7c074fa6178f4982afb2930a1fc0909a  1229  09-21 20:43:37  falsify_L12_s7.json
+9c4f1e8cec6642f0ddbc90ee0b991541  1226  09-21 20:49:19  falsify_L16_s13.json
+3603b8af82a88b9d8cbdd253feea9b6a  1231  09-21 20:46:00  falsify_L16_s42.json
+755dbfefe65fc2f9577000f3448a368f  1222  09-21 20:47:28  falsify_L16_s7.json
+e169c3665a5bc5c6aa05580bab97e498  1225  09-21 20:54:33  falsify_L20_s13.json
+d50fbcfa8701df4e066442db131151cd  1215  09-21 20:51:21  falsify_L20_s42.json
+f9fa2463896237b33e94d61b59a0b999  1228  09-21 20:53:04  falsify_L20_s7.json
+963b4f7ddbcdaa40db8a87ab0550ee41  1226  09-21 21:00:05  falsify_L22_s13.json
+46304d81568fd427afa2bc1d4f7917b8  1224  09-21 20:56:09  falsify_L22_s42.json
+586cd389ffe93d7e86c8d90db80dc3ad  1228  09-21 20:58:25  falsify_L22_s7.json
+cfc2207be2dd1a4786da1461b7451c6e  1226  09-21 21:04:12  falsify_L24_s13.json
+988f4a3a0810aad285c9c4adbfc1bc3a  1228  09-21 21:01:30  falsify_L24_s42.json
+cf5f85667931545d8f1a8fcb22833942  1230  09-21 21:02:50  falsify_L24_s7.json
+5569f33c3a7db30273e6f4053aaabc0d  1212  09-21 21:08:16  falsify_L28_s13.json
+81735fda73faa1197e212f0513bb1a03  1215  09-21 21:05:38  falsify_L28_s42.json
+1132e4568d0bddfc1b7e2f097f7d4793  1195  09-21 21:07:01  falsify_L28_s7.json
+0d0b2772b05e0b73f775923656e19a43  1214  09-21 21:12:18  falsify_L32_s13.json
+094d71a195630282d838ed8bda36c18e  1201  09-21 21:09:34  falsify_L32_s42.json
+a6a39f5caca7bf88eaf0b0513ee043eb  1197  09-21 21:10:59  falsify_L32_s7.json
+240fd03c976aee43177f8010499adfe4  1226  09-21 21:16:35  falsify_L36_s13.json
+c7dff6e70e2eb2ee400e1e3c9620dca2  1202  09-21 21:13:43  falsify_L36_s42.json
+40ab1fb1b657b250a1dcc83b2a5596ab  1227  09-21 21:15:08  falsify_L36_s7.json
+9366cd3fa55b55fd15535af85280d848  1231  09-23 02:24:15  falsify_L4_s13.json
+ca6e50ecc73e534573c50f0acaf1c9b4  1230  09-23 02:22:39  falsify_L4_s42.json
+32def14e378de1f4fbef076b7c5ebaef  1218  09-23 02:23:27  falsify_L4_s7.json
+2edfda4af986238484014ecb31ebba11  1215  09-21 20:34:16  falsify_L40_s13.json
+881fbd209c60b60df888d4978bfc18c2  1214  09-21 21:18:08  falsify_L40_s42.json
+963cf32b2b29ad7dbc5474017bf5fbd5  1213  09-21 21:19:38  falsify_L40_s7.json
+6dbcf057357856b9c4d349021bf6214a  1228  09-21 21:24:36  falsify_L44_s13.json
+660bb0ff916845327eed7389f47a6a29  1214  09-21 21:21:14  falsify_L44_s42.json
+fef23bc0afbe9a64bded132104a31828  1202  09-21 21:22:52  falsify_L44_s7.json
+5a2b3f7ca79cc2ee56e57303522ab3da  1225  09-21 21:30:06  falsify_L48_s13.json
+773c2d5b76163cd6d9edf037f934166b  1229  09-21 21:26:28  falsify_L48_s42.json
+7d532499c3da131b1c38990740287022  1227  09-21 21:28:18  falsify_L48_s7.json
+deee966c9878df5596bc39151eda559a  1227  09-21 21:35:51  falsify_L52_s13.json
+72036a7122fe3a712f9ebc9ddb60e9a7  1213  09-21 21:31:59  falsify_L52_s42.json
+04b7f6ca43ecc5215315d9b3fae07ac9  1226  09-21 21:33:55  falsify_L52_s7.json
+b276363d72dce9c05d9872ac7b023800  1215  09-21 21:41:49  falsify_L56_s13.json
+dc56750722516cfe818186bb0d9477e2  1226  09-21 21:37:49  falsify_L56_s42.json
+53cd2e8da1175706444106af7d862011  1226  09-21 21:39:53  falsify_L56_s7.json
+84e13c66379723161c2555908c98f828  1228  09-21 21:48:07  falsify_L60_s13.json
+bde4d56ee793228de312c214584ea4ad  1203  09-21 21:43:49  falsify_L60_s42.json
+b9915ad0eb5ce892783113336a1c7f19  1217  09-21 21:45:58  falsify_L60_s7.json
+75b076ab104159b690281ae6513114db  1216  09-21 21:54:53  falsify_L64_s13.json
+e21cc1b904365ebdf333ceb72aaf9f8f  1204  09-21 21:50:20  falsify_L64_s42.json
+7fb59196315f5314902391b0d4d302d3  1229  09-21 21:52:38  falsify_L64_s7.json
+c4d0833c1ba8ef0e840e44b976b80500  1227  09-21 22:01:59  falsify_L68_s13.json
+77ae57f834d858a78164c21cb28fd818  1212  09-21 21:57:16  falsify_L68_s42.json
+9cabf59d2c1d506649bb439b7135e2c2  1227  09-21 21:59:35  falsify_L68_s7.json
+0784a78f5549795a55ef54dbb5956803  1227  09-21 22:09:38  falsify_L72_s13.json
+56393f2e464dc3dd7fc53f301baef1e9  1228  09-21 22:04:32  falsify_L72_s42.json
+20d729d4881e6783688c49e1ca49293d  1226  09-21 22:07:08  falsify_L72_s7.json
+767547ee0d65907b6c1f85d56cb6f401  1226  09-21 22:18:15  falsify_L76_s13.json
+3dcfcb4543eb54159194c52b37ec6466  1226  09-21 22:12:28  falsify_L76_s42.json
+7bf0c9f5e32b9a44967f2a6a3ca4bdfe  1229  09-21 22:15:18  falsify_L76_s7.json
+73183cb2b3669eae8f6a9f2b88f2878c  1223  09-21 20:41:44  falsify_L8_s13.json
+d28f604ba1d095394d11a17b4e99beda  1215  09-21 20:39:52  falsify_L8_s42.json
+2cb2e0629e24316408367f78555e64d6  1227  09-21 20:40:50  falsify_L8_s7.json
+--- falsify.status tail
+2026-09-23 02:23:28  L4 s13  start (6/63)
+2026-09-23 02:24:15  L4 s13  real=0.6430  best-null=0.6350  gap=0.0080  budget10=0.6014  0.8m
+2026-09-23 02:24:15  L8 s42  start (7/63)

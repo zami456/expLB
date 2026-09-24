@@ -1,0 +1,15 @@
+id,source,source_ref,claim_short,numbers,layer,dataset_hint,status
+L-F-01,FINDINGS.md,kd/docs/FINDINGS.md:21,2026-09-19 · HP-KR is largely a lexical task,0.913; 0.870,,harm-pressure-knowledge-report HP-KR,TODO
+L-F-02,FINDINGS.md,kd/docs/FINDINGS.md:35,2026-09-19 · HP-KR cannot attribute its own results,,,HP-KR,TODO
+L-F-03,FINDINGS.md,kd/docs/FINDINGS.md:58,2026-09-19 · The matched slice reverses the HP-KR result,0.300; 0.752; 0.694; 0.715; 0.659; 0.597; 0.596; 0.614,40,HP-KR mask,TODO
+L-F-04,FINDINGS.md,kd/docs/FINDINGS.md:77,2026-09-19 · Almost nothing clears a dataset-level bootstrap,+0.015; 95%; 0.170; +0.187; 0.931; +0.026; 0.855,40,,TODO
+L-F-05,FINDINGS.md,kd/docs/FINDINGS.md:87,2026-09-19 · Factor probes work; my gate criterion was wrong,0.996; 0.999; 0.685; 0.772; 0.771; 0.351; 0.784; 0.785,"20,40,44",HP-KR,TODO
+L-F-06,FINDINGS.md,kd/docs/FINDINGS.md:101,"2026-09-19 · Knowledge and wording are entangled at L40, not at L20",0.063; 0.410; 0.430; 0.784; 0.509; 0.785; 0.486,"20,40,44",,TODO
+L-F-07,FINDINGS.md,kd/docs/FINDINGS.md:114,2026-09-19 · A 121-item class was enough; my concern was wrong,0.988; 0.995; 0.993; 0.007,"20,40,44",,TODO
+L-F-08,FINDINGS.md,kd/docs/FINDINGS.md:126,2026-09-19 · Scoring WMDP ourselves gives a cleaner knowledge label,0.786; 0.867; 0.736; 24%,,HP-KR,TODO
+L-F-09,FINDINGS.md,kd/docs/FINDINGS.md:142,2026-09-19 · Both continuous knowledge signals saturate,60%,,,TODO
+L-F-10,FINDINGS.md,kd/docs/FINDINGS.md:155,2026-09-20 · Score-3 filtering imposes an asymmetric sample imbalance,1.31; 1.59; 0.98; 30%,,,TODO
+L-F-100,FINDINGS.md,kd/docs/FINDINGS.md:4601,"2026-09-22 · **F-96's open gap closed: the 70B rung swept at k=3. The monotone decline SURVIVES layer-averaging — +0.120 / +0.103 / +0.075 — but its steepness was an artifact of the 3B layer choice, a",+0.120; +0.103; +0.075; +0.2023; +0.1197; +0.1147; +0.1027; +0.0794,"16,40,70",,TODO
+L-F-101,FINDINGS.md,kd/docs/FINDINGS.md:4674,"2026-09-22 · **The 70B rung under `last` pooling: F-100's ""persona buys nothing over raw"" is POOLING-DEPENDENT — +0.007 (mean) vs +0.033 (last), positive at 11/21 vs 19/21 — and L40 is the second-wors",+0.007; +0.033; +0.0791; +0.0945; +0.0383; +0.0366; +0.0070; +0.0333,40,,TODO
+L-F-102,FINDINGS.md,kd/docs/FINDINGS.md:4728,2026-09-22 · **F-63's monotone decline with scale is a MEAN-POOLING result. Under `last` pooling the three-rung trend is non-monotone on the matched control and REVERSES against raw — persona loses at,+0.1197; +0.0745; +0.1027; +0.0090; +0.0791; +0.0945; +0.009; +0.0328,,,TODO
+L-F-103,FINDINGS.md,kd/docs/FINDINGS.md:4818,"2026-09-22 · **The kd-bank share is POOLING-ROBUST, unlike the scale trend: +0.055 (mean) vs +0.059 (last), positive at 21/21 and 20/21. F-102's warning does not transfer to F-98/F-99",+0.055; +0.059; +0.0551; +0.0590; +0.0019; +0.0814; 0.0327; +0.0848,0,,TODO

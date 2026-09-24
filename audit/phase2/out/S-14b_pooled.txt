@@ -1,0 +1,18 @@
+keys pooled by the script's rule: ['ai_liar', 'alpaca', 'convincing-game', 'harm-pressure-choice', 'harm-pressure-knowledge-report', 'harm-pressure-kr-matched', 'insider-trading', 'instructed-deception', 'mask', 'roleplaying', 'sandbagging_v2']
+  ai_liar                            n=   270 pos=   135 neg=   135
+  alpaca                             n=  2000 pos=     0 neg=  2000
+  convincing-game                    n=   267 pos=   167 neg=   100
+  harm-pressure-choice               n=  2134 pos=   134 neg=  2000
+  harm-pressure-knowledge-report     n=  2139 pos=   139 neg=  2000
+  harm-pressure-kr-matched           n=   258 pos=   124 neg=   134
+  insider-trading                    n=  1080 pos=   423 neg=   657
+  instructed-deception               n=  5432 pos=  3045 neg=  2387
+  mask                               n=   585 pos=   415 neg=   170
+  roleplaying                        n=   287 pos=   203 neg=    84
+  sandbagging_v2                     n=  1000 pos=   500 neg=   500
+
+POOLED all-of-them n=15452 pos=5285  deception 0.8783  assistant 0.1773
+  without ['alpaca']: n=13452  deception 0.8599  assistant 0.2105
+  without ['harm-pressure-kr-matched']: n=15194  deception 0.8810  assistant 0.1759
+  without ['alpaca', 'harm-pressure-kr-matched']: n=13194  deception 0.8630  assistant 0.2093
+python exit 0

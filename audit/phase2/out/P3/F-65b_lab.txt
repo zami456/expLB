@@ -1,0 +1,47 @@
+==============================================================================
+C:/Users/user4/expLB/run-cap/axes_s23.pt | size 62934010 | md5 96a9b42b6ea9a0d5b75ee0793ffedbb0
+  top-level keys: ['axes', 'counts', 'layers', 'pca', 'pca_components', 'pca_variance_ratio', 'role_groups', 'roles', 'vectors_dir']
+  axes    : ['assistant', 'cap_only', 'cap_vs_default', 'capitulation']
+  pca     : ['all', 'cap_only', 'cap_vs_default', 'capitulation']
+  roles      : ['default', 'pc_appeaser', 'pc_calibrated_holder', 'pc_caver', 'pc_conflict_avoider', 'pc_consensus_follower', 'pc_deferrer', 'pc_disagreement_tolerant', 'pc_evidence_bound', 'pc_position_holder', 'pc_reasoned_defender', 'pc_second_guesser', 'pc_steadfast_reviewer']
+  role_groups: {'capitulation': {'contrast_with': 'position_holding', 'note': 'the answer moves under social pressure alone', 'roles': ['pc_caver', 'pc_deferrer', 'pc_appeaser', 'pc_second_guesser', 'pc_consensus_follower', 'pc_conflict_avoider']}, 'position_holding': {'contrast_with': 'capitulation', 'note': 'the answer moves only for new evidence', 'roles': ['pc_position_holder', 'pc_evidence_bound', 'pc_stead ...
+  layers     : [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79]
+  L40 basis all                 cos(PC1,assistant)=-0.8376  n_roles=13
+  L40 basis cap_only           cos(PC1,contrast)=+0.9358  cos(PC1,assistant)=-0.8875  n_roles=7
+  L40 basis cap_vs_default     cos(PC1,contrast)=+0.9491  cos(PC1,assistant)=-0.8376  n_roles=13
+  L40 basis capitulation       cos(PC1,contrast)=+0.9871  cos(PC1,assistant)=-0.8376  n_roles=13
+  L40 contrast-vs-contrast cosines:
+    cos(assistant, cap_only) = -0.9630
+    cos(assistant, cap_vs_default) = -0.9630
+    cos(assistant, capitulation) = -0.7986
+    cos(cap_only, cap_vs_default) = +1.0000
+    cos(cap_only, capitulation) = +0.9313
+    cos(cap_vs_default, capitulation) = +0.9313
+  roles[all] (13): ['default', 'pc_appeaser', 'pc_calibrated_holder', 'pc_caver', 'pc_conflict_avoider', 'pc_consensus_follower', 'pc_deferrer', 'pc_disagreement_tolerant', 'pc_evidence_bound', 'pc_position_holder', 'pc_reasoned_defender', 'pc_second_guesser', 'pc_steadfast_reviewer']
+  roles[cap_only] (7): ['default', 'pc_appeaser', 'pc_caver', 'pc_conflict_avoider', 'pc_consensus_follower', 'pc_deferrer', 'pc_second_guesser']
+  roles[cap_vs_default] (13): ['default', 'pc_appeaser', 'pc_calibrated_holder', 'pc_caver', 'pc_conflict_avoider', 'pc_consensus_follower', 'pc_deferrer', 'pc_disagreement_tolerant', 'pc_evidence_bound', 'pc_position_holder', 'pc_reasoned_defender', 'pc_second_guesser', 'pc_steadfast_reviewer']
+  roles[capitulation] (13): ['default', 'pc_appeaser', 'pc_calibrated_holder', 'pc_caver', 'pc_conflict_avoider', 'pc_consensus_follower', 'pc_deferrer', 'pc_disagreement_tolerant', 'pc_evidence_bound', 'pc_position_holder', 'pc_reasoned_defender', 'pc_second_guesser', 'pc_steadfast_reviewer']
+==============================================================================
+C:/Users/user4/expLB/run-cap-ctrl/axes_s23.pt | size 62934394 | md5 326310336d24b97680fb99b906cf5cff
+  top-level keys: ['axes', 'counts', 'layers', 'pca', 'pca_components', 'pca_variance_ratio', 'role_groups', 'roles', 'vectors_dir']
+  axes    : ['assistant', 'cap_only_ctrl', 'cap_vs_neutral', 'cap_vs_para']
+  pca     : ['all', 'cap_only_ctrl', 'cap_vs_neutral', 'cap_vs_para']
+  roles      : ['default', 'pc_appeaser', 'pc_caver', 'pc_conflict_avoider', 'pc_consensus_follower', 'pc_deferrer', 'pc_neutral_alphabetiser', 'pc_neutral_citer', 'pc_neutral_metric', 'pc_neutral_speaker', 'pc_neutral_speller', 'pc_neutral_timekeeper', 'pc_para_calibrated_holder', 'pc_para_disagreement_tolerant', 'pc_para_evidence_bound', 'pc_para_position_holder', 'pc_para_reasoned_defender', 'pc_para_steadfas ...
+  role_groups: {'capitulation': {'roles': ['pc_caver', 'pc_deferrer', 'pc_appeaser', 'pc_second_guesser', 'pc_consensus_follower', 'pc_conflict_avoider'], 'note': 'unchanged from the original cap bank'}, 'neutral': {'roles': ['pc_neutral_alphabetiser', 'pc_neutral_citer', 'pc_neutral_metric', 'pc_neutral_speaker', 'pc_neutral_speller', 'pc_neutral_timekeeper'], 'note': 'format-matched, no stance on keeping or re ...
+  layers     : [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79]
+  L40 basis all                 cos(PC1,assistant)=-0.6628  n_roles=19
+  L40 basis cap_only_ctrl      cos(PC1,contrast)=+0.9358  cos(PC1,assistant)=-0.7975  n_roles=7
+  L40 basis cap_vs_neutral     cos(PC1,contrast)=+0.9888  cos(PC1,assistant)=-0.6919  n_roles=13
+  L40 basis cap_vs_para        cos(PC1,contrast)=+0.9900  cos(PC1,assistant)=-0.6293  n_roles=13
+  L40 contrast-vs-contrast cosines:
+    cos(assistant, cap_only_ctrl) = -0.8847
+    cos(assistant, cap_vs_neutral) = -0.6372
+    cos(assistant, cap_vs_para) = -0.6024
+    cos(cap_only_ctrl, cap_vs_neutral) = +0.9113
+    cos(cap_only_ctrl, cap_vs_para) = +0.8918
+    cos(cap_vs_neutral, cap_vs_para) = +0.9170
+  roles[all] (19): ['default', 'pc_appeaser', 'pc_caver', 'pc_conflict_avoider', 'pc_consensus_follower', 'pc_deferrer', 'pc_neutral_alphabetiser', 'pc_neutral_citer', 'pc_neutral_metric', 'pc_neutral_speaker', 'pc_neutral_speller', 'pc_neutral_timekeeper', 'pc_para_calibrated_holder', 'pc_para_disagreement_tolerant', 'pc_para_evidence_bound', 'pc_para_position_holder', 'pc_para_reasoned_defender', 'pc_para_steadfast_reviewer', 'pc_second_guesser']
+  roles[cap_only_ctrl] (7): ['default', 'pc_appeaser', 'pc_caver', 'pc_conflict_avoider', 'pc_consensus_follower', 'pc_deferrer', 'pc_second_guesser']
+  roles[cap_vs_neutral] (13): ['default', 'pc_appeaser', 'pc_caver', 'pc_conflict_avoider', 'pc_consensus_follower', 'pc_deferrer', 'pc_neutral_alphabetiser', 'pc_neutral_citer', 'pc_neutral_metric', 'pc_neutral_speaker', 'pc_neutral_speller', 'pc_neutral_timekeeper', 'pc_second_guesser']
+  roles[cap_vs_para] (13): ['default', 'pc_appeaser', 'pc_caver', 'pc_conflict_avoider', 'pc_consensus_follower', 'pc_deferrer', 'pc_para_calibrated_holder', 'pc_para_disagreement_tolerant', 'pc_para_evidence_bound', 'pc_para_position_holder', 'pc_para_reasoned_defender', 'pc_para_steadfast_reviewer', 'pc_second_guesser']
+python exit 0

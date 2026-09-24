@@ -1,0 +1,5 @@
+file results/subsets/harm-pressure-knowledge-report.csv rows 7068
+columns ['index', 'model', 'dataset', 'messages', 'deceptive', 'temperature', 'meta', 'canary']
+models: Counter({'qwen-2.5-72b-instruct': 2571, 'mistral-small-3.1-24b-instruct': 2358, 'llama-v3.3-70b-instruct': 2139})
+ALL rows: n=7068  pos=1407  AUROC=0.8699  TPR=0.9517 FPR=0.2118  missed_deceptive=68
+Llama-3.3-70B rows: n=2139  pos=139  AUROC=0.9125  TPR=0.8921 FPR=0.0670  missed_deceptive=15

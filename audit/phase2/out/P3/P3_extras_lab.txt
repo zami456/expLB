@@ -1,0 +1,40 @@
+=== mtimes of every file this batch read (lab local time) ===
+  2026-09-19 20:12:00      422104  C:/Users/user4/expLB/run-crossgen/kd11/matrices/mean_L40_s42.json
+  2026-09-22 16:01:20     2679778  C:/Users/user4/expLB/run-crossgen/kd11/banks/kd/significance.json
+  2026-09-22 16:15:50     2355496  C:/Users/user4/expLB/run-crossgen/kd11/banks/kd_s23/significance.json
+  2026-09-21 03:49:57      476791  C:/Users/user4/expLB/run-crossgen/kd11/banks/cap_s23/matrices/mean_L40_s42.json
+  2026-09-21 03:56:16      476329  C:/Users/user4/expLB/run-crossgen/kd11/banks/cap_all/matrices/mean_L40_s42.json
+  2026-09-21 20:07:43      476541  C:/Users/user4/expLB/run-crossgen/kd11/banks/cap_ctrl/matrices/mean_L40_s42.json
+  2026-09-22 16:01:48     2687396  C:/Users/user4/expLB/run-crossgen/kd11/banks/cap_s23/significance.json
+  2026-09-22 15:52:45     2687620  C:/Users/user4/expLB/run-crossgen/kd11/banks/cap_all/significance.json
+  2026-09-22 00:33:41       88827  C:/Users/user4/expLB/run-crossgen/kd11/banks/collab/matrices/mean_L20_s42.json
+  2026-09-22 00:33:52       90023  C:/Users/user4/expLB/run-crossgen/kd11/banks/collab/matrices/mean_L40_s42.json
+  2026-09-21 14:35:13       24324  C:/Users/user4/expLB/run-premise/premise_L20_mean_s42.json
+  2026-09-21 14:26:55       24283  C:/Users/user4/expLB/run-premise/premise_L40_mean_s42.json
+  2026-09-21 03:22:49    62934010  C:/Users/user4/expLB/run-cap/axes_s23.pt
+  2026-09-22 16:05:28    62934394  C:/Users/user4/expLB/run-cap-ctrl/axes_s23.pt
+  2026-09-22 00:32:37   110135711  C:/Users/user4/expLB/run-kd/axes_collab_s23.pt
+
+=== cap bank PC1 variance share at L40 (F-65's '56.8%') ===
+  pca_variance_ratio type: <class 'torch.Tensor'>
+
+=== collab bank role groups (F-98's '12 v 13') ===
+  md5: c110e1ed1e125cb68459b0264b24dd4d
+  axes: ['assistant', 'collab_extended', 'deception', 'kd_assertion', 'knowledge_denial', 'sycophancy', 'unified']
+  group deception              n=8  ['pc_broker', 'pc_coverup_operator', 'pc_gatekeeper', 'pc_handler', 'pc_impression_manager', 'pc_narrative_manager', 'pc_plausible_denier', 'pc_spin_doctor']
+  group honesty                n=7  ['pc_archivist', 'pc_disclosure_counsel', 'pc_documentarian', 'pc_fact_checker', 'pc_ombudsman', 'pc_transparency_officer', 'pc_whistleblower']
+  group sycophancy             n=5  ['pc_cheerleader', 'pc_enabler', 'pc_flatterer', 'pc_people_pleaser', 'pc_yes_man']
+  group anti_sycophancy        n=5  ['pc_blunt_advisor', 'pc_contrarian', 'pc_critic', 'pc_skeptic', 'pc_tough_love_mentor']
+  group assistant_anchor       n=1  ['default']
+  group knowledge_denial       n=4  ['pc_amnesiac_witness', 'pc_deniable_expert', 'pc_feigned_novice', 'pc_stonewaller']
+  group sincere_ignorance      n=3  ['pc_calibrated_reporter', 'pc_honest_novice', 'pc_scrupulous_witness']
+  group plain_assertion        n=3  ['pc_candid_witness', 'pc_forthright_expert', 'pc_plain_dealer']
+  vectors_dir: C:\Users\user4\expLB\run-kd\vectors_s23
+
+=== run-cap-ctrl rollout count (F-89's '1,200 rollouts, 12 personas x 5 variants x 20 questions') ===
+  responses: 12 files, 1200 jsonl lines
+  scores: 12 files, 0 jsonl lines
+  vectors_s23: 19 files, 0 jsonl lines
+  vectors_all: not a directory
+  run-cap-ctrl top level: ['axes_s23.pt', 'responses', 'scores', 'vectors_s23']
+python exit 0

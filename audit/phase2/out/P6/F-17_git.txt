@@ -1,0 +1,27 @@
+=== (a) significance.json ===
+file : C:\Users\SURAIYA\Documents\STUDY\thesis\expLB\run-crossgen\significance.json | 86720 B
+n tests: 192 | blocks ['10', '9'] | layers [40]
+  block 10 pc:unified@2 - datapca@2   diff=-0.0028 dataset_p=0.9632 q_bh=0.9733 pairs=90
+  block  9 pc:unified@2 - datapca@2   diff=+0.0855 dataset_p=0.4036 q_bh=0.9362 pairs=72
+  block 10 pc:unified - datapca       diff=-0.0053 dataset_p=0.9470 q_bh=0.9733 pairs=90
+  block  9 pc:unified - datapca       diff=+0.0382 dataset_p=0.5534 q_bh=0.9487 pairs=72
+
+=== (b)-(d) per-cell matrix ===
+file : C:\Users\SURAIYA\Documents\STUDY\thesis\expLB\run-crossgen\matrices\mean_L40_s42.json | 349229 B
+bank : axes_vectors_s3_fp32.pt | k 5 | pooling mean | layer 40 | seed 42 | datasets 10
+probe             cells  mean(d) raw<0.6    n  mean(d) raw>=0.85    n  corr(raw,d)
+paper               all          +0.0555   32            -0.3869   35      -0.7165
+paper          off-diag          +0.0555   32            -0.4378   25      -0.7565
+lr_reg10            all          +0.0123   36            -0.4021   32      -0.6962
+lr_reg10       off-diag          +0.0123   36            -0.4679   22      -0.7372
+mms                 all          +0.1149   34            -0.4148   31      -0.7701
+mms            off-diag          +0.1149   34            -0.4796   23      -0.8147
+
+  same, with 'random' (k=5) instead of random@2, probe=paper:
+             all lo=+0.1402 (n=32) hi=-0.2514 (n=35) corr=-0.7144
+        off-diag lo=+0.1402 (n=32) hi=-0.2895 (n=25) corr=-0.7563
+
+=== layer sweep of (b)-(d), probe=paper, all cells, mean pooling ===
+ layer    raw<0.6    n   raw>=0.85    n     corr
+    40    +0.0555   32     -0.3869   35  -0.7165
+  layers covered: [40]

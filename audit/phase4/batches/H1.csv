@@ -1,0 +1,13 @@
+id,source_ref,stated_numbers,claim_plain
+H-001,"his branch: results/XXXX-9-llama-all-followup/summary.md:24 (commit fd17728, 2026-09-21)",0.002; ~0.05; 0.80 vs 0.60,"The re-measured Liars' Bench Follow-Up Probe (Llama-3.3-70B, layer 20, LR on RepE activations at the prefilled 'No', 1% FPR on Alpaca) matches published Table 7 to 0.002 mean AUROC over the 5 shared d"
+H-009,his branch: results/loo_L20/summary.md:52-54 (commit 6b16a46),0.928; 0.909; 0.915; 0.917,"With HP-KR excluded from the average, pooled supervision matches or beats the zero-shot extended persona axis: 0.928 vs 0.909 at layer 20 (a loss for the axis) and 0.915 vs 0.917 at layer 40 (a tie)."
+H-010,his branch: results/loo_L20/summary.md:53-54 (commit 6b16a46),0.124; 0.523,"The persona axis's average advantage over pooled supervision is carried almost entirely by HP-KR, where the pooled baseline 'inverts' to 0.124 at layer 20 and 0.523 at layer 40."
+H-012,his branch: results/loo_L20/summary.md:86-96 (commit 6b16a46),"0.03 (table: 0.694/0.899 vs 0.890/0.930, 0.636/0.682, 0.578/0.634)","The zero-shot extended persona axis at layer 40 beats both published non-privileged probes on both metrics and comes within 0.03 AUROC of the privileged Upper-Bound Probe, which trains on in-dataset e"
+H-018,src/probes/deception-detection/results/persona_ood/summary.md:39,0.038,"(−0.038).** Both directions match the paper, which reports gains on cross-dataset pairs ""along"
+H-025,src/probes/deception-detection/results/persona_ood/summary.md:111,1%,"calibration against the control, not ranking failure — recall at the 1% threshold:"
+H-026,src/probes/deception-detection/results/persona_ood/summary.md:126,0.55,"So: no, this does not beat the Liars' Bench baselines.** At 0.55 balanced accuracy it would"
+H-029,src/probes/deception-detection/results/persona_ood/summary.md:189,0.652; 0.615; 0.682; 0.606; 0.646; 0.614,"PC1 0.652 vs 0.615, k=3 0.682 vs 0.606, axis 0.646 vs 0.614, and excluding HP-KR 0.920 vs 0.883."
+H-041,src/probes/deception-detection/results/persona_ood/summary.md:306,0.657,rows are not comparable — this repo's reproduction of the Mean Probe recipe reaches 0.657 balanced
+H-045,src/probes/deception-detection/results/persona_ood/summary.md:319,0.936,"anomaly driving much of this analysis, is *solved* at layer 40 (0.936). Insider-trading inverts"
+H-058,src/probes/deception-detection/results/persona_ood_ext_L20/summary.md:59,0.651; 0.919; 0.27,is 0.651 vs 0.919 — a 0.27 penalty paid entirely to one dataset. For the extended axis it is
+H-059,src/probes/deception-detection/results/persona_ood_ext_L20/summary.md:60,0.904; 0.909,"0.904 vs 0.909. HP-KR stops being pathological, which is the whole point."

@@ -1,0 +1,197 @@
+#### S-20: rclone.conf vs its backup - structure only, NO secret values printed
+  current lines=8  backup lines=8
+   line 1 key='[tamara]' SAME (len cur=8 bak=8)
+   line 2 key='type ' SAME (len cur=12 bak=12)
+   line 3 key='client_secret ' SAME (len cur=51 bak=51)
+   line 4 key='scope ' SAME (len cur=18 bak=18)
+   line 5 key='client_id ' SAME (len cur=84 bak=84)
+   line 6 key='token ' DIFF (len cur=488 bak=488)
+   line 7 key='team_drive ' SAME (len cur=13 bak=13)
+   line 8 key='' SAME (len cur=0 bak=0)
+
+#### S-19: rclone / sync logs, lines mentioning exit codes on 09-22
+  --- kd_rclone.log
+      2026/09/22 23:11:33 INFO  : There was nothing to transfer
+      2026/09/22 23:11:33 INFO  : 
+      2026/09/22 23:25:38 INFO  : There was nothing to transfer
+      2026/09/22 23:25:38 INFO  : 
+      2026/09/22 23:25:48 INFO  : There was nothing to transfer
+      2026/09/22 23:25:48 INFO  : 
+      2026/09/22 23:26:36 NOTICE: passA/banks/kd_s23/csv/mean_L47_axes_resid_mms.csv: Duplicate object found in destination - ignoring
+      2026/09/22 23:26:42 INFO  : There was nothing to transfer
+      2026/09/22 23:26:42 INFO  : 
+      2026/09/22 23:40:31 INFO  : There was nothing to transfer
+      2026/09/22 23:40:31 INFO  : 
+      2026/09/22 23:40:37 INFO  : There was nothing to transfer
+      2026/09/22 23:40:37 INFO  : 
+      2026/09/22 23:41:28 NOTICE: passA/banks/kd_s23/csv/mean_L47_axes_resid_mms.csv: Duplicate object found in destination - ignoring
+      2026/09/22 23:41:29 INFO  : There was nothing to transfer
+      2026/09/22 23:41:29 INFO  : 
+      2026/09/22 23:55:14 INFO  : scripts: Set directory modification time (using SetModTime)
+      2026/09/22 23:55:16 INFO  : scripts/run_passAC_11.ps1: Copied (replaced existing)
+      2026/09/22 23:55:40 INFO  : scripts: Set directory modification time (using SetModTime)
+      2026/09/22 23:55:40 INFO  : 
+      2026/09/22 23:55:50 INFO  : There was nothing to transfer
+      2026/09/22 23:55:50 INFO  : 
+      2026/09/22 23:56:39 NOTICE: passA/banks/kd_s23/csv/mean_L47_axes_resid_mms.csv: Duplicate object found in destination - ignoring
+      2026/09/22 23:56:40 INFO  : There was nothing to transfer
+      2026/09/22 23:56:40 INFO  : 
+  --- coords_rclone.log
+      2026/09/22 23:37:35 INFO  : 
+      2026/09/22 23:38:35 INFO  : 
+      2026/09/22 23:39:35 INFO  : 
+      2026/09/22 23:40:26 NOTICE: Google drive root 'expLB/coords': 0 differences found
+      2026/09/22 23:40:26 NOTICE: Google drive root 'expLB/coords': 2242 matching files
+      2026/09/22 23:40:26 INFO  : 
+      2026/09/22 23:44:49 INFO  : 
+      2026/09/22 23:45:49 INFO  : 
+      2026/09/22 23:46:49 INFO  : 
+      2026/09/22 23:47:49 INFO  : 
+      2026/09/22 23:48:49 INFO  : 
+      2026/09/22 23:49:49 INFO  : 
+      2026/09/22 23:50:05 INFO  : There was nothing to transfer
+      2026/09/22 23:50:05 INFO  : 
+      2026/09/22 23:50:07 INFO  : Using md5 for hash comparisons
+      2026/09/22 23:51:07 INFO  : 
+      2026/09/22 23:52:07 INFO  : 
+      2026/09/22 23:53:07 INFO  : 
+      2026/09/22 23:54:07 INFO  : 
+      2026/09/22 23:55:07 INFO  : 
+      2026/09/22 23:56:07 INFO  : 
+      2026/09/22 23:56:18 NOTICE: Google drive root 'expLB/coords': 0 differences found
+      2026/09/22 23:56:18 NOTICE: Google drive root 'expLB/coords': 2242 matching files
+      2026/09/22 23:56:18 INFO  : 
+      2026/09/22 23:59:49 INFO  : 
+  --- night_rclone.log
+      2026/09/22 22:55:23 INFO  : 
+      2026/09/22 23:10:29 INFO  : There was nothing to transfer
+      2026/09/22 23:10:29 INFO  : 
+      2026/09/22 23:10:31 INFO  : There was nothing to transfer
+      2026/09/22 23:10:31 INFO  : 
+      2026/09/22 23:10:33 INFO  : There was nothing to transfer
+      2026/09/22 23:10:33 INFO  : 
+      2026/09/22 23:25:17 INFO  : There was nothing to transfer
+      2026/09/22 23:25:17 INFO  : 
+      2026/09/22 23:25:19 INFO  : There was nothing to transfer
+      2026/09/22 23:25:19 INFO  : 
+      2026/09/22 23:25:21 INFO  : There was nothing to transfer
+      2026/09/22 23:25:21 INFO  : 
+      2026/09/22 23:40:16 INFO  : There was nothing to transfer
+      2026/09/22 23:40:16 INFO  : 
+      2026/09/22 23:40:19 INFO  : There was nothing to transfer
+      2026/09/22 23:40:19 INFO  : 
+      2026/09/22 23:40:22 INFO  : There was nothing to transfer
+      2026/09/22 23:40:22 INFO  : 
+      2026/09/22 23:55:16 INFO  : There was nothing to transfer
+      2026/09/22 23:55:16 INFO  : 
+      2026/09/22 23:55:18 INFO  : There was nothing to transfer
+      2026/09/22 23:55:18 INFO  : 
+      2026/09/22 23:55:20 INFO  : There was nothing to transfer
+      2026/09/22 23:55:20 INFO  : 
+  --- scale_rclone.log
+      2026/09/22 16:20:15 CRITICAL: Failed to create file system for "tamara:expLB/scale": couldn't find root directory ID: Get "https://www.googleapis.com/drive/v3/files/root?alt=json&fields=id&prettyPrint
+  --- drive_sync.log
+      SYNC-EXIT 09/16/2026 20:47:36
+      SYNC-EXIT 09/17/2026 00:10:55
+      SYNC-EXIT 09/17/2026 01:16:34
+      SYNC-EXIT 09/17/2026 12:09:38
+  --- crossgen_rclone.log
+
+#### S-19b: sync .status files
+  --- kd_sync.status  mtime 2026-09-23 15:26:13
+      2026-09-19 18:09:09  periodic START
+      2026-09-19 18:09:27  periodic DONE exit 0 (8 local files)
+      2026-09-19 18:10:08  periodic START
+      2026-09-19 18:10:11  periodic DONE exit 0 (8 local files)
+      2026-09-19 18:25:09  periodic START
+      2026-09-19 18:25:12  periodic DONE exit 0 (8 local files)
+      2026-09-19 18:40:09  periodic START
+      2026-09-19 18:40:12  periodic DONE exit 0 (8 local files)
+      2026-09-19 18:55:09  periodic START
+      2026-09-19 18:55:13  periodic DONE exit 0 (8 local files)
+      2026-09-19 19:10:09  periodic START
+      2026-09-19 19:10:13  periodic DONE exit 0 (8 local files)
+      2026-09-19 19:25:09  periodic START
+      2026-09-19 19:25:12  periodic DONE exit 0 (8 local files)
+      2026-09-19 19:40:09  periodic START
+      2026-09-19 19:40:35  periodic DONE exit 0 (24 local files)
+      2026-09-19 19:55:09  periodic START
+      2026-09-19 19:55:54  periodic DONE exit 0 (53 local files)
+      2026-09-19 20:10:09  periodic START
+      2026-09-19 20:10:55  periodic DONE exit 0 (85 local files)
+      2026-09-19 20:14:59  crossgen/peak START
+      2026-09-19 20:18:04  crossgen/peak crossgen11 exit 0 (271 files)
+      2026-09-19 20:18:04  crossgen/peak DONE exit 0 (93 local files)
+      2026-09-19 20:19:45  pull START
+      2026-09-19 20:20:19  pull crossgen11 exit 0 (272 files)
+      2026-09-19 20:20:19  pull DONE exit 0 (102 local files)
+      2026-09-19 20:21:02  crossgen/l20 START
+      2026-09-19 20:22:42  crossgen/l20 crossgen11 exit 0 (405 files)
+      2026-09-19 20:22:42  crossgen/l20 DONE exit 0 (105 local files)
+      2026-09-19 20:25:09  periodic START
+      2026-09-19 20:25:35  periodic crossgen11 exit 0 (407 files)
+      2026-09-19 20:25:35  periodic DONE exit 0 (109 local files)
+      2026-09-19 20:40:09  periodic START
+      2026-09-19 20:40:51  periodic run-kd exit 0 (0 files)
+      2026-09-19 20:41:07  periodic crossgen11 exit 0 (423 files)
+      2026-09-19 20:41:07  periodic DONE exit 0 (151 local files)
+      2026-09-19 20:55:09  periodic START
+      2026-09-19 20:55:25  periodic run-kd exit 0 (1 files)
+      2026-09-19 20:55:40  periodic crossgen11 exit 0 (438 files)
+      2026-09-19 20:55:40  periodic DONE exit 0 (151 local files)
+  --- crossgen_sync.status  mtime 2026-09-23 15:17:32
+      2026-09-18 12:18:59  smoke1 SKIP (no C:\Users\user4\expLB\run-crossgen\banks\__smoke_missing__)
+      2026-09-18 12:18:59  smoke2_locked SKIP (another sync holds the lock)
+      2026-09-18 12:19:25  manual START <whole tree>
+      2026-09-18 12:21:43  B/bindtest SKIP (another sync holds the lock)
+      2026-09-18 12:31:32  guardtest SKIP (rclone already writing crossgen: pid 3024, 21140)
+      2026-09-18 14:58:17  A/root SKIP (another sync holds the lock)
+      2026-09-18 15:22:45  A/paper16_famcentred SKIP (another sync holds the lock)
+      2026-09-18 15:47:37  A/paper16_shared START passA\banks\paper16_shared
+      2026-09-18 16:02:54  C/root SKIP (another sync holds the lock)
+      2026-09-18 16:05:24  C/paper16_famcentred SKIP (another sync holds the lock)
+      2026-09-18 16:07:55  C/paper16_shared SKIP (another sync holds the lock)
+      2026-09-18 16:10:17  C/own100 SKIP (another sync holds the lock)
+      2026-09-18 16:13:10  C/hf100 SKIP (another sync holds the lock)
+      2026-09-18 16:15:45  C/hf275_loose SKIP (another sync holds the lock)
+      2026-09-18 16:16:10  periodic SKIP (another sync holds the lock)
+      2026-09-18 16:18:24  C/hf275_strict SKIP (another sync holds the lock)
+      2026-09-18 16:21:01  C/own100_strict SKIP (another sync holds the lock)
+      2026-09-18 16:46:11  periodic SKIP (another sync holds the lock)
+      2026-09-18 17:16:11  periodic SKIP (another sync holds the lock)
+      2026-09-18 17:37:08  A/paper16_shared EXIT 0
+      2026-09-18 17:37:20  manual START <whole tree>
+      2026-09-18 17:46:11  periodic SKIP (another sync holds the lock)
+      2026-09-18 17:57:58  A/own100 SKIP (another sync holds the lock)
+      2026-09-18 18:16:11  periodic SKIP (another sync holds the lock)
+      2026-09-18 18:19:04  A/hf100 SKIP (another sync holds the lock)
+      2026-09-18 18:39:58  A/hf275_loose SKIP (another sync holds the lock)
+      2026-09-18 18:46:11  periodic SKIP (another sync holds the lock)
+      2026-09-18 19:01:32  A/hf275_strict SKIP (another sync holds the lock)
+      2026-09-18 19:16:11  periodic SKIP (another sync holds the lock)
+      2026-09-18 19:25:51  A/own100_strict SKIP (another sync holds the lock)
+      2026-09-18 19:46:11  periodic SKIP (another sync holds the lock)
+      2026-09-18 20:16:11  periodic SKIP (another sync holds the lock)
+      2026-09-18 20:21:08  C/final SKIP (lock busy 240m)
+      2026-09-18 20:46:11  periodic SKIP (another sync holds the lock)
+      2026-09-18 21:16:11  periodic SKIP (another sync holds the lock)
+      2026-09-18 21:46:11  periodic SKIP (another sync holds the lock)
+      2026-09-18 22:16:11  periodic SKIP (another sync holds the lock)
+      2026-09-18 22:33:50  manual EXIT 0
+      2026-09-18 22:36:47  manual DUPCHECK exit 0 (see logs\crossgen_dupes.log)
+      2026-09-18 22:36:57  A/final START <whole tree>
+  --- scale_sync.status  mtime 2026-09-22 16:20:15
+      2026-09-20 15:01:27  8b/final START
+      2026-09-20 15:03:05  8b/final DONE exit 0 (140 files)
+      2026-09-20 16:56:14  3b/final START
+      2026-09-20 16:57:03  3b/final DONE exit 0 (208 files)
+      2026-09-20 21:24:16  coords/final START
+      2026-09-20 21:40:48  coords/final DONE exit 0 (1803 files)
+      2026-09-22 16:20:15  coords/final START
+      2026-09-22 16:20:15  coords/final DONE exit 1 (2431 files)
+  --- drive_check.status  mtime 2026-09-17 01:40:30
+      START 09/17/2026 01:34:30
+      EXIT 09/17/2026 01:40:30
+
+#### S-21: logs written 2026-09-22 00:20-02:00 (the sweep window)
+  sarc_pilot.status.pre-e2e-2026-09-22       1067  2026-09-22 02:29:35

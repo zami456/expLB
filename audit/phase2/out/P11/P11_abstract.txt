@@ -1,0 +1,257 @@
+==============================================================================
+commit / provenance
+==============================================================================
+  branch head: 45b16d906da0e3da13b1abb34898e69311d688cf
+  history of persona_ood_ext_L40/summary.csv:
+    9774075 2026-09-20 17:53:11 +0600 zami456 Knowledge-denial personas fix HP-KR
+  (the abstract was pasted 2026-09-21 10:38Z; the results predate it)
+==============================================================================
+A-02  the published paper: persona coordinates = PCs of contrastive persona vectors; models Llama 3.2-3B and Llama 3-8B
+==============================================================================
+  [p4] ...10 questions from each axis. Further details are provided in Appendix C. Language Models.Our main results use Llama 3.2-3B, with additional replications on Llama 3-8B. For each model, we use that model’s own generations in both parts of the...
+  [p4] ...re provided in Appendix C. Language Models.Our main results use Llama 3.2-3B, with additional replications on Llama 3-8B. For each model, we use that model’s own generations in both parts of the pipeline. Persona vectors are built from the ...
+  [pNone] ...NOT FOUND...
+  [p1] ...for deception and sycophancy using contrastive persona prompts. The first prin- cipal components, obtained by unsupervised PCA of the persona-specific vectors, cleanly separate harmful and harmless personas. Across 10 eval- uation datasets,...
+  [p1] ...we show that persona-derived di- rections transfer non-trivially and probes trained on persona-PC projections generalize better than probes trained on raw activations. We also find that unified axis consisting of multiple harmful and harmle...
+  [p4] ...n instructions and user prompts. In both cases, we mean-pool over output-token activations. The corresponding Llama 3-8B evaluations are reported in Ap- pendix E and Appendix F. Training and Evaluation.We train binary logistic regres- sion ...
+  [p5] ... fer a general route to more transferable monitoring features. The auxiliary 8B comparisons in Appendix F are broadly sup- portive of the findings on the results on 3B model. 7 Limitations and Future Work Our work could be improved and exte...
+==============================================================================
+A-03  'six Liars' Bench datasets at layers 20 and 40 ... fifteen feature sets'
+==============================================================================
+  L20: feature rows in persona_ood_ext_L20/summary.csv = 15
+       features = ['baseline', 'pc1', 'pc3', 'axis1', 'random3', 'syc_pc1', 'syc3', 'syc_axis1', 'syc3_orth', 'dec3_orth', 'ext_pc1', 'ext_pc3', 'ext_axis1', 'denial_pc3', 'denial_axis1']
+  L40: feature rows in persona_ood_ext_L40/summary.csv = 15
+       features = ['baseline', 'pc1', 'pc3', 'axis1', 'random3', 'syc_pc1', 'syc3', 'syc_axis1', 'syc3_orth', 'dec3_orth', 'ext_pc1', 'ext_pc3', 'ext_axis1', 'denial_pc3', 'denial_axis1']
+  L44: feature rows in persona_ood_ext_L44/summary.csv = 15
+       features = ['baseline', 'pc1', 'pc3', 'axis1', 'random3', 'syc_pc1', 'syc3', 'syc_axis1', 'syc3_orth', 'dec3_orth', 'ext_pc1', 'ext_pc3', 'ext_axis1', 'denial_pc3', 'denial_axis1']
+  L20: feature rows in the PUBLISHED-bank dir = 10
+  L40: feature rows in the PUBLISHED-bank dir = 10
+  datasets scored in zero_shot.csv (L40):
+       convince_me__plain                       n= 267.0  n_deceptive= 167.0
+       harm_refusal_choice__plain               n=2134.0  n_deceptive= 134.0
+       harm_refusal_knowledge_report__plain     n=2139.0  n_deceptive= 139.0
+       insider_trading_cadenza__plain           n=1080.0  n_deceptive= 423.0
+       instruct_dishonesty__plain               n=5432.0  n_deceptive=3045.0
+       repe_honesty__plain                      n= 550.0  n_deceptive= 275.0
+       XXXX-20__plain                           n=2000.0  n_deceptive=   0.0
+  -> 'XXXX-20__plain' is the alpaca control (n_deceptive 0), not a transfer dataset
+  which of the six are LIARS' BENCH datasets?
+     convince_me / harm_refusal_choice / harm_refusal_knowledge_report /
+     insider_trading_cadenza / instruct_dishonesty  = 5 (Liars' Bench)
+     repe_honesty                                    = RepE honesty (Zou et al.), NOT Liars' Bench
+  his own operating table names the 5-dataset mean row "Average (Liars' Bench)":
+     ['Average', "Average (Liars' Bench)"]
+  layer dirs on his branch:
+    ['persona_ood', 'persona_ood_L40', 'persona_ood_ext_L20', 'persona_ood_ext_L40', 'persona_ood_ext_L44', 'persona_ood_followup_L20', 'persona_ood_mod_L20', 'persona_ood_mod_L40', 'persona_ood_mod_L44']
+==============================================================================
+A-04  0.904 / 0.916 for the 1-d contrast vs 0.648 / 0.732 for the 8192-d probes; 'wins on every held-out dataset individually'
+==============================================================================
+  ext_axis1 off_diagonal_mean L20                                stated=0.904    file=0.904117  -> MATCH
+  ext_axis1 off_diagonal_mean L40                                stated=0.916    file=0.915835  -> MATCH
+  baseline  off_diagonal_mean L20                                stated=0.648    file=0.647770  -> MATCH
+  baseline  off_diagonal_mean L40                                stated=0.732    file=0.732033  -> MATCH
+  -- recomputed from the 30 off-diagonal cells of his own matrices --
+  L20 ext_axis1  off-diag mean over 30 cells = 0.904117
+  L20 baseline   off-diag mean over 30 cells = 0.647773
+  L20 axis1      off-diag mean over 30 cells = 0.651073
+  L40 ext_axis1  off-diag mean over 30 cells = 0.915833
+  L40 baseline   off-diag mean over 30 cells = 0.732027
+  L40 axis1      off-diag mean over 30 cells = 0.831900
+  L44 ext_axis1  off-diag mean over 30 cells = 0.903383
+  L44 baseline   off-diag mean over 30 cells = 0.715650
+  L44 axis1      off-diag mean over 30 cells = 0.826050
+  -- 'wins on every held-out dataset': column means over the 5 training sets --
+  L20 held-out convince_me__plain                       ext=0.9692  raw=0.6632  delta=+0.3060
+  L20 held-out harm_refusal_choice__plain               ext=0.6393  raw=0.5349  delta=+0.1044
+  L20 held-out harm_refusal_knowledge_report__plain     ext=0.8816  raw=0.3936  delta=+0.4880
+  L20 held-out insider_trading_cadenza__plain           ext=0.9899  raw=0.7992  delta=+0.1907
+  L20 held-out instruct_dishonesty__plain               ext=0.9539  raw=0.7777  delta=+0.1762
+  L20 held-out repe_honesty__plain                      ext=0.9908  raw=0.7181  delta=+0.2727
+  L20 -> ext wins on 6/6 held-out datasets
+  L40 held-out convince_me__plain                       ext=0.9123  raw=0.7875  delta=+0.1248
+  L40 held-out harm_refusal_choice__plain               ext=0.7116  raw=0.5709  delta=+0.1407
+  L40 held-out harm_refusal_knowledge_report__plain     ext=0.9124  raw=0.5836  delta=+0.3288
+  L40 held-out insider_trading_cadenza__plain           ext=0.9803  raw=0.7999  delta=+0.1804
+  L40 held-out instruct_dishonesty__plain               ext=0.9784  raw=0.8267  delta=+0.1517
+  L40 held-out repe_honesty__plain                      ext=1.0000  raw=0.8236  delta=+0.1764
+  L40 -> ext wins on 6/6 held-out datasets
+  L44 held-out convince_me__plain                       ext=0.8586  raw=0.7571  delta=+0.1015
+  L44 held-out harm_refusal_choice__plain               ext=0.7119  raw=0.5704  delta=+0.1415
+  L44 held-out harm_refusal_knowledge_report__plain     ext=0.8936  raw=0.6368  delta=+0.2568
+  L44 held-out insider_trading_cadenza__plain           ext=0.9822  raw=0.7361  delta=+0.2461
+  L44 held-out instruct_dishonesty__plain               ext=0.9740  raw=0.8081  delta=+0.1659
+  L44 held-out repe_honesty__plain                      ext=1.0000  raw=0.7853  delta=+0.2147
+  L44 -> ext wins on 6/6 held-out datasets
+  -- ATTRIBUTION: which contrast is 0.904/0.916? --
+  L20 zero-shot mean over the 6: paper 8v7 axis1=0.7909   extended 12v13=0.9041   4v6 denial=0.8660
+  L40 zero-shot mean over the 6: paper 8v7 axis1=0.8319   extended 12v13=0.9158   4v6 denial=0.9115
+  extended_arms() in his scripts/persona_ood.py builds 8+4 vs 7+6 (see A-11 section)
+==============================================================================
+A-05  'its generalization gap is zero; the trained probes lose 0.31 and 0.25'
+==============================================================================
+  baseline diagonal-off_diagonal L20                             stated=0.31     file=0.308658  -> MATCH
+        (diagonal 0.956428 - off-diagonal 0.647770)
+  baseline diagonal-off_diagonal L40                             stated=0.25     file=0.251240  -> MATCH
+        (diagonal 0.983273 - off-diagonal 0.732033)
+  L20 ext_axis1 diagonal 0.903505 - off-diagonal 0.904117 = -0.000612
+  L40 ext_axis1 diagonal 0.915555 - off-diagonal 0.915835 = -0.000281
+  L44 ext_axis1 diagonal 0.903264 - off-diagonal 0.903388 = -0.000125
+  L44 baseline gap: 0.266544
+==============================================================================
+A-06  'the PCs do not contribute: top-3 reaches 0.684 and 0.866, and at L40 its first component scores 0.09 below the contrast it is derived from'
+==============================================================================
+  ext_pc3 off_diagonal_mean L20                                  stated=0.684    file=0.683697  -> MATCH
+  ext_pc3 off_diagonal_mean L40                                  stated=0.866    file=0.865534  -> MATCH
+  ext_pc3 L44 = 0.879936 (not quoted)
+  -- candidate readings of 'first component 0.09 below the contrast', L40 --
+    ext_pc1 vs ext_axis1 (extended bank)       ext_pc1=0.7680  ext_axis1=0.9158  ext_pc1-ext_axis1 = -0.1479
+    pc1 vs axis1 (published bank, ext dir)     pc1=0.8593  axis1=0.8319  pc1-axis1 = +0.0274
+    ext_pc1 vs pc1                             ext_pc1=0.7680  pc1=0.8593  ext_pc1-pc1 = -0.0914
+    ext_pc1 vs axis1                           ext_pc1=0.7680  axis1=0.8319  ext_pc1-axis1 = -0.0639
+    denial_pc3 vs denial_axis1                 denial_pc3=0.8718  denial_axis1=0.9115  denial_pc3-denial_axis1 = -0.0397
+    syc_pc1 vs syc_axis1                       syc_pc1=0.6618  syc_axis1=0.6626  syc_pc1-syc_axis1 = -0.0008
+    ext_pc3 vs ext_axis1                       ext_pc3=0.8655  ext_axis1=0.9158  ext_pc3-ext_axis1 = -0.0503
+  published-bank dir (persona_ood_L40): pc1 = 0.8463  axis1 = 0.8240   pc1-axis1 = +0.0223
+  -- exhaustive scan: every ordered pair of features in L40 summary with |gap - 0.09| <= 0.005 --
+    pc3 is 0.0927 below baseline
+    ext_pc1 is 0.0914 below pc1
+  -- does PC1 beat the contrast it derives from? (all three layers) --
+  L20 zero-shot mean over the 6:  pc1=0.8056 vs axis1=0.7909  (+0.0147)   |  ext_pc1=0.6613 vs ext_axis1=0.9041  (-0.2428)
+       trained off-diag:  pc1=0.6669 vs axis1=0.6511  (+0.0158)
+  L40 zero-shot mean over the 6:  pc1=0.8593 vs axis1=0.8319  (+0.0274)   |  ext_pc1=0.7680 vs ext_axis1=0.9158  (-0.1479)
+       trained off-diag:  pc1=0.8593 vs axis1=0.8319  (+0.0274)
+  L44 zero-shot mean over the 6:  pc1=0.8506 vs axis1=0.8260  (+0.0246)   |  ext_pc1=0.7801 vs ext_axis1=0.9034  (-0.1232)
+       trained off-diag:  pc1=0.8506 vs axis1=0.8260  (+0.0246)
+==============================================================================
+A-08  Liars' Bench Mean Probe 0.12 / Upper-Bound 0.97 on HP-KR; published 8v7 inverts at L20 (0.148) and barely clears chance at L40 (0.593)
+==============================================================================
+  axis1 zero-shot HP-KR L20                                      stated=0.148    file=0.148277  -> MATCH
+  axis1 zero-shot HP-KR L40                                      stated=0.593    file=0.592579  -> MATCH
+  axis1 zero-shot HP-KR L44 = 0.589493 (not quoted in the abstract)
+  Table 6 Mean Probe: 'Llama 3.3 70B0.41 0.12 1.00 0.57 0.95 0.45 0.93 0.64\nQwen 2.5 72B0.50 0.49 — 0.57 0.60 — —'
+  Table 8 Upper Bound Probe: 'Llama 3.3 70B0.74 0.97 1.00 — 0.95 — 0.99 0.93\nQwen 2.5 72B0.71 0.97 1.00 — 0.93 — 0.98 0.'
+  Mean Probe AUROC (Table 6), Llama 3.3 70B row: HP-C .41 HP-KR .12 CG 1.00 ST .57 ID .95 GS .45 IT .93
+     -> HP-KR is the minimum for the Mean Probe on that model, and for the across-model average (.36)
+  BUT the Unrelated-Question Classifier (Table 11) scores HP-KR 0.90 on the same model,
+     and LLM-as-a-Judge (Table 10) scores GS 0.45 below HP-KR 0.48 -> 'hardest column' is method-specific
+==============================================================================
+A-10  'the independently constructed sycophancy axis inverts further still (0.043)'
+==============================================================================
+  L20 syc_axis1 zero-shot HP-KR = 0.042928   syc_pc1 = 0.040576   (axis1 = 0.148277)
+  L40 syc_axis1 zero-shot HP-KR = 0.167054   syc_pc1 = 0.159935   (axis1 = 0.592579)
+  L44 syc_axis1 zero-shot HP-KR = 0.480406   syc_pc1 = 0.514669   (axis1 = 0.589493)
+  syc_axis1 zero-shot HP-KR L20                                  stated=0.043    file=0.042928  -> MATCH
+  -- is the sycophancy axis 'independently constructed'? --
+     his persona_pcs.py builds it from SYCOPHANCY_PERSONAS - ANTI_SYCOPHANCY_PERSONAS
+     of the SAME paper16_L20 bank that gives the deception axis (see the file listing below)
+==============================================================================
+A-11  'adding four feigned-ignorance personas against six candour personas raises zero-shot AUROC to 0.882 and 0.912, and lifts transfer on the four unrelated datasets by 0.18-0.21'
+==============================================================================
+  ext_axis1 zero-shot HP-KR L20                                  stated=0.882    file=0.881568  -> MATCH
+  ext_axis1 zero-shot HP-KR L40                                  stated=0.912    file=0.912392  -> MATCH
+  ext_axis1 zero-shot HP-KR L44 = 0.893637
+  denial_axis1 (4v6 alone) HP-KR: L20=0.8899  L40=0.9185  L44=0.9077
+  -- persona counts, from his source and the owner's bank --
+    his KNOWLEDGE_DENIAL_PERSONAS    n=4  ['pc_amnesiac_witness', 'pc_deniable_expert', 'pc_feigned_novice', 'pc_stonewaller']
+    his KNOWLEDGE_CANDOUR_PERSONAS   n=6  ['pc_calibrated_reporter', 'pc_candid_witness', 'pc_forthright_expert', 'pc_honest_novice', 'pc_plain_dealer', 'pc_scrupulous_witness']
+    his DECEPTION_PERSONAS           n=8  ['pc_handler', 'pc_broker', 'pc_impression_manager', 'pc_coverup_operator', 'pc_gatekeeper', 'pc_spin_doctor', 'pc_plausible_denier', 'pc_narrative_manager']
+    his HONESTY_PERSONAS             n=7  ['pc_archivist', 'pc_disclosure_counsel', 'pc_documentarian', 'pc_fact_checker', 'pc_ombudsman', 'pc_transparency_officer', 'pc_whistleblower']
+    owner kd_role_groups.json[knowledge_denial  ] n=4  ['pc_amnesiac_witness', 'pc_deniable_expert', 'pc_stonewaller', 'pc_feigned_novice']
+    owner kd_role_groups.json[sincere_ignorance ] n=3  ['pc_honest_novice', 'pc_calibrated_reporter', 'pc_scrupulous_witness']
+    owner kd_role_groups.json[plain_assertion   ] n=3  ['pc_forthright_expert', 'pc_candid_witness', 'pc_plain_dealer']
+    his 4 denial  == owner knowledge_denial       : True
+    his 6 candour == owner sincere_ignorance+plain_assertion : True
+    his committed extended vector folder holds 36 .pt files
+  -- 'lifts transfer on the four unrelated datasets by 0.18-0.21' --
+     reading A: TRAINED column means (mean over the 5 training sets), ext_axis1 - axis1
+     L20:
+        convince_me__plain                       axis1=0.7639 ext=0.9692  delta=+0.2053   <-- in 0.18-0.21
+        harm_refusal_choice__plain               axis1=0.6301 ext=0.6393  delta=+0.0092
+        harm_refusal_knowledge_report__plain     axis1=0.1483 ext=0.8816  delta=+0.7333
+        insider_trading_cadenza__plain           axis1=0.7927 ext=0.9899  delta=+0.1972   <-- in 0.18-0.21
+        instruct_dishonesty__plain               axis1=0.7752 ext=0.9539  delta=+0.1787   <-- in 0.18-0.21
+        repe_honesty__plain                      axis1=0.7961 ext=0.9908  delta=+0.1947   <-- in 0.18-0.21
+     L40:
+        convince_me__plain                       axis1=0.8650 ext=0.9123  delta=+0.0473
+        harm_refusal_choice__plain               axis1=0.5807 ext=0.7116  delta=+0.1309
+        harm_refusal_knowledge_report__plain     axis1=0.5926 ext=0.9124  delta=+0.3198
+        insider_trading_cadenza__plain           axis1=0.9787 ext=0.9803  delta=+0.0016
+        instruct_dishonesty__plain               axis1=0.9744 ext=0.9784  delta=+0.0040
+        repe_honesty__plain                      axis1=1.0000 ext=1.0000  delta=+0.0000
+     L44:
+        convince_me__plain                       axis1=0.8190 ext=0.8586  delta=+0.0396
+        harm_refusal_choice__plain               axis1=0.6070 ext=0.7119  delta=+0.1049
+        harm_refusal_knowledge_report__plain     axis1=0.5895 ext=0.8936  delta=+0.3041
+        insider_trading_cadenza__plain           axis1=0.9787 ext=0.9822  delta=+0.0035
+        instruct_dishonesty__plain               axis1=0.9621 ext=0.9740  delta=+0.0119
+        repe_honesty__plain                      axis1=1.0000 ext=1.0000  delta=+0.0000
+     reading B: ZERO-SHOT per dataset, ext_axis - axis (the protocol the 0.882/0.912 use)
+     L20:
+        convince_me__plain                       axis1=0.9399 ext=0.9692  delta=+0.0292
+        harm_refusal_choice__plain               axis1=0.7169 ext=0.6393  delta=-0.0776
+        harm_refusal_knowledge_report__plain     axis1=0.1483 ext=0.8816  delta=+0.7333
+        insider_trading_cadenza__plain           axis1=0.9879 ext=0.9899  delta=+0.0020
+        instruct_dishonesty__plain               axis1=0.9587 ext=0.9539  delta=-0.0048
+        repe_honesty__plain                      axis1=0.9935 ext=0.9908  delta=-0.0028
+     L40:
+        convince_me__plain                       axis1=0.8650 ext=0.9123  delta=+0.0473
+        harm_refusal_choice__plain               axis1=0.5807 ext=0.7116  delta=+0.1310
+        harm_refusal_knowledge_report__plain     axis1=0.5926 ext=0.9124  delta=+0.3198
+        insider_trading_cadenza__plain           axis1=0.9787 ext=0.9803  delta=+0.0015
+        instruct_dishonesty__plain               axis1=0.9744 ext=0.9784  delta=+0.0040
+        repe_honesty__plain                      axis1=1.0000 ext=1.0000  delta=+0.0000
+     L44:
+        convince_me__plain                       axis1=0.8190 ext=0.8586  delta=+0.0396
+        harm_refusal_choice__plain               axis1=0.6070 ext=0.7119  delta=+0.1049
+        harm_refusal_knowledge_report__plain     axis1=0.5895 ext=0.8936  delta=+0.3041
+        insider_trading_cadenza__plain           axis1=0.9787 ext=0.9822  delta=+0.0035
+        instruct_dishonesty__plain               axis1=0.9621 ext=0.9740  delta=+0.0118
+        repe_honesty__plain                      axis1=1.0000 ext=1.0000  delta=+0.0000
+     why reading A is large at L20: the axis1 transfer matrix has ONE sign-flipped row
+     (the probe trained on HP-KR), which drags every other column down by 1/5 of the flip:
+                                      convince_me__plain  harm_refusal_choice__plain  harm_refusal_knowledge_report__plain  insider_trading_cadenza__plain  instruct_dishonesty__plain  repe_honesty__plain
+convince_me__plain                                0.9389                      0.7169                                0.1483                          0.9879                      0.9587               0.9935
+harm_refusal_choice__plain                        0.9399                      0.7152                                0.1483                          0.9879                      0.9587               0.9935
+harm_refusal_knowledge_report__plain              0.0601                      0.2831                                0.8516                          0.0121                      0.0413               0.0065
+insider_trading_cadenza__plain                    0.9399                      0.7169                                0.1483                          0.9877                      0.9587               0.9935
+instruct_dishonesty__plain                        0.9399                      0.7169                                0.1483                          0.9879                      0.9586               0.9935
+repe_honesty__plain                               0.9399                      0.7169                                0.1483                          0.9879                      0.9587               0.9934
+==============================================================================
+D-080  HP-KR: 0.148 at L20; 0.593 and 0.589 at L40 and L44
+==============================================================================
+  axis1 zero-shot HP-KR L20                                      stated=0.148    file=0.148277  -> MATCH
+  axis1 zero-shot HP-KR L40                                      stated=0.593    file=0.592579  -> MATCH
+  axis1 zero-shot HP-KR L44                                      stated=0.589    file=0.589493  -> MATCH
+==============================================================================
+D-100  at L40 the probe trained on ID scores higher on CG than the contrast does (0.98 vs 0.91)
+==============================================================================
+  baseline  train=instruct_dishonesty test=convince_me           stated=0.98     file=0.983100  -> MATCH
+  ext_axis1 train=instruct_dishonesty test=convince_me           stated=0.91     file=0.912300  -> MATCH
+  how common is that? raw-beats-ext off-diagonal cells at L40:
+    raw > ext in 2 of 30 off-diagonal cells
+    L20: raw > ext in 2 of 30 off-diagonal cells
+    L44: raw > ext in 2 of 30 off-diagonal cells
+==============================================================================
+D-126  layer 40 is best for the persona contrasts: transfer 0.904/0.916/0.903 and balanced accuracy 0.591/0.694/0.666
+==============================================================================
+  ext_axis1 off_diagonal_mean L20                                stated=0.904    file=0.904117  -> MATCH
+  ext_axis1 off_diagonal_mean L40                                stated=0.916    file=0.915835  -> MATCH
+  ext_axis1 off_diagonal_mean L44                                stated=0.903    file=0.903388  -> MATCH
+  extended axis balacc, Average(LB), control threshold L20       stated=0.591    file=0.591400  -> MATCH
+  extended axis balacc, Average(LB), control threshold L40       stated=0.694    file=0.693900  -> MATCH
+  extended axis balacc, Average(LB), control threshold L44       stated=0.666    file=0.666300  -> MATCH
+  is L40 the best of the three layers for every persona contrast?
+    ext_axis1      L20=0.9041 L40=0.9158 L44=0.9034  best=L40
+    denial_axis1   L20=0.8660 L40=0.9115 L44=0.9001  best=L40
+    axis1          L20=0.6511 L40=0.8319 L44=0.8260  best=L40
+    pc1            L20=0.6669 L40=0.8593 L44=0.8506  best=L40
+    ext_pc3        L20=0.6837 L40=0.8655 L44=0.8799  best=L44
+    syc_axis1      L20=0.6153 L40=0.6626 L44=0.7078  best=L44
+    balacc extended axis (12v13)          L20=0.5914 L40=0.6939 L44=0.6663  best=L40
+    balacc knowledge-denial axis (4v6)    L20=0.5587 L40=0.7251 L44=0.6829  best=L40
+    balacc deception axis (8v7)           L20=0.5342 L40=0.6750 L44=0.6535  best=L40
+    balacc sycophancy axis (5v5)          L20=0.5477 L40=0.6009 L44=0.5764  best=L40
+    balacc base probe (RepE-trained)      L20=0.7209 L40=0.6255 L44=0.6256  best=L20
+  NB only three layers exist on his branch (20/40/44); no other depth was run.
+
+DONE

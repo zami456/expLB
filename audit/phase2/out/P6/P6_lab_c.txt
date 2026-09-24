@@ -1,0 +1,161 @@
+
+==============================================================================
+== F-20 (1)  can the 98-row / 89:9 passA & passC state be reconstructed?
+==============================================================================
+  matched slice (passB): C:/Users/user4/expLB/run-coords/passB/harm-pressure-kr-matched/rows.jsonl  74352 B  mtime=2026-09-19 20:09:16 -> 258 row_ids {1: 124, 0: 134}
+  C:/Users/user4/expLB/run-crossgen/passA/splits.json  117438 B  mtime=2026-09-19 14:16:00
+    top-level keys (6): ['frac_train', 'design', 'datasets', 'control', 'run_dir', 'splits']
+    /splits/42/harm-pressure-knowledge-report/test_row_ids: 40 row_ids; in matched slice: 20; labels {1: 18, 0: 2}
+    /splits/0/harm-pressure-knowledge-report/test_row_ids: 40 row_ids; in matched slice: 20; labels {1: 17, 0: 3}
+    /splits/1/harm-pressure-knowledge-report/test_row_ids: 40 row_ids; in matched slice: 19; labels {1: 17, 0: 2}
+    /splits/2/harm-pressure-knowledge-report/test_row_ids: 40 row_ids; in matched slice: 16; labels {1: 15, 0: 1}
+    /splits/3/harm-pressure-knowledge-report/test_row_ids: 40 row_ids; in matched slice: 19; labels {1: 17, 0: 2}
+    /splits/4/harm-pressure-knowledge-report/test_row_ids: 40 row_ids; in matched slice: 20; labels {1: 18, 0: 2}
+  C:/Users/user4/expLB/run-crossgen/kd11/passA/splits.json  19967 B  mtime=2026-09-20 13:57:51
+    top-level keys (6): ['frac_train', 'design', 'datasets', 'control', 'run_dir', 'splits']
+    /splits/42/harm-pressure-knowledge-report/test_row_ids: 40 row_ids; in matched slice: 20; labels {1: 18, 0: 2}
+  no splits at C:/Users/user4/expLB/run-crossgen/passB/splits.json
+  no splits at C:/Users/user4/expLB/run-crossgen/kd11/passB/splits.json
+  C:/Users/user4/expLB/run-crossgen/passC/splits.json  117438 B  mtime=2026-09-18 16:00:47
+    top-level keys (6): ['frac_train', 'design', 'datasets', 'control', 'run_dir', 'splits']
+    /splits/42/harm-pressure-knowledge-report/test_row_ids: 40 row_ids; in matched slice: 20; labels {1: 18, 0: 2}
+    /splits/0/harm-pressure-knowledge-report/test_row_ids: 40 row_ids; in matched slice: 20; labels {1: 17, 0: 3}
+    /splits/1/harm-pressure-knowledge-report/test_row_ids: 40 row_ids; in matched slice: 19; labels {1: 17, 0: 2}
+    /splits/2/harm-pressure-knowledge-report/test_row_ids: 40 row_ids; in matched slice: 16; labels {1: 15, 0: 1}
+    /splits/3/harm-pressure-knowledge-report/test_row_ids: 40 row_ids; in matched slice: 19; labels {1: 17, 0: 2}
+    /splits/4/harm-pressure-knowledge-report/test_row_ids: 40 row_ids; in matched slice: 20; labels {1: 18, 0: 2}
+  C:/Users/user4/expLB/run-crossgen/kd11/passC/splits.json  19967 B  mtime=2026-09-20 13:45:49
+    top-level keys (6): ['frac_train', 'design', 'datasets', 'control', 'run_dir', 'splits']
+    /splits/42/harm-pressure-knowledge-report/test_row_ids: 40 row_ids; in matched slice: 20; labels {1: 18, 0: 2}
+
+  --- hypergeometric expectation for a 200-row (100D/100H) HP-KR subsample ---
+    corpus: 139 deceptive / 2000 honest; matched slice keeps 124 / 134
+    100 deceptive drawn from 139: expected in slice = 100*124/139 = 89.2  (sd ~ 1.6)
+    100 honest    drawn from 2000: expected in slice = 100*134/2000 = 6.7  (sd ~ 2.4)
+    -> F-20's 89 / 9 (total 98) sits at those expectations.
+
+==============================================================================
+== F-20 (2)  do the passA/passC crossgen matrices include harm-pressure-kr-matched?
+==============================================================================
+  C:/Users/user4/expLB/run-crossgen/kd11/passA/matrices/*.json: 160 files; first = last_L0_s42.json
+    datasets (10): ['instructed-deception', 'harm-pressure-choice', 'harm-pressure-knowledge-report', 'convincing-game', 'insider-trading', 'ai_liar', 'sandbagging_v2', 'roleplaying', 'mask', 'sycophancy_mt']
+    'harm-pressure-kr-matched' present: False
+  C:/Users/user4/expLB/run-crossgen/kd11/passC/matrices/*.json: 12 files; first = last_L20_s42.json
+    datasets (10): ['instructed-deception', 'harm-pressure-choice', 'harm-pressure-knowledge-report', 'convincing-game', 'insider-trading', 'ai_liar', 'sandbagging_v2', 'roleplaying', 'mask', 'sycophancy_mt']
+    'harm-pressure-kr-matched' present: False
+  C:/Users/user4/expLB/run-crossgen/passA/matrices/*.json: 960 files; first = last_L0_s0.json
+    datasets (10): ['instructed-deception', 'harm-pressure-choice', 'harm-pressure-knowledge-report', 'convincing-game', 'insider-trading', 'ai_liar', 'sandbagging_v2', 'roleplaying', 'mask', 'sycophancy_mt']
+    'harm-pressure-kr-matched' present: False
+  C:/Users/user4/expLB/run-crossgen/passC/matrices/*.json: 72 files; first = last_L20_s0.json
+    datasets (10): ['instructed-deception', 'harm-pressure-choice', 'harm-pressure-knowledge-report', 'convincing-game', 'insider-trading', 'ai_liar', 'sandbagging_v2', 'roleplaying', 'mask', 'sycophancy_mt']
+    'harm-pressure-kr-matched' present: False
+  C:/Users/user4/expLB/run-crossgen/kd11/matrices/*.json: 42 files; first = last_L0_s42.json
+    datasets (11): ['instructed-deception', 'harm-pressure-choice', 'harm-pressure-knowledge-report', 'harm-pressure-kr-matched', 'convincing-game', 'insider-trading', 'ai_liar', 'sandbagging_v2', 'roleplaying', 'mask', 'sycophancy_mt']
+    'harm-pressure-kr-matched' present: True
+
+==============================================================================
+== F-17 / F-04 on the LAB copies
+==============================================================================
+
+######################################################################
+# F-04 on the lab copy
+######################################################################
+file : C:\Users\user4\expLB\run-crossgen\kd11\significance.json
+size : 2256477 B
+meta : boot_datasets = 10000 | note: BH within each block over every pooling x layer x probe x comparison
+n tests: 4788
+blocks  : ['10', '9']
+layers  : [0, 4, 8, 12, 16, 20, 22, 24, 28, 32, 36, 40, 44, 48, 52, 56, 60, 64, 68, 72, 76]
+poolings: ['last', 'mean']
+probes  : ['lr_reg10', 'mms', 'paper']
+comparisons (19): ['axes - datapca', 'axes - random', 'axes - raw', 'axes_resid - datapca', 'axes_resid - random', 'axes_resid - raw', 'datapca - raw', 'datapca@2 - raw', 'pc:deception - datapca', 'pc:deception - random', 'pc:deception - raw', 'pc:unified - datapca', 'pc:unified - random', 'pc:unified - raw', 'pc:unified@2 - datapca@2', 'pc:unified@2 - random@2', 'pc:unified@2 - raw', 'random - raw', 'random@2 - raw']
+  block '10': n=2394  pairs values=[110]   -> n_datasets = [11] (pairs = n*(n-1))
+  block '9': n=2394  pairs values=[90]   -> n_datasets = [10] (pairs = n*(n-1))
+
+=== the two quoted tests (block 9, L40, mean, paper) ===
+  axes - raw       diff=+0.0147  dataset_ci95=[-0.1701,+0.1872]  dataset_p=0.8746  q_bh(stored)=0.9725  pairs=90
+  axes - datapca   diff=+0.0264  dataset_ci95=[-0.1421,+0.1753]  dataset_p=0.7148  q_bh(stored)=0.9060  pairs=90
+
+significant_datasets == True : 0 of 4788
+per block: {'10': 0, '9': 0}
+
+=== BH q re-derived over candidate families (stated: 0.931 / 0.855, 1 significant) ===
+  block 9 only (as stored: BH per block)                     n= 2394  q(axes-raw)=0.9725  q(axes-datapca)=0.9060  n_sig(q<.05)=0
+  all tests in the file                                      n= 4788  q(axes-raw)=0.9563  q(axes-datapca)=0.8917  n_sig(q<.05)=0
+  layers [40] - both blocks pooled                           n=  228  q(axes-raw)=0.9764  q(axes-datapca)=0.9764  n_sig(q<.05)=0
+  layers [40] - block 9 only                                 n=  114  q(axes-raw)=0.9669  q(axes-datapca)=0.9318  n_sig(q<.05)=0
+  layers [40, 44] - both blocks pooled                       n=  456  q(axes-raw)=0.9787  q(axes-datapca)=0.9595  n_sig(q<.05)=1
+  layers [40, 44] - block 9 only                             n=  228  q(axes-raw)=0.9727  q(axes-datapca)=0.8948  n_sig(q<.05)=1
+  layers [40, 44, 20] - both blocks pooled                   n=  684  q(axes-raw)=0.9554  q(axes-datapca)=0.9014  n_sig(q<.05)=0
+  layers [40, 44, 20] - block 9 only                         n=  342  q(axes-raw)=0.9578  q(axes-datapca)=0.8638  n_sig(q<.05)=1
+
+=== the run-1 family the log describes: 16 comparisons x 3 probes x 2 poolings x 2 layers x 2 blocks ===
+  tests present at layers 40+44: 456 | comparisons 19 | probes 3 | poolings 2 | blocks 2
+  16 x 3 x 2 x 2 x 2 = 384
+  run-1 reconstruction: block 10, layers 40+44               n=  228  q(axes-raw)=nan  q(axes-datapca)=nan  n_sig(q<.05)=0
+  run-1 reconstruction: block 9, layers 40+44                n=  228  q(axes-raw)=0.9727  q(axes-datapca)=0.8948  n_sig(q<.05)=1
+  run-1 reconstruction: all 384 (BH over both blocks together) n=  456  q(axes-raw)=0.9787  q(axes-datapca)=0.9595  n_sig(q<.05)=1
+
+=== how many tests would clear q<0.05 in each reconstruction ===
+  block 10: 0 significant -> []
+  block 9: 1 significant -> [(0.0228, 'last', 44, 'mms', 'random@2 - raw')]
+  all 384 pooled: 1 significant -> [(0.0456, '9', 'last', 44, 'mms', 'random@2 - raw')]
+
+=== smallest dataset_p in the 384 reconstruction (what 'the 1 significant' would be) ===
+  p=0.0001 block=9 last L44 mms       random@2 - raw         diff=-0.2287
+  p=0.0018 block=9 last L40 mms       random@2 - raw         diff=-0.2064
+  p=0.0024 block=9 last L44 paper     random@2 - raw         diff=-0.1541
+  p=0.0028 block=9 last L44 mms       axes - random          diff=+0.2112
+  p=0.0028 block=9 last L44 mms       pc:unified@2 - random@2 diff=+0.2305
+
+######################################################################
+# F-17 on the lab copy
+######################################################################
+=== (a) significance.json ===
+file : C:\Users\user4\expLB\run-crossgen\significance.json | 2247993 B
+n tests: 4788 | blocks ['10', '9'] | layers [0, 4, 8, 12, 16, 20, 22, 24, 28, 32, 36, 40, 44, 48, 52, 56, 60, 64, 68, 72, 76]
+  block 10 pc:unified@2 - datapca@2   diff=-0.0028 dataset_p=0.9632 q_bh=0.9842 pairs=90
+  block  9 pc:unified@2 - datapca@2   diff=+0.0855 dataset_p=0.4036 q_bh=0.8171 pairs=72
+  block 10 pc:unified - datapca       diff=-0.0053 dataset_p=0.9470 q_bh=0.9793 pairs=90
+  block  9 pc:unified - datapca       diff=+0.0382 dataset_p=0.5534 q_bh=0.8762 pairs=72
+
+=== (b)-(d) per-cell matrix ===
+file : C:\Users\user4\expLB\run-crossgen\matrices\mean_L40_s42.json | 349229 B
+bank : axes_vectors_s3_fp32.pt | k 5 | pooling mean | layer 40 | seed 42 | datasets 10
+probe             cells  mean(d) raw<0.6    n  mean(d) raw>=0.85    n  corr(raw,d)
+paper               all          +0.0555   32            -0.3869   35      -0.7165
+paper          off-diag          +0.0555   32            -0.4378   25      -0.7565
+lr_reg10            all          +0.0123   36            -0.4021   32      -0.6962
+lr_reg10       off-diag          +0.0123   36            -0.4679   22      -0.7372
+mms                 all          +0.1149   34            -0.4148   31      -0.7701
+mms            off-diag          +0.1149   34            -0.4796   23      -0.8147
+
+  same, with 'random' (k=5) instead of random@2, probe=paper:
+             all lo=+0.1402 (n=32) hi=-0.2514 (n=35) corr=-0.7144
+        off-diag lo=+0.1402 (n=32) hi=-0.2895 (n=25) corr=-0.7563
+
+=== layer sweep of (b)-(d), probe=paper, all cells, mean pooling ===
+ layer    raw<0.6    n   raw>=0.85    n     corr
+     0    +0.0323   66     -0.3304    9  -0.7576
+     4    +0.0987   54     -0.2737   12  -0.8326
+     8    +0.1153   52     -0.3804   16  -0.8698
+    12    +0.1372   47     -0.2960   17  -0.8223
+    16    +0.0440   46     -0.3448   23  -0.7793
+    20    +0.0421   43     -0.3991   33  -0.7592
+    22    +0.0772   44     -0.4363   29  -0.7931
+    24    +0.0826   37     -0.4267   30  -0.7671
+    28    +0.0452   36     -0.3884   34  -0.7170
+    32    +0.0980   30     -0.3814   39  -0.8291
+    36    +0.1062   32     -0.3932   38  -0.7923
+    40    +0.0555   32     -0.3869   35  -0.7165
+    44    +0.0342   36     -0.4162   31  -0.7236
+    48    +0.0877   37     -0.4158   27  -0.7918
+    52    +0.0938   37     -0.3743   28  -0.7705
+    56    +0.1038   38     -0.3772   27  -0.8118
+    60    +0.0834   37     -0.3747   26  -0.7824
+    64    +0.1081   35     -0.4029   27  -0.7443
+    68    +0.1115   38     -0.4050   26  -0.7464
+    72    +0.1007   37     -0.4028   26  -0.7797
+    76    +0.0628   41     -0.3753   29  -0.7329
+  layers covered: [0, 4, 8, 12, 16, 20, 22, 24, 28, 32, 36, 40, 44, 48, 52, 56, 60, 64, 68, 72, 76]
+python exit 0

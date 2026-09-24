@@ -1,0 +1,103 @@
+=== ZERO-SHOT on sycophancy_mt (mean pooling, seed 42) ===
+  banks/cap_s23      L20: bank=axes_s23.pt name=cap_s23 k=5 | contrast=0.7592[0.733,0.789]  PC1=0.7399[0.712,0.770]  contrast:cap_vs_default=0.7082[0.678,0.742]  PC1:cap_vs_default=0.7399[0.712,0.770]  contrast:cap_only=0.7082[0.678,0.742]  PC1:cap_only=0.6970[0.666,0.731]
+  banks/cap_s23      L40: bank=axes_s23.pt name=cap_s23 k=5 | contrast=0.7449[0.717,0.772]  PC1=0.7355[0.706,0.763]  contrast:cap_vs_default=0.7021[0.669,0.731]  PC1:cap_vs_default=0.7355[0.706,0.763]  contrast:cap_only=0.7021[0.669,0.731]  PC1:cap_only=0.7012[0.670,0.731]
+  banks/cap_s23      L44: bank=axes_s23.pt name=cap_s23 k=5 | contrast=0.7281[0.699,0.756]  PC1=0.7166[0.687,0.744]  contrast:cap_vs_default=0.6806[0.650,0.711]  PC1:cap_vs_default=0.7166[0.687,0.744]  contrast:cap_only=0.6806[0.650,0.711]  PC1:cap_only=0.6756[0.644,0.706]
+  banks/cap_all      L20: bank=axes_all.pt name=cap_all k=5 | contrast=0.7624[0.735,0.792]  PC1=0.7382[0.710,0.769]  contrast:cap_vs_default=0.7088[0.678,0.742]  PC1:cap_vs_default=0.7382[0.710,0.769]  contrast:cap_only=0.7088[0.678,0.742]  PC1:cap_only=0.6975[0.666,0.731]
+  banks/cap_all      L40: bank=axes_all.pt name=cap_all k=5 | contrast=0.7469[0.719,0.774]  PC1=0.7364[0.708,0.764]  contrast:cap_vs_default=0.7026[0.670,0.732]  PC1:cap_vs_default=0.7364[0.708,0.764]  contrast:cap_only=0.7026[0.670,0.732]  PC1:cap_only=0.7002[0.669,0.731]
+  banks/cap_all      L44: bank=axes_all.pt name=cap_all k=5 | contrast=0.7305[0.702,0.758]  PC1=0.7176[0.688,0.745]  contrast:cap_vs_default=0.6815[0.651,0.712]  PC1:cap_vs_default=0.7176[0.688,0.745]  contrast:cap_only=0.6815[0.651,0.712]  PC1:cap_only=0.6749[0.643,0.705]
+  (paper16 baseline) L20: bank=axes_vectors_s3_fp32.pt name=paper16 k=5 | contrast=0.4527[0.418,0.493]  PC1=0.4052[0.371,0.445]
+  (paper16 baseline) L40: bank=axes_vectors_s3_fp32.pt name=paper16 k=5 | contrast=0.4089[0.374,0.445]  PC1=0.3740[0.340,0.408]
+  (paper16 baseline) L44: bank=axes_vectors_s3_fp32.pt name=paper16 k=5 | contrast=0.3891[0.355,0.424]  PC1=0.3563[0.323,0.389]
+
+=== TRAINED: off-diagonal mean with sycophancy_mt as TARGET, probe=paper, L40, mean ===
+  pc:cap_vs_default@2      0.7136  vs_raw=+0.1123  n=10
+  pc:capitulation@2        0.7136  vs_raw=+0.1123  n=10
+  pc:cap_vs_default        0.6575  vs_raw=+0.0562  n=10
+  pc:capitulation          0.6575  vs_raw=+0.0562  n=10
+  pc:cap_only              0.6355  vs_raw=+0.0341  n=10
+  raw                      0.6013  vs_raw=+0.0000  n=10
+  pc:cap_only@2            0.5935  vs_raw=-0.0078  n=10
+  length                   0.5820  vs_raw=-0.0193  n=10
+  datapca                  0.5776  vs_raw=-0.0237  n=10
+  datapca@2                0.5594  vs_raw=-0.0420  n=10
+  random                   0.5413  vs_raw=-0.0600  n=10
+  random@2                 0.4974  vs_raw=-0.1039  n=10
+  paper16:pc:unified       0.4451  vs_raw=-0.1562  n=10
+  paper16:axes_resid       0.4289  vs_raw=-0.1725  n=10
+  paper16:pc:deception     0.3910  vs_raw=-0.2103  n=10
+  paper16:axes             0.3551  vs_raw=-0.2462  n=10
+  paper16:pc:unified@2     0.3424  vs_raw=-0.2589  n=10
+
+=== JUDGE FILTER: s23 vs all, EVERY feature, L40 mean, paper probe ===
+  datapca                  s23=0.5776  all=0.5776  |diff|=0.0000
+  datapca@2                s23=0.5594  all=0.5594  |diff|=0.0000
+  length                   s23=0.5820  all=0.5820  |diff|=0.0000
+  pc:cap_only              s23=0.6355  all=0.6289  |diff|=0.0066  <-- exceeds 0.004
+  pc:cap_only@2            s23=0.5935  all=0.6077  |diff|=0.0142  <-- exceeds 0.004
+  pc:cap_vs_default        s23=0.6575  all=0.6564  |diff|=0.0012
+  pc:cap_vs_default@2      s23=0.7136  all=0.7132  |diff|=0.0004
+  pc:capitulation          s23=0.6575  all=0.6564  |diff|=0.0012
+  pc:capitulation@2        s23=0.7136  all=0.7132  |diff|=0.0004
+  random                   s23=0.5413  all=0.5413  |diff|=0.0000
+  random@2                 s23=0.4974  all=0.4974  |diff|=0.0000
+  raw                      s23=0.6013  all=0.6013  |diff|=0.0000
+  zero-shot contrast               s23=0.7449  all=0.7469  |diff|=0.0020
+  zero-shot PC1                    s23=0.7355  all=0.7364  |diff|=0.0009
+  zero-shot contrast:cap_vs_default s23=0.7021  all=0.7026  |diff|=0.0004
+  zero-shot PC1:cap_vs_default     s23=0.7355  all=0.7364  |diff|=0.0009
+  zero-shot contrast:cap_only      s23=0.7021  all=0.7026  |diff|=0.0004
+  zero-shot PC1:cap_only           s23=0.7012  all=0.7002  |diff|=0.0010
+  LARGEST trained |s23 - all| over all features: 0.0142 on pc:cap_only@2
+
+=== cap_only penalty (the entry's caveat (c)), both filters, all three layers ===
+  L20  s23: capitulation@2=0.6438 cap_only@2=0.5869 penalty=-0.0570 | capitulation=0.6423 cap_only=0.5791 penalty=-0.0631
+  L20  all: capitulation@2=0.6451 cap_only@2=0.5986 penalty=-0.0465 | capitulation=0.6345 cap_only=0.5842 penalty=-0.0503
+  L40  s23: capitulation@2=0.7136 cap_only@2=0.5935 penalty=-0.1201 | capitulation=0.6575 cap_only=0.6355 penalty=-0.0221
+  L40  all: capitulation@2=0.7132 cap_only@2=0.6077 penalty=-0.1054 | capitulation=0.6564 cap_only=0.6289 penalty=-0.0275
+  L44  s23: capitulation@2=0.6904 cap_only@2=0.5957 penalty=-0.0947 | capitulation=0.6421 cap_only=0.6243 penalty=-0.0179
+  L44  all: capitulation@2=0.6894 cap_only@2=0.6101 penalty=-0.0793 | capitulation=0.6392 cap_only=0.6349 penalty=-0.0044
+
+=== LAYER PROFILE, trained @2 (s23) and zero-shot contrast, every stored layer ===
+  mean L0   zs contrast=0.6186 PC1=0.6196 | cap@2=0.5786 cap_only@2=0.5187 raw=0.5096 datapca@2=0.4771 random@2=0.4874 | register contrast=0.3626 PC1=0.3711
+  mean L4   zs contrast=0.6450 PC1=0.6335 | cap@2=0.5662 cap_only@2=0.5362 raw=0.5286 datapca@2=0.4988 random@2=0.4854 | register contrast=0.3911 PC1=0.3961
+  mean L8   zs contrast=0.6977 PC1=0.6876 | cap@2=0.5658 cap_only@2=0.5653 raw=0.5472 datapca@2=0.5203 random@2=0.4946 | register contrast=0.4597 PC1=0.4465
+  mean L12  zs contrast=0.6995 PC1=0.6891 | cap@2=0.5585 cap_only@2=0.5478 raw=0.5540 datapca@2=0.5469 random@2=0.5217 | register contrast=0.4399 PC1=0.4116
+  mean L16  zs contrast=0.7355 PC1=0.7221 | cap@2=0.6074 cap_only@2=0.5973 raw=0.5912 datapca@2=0.5714 random@2=0.5028 | register contrast=0.4875 PC1=0.4393
+  mean L20  zs contrast=0.7592 PC1=0.7399 | cap@2=0.6438 cap_only@2=0.5869 raw=0.5600 datapca@2=0.5756 random@2=0.4907 | register contrast=0.4527 PC1=0.4052
+  mean L22  zs contrast=0.7516 PC1=0.7360 | cap@2=0.6325 cap_only@2=0.5839 raw=0.5565 datapca@2=0.5699 random@2=0.4956 | register contrast=0.4266 PC1=0.3852
+  mean L24  zs contrast=0.7437 PC1=0.7288 | cap@2=0.6034 cap_only@2=0.5718 raw=0.5621 datapca@2=0.5773 random@2=0.4982 | register contrast=0.4219 PC1=0.3826
+  mean L28  zs contrast=0.7738 PC1=0.7611 | cap@2=0.7193 cap_only@2=0.5901 raw=0.5836 datapca@2=0.5697 random@2=0.4947 | register contrast=0.4531 PC1=0.4083
+  mean L32  zs contrast=0.7796 PC1=0.7699 | cap@2=0.7521 cap_only@2=0.5825 raw=0.6134 datapca@2=0.5774 random@2=0.4881 | register contrast=0.4699 PC1=0.4318
+  mean L36  zs contrast=0.7509 PC1=0.7419 | cap@2=0.7299 cap_only@2=0.6062 raw=0.6017 datapca@2=0.5701 random@2=0.4859 | register contrast=0.4640 PC1=0.4219
+  mean L40  zs contrast=0.7449 PC1=0.7355 | cap@2=0.7136 cap_only@2=0.5935 raw=0.6013 datapca@2=0.5594 random@2=0.4974 | register contrast=0.4089 PC1=0.3740
+  mean L44  zs contrast=0.7281 PC1=0.7166 | cap@2=0.6904 cap_only@2=0.5957 raw=0.5831 datapca@2=0.5192 random@2=0.4968 | register contrast=0.3891 PC1=0.3563
+  mean L48  zs contrast=0.7113 PC1=0.6982 | cap@2=0.6720 cap_only@2=0.5966 raw=0.5743 datapca@2=0.5089 random@2=0.4903 | register contrast=0.3729 PC1=0.3433
+  mean L52  zs contrast=0.7121 PC1=0.6988 | cap@2=0.6750 cap_only@2=0.5920 raw=0.5696 datapca@2=0.5090 random@2=0.4842 | register contrast=0.3771 PC1=0.3523
+  mean L56  zs contrast=0.7028 PC1=0.6900 | cap@2=0.6677 cap_only@2=0.5854 raw=0.5703 datapca@2=0.5086 random@2=0.4768 | register contrast=0.3669 PC1=0.3480
+  mean L60  zs contrast=0.7017 PC1=0.6904 | cap@2=0.6657 cap_only@2=0.5799 raw=0.5721 datapca@2=0.5074 random@2=0.4900 | register contrast=0.3623 PC1=0.3480
+  mean L64  zs contrast=0.6955 PC1=0.6864 | cap@2=0.6477 cap_only@2=0.5840 raw=0.5663 datapca@2=0.5108 random@2=0.4915 | register contrast=0.3639 PC1=0.3513
+  mean L68  zs contrast=0.6906 PC1=0.6829 | cap@2=0.6385 cap_only@2=0.5856 raw=0.5719 datapca@2=0.5143 random@2=0.4795 | register contrast=0.3691 PC1=0.3538
+  mean L72  zs contrast=0.6979 PC1=0.6885 | cap@2=0.6467 cap_only@2=0.5409 raw=0.5735 datapca@2=0.5247 random@2=0.4785 | register contrast=0.3792 PC1=0.3665
+  mean L76  zs contrast=0.6912 PC1=0.6872 | cap@2=0.6242 cap_only@2=0.5249 raw=0.5573 datapca@2=0.5161 random@2=0.4908 | register contrast=0.3978 PC1=0.3869
+  last L0   zs contrast=0.5614 PC1=0.5087 | cap@2=0.4956 cap_only@2=0.4883 raw=0.4919 datapca@2=0.4663 random@2=0.4734 | register contrast=0.3822 PC1=0.3795
+  last L4   zs contrast=0.5516 PC1=0.5499 | cap@2=0.4772 cap_only@2=0.4957 raw=0.4945 datapca@2=0.4560 random@2=0.4943 | register contrast=0.3814 PC1=0.3995
+  last L8   zs contrast=0.5734 PC1=0.5679 | cap@2=0.4970 cap_only@2=0.5003 raw=0.5077 datapca@2=0.4788 random@2=0.4725 | register contrast=0.4330 PC1=0.4356
+  last L12  zs contrast=0.5719 PC1=0.5634 | cap@2=0.5142 cap_only@2=0.5056 raw=0.5131 datapca@2=0.4851 random@2=0.5039 | register contrast=0.4204 PC1=0.4044
+  last L16  zs contrast=0.5989 PC1=0.5856 | cap@2=0.5361 cap_only@2=0.5347 raw=0.5376 datapca@2=0.5174 random@2=0.5179 | register contrast=0.4553 PC1=0.4100
+  last L20  zs contrast=0.6562 PC1=0.6241 | cap@2=0.5923 cap_only@2=0.5378 raw=0.5234 datapca@2=0.5356 random@2=0.5126 | register contrast=0.3965 PC1=0.3529
+  last L22  zs contrast=0.6436 PC1=0.6119 | cap@2=0.5696 cap_only@2=0.5347 raw=0.5041 datapca@2=0.5214 random@2=0.4984 | register contrast=0.3979 PC1=0.3632
+  last L24  zs contrast=0.6390 PC1=0.6078 | cap@2=0.5420 cap_only@2=0.5326 raw=0.4845 datapca@2=0.5250 random@2=0.5005 | register contrast=0.3995 PC1=0.3647
+  last L28  zs contrast=0.6721 PC1=0.6494 | cap@2=0.6340 cap_only@2=0.5557 raw=0.5141 datapca@2=0.5116 random@2=0.5118 | register contrast=0.3627 PC1=0.3386
+  last L32  zs contrast=0.6660 PC1=0.6521 | cap@2=0.6592 cap_only@2=0.5696 raw=0.5267 datapca@2=0.5038 random@2=0.5164 | register contrast=0.3673 PC1=0.3548
+  last L36  zs contrast=0.6270 PC1=0.6146 | cap@2=0.6016 cap_only@2=0.5522 raw=0.5316 datapca@2=0.4938 random@2=0.5867 | register contrast=0.3826 PC1=0.3504
+  last L40  zs contrast=0.5762 PC1=0.5619 | cap@2=0.5622 cap_only@2=0.5135 raw=0.4995 datapca@2=0.4878 random@2=0.5042 | register contrast=0.3430 PC1=0.3153
+  last L44  zs contrast=0.5442 PC1=0.5289 | cap@2=0.5411 cap_only@2=0.4920 raw=0.4958 datapca@2=0.4818 random@2=0.4980 | register contrast=0.3660 PC1=0.3326
+  last L48  zs contrast=0.4873 PC1=0.4735 | cap@2=0.4991 cap_only@2=0.4482 raw=0.4842 datapca@2=0.4741 random@2=0.5046 | register contrast=0.3882 PC1=0.3560
+  last L52  zs contrast=0.4731 PC1=0.4575 | cap@2=0.4938 cap_only@2=0.4321 raw=0.4718 datapca@2=0.4752 random@2=0.4976 | register contrast=0.4128 PC1=0.3938
+  last L56  zs contrast=0.4344 PC1=0.4206 | cap@2=0.4588 cap_only@2=0.4144 raw=0.4816 datapca@2=0.4761 random@2=0.5154 | register contrast=0.4516 PC1=0.4349
+  last L60  zs contrast=0.4018 PC1=0.3913 | cap@2=0.4549 cap_only@2=0.4059 raw=0.4994 datapca@2=0.4733 random@2=0.5158 | register contrast=0.4914 PC1=0.4816
+  last L64  zs contrast=0.3916 PC1=0.3849 | cap@2=0.4412 cap_only@2=0.4064 raw=0.4947 datapca@2=0.4697 random@2=0.5175 | register contrast=0.4846 PC1=0.4753
+  last L68  zs contrast=0.3972 PC1=0.3943 | cap@2=0.4461 cap_only@2=0.4160 raw=0.4950 datapca@2=0.4590 random@2=0.5139 | register contrast=0.4210 PC1=0.4096
+  last L72  zs contrast=0.4243 PC1=0.4201 | cap@2=0.4541 cap_only@2=0.4263 raw=0.4988 datapca@2=0.4589 random@2=0.5227 | register contrast=0.4057 PC1=0.3918
+  last L76  zs contrast=0.4946 PC1=0.4871 | cap@2=0.5026 cap_only@2=0.4265 raw=0.5055 datapca@2=0.4576 random@2=0.4801 | register contrast=0.3614 PC1=0.3482
+python exit 0

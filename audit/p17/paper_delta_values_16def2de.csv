@@ -1,0 +1,86 @@
+key,recomputed_full,recomputed_3dp,numbers_tex,match,note,sha
+depth-n,16.0,16,16,MATCH,,16def2deec34aeee532511df116adb7de5522ca7
+depth-first,20,20,20,MATCH,,16def2deec34aeee532511df116adb7de5522ca7
+depth-last,79,79,79,MATCH,,16def2deec34aeee532511df116adb7de5522ca7
+depth-off-ext-peak,0.9274688514303678,0.927,0.927,MATCH,"summary.csv off_diagonal_mean, max over 16 layers",16def2deec34aeee532511df116adb7de5522ca7
+depth-off-ext-peak-layer,36,36,36,MATCH,,16def2deec34aeee532511df116adb7de5522ca7
+depth-off-dec-peak,0.8737529861877285,0.874,0.874,MATCH,"summary.csv off_diagonal_mean, max over 16 layers",16def2deec34aeee532511df116adb7de5522ca7
+depth-off-dec-peak-layer,76,76,76,MATCH,,16def2deec34aeee532511df116adb7de5522ca7
+depth-off-den-peak,0.9124272845083764,0.912,0.912,MATCH,"summary.csv off_diagonal_mean, max over 16 layers",16def2deec34aeee532511df116adb7de5522ca7
+depth-off-den-peak-layer,36,36,36,MATCH,,16def2deec34aeee532511df116adb7de5522ca7
+depth-off-base-peak,0.7682162964601599,0.768,0.768,MATCH,"summary.csv off_diagonal_mean, max over 16 layers",16def2deec34aeee532511df116adb7de5522ca7
+depth-off-base-peak-layer,36,36,36,MATCH,,16def2deec34aeee532511df116adb7de5522ca7
+depth-zs-ext-peak,0.913,0.913,0.913,MATCH,"zero_shot_operating.csv control, Average (Liars' Bench) auroc",16def2deec34aeee532511df116adb7de5522ca7
+depth-zs-ext-peak-layer,36,36,36,MATCH,,16def2deec34aeee532511df116adb7de5522ca7
+depth-zs-dec-peak,0.8515,0.852,0.852,MATCH,"zero_shot_operating.csv control, Average (Liars' Bench) auroc",16def2deec34aeee532511df116adb7de5522ca7
+depth-zs-dec-peak-layer,76,76,76,MATCH,,16def2deec34aeee532511df116adb7de5522ca7
+depth-zs-den-peak,0.895,0.895,0.895,MATCH,"zero_shot_operating.csv control, Average (Liars' Bench) auroc",16def2deec34aeee532511df116adb7de5522ca7
+depth-zs-den-peak-layer,36,36,36,MATCH,,16def2deec34aeee532511df116adb7de5522ca7
+depth-zs-base-peak,0.8498,0.850,0.850,MATCH,"zero_shot_operating.csv control, Average (Liars' Bench) auroc",16def2deec34aeee532511df116adb7de5522ca7
+depth-zs-base-peak-layer,32,32,32,MATCH,,16def2deec34aeee532511df116adb7de5522ca7
+depth-zs-margin-at-base-peak,0.055499999999999994,0.055,0.055,MATCH,at L32,16def2deec34aeee532511df116adb7de5522ca7
+depth-zs-ext-at-base-peak,0.9053,0.905,0.905,MATCH,,16def2deec34aeee532511df116adb7de5522ca7
+depth-zs-base-at-ext-peak,0.7826,0.783,0.783,MATCH,,16def2deec34aeee532511df116adb7de5522ca7
+depth-ext-over-dec-min,0.025713869570379244,0.026,0.026,MATCH,ext>=dec at all layers: True,16def2deec34aeee532511df116adb7de5522ca7
+depth-ext-trough,0.8474103872284992,0.847,0.847,MATCH,,16def2deec34aeee532511df116adb7de5522ca7
+depth-ext-L76,0.9231802495986432,0.923,0.923,MATCH,,16def2deec34aeee532511df116adb7de5522ca7
+depth-ext-last,0.8436290446856929,0.844,0.844,MATCH,,16def2deec34aeee532511df116adb7de5522ca7
+depth-pertest-holds-last,48,48,48,MATCH,"breaks={52: ['HP-C'], 56: ['HP-C'], 60: ['HP-C', 'HP-KR'], 64: ['HP-C'], 68: ['HP-C', 'HP-KR'], 72: ['HP-C']}",16def2deec34aeee532511df116adb7de5522ca7
+depth-pertest-break-first,52,52,52,MATCH,,16def2deec34aeee532511df116adb7de5522ca7
+depth-pertest-break-last,72,72,72,MATCH,,16def2deec34aeee532511df116adb7de5522ca7
+depth-pertest-exception,HP-C and HP-KR,HP-C and HP-KR,HP-C and HP-KR,MATCH,,16def2deec34aeee532511df116adb7de5522ca7
+depth-pertest-break-n,6.0,6,6,MATCH,,16def2deec34aeee532511df116adb7de5522ca7
+depth-pc-wins-n,3.0,3,3,MATCH,"layers=[64, 68, 72]",16def2deec34aeee532511df116adb7de5522ca7
+depth-pc-wins-complement,13.0,13,13,MATCH,,16def2deec34aeee532511df116adb7de5522ca7
+depth-pc-wins-first,64,64,64,MATCH,,16def2deec34aeee532511df116adb7de5522ca7
+depth-pc-wins-last,72,72,72,MATCH,,16def2deec34aeee532511df116adb7de5522ca7
+depth-pc-wins-max,0.020542220347425588,0.021,0.021,MATCH,,16def2deec34aeee532511df116adb7de5522ca7
+depth-off-ext-over-base-min,0.11503427840567926,0.115,0.115,MATCH,ext>base all: True; argmin L60,16def2deec34aeee532511df116adb7de5522ca7
+depth-off-ext-over-base-at-peak,0.15925255497020796,0.159,0.159,MATCH,,16def2deec34aeee532511df116adb7de5522ca7
+depth-base-diag-min,0.9564141442695137,0.956,0.956,MATCH,argmin L20,16def2deec34aeee532511df116adb7de5522ca7
+depth-base-diag-max,0.9837635106184428,0.984,0.984,MATCH,argmax L52,16def2deec34aeee532511df116adb7de5522ca7
+depth-ext-diag-min,0.8425959834630191,0.843,0.843,MATCH,argmin L79,16def2deec34aeee532511df116adb7de5522ca7
+depth-ext-diag-max,0.9271761381512073,0.927,0.927,MATCH,argmax L36,16def2deec34aeee532511df116adb7de5522ca7
+depth-base-drop-min,0.21301465625681248,0.213,0.213,MATCH,L36,16def2deec34aeee532511df116adb7de5522ca7
+depth-base-drop-max,0.3468521131250515,0.347,0.347,MATCH,L24,16def2deec34aeee532511df116adb7de5522ca7
+depth-ext-drop-max,0.0017223859094988025,0.002,0.002,MATCH,L60,16def2deec34aeee532511df116adb7de5522ca7
+depth-ext-worst-dataset,0.5424141791044776,0.542,0.542,MATCH,"at (64, 'harm_refusal_choice__plain')",16def2deec34aeee532511df116adb7de5522ca7
+depth-syc-hpkr-max,0.5073453237410072,0.507,0.507,MATCH,,16def2deec34aeee532511df116adb7de5522ca7
+depth-syc-hpkr-max-layer,48,48,48,MATCH,,16def2deec34aeee532511df116adb7de5522ca7
+depth-dec-over-syc-n,14.0,14,14,MATCH,,16def2deec34aeee532511df116adb7de5522ca7
+depth-zs-ext-over-base-min,0.021500000000000075,0.022,0.022,MATCH,argmin L72; all>0: True,16def2deec34aeee532511df116adb7de5522ca7
+depth-base-no-invert,32,32,32,MATCH,"inversions={20: ['HP-C', 'HP-KR'], 24: ['HP-KR'], 28: ['HP-KR'], 36: ['IT'], 40: ['IT'], 44: ['IT'], 48: ['IT'], 52: ['IT'], 56: ['IT'], 60: ['IT'], 64: ['IT'], 68: ['IT'], 72: ['IT'], 76: ['IT'], 79: ['IT']}",16def2deec34aeee532511df116adb7de5522ca7
+depth-base-invert-layers,15.0,15,15,MATCH,,16def2deec34aeee532511df116adb7de5522ca7
+depth-base-it-invert-first,36,36,36,MATCH,"IT-inverted layers [36, 40, 44, 48, 52, 56, 60, 64, 68, 72, 76, 79]",16def2deec34aeee532511df116adb7de5522ca7
+depth-hpkr-den-balacc-peak,0.9102,0.910,0.910,MATCH,,16def2deec34aeee532511df116adb7de5522ca7
+depth-hpkr-den-balacc-peak-layer,40,40,40,MATCH,,16def2deec34aeee532511df116adb7de5522ca7
+depth-hpkr-den-balacc-L36,0.7449,0.745,0.745,MATCH,,16def2deec34aeee532511df116adb7de5522ca7
+depth-hpkr-den-balacc-L44,0.7571,0.757,0.757,MATCH,,16def2deec34aeee532511df116adb7de5522ca7
+depth-hpkr-den-broad-first,36,36,36,MATCH,"layers>0.6: [36, 40, 44, 48, 52, 56, 60, 64, 68, 72, 76]",16def2deec34aeee532511df116adb7de5522ca7
+depth-hpkr-den-broad-last,76,76,76,MATCH,,16def2deec34aeee532511df116adb7de5522ca7
+depth-hpkr-den-auroc-min,0.7993,0.799,0.799,MATCH,,16def2deec34aeee532511df116adb7de5522ca7
+depth-hpkr-den-auroc-max,0.9185,0.919,0.919,MATCH,,16def2deec34aeee532511df116adb7de5522ca7
+depth-hpkr-ext-auroc-min,0.7986,0.799,0.799,MATCH,,16def2deec34aeee532511df116adb7de5522ca7
+depth-hpkr-ext-auroc-max,0.9249,0.925,0.925,MATCH,,16def2deec34aeee532511df116adb7de5522ca7
+depth-hpkr-base-auroc-peak,0.9671,0.967,0.967,MATCH,,16def2deec34aeee532511df116adb7de5522ca7
+depth-hpkr-base-auroc-peak-layer,36,36,36,MATCH,,16def2deec34aeee532511df116adb7de5522ca7
+depth-hpkr-base-ahead-n,8.0,8,8,MATCH,"ahead=[36, 40, 56, 60, 64, 68, 72, 79]; NOT ahead=[44, 48, 52, 76]",16def2deec34aeee532511df116adb7de5522ca7
+depth-hpkr-base-deep-n,12.0,12,12,MATCH,,16def2deec34aeee532511df116adb7de5522ca7
+depth-hpkr-base-peak-margin,0.0625,0.063,0.063,MATCH,,16def2deec34aeee532511df116adb7de5522ca7
+depth-hpkr-floor-arms,the base probe and the extended contrast,the base probe and the extended contrast,the base probe and the extended contrast,MATCH,,16def2deec34aeee532511df116adb7de5522ca7
+x-hpkr-dec-balacc-range,0.486-0.503,0.486-0.503,,n/a,not a numbers.tex key,16def2deec34aeee532511df116adb7de5522ca7
+x-hpkr-base-auroc-range-40plus,0.8283-0.9397,0.8283-0.9397,,n/a,not a key,16def2deec34aeee532511df116adb7de5522ca7
+zs-den-hpkr-L44,0.90768345323741,0.908,0.908,MATCH,zero_shot.csv L44,16def2deec34aeee532511df116adb7de5522ca7
+bp-auroc-hpkr-L44,0.8283,0.828,0.828,MATCH,zero_shot_operating.csv base arm (results_table.csv not committed),16def2deec34aeee532511df116adb7de5522ca7
+bp-auroc-hpc-L20,0.4708,0.471,0.471,MATCH,zero_shot_operating.csv base arm (results_table.csv not committed),16def2deec34aeee532511df116adb7de5522ca7
+bp-auroc-hpkr-L20,0.109,0.109,0.109,MATCH,zero_shot_operating.csv base arm (results_table.csv not committed),16def2deec34aeee532511df116adb7de5522ca7
+bp-auroc-it-L40,0.3378,0.338,0.338,MATCH,zero_shot_operating.csv base arm (results_table.csv not committed),16def2deec34aeee532511df116adb7de5522ca7
+bp-auroc-it-L44,0.2888,0.289,0.289,MATCH,zero_shot_operating.csv base arm (results_table.csv not committed),16def2deec34aeee532511df116adb7de5522ca7
+bp-balacc-hpkr-L40,0.5,0.500,0.500,MATCH,zero_shot_operating.csv base arm (results_table.csv not committed),16def2deec34aeee532511df116adb7de5522ca7
+zs-ext-lb-L40,0.8990023281603701,0.899,0.899,MATCH,,16def2deec34aeee532511df116adb7de5522ca7
+off-ext-L40,0.9158352734669752,0.916,0.916,MATCH,,16def2deec34aeee532511df116adb7de5522ca7
+op-base-auroc-L20,0.6972,0.697,0.697,MATCH,,16def2deec34aeee532511df116adb7de5522ca7
+op-base-auroc-hpkr-L20,0.109,0.109,0.109,MATCH,,16def2deec34aeee532511df116adb7de5522ca7
+pt-base-cg-L40,0.7873,0.787,0.787,MATCH,matrix_baseline L40 col CG,16def2deec34aeee532511df116adb7de5522ca7
+gap-ext-extpcthree-L20,0.22041995607033382,0.220,0.220,MATCH,,16def2deec34aeee532511df116adb7de5522ca7
+gap-ext-extpcthree-L44,0.023452616733886766,0.023,0.023,MATCH,,16def2deec34aeee532511df116adb7de5522ca7

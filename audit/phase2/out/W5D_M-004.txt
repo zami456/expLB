@@ -1,0 +1,34 @@
+### run-crossgen/matrices\mean_L40_s42.json  bank=axes_vectors_s3_fp32.pt k=5 layer=40 seed=42 pooling=mean n_datasets=10
+  mean  mms      raw           ID-row mean over 9 others = 0.8167   | w/o sycophancy_mt (n=8) = 0.8456
+  mean  mms      pc:deception  ID-row mean over 9 others = 0.6492   | w/o sycophancy_mt (n=8) = 0.6932
+  mean  mms      axes          ID-row mean over 9 others = 0.7271   | w/o sycophancy_mt (n=8) = 0.7764
+  mean  lr_reg10 raw           ID-row mean over 9 others = 0.7271   | w/o sycophancy_mt (n=8) = 0.7227
+  mean  lr_reg10 pc:deception  ID-row mean over 9 others = 0.7022   | w/o sycophancy_mt (n=8) = 0.7469
+  mean  lr_reg10 axes          ID-row mean over 9 others = 0.7252   | w/o sycophancy_mt (n=8) = 0.7685
+  mean  paper    raw           ID-row mean over 9 others = 0.7269   | w/o sycophancy_mt (n=8) = 0.7242
+  mean  paper    pc:deception  ID-row mean over 9 others = 0.7224   | w/o sycophancy_mt (n=8) = 0.7702
+  mean  paper    axes          ID-row mean over 9 others = 0.7221   | w/o sycophancy_mt (n=8) = 0.7630
+  mean  mms      random   HP-KR diag=0.8320 row(off)=0.6495 col(off)=0.6706 ID->HPKR=0.7675
+  mean  paper    random   HP-KR diag=0.7979 row(off)=0.6559 col(off)=0.6932 ID->HPKR=0.7636
+  mean  lr_reg10 random   HP-KR diag=0.8606 row(off)=0.6466 col(off)=0.6979 ID->HPKR=0.7543
+  mean  mms      length   HP-KR diag=0.7713 row(off)=0.5957 col(off)=0.6225 ID->HPKR=0.7756
+  mean  paper    length   HP-KR diag=0.7713 row(off)=0.5957 col(off)=0.6225 ID->HPKR=0.7756
+  mean  lr_reg10 length   HP-KR diag=0.7713 row(off)=0.5957 col(off)=0.6225 ID->HPKR=0.7756
+
+### run-crossgen/matrices\last_L40_s42.json  bank=axes_vectors_s3_fp32.pt k=5 layer=40 seed=42 pooling=last n_datasets=10
+  last  mms      raw           ID-row mean over 9 others = 0.7776   | w/o sycophancy_mt (n=8) = 0.8290
+  last  mms      pc:deception  ID-row mean over 9 others = 0.6536   | w/o sycophancy_mt (n=8) = 0.6899
+  last  mms      axes          ID-row mean over 9 others = 0.7240   | w/o sycophancy_mt (n=8) = 0.7798
+  last  lr_reg10 raw           ID-row mean over 9 others = 0.6395   | w/o sycophancy_mt (n=8) = 0.6290
+  last  lr_reg10 pc:deception  ID-row mean over 9 others = 0.5772   | w/o sycophancy_mt (n=8) = 0.5979
+  last  lr_reg10 axes          ID-row mean over 9 others = 0.6614   | w/o sycophancy_mt (n=8) = 0.6981
+  last  paper    raw           ID-row mean over 9 others = 0.6676   | w/o sycophancy_mt (n=8) = 0.6616
+  last  paper    pc:deception  ID-row mean over 9 others = 0.6680   | w/o sycophancy_mt (n=8) = 0.7000
+  last  paper    axes          ID-row mean over 9 others = 0.6552   | w/o sycophancy_mt (n=8) = 0.6892
+  last  mms      random   HP-KR diag=0.9520 row(off)=0.5168 col(off)=0.4753 ID->HPKR=0.4664
+  last  paper    random   HP-KR diag=0.9492 row(off)=0.5048 col(off)=0.4626 ID->HPKR=0.2013
+  last  lr_reg10 random   HP-KR diag=0.9489 row(off)=0.5169 col(off)=0.4487 ID->HPKR=0.1235
+  last  mms      length   HP-KR diag=0.7713 row(off)=0.5957 col(off)=0.6225 ID->HPKR=0.7756
+  last  paper    length   HP-KR diag=0.7713 row(off)=0.5957 col(off)=0.6225 ID->HPKR=0.7756
+  last  lr_reg10 length   HP-KR diag=0.7713 row(off)=0.5957 col(off)=0.6225 ID->HPKR=0.7756
+

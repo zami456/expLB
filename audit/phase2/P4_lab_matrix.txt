@@ -1,0 +1,137 @@
+= Level-2 direct recompute from the matrix JSONs (probe=paper, seed 42) =
+
+  scale_3b  mean_L16  bank=axes_3b.pt bank_name=paper16_3b k=3 pairs=20 mtime=2026-09-20 23:40
+     datasets: ['instructed-deception', 'mask', 'convincing-game', 'ai_liar', 'roleplaying']
+     raw            0.7619   (- raw +0.0000)
+     axes           0.7815   (- raw +0.0195)
+     pc:deception   0.7788   (- raw +0.0169)
+     pc:unified     0.7418   (- raw -0.0202)
+     pc:unified@2   0.7949   (- raw +0.0330)
+     datapca        0.5791   (- raw -0.1828)
+     datapca@2      0.6001   (- raw -0.1619)
+     random         0.4521   (- raw -0.3099)
+     random@2       0.5448   (- raw -0.2172)
+     length         0.4948   (- raw -0.2671)
+     zs:PC1         0.8052
+     zs:contrast    0.7971
+
+  scale_8b  mean_L16  bank=axes_8b.pt bank_name=paper16_8b k=3 pairs=20 mtime=2026-09-20 23:38
+     datasets: ['instructed-deception', 'mask', 'convincing-game', 'ai_liar', 'roleplaying']
+     raw            0.7980   (- raw +0.0000)
+     axes           0.7731   (- raw -0.0249)
+     pc:deception   0.8105   (- raw +0.0125)
+     pc:unified     0.7890   (- raw -0.0090)
+     pc:unified@2   0.7951   (- raw -0.0029)
+     datapca        0.6958   (- raw -0.1022)
+     datapca@2      0.6540   (- raw -0.1440)
+     random         0.6796   (- raw -0.1185)
+     random@2       0.5112   (- raw -0.2869)
+     length         0.4948   (- raw -0.3032)
+     zs:PC1         0.7730
+     zs:contrast    0.7804
+
+  scale_70b  mean_L40  bank=axes_vectors_s3.pt bank_name=paper16_70b k=3 pairs=20 mtime=2026-09-20 23:42
+     datasets: ['instructed-deception', 'mask', 'convincing-game', 'ai_liar', 'roleplaying']
+     raw            0.8090   (- raw +0.0000)
+     axes           0.8220   (- raw +0.0131)
+     pc:deception   0.7937   (- raw -0.0153)
+     pc:unified     0.8173   (- raw +0.0083)
+     pc:unified@2   0.8352   (- raw +0.0263)
+     datapca        0.7426   (- raw -0.0663)
+     datapca@2      0.6969   (- raw -0.1120)
+     random         0.5043   (- raw -0.3047)
+     random@2       0.4649   (- raw -0.3441)
+     length         0.4948   (- raw -0.3141)
+     zs:PC1         0.8147
+     zs:contrast    0.7895
+
+  scale_70b_paper16fp32  mean_L40  bank=axes_vectors_s3_fp32.pt bank_name=paper16_70b_fp32 k=3 pairs=20 mtime=2026-09-23 00:09
+     datasets: ['instructed-deception', 'mask', 'convincing-game', 'ai_liar', 'roleplaying']
+     raw            0.8090   (- raw +0.0000)
+     axes           0.8219   (- raw +0.0130)
+     pc:deception   0.7935   (- raw -0.0155)
+     pc:unified     0.8172   (- raw +0.0083)
+     pc:unified@2   0.8351   (- raw +0.0262)
+     datapca        0.7426   (- raw -0.0663)
+     datapca@2      0.6969   (- raw -0.1120)
+     random         0.5043   (- raw -0.3047)
+     random@2       0.4649   (- raw -0.3441)
+     length         0.4948   (- raw -0.3141)
+     zs:PC1         0.8146
+     zs:PC1:sycophancy 0.8547
+     zs:PC1:unified 0.7820
+     zs:contrast    0.7894
+     zs:contrast:sycophancy 0.8547
+     zs:contrast:unified 0.8439
+
+  scale_70b  last_L40  bank=axes_vectors_s3.pt bank_name=paper16_70b k=3 pairs=20 mtime=2026-09-20 23:42
+     datasets: ['instructed-deception', 'mask', 'convincing-game', 'ai_liar', 'roleplaying']
+     raw            0.7814   (- raw +0.0000)
+     axes           0.7958   (- raw +0.0144)
+     pc:deception   0.6717   (- raw -0.1097)
+     pc:unified     0.7574   (- raw -0.0241)
+     pc:unified@2   0.7995   (- raw +0.0180)
+     datapca        0.7525   (- raw -0.0289)
+     datapca@2      0.6889   (- raw -0.0925)
+     random         0.5012   (- raw -0.2802)
+     random@2       0.5091   (- raw -0.2724)
+     length         0.4948   (- raw -0.2866)
+     zs:PC1         0.8141
+     zs:contrast    0.7925
+
+  scale_70b_paper16fp32  last_L40  bank=axes_vectors_s3_fp32.pt bank_name=paper16_70b_fp32 k=3 pairs=20 mtime=2026-09-23 00:14
+     datasets: ['instructed-deception', 'mask', 'convincing-game', 'ai_liar', 'roleplaying']
+     raw            0.7814   (- raw +0.0000)
+     axes           0.7959   (- raw +0.0145)
+     pc:deception   0.6717   (- raw -0.1098)
+     pc:unified     0.7573   (- raw -0.0241)
+     pc:unified@2   0.7992   (- raw +0.0177)
+     datapca        0.7525   (- raw -0.0289)
+     datapca@2      0.6889   (- raw -0.0925)
+     random         0.5012   (- raw -0.2802)
+     random@2       0.5091   (- raw -0.2724)
+     length         0.4948   (- raw -0.2866)
+     zs:PC1         0.8140
+     zs:PC1:sycophancy 0.8540
+     zs:PC1:unified 0.7668
+     zs:contrast    0.7923
+     zs:contrast:sycophancy 0.8501
+     zs:contrast:unified 0.8398
+
+  kd11  mean_L40  bank=axes_vectors_s3_fp32.pt bank_name=paper16 k=5 pairs=110 mtime=2026-09-19 20:12
+     datasets: ['instructed-deception', 'harm-pressure-choice', 'harm-pressure-knowledge-report', 'harm-pressure-kr-matched', 'convincing-game', 'insider-trading', 'ai_liar', 'sandbagging_v2', 'roleplaying', 'mask', 'sycophancy_mt']
+     raw            0.6623   (- raw +0.0000)
+     axes           0.6408   (- raw -0.0215)
+     pc:deception   0.6432   (- raw -0.0191)
+     pc:unified     0.6715   (- raw +0.0093)
+     pc:unified@2   0.6396   (- raw -0.0227)
+     datapca        0.6651   (- raw +0.0028)
+     datapca@2      0.6333   (- raw -0.0290)
+     random         0.5849   (- raw -0.0773)
+     random@2       0.4910   (- raw -0.1712)
+     length         0.5555   (- raw -0.1068)
+     zs:PC1         0.7365
+     zs:contrast    0.7287
+
+= layer-means over all stored layers, both poolings (independent of the W1 csv) =
+  scale_3b                 mean  n= 7 layers=[0, 4, 8, 12, 16, 20, 24]
+      raw=0.6989  best-raw=+0.0328 (7/7)  best-dpca=+0.1197 (7/7)  axes-dpca=+0.0806
+  scale_3b                 last  n= 7 layers=[0, 4, 8, 12, 16, 20, 24]
+      raw=0.7286  best-raw=-0.0178 (2/7)  best-dpca=+0.0745 (7/7)  axes-dpca=+0.0262
+  scale_8b                 mean  n= 8 layers=[0, 4, 8, 12, 16, 20, 24, 28]
+      raw=0.7149  best-raw=+0.0089 (6/8)  best-dpca=+0.1027 (8/8)  axes-dpca=+0.0748
+  scale_8b                 last  n= 8 layers=[0, 4, 8, 12, 16, 20, 24, 28]
+      raw=0.7343  best-raw=-0.0742 (0/8)  best-dpca=+0.0090 (4/8)  axes-dpca=-0.0032
+  scale_70b                mean  n=21 layers=[0, 4, 8, 12, 16, 20, 22, 24, 28, 32, 36, 40, 44, 48, 52, 56, 60, 64, 68, 72, 76]
+      raw=0.7546  best-raw=+0.0070 (11/21)  best-dpca=+0.0791 (20/21)  axes-dpca=+0.0383
+      [F-100 19 layers] raw=0.7524  best-raw=+0.0079 (10/19)  best-dpca=+0.0751 (18/19)  axes-dpca=+0.0395
+  scale_70b                last  n=21 layers=[0, 4, 8, 12, 16, 20, 22, 24, 28, 32, 36, 40, 44, 48, 52, 56, 60, 64, 68, 72, 76]
+      raw=0.7454  best-raw=+0.0333 (19/21)  best-dpca=+0.0945 (21/21)  axes-dpca=+0.0366
+      [F-100 19 layers] raw=0.7445  best-raw=+0.0305 (17/19)  best-dpca=+0.0932 (19/19)  axes-dpca=+0.0388
+  scale_70b_paper16fp32    mean  n=21 layers=[0, 4, 8, 12, 16, 20, 22, 24, 28, 32, 36, 40, 44, 48, 52, 56, 60, 64, 68, 72, 76]
+      raw=0.7546  best-raw=-0.0171 (8/21)  best-dpca=+0.0550 (20/21)  axes-dpca=+0.0466
+      [F-100 19 layers] raw=0.7524  best-raw=-0.0131 (8/19)  best-dpca=+0.0541 (18/19)  axes-dpca=+0.0487
+  scale_70b_paper16fp32    last  n=21 layers=[0, 4, 8, 12, 16, 20, 22, 24, 28, 32, 36, 40, 44, 48, 52, 56, 60, 64, 68, 72, 76]
+      raw=0.7454  best-raw=+0.0069 (12/21)  best-dpca=+0.0681 (20/21)  axes-dpca=+0.0642
+      [F-100 19 layers] raw=0.7445  best-raw=+0.0061 (10/19)  best-dpca=+0.0688 (18/19)  axes-dpca=+0.0673
+python exit 0

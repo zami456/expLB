@@ -1,0 +1,242 @@
+alpaca_3b.log [utf16] | 1 | 201 |  | 2026-09-20 22:17:26,771 - INFO - Done.
+alpaca_8b.log [utf16] | 1 | 51 |  | 2026-09-20 22:01:49,717 - INFO - Done.
+cap_axes_all.log [utf16] | 5 | 0 | 6_axes.py,run_cap_chain.ps1 | wrote C:\Users\user4\expLB\run-cap\axes_all.pt  (axes: assistant, capitulation, cap_vs_default, cap_only; pca bases: capitulation, cap_vs_default, cap
+cap_axes_s23.log [utf16] | 5 | 0 | 6_axes.py,run_cap_chain.ps1 | wrote C:\Users\user4\expLB\run-cap\axes_s23.pt  (axes: assistant, capitulation, cap_vs_default, cap_only; pca bases: capitulation, cap_vs_default, cap
+cap_chain.status | 15 | 7 |  | 2026-09-21 03:21:17  DONE
+cap_controls.status | 1 | 2 |  | 2026-09-22 16:10:57  DONE
+cap_crossgen_all.log [utf16] | 13 | 0 | 27_crossgen.py,run_cap_chain.ps1,9_persona_probes.py | 2026-09-21 03:16:14,945 - INFO - wrote summary.json, significance.json, 432 CSVs
+cap_crossgen_s23.log [utf16] | 13 | 0 | 27_crossgen.py,run_cap_chain.ps1,9_persona_probes.py | 2026-09-21 03:09:43,414 - INFO - wrote summary.json, significance.json, 432 CSVs
+cap_ctrl_axes.log [utf16] | 1 | 0 | 6_axes.py,run_cap_controls.ps1 | wrote C:\Users\user4\expLB\run-cap-ctrl\axes_s23.pt  (axes: assistant, cap_vs_neutral, cap_vs_para, cap_only_ctrl; pca bases: cap_vs_neutral, cap_vs_p
+cap_ctrl_crossgen.log [utf16] | 3 | 0 | 27_crossgen.py,run_cap_ctrl_crossgen.ps1,run_cap_controls.ps1 | 2026-09-22 16:10:56,658 - INFO - wrote summary.json, significance.json, 3024 CSVs
+cap_ctrl_gen.log [utf16] | 3 | 157 | run_cap_controls.ps1,gen_multiturn_ndif.py | pc_para_steadfast_reviewer: exists, skipping
+cap_ctrl_judge.log [utf16] | 2 | 14 | run_cap_controls.ps1,3_judge_ndif.py | 2026-09-22 16:05:16,936 - INFO - Done.
+cap_ctrl_layers.log [utf16] | 2 | 0 | run_cap_ctrl_layers.ps1,27_crossgen.py | 2026-09-22 16:25:50,043 - INFO - wrote summary.json, significance.json, 3024 CSVs
+cap_ctrl_layers.status | 1 | 1 |  | 2026-09-22 16:25:50  DONE
+cap_ctrl_vectors.log [utf16] | 2 | 14 | run_cap_controls.ps1,2_activations_ndif.py | 2026-09-22 16:05:26,279 - INFO - Done.
+cap_gen.log [utf16] | 14 | 195 | run_cap_chain.ps1,gen_multiturn_ndif.py | default: exists, skipping
+cap_gen_default.err | 0 | 0 |  | downloading:   0%|          | 0.00/2.51k [00:00<?, ?B/s]
+cap_gen_default.log | 0 | 13 |  | default: wrote 100/100 -> run-cap\responses\default.jsonl
+cap_judge.log [utf16] | 7 | 19 | run_cap_chain.ps1,3_judge_ndif.py | 2026-09-21 03:02:22,771 - INFO - Done.
+cap_layers.status | 0 | 3 |  | 2026-09-22 15:52:50  DONE
+cap_layers_all.log [utf16] | 2 | 0 | run_cap_layers.ps1,27_crossgen.py | 2026-09-22 15:52:45,465 - INFO - wrote summary.json, significance.json, 3024 CSVs
+cap_layers_s23.log [utf16] | 2 | 0 | run_cap_layers.ps1,27_crossgen.py | 2026-09-22 15:51:21,925 - INFO - wrote summary.json, significance.json, 3024 CSVs
+cap_nopersona.log [utf16] | 1 | 1 |  | pc_position_holder: wrote 8/8 -> cap\run\probe\pc_position_holder_nopersona.jsonl
+cap_pair5.log [utf16] | 1 | 2 |  | pc_calibrated_holder: wrote 8/8 -> cap\run\probe\pc_calibrated_holder.jsonl
+cap_seeds.log [utf16] | 6 | 0 | 27_crossgen.py,run_cap_seeds.ps1,9_persona_probes.py | 2026-09-22 16:01:48,231 - INFO - wrote summary.json, significance.json, 3024 CSVs
+cap_seeds.status | 0 | 2 |  | 2026-09-22 16:01:49  DONE
+cap_smoke.log [utf16] | 1 | 8 |  | ------------------------------------------------------------------------------
+cap_smoke_v2.log [utf16] | 2 | 12 |  | ------------------------------------------------------------------------------
+cap_tf_cells.log [utf16] | 1 | 2 |  | pc_position_holder: wrote 8/8 -> cap\run\smoke_cells\pc_position_holder.jsonl
+cap_tf_control.log [utf16] | 1 | 2 |  | pc_position_holder: wrote 4/4 -> cap\run\smoke_cells\pc_position_holder_control.jsonl
+cap_tf_smoke.log [utf16] | 1 | 2 |  | pc_position_holder: wrote 4/4 -> cap\run\smoke_tf\pc_position_holder.jsonl
+cap_v4_cells.log [utf16] | 1 | 2 |  | pc_position_holder: wrote 8/8 -> cap\run\smoke_v4\pc_position_holder.jsonl
+cap_v4_control.log [utf16] | 1 | 2 |  | pc_position_holder: wrote 4/4 -> cap\run\smoke_v4\pc_position_holder_control.jsonl
+cap_vectors_all.log [utf16] | 7 | 21 | run_cap_chain.ps1,2_activations_ndif.py | 2026-09-21 03:02:36,402 - INFO - Done.
+cap_vectors_s23.log [utf16] | 7 | 21 | run_cap_chain.ps1,2_activations_ndif.py | 2026-09-21 03:02:29,538 - INFO - Done.
+confounds.log | 1 | 0 | run_confounds.ps1 | 2026-09-16 19:36:45,230 - INFO - wrote run-coords\confounds_L44_last.json
+coords_chain.log | 0 | 0 |  | 2026-09-15 21:31:46  === coords chain finished ===
+coords_passB.log [utf16] | 540 | 788 | remote.py,run_coords_chain.ps1,8_coords_ndif.py | 2026-09-15 21:31:45,868 - INFO - Done.
+coords_preflight.log [utf16] | 0 | 0 |  | All required models are up. Safe to run.
+coords_prepare.log [utf16] | 1 | 1 | run_coords_chain.ps1,8_coords_ndif.py | 2026-09-15 18:30:19,920 - INFO - Done.
+coords_rclone.log | 729 | 0 |  | Elapsed time:      2m37.3s
+coords_supervisor.log | 0 | 672 |  | 2026-09-22 21:19:07  See logs\coords_passB.log and logs\coords_rclone.log
+crossgen.log | 0 | 0 |  | 2026-09-17 21:18:41,962 - INFO -     raw           mms      diag 0.824  off-diag 0.588  (9 datasets 0.584)  off-diag on 100% target 0.584
+crossgen.status | 0 | 0 |  | PYTHON_EXIT -1 2026-09-17 21:18:44
+crossgen_banks.log | 0 | 0 |  | 2026-09-18 03:21:36,902 - INFO - wrote summary.json, significance.json, 132 CSVs
+crossgen_banks.status | 0 | 2 |  | DONE 2026-09-18 03:22:59
+crossgen_banks_rclone.log | 0 | 0 |  | Elapsed time:      1m20.2s
+crossgen_chain.status | 0 | 5 |  | DONE 2026-09-22 15:45:47
+crossgen_dedupe.log | 0 | 1 |  | 2026-09-18 15:46:52  === dedupe run done ===
+crossgen_dedupe_rclone.log | 0 | 0 |  | 2026/09/18 15:45:50 NOTICE: banks/hf275_strict/csv/mean_L16_random_lr_reg10.csv: All duplicates removed
+crossgen_dupes.log | 0 | 0 |  | === manual 2026-09-22 17:28:20 tamara:expLB/crossgen
+crossgen_final_report.txt | 1 | 16 |  | 2026-09-22 15:50:17  === report complete ===
+crossgen_full_A.log | 0 | 0 |  | split for harm-pressure-knowledge-report seed 42 differs from run-crossgen\passA\splits.json
+crossgen_full_A.status | 9 | 1 |  | DONE 2026-09-22 15:44:03
+crossgen_full_B.log | 0 | 0 |  | 2026-09-22 15:43:09,760 - INFO - wrote summary.json, significance.json, 2772 CSVs
+crossgen_full_B.status | 5 | 1 |  | DONE 2026-09-22 15:43:11
+crossgen_full_B_fine.log | 0 | 0 |  | 2026-09-22 15:45:33,595 - INFO - wrote summary.json, significance.json, 1320 CSVs
+crossgen_full_B_fine.status | 5 | 1 |  | DONE 2026-09-22 15:45:35
+crossgen_full_C.log | 0 | 0 |  | 2026-09-18 16:21:00,599 - INFO - wrote summary.json, significance.json, 792 CSVs
+crossgen_full_C.status | 0 | 10 |  | DONE 2026-09-18 20:21:08
+crossgen_full_P.log | 0 | 0 |  | 2026-09-22 15:45:46,057 - INFO - wrote summary.json, significance.json, 396 CSVs
+crossgen_full_P.status | 2 | 1 |  | DONE 2026-09-22 15:45:47
+crossgen_full_rclone.log | 31 | 0 |  | Elapsed time:      1m38.2s
+crossgen_rclone.lock | 0 | 0 |  | 
+crossgen_rclone.log | 0 | 0 |  | Elapsed time:        18.4s
+crossgen_scale_3b.log | 0 | 0 |  | 2026-09-20 23:40:46,079 - INFO - wrote summary.json, significance.json, 924 CSVs
+crossgen_scale_70b.log [utf16] | 1 | 0 |  | 2026-09-20 23:42:37,738 - INFO - wrote summary.json, significance.json, 132 CSVs
+crossgen_scale_8b.log | 2 | 0 | 27_crossgen.py | 2026-09-20 23:39:44,986 - INFO - wrote summary.json, significance.json, 1056 CSVs
+crossgen_smoke.log | 0 | 0 |  | 2026-09-17 21:22:41,716 - INFO -   wrote smoke\last_L44_s42.json   37s   (total 1 min)
+crossgen_smoke.status | 0 | 3 |  | DONE 2026-09-17 21:22:50
+crossgen_smoke_rclone.log | 0 | 0 |  | Elapsed time:         6.1s
+crossgen_sync.status | 31 | 172 |  | 2026-09-22 21:17:51  periodic EXIT 0
+crossgen_verify.txt [utf16] | 0 | 0 |  | 믯඿㈊　㈀㘀ⴀ　㤀ⴀ㄀㠀 ㄀㌀㨀㄀㈀㨀㄀㜀  㴀㴀㴀 瘀攀爀椀昀椀挀愀琀椀漀渀 猀琀愀爀琀攀搀 㴀㴀㴀ഀ਀㈀　㈀㘀ⴀ　㤀ⴀ㄀㠀 ㄀㌀㨀㄀㈀㨀㄀㜀  眀愀椀琀椀渀最 漀渀 ㈀ 眀爀椀琀攀爀⠀猀⤀㨀 ㌀　㈀㐀Ⰰ ㈀㄀㄀㐀　ഀ਀㈀　㈀㘀ⴀ　㤀ⴀ㄀㠀 ㄀㌀㨀㄀㌀㨀㄀㜀  眀愀椀琀椀渀最 漀渀 ㈀ 眀爀椀琀攀
+dotproducts.log [utf16] | 1 | 0 |  | 2026-09-16 11:09:52,588 - INFO - wrote C:\Users\user4\expLB\run-coords\dotproducts_mean.json
+drive_check.status | 0 | 1 |  | EXIT 09/17/2026 01:40:30
+drive_check_summary.txt | 7 | 3 |  | figures        local files    26 | match    26 | MISSING on Drive   0 | DIFFERENT   0 | errors   0
+drive_sync.log [utf16] | 0 | 4 |  | SYNC-EXIT 09/17/2026 12:09:38
+extra_extractions.status | 0 | 5 |  | DONE 2026-09-18 10:41:06
+extra_extractions_rclone.log | 0 | 0 |  | Elapsed time:        22.2s
+extract_P0a_passA.log | 0 | 7 |  | 2026-09-18 04:36:30,172 - INFO - Done.
+extract_P0a_passC.log | 0 | 9 |  | 2026-09-18 04:42:18,719 - INFO - Done.
+extract_P0b_passP.log | 1 | 517 |  | 2026-09-18 07:30:15,515 - INFO - Done.
+extract_P0c_passB_fine.log | 1 | 518 |  | 2026-09-18 10:37:03,095 - INFO - Done.
+falsify.log [utf16] | 77 | 0 | 30e_falsify_meandir.py,run_falsify.ps1,validation.py,base.py | wrote C:\Users\user4\expLB\run-premise\falsify\falsify_L76_s13.json
+falsify.status | 0 | 1 |  | 2026-09-22 16:05:05  DONE
+finalize.log [utf16] | 38 | 0 | 5_axis.py,supervisor.ps1,6_axes.py | axes + PCA      : C:\Users\user4\expLB\run\axes.pt
+gate3_coords.log [utf16] | 1 | 4 |  | 2026-09-22 14:30:52,259 - INFO - Done.
+hpkr_denial_control.log [utf16] | 2 | 3 |  | wrote kd\run\denial\control.jsonl
+hpkr_denial_margin.log [utf16] | 9 | 2 |  | wrote kd\run\denial\margin.jsonl
+hpkr_denial_smoke.log [utf16] | 2 | 3 |  | wrote C:\Users\user4\expLB\kd\run\denial\rollouts.jsonl
+hpkr_topup.status | 2 | 4 |  | 2026-09-22 15:47:43  DONE
+hpkr_topup_passA.log [utf16] | 2 | 52 | run_hpkr_topup.ps1 | 2026-09-22 15:47:21,179 - INFO - Done.
+hpkr_topup_passC.log [utf16] | 2 | 52 | run_hpkr_topup.ps1 | 2026-09-22 15:47:40,102 - INFO - Done.
+hpkr_topup_rclone.log | 2 | 0 |  | 2026/09/22 15:47:43 CRITICAL: Failed to create file system for "tamara:expLB/coords/passC/harm-pressure-knowledge-report": couldn't find root director
+kd_axes.log | 0 | 0 |  | wrote C:\Users\user4\expLB\run-kd\axes_vectors_s3.pt  (axes: assistant, deception, sycophancy, unified, knowledge_denial, kd_assertion; pca bases: dec
+kd_axes_s23.log | 0 | 0 |  | wrote C:\Users\user4\expLB\run-kd\axes_vectors_s23.pt  (axes: assistant, deception, sycophancy, unified, knowledge_denial, kd_assertion; pca bases: de
+kd_bank_crossgen.log | 0 | 0 |  | 2026-09-22 16:01:20,331 - INFO - wrote summary.json, significance.json, 3276 CSVs
+kd_bank_crossgen.status | 0 | 12 |  | 2026-09-22 16:01:30  DONE
+kd_chain.status | 0 | 7 |  | 2026-09-22 15:42:00  === chain finished ===
+kd_crossgen.log | 0 | 0 |  | 2026-09-22 15:53:40,934 - INFO - wrote summary.json, significance.json, 2772 CSVs
+kd_crossgen.status | 0 | 12 |  | 2026-09-22 15:53:45  DONE
+kd_extract.log | 7 | 97 |  | 2026-09-22 15:47:07,325 - INFO - Done.
+kd_generate.log | 0 | 111 |  | 2026-09-22 15:41:20,888 - INFO - Done.
+kd_judge.log | 2 | 73 | remote.py | 2026-09-22 15:41:30,049 - INFO - Done.
+kd_knowledge.log | 3 | 15 |  | 2026-09-22 15:45:02,436 - INFO - nothing to do
+kd_passAC.log | 2 | 0 | 27_crossgen.py,pathlib.py | 2026-09-20 14:21:05,842 - INFO - wrote summary.json, significance.json, 11520 CSVs
+kd_passAC.status | 1 | 7 |  | 2026-09-22 16:10:01  SKIP already DONE; -Force to re-run
+kd_preflight.log | 0 | 0 |  | All required models are up. Safe to run.
+kd_rclone.lock | 0 | 0 |  | 
+kd_rclone.log | 122 | 0 | run_kd_s23.ps1,sync_kd.ps1,run_kd_passAC.ps1,paper_comparison.py | Elapsed time:        52.7s
+kd_s23.status | 2 | 18 |  | 2026-09-22 16:03:43  DONE
+kd_s23_alllayers.log | 0 | 0 |  | 2026-09-22 16:15:50,909 - INFO - wrote summary.json, significance.json, 3024 CSVs
+kd_s23_alllayers.status | 0 | 4 | 27_crossgen.py | 2026-09-22 16:15:54  DONE
+kd_s23_crossgen.log | 0 | 0 | 27_crossgen.py | 2026-09-22 16:03:37,850 - INFO - wrote summary.json, significance.json, 3024 CSVs
+kd_sync.status | 114 | 838 |  | 2026-09-22 21:11:26  periodic DONE exit 0 (183 local files)
+kd_vectors_all.log | 0 | 39 |  | 2026-09-22 15:41:42,655 - INFO - Done.
+kd_vectors_s23.log | 0 | 40 |  | 2026-09-22 16:00:21,545 - INFO - Done.
+kd_vectors_s3.log | 0 | 39 |  | 2026-09-22 15:41:52,517 - INFO - Done.
+label_banks.log | 0 | 0 |  | wrote run\axes_strict.pt  (axes: assistant, deception, sycophancy, unified; pca bases: deception, sycophancy, unified, all; PCA (80, 5, 8192))
+label_banks.status | 0 | 5 |  | DONE 2026-09-18 05:19:06
+lengthctl.log | 1 | 0 | run_lengthctl.ps1 | 2026-09-16 19:38:23,367 - INFO - wrote run-coords\p1_L44_last_lengthctl.json
+lengthctl_q5.log | 1 | 0 | run_lengthctl.ps1 | 2026-09-16 19:38:25,300 - INFO - wrote run-coords\q5_semantics_lengthctl.json
+mask_3b.err | 0 | 1 |  | 2026-09-20 23:37:57,630 - INFO - Done.
+mask_3b.log | 0 | 293 |  | [K✓ [3d7d9c11-6bd7-41c5-b829-3611bd48904e] COMPLETED  (0.2s) Your job has been completed.
+mask_8b.err | 0 | 1 |  | 2026-09-20 23:15:01,311 - INFO - Done.
+mask_8b.log | 0 | 78 |  | [K✓ [794527cc-f107-4988-80a4-f2d752b2b527] COMPLETED  (0.2s) Your job has been completed.
+newroles.log | 4 | 0 | remote.py | [K⠸ [f61d4eb8-bf31-495b-ba4e-af42f4d5938e] RUNNING    (3m 27s) Your job has started running.
+night_chain.log | 0 | 1 |  | 09-22 21:10:20  sync done
+night_rclone.log | 63 | 0 |  | Elapsed time:         0.5s
+p2.log [utf16] | 1 | 0 |  | 2026-09-16 15:59:38,230 - INFO - wrote run-coords\p2_L44_last.json
+paper16_shared.status | 0 | 1 |  | DONE 2026-09-18 03:14:30
+paper16_shared_axes.log | 0 | 0 |  | wrote run-paper16-shared\axes_vectors_s3.pt  (axes: assistant, deception, sycophancy, unified; pca bases: deception, sycophancy, unified, all; PCA (80
+paper16_shared_chain.log | 0 | 8 |  | 2026-09-18 03:14:30  === chain finished ===
+paper16_shared_generate.log | 0 | 27 |  | 2026-09-18 01:44:40,019 - INFO - Done.
+paper16_shared_judge.log | 0 | 26 |  | 2026-09-18 02:22:06,876 - INFO - Done.
+paper16_shared_preflight.log | 0 | 0 |  | All required models are up. Safe to run.
+paper16_shared_rclone.log | 0 | 0 |  | Elapsed time:      1m12.9s
+paper16_shared_vectors_all.log | 2 | 27 | remote.py | 2026-09-18 02:50:57,486 - INFO - Done.
+paper16_shared_vectors_s3.log | 0 | 27 |  | 2026-09-18 03:13:09,779 - INFO - Done.
+passA.log | 0 | 2 |  | 12:38:03  already done
+passAC11.log | 0 | 0 |  | 2026-09-22 16:05:38,253 - INFO - wrote summary.json, significance.json, 11520 CSVs
+passAC11.status | 0 | 7 |  | 2026-09-22 16:05:43  DONE
+passAC11_view.log [utf16] | 0 | 0 |  | linked 0 chunks
+passA_rclone.log | 0 | 0 |  | Elapsed time:        49.8s
+passA_run.log [utf16] | 1 | 84 | run_passA.ps1,8_coords_ndif.py | 2026-09-16 02:54:43,556 - INFO - Done.
+passC.log | 0 | 2 |  | 09-16 13:58:10  drive sync exit 0
+passC_rclone.log | 0 | 0 |  | Elapsed time:      1m12.4s
+passC_run.log [utf16] | 1 | 108 | run_passC.ps1,8_coords_ndif.py | 2026-09-16 13:56:54,539 - INFO - Done.
+passC_smoke.log [utf16] | 1 | 2 |  | 2026-09-16 12:49:05,143 - INFO - Done.
+pcount.log [utf16] | 1 | 0 |  | 2026-09-16 17:43:45,937 - INFO - wrote C:\Users\user4\expLB\run-coords\persona_count_L40.json
+pertoken.log [utf16] | 4 | 0 | __init__.py,14_pertoken.py | 2026-09-16 14:39:28,086 - INFO - wrote C:\Users\user4\expLB\run-coords\pertoken_q8.json
+preflight_probe.log | 0 | 0 |  | READY_MATCH=True
+premise_extras.log [utf16] | 21 | 0 | 30_premise.py,run_premise_extras.ps1,30c_cluster_perm.py | => band is not distinguishable from label noise
+premise_extras.status | 0 | 8 |  | 2026-09-22 16:07:03  DONE
+premise_layers.log [utf16] | 20 | 0 | run_premise_layers.ps1,30_premise.py | wrote run-premise\premise_L76_mean_s42.json
+premise_layers.status | 0 | 1 |  | 2026-09-22 15:53:05  DONE
+q11_analysis_L20.log | 1 | 0 | run_q11_analysis.ps1 | 2026-09-16 20:43:51,700 - INFO - wrote C:\Users\user4\expLB\run-coords\q11_sleeper_L20_last.json
+q11_analysis_L44.log | 1 | 0 | run_q11_analysis.ps1 | 2026-09-16 20:44:02,422 - INFO - wrote C:\Users\user4\expLB\run-coords\q11_sleeper_L44_last.json
+q11_extract.log | 1 | 113 | run_q11.ps1 | 2026-09-16 20:12:43,261 - INFO - Done.
+q11_prep.log | 1 | 1 | prep_q11.ps1 | 2026-09-16 19:18:21,699 - INFO - Done.
+q3q4.log | 1 | 0 | q3q4_job.ps1 | 2026-09-17 02:09:50,342 - INFO - wrote C:\Users\user4\expLB\run-coords\q3_q4_bootstrap.json   740s
+q3q4.status | 0 | 1 |  | EXIT 0 09/17/2026 02:09:51
+q5_L20.log | 1 | 0 | q5_layers.ps1,9_persona_probes.py | 2026-09-16 19:20:17,615 - INFO - wrote run-coords\q5_layers\p1_L20.json
+q5_L28.log | 1 | 0 | q5_layers.ps1,9_persona_probes.py | 2026-09-16 19:20:23,867 - INFO - wrote run-coords\q5_layers\p1_L28.json
+q5_L32.log | 1 | 0 | q5_layers.ps1,9_persona_probes.py | 2026-09-16 19:20:30,167 - INFO - wrote run-coords\q5_layers\p1_L32.json
+q5_L36.log | 1 | 0 | q5_layers.ps1,9_persona_probes.py | 2026-09-16 19:20:37,545 - INFO - wrote run-coords\q5_layers\p1_L36.json
+q5_L40.log | 1 | 0 | q5_layers.ps1,9_persona_probes.py | 2026-09-16 19:20:44,526 - INFO - wrote run-coords\q5_layers\p1_L40.json
+q5_L44.log | 1 | 0 | q5_layers.ps1,9_persona_probes.py | 2026-09-16 19:20:51,724 - INFO - wrote run-coords\q5_layers\p1_L44.json
+q5_L48.log | 1 | 0 | q5_layers.ps1,9_persona_probes.py | 2026-09-16 19:20:58,667 - INFO - wrote run-coords\q5_layers\p1_L48.json
+q5_L60.log | 1 | 0 | q5_layers.ps1,9_persona_probes.py | 2026-09-16 19:21:05,439 - INFO - wrote run-coords\q5_layers\p1_L60.json
+q5_p1.log | 1 | 0 | runq5.ps1,9_persona_probes.py | 2026-09-16 19:13:49,366 - INFO - wrote run-coords\p1_L44_last_withsyc.json
+q5_sem.log | 1 | 0 | runq5.ps1,18_q5_semantics.py | 2026-09-16 19:13:52,245 - INFO - wrote run-coords\q5_semantics_L44_last.json
+q8_full.log | 1 | 0 | q8_full_job.ps1 | 2026-09-16 21:21:06,466 - INFO - wrote run-coords\q8_trained_pertoken.json   total 485s
+q8_full.status | 0 | 1 |  | EXIT 0 09/16/2026 21:21:07
+q8_smoke.log | 1 | 0 | q8_smoke.ps1 | 2026-09-16 21:12:35,602 - INFO - wrote run-coords\q8_trained_SMOKE.json   total 51s
+rb_own100.log [utf16] | 22 | 76 | rebuild2.ps1,2_activations_ndif.py | [KΓá╝ [581ed397-f004-4719-940a-7ba057bedaed] RUNNING    (6.9s) Your job has started running.
+rb_paper16_all.log [utf16] | 1 | 79 | rebuild2.ps1,2_activations_ndif.py | 2026-09-16 01:30:17,098 - INFO - Done.
+rb_paper16_s3.log [utf16] | 3 | 63 | rebuild2.ps1,2_activations_ndif.py | 2026-09-16 01:03:12,142 - INFO - Done.
+rebuild_banks.log | 0 | 2 |  | 01:30:17  own100 pass 1 (have 0)
+rebuild_paper16_vectors_s3_fp32.log [utf16] | 1 | 0 | rebuild_banks.ps1,2_activations_ndif.py | [KΓá┤ [ae5eac04-9ac2-475a-bc21-8fcab523e00a] RUNNING    (32.0s) Your job has started running.
+sarc_pilot.status | 1 | 1 |  | 2026-09-22 15:55:30  DONE
+sarc_pilot.status.2026-09-21-buggy-verdict | 0 | 1 |  | 2026-09-21 21:45:59  DONE
+sarc_pilot.status.pre-e2e-2026-09-22 | 1 | 1 |  | 2026-09-22 02:29:35  DONE
+sarc_pilot_gen.log [utf16] | 6 | 24 | run_sarc_pilot.ps1,1_generate_ndif.py | 2026-09-22 15:55:09,957 - INFO - Done.
+sarc_pilot_judge.log [utf16] | 6 | 9 | run_sarc_pilot.ps1,3_judge_ndif.py | 2026-09-22 15:55:23,082 - INFO - Done.
+sarc_pilot_markers.log [utf16] | 0 | 0 |  | diagnose. See the feature lists above for what carries the separation.
+scale_3b.status | 0 | 8 |  | 2026-09-22 16:05:00  SKIP already DONE; -Force to re-run
+scale_3b_axes.log | 0 | 0 |  | wrote C:\Users\user4\expLB\run-scale\3b\axes_3b.pt  (axes: assistant, deception, sycophancy, unified; pca bases: deception, sycophancy, unified, all; 
+scale_3b_generate.log | 118 | 132 | hub.py,file_download.py,1_generate_ndif.py,language.py | 2026-09-20 15:51:28,962 - INFO - Done.
+scale_3b_judge.log | 0 | 27 |  | 2026-09-20 15:51:34,333 - INFO - Done.
+scale_3b_preflight.log | 0 | 0 |  | All required models are up. Safe to run.
+scale_3b_vectors_all.log | 251 | 339 | remote.py,models.py | 2026-09-20 16:24:26,999 - INFO - Done.
+scale_3b_vectors_s23.log | 2 | 332 | models.py | 2026-09-20 16:56:09,504 - INFO - Done.
+scale_8b.status | 0 | 8 |  | 2026-09-22 16:05:00  SKIP already DONE; -Force to re-run
+scale_8b_axes.log | 0 | 0 |  | wrote C:\Users\user4\expLB\run-scale\8b\axes_8b.pt  (axes: assistant, deception, sycophancy, unified; pca bases: deception, sycophancy, unified, all; 
+scale_8b_generate.log | 32 | 105 | remote.py | 2026-09-20 14:16:24,577 - INFO - Done.
+scale_8b_judge.log | 0 | 26 |  | 2026-09-20 14:54:18,388 - INFO - Done.
+scale_8b_preflight.log | 0 | 0 |  | All required models are up. Safe to run.
+scale_8b_vectors_all.log | 1 | 27 | models.py | 2026-09-20 14:57:40,324 - INFO - Done.
+scale_8b_vectors_s23.log | 1 | 27 | models.py | 2026-09-20 15:01:23,515 - INFO - Done.
+scale_coords.status | 0 | 6 |  | 2026-09-22 16:20:15  DONE
+scale_coords_3b.log | 1 | 1262 |  | 2026-09-22 16:20:14,470 - INFO - Done.
+scale_coords_8b.log | 422 | 836 |  | 2026-09-22 16:20:06,516 - INFO - Done.
+scale_coords_8b_hpc.log [utf16] | 1 | 101 |  | 2026-09-20 20:00:18,564 - INFO - Done.
+scale_crossgen.status | 3 | 12 |  | 2026-09-20 23:40:46  DONE
+scale_rclone.lock | 0 | 0 |  | 
+scale_rclone.log | 1 | 0 |  | 2026/09/22 16:20:15 CRITICAL: Failed to create file system for "tamara:expLB/scale": couldn't find root directory ID: Get "https://www.googleapis.com/
+scale_sync.status | 1 | 4 |  | 2026-09-22 16:20:15  coords/final DONE exit 1 (2431 files)
+shard0.log | 48 | 272 | remote.py,module.py,modeling_llama.py,hooks.py | axes + PCA      : C:\Users\user4\expLB\run\axes.pt
+shard1.log | 80 | 282 | module.py,modeling_llama.py,hooks.py,remote.py | axes + PCA      : C:\Users\user4\expLB\run\axes.pt
+shard2.log | 363 | 348 | remote.py,module.py,modeling_llama.py,hooks.py | axes + PCA      : C:\Users\user4\expLB\run\axes.pt
+sig.log | 1 | 0 | nulls_job.ps1 | 2026-09-17 01:05:46,826 - INFO - wrote C:\Users\user4\expLB\run-coords\zeroshot_nulls.json
+sig.status | 0 | 1 |  | EXIT 0 09/17/2026 01:05:47
+supervisor.log | 0 | 0 |  | 2026-09-15 12:51:42  DELIVERABLE READY: vectors=100 axis.pt=True axes.pt=True
+sweep_last.log [utf16] | 1 | 0 |  | 2026-09-16 11:21:57,072 - INFO - wrote run-coords\layer_sweep_passB_last.json
+syco_extract.log [utf16] | 1 | 32 |  | 2026-09-16 19:08:13,717 - INFO - Done.
+syco_gen.log [utf16] | 2 | 19 | night_chain.ps1,10_sycophancy_ndif.py | C:\Users\user4\expLB\run-sycophancy\responses.jsonl
+syco_label.log [utf16] | 1 | 0 | night_chain.ps1,10_sycophancy_ndif.py | C:\Users\user4\expLB\run-sycophancy\rows.jsonl
+syco_mt_gen1.log [utf16] | 1 | 13 | night_chain.ps1,13_sycophancy_multiturn.py | 2026-09-16 15:54:25,806 - INFO -   1200/1200
+syco_mt_gen2.log [utf16] | 1 | 13 | night_chain.ps1,13_sycophancy_multiturn.py | 2026-09-16 18:01:26,744 - INFO -   1200/1200
+syco_mt_judge.log [utf16] | 1 | 13 | night_chain.ps1,13_sycophancy_multiturn.py | 2026-09-16 18:23:33,603 - INFO -   1200/1200
+syco_mt_label.log [utf16] | 1 | 0 | night_chain.ps1,13_sycophancy_multiturn.py | C:\Users\user4\expLB\run-sycophancy-mt\rows.jsonl
+syco_prep.log [utf16] | 1 | 0 | night_chain.ps1,10_sycophancy_ndif.py | C:\Users\user4\expLB\run-sycophancy\prompts.jsonl
+sync_all.log | 0 | 0 |  | Elapsed time:         0.0s
+validate.log [utf16] | 1 | 0 |  | 2026-09-16 18:45:12,996 - INFO - wrote C:\Users\user4\expLB\run-coords\validate_L40.json
+vectors.log | 1 | 129 |  | 
+vectors_loop.log | 0 | 0 |  | 2026-09-14 13:53:30  all 100 vectors present -- exiting.
+watcher.log | 0 | 0 |  | 2026-09-12 05:55:45  all 3 shards launched. Watcher done.
+drive_check/coords.combined.txt | 0 | 3 |  | = passB/sandbagging_v2/chunk_0102.pt
+drive_check/coords.log | 6 | 3 | drive_check_job.ps1 | 2026/09/17 01:40:13 NOTICE: Failed to check with 3 errors: last error was: 3 differences found
+drive_check/figures.combined.txt | 0 | 0 |  | = significance_forest.png
+drive_check/figures.log | 1 | 0 | drive_check_job.ps1 | 2026/09/17 01:40:30 NOTICE: Google drive root 'expLB/figures': 26 matching files
+drive_check/own100.combined.txt | 0 | 0 |  | = responses/witness.jsonl
+drive_check/own100.log | 5 | 0 | drive_check_job.ps1 | 2026/09/17 01:40:18 NOTICE: Failed to check with 2 errors: last error was: 2 differences found
+drive_check/paper16.combined.txt | 0 | 0 |  | = vectors_all_fp32/pc_yes_man.pt
+drive_check/paper16.log | 1 | 0 | drive_check_job.ps1 | 2026/09/17 01:40:22 NOTICE: Google drive root 'expLB/paper16': 107 matching files
+drive_check/sycophancy.combined.txt | 0 | 0 |  | = responses.jsonl
+drive_check/sycophancy.log | 1 | 0 | drive_check_job.ps1 | 2026/09/17 01:40:24 NOTICE: Google drive root 'expLB/sycophancy': 3 matching files
+drive_check/sycophancy_mt.combined.txt | 0 | 0 |  | = rows.jsonl
+drive_check/sycophancy_mt.log | 1 | 0 | drive_check_job.ps1 | 2026/09/17 01:40:26 NOTICE: Google drive root 'expLB/sycophancy_mt': 5 matching files
+drive_check/thinking.combined.txt | 0 | 0 |  | = memory/significance-and-random-nulls.md
+drive_check/thinking.log | 1 | 0 | drive_check_job.ps1 | 2026/09/17 01:40:28 NOTICE: Google drive root 'expLB/thinking': 24 matching files

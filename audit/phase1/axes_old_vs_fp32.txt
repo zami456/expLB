@@ -1,0 +1,117 @@
+OLD keys:
+  axes.assistant: (80, 8192) torch.float32
+  axes.deception: (80, 8192) torch.float32
+  axes.sycophancy: (80, 8192) torch.float32
+  axes.unified: (80, 8192) torch.float32
+  counts.assistant: tuple (1, 25)
+  counts.deception: tuple (8, 7)
+  counts.sycophancy: tuple (5, 5)
+  counts.unified: tuple (13, 12)
+  layers: list [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 2
+  pca_components: (80, 5, 8192) torch.float32
+  pca_variance_ratio: (80, 5) torch.float32
+  pca.deception.components: (80, 5, 8192) torch.float32
+  pca.deception.variance_ratio: (80, 5) torch.float32
+  pca.deception.sign: (80, 5) torch.float32
+  pca.deception.roles: list ['default', 'pc_archivist', 'pc_broker', 'pc_coverup_operator', 'pc_disclosure_c
+  pca.deception.reference: str deception contrast
+  pca.sycophancy.components: (80, 5, 8192) torch.float32
+  pca.sycophancy.variance_ratio: (80, 5) torch.float32
+  pca.sycophancy.sign: (80, 5) torch.float32
+  pca.sycophancy.roles: list ['default', 'pc_blunt_advisor', 'pc_cheerleader', 'pc_contrarian', 'pc_critic', 
+  pca.sycophancy.reference: str sycophancy contrast
+  pca.unified.components: (80, 5, 8192) torch.float32
+  pca.unified.variance_ratio: (80, 5) torch.float32
+  pca.unified.sign: (80, 5) torch.float32
+  pca.unified.roles: list ['default', 'pc_archivist', 'pc_blunt_advisor', 'pc_broker', 'pc_cheerleader', '
+  pca.unified.reference: str unified contrast
+  pca.all.components: (80, 5, 8192) torch.float32
+  pca.all.variance_ratio: (80, 5) torch.float32
+  pca.all.sign: (80, 5) torch.float32
+  pca.all.roles: list ['default', 'pc_archivist', 'pc_blunt_advisor', 'pc_broker', 'pc_cheerleader', '
+  pca.all.reference: str assistant axis
+  roles: list ['default', 'pc_archivist', 'pc_blunt_advisor', 'pc_broker', 'pc_cheerleader', '
+  role_groups.deception.contrast_with: str honesty
+  role_groups.deception.note: str control disclosure: timing, emphasis, omission
+  role_groups.deception.roles: list ['pc_handler', 'pc_broker', 'pc_impression_manager', 'pc_coverup_operator', 'pc_
+  role_groups.honesty.contrast_with: str deception
+  role_groups.honesty.note: str completeness of the record as the governing value
+  role_groups.honesty.roles: list ['pc_ombudsman', 'pc_transparency_officer', 'pc_disclosure_counsel', 'pc_whistle
+  role_groups.sycophancy.contrast_with: str anti_sycophancy
+  role_groups.sycophancy.note: str agreement and validation over accuracy
+  role_groups.sycophancy.roles: list ['pc_yes_man', 'pc_flatterer', 'pc_people_pleaser', 'pc_cheerleader', 'pc_enable
+  role_groups.anti_sycophancy.contrast_with: str sycophancy
+  role_groups.anti_sycophancy.note: str assessment and pushback over agreement
+  role_groups.anti_sycophancy.roles: list ['pc_critic', 'pc_skeptic', 'pc_contrarian', 'pc_blunt_advisor', 'pc_tough_love_
+  role_groups.assistant_anchor.contrast_with: NoneType None
+  role_groups.assistant_anchor.note: str the paper's default anchor; reuses the existing AA role
+  role_groups.assistant_anchor.roles: list ['default']
+  vectors_dir: str C:\Users\SURAIYA\Documents\STUDY\thesis\expLB\run-paper16\vectors_s3
+NEW keys:
+  axes.assistant: (80, 8192) torch.float32
+  axes.deception: (80, 8192) torch.float32
+  axes.sycophancy: (80, 8192) torch.float32
+  axes.unified: (80, 8192) torch.float32
+  counts.assistant: tuple (1, 25)
+  counts.deception: tuple (8, 7)
+  counts.sycophancy: tuple (5, 5)
+  counts.unified: tuple (13, 12)
+  layers: list [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 2
+  pca_components: (80, 5, 8192) torch.float32
+  pca_variance_ratio: (80, 5) torch.float32
+  pca.deception.components: (80, 5, 8192) torch.float32
+  pca.deception.variance_ratio: (80, 5) torch.float32
+  pca.deception.sign: (80, 5) torch.float32
+  pca.deception.roles: list ['default', 'pc_archivist', 'pc_broker', 'pc_coverup_operator', 'pc_disclosure_c
+  pca.deception.reference: str deception contrast
+  pca.sycophancy.components: (80, 5, 8192) torch.float32
+  pca.sycophancy.variance_ratio: (80, 5) torch.float32
+  pca.sycophancy.sign: (80, 5) torch.float32
+  pca.sycophancy.roles: list ['default', 'pc_blunt_advisor', 'pc_cheerleader', 'pc_contrarian', 'pc_critic', 
+  pca.sycophancy.reference: str sycophancy contrast
+  pca.unified.components: (80, 5, 8192) torch.float32
+  pca.unified.variance_ratio: (80, 5) torch.float32
+  pca.unified.sign: (80, 5) torch.float32
+  pca.unified.roles: list ['default', 'pc_archivist', 'pc_blunt_advisor', 'pc_broker', 'pc_cheerleader', '
+  pca.unified.reference: str unified contrast
+  pca.all.components: (80, 5, 8192) torch.float32
+  pca.all.variance_ratio: (80, 5) torch.float32
+  pca.all.sign: (80, 5) torch.float32
+  pca.all.roles: list ['default', 'pc_archivist', 'pc_blunt_advisor', 'pc_broker', 'pc_cheerleader', '
+  pca.all.reference: str assistant axis
+  roles: list ['default', 'pc_archivist', 'pc_blunt_advisor', 'pc_broker', 'pc_cheerleader', '
+  role_groups.deception.contrast_with: str honesty
+  role_groups.deception.note: str control disclosure: timing, emphasis, omission
+  role_groups.deception.roles: list ['pc_handler', 'pc_broker', 'pc_impression_manager', 'pc_coverup_operator', 'pc_
+  role_groups.honesty.contrast_with: str deception
+  role_groups.honesty.note: str completeness of the record as the governing value
+  role_groups.honesty.roles: list ['pc_ombudsman', 'pc_transparency_officer', 'pc_disclosure_counsel', 'pc_whistle
+  role_groups.sycophancy.contrast_with: str anti_sycophancy
+  role_groups.sycophancy.note: str agreement and validation over accuracy
+  role_groups.sycophancy.roles: list ['pc_yes_man', 'pc_flatterer', 'pc_people_pleaser', 'pc_cheerleader', 'pc_enable
+  role_groups.anti_sycophancy.contrast_with: str sycophancy
+  role_groups.anti_sycophancy.note: str assessment and pushback over agreement
+  role_groups.anti_sycophancy.roles: list ['pc_critic', 'pc_skeptic', 'pc_contrarian', 'pc_blunt_advisor', 'pc_tough_love_
+  role_groups.assistant_anchor.contrast_with: NoneType None
+  role_groups.assistant_anchor.note: str the paper's default anchor; reuses the existing AA role
+  role_groups.assistant_anchor.roles: list ['default']
+  vectors_dir: str C:\Users\user4\expLB\run-paper16\vectors_s3_fp32
+axes.assistant: cos@L[0, 10, 20, 22, 30, 40, 44, 60, 79] = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0] | min cos 1.0000 (L0) | max rel.diff 0.0091
+axes.deception: cos@L[0, 10, 20, 22, 30, 40, 44, 60, 79] = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0] | min cos 1.0000 (L0) | max rel.diff 0.0053
+axes.sycophancy: cos@L[0, 10, 20, 22, 30, 40, 44, 60, 79] = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0] | min cos 1.0000 (L0) | max rel.diff 0.0049
+axes.unified: cos@L[0, 10, 20, 22, 30, 40, 44, 60, 79] = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0] | min cos 1.0000 (L0) | max rel.diff 0.0050
+pca.all.components: shape (80, 5, 8192) max|diff| 0.005469
+pca.all.sign: cos@L[0, 10, 20, 22, 30, 40, 44, 60, 79] = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0] | min cos 0.2000 (L65) | max rel.diff 1.2649
+pca.all.variance_ratio: cos@L[0, 10, 20, 22, 30, 40, 44, 60, 79] = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0] | min cos 1.0000 (L46) | max rel.diff 0.0004
+pca.deception.components: shape (80, 5, 8192) max|diff| 0.009148
+pca.deception.sign: cos@L[0, 10, 20, 22, 30, 40, 44, 60, 79] = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0] | min cos 0.6000 (L23) | max rel.diff 0.8944
+pca.deception.variance_ratio: cos@L[0, 10, 20, 22, 30, 40, 44, 60, 79] = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0] | min cos 1.0000 (L2) | max rel.diff 0.0008
+pca.sycophancy.components: shape (80, 5, 8192) max|diff| 0.004835
+pca.sycophancy.sign: cos@L[0, 10, 20, 22, 30, 40, 44, 60, 79] = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0] | min cos 1.0000 (L0) | max rel.diff 0.0000
+pca.sycophancy.variance_ratio: cos@L[0, 10, 20, 22, 30, 40, 44, 60, 79] = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0] | min cos 1.0000 (L34) | max rel.diff 0.0007
+pca.unified.components: shape (80, 5, 8192) max|diff| 0.005469
+pca.unified.sign: cos@L[0, 10, 20, 22, 30, 40, 44, 60, 79] = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0] | min cos 0.2000 (L65) | max rel.diff 1.2649
+pca.unified.variance_ratio: cos@L[0, 10, 20, 22, 30, 40, 44, 60, 79] = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0] | min cos 1.0000 (L46) | max rel.diff 0.0004
+pca_components: shape (80, 5, 8192) max|diff| 0.005469
+pca_variance_ratio: cos@L[0, 10, 20, 22, 30, 40, 44, 60, 79] = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0] | min cos 1.0000 (L46) | max rel.diff 0.0004
+python exit 0

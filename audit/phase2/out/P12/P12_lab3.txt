@@ -1,0 +1,15 @@
+n_train block: {"single_mean": 666, "pooled_full": 7336, "pooled_match": 414}
+n_lodo       : mean 6669  min 3564  max 7192
+n_lodo_match : mean 449  min 412  max 500
+  instructed-deception               n_lodo=3564   n_lodo_match=440  
+  harm-pressure-choice               n_lodo=7134   n_lodo_match=500  
+  harm-pressure-knowledge-report     n_lodo=7114   n_lodo_match=476  
+  harm-pressure-kr-matched           n_lodo=7130   n_lodo_match=442  
+  convincing-game                    n_lodo=7182   n_lodo_match=442  
+  insider-trading                    n_lodo=6678   n_lodo_match=412  
+  ai_liar                            n_lodo=7122   n_lodo_match=440  
+  sandbagging_v2                     n_lodo=6536   n_lodo_match=424  
+  roleplaying                        n_lodo=7192   n_lodo_match=450  
+  mask                               n_lodo=7074   n_lodo_match=458  
+  sycophancy_mt                      n_lodo=6634   n_lodo_match=460  
+python exit 0

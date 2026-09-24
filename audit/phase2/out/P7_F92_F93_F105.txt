@@ -1,0 +1,48 @@
+300 responses, roles=['pc_ironic_critic', 'pc_sincere_critic', 'pc_sycophant'], variants=[0, 1, 2, 3, 4], questions=20
+
+=== F-92 / F-93 : marker rate per role x variant (>=1 marker, echo stripped) ===
+  role                     v1     v2     v3     v4     v5     all
+  pc_ironic_critic       0.85   0.15   0.10   0.00   0.00    0.22
+  pc_sincere_critic      0.60   0.15   0.15   0.25   0.05    0.24
+  pc_sycophant           0.85   1.00   0.50   0.00   0.05    0.48
+
+  marker counts by type:
+  pc_ironic_critic    exclamation=27  rhetorical_q=13  stock_irony=11  allcaps=4
+  pc_sincere_critic   allcaps=23  reveal_aside=13  scare_quotes=7
+  pc_sycophant        exclamation=79  rhetorical_q=11  allcaps=7  scare_quotes=4  stock_irony=4
+
+  F-92 quotes the IRONIC ARM ONLY (n=100): exclamation=27  rhetorical_q=13  stock_irony=11  allcaps=4
+
+=== F-93 / F-105 : lexical separability (grouped by question id) ===
+  subset      pair                     A raw  A strip   B raw  B strip    n   F-93/F-105 state
+  all v1-v5   ironic vs sycophant     0.9527   0.9472  0.9527   0.9472  200   0.953 / 0.947
+  v1 only     ironic vs sycophant     1.0000   1.0000  1.0000   1.0000   40   1.000 / 1.000
+  v4+v5       ironic vs sycophant     0.9194   0.9213  0.9194   0.9213   80   0.919 / 0.921
+  all v1-v5   ironic vs sincere       0.9997   0.9995  0.9997   0.9995  200   -
+  v1 only     ironic vs sincere       0.9975   0.9975  0.9975   0.9975   40   -
+  v4+v5       ironic vs sincere       0.9969   0.9963  0.9969   0.9963   80   0.997 / 0.996
+
+  bootstrap over the 20 question ids, v4+v5 ironic vs sycophant, stripped (B=2000):
+    point (out-of-fold) 0.9213
+    95% CI over questions [0.8719, 0.9669]   P(<=0.65 pre-registered ceiling) = 0.0000
+
+=== F-105 : discriminating words, v4+v5, markers stripped, single fit ===
+  vocab=387  n=80
+  ironic top-12   : of, that's, undoubtedly, ability, i, i'm, fact, decision, like, a, that, in
+  sycophant top-12: plan, good, can, get, off, you're, straightforward, you, more, if, getting, you've
+  F-93's 12 ironic words in my top-25:    11/12  (missing: ['definitely'])
+  F-93's 14 sycophant words in my top-25: 14/14  (missing: [])
+
+=== F-93 amendment / F-105 : polarity (judge role score 0-3) ===
+  arm                    mean    n    >=2   v1    v2    v3    v4    v5
+  pc_ironic_critic       2.59  100   1.00   2.85  2.85  2.60  2.55  2.10
+  pc_sincere_critic      2.37  100   1.00   2.85  2.25  2.40  2.25  2.10
+  pc_sycophant           2.44  100   0.96   2.45  2.25  2.55  2.15  2.80
+
+=== EXTRA: same fit WITHOUT stripping marker tokens (does F-93's list come from here?) ===
+  strip_markers=False  vocab=392
+    ironic top-12   : of, that's, ability, undoubtedly, i, i'm, definitely, fact, decision, like, a, in
+    sycophant top-12: plan, can, good, get, off, you're, straightforward, you, more, if, getting, you've
+  strip_markers=True  vocab=387
+    ironic top-12   : of, that's, undoubtedly, ability, i, i'm, fact, decision, like, a, that, in
+    sycophant top-12: plan, good, can, get, off, you're, straightforward, you, more, if, getting, you've

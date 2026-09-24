@@ -736,6 +736,29 @@ have both layers 20 and 22 are used for the 20 vs 22 comparison).
 | LODO Pass C: token LR, mean | 0.785 | 0.779 | 0.839 | L44 0.851 |
 
 **Verdict: neither 6a nor 6b — the method decides how much the layer matters.**
+> **UPDATE 2026-09-24 (DF-105, P17).** In the DF-63 block below, *"the median gap is 0.012"* was not
+> re-derived: the method set behind it ("17 methods" in DOC_FIXES DF-63) is not recorded. The declared
+> ±0.02 margin, the four diffs (−0.0128 / +0.0061 / +0.0036 / −0.0092), the four `False` flags and the
+> CI span (−0.038 / +0.033) were re-checked and match.
+> **Source:** `audit/p17/correction_blocks_check.csv` lines 78–87.
+>
+> **CORRECTION 2026-09-24 (DF-63, Phase 6).** Item 1 below concludes equivalence *"within about
+> ±0.04"*. **The pre-registered margin, at `:513` of this same file, is ±0.02** — the margin was
+> widened in the results section, with no note that it differs from the declared one.
+> **All four stored tests disagree with the conclusion at the declared margin:**
+> `run-coords/significance.json`, comparisons[7]–[10], every one
+> **`equivalent_within_margin = False`**; diffs −0.0128 / +0.0061 / +0.0036 / −0.0092. (The file
+> stores no `margin` field, so the flag's own threshold is not recorded either.)
+> **Source:** `run-coords/significance.json`, comparisons[7]–[10]; declared margin at
+> `docs/thesis/persona-coordinates-70b-results.md:513`.
+> **How the claim is updated:** read it as — *"the four equivalence tests do not clear the
+> pre-registered ±0.02 margin; the median gap is 0.012 and the 90% CIs span −0.038 to +0.033, so
+> the two layers are close but formal equivalence at ±0.02 is not established."*
+> **Why it matters more under the reframe:** the thesis argues that control discipline is the
+> contribution. A post-hoc margin widening is exactly what a referee looks for in that argument.
+> The conclusion is probably still right — just not by this route.
+> _The text below is superseded on this point and is kept for the record._
+
 1. **20 vs 22 is immaterial.** The median gap over the 17 methods is 0.012 and the maximum 0.037.
    Across datasets the four equivalence tests have 90% CIs from −0.038 to +0.033, so the two are
    equivalent within about ±0.04.

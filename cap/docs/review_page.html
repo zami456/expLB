@@ -155,6 +155,37 @@
 psychology one, and everything needed to make it is on this page.</p>
 
 <h2>The problem these fix</h2>
+<div class="callout">
+<p><strong>CORRECTION 2026-09-24 (DF-103, P17).</strong> The correction block below says the
+sycophancy axis was &ldquo;re-measured at 0.3061 / 0.2996 on passA11/passC11&rdquo;. Both values
+are <strong>passA11&rsquo;s</strong> (contrast / PC1). passC11 reads <strong>0.3066 / 0.2995</strong>.
+The 0.313 claim and the argument are unaffected.</p>
+<p><strong>Source:</strong> <code>audit/p17/correction_blocks_check.csv</code> lines 30&ndash;31
+(lab <code>run-crossgen/kd11/passA11/</code> and <code>passC11/matrices/mean_L40_s42.json</code>).</p>
+</div>
+
+<div class="callout">
+<p><strong>CORRECTION 2026-09-24 (DF-31, Phase 6).</strong> The paragraph below misattributes its
+number, and the <em>.md</em> versions of this packet were corrected on 2026-09-23 while this
+rendered page was not. <strong>0.374 is the paper16 <em>deception</em> axis's PC1, not the
+sycophancy axis.</strong> The paper16 <strong>sycophancy</strong> axis reads
+<strong>0.313</strong>; the deception axis's contrast reads 0.409.</p>
+<p>The correction makes the argument <em>stronger</em>. Against a 1,000-direction null, the
+sycophancy axis at 0.313 is <strong>significantly inverted</strong> (p 0.001&ndash;0.008), while
+0.374 sits <em>inside</em> the null &mdash; so &ldquo;worse than a random guess&rdquo; is
+<strong>not</strong> supported for the number quoted below, and <strong>is</strong> supported for
+the axis it names. The &ldquo;0.54&rdquo; comparator is also a <em>trained</em> random probe, not a
+zero-shot random direction; compare like with like.</p>
+<p><strong>Source:</strong> <code>run-crossgen/kd11/matrices/mean_L40_s42.json</code>, zeroshot
+block, <code>sycophancy_mt</code> column &mdash; <code>contrast</code> 0.4089,
+<code>PC1</code> 0.3739; sycophancy-axis 0.313 from <code>24_q10_sycophancy_axis.py</code>
+(2026-09-17), independently re-measured at 0.3061 / 0.2996 on passA11/passC11.</p>
+<p><strong>How the claim is updated:</strong> read it as &mdash; <em>&ldquo;on the one dataset that
+actually measures sycophancy it scores 0.313 where 0.5 is chance &mdash; significantly inverted,
+beyond a 1,000-direction null at p 0.001&ndash;0.008.&rdquo;</em> The paragraph below is superseded
+on this point and is kept for the record.</p>
+</div>
+
 <p>I already have a sycophancy persona set &mdash; <code>yes_man</code>, <code>flatterer</code>,
 <code>people_pleaser</code> against <code>critic</code>, <code>skeptic</code>,
 <code>blunt_advisor</code>. Geometrically it is the cleanest set in the whole project. On the

@@ -1,0 +1,145 @@
+==============================================================================
+PROVENANCE
+==============================================================================
+  q6_layers.json                        11720 B  md5 01e35cf0b472cb13e05ec871d7ab27c6  mtime 2026-09-16 21:22:58
+  layer_sweep_passB_mms.json             3174 B  md5 3506b84d16e7b686c094de79c468f708  mtime 2026-09-16 19:21:56
+  layer_sweep_passB_last.json            3173 B  md5 67cf30ed464d53b14526d0545dc53308  mtime 2026-09-16 19:21:55
+  layer_sweep_mean.json                  3027 B  md5 430e636c0652c333720c60a60619d323  mtime 2026-09-16 19:21:54
+  layer_sweep_mms.json                   3022 B  md5 6a6788e6c726569f8e709760dc5209a2  mtime 2026-09-16 19:21:55
+  dotproducts_mean.json                 26923 B  md5 a12563f5c24afc0a6b001ed26236c6d9  mtime 2026-09-16 19:21:53
+  pertoken_q8.json                      10808 B  md5 ee4f78d17623e37098e18ac2933b96fa  mtime 2026-09-16 19:21:58
+  q8_trained_pertoken.json             188408 B  md5 907b05ce36f8accf1a21bae09e305ce2  mtime 2026-09-16 21:22:15
+  significance.json                     19244 B  md5 b52ff6166e2849258cf0e34a8715eecf  mtime 2026-09-17 01:03:35
+
+  q6_layers.json: targets=[20, 22, 40], 23 method rows, tol=0.02
+
+==============================================================================
+LEVEL 1  --  the six quoted table rows vs q6_layers.json
+==============================================================================
+
+O-083  raw / mms / mean               source='trained transfer, full corpus'  file=layer_sweep_passB_mms.json
+      file : L20 0.652382  L22 0.646258  L40 0.669278  own best L32 0.716728
+      doc  : L20 0.652  L22 0.646  L40 0.669     own best L32 0.717
+      LEVEL1 MATCH   L20=ok L22=ok L40=ok best_layer=ok best=ok
+      L2   : re-read layer_sweep_passB_mms.json (pooling=mean probe=mms k=5 bank=axes_vectors_s3_fp32.pt)
+             -> L20 0.652382  L40 0.669278  argmax over 21 layers = L32 0.716728
+             agrees with q6_layers row: True
+
+O-084  raw / lr_reg10 / mean          source='trained transfer, Pass A (no layer 22)'  file=layer_sweep_mean.json
+      file : L20 0.676238  L22    None   L40 0.675064  own best L32 0.717615
+      doc  : L20 0.676  L22  --    L40 0.675     own best L32 0.718
+      LEVEL1 MATCH   L20=ok L22=ok L40=ok best_layer=ok best=ok
+      L2   : re-read layer_sweep_mean.json (pooling=mean probe=lr_reg10 k=5 bank=axes_vectors_s3_fp32.pt)
+             -> L20 0.676238  L40 0.675064  argmax over 20 layers = L32 0.717615
+             agrees with q6_layers row: True
+
+O-085  axes / mms / mean              source='trained transfer, full corpus'  file=layer_sweep_passB_mms.json
+      file : L20 0.569769  L22 0.566187  L40 0.720791  own best L44 0.730889
+      doc  : L20 0.570  L22 0.566  L40 0.721     own best L44 0.731
+      LEVEL1 MATCH   L20=ok L22=ok L40=ok best_layer=ok best=ok
+      L2   : re-read layer_sweep_passB_mms.json (pooling=mean probe=mms k=5 bank=axes_vectors_s3_fp32.pt)
+             -> L20 0.569769  L40 0.720791  argmax over 21 layers = L44 0.730889
+             agrees with q6_layers row: True
+
+O-087  deception contrast axis / mean   source='zero-shot, full corpus'  file=dotproducts_mean.json
+      file : L20 0.608052  L22 0.629506  L40 0.863011  own best L40 0.863011
+      doc  : L20 0.608  L22 0.630  L40 0.863     own best L40 0.863
+      LEVEL1 MATCH   L20=ok L22=ok L40=ok best_layer=ok best=ok
+      L2   : re-read dotproducts_mean.json contrast -> L20 0.608052 L22 0.629506 L40 0.863011  argmax over 21 layers = L40 0.863011
+             agrees with q6_layers row: True
+
+O-089  pool_mean_mms / pooled         source='leave-one-dataset-out, Pass C'  file=q8_trained_pertoken.json
+      file : L20 0.857024  L22 0.854373  L40 0.882577  own best L40 0.882577
+      doc  : L20 0.857  L22 0.854  L40 0.883     own best L40 0.883
+      LEVEL1 MATCH   L20=ok L22=ok L40=ok best_layer=ok best=ok
+      L2   : re-read q8_trained_pertoken.json (probe=pool_mean_mms aggregation=pooled, protocol=leave-one-dataset-out, 9 folds) -> L20 0.857024 L22 0.854373 L40 0.882577  argmax over [20, 22, 28, 40, 44, 48] = L40 0.882577
+             agrees with q6_layers row: True
+
+O-090  tok_lr / mean                  source='leave-one-dataset-out, Pass C'  file=q8_trained_pertoken.json
+      file : L20 0.785067  L22 0.779317  L40 0.839061  own best L44 0.850734
+      doc  : L20 0.785  L22 0.779  L40 0.839     own best L44 0.851
+      LEVEL1 MATCH   L20=ok L22=ok L40=ok best_layer=ok best=ok
+      L2   : re-read q8_trained_pertoken.json (probe=tok_lr aggregation=mean, protocol=leave-one-dataset-out, 9 folds) -> L20 0.785067 L22 0.779317 L40 0.839061  argmax over [20, 22, 28, 40, 44, 48] = L44 0.850734
+             agrees with q6_layers row: True
+
+==============================================================================
+LEVEL 2  --  the four verdict bullets (7.6, lines 739-748)
+==============================================================================
+
+O-091  '20 vs 22 is immaterial. Median gap over the 17 methods is 0.012 and the maximum 0.037.'
+       rows with both layers: 17
+         zeroshot_axis / top10pct  [leave-one-dataset-out,]   0.037019
+         axis / top10pct  [zero-shot per-token, P]            0.035219
+         PC1 / mean  [zero-shot, full corpus]                 0.025794
+         deception contrast axis / mean  [zero-shot, full corpus] 0.021454
+         pc:deception / mms / last  [trained transfer, full]  0.017792
+         raw / mms / last  [trained transfer, full]           0.012812
+         pool_mean_lr / pooled  [leave-one-dataset-out,]      0.012622
+         pool_last_mms / pooled  [leave-one-dataset-out,]     0.012290
+         tok_mms / mean  [leave-one-dataset-out,]             0.011547
+         axes / mms / last  [trained transfer, full]          0.009235
+         tok_lr / top10pct  [leave-one-dataset-out,]          0.008417
+         pc:deception / mms / mean  [trained transfer, full]  0.006277
+         raw / mms / mean  [trained transfer, full]           0.006124
+         tok_lr / mean  [leave-one-dataset-out,]              0.005750
+         axes / mms / mean  [trained transfer, full]          0.003581
+         axis / mean  [zero-shot per-token, P]                0.003255
+         pool_mean_mms / pooled  [leave-one-dataset-out,]     0.002651
+       median |gap| = 0.011547  -> 0.012
+       max    |gap| = 0.037019  -> 0.037
+       + second sentence: 'the four equivalence tests have 90%% CIs from -0.038 to +0.033'
+         raw: layer 20 vs 22 (last)         diff -0.012812  dataset_ci90 [-0.03830, +0.01509]  equivalent_within_margin=False (margin 0.02)
+         raw: layer 20 vs 22 (mean)         diff +0.006124  dataset_ci90 [-0.01647, +0.03345]  equivalent_within_margin=False (margin 0.02)
+         axes: layer 20 vs 22 (mean)        diff +0.003581  dataset_ci90 [-0.01265, +0.02165]  equivalent_within_margin=False (margin 0.02)
+         axes: layer 20 vs 22 (last)        diff -0.009235  dataset_ci90 [-0.02127, +0.00048]  equivalent_within_margin=False (margin 0.02)
+         union of the four CI90s: [-0.03830, +0.03345]
+
+O-092  'Raw probes: layer 40 helps a little. Median +0.025 over the better of 20/22 (range -0.016 to +0.068, 10 methods).'
+       raw-probe rows (10):
+         raw / mms / mean  [trained transfer, full]           +0.016896
+         raw / mms / last  [trained transfer, full]           -0.015704
+         raw / lr_reg10 / mean  [trained transfer, Pass]      -0.001174
+         raw / mms / mean  [trained transfer, Pass]           +0.011348
+         tok_lr / top10pct  [leave-one-dataset-out,]          +0.068146
+         tok_lr / mean  [leave-one-dataset-out,]              +0.053994
+         tok_mms / mean  [leave-one-dataset-out,]             +0.030480
+         pool_mean_mms / pooled  [leave-one-dataset-out,]     +0.025553
+         pool_mean_lr / pooled  [leave-one-dataset-out,]      +0.024647
+         pool_last_mms / pooled  [leave-one-dataset-out,]     +0.036060
+       median +0.025100 -> +0.025    min -0.015704 -> -0.016    max +0.068146 -> +0.068
+
+O-093  'Persona methods: layer 40 dominates. Median +0.113 (13 methods), up to +0.234 zero-shot.'
+       persona rows (13):
+         pc:deception / mms / mean  [trained transfer, full]  +0.137025
+         axes / mms / mean  [trained transfer, full]          +0.151022
+         pc:deception / mms / last  [trained transfer, full]  +0.063844
+         axes / mms / last  [trained transfer, full]          +0.085191
+         pc:deception / lr_reg10 / mean  [trained transfer, Pass] +0.066645
+         axes / lr_reg10 / mean  [trained transfer, Pass]     +0.113456
+         pc:deception / mms / mean  [trained transfer, Pass]  +0.115686
+         axes / mms / mean  [trained transfer, Pass]          +0.113549
+         deception contrast axis / mean  [zero-shot, full corpus] +0.233504
+         PC1 / mean  [zero-shot, full corpus]                 +0.178359
+         axis / mean  [zero-shot per-token, P]                +0.066540
+         axis / top10pct  [zero-shot per-token, P]            -0.028301
+         zeroshot_axis / top10pct  [leave-one-dataset-out,]   +0.010738
+       median +0.113456 -> +0.113    max +0.233504 -> +0.234 (deception contrast axis / mean)
+       zero-shot subset only: max +0.233504
+       ratio persona-median / raw-median = 4.52x  (doc: 'about 4x')
+
+O-094  'deception-axis AUROC is 0.491 at L60 and 0.445 at L68, below chance'
+       dotproducts_mean.json layers: [0, 4, 8, 12, 16, 20, 22, 24, 28, 32, 36, 40, 44, 48, 52, 56, 60, 64, 68, 72, 76]
+        layer   contrast        pc1
+           40   0.863011   0.876895
+           44   0.806496   0.829525
+           48   0.741311   0.780716
+           52   0.658467   0.718489
+           56   0.556331   0.602919
+           60   0.491368   0.526010
+           64   0.450325   0.471935
+           68   0.444665   0.462264
+           72   0.435329   0.453086
+           76   0.612668   0.679996
+       L60  contrast = 0.491368 -> 0.491   (below chance: True)
+       L68  contrast = 0.444665 -> 0.445   (below chance: True)
+       layers with contrast AUROC < 0.5: [0, 4, 8, 12, 16, 60, 64, 68, 72]

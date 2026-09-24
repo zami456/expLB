@@ -1,0 +1,72 @@
+== run-crossgen/summary.json: leaves lab=314268 git=6593 | only-lab=307777 only-git=102 | differing=5524 (numeric 4562, max |delta|=42)
+    records[65].seed: git=42 lab=0
+    records[5].seed: git=42 lab=0
+    records[2].seed: git=42 lab=0
+    records[0].seed: git=42 lab=0
+    records[63].seed: git=42 lab=0
+    records[3].seed: git=42 lab=0
+    only-lab: records[1000].blocks.belief->belief.mean_auroc
+    only-lab: records[1000].blocks.belief->belief.mean_delta_vs_raw
+    only-lab: records[1000].blocks.belief->belief.n_cells
+    only-git: records[0].sign_flips.significantly_above_chance
+    only-git: records[0].sign_flips.significantly_inverted
+    only-git: records[10].sign_flips.significantly_above_chance
+== run-crossgen/significance.json: leaves lab=75759 git=2979 | only-lab=72894 only-git=114 | differing=2251 (numeric 1631, max |delta|=40)
+    tests[52].layer: git=40 lab=0
+    tests[30].layer: git=40 lab=0
+    tests[15].layer: git=40 lab=0
+    tests[36].layer: git=40 lab=0
+    tests[1].layer: git=40 lab=0
+    tests[43].layer: git=40 lab=0
+    only-lab: tests[1000].block
+    only-lab: tests[1000].comparison
+    only-lab: tests[1000].dataset_ci95[0]
+    only-git: tests[101].row_ci95
+    only-git: tests[103].row_ci95
+    only-git: tests[104].row_ci95
+== run-crossgen/banks/own100/summary.json: leaves lab=371304 git=2783 | only-lab=368521 only-git=0 | differing=2678 (numeric 2529, max |delta|=42)
+    records[5].seed: git=42 lab=0
+    records[7].seed: git=42 lab=0
+    records[3].seed: git=42 lab=0
+    records[0].seed: git=42 lab=0
+    records[1].seed: git=42 lab=0
+    records[6].seed: git=42 lab=0
+    only-lab: records[0].blocks.belief->belief.mean_auroc
+    only-lab: records[0].blocks.belief->belief.mean_delta_vs_raw
+    only-lab: records[0].blocks.belief->belief.n_cells
+== run-crossgen/kd11/banks/kd_s23/summary.json: leaves lab=181199 git=25796 | only-lab=155460 only-git=57 | differing=19214 (numeric 16756, max |delta|=47)
+    records[52].sign_flips.significantly_above_chance: git=89 lab=42
+    records[51].sign_flips.significantly_above_chance: git=91 lab=44
+    records[50].sign_flips.significantly_above_chance: git=77 lab=31
+    records[27].sign_flips.significantly_above_chance: git=80 lab=35
+    records[20].sign_flips.significantly_above_chance: git=88 lab=45
+    records[160].sign_flips.significantly_above_chance: git=108 lab=65
+    only-lab: records[1000].blocks.?->belief.mean_auroc
+    only-lab: records[1000].blocks.?->belief.mean_delta_vs_raw
+    only-lab: records[1000].blocks.?->belief.n_cells
+    only-git: records[10].sign_flips.cells_below_0.35[6][0]
+    only-git: records[10].sign_flips.cells_below_0.35[6][1]
+    only-git: records[10].sign_flips.cells_below_0.35[6][2]
+== run-crossgen/kd11/banks/kd_s23/significance.json: leaves lab=83163 git=7023 | only-lab=76140 only-git=0 | differing=4721 (numeric 3469, max |delta|=74)
+    tests[451].pairs_won: git=24 lab=98
+    tests[297].pairs_won: git=12 lab=73
+    tests[229].pairs_won: git=91 lab=33
+    tests[336].pairs_won: git=12 lab=65
+    tests[259].pairs_won: git=13 lab=66
+    tests[388].pairs_won: git=25 lab=76
+    only-lab: tests[1000].block
+    only-lab: tests[1000].comparison
+    only-lab: tests[1000].dataset_ci95[0]
+== run-crossgen/kd11/significance.json: leaves lab=75855 git=64515 | only-lab=12614 only-git=1274 | differing=44551 (numeric 35925, max |delta|=72)
+    tests[1046].layer: git=0 lab=72
+    tests[1922].layer: git=76 lab=4
+    tests[1937].layer: git=76 lab=4
+    tests[1041].layer: git=0 lab=72
+    tests[1927].layer: git=76 lab=4
+    tests[1036].layer: git=0 lab=72
+    only-lab: tests[100].row_ci95
+    only-lab: tests[1010].row_ci95
+    only-lab: tests[1011].row_ci95
+    only-git: tests[100].row_ci95[0]
+    only-git: tests[100].row_ci95[1]
+    only-git: tests[1010].row_ci95[0]

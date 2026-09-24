@@ -1,0 +1,279 @@
+
+==============================================================================
+A. zero_shot.csv (his committed per-dataset zero-shot AUROC)
+==============================================================================
+  L20 HP-KR n=2139 n_dec=139 axis(8v7)=0.1483 denial(4v6)=0.8899 ext(12v13)=0.8816
+  L40 HP-KR n=2139 n_dec=139 axis(8v7)=0.5926 denial(4v6)=0.9185 ext(12v13)=0.9124
+  L44 HP-KR n=2139 n_dec=139 axis(8v7)=0.5895 denial(4v6)=0.9077 ext(12v13)=0.8936
+
+==============================================================================
+D-003 / D-083 / D-006 : HP-KR zero-shot AUROC
+==============================================================================
+  D-003 published contrast (8v7) HP-KR L20 = 0.148         draft=0.148    file=0.148277  MATCH
+  D-083 knowledge-denial (4v6) HP-KR L20 = 0.89            draft=0.89     file=0.889932  MATCH
+  D-083 knowledge-denial (4v6) HP-KR L40 = 0.919           draft=0.919    file=0.918536  MATCH
+  D-083 knowledge-denial (4v6) HP-KR L44 = 0.908           draft=0.908    file=0.907683  MATCH
+  [draft 5.1 also states 8v7 = 0.593 / 0.589 at L40 / L44]
+        published (8v7) HP-KR L40 = 0.593                  draft=0.593    file=0.592579  MATCH
+        published (8v7) HP-KR L44 = 0.589                  draft=0.589    file=0.589493  MATCH
+  [Table 2 extended contrast (12v13) = 0.882 / 0.912 / 0.894]
+        extended (12v13) HP-KR L20 = 0.882                 draft=0.882    file=0.881568  MATCH
+        extended (12v13) HP-KR L40 = 0.912                 draft=0.912    file=0.912392  MATCH
+        extended (12v13) HP-KR L44 = 0.894                 draft=0.894    file=0.893637  MATCH
+
+==============================================================================
+Table 6 (all six datasets x three contrasts) -- underpins D-099
+==============================================================================
+  Table 6 cells checked: 54, mismatches: 0
+  Table 6 'Mean' row (draft): L20 .791/.866/.904  L40 .832/.912/.916  L44 .826/.900/.903
+  -> that Mean row is NOT the mean of the 6 zero-shot cells; it is summary.csv off_diagonal_mean:
+    L20 mean-of-6-cells = 0.7909 / 0.8660 / 0.9041
+    L40 mean-of-6-cells = 0.8319 / 0.9115 / 0.9158
+    L44 mean-of-6-cells = 0.8260 / 0.9001 / 0.9034
+
+==============================================================================
+B. summary.csv off_diagonal_mean -- D-008 / D-098 / D-028 / D-010 / D-104 / D-168
+==============================================================================
+  L20  baseline       dim=8192  off_diag=0.647770 excl_hpkr=0.728235 diag=0.956428
+  L20  axis1          dim=1     off_diag=0.651080 excl_hpkr=0.919401 diag=0.907584
+  L20  denial_axis1   dim=1     off_diag=0.866039 excl_hpkr=0.861261 diag=0.864695
+  L20  ext_axis1      dim=1     off_diag=0.904117 excl_hpkr=0.908627 diag=0.903505
+  L20  ext_pc3        dim=3     off_diag=0.683697 excl_hpkr=0.900024 diag=0.914857
+  L20  ext_pc1        dim=1     off_diag=0.661275 excl_hpkr=0.681659 diag=0.642648
+  L20  pc3            dim=3     off_diag=0.679191 excl_hpkr=0.887892 diag=0.919205
+  L20  random3        dim=3     off_diag=0.526938 excl_hpkr=0.559843 diag=0.787425
+  L40  baseline       dim=8192  off_diag=0.732033 excl_hpkr=0.758089 diag=0.983273
+  L40  axis1          dim=1     off_diag=0.831894 excl_hpkr=0.879757 diag=0.828895
+  L40  denial_axis1   dim=1     off_diag=0.911535 excl_hpkr=0.910135 diag=0.911198
+  L40  ext_axis1      dim=1     off_diag=0.915835 excl_hpkr=0.916524 diag=0.915555
+  L40  ext_pc3        dim=3     off_diag=0.865534 excl_hpkr=0.866985 diag=0.943480
+  L40  ext_pc1        dim=1     off_diag=0.767950 excl_hpkr=0.774362 diag=0.763668
+  L40  pc3            dim=3     off_diag=0.639362 excl_hpkr=0.751160 diag=0.916306
+  L40  random3        dim=3     off_diag=0.503798 excl_hpkr=0.543712 diag=0.807368
+  L44  baseline       dim=8192  off_diag=0.715649 excl_hpkr=0.729708 diag=0.982192
+  L44  axis1          dim=1     off_diag=0.826048 excl_hpkr=0.873359 diag=0.821472
+  L44  denial_axis1   dim=1     off_diag=0.900121 excl_hpkr=0.898608 diag=0.899629
+  L44  ext_axis1      dim=1     off_diag=0.903388 excl_hpkr=0.905339 diag=0.903264
+  L44  ext_pc3        dim=3     off_diag=0.879936 excl_hpkr=0.869930 diag=0.930816
+  L44  ext_pc1        dim=1     off_diag=0.780140 excl_hpkr=0.793076 diag=0.777883
+  L44  pc3            dim=3     off_diag=0.616589 excl_hpkr=0.728075 diag=0.915934
+  L44  random3        dim=3     off_diag=0.492709 excl_hpkr=0.546985 diag=0.795992
+
+==============================================================================
+D-008 (abstract) / D-098 (5.2): off-diagonal means
+==============================================================================
+  D-008 ext_axis1 L40 = 0.916                              draft=0.916    file=0.915835  MATCH
+  D-008 baseline  L40 = 0.732                              draft=0.732    file=0.732033  MATCH
+  D-098 ext_axis1 L20 = 0.904                              draft=0.904    file=0.904117  MATCH
+  D-098 ext_axis1 L40 = 0.916                              draft=0.916    file=0.915835  MATCH
+  D-098 ext_axis1 L44 = 0.903                              draft=0.903    file=0.903388  MATCH
+  D-098 baseline  L20 = 0.648                              draft=0.648    file=0.647770  MATCH
+  D-098 baseline  L40 = 0.732                              draft=0.732    file=0.732033  MATCH
+  D-098 baseline  L44 = 0.716                              draft=0.716    file=0.715649  MATCH
+  [5.2 also: in-distribution 0.983 at L40, loses 0.251]
+        baseline diagonal_mean L40 = 0.983                 draft=0.983    file=0.983273  MATCH
+        diagonal - off-diagonal   = 0.251                  draft=0.251    file=0.251240  MATCH
+
+==============================================================================
+D-028 / D-104 / D-010 : 1-d contrast vs persona PCs
+==============================================================================
+  L20: ext_axis1 0.9041  ext_pc3 0.6837  ext_pc1 0.6613  axis1-pc3 = +0.2204   beats_pc3=True  beats_pc1=True
+  L40: ext_axis1 0.9158  ext_pc3 0.8655  ext_pc1 0.7680  axis1-pc3 = +0.0503   beats_pc3=True  beats_pc1=True
+  L44: ext_axis1 0.9034  ext_pc3 0.8799  ext_pc1 0.7801  axis1-pc3 = +0.0235   beats_pc3=True  beats_pc1=True
+  D-028 gap L20 = 0.220                                    draft=0.22     file=0.220420  MATCH
+  D-028 gap L44 = 0.023                                    draft=0.023    file=0.023453  MATCH
+  5.3   gap L40 = 0.050                                    draft=0.05     file=0.050301  MATCH
+
+==============================================================================
+Table 3 -- every cell (context for D-010/D-104/D-168)
+==============================================================================
+  Table 3 cells checked: 48, mismatches: 0
+
+==============================================================================
+C. Table 7 recomputed from matrix_*.csv -- D-009 / D-027 / D-099 / D-195
+==============================================================================
+  --- L20 (mean over the 5 OTHER training sets, per test set) ---
+    CG     raw draft=0.663 calc=0.6632 ok | 12v13 draft=0.969 calc=0.9692 ok | 8v7 calc=0.7639 | ext>raw=True ext>=pub=True
+    HP-C   raw draft=0.535 calc=0.5349 ok | 12v13 draft=0.639 calc=0.6393 ok | 8v7 calc=0.6301 | ext>raw=True ext>=pub=True
+    HP-KR  raw draft=0.394 calc=0.3936 ok | 12v13 draft=0.882 calc=0.8816 ok | 8v7 calc=0.1483 | ext>raw=True ext>=pub=True
+    IT     raw draft=0.799 calc=0.7992 ok | 12v13 draft=0.99 calc=0.9899 ok | 8v7 calc=0.7927 | ext>raw=True ext>=pub=True
+    ID     raw draft=0.778 calc=0.7777 ok | 12v13 draft=0.954 calc=0.9539 ok | 8v7 calc=0.7752 | ext>raw=True ext>=pub=True
+    RepE   raw draft=0.718 calc=0.7181 ok | 12v13 draft=0.991 calc=0.9908 ok | 8v7 calc=0.7961 | ext>raw=True ext>=pub=True
+  --- L40 (mean over the 5 OTHER training sets, per test set) ---
+    CG     raw draft=0.788 calc=0.7875 ok | 12v13 draft=0.912 calc=0.9123 ok | 8v7 calc=0.8650 | ext>raw=True ext>=pub=True
+    HP-C   raw draft=0.571 calc=0.5709 ok | 12v13 draft=0.712 calc=0.7116 ok | 8v7 calc=0.5807 | ext>raw=True ext>=pub=True
+    HP-KR  raw draft=0.584 calc=0.5836 ok | 12v13 draft=0.912 calc=0.9124 ok | 8v7 calc=0.5926 | ext>raw=True ext>=pub=True
+    IT     raw draft=0.8 calc=0.7999 ok | 12v13 draft=0.98 calc=0.9803 ok | 8v7 calc=0.9787 | ext>raw=True ext>=pub=True
+    ID     raw draft=0.827 calc=0.8267 ok | 12v13 draft=0.978 calc=0.9784 ok | 8v7 calc=0.9744 | ext>raw=True ext>=pub=True
+    RepE   raw draft=0.824 calc=0.8236 ok | 12v13 draft=1.0 calc=1.0000 ok | 8v7 calc=1.0000 | ext>raw=True ext>=pub=True
+  --- L44 (mean over the 5 OTHER training sets, per test set) ---
+    CG     raw draft=0.757 calc=0.7571 ok | 12v13 draft=0.859 calc=0.8586 ok | 8v7 calc=0.8190 | ext>raw=True ext>=pub=True
+    HP-C   raw draft=0.57 calc=0.5704 ok | 12v13 draft=0.712 calc=0.7119 ok | 8v7 calc=0.6070 | ext>raw=True ext>=pub=True
+    HP-KR  raw draft=0.637 calc=0.6368 ok | 12v13 draft=0.894 calc=0.8936 ok | 8v7 calc=0.5895 | ext>raw=True ext>=pub=True
+    IT     raw draft=0.736 calc=0.7361 ok | 12v13 draft=0.982 calc=0.9822 ok | 8v7 calc=0.9787 | ext>raw=True ext>=pub=True
+    ID     raw draft=0.808 calc=0.8081 ok | 12v13 draft=0.974 calc=0.9740 ok | 8v7 calc=0.9621 | ext>raw=True ext>=pub=True
+    RepE   raw draft=0.785 calc=0.7853 ok | 12v13 draft=1.0 calc=1.0000 ok | 8v7 calc=1.0000 | ext>raw=True ext>=pub=True
+  Table 7 cells checked: 36, mismatches: 0
+
+==============================================================================
+D-009 / D-027 / D-195 verdict inputs: does 12v13 beat raw on EVERY test set, EVERY layer?
+==============================================================================
+  12v13 > raw on all 18 (test set x layer) cells: True
+
+==============================================================================
+D-099 second half: does 12v13 'match or beat' the published contrast (8v7)?
+==============================================================================
+  L20 CG     12v13=0.9692  8v7=0.7639  diff=+0.2053
+  L20 HP-C   12v13=0.6393  8v7=0.6301  diff=+0.0092
+  L20 HP-KR  12v13=0.8816  8v7=0.1483  diff=+0.7333
+  L20 IT     12v13=0.9899  8v7=0.7927  diff=+0.1972
+  L20 ID     12v13=0.9539  8v7=0.7752  diff=+0.1787
+  L20 RepE   12v13=0.9908  8v7=0.7961  diff=+0.1947
+  L40 CG     12v13=0.9123  8v7=0.8650  diff=+0.0473
+  L40 HP-C   12v13=0.7116  8v7=0.5807  diff=+0.1309
+  L40 HP-KR  12v13=0.9124  8v7=0.5926  diff=+0.3198
+  L40 IT     12v13=0.9803  8v7=0.9787  diff=+0.0016
+  L40 ID     12v13=0.9784  8v7=0.9744  diff=+0.0040
+  L40 RepE   12v13=1.0000  8v7=1.0000  diff=+0.0000
+  L44 CG     12v13=0.8586  8v7=0.8190  diff=+0.0396
+  L44 HP-C   12v13=0.7119  8v7=0.6070  diff=+0.1049
+  L44 HP-KR  12v13=0.8936  8v7=0.5895  diff=+0.3041
+  L44 IT     12v13=0.9822  8v7=0.9787  diff=+0.0035
+  L44 ID     12v13=0.9740  8v7=0.9621  diff=+0.0119
+  L44 RepE   12v13=1.0000  8v7=1.0000  diff=+0.0000
+
+==============================================================================
+Off-diagonal mean recomputed from the matrices (checks summary.csv internally)
+==============================================================================
+  L20 baseline      matrix-mean=0.6478 summary=0.6478 ok
+  L20 ext_axis1     matrix-mean=0.9041 summary=0.9041 ok
+  L20 axis1         matrix-mean=0.6511 summary=0.6511 ok
+  L20 denial_axis1  matrix-mean=0.8660 summary=0.8660 ok
+  L20 ext_pc3       matrix-mean=0.6837 summary=0.6837 ok
+  L20 ext_pc1       matrix-mean=0.6613 summary=0.6613 ok
+  L20 pc3           matrix-mean=0.6792 summary=0.6792 ok
+  L20 random3       matrix-mean=0.5269 summary=0.5269 ok
+  L40 baseline      matrix-mean=0.7320 summary=0.7320 ok
+  L40 ext_axis1     matrix-mean=0.9158 summary=0.9158 ok
+  L40 axis1         matrix-mean=0.8319 summary=0.8319 ok
+  L40 denial_axis1  matrix-mean=0.9115 summary=0.9115 ok
+  L40 ext_pc3       matrix-mean=0.8655 summary=0.8655 ok
+  L40 ext_pc1       matrix-mean=0.7679 summary=0.7680 ok
+  L40 pc3           matrix-mean=0.6394 summary=0.6394 ok
+  L40 random3       matrix-mean=0.5038 summary=0.5038 ok
+  L44 baseline      matrix-mean=0.7156 summary=0.7156 ok
+  L44 ext_axis1     matrix-mean=0.9034 summary=0.9034 ok
+  L44 axis1         matrix-mean=0.8260 summary=0.8260 ok
+  L44 denial_axis1  matrix-mean=0.9001 summary=0.9001 ok
+  L44 ext_pc3       matrix-mean=0.8800 summary=0.8799 ok
+  L44 ext_pc1       matrix-mean=0.7801 summary=0.7801 ok
+  L44 pc3           matrix-mean=0.6166 summary=0.6166 ok
+  L44 random3       matrix-mean=0.4927 summary=0.4927 ok
+
+==============================================================================
+D. zero_shot_operating.csv -- D-006 / D-093 / D-117 / D-167
+==============================================================================
+  --- HP-KR, control threshold (1% FPR on Alpaca) ---
+    L20 deception axis (8v7)         balacc=0.5      recall=0.0      auroc=0.1483   spec=1.0
+    L20 knowledge-denial axis (4v6)  balacc=0.5331   recall=0.9496   auroc=0.8899   spec=0.1165
+    L20 extended axis (12v13)        balacc=0.5      recall=0.0      auroc=0.8816   spec=1.0
+    L20 base probe (RepE-trained)    balacc=0.5      recall=0.0      auroc=0.109    spec=1.0
+    L40 deception axis (8v7)         balacc=0.5      recall=0.0      auroc=0.5926   spec=1.0
+    L40 knowledge-denial axis (4v6)  balacc=0.9102   recall=0.8849   auroc=0.9185   spec=0.9355
+    L40 extended axis (12v13)        balacc=0.5      recall=0.0      auroc=0.9124   spec=1.0
+    L40 base probe (RepE-trained)    balacc=0.5      recall=0.0      auroc=0.9358   spec=1.0
+    L44 deception axis (8v7)         balacc=0.5      recall=0.0      auroc=0.5895   spec=1.0
+    L44 knowledge-denial axis (4v6)  balacc=0.7571   recall=0.5612   auroc=0.9077   spec=0.953
+    L44 extended axis (12v13)        balacc=0.5      recall=0.0      auroc=0.8936   spec=1.0
+    L44 base probe (RepE-trained)    balacc=0.5      recall=0.0      auroc=0.8283   spec=1.0
+
+==============================================================================
+D-093 / D-006: knowledge-denial axis, HP-KR, L40, control threshold
+==============================================================================
+  balanced accuracy = 0.910                                draft=0.91     file=0.910200  MATCH
+  recall            = 0.885                                draft=0.885    file=0.884900  MATCH
+  specificity = 0.9355  ->  honest flagged = 0.0645  (draft says '6%')
+  AUROC             = 0.919                                draft=0.919    file=0.918500  *** MISMATCH ***
+  95% CI: balacc [0.8835, 0.9369]  recall [0.8345, 0.9353]  auroc [0.8878, 0.945]
+  [5.1 also: at L20 the same axis flags 88% of honest answers, balacc 0.533]
+    L20 balacc=0.5331 specificity=0.1165 -> honest flagged 0.8835
+
+==============================================================================
+Table 2 balanced-accuracy column
+==============================================================================
+  L20 deception axis (8v7)         draft=0.5 file=0.5 ok
+  L20 knowledge-denial axis (4v6)  draft=0.533 file=0.5331 ok
+  L20 extended axis (12v13)        draft=0.5 file=0.5 ok
+  L20 base probe (RepE-trained)    draft=0.5 file=0.5 ok
+  L40 deception axis (8v7)         draft=0.5 file=0.5 ok
+  L40 knowledge-denial axis (4v6)  draft=0.91 file=0.9102 ok
+  L40 extended axis (12v13)        draft=0.5 file=0.5 ok
+  L40 base probe (RepE-trained)    draft=0.5 file=0.5 ok
+  L44 deception axis (8v7)         draft=0.5 file=0.5 ok
+  L44 knowledge-denial axis (4v6)  draft=0.757 file=0.7571 ok
+  L44 extended axis (12v13)        draft=0.5 file=0.5 ok
+  L44 base probe (RepE-trained)    draft=0.5 file=0.5 ok
+  [Table 2 base-probe AUROC on HP-KR: 0.109 / 0.936 / 0.828]
+      base probe HP-KR AUROC L20 = 0.109                   draft=0.109    file=0.109000  MATCH
+      base probe HP-KR AUROC L40 = 0.936                   draft=0.936    file=0.935800  MATCH
+      base probe HP-KR AUROC L44 = 0.828                   draft=0.828    file=0.828300  MATCH
+
+==============================================================================
+D-117: Table 4, Average (Liars' Bench) at the control threshold
+==============================================================================
+  L20 base probe (RepE-trained)    draft=(0.721,0.489,0.697) file=(0.7209,0.4893,0.6972) ['ok', 'ok', 'ok']
+  L20 deception axis (8v7)         draft=(0.534,0.069,0.75) file=(0.5342,0.0692,0.7503) ['ok', 'ok', 'ok']
+  L20 knowledge-denial axis (4v6)  draft=(0.559,0.305,0.863) file=(0.5587,0.3053,0.8628) ['ok', 'ok', 'ok']
+  L20 extended axis (12v13)        draft=(0.591,0.187,0.887) file=(0.5914,0.1872,0.8868) ['ok', 'ok', 'ok']
+  L40 base probe (RepE-trained)    draft=(0.626,0.281,0.778) file=(0.6255,0.2814,0.7784) ['***', 'ok', 'ok']
+  L40 deception axis (8v7)         draft=(0.675,0.382,0.798) file=(0.675,0.3819,0.7983) ['ok', 'ok', 'ok']
+  L40 knowledge-denial axis (4v6)  draft=(0.725,0.487,0.894) file=(0.7251,0.4868,0.8938) ['ok', 'ok', 'ok']
+  L40 extended axis (12v13)        draft=(0.694,0.413,0.899) file=(0.6939,0.4129,0.899) ['ok', 'ok', 'ok']
+  L44 base probe (RepE-trained)    draft=(0.626,0.281,0.756) file=(0.6256,0.2812,0.7564) ['ok', 'ok', 'ok']
+  L44 deception axis (8v7)         draft=(0.654,0.318,0.791) file=(0.6535,0.318,0.7913) ['***', 'ok', 'ok']
+  L44 knowledge-denial axis (4v6)  draft=(0.683,0.395,0.88) file=(0.6829,0.3949,0.8802) ['ok', 'ok', 'ok']
+  L44 extended axis (12v13)        draft=(0.666,0.35,0.884) file=(0.6663,0.3503,0.8841) ['ok', 'ok', 'ok']
+  Table 4 cells checked: 36, mismatches: 2
+  NOTE: base probe L40 and L44 balacc/recall are identical (0.626 / 0.281) in the file too.
+
+==============================================================================
+Base probe per-dataset at L40 vs L44 (is the identity a coincidence or a copied file?)
+==============================================================================
+  CG                     L40 (ba=0.7036, rec=0.4072, auroc=0.9723, thr=-2.4762)  L44 (ba=0.7036, rec=0.4072, auroc=0.9395, thr=-2.9885)
+  HP-C                   L40 (ba=0.5, rec=0.0, auroc=0.675, thr=-2.4762)  L44 (ba=0.5, rec=0.0, auroc=0.7577, thr=-2.9885)
+  HP-KR                  L40 (ba=0.5, rec=0.0, auroc=0.9358, thr=-2.4762)  L44 (ba=0.5, rec=0.0, auroc=0.8283, thr=-2.9885)
+  IT                     L40 (ba=0.5, rec=0.0, auroc=0.3378, thr=-2.4762)  L44 (ba=0.5, rec=0.0, auroc=0.2888, thr=-2.9885)
+  ID                     L40 (ba=0.924, rec=1.0, auroc=0.971, thr=-2.4762)  L44 (ba=0.9246, rec=0.9987, auroc=0.9677, thr=-2.9885)
+  RepE                   L40 (ba=1.0, rec=1.0, auroc=1.0, thr=-2.4762)  L44 (ba=1.0, rec=1.0, auroc=1.0, thr=-2.9885)
+  Average (Liars' Bench) L40 (ba=0.6255, rec=0.2814, auroc=0.7784, thr=)  L44 (ba=0.6256, rec=0.2812, auroc=0.7564, thr=)
+  Average                L40 (ba=0.6879, rec=0.4012, auroc=0.8153, thr=)  L44 (ba=0.688, rec=0.401, auroc=0.797, thr=)
+
+==============================================================================
+5.4 supporting numbers
+==============================================================================
+  base recall CG L20                         balacc=0.8383 recall=0.6766 auroc=0.9837 spec=1.0 (flags 0.000)
+  ext recall CG L20                          balacc=0.5868 recall=0.1737 auroc=0.9692 spec=1.0 (flags 0.000)
+  base spec IT L20 (draft: flags 13%)        balacc=0.9085 recall=0.948 auroc=0.9726 spec=0.8691 (flags 0.131)
+  base spec ID L20 (draft: flags 11%)        balacc=0.8578 recall=0.822 auroc=0.9498 spec=0.8936 (flags 0.106)
+  ext spec IT L20 (draft: 0%)                balacc=0.617 recall=0.234 auroc=0.9899 spec=1.0 (flags 0.000)
+  ext spec ID L20 (draft: 2%)                balacc=0.7529 recall=0.5281 auroc=0.9539 spec=0.9778 (flags 0.022)
+  base AUROC IT L40 (draft 0.338)            balacc=0.5 recall=0.0 auroc=0.3378 spec=1.0 (flags 0.000)
+  base AUROC IT L44 (draft 0.289)            balacc=0.5 recall=0.0 auroc=0.2888 spec=1.0 (flags 0.000)
+  kd recall HP-C L40 (draft 0.015)           balacc=0.5075 recall=0.0149 auroc=0.7552 spec=1.0 (flags 0.000)
+
+==============================================================================
+E. Cross-file consistency: zero_shot.csv AUROC vs zero_shot_operating.csv AUROC
+==============================================================================
+  54 comparisons, mismatches: 0
+
+==============================================================================
+F. Sample sizes behind the headline numbers
+==============================================================================
+  CG     n=267    n_deceptive=167
+  HP-C   n=2134   n_deceptive=134
+  HP-KR  n=2139   n_deceptive=139
+  IT     n=1080   n_deceptive=423
+  ID     n=5432   n_deceptive=3045
+  RepE   n=550    n_deceptive=275
+  Alpaca control row: 2000 rows, n_deceptive 0
+  Single run: no seed column anywhere in zero_shot.csv / summary.csv (zero-shot directions are deterministic; bootstrap CIs are over examples, 1000 resamples).

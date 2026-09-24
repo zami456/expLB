@@ -1,0 +1,29 @@
+### run-crossgen/matrices/mean_L40_s42.json
+    pooling=mean layer=40 seed=42 bank=axes_vectors_s3_fp32.pt k=5 n_datasets=10 design=train on 80% of the row dataset; diagonal = its own 20% test...
+
+--- probe=paper : 90 off-diagonal cells ---
+    raw off-diag mean = 0.6652; cells with raw<0.5: 23; raw<0.6: 32; raw>=0.85: 25
+    random@2       mean delta vs raw = -0.1744  pairs won 19/90   | raw<0.6 (n=32): +0.0555   | raw>=0.85 (n=25): -0.4378   | corr(raw,delta) = -0.757
+    pc:unified@2   mean delta vs raw = -0.0338  pairs won 42/90   | raw<0.6 (n=32): +0.1825   | raw>=0.85 (n=25): -0.2079   | corr(raw,delta) = -0.478
+    datapca@2      mean delta vs raw = -0.0310  pairs won 45/90   | raw<0.6 (n=32): +0.1175   | raw>=0.85 (n=25): -0.1643   | corr(raw,delta) = -0.581
+    random         mean delta vs raw = -0.0844  pairs won 27/90   | raw<0.6 (n=32): +0.1402   | raw>=0.85 (n=25): -0.2895   | corr(raw,delta) = -0.756
+    pc:unified     mean delta vs raw = -0.0059  pairs won 41/90   | raw<0.6 (n=32): +0.1468   | raw>=0.85 (n=25): -0.1364   | corr(raw,delta) = -0.471
+    datapca        mean delta vs raw = -0.0006  pairs won 51/90   | raw<0.6 (n=32): +0.0943   | raw>=0.85 (n=25): -0.0822   | corr(raw,delta) = -0.446
+
+--- probe=mms : 90 off-diagonal cells ---
+    raw off-diag mean = 0.6657; cells with raw<0.5: 18; raw<0.6: 34; raw>=0.85: 23
+    random@2       mean delta vs raw = -0.1752  pairs won 21/90   | raw<0.6 (n=34): +0.1149   | raw>=0.85 (n=23): -0.4796   | corr(raw,delta) = -0.815
+    pc:unified@2   mean delta vs raw = -0.0466  pairs won 35/90   | raw<0.6 (n=34): +0.1101   | raw>=0.85 (n=23): -0.1487   | corr(raw,delta) = -0.404
+    datapca@2      mean delta vs raw = -0.0281  pairs won 45/90   | raw<0.6 (n=34): +0.0334   | raw>=0.85 (n=23): -0.1256   | corr(raw,delta) = -0.452
+    random         mean delta vs raw = -0.0906  pairs won 30/90   | raw<0.6 (n=34): +0.1079   | raw>=0.85 (n=23): -0.3039   | corr(raw,delta) = -0.699
+    pc:unified     mean delta vs raw = -0.0878  pairs won 31/90   | raw<0.6 (n=34): +0.0323   | raw>=0.85 (n=23): -0.1820   | corr(raw,delta) = -0.371
+    datapca        mean delta vs raw = +0.0090  pairs won 54/90   | raw<0.6 (n=34): +0.0386   | raw>=0.85 (n=23): -0.0510   | corr(raw,delta) = -0.345
+
+--- probe=lr_reg10 : 90 off-diagonal cells ---
+    raw off-diag mean = 0.6627; cells with raw<0.5: 22; raw<0.6: 36; raw>=0.85: 22
+    random@2       mean delta vs raw = -0.1730  pairs won 19/90   | raw<0.6 (n=36): +0.0123   | raw>=0.85 (n=22): -0.4679   | corr(raw,delta) = -0.737
+    pc:unified@2   mean delta vs raw = -0.0424  pairs won 42/90   | raw<0.6 (n=36): +0.1620   | raw>=0.85 (n=22): -0.1216   | corr(raw,delta) = -0.462
+    datapca@2      mean delta vs raw = -0.0269  pairs won 50/90   | raw<0.6 (n=36): +0.1597   | raw>=0.85 (n=22): -0.2401   | corr(raw,delta) = -0.630
+    random         mean delta vs raw = -0.0813  pairs won 34/90   | raw<0.6 (n=36): +0.1276   | raw>=0.85 (n=22): -0.3391   | corr(raw,delta) = -0.775
+    pc:unified     mean delta vs raw = -0.0322  pairs won 38/90   | raw<0.6 (n=36): +0.1616   | raw>=0.85 (n=22): -0.1044   | corr(raw,delta) = -0.472
+    datapca        mean delta vs raw = +0.0082  pairs won 55/90   | raw<0.6 (n=36): +0.1586   | raw>=0.85 (n=22): -0.1534   | corr(raw,delta) = -0.520

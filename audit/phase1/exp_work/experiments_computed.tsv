@@ -1,0 +1,115 @@
+exp_id	n_primary	lab_n	git_n	his_n	drive_only_n	laptop_n	lab_wave_n	lab_on_drive_n	main_script_first_commit	doc_hits	doc_hit_names	f_ids
+BG1-liars-bench	14	14	709				0	0	c21a1a2 2025-10-24 17:50	25	docs/COLLABORATOR_BRIEFING.md,docs/LAYER_PREREGISTRATION.md,docs/NOVELTY_ASSESSMENT.md,docs/NOVELTY_CHECK_PROMPT.md,docs/ONBOARDING.md,docs/REVIEW_REQUEST_POOLING.md,docs/papers/liars-bench-notes.md,docs/papers/persona-coordinates-notes.md,docs/papers/soft-trigger-notes.md,docs/thesis/persona-coordinates-70b-results.md,kd/docs/FINDINGS.md,kd/docs/REPORT.md,memory/hpkr-cannot-attribute-itself.md,memory/labpc-not-a-git-repo.md,memory/q2-answer-is-layer-dependent.md,memory/q6-layer-choice-depends-on-method.md,memory/syc-dataset-erases-axes-advantage.md,his:DD/deceptive/README.md,his:DD/results/XXXX-9-llama-all-followup/summary.md,his:DD/results/loo_L20/summary.md,his:DD/results/persona_ood/summary.md,his:DD/results/persona_ood_L40/summary.md,his:DD/results/persona_ood_ext_L20/summary.md,his:DD/results/persona_ood_ext_L44/summary.md,his:DD/results/persona_ood_followup_L20/summary.md	F-01 F-02 F-16 F-38
+BG2-apollo-examples	25		25						52281fa 2026-07-11 14:10	1	memory/resumable-acts-cache-branch.md	
+O01-aa-smoke	3	3				39	0	0	8078702 2026-09-10 16:19	0		
+O02-aa-own100	304	304					0	303	8078702 2026-09-10 16:19	16	docs/ONBOARDING.md,docs/thesis/hf275-role-labels-draft.md,docs/thesis/persona-coordinates-70b-results.md,docs/thesis/role-labels/role_labels_review.csv,kd/docs/FINDINGS.md,memory/aa-run-live-labpc.md,memory/crossgen-80-20-retrain.md,memory/drive-sync-topology.md,memory/judge-choice-barely-matters.md,memory/MEMORY.md,memory/paper16-assistant-direction-not-lu-axis.md,memory/paper16-used-paper-questions-only.md,memory/persona-axis-diagnostics.md,memory/persona-set-decides-detection.md,memory/q10-sycophancy-axis-inverted.md,memory/role-label-rules-and-banks.md	F-90
+O03-paper16-orig	53	53	51		117	54	0	53	1e8a2cb 2026-09-15 04:52	8	docs/thesis/persona-coordinates-70b-results.md,kd/README.md,kd/docs/FINDINGS.md,memory/judge-choice-barely-matters.md,memory/paper16-assistant-direction-not-lu-axis.md,memory/paper16-used-paper-questions-only.md,memory/results-chapter-audit.md,memory/unified-pc1-is-question-family.md	F-18 F-30 F-61
+O04-paper16-fp32	54	54					0	54	8078702 2026-09-10 16:19	3	docs/thesis/persona-coordinates-70b-results.md,memory/bf16-mask-reductions.md,memory/MEMORY.md	
+O05-own100-fp32	1	1					0	1	8078702 2026-09-10 16:19	0		
+O06-paper16-405b-judge	25		25			2			ca1cdbe 2026-09-15 15:28	6	docs/ONBOARDING.md,docs/PERSONA_CONSTRUCTION.md,docs/papers/mask-notes.md,docs/thesis/persona-coordinates-70b-results.md,memory/judge-choice-barely-matters.md,memory/MEMORY.md	
+O07-coords-passB	506	506					0	505	c0349ff 2026-09-15 12:37	9	docs/ONBOARDING.md,docs/OPEN_DECISIONS.md,docs/thesis/persona-coordinates-70b-results.md,kd/docs/FINDINGS.md,kd/docs/NEXT.md,memory/bf16-mask-reductions.md,memory/crossgen-80-20-retrain.md,memory/ndif-download-stalls.md,memory/q2-answer-is-layer-dependent.md	F-40 F-43 F-73 F-102
+O08-coords-passA	96	96					0	95	c0349ff 2026-09-15 12:37	3	docs/ROADMAP_TO_DEFENCE.md,kd/docs/FINDINGS.md,kd/docs/NEXT.md	
+O09-coords-passC	123	123					0	54	c0349ff 2026-09-15 12:37	4	docs/ROADMAP_TO_DEFENCE.md,kd/docs/FINDINGS.md,kd/docs/NEXT.md,memory/MEMORY.md	
+O10-extra-P0a-sycmt	18	18					0	11	b9a497e 2026-09-18 11:26	0		
+O11-extra-P0b-passP	545	545					0	545	b9a497e 2026-09-18 11:26	2	docs/thesis/persona-coordinates-70b-results.md,memory/crossgen-layer-coverage.md	
+O12-extra-P0c-passBfine	538	538					0	538	b9a497e 2026-09-18 11:26	1	memory/crossgen-layer-coverage.md	
+O13-coords-passQ11	120	120					0	120	c0349ff 2026-09-15 12:37	4	docs/ONBOARDING.md,docs/OPEN_DECISIONS.md,docs/thesis/persona-coordinates-70b-results.md,memory/q11-sleeper-detection-is-falsity.md	
+O14-syco-single	4	4					0	3	330642f 2026-09-15 18:22	5	docs/ONBOARDING.md,docs/thesis/persona-coordinates-70b-results.md,kd/docs/FINDINGS.md,memory/paper16-assistant-direction-not-lu-axis.md,memory/q10-sycophancy-axis-inverted.md	F-15
+O15-syco-multiturn	38	38					0	38	152a174 2026-09-16 12:58	18	cap/docs/DESIGN.md,docs/NOVELTY_CHECK_PROMPT.md,docs/ONBOARDING.md,docs/OPEN_DECISIONS.md,docs/TODO.md,docs/thesis/persona-coordinates-70b-results.md,kd/docs/FINDINGS.md,kd/docs/NEXT.md,memory/drive-sync-topology.md,memory/MEMORY.md,memory/paper16-assistant-direction-not-lu-axis.md,memory/persona-axes-encode-register.md,memory/q10-sycophancy-axis-inverted.md,memory/q11-sleeper-detection-is-falsity.md,memory/q5-semantics-does-not-predict-transfer.md,memory/response-length-transfers-on-its-own.md,memory/results-chapter-audit.md,memory/syc-dataset-erases-axes-advantage.md	F-36
+O16-q-pilot-probes	5	5					0	5	5070965 2026-09-15 17:08	0		
+O17-q1q2q4-full-probes	8	8					0	8	5070965 2026-09-15 17:08	3	docs/thesis/persona-coordinates-70b-results.md,kd/docs/REPORT.md,memory/q4-signal-survives-assistant-erasure.md	
+O18-layer-sweep	4	4					0	4	9630f14 2026-09-16 10:58	1	docs/thesis/persona-coordinates-70b-results.md	
+O19-dotproducts	1	1					0	1	735567d 2026-09-16 13:09	1	docs/thesis/persona-coordinates-70b-results.md	
+O20-q8-pertoken-zeroshot	1	1					0	1	78232ea 2026-09-16 14:40	2	docs/thesis/persona-coordinates-70b-results.md,memory/q8-per-token-beats-pooling.md	
+O21-p2-L44	1	1					0	1	5070965 2026-09-15 17:08	1	docs/thesis/persona-coordinates-70b-results.md	
+O22-persona-count	1	1					0	1	7394db4 2026-09-16 17:44	3	docs/thesis/persona-coordinates-70b-results.md,kd/docs/FINDINGS.md,memory/labpc-not-a-git-repo.md	
+O23-regroup-hf	1		1						d004a91 2026-09-16 18:08	1	docs/thesis/persona-coordinates-70b-results.md	
+O24-validate	1	1					0	1	5875c02 2026-09-16 18:45	1	docs/thesis/persona-coordinates-70b-results.md	
+O25-q5-semantics	10	10					0	10	ea046d6 2026-09-16 19:20	2	docs/thesis/persona-coordinates-70b-results.md,memory/syc-dataset-erases-axes-advantage.md	
+O26-length-confounds	3	3					0	3		0		
+O27-q11-sleeper	2	2					0	2	6941d76 2026-09-16 19:29	1	docs/thesis/persona-coordinates-70b-results.md	
+O28-q8-trained-pertoken	2	2					0	2	0f63878 2026-09-16 21:16	2	docs/thesis/persona-coordinates-70b-results.md,memory/q8-per-token-beats-pooling.md	
+O29-q6-layers	1	1					0	1	0f63878 2026-09-16 21:16	2	docs/thesis/persona-coordinates-70b-results.md,memory/q6-layer-choice-depends-on-method.md	
+O30-significance-q	1	1					0	1	34c6b70 2026-09-17 01:09	3	docs/ONBOARDING.md,docs/thesis/persona-coordinates-70b-results.md,memory/significance-and-random-nulls.md	
+O31-q10-syco-axis	1	1					0	1	34c6b70 2026-09-17 01:09	3	docs/thesis/persona-coordinates-70b-results.md,memory/paper16-assistant-direction-not-lu-axis.md,memory/q10-sycophancy-axis-inverted.md	
+O32-zeroshot-nulls	1	1					0	1	34c6b70 2026-09-17 01:09	4	docs/ONBOARDING.md,docs/thesis/persona-coordinates-70b-results.md,memory/q10-sycophancy-axis-inverted.md,memory/significance-and-random-nulls.md	
+O33-q3q4-bootstrap	1	1					0	1	0c1a224 2026-09-17 03:02	4	docs/thesis/persona-coordinates-70b-results.md,memory/paper16-assistant-direction-not-lu-axis.md,memory/q3-advantage-grows-with-n.md,memory/q4-signal-survives-assistant-erasure.md	
+O34-persona-coords-figs	26	26	26				0	26	8f85783 2026-09-16 19:26	3	docs/thesis/persona-coordinates-70b-results.md,kd/docs/FINDINGS.md,memory/labpc-not-a-git-repo.md	
+O35-hf-label-banks	281	281				378	0	280	b9a497e 2026-09-18 11:26	9	docs/thesis/hf275-role-labels-draft.md,docs/thesis/persona-coordinates-70b-results.md,kd/docs/FINDINGS.md,memory/crossgen-80-20-retrain.md,memory/drive-sync-topology.md,memory/judge-choice-barely-matters.md,memory/paper16-assistant-direction-not-lu-axis.md,memory/persona-axis-diagnostics.md,memory/role-label-rules-and-banks.md	
+O36-paper16-famcentred	1	1					0	0	b9a497e 2026-09-18 11:26	1	kd/docs/FINDINGS.md	
+O37-paper16-shared	105	105					0	105	b9a497e 2026-09-18 11:26	5	kd/README.md,kd/docs/FINDINGS.md,memory/crossgen-80-20-retrain.md,memory/persona-axes-encode-register.md,his:DD/deceptive/README.md	F-18 F-37
+O38-share-export	6	6			66		0	6		4	docs/COLLABORATOR_BRIEFING.md,kd/docs/FINDINGS.md,memory/abstract-number-is-our-kd-bank.md,his:DD/deceptive/README.md	
+O39-crossgen-smoke	1	1	1				0	1	b9a497e 2026-09-18 11:26	0		
+O40-crossgen-retrain-attempt	0								b9a497e 2026-09-18 11:26	1	memory/crossgen-80-20-retrain.md	
+O41-crossgen-root-L40	2	2	5				0	2	b9a497e 2026-09-18 11:26	12	docs/papers/deception-probes-notes.md,docs/papers/mask-notes.md,docs/papers/persona-coordinates-notes.md,kd/docs/DESIGN.md,kd/docs/FINDINGS.md,kd/docs/REPORT.md,memory/crossgen-80-20-retrain.md,memory/crossgen-layer-coverage.md,memory/hpkr-cannot-attribute-itself.md,memory/matched-control-kills-the-gain.md,memory/MEMORY.md,memory/unified-pc1-is-question-family.md	F-17
+O42-crossgen-banks-L40	8	8	548				0	8	b9a497e 2026-09-18 11:26	1	memory/crossgen-80-20-retrain.md	
+O43-crossgen-full-passB	24216	24216					11100	24216	b9a497e 2026-09-18 11:26	2	memory/crossgen-layer-coverage.md,memory/drive-sync-topology.md	F-17
+O44-crossgen-full-passA	92184	92184					0	92184	b9a497e 2026-09-18 11:26	0		
+O45-crossgen-full-passC	6936	6936					0	6936	b9a497e 2026-09-18 11:26	0		
+O46-crossgen-Bfine-P	5777	5777					5691	5777	b9a497e 2026-09-18 11:26	0		
+O47-crossgen-figures	251		251		251				b9a497e 2026-09-18 11:26	7	docs/thesis/persona-coordinates-70b-results.md,kd/docs/FINDINGS.md,memory/crossgen-80-20-retrain.md,memory/crossgen-layer-coverage.md,memory/drive-sync-topology.md,memory/scp-truncates-at-200kib.md,memory/unified-pc1-is-question-family.md	
+O48-kd-knowledge-score	2	2	2				0	2	e9969af 2026-09-21 10:55	2	kd/docs/FINDINGS.md,memory/scp-truncates-at-200kib.md	F-08 F-09 F-14
+O49-kd-factor-probes	99	99	2				0	99	e9969af 2026-09-21 10:55	6	kd/README.md,kd/docs/DESIGN.md,kd/docs/FINDINGS.md,kd/docs/NEXT.md,kd/docs/REPORT.md,memory/hpkr-cannot-attribute-itself.md	F-05 F-06 F-07 F-16
+O50-kr-matched-view	56	56					0	56	7bc2784 2026-09-15 02:29	4	docs/COLLABORATOR_BRIEFING.md,docs/NOVELTY_CHECK_PROMPT.md,kd/docs/FINDINGS.md,kd/docs/NEXT.md	F-16 F-23 F-44 F-108
+O51-kd11-root	2817	2817	2817				2775	2817	b9a497e 2026-09-18 11:26	3	kd/docs/FINDINGS.md,memory/persona-axes-encode-register.md,memory/scp-truncates-at-200kib.md	F-03 F-04 F-13 F-29 F-39 F-58 F-61 F-73 F-74 F-98 F-99 F-103
+O52-kd-bank-chain	146	146		36			2	146	e9969af 2026-09-21 10:55	2	kd/README.md,kd/docs/FINDINGS.md	F-10 F-11 F-12 F-19 F-61
+O53-kd-bank-crossgen	3321	3321	3321				3279	3321	b9a497e 2026-09-18 11:26	1	kd/docs/FINDINGS.md	F-31 F-61 F-62
+O54-kd-s23	37	37					1	37	e9969af 2026-09-21 10:55	5	docs/COLLABORATOR_BRIEFING.md,docs/OPEN_DECISIONS.md,kd/docs/FINDINGS.md,kd/docs/NEXT.md,memory/gates-must-assert-their-own-number.md	F-19 F-62
+O55-kd-s23-alllayers	3069	3069	441				3027	3069	e9969af 2026-09-21 10:55	1	kd/docs/FINDINGS.md	F-34 F-57 F-85 F-91
+O56-kd-passAC	24093	24093	17				0	24093	e9969af 2026-09-21 10:55	1	kd/docs/FINDINGS.md	F-20 F-24 F-25
+O57-hpkr-topup	114	114					2	114	e9969af 2026-09-21 10:55	1	kd/docs/FINDINGS.md	F-69 F-71
+O58-kd-passAC11	24204	24204					23750	24204	aa699b0 2026-09-21 12:20	1	kd/docs/FINDINGS.md	F-72 F-75 F-76
+O59-hpkr-denial-gate	3	3					0	3	e9969af 2026-09-21 10:55	2	docs/TODO.md,kd/docs/FINDINGS.md	F-59
+O60-kd-collab-bank	2062	2062					0	2062	8f68cf5 2026-09-10 16:39	1	kd/docs/FINDINGS.md	F-98 F-99 F-103 F-107
+O61-thesis-figures	2	2	12				0	1	dc24e96 2026-09-21 03:37	3	cap/docs/DESIGN.md,docs/TODO.md,kd/docs/FINDINGS.md	F-57
+O62-cap-smoke-multiturn	2	2					0	0	6432257 2026-09-21 03:26	1	kd/docs/FINDINGS.md	F-26 F-28 F-32 F-36 F-46
+O63-cap-teacher-forced-smokes	10	10					0	0	6432257 2026-09-21 03:26	12	cap/docs/DESIGN.md,cap/docs/SARCASM_DESIGN.md,docs/COLLABORATOR_BRIEFING.md,docs/NOVELTY_ASSESSMENT.md,docs/OPEN_DECISIONS.md,docs/thesis/persona-coordinates-70b-results.md,docs/thesis/sarcasm-pilot-negative-result.md,kd/README.md,kd/docs/FINDINGS.md,memory/aa-run-live-labpc.md,memory/hpkr-cannot-attribute-itself.md,memory/q11-sleeper-detection-is-falsity.md	F-51 F-52 F-53
+O64-cap-nopersona-probe	3	3					0	0	6432257 2026-09-21 03:26	1	kd/docs/FINDINGS.md	F-55
+O65-cap-chain	6210	6210					6054	6144	6432257 2026-09-21 03:26	3	cap/docs/DESIGN.md,docs/COLLABORATOR_BRIEFING.md,kd/docs/FINDINGS.md	F-64 F-65 F-66 F-67 F-68
+O66-cap-layers	72	72					0	72	2be35eb 2026-09-21 12:41	1	kd/docs/FINDINGS.md	F-77 F-82 F-91
+O67-cap-seeds	6	6					0	6	4d0d046 2026-09-22 02:46	1	kd/docs/FINDINGS.md	F-87
+O68-cap-controls	3113	3113					3028	3069	b548299 2026-09-21 17:47	6	cap/docs/SARCASM_DESIGN.md,docs/COLLABORATOR_BRIEFING.md,docs/NOVELTY_ASSESSMENT.md,docs/ROADMAP_TO_DEFENCE.md,kd/docs/FINDINGS.md,memory/labpc-not-a-git-repo.md	F-89 F-94
+O69-cap-ctrl-layers	36	36					0	36	f0a54f4 2026-09-21 22:48	1	kd/docs/FINDINGS.md	F-94
+O70-sarcasm-pilot	8	8					1	0	aea9f53 2026-09-21 21:25	3	docs/thesis/sarcasm-pilot-negative-result.md,kd/docs/FINDINGS.md,memory/labpc-not-a-git-repo.md	F-92 F-93 F-104 F-105
+O71-sarcasm-natural-gate3	7	7	3				0	5	cf11749 2026-09-22 16:51	5	docs/COLLABORATOR_BRIEFING.md,docs/thesis/sarcasm-pilot-negative-result.md,kd/docs/FINDINGS.md,memory/MEMORY.md,memory/sarcasm-gate3-deception-axis-is-random.md	F-106 F-107
+O72-scale-8b-bank	104	104					0	104	3dfdb67 2026-09-21 11:07	2	docs/thesis/persona-coordinates-70b-results.md,kd/docs/FINDINGS.md	F-22 F-27 F-30 F-35 F-37
+O73-scale-3b-bank	104	104					0	104	3dfdb67 2026-09-21 11:07	5	docs/NOVELTY_CHECK_PROMPT.md,docs/ONBOARDING.md,docs/papers/persona-coordinates-notes.md,docs/thesis/persona-coordinates-70b-results.md,kd/docs/FINDINGS.md	F-21 F-27 F-30 F-33 F-35 F-37
+O74-scale-coords	1594	1594					0	1594	3dfdb67 2026-09-21 11:07	2	kd/docs/FINDINGS.md,memory/gates-must-assert-their-own-number.md	F-40 F-41 F-42 F-43 F-44 F-45 F-47 F-48 F-49 F-50 F-54 F-102
+O75-scale-coords-extras	629	629					0	1	c0349ff 2026-09-15 12:37	0		F-60 F-63
+O76-scale-crossgen-3b8b	2016	2016					0	2016	3dfdb67 2026-09-21 11:07	0		F-56 F-58 F-60 F-63 F-96 F-102
+O77-scale-crossgen-70b	2817	2817					0	2817	b9a497e 2026-09-18 11:26	2	kd/docs/FINDINGS.md,memory/no-margin-from-one-layer.md	F-63 F-96 F-100 F-101 F-102
+O78-premise-L40	1	1					0	0	ae3d840 2026-09-21 14:27	2	docs/REVIEW_REQUEST_POOLING.md,kd/docs/FINDINGS.md	F-79 F-80 F-83 F-86 F-98
+O79-premise-layers	20	20					0	0	50fa69d 2026-09-21 14:34	1	kd/docs/FINDINGS.md	F-81 F-98
+O80-premise-extras	7	7					7	0	88caf47 2026-09-21 16:00	3	docs/ROADMAP_TO_DEFENCE.md,docs/papers/truthfulness-spectrum-notes.md,kd/docs/FINDINGS.md	F-83 F-84
+O81-premise-six	3	3					0	0	ae3d840 2026-09-21 14:27	1	kd/docs/FINDINGS.md	F-85 F-109
+O82-premise-why	1	1					0	0	5bd8961 2026-09-21 17:25	2	docs/REVIEW_REQUEST_POOLING.md,kd/docs/FINDINGS.md	F-86
+O83-premise-falsify	64	64					0	0	080a979 2026-09-21 20:34	3	docs/REVIEW_REQUEST_POOLING.md,kd/docs/FINDINGS.md,memory/gates-must-assert-their-own-number.md	F-91 F-95
+O84-premise-audit	1	1					0	0	a13e11d 2026-09-21 21:01	1	kd/docs/FINDINGS.md	F-90
+O85-premise-clustered	3	3					0	0	43ee6d3 2026-09-22 17:37	2	docs/COLLABORATOR_BRIEFING.md,kd/docs/FINDINGS.md	F-108
+AN1-kd-print-readers	0								e9969af 2026-09-21 10:55	0		F-01 F-02 F-10 F-34 F-39 F-62 F-72 F-73 F-74 F-75 F-76
+AN2-cap-print-readers	0								6432257 2026-09-21 03:26	0		F-51 F-65 F-66 F-67 F-68 F-77 F-82
+AN3-scale-premise-print	0								3dfdb67 2026-09-21 11:07	0		F-27 F-30 F-33 F-64 F-80 F-81
+AN4-lab-loose-analyses	0									0		F-06 F-10 F-12 F-18 F-75 F-85 F-87 F-89 F-90 F-91 F-93 F-94 F-95
+AN5-inline-no-script	0									0		F-96 F-98 F-99 F-100 F-101 F-102 F-103 F-104 F-107 F-108
+O86-acts-workspace	317	317					0	0		3	memory/MEMORY.md,memory/resumable-acts-cache-branch.md,memory/verify-after-interrupted-tool-call.md	
+O87-layer22-acts-cache	99	99					0	0		0		
+C01-meanprobe-0712	4			4					52281fa 2026-07-11 14:10	0		
+C02-meanprobe-L20	4			4					52281fa 2026-07-11 14:10	6	memory/resumable-acts-cache-branch.md,his:DD/results/XXXX-9-llama-all-followup/summary.md,his:DD/results/persona_ood_ext_L20/summary.md,his:DD/results/persona_ood_ext_L44/summary.md,his:DD/results/persona_ood_followup_L20/summary.md,his:DD/results/persona_positions_L40/summary.md	
+C03-meanprobe-L40	4			4					52281fa 2026-07-11 14:10	1	his:DD/results/persona_positions_L40/summary.md	
+C04-meanprobe-L44	4			4					52281fa 2026-07-11 14:10	1	his:DD/results/persona_ood_ext_L44/summary.md	
+C05-followup-probe	7			7					52281fa 2026-07-11 14:10	2	his:DD/results/XXXX-9-llama-all-followup/summary.md,his:DD/results/persona_ood_followup_L20/summary.md	
+C06-persona-ood-L20	30			30					2731cb0 2026-09-18 17:36	15	docs/COLLABORATOR_BRIEFING.md,kd/docs/FINDINGS.md,memory/abstract-number-is-our-kd-bank.md,his:DD/results/XXXX-9-llama-all-followup/summary.md,his:DD/results/loo_L20/summary.md,his:DD/results/persona_ood/summary.md,his:DD/results/persona_ood_L40/summary.md,his:DD/results/persona_ood_ext_L20/summary.md,his:DD/results/persona_ood_ext_L40/summary.md,his:DD/results/persona_ood_ext_L44/summary.md,his:DD/results/persona_ood_followup_L20/summary.md,his:DD/results/persona_ood_mod_L20/summary.md,his:DD/results/persona_ood_mod_L40/summary.md,his:DD/results/persona_ood_mod_L44/summary.md,his:DD/results/persona_positions_L40/summary.md	
+C07-persona-ood-L40	30			30					2731cb0 2026-09-18 17:36	2	his:DD/results/persona_ood/summary.md,his:DD/results/persona_ood_ext_L44/summary.md	
+C08-ext-L20	43			43					2731cb0 2026-09-18 17:36	5	docs/COLLABORATOR_BRIEFING.md,his:DD/results/XXXX-9-llama-all-followup/summary.md,his:DD/results/persona_ood_ext_L40/summary.md,his:DD/results/persona_ood_ext_L44/summary.md,his:DD/results/persona_ood_followup_L20/summary.md	F-85 F-97
+C09-ext-L40	43			43					2731cb0 2026-09-18 17:36	4	docs/COLLABORATOR_BRIEFING.md,his:DD/results/persona_ood_ext_L20/summary.md,his:DD/results/persona_ood_mod_L40/summary.md,his:DD/results/persona_positions_L40/summary.md	F-85 F-97
+C10-ext-L44	43			43					2731cb0 2026-09-18 17:36	1	his:DD/results/persona_ood_ext_L44/summary.md	
+C11-ext-followup-L20	43			43					2731cb0 2026-09-18 17:36	1	his:DD/results/persona_ood_followup_L20/summary.md	
+C12-mod-L20	43			43					2731cb0 2026-09-18 17:36	1	his:DD/results/persona_ood_mod_L40/summary.md	
+C13-mod-L40	43			43					2731cb0 2026-09-18 17:36	3	his:DD/results/persona_ood_mod_L20/summary.md,his:DD/results/persona_ood_mod_L40/summary.md,his:DD/results/persona_ood_mod_L44/summary.md	
+C14-mod-L44	43			43					2731cb0 2026-09-18 17:36	0		
+C15-loo-L20	8			8					2731cb0 2026-09-18 17:36	2	his:DD/results/loo_L20/summary.md,his:DD/results/loo_L40/summary.md	
+C16-loo-L40	8			8					2731cb0 2026-09-18 17:36	1	his:DD/results/loo_L20/summary.md	
+C17-positions-L20	7			7					a8eb902 2026-09-22 01:21	1	his:DD/results/persona_positions_L40/summary.md	
+C18-positions-L40	7			7					a8eb902 2026-09-22 01:21	4	his:DD/results/persona_ood_ext_L44/summary.md,his:DD/results/persona_positions_L20/summary.md,his:DD/results/persona_positions_L40/summary.md,his:DD/results/persona_positions_L44/summary.md	
+C19-positions-L44	7			7					a8eb902 2026-09-22 01:21	0		
+C20-inlp-ghost	0									0		

@@ -1,0 +1,44 @@
+matrix: run-crossgen/kd11/matrices/mean_L40_s42.json
+  pooling=mean layer=40 seed=42 bank=axes_vectors_s3_fp32.pt bank_name=paper16 k=5 n_datasets=11
+
+=== F-73 : off-diagonal AUROC, paper probe, 110 cells ===
+feature         offdiag mean     n   F-73 states
+raw                   0.6623   110   0.6623
+datapca               0.6651   110   0.6651
+random                0.5849   110   0.5849
+length                0.5555   110   0.5555
+
+  extra (robustness, not quoted by F-73):
+    raw          lr_reg10  0.6481
+    raw          mms       0.6667
+    datapca      lr_reg10  0.6710
+    datapca      mms       0.6748
+    random       lr_reg10  0.5857
+    random       mms       0.5802
+    length       lr_reg10  0.5555
+    length       mms       0.5555
+    random@2   paper    0.4910
+    datapca@2  paper    0.6333
+
+=== F-74 : coupling of corr(raw, X - raw) ===
+  sd(raw)        = 0.2128   (F-74 states 0.2128)
+  sd(random@2)   = 0.1898   (F-74 states 0.1898)
+  measured corr(raw, random@2 - raw) = -0.7684   (F-74 states -0.7684)
+  analytic null  -s_raw/sqrt(s_raw^2+s_X^2) = -0.7462   (F-74 states -0.7462)
+  permuted null  mean=-0.7455  95% [-0.8001, -0.6889]   (F-74: -0.7456 [-0.7986, -0.6892])
+  P(permuted null <= measured) = 0.2117   (F-74 states P=0.2135)
+  simulated null mean=-0.7468  95% [-0.8118, -0.6705]   (F-74: -0.7462 [-0.8106, -0.6683])
+  P(simulated null <= measured) = 0.3005
+
+  --- the clean (uncoupled) test ---
+  pc:unified@2 - datapca@2 : slope vs raw = -0.0998  r = -0.0671  mean margin = +0.0063   (F-74: -0.100 / -0.067 / +0.0063)
+  raw - datapca@2          : slope vs raw = +0.6297  r = +0.5711  mean margin = +0.0290   (F-74: +0.630 / +0.571 / +0.0290)
+  [alt] raw - datapca(k=5) : slope vs raw = +0.3980  r = +0.4604  mean margin = -0.0028
+block9 = ['instructed-deception', 'harm-pressure-choice', 'harm-pressure-knowledge-report', 'harm-pressure-kr-matched', 'convincing-game', 'insider-trading', 'ai_liar', 'sandbagging_v2', 'roleplaying', 'mask'] 10
+
+=== F-73 stated-vs-earlier: which dataset set gives 0.553 / 0.665? ===
+  all 11                   n= 110  raw=0.6623  datapca=0.6651  random=0.5849  length=0.5555  random@2=0.4910  datapca@2=0.6333
+  block9 (10)              n=  90  raw=0.6870  datapca=0.6753  random=0.5845  length=0.5467  random@2=0.4873  datapca@2=0.6365
+  block9 minus hpkr (9)    n=  72  raw=0.6841  datapca=0.6956  random=0.5591  length=0.5319  random@2=0.4768  datapca@2=0.6448
+
+  stored CI keys: {'raw|paper|10': [0.6570138941371615, 0.6672859228717035], 'raw|paper|9': [0.6811293274152991, 0.6928643851946811], 'length|paper|10': [0.5469574424370949, 0.5638062644266322], 'length|paper|9': [0.5378009528956694, 0.5552329760236235]}

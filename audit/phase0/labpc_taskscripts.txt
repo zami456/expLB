@@ -1,0 +1,152 @@
+=== C:\Users\user4\expLB\src\assistant_axis_ndif\coords_supervisor.ps1
+lines=243  md5=7078AAA79AA82F1E26E2BF3EC3D1C015  mtime=2026-09-16 02:20
+-- rclone / python / done-marker lines:
+  6: 1. Finished?      -> run-coords\passB\.done exists. Log and exit.
+  10: Relaunching is safe: 8_coords_ndif.py counts the chunk_*.pt already written and skips the
+  29: $cand = Join-Path $Repo "$v\Scripts\python.exe"
+  32: if (-not $py) { Write-Host "no windows venv found under $Repo"; exit 1 }
+  53: Log "supervisor already running (pid $old); exiting"
+  54: exit 0
+  61: function Test-Done { Test-Path (Join-Path $Repo "$Out\passB\.done") }
+  73: $g = Get-CimInstance Win32_Process -Filter "Name='python.exe'" -ErrorAction SilentlyContinue |
+  74: Where-Object { $_.CommandLine -match '8_coords_ndif\.py' }
+  87: & $py "$D\0_preflight_ndif.py" *> (Join-Path $Repo "logs\coords_preflight.log")
+  88: $script:lastNdifOk    = ($LASTEXITCODE -eq 0)   # 0 = READY or WARMING, 2 = NOT READY
+  98: # Safe to run against a live output dir: 8_coords_ndif.py writes each chunk to .tmp and
+  104: function Get-Rclone {
+  106: # $env:USERPROFILE resolved to a copy of rclone -- the supervisor logged
+  107: # "rclone not found" while rclone.exe sat in the invoking user's profile -- so the only
+  109: $cands = @((Join-Path $Repo "tools\rclone.exe"),
+  110: (Join-Path $env:USERPROFILE "tools\rclone.exe"))
+  112: $c = Get-Command rclone -ErrorAction SilentlyContinue
+  117: $script:warnedNoRclone = $false
+  120: $rc = Get-Rclone
+  122: if (-not $script:warnedNoRclone) { Log "rclone not found -- Drive sync disabled"; $script:warnedNoRclone = $true }
+  127: $rlog = Join-Path $Repo "logs\coords_rclone.log"
+  135: if ($LASTEXITCODE -ne 0) { Log "rclone copy exited $LASTEXITCODE -- see logs\coords_rclone.log" }
+  139: Log "rclone check exited $LASTEXITCODE (0 = every chunk verified on Drive)"
+  150: # A hung flow is invisible to Test-ChainAlive -- python is alive and "working" -- so the
+=== C:\Users\user4\night_chain.ps1
+lines=55  md5=E5C35CEC62C4916AAE3C0F738AB4966E  mtime=2026-09-16 12:58
+-- rclone / python / done-marker lines:
+  5: immediately if already done, so re-firing is free and a death anywhere resumes. Strictly
+  10: $py   = "$repo\.venv-aa\Scripts\python.exe"
+  11: $pya  = "$repo\.venv-analysis\Scripts\python.exe"
+  18: if (-not (Test-Path "$repo\run-coords\passC\.done")) {
+  21: exit 0
+  27: & $py "$D\13_sycophancy_multiturn.py" --stage gen1 *>> "$repo\logs\syco_mt_gen1.log"
+  32: & $py "$D\13_sycophancy_multiturn.py" --stage gen2 *>> "$repo\logs\syco_mt_gen2.log"
+  37: & $py "$D\13_sycophancy_multiturn.py" --stage judge *>> "$repo\logs\syco_mt_judge.log"
+  42: & $pya "$D\13_sycophancy_multiturn.py" --stage label *>> "$repo\logs\syco_mt_label.log"
+  46: $rc = "$repo\tools\rclone.exe"
+  52: --transfers 4 --checkers 8 --log-file "$repo\logs\night_rclone.log" --log-level INFO
+  55: Log "sync done"
+=== C:\Users\user4\run_passC.ps1
+lines=39  md5=56B100622FAA9E1F6D34E8C5495C1A8F  mtime=2026-09-16 12:50
+-- rclone / python / done-marker lines:
+  10: $py   = "$repo\.venv-aa\Scripts\python.exe"
+  15: if (Test-Path "$repo\run-coords\passC\.done") { exit 0 }
+  20: & $py "$D\8_coords_ndif.py" `
+  29: $code = $LASTEXITCODE
+  31: Log "exit $code -- $($c.Count) chunks, $([math]::Round((($c | Measure-Object Length -Sum).Sum)/1MB,0)) MB"
+  32: if ($code -eq 0) { New-Item -ItemType File -Force -Path "$repo\run-coords\passC\.done" | Out-Null }
+  34: $rc = "$repo\tools\rclone.exe"
+  37: --transfers 4 --checkers 8 --log-file "$repo\logs\passC_rclone.log" --log-level INFO
+  38: Log "drive sync exit $LASTEXITCODE"
+=== C:\Users\user4\expLB\src\assistant_axis_ndif\sync_crossgen.ps1
+lines=112  md5=F14757C39DA3F849BA8CF0730ECF9733  mtime=2026-09-18 13:11
+-- rclone / python / done-marker lines:
+  8: * That script called rclone exactly ONCE, at the very end. A step covering three
+  12: * Two rclone processes copying the same tree into the same Drive folder can each
+  51: $lockPath = Join-Path $logDir "crossgen_rclone.lock"
+  54: $rc = Join-Path $repo "tools\rclone.exe"
+  55: if (-not (Test-Path $rc)) { $rc = "C:\Users\user4\tools\rclone.exe" }
+  56: if (-not (Test-Path $rc)) { Note "$Tag ABORT (no rclone)"; exit 1 }
+  65: if (-not (Test-Path $src)) { Note "$Tag SKIP (no $src)"; exit 0 }
+  75: if ($OnBusy -eq "Skip") { Note "$Tag SKIP (another sync holds the lock)"; exit 0 }
+  76: if ((Get-Date) -ge $deadline) { Note "$Tag SKIP (lock busy ${WaitMinutes}m)"; exit 0 }
+  82: # script's Scheduled Task kills the PowerShell but ORPHANS its rclone child, which then
+  84: # run_crossgen_full.ps1 still in flight calls rclone directly for the same reason. So
+  86: # Only WRITERS count. rclone size/check/dedupe name the same remote but cannot collide,
+  88: $other = @(Get-CimInstance Win32_Process -Filter "Name='rclone.exe'" -ErrorAction SilentlyContinue |
+  93: Note ("$Tag SKIP (rclone already writing crossgen: pid " + (($other | ForEach-Object { $_.ProcessId }) -join ', ') + ")")
+  94: exit 0
+  98: --log-file (Join-Path $logDir "crossgen_full_rclone.log") --log-level INFO
+  99: $code = $LASTEXITCODE
+  100: Note "$Tag EXIT $code"
+  107: Note "$Tag DUPCHECK exit $LASTEXITCODE (see logs\crossgen_dupes.log)"
+  109: exit $code
+=== C:\Users\user4\expLB\kd\scripts\sync_kd.ps1
+lines=86  md5=2DD3CF9E22FB044B3C74040EAE8B37B1  mtime=2026-09-19 20:38
+-- rclone / python / done-marker lines:
+  8: Takes an exclusive file-handle lock, the same discipline as sync_crossgen.ps1: two rclone
+  29: $log = Join-Path $logDir "kd_rclone.log"
+  30: $lockPath = Join-Path $logDir "kd_rclone.lock"
+  33: $rc = Join-Path $repo "tools\rclone.exe"
+  34: if (-not (Test-Path $rc)) { $rc = "C:\Users\user4\tools\rclone.exe" }
+  35: if (-not (Test-Path $rc)) { Note "$Tag NO RCLONE"; exit 1 }
+  38: # PowerShell but orphans its rclone child, which keeps uploading with the handle released.
+  39: # So also refuse when any other rclone is already writing this Drive path.
+  40: $other = @(Get-CimInstance Win32_Process -Filter "Name='rclone.exe'" -EA SilentlyContinue |
+  42: if ($other.Count) { Note "$Tag SKIP (another rclone already writing expLB/kd)"; exit 0 }
+  49: if ($OnBusy -eq "Skip") { Note "$Tag SKIP (lock held)"; exit 0 }
+  50: if ((Get-Date) -gt $deadline) { Note "$Tag GAVE UP waiting for lock"; exit 1 }
+  58: $code = $LASTEXITCODE
+  61: # The 11-dataset crossgen cannot live under kd/: 27_crossgen.py's guard() requires
+  66: # cannot live under kd/ (1_generate_ndif.py and friends take an --output_dir and the
+  73: Note "$Tag run-kd exit $LASTEXITCODE ($nk files)"
+  81: Note "$Tag crossgen11 exit $LASTEXITCODE ($n2 files)"
+  83: Note "$Tag DONE exit $code ($n local files)"
+=== tail logs\coords_supervisor.log
+2026-09-22 18:28:47  DONE -- run-coords\passB\.done present. Final checksum sync to Drive.
+2026-09-22 18:37:39  rclone check exited 0 (0 = every chunk verified on Drive)
+2026-09-22 18:37:39  See logs\coords_passB.log and logs\coords_rclone.log
+2026-09-22 18:43:46  === coords supervisor started (pid 47588) repo=C:\Users\user4\expLB ===
+2026-09-22 18:43:47  heartbeat: 570 chunks, 12207 MB, chain alive = False
+2026-09-22 18:43:47  DONE -- run-coords\passB\.done present. Final checksum sync to Drive.
+2026-09-22 18:53:48  rclone check exited 0 (0 = every chunk verified on Drive)
+2026-09-22 18:53:48  See logs\coords_passB.log and logs\coords_rclone.log
+=== tail logs\night_chain.log
+09-22 16:55:07  sync done
+09-22 17:10:07  sync done
+09-22 17:25:07  sync done
+09-22 17:40:21  sync done
+09-22 17:55:19  sync done
+09-22 18:10:21  sync done
+09-22 18:25:20  sync done
+09-22 18:40:20  sync done
+=== tail logs\crossgen_sync.status
+2026-09-22 17:28:20  manual EXIT 0
+2026-09-22 17:34:28  manual DUPCHECK exit 0 (see logs\crossgen_dupes.log)
+2026-09-22 17:46:11  periodic START <whole tree>
+2026-09-22 17:47:43  periodic EXIT 0
+2026-09-22 18:16:11  periodic START <whole tree>
+2026-09-22 18:18:20  periodic EXIT 0
+2026-09-22 18:46:11  periodic START <whole tree>
+2026-09-22 18:47:47  periodic EXIT 0
+=== tail logs\kd_sync.status
+2026-09-22 18:25:10  periodic START
+2026-09-22 18:25:34  periodic run-kd exit 0 (184 files)
+2026-09-22 18:26:28  periodic crossgen11 exit 0 (68666 files)
+2026-09-22 18:26:28  periodic DONE exit 0 (183 local files)
+2026-09-22 18:40:10  periodic START
+2026-09-22 18:40:31  periodic run-kd exit 0 (184 files)
+2026-09-22 18:41:21  periodic crossgen11 exit 0 (68666 files)
+2026-09-22 18:41:21  periodic DONE exit 0 (183 local files)
+=== tail hpkr_topup_passC.log (09/22/2026 15:47:40)
+2026-09-22 15:47:29,129 - INFO - layers: 6 of 80  pooling: mean,last  datasets: 
+harm-pressure-knowledge-report
+2026-09-22 15:47:39,831 - INFO - harm-pressure-knowledge-report: 2139 rows -> 2139 spans 
+2026-09-22 15:47:40,102 - INFO - harm-pressure-knowledge-report: already complete (2139 rows)
+2026-09-22 15:47:40,102 - INFO - Done.
+=== tail extract_P0a_passC.log (09/18/2026 04:42:18)
+System.Management.Automation.RemoteException
+                                                               [A
+  sycophancy_mt: 100%|██████████| 8/8 [05:41<00:00, 43.61s/it]
+                                                              
+2026-09-18 04:42:18,719 - INFO - Done.
+=== tail passC.log (09/16/2026 13:58:10)
+09-16 12:50:23  start (pid 25052) -- 0 chunks, 0 MB of ~28600
+09-16 13:56:55  exit 0 -- 107 chunks, 28941 MB
+09-16 13:58:10  drive sync exit 0
+=== END

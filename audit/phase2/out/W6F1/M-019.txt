@@ -1,0 +1,18 @@
+design: train on 80% of the row dataset; diagonal = its own 20% test split; off-diagonal = 100% of the column dataset
+datasets: ['instructed-deception', 'harm-pressure-choice', 'harm-pressure-knowledge-report', 'convincing-game', 'insider-trading', 'ai_liar', 'sandbagging_v2', 'roleplaying', 'mask', 'sycophancy_mt']
+main_seed 42 n_records 66
+matching records: 11 features: ['raw', 'pc:deception', 'axes', 'axes_resid', 'random', 'length', 'pc:unified', 'datapca', 'pc:unified@2', 'random@2', 'datapca@2']
+
+blocks: ['belief->belief', 'belief->intent', 'belief->judge', 'intent->belief', 'intent->intent', 'intent->judge', 'judge->belief', 'judge->intent', 'sycophancy as source', 'sycophancy as target']
+
+block                                raw  pc:deception          axes    axes_resid        random        length    pc:unified       datapca  pc:unified@2      random@2     datapca@2
+belief->belief (n=2)               0.550         0.478         0.320         0.369         0.441         0.644         0.527         0.663         0.372         0.412         0.607
+belief->intent (n=14)              0.670         0.442         0.510         0.465         0.621         0.629         0.612         0.649         0.453         0.503         0.629
+belief->judge (n=2)                0.575         0.276         0.541         0.483         0.546         0.441         0.437         0.554         0.450         0.498         0.461
+intent->belief (n=14)              0.607         0.432         0.447         0.478         0.546         0.583         0.484         0.621         0.444         0.492         0.588
+intent->intent (n=42)              0.679         0.761         0.713         0.681         0.594         0.565         0.727         0.694         0.724         0.508         0.693
+intent->judge (n=7)                0.660         0.774         0.744         0.731         0.550         0.467         0.755         0.674         0.793         0.493         0.657
+judge->belief (n=2)                0.562         0.354         0.450         0.471         0.546         0.356         0.430         0.528         0.440         0.477         0.447
+judge->intent (n=7)                0.785         0.806         0.798         0.780         0.580         0.371         0.768         0.667         0.825         0.383         0.470
+sycophancy as source (n=9)         0.526         0.252         0.384         0.318         0.629         0.608         0.477         0.673         0.220         0.537         0.701
+sycophancy as target (n=9)         0.601         0.387         0.357         0.428         0.540         0.573         0.435         0.597         0.344         0.503         0.575

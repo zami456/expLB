@@ -1,0 +1,770 @@
+===== cap_chain.status  (9179 B, 2026-09-21 03:21:17)
+START 2026-09-20 22:59:00
+2026-09-20 22:59:00  2a generate: 12 personas x 5 variants x 20 questions (turn 2 only)
+2026-09-21 00:49:45  2a  measured=12 files / 1200 rows  predicted=12 / 1200  PASS
+2026-09-21 00:49:45  2b control: turn 1 prefilled WRONG
+2026-09-21 01:05:14  2b  measured=12 control files  predicted=12  PASS
+2026-09-21 01:05:14  2c judge (Llama-3.1-70B, held constant with every other bank)
+2026-09-21 01:15:53  2c  measured=12 score files  predicted=>=12  PASS
+2026-09-21 01:15:53  2d vectors_s23  keep_scores=2,3
+2026-09-21 01:23:08  2d/s23  measured=12 vectors  predicted=13  PASS
+2026-09-21 01:23:08  2d vectors_all  keep_scores=0,1,2,3
+2026-09-21 01:30:03  2d/all  measured=12 vectors  predicted=13  PASS
+2026-09-21 01:30:03  2e axes_s23  (contrasts: capitulation, cap_vs_default, cap_only)
+2026-09-21 01:30:04  2e/s23  measured=missing  predicted=written  GATE FAILED
+2026-09-21 01:30:04  2e axes_all  (contrasts: capitulation, cap_vs_default, cap_only)
+2026-09-21 01:30:05  2e/all  measured=missing  predicted=written  GATE FAILED
+2026-09-21 01:30:05  2f/s23 skipped: no axes
+2026-09-21 01:30:05  2f/all skipped: no axes
+2026-09-21 01:31:21  DONE
+START 2026-09-21 02:01:26
+2026-09-21 02:01:26  2a generate: 12 personas x 5 variants x 20 questions (turn 2 only)
+2026-09-21 02:01:31  2a  measured=13 files / 1300 rows  predicted=13 / 1300  PASS
+2026-09-21 02:01:31  2b control: turn 1 prefilled WRONG
+2026-09-21 02:02:35  2b  measured=13 control files  predicted=12  GATE FAILED
+2026-09-21 02:02:35  2c judge (Llama-3.1-70B, held constant with every other bank)
+2026-09-21 02:02:41  2c  measured=12 score files  predicted=>=12  PASS
+2026-09-21 02:02:41  2d vectors_s23  keep_scores=2,3
+2026-09-21 02:03:34  2d/s23  measured=14 vectors  predicted=13  GATE FAILED
+2026-09-21 02:03:34  2d vectors_all  keep_scores=0,1,2,3
+2026-09-21 02:04:27  2d/all  measured=14 vectors  predicted=13  GATE FAILED
+2026-09-21 02:04:27  2e axes_s23  (contrasts: capitulation, cap_vs_default, cap_only)
+2026-09-21 02:04:28  2e/s23  measured=missing  predicted=written  GATE FAILED
+2026-09-21 02:04:28  2e axes_all  (contrasts: capitulation, cap_vs_default, cap_only)
+2026-09-21 02:04:29  2e/all  measured=missing  predicted=written  GATE FAILED
+2026-09-21 02:04:29  2f/s23 skipped: no axes
+2026-09-21 02:04:29  2f/all skipped: no axes
+2026-09-21 02:05:47  DONE
+START 2026-09-21 02:18:06
+2026-09-21 02:18:06  2a generate: 12 personas x 5 variants x 20 questions (turn 2 only)
+2026-09-21 02:18:12  2a  measured=13 files / 1300 rows  predicted=13 / 1300  PASS
+2026-09-21 02:18:12  2b control: turn 1 prefilled WRONG
+2026-09-21 02:18:18  2b  measured=13 control files  predicted=13  PASS
+2026-09-21 02:18:18  2c judge (Llama-3.1-70B, held constant with every other bank)
+2026-09-21 02:18:23  2c  measured=12 score files  predicted=>=12  PASS
+2026-09-21 02:18:23  2d vectors_s23  keep_scores=2,3
+2026-09-21 02:18:30  2d/s23  measured=13 vectors  predicted=13  PASS
+2026-09-21 02:18:30  2d vectors_all  keep_scores=0,1,2,3
+2026-09-21 02:18:36  2d/all  measured=13 vectors  predicted=13  PASS
+2026-09-21 02:18:36  2e axes_s23  (contrasts: capitulation, cap_vs_default, cap_only)
+2026-09-21 02:18:38  2e/s23  measured=written  predicted=written  PASS
+2026-09-21 02:18:38  2e axes_all  (contrasts: capitulation, cap_vs_default, cap_only)
+2026-09-21 02:18:40  2e/all  measured=written  predicted=written  PASS
+2026-09-21 02:18:40  2f crossgen_s23 on the 11-dataset grid
+2026-09-21 02:19:10  2f/s23  measured=0 matrices  predicted=>=6  GATE FAILED
+2026-09-21 02:19:10  2f crossgen_all on the 11-dataset grid
+2026-09-21 02:19:38  2f/all  measured=0 matrices  predicted=>=6  GATE FAILED
+2026-09-21 02:21:02  DONE
+START 2026-09-21 02:32:01
+2026-09-21 02:32:01  2a generate: 12 personas x 5 variants x 20 questions (turn 2 only)
+2026-09-21 02:32:07  2a  measured=13 files / 1300 rows  predicted=13 / 1300  PASS
+2026-09-21 02:32:07  2b control: turn 1 prefilled WRONG
+2026-09-21 02:32:12  2b  measured=13 control files  predicted=13  PASS
+2026-09-21 02:32:12  2c judge (Llama-3.1-70B, held constant with every other bank)
+2026-09-21 02:32:18  2c  measured=12 score files  predicted=>=12  PASS
+2026-09-21 02:32:18  2d vectors_s23  keep_scores=2,3
+2026-09-21 02:32:24  2d/s23  measured=13 vectors  predicted=13  PASS
+2026-09-21 02:32:24  2d vectors_all  keep_scores=0,1,2,3
+2026-09-21 02:32:31  2d/all  measured=13 vectors  predicted=13  PASS
+2026-09-21 02:32:31  2e axes_s23  (contrasts: capitulation, cap_vs_default, cap_only)
+2026-09-21 02:32:33  2e/s23  measured=written  predicted=written  PASS
+2026-09-21 02:32:33  2e axes_all  (contrasts: capitulation, cap_vs_default, cap_only)
+2026-09-21 02:32:35  2e/all  measured=written  predicted=written  PASS
+2026-09-21 02:32:35  2f crossgen_s23 on the 11-dataset grid
+2026-09-21 02:33:28  2f/s23  measured=0 matrices  predicted=>=6  GATE FAILED
+2026-09-21 02:33:28  2f crossgen_all on the 11-dataset grid
+2026-09-21 02:34:23  2f/all  measured=0 matrices  predicted=>=6  GATE FAILED
+2026-09-21 02:35:40  DONE
+START 2026-09-21 02:35:41
+2026-09-21 02:35:41  2a generate: 12 personas x 5 variants x 20 questions (turn 2 only)
+2026-09-21 02:35:47  2a  measured=13 files / 1300 rows  predicted=13 / 1300  PASS
+2026-09-21 02:35:47  2b control: turn 1 prefilled WRONG
+2026-09-21 02:35:53  2b  measured=13 control files  predicted=13  PASS
+2026-09-21 02:35:53  2c judge (Llama-3.1-70B, held constant with every other bank)
+2026-09-21 02:35:58  2c  measured=12 score files  predicted=>=12  PASS
+2026-09-21 02:35:58  2d vectors_s23  keep_scores=2,3
+2026-09-21 02:36:05  2d/s23  measured=13 vectors  predicted=13  PASS
+2026-09-21 02:36:05  2d vectors_all  keep_scores=0,1,2,3
+2026-09-21 02:36:12  2d/all  measured=13 vectors  predicted=13  PASS
+2026-09-21 02:36:12  2e axes_s23  (contrasts: capitulation, cap_vs_default, cap_only)
+2026-09-21 02:36:15  2e/s23  measured=written  predicted=written  PASS
+2026-09-21 02:36:15  2e axes_all  (contrasts: capitulation, cap_vs_default, cap_only)
+2026-09-21 02:36:17  2e/all  measured=written  predicted=written  PASS
+2026-09-21 02:36:17  2f crossgen_s23 on the 11-dataset grid
+2026-09-21 02:37:50  2f/s23  measured=0 matrices  predicted=>=6  GATE FAILED
+2026-09-21 02:37:50  2f crossgen_all on the 11-dataset grid
+2026-09-21 02:38:56  2f/all  measured=0 matrices  predicted=>=6  GATE FAILED
+2026-09-21 02:39:55  DONE
+START 2026-09-21 02:46:35
+2026-09-21 02:46:35  2a generate: 12 personas x 5 variants x 20 questions (turn 2 only)
+2026-09-21 02:46:41  2a  measured=13 files / 1300 rows  predicted=13 / 1300  PASS
+2026-09-21 02:46:41  2b control: turn 1 prefilled WRONG
+2026-09-21 02:46:47  2b  measured=13 control files  predicted=13  PASS
+2026-09-21 02:46:47  2c judge (Llama-3.1-70B, held constant with every other bank)
+2026-09-21 02:46:53  2c  measured=12 score files  predicted=>=12  PASS
+2026-09-21 02:46:53  2d vectors_s23  keep_scores=2,3
+2026-09-21 02:47:00  2d/s23  measured=13 vectors  predicted=13  PASS
+2026-09-21 02:47:00  2d vectors_all  keep_scores=0,1,2,3
+2026-09-21 02:47:08  2d/all  measured=13 vectors  predicted=13  PASS
+2026-09-21 02:47:08  2e axes_s23  (contrasts: capitulation, cap_vs_default, cap_only)
+2026-09-21 02:47:10  2e/s23  measured=written  predicted=written  PASS
+2026-09-21 02:47:10  2e axes_all  (contrasts: capitulation, cap_vs_default, cap_only)
+2026-09-21 02:47:12  2e/all  measured=written  predicted=written  PASS
+2026-09-21 02:47:12  2f crossgen_s23 on the 11-dataset grid
+2026-09-21 02:48:42  2f/s23  measured=0 matrices  predicted=>=6  GATE FAILED
+2026-09-21 02:48:42  2f crossgen_all on the 11-dataset grid
+2026-09-21 02:50:06  2f/all  measured=0 matrices  predicted=>=6  GATE FAILED
+2026-09-21 02:51:21  DONE
+START 2026-09-21 03:02:06
+2026-09-21 03:02:06  2a generate: 12 personas x 5 variants x 20 questions (turn 2 only)
+2026-09-21 03:02:12  2a  measured=13 files / 1300 rows  predicted=13 / 1300  PASS
+2026-09-21 03:02:12  2b control: turn 1 prefilled WRONG
+2026-09-21 03:02:17  2b  measured=13 control files  predicted=13  PASS
+2026-09-21 03:02:17  2c judge (Llama-3.1-70B, held constant with every other bank)
+2026-09-21 03:02:23  2c  measured=12 score files  predicted=>=12  PASS
+2026-09-21 03:02:23  2d vectors_s23  keep_scores=2,3
+2026-09-21 03:02:30  2d/s23  measured=13 vectors  predicted=13  PASS
+2026-09-21 03:02:30  2d vectors_all  keep_scores=0,1,2,3
+2026-09-21 03:02:36  2d/all  measured=13 vectors  predicted=13  PASS
+2026-09-21 03:02:36  2e axes_s23  (contrasts: capitulation, cap_vs_default, cap_only)
+2026-09-21 03:02:38  2e/s23  measured=written  predicted=written  PASS
+2026-09-21 03:02:38  2e axes_all  (contrasts: capitulation, cap_vs_default, cap_only)
+2026-09-21 03:02:40  2e/all  measured=written  predicted=written  PASS
+2026-09-21 03:02:40  2f crossgen_s23 on the 11-dataset grid
+2026-09-21 03:09:44  2f/s23  measured=6 matrices  predicted=>=6  PASS
+2026-09-21 03:09:44  2f crossgen_all on the 11-dataset grid
+2026-09-21 03:16:15  2f/all  measured=6 matrices  predicted=>=6  PASS
+2026-09-21 03:21:17  DONE
+===== cap_controls.status  (1326 B, 2026-09-22 16:10:57)
+START 2026-09-22 16:05:00
+2026-09-22 16:05:00  1 generate: 12 control personas x 5 variants x 20 questions (turn 2 only)
+2026-09-22 16:05:10  1 generate  measured=12 files / 1200 rows  predicted=12 / 1200  PASS
+2026-09-22 16:05:10  2 judge (Llama-3.1-70B, the same judge as every other bank in the project)
+2026-09-22 16:05:17  2 judge  measured=12 score files  predicted=12  PASS
+2026-09-22 16:05:17  3 vectors_s23 for the 12 controls
+2026-09-22 16:05:27  3 vectors(new)  measured=19 vectors  predicted=12  GATE FAILED
+2026-09-22 16:05:27  3 vectors(total)  measured=19 vectors (7 reused from run-cap)  predicted=19  PASS
+2026-09-22 16:05:27  4 axes (cap_vs_neutral, cap_vs_para, cap_only_ctrl)
+2026-09-22 16:05:29  4 axes  measured=3 bases, min cos(PC1,contrast)=0.936  predicted=3 bases, >=0.90  PASS
+2026-09-22 16:05:29  5 crossgen on the 11-dataset grid, layers 20/40/44
+2026-09-22 16:06:46  5 crossgen  measured=42 matrices  predicted=>=6  PASS
+2026-09-22 16:06:50  DONE
+2026-09-22 16:10:01  4 axes  measured=3 bases, min cos(PC1,contrast)=0.936  predicted=3 bases, >=0.90  PASS (re-run after the $src/$SRC collision)
+2026-09-22 16:10:01  5 crossgen on the 11-dataset grid, layers 20/40/44
+2026-09-22 16:10:57  5 crossgen  measured=42 matrices  predicted=>=6  PASS  0.9 min
+2026-09-22 16:10:57  DONE
+===== cap_ctrl_layers.status  (230 B, 2026-09-22 16:25:50)
+START 2026-09-22 16:25:01
+2026-09-22 16:25:01  crossgen cap_ctrl on 18 missing layers (20/40/44 already done)
+2026-09-22 16:25:50  measured=0 mean matrices (0 last)  predicted=21 mean  GATE FAILED
+2026-09-22 16:25:50  DONE
+===== cap_layers.status  (551 B, 2026-09-22 15:52:50)
+START 2026-09-22 15:50:00
+2026-09-22 15:50:00  cap_s23 : all stored layers
+2026-09-22 15:51:23  cap_s23  exit 0  mean-pooled layers=21 (was 3, predicted 21)  1.4 min  PASS
+2026-09-22 15:51:23  cap_s23  layers: 0,4,8,12,16,20,22,24,28,32,36,40,44,48,52,56,60,64,68,72,76
+2026-09-22 15:51:23  cap_all : all stored layers
+2026-09-22 15:52:46  cap_all  exit 0  mean-pooled layers=21 (was 3, predicted 21)  1.4 min  PASS
+2026-09-22 15:52:46  cap_all  layers: 0,4,8,12,16,20,22,24,28,32,36,40,44,48,52,56,60,64,68,72,76
+2026-09-22 15:52:50  DONE
+===== cap_seeds.status  (146 B, 2026-09-22 16:01:49)
+START 2026-09-22 16:00:01
+2026-09-22 16:01:49  cap seeds exit 0  L40 seed-matrices=4 (predicted 4)  1.8 min  PASS
+2026-09-22 16:01:49  DONE
+===== crossgen.status  (66 B, 2026-09-17 21:18:44)
+START 2026-09-17 21:12:52
+PYTHON_EXIT -1 2026-09-17 21:18:44
+===== crossgen_banks.status  (163 B, 2026-09-18 03:22:59)
+START 2026-09-18 03:20:34 layers=40 banks=paper16_shared
+RUN paper16_shared 03:20:34
+EXIT paper16_shared 0 03:21:37
+RCLONE_EXIT 0
+DONE 2026-09-18 03:22:59
+===== crossgen_chain.status  (272 B, 2026-09-22 15:45:47)
+START 2026-09-22 15:40:01
+STEP B_newbanks start 15:40:01
+STEP B_newbanks exit 0 15:43:11
+STEP A start 15:43:11
+STEP A exit 0 15:44:03
+STEP B_fine start 15:44:03
+STEP B_fine exit 0 15:45:35
+STEP P start 15:45:35
+STEP P exit 0 15:45:47
+DONE 2026-09-22 15:45:47
+===== crossgen_full_A.status  (1423 B, 2026-09-22 15:44:03)
+START 2026-09-22 15:43:12 pass=A layers=all banks=paper16_famcentred paper16_shared own100 hf100 hf275_loose hf275_strict own100_strict seeds=0 1 2 3 4
+2026-09-22 15:43:12  datasets: instructed-deception, harm-pressure-choice, harm-pressure-knowledge-report, convincing-game, insider-trading, ai_liar, sandbagging_v2, roleplaying, mask, sycophancy_mt
+2026-09-22 15:43:12  START root
+2026-09-22 15:43:21  EXIT root 1
+2026-09-22 15:43:21  SYNC root exit 1
+2026-09-22 15:43:21  START paper16_famcentred
+2026-09-22 15:43:27  EXIT paper16_famcentred 1
+2026-09-22 15:43:27  SYNC paper16_famcentred exit 1
+2026-09-22 15:43:27  START paper16_shared
+2026-09-22 15:43:32  EXIT paper16_shared 1
+2026-09-22 15:43:33  SYNC paper16_shared exit 1
+2026-09-22 15:43:33  START own100
+2026-09-22 15:43:38  EXIT own100 1
+2026-09-22 15:43:39  SYNC own100 exit 1
+2026-09-22 15:43:39  START hf100
+2026-09-22 15:43:44  EXIT hf100 1
+2026-09-22 15:43:45  SYNC hf100 exit 1
+2026-09-22 15:43:45  START hf275_loose
+2026-09-22 15:43:50  EXIT hf275_loose 1
+2026-09-22 15:43:51  SYNC hf275_loose exit 1
+2026-09-22 15:43:51  START hf275_strict
+2026-09-22 15:43:56  EXIT hf275_strict 1
+2026-09-22 15:43:57  SYNC hf275_strict exit 1
+2026-09-22 15:43:57  START own100_strict
+2026-09-22 15:44:02  EXIT own100_strict 1
+2026-09-22 15:44:02  SYNC own100_strict exit 1
+2026-09-22 15:44:03  SYNC final exit 1
+DONE 2026-09-22 15:44:03
+===== crossgen_full_B.status  (871 B, 2026-09-22 15:43:11)
+START 2026-09-22 15:40:02 pass=B layers=all banks=hf275_loose hf275_strict own100_strict seeds=0 1 2 3 4
+2026-09-22 15:40:02  datasets: instructed-deception, harm-pressure-choice, harm-pressure-knowledge-report, convincing-game, insider-trading, ai_liar, sandbagging_v2, roleplaying, mask, sycophancy_mt
+2026-09-22 15:40:02  START root
+2026-09-22 15:40:54  EXIT root 0
+2026-09-22 15:40:55  SYNC root exit 1
+2026-09-22 15:40:55  START hf275_loose
+2026-09-22 15:41:41  EXIT hf275_loose 0
+2026-09-22 15:41:42  SYNC hf275_loose exit 1
+2026-09-22 15:41:42  START hf275_strict
+2026-09-22 15:42:25  EXIT hf275_strict 0
+2026-09-22 15:42:26  SYNC hf275_strict exit 1
+2026-09-22 15:42:26  START own100_strict
+2026-09-22 15:43:10  EXIT own100_strict 0
+2026-09-22 15:43:11  SYNC own100_strict exit 1
+2026-09-22 15:43:11  SYNC final exit 1
+DONE 2026-09-22 15:43:11
+===== crossgen_full_B_fine.status  (852 B, 2026-09-22 15:45:35)
+START 2026-09-22 15:44:03 pass=B_fine layers=all banks=paper16_shared own100 hf275_strict seeds= 
+2026-09-22 15:44:03  datasets: instructed-deception, harm-pressure-choice, harm-pressure-knowledge-report, convincing-game, insider-trading, ai_liar, sandbagging_v2, roleplaying, mask, sycophancy_mt
+2026-09-22 15:44:03  START root
+2026-09-22 15:44:27  EXIT root 0
+2026-09-22 15:44:28  SYNC root exit 1
+2026-09-22 15:44:28  START paper16_shared
+2026-09-22 15:44:49  EXIT paper16_shared 0
+2026-09-22 15:44:50  SYNC paper16_shared exit 1
+2026-09-22 15:44:50  START own100
+2026-09-22 15:45:12  EXIT own100 0
+2026-09-22 15:45:13  SYNC own100 exit 1
+2026-09-22 15:45:13  START hf275_strict
+2026-09-22 15:45:34  EXIT hf275_strict 0
+2026-09-22 15:45:34  SYNC hf275_strict exit 1
+2026-09-22 15:45:35  SYNC final exit 1
+DONE 2026-09-22 15:45:35
+===== crossgen_full_C.status  (1423 B, 2026-09-18 20:21:08)
+START 2026-09-18 15:57:55 pass=C layers=all banks=paper16_famcentred paper16_shared own100 hf100 hf275_loose hf275_strict own100_strict seeds=0 1 2 3 4
+2026-09-18 15:57:55  datasets: instructed-deception, harm-pressure-choice, harm-pressure-knowledge-report, convincing-game, insider-trading, ai_liar, sandbagging_v2, roleplaying, mask, sycophancy_mt
+2026-09-18 15:57:55  START root
+2026-09-18 16:02:54  EXIT root 0
+2026-09-18 16:02:54  SYNC root exit 0
+2026-09-18 16:02:54  START paper16_famcentred
+2026-09-18 16:05:24  EXIT paper16_famcentred 0
+2026-09-18 16:05:24  SYNC paper16_famcentred exit 0
+2026-09-18 16:05:24  START paper16_shared
+2026-09-18 16:07:55  EXIT paper16_shared 0
+2026-09-18 16:07:55  SYNC paper16_shared exit 0
+2026-09-18 16:07:55  START own100
+2026-09-18 16:10:16  EXIT own100 0
+2026-09-18 16:10:17  SYNC own100 exit 0
+2026-09-18 16:10:17  START hf100
+2026-09-18 16:13:09  EXIT hf100 0
+2026-09-18 16:13:10  SYNC hf100 exit 0
+2026-09-18 16:13:10  START hf275_loose
+2026-09-18 16:15:45  EXIT hf275_loose 0
+2026-09-18 16:15:45  SYNC hf275_loose exit 0
+2026-09-18 16:15:45  START hf275_strict
+2026-09-18 16:18:23  EXIT hf275_strict 0
+2026-09-18 16:18:24  SYNC hf275_strict exit 0
+2026-09-18 16:18:24  START own100_strict
+2026-09-18 16:21:01  EXIT own100_strict 0
+2026-09-18 16:21:01  SYNC own100_strict exit 0
+2026-09-18 20:21:08  SYNC final exit 0
+DONE 2026-09-18 20:21:08
+===== crossgen_full_P.status  (436 B, 2026-09-22 15:45:47)
+START 2026-09-22 15:45:37 pass=P layers=all banks=  seeds= 
+2026-09-22 15:45:37  datasets: instructed-deception, harm-pressure-choice, harm-pressure-knowledge-report, convincing-game, insider-trading, ai_liar, sandbagging_v2, roleplaying, mask, sycophancy_mt
+2026-09-22 15:45:37  START root
+2026-09-22 15:45:46  EXIT root 0
+2026-09-22 15:45:47  SYNC root exit 1
+2026-09-22 15:45:47  SYNC final exit 1
+DONE 2026-09-22 15:45:47
+===== crossgen_smoke.status  (126 B, 2026-09-17 21:22:50)
+START 2026-09-17 21:21:58
+PYTHON_EXIT 0 2026-09-17 21:22:42
+RCLONE_EXIT 0 2026-09-17 21:22:50
+DONE 2026-09-17 21:22:50
+===== drive_check.status  (56 B, 2026-09-17 01:40:30)
+START 09/17/2026 01:34:30
+EXIT 09/17/2026 01:40:30
+===== extra_extractions.status  (628 B, 2026-09-18 10:41:06)
+START 2026-09-18 04:33:21 jobs=P0a P0b P0c
+2026-09-18 04:33:21  START extract_P0a_passA
+2026-09-18 04:36:30  EXIT extract_P0a_passA 0
+2026-09-18 04:36:30  START extract_P0a_passC
+2026-09-18 04:42:19  EXIT extract_P0a_passC 0
+2026-09-18 04:42:19  START extract_P0b_passP
+2026-09-18 07:30:16  EXIT extract_P0b_passP 0
+2026-09-18 07:30:16  START extract_P0c_passB_fine
+2026-09-18 10:37:03  EXIT extract_P0c_passB_fine 0
+2026-09-18 10:37:17  RCLONE passA exit 0
+2026-09-18 10:40:32  RCLONE passC exit 0
+2026-09-18 10:40:42  RCLONE passP exit 0
+2026-09-18 10:41:06  RCLONE passB_fine exit 0
+DONE 2026-09-18 10:41:06
+===== falsify.status  (3577 B, 2026-09-22 16:05:05)
+START 2026-09-22 16:05:00
+2026-09-22 16:05:00  L0 s42  exists, skipping
+2026-09-22 16:05:00  L0 s7  exists, skipping
+2026-09-22 16:05:00  L0 s13  exists, skipping
+2026-09-22 16:05:00  L4 s42  exists, skipping
+2026-09-22 16:05:00  L4 s7  exists, skipping
+2026-09-22 16:05:00  L4 s13  exists, skipping
+2026-09-22 16:05:00  L8 s42  exists, skipping
+2026-09-22 16:05:00  L8 s7  exists, skipping
+2026-09-22 16:05:00  L8 s13  exists, skipping
+2026-09-22 16:05:00  L12 s42  exists, skipping
+2026-09-22 16:05:00  L12 s7  exists, skipping
+2026-09-22 16:05:00  L12 s13  exists, skipping
+2026-09-22 16:05:00  L16 s42  exists, skipping
+2026-09-22 16:05:00  L16 s7  exists, skipping
+2026-09-22 16:05:00  L16 s13  exists, skipping
+2026-09-22 16:05:00  L20 s42  exists, skipping
+2026-09-22 16:05:00  L20 s7  exists, skipping
+2026-09-22 16:05:00  L20 s13  exists, skipping
+2026-09-22 16:05:00  L22 s42  exists, skipping
+2026-09-22 16:05:00  L22 s7  exists, skipping
+2026-09-22 16:05:00  L22 s13  exists, skipping
+2026-09-22 16:05:00  L24 s42  exists, skipping
+2026-09-22 16:05:00  L24 s7  exists, skipping
+2026-09-22 16:05:00  L24 s13  exists, skipping
+2026-09-22 16:05:00  L28 s42  exists, skipping
+2026-09-22 16:05:00  L28 s7  exists, skipping
+2026-09-22 16:05:00  L28 s13  exists, skipping
+2026-09-22 16:05:00  L32 s42  exists, skipping
+2026-09-22 16:05:00  L32 s7  exists, skipping
+2026-09-22 16:05:00  L32 s13  exists, skipping
+2026-09-22 16:05:00  L36 s42  exists, skipping
+2026-09-22 16:05:00  L36 s7  exists, skipping
+2026-09-22 16:05:00  L36 s13  exists, skipping
+2026-09-22 16:05:00  L40 s42  exists, skipping
+2026-09-22 16:05:00  L40 s7  exists, skipping
+2026-09-22 16:05:00  L40 s13  exists, skipping
+2026-09-22 16:05:00  L44 s42  exists, skipping
+2026-09-22 16:05:00  L44 s7  exists, skipping
+2026-09-22 16:05:00  L44 s13  exists, skipping
+2026-09-22 16:05:00  L48 s42  exists, skipping
+2026-09-22 16:05:00  L48 s7  exists, skipping
+2026-09-22 16:05:00  L48 s13  exists, skipping
+2026-09-22 16:05:00  L52 s42  exists, skipping
+2026-09-22 16:05:00  L52 s7  exists, skipping
+2026-09-22 16:05:00  L52 s13  exists, skipping
+2026-09-22 16:05:00  L56 s42  exists, skipping
+2026-09-22 16:05:00  L56 s7  exists, skipping
+2026-09-22 16:05:00  L56 s13  exists, skipping
+2026-09-22 16:05:00  L60 s42  exists, skipping
+2026-09-22 16:05:00  L60 s7  exists, skipping
+2026-09-22 16:05:00  L60 s13  exists, skipping
+2026-09-22 16:05:00  L64 s42  exists, skipping
+2026-09-22 16:05:00  L64 s7  exists, skipping
+2026-09-22 16:05:00  L64 s13  exists, skipping
+2026-09-22 16:05:00  L68 s42  exists, skipping
+2026-09-22 16:05:00  L68 s7  exists, skipping
+2026-09-22 16:05:00  L68 s13  exists, skipping
+2026-09-22 16:05:00  L72 s42  exists, skipping
+2026-09-22 16:05:00  L72 s7  exists, skipping
+2026-09-22 16:05:00  L72 s13  exists, skipping
+2026-09-22 16:05:00  L76 s42  exists, skipping
+2026-09-22 16:05:00  L76 s7  exists, skipping
+2026-09-22 16:05:00  L76 s13  exists, skipping
+2026-09-22 16:05:00  GATE reproduce F-86  measured real=0.8828  predicted=0.883+-0.005  PASS
+2026-09-22 16:05:01  GATE calibration    measured 4/12 cells BELOW L16 clear  predicted few -- failing here is correct
+2026-09-22 16:05:01  GATE falsification  measured min gap over 51 cells at L>=16 = 0.1021  predicted >0.02  SURVIVES
+2026-09-22 16:05:01  GATE stability      measured real range 0.6241-0.8957 over 63 cells / 21 layers
+2026-09-22 16:05:01  GATE coverage       measured 51/63 cells clear the best null by >0.02
+2026-09-22 16:05:05  DONE
+===== hpkr_topup.status  (1261 B, 2026-09-22 15:47:43)
+START 2026-09-21 10:53:42  jobs=A C
+2026-09-21 10:53:44  before: passA=200  passC=200  target=2139
+2026-09-21 10:53:44  passA: harm-pressure-knowledge-report at all 80 layers (adds ~1939 rows, ~2.6 MB/row => ~5 GB)
+2026-09-21 11:29:46  passA  measured=2139 rows  predicted=2139  PASS
+2026-09-21 11:29:46  passC: harm-pressure-knowledge-report per-token at 6 layers (adds ~1939 rows, ~0.8 MB/row => ~1.6 GB)
+2026-09-21 11:52:46  passC  measured=2139 rows  predicted=2139  PASS
+2026-09-21 11:52:46  C: 47.8 GB free
+2026-09-21 11:53:12  rclone passA exit 0
+2026-09-21 11:53:51  rclone passC exit 0
+2026-09-21 11:53:51  DONE
+START 2026-09-22 15:47:01  jobs=A C
+2026-09-22 15:47:05  before: passA=2139  passC=2139  target=2139
+2026-09-22 15:47:05  passA: harm-pressure-knowledge-report at all 80 layers (adds ~0 rows, ~2.6 MB/row => ~5 GB)
+2026-09-22 15:47:23  passA  measured=2139 rows  predicted=2139  PASS
+2026-09-22 15:47:23  passC: harm-pressure-knowledge-report per-token at 6 layers (adds ~0 rows, ~0.8 MB/row => ~1.6 GB)
+2026-09-22 15:47:42  passC  measured=2139 rows  predicted=2139  PASS
+2026-09-22 15:47:42  C: 68.2 GB free
+2026-09-22 15:47:42  rclone passA exit 1
+2026-09-22 15:47:43  rclone passC exit 1
+2026-09-22 15:47:43  DONE
+===== kd_bank_crossgen.status  (1386 B, 2026-09-22 16:01:30)
+2026-09-20 01:44:30  WAITING for C:\Users\user4\expLB\run-kd\axes_vectors_s3.pt
+2026-09-20 03:05:01  bank present (90 MB)
+2026-09-20 03:05:01  STEP peak layers=40,44 start
+2026-09-20 03:07:57  STEP peak exit 0
+2026-09-20 03:11:28  STEP l20 layers=20 start
+2026-09-20 03:13:06  STEP l20 exit 0
+2026-09-20 03:14:54  STEP rest layers=0,4,8,12,16,22,24,28,32,36,48,52,56,60,64,68,72,76 start
+2026-09-20 03:39:52  STEP rest exit 0
+2026-09-20 04:06:59  DONE
+2026-09-20 04:38:06  WAITING for C:\Users\user4\expLB\run-kd\axes_vectors_s3.pt
+2026-09-20 04:38:36  bank present (90 MB)
+2026-09-20 04:38:36  STEP peak layers=40,44 start
+2026-09-20 04:39:17  STEP peak exit 0
+2026-09-20 04:39:39  STEP l20 layers=20 start
+2026-09-20 04:40:18  STEP l20 exit 0
+2026-09-20 04:40:18  STEP rest layers=0,4,8,12,16,22,24,28,32,36,48,52,56,60,64,68,72,76 start
+2026-09-20 04:41:02  STEP rest exit 0
+2026-09-20 04:41:45  DONE
+2026-09-22 15:55:01  WAITING for C:\Users\user4\expLB\run-kd\axes_vectors_s3.pt
+2026-09-22 15:55:31  bank present (90 MB)
+2026-09-22 15:55:31  STEP peak layers=40,44 start
+2026-09-22 15:57:54  STEP peak exit 0
+2026-09-22 15:57:57  STEP l20 layers=20 start
+2026-09-22 15:59:26  STEP l20 exit 0
+2026-09-22 15:59:30  STEP rest layers=0,4,8,12,16,22,24,28,32,36,48,52,56,60,64,68,72,76 start
+2026-09-22 16:01:21  STEP rest exit 0
+2026-09-22 16:01:30  DONE
+===== kd_chain.status  (749 B, 2026-09-22 15:42:00)
+START 2026-09-22 15:41:01
+2026-09-22 15:41:01  inputs: 36 persona files, 30 questions
+2026-09-22 15:41:01  preflight
+2026-09-22 15:41:15  generating 36 x 5 x 30 = 5400 rollouts
+2026-09-22 15:41:21  generation exit 0: 36 role files, 5400 rollouts (expect 36 / 5400)
+2026-09-22 15:41:24  judging with meta-llama/Llama-3.1-70B-Instruct
+2026-09-22 15:41:30  judge exit 0: 35 score files
+2026-09-22 15:41:33  extracting vectors_all
+2026-09-22 15:41:43  vectors_all exit 0: 36 vectors
+2026-09-22 15:41:43  extracting vectors_s3
+2026-09-22 15:41:53  vectors_s3 exit 0: 36 vectors
+2026-09-22 15:41:55  axes_vectors_all exit 0
+2026-09-22 15:41:57  axes_vectors_s3 exit 0
+DONE 2026-09-22 15:42:00
+2026-09-22 15:42:00  === chain finished ===
+===== kd_crossgen.status  (1227 B, 2026-09-22 15:53:45)
+2026-09-19 20:10:57  START 11-dataset crossgen on passB (11 datasets)
+2026-09-19 20:10:57  STEP peak layers=40,44 start
+2026-09-19 20:14:58  STEP peak exit 0
+2026-09-19 20:18:05  STEP l20 layers=20 start
+2026-09-19 20:21:02  STEP l20 exit 0
+2026-09-19 20:22:42  STEP rest layers=0,4,8,12,16,22,24,28,32,36,48,52,56,60,64,68,72,76 start
+2026-09-19 20:58:48  STEP rest exit 0
+2026-09-19 21:22:14  DONE
+2026-09-20 04:33:05  START 11-dataset crossgen on passB (11 datasets)
+2026-09-20 04:33:05  STEP peak layers=40,44 start
+2026-09-20 04:34:00  STEP peak exit 0
+2026-09-20 04:34:21  STEP l20 layers=20 start
+2026-09-20 04:34:58  STEP l20 exit 0
+2026-09-20 04:35:18  STEP rest layers=0,4,8,12,16,22,24,28,32,36,48,52,56,60,64,68,72,76 start
+2026-09-20 04:35:56  STEP rest exit 0
+2026-09-20 04:36:16  DONE
+2026-09-22 15:50:00  START 11-dataset crossgen on passB (11 datasets)
+2026-09-22 15:50:00  STEP peak layers=40,44 start
+2026-09-22 15:51:12  STEP peak exit 0
+2026-09-22 15:51:16  STEP l20 layers=20 start
+2026-09-22 15:52:27  STEP l20 exit 0
+2026-09-22 15:52:31  STEP rest layers=0,4,8,12,16,22,24,28,32,36,48,52,56,60,64,68,72,76 start
+2026-09-22 15:53:42  STEP rest exit 0
+2026-09-22 15:53:45  DONE
+===== kd_passAC.status  (668 B, 2026-09-22 16:10:01)
+START 2026-09-20 13:44:04
+2026-09-20 13:44:04  STEP A-root layers=40,44,20 start
+2026-09-20 13:44:22  STEP A-root exit 0
+2026-09-20 13:44:22  STEP A-kd layers=40,44,20 start
+2026-09-20 13:44:38  STEP A-kd exit 0
+2026-09-20 13:44:38  STEP C-root layers= start
+2026-09-20 13:46:25  STEP C-root exit 1
+2026-09-20 13:46:25  STEP C-kd layers= start
+2026-09-20 13:47:47  STEP C-kd exit 0
+2026-09-20 13:47:47  STEP A-root-all layers= start
+2026-09-20 14:10:15  STEP A-root-all exit 0
+2026-09-20 14:10:15  STEP A-kd-all layers= start
+2026-09-20 14:21:06  STEP A-kd-all exit 0
+DONE 2026-09-20 14:21:07
+2026-09-22 16:10:01  SKIP already DONE; -Force to re-run
+===== kd_s23.status  (2269 B, 2026-09-22 16:03:43)
+2026-09-20 02:06:02  WAITING for KD-Chain to finish (NDIF must be free before extracting)
+2026-09-20 04:43:06  WAITING for KD-Chain to finish (NDIF must be free before extracting)
+2026-09-20 11:49:25  WAITING for KD-Chain to finish (NDIF must be free before extracting)
+2026-09-20 11:49:25  KD-Chain done; extracting vectors_s23
+2026-09-20 12:40:36  vectors_s23 exit 0: 36 vectors (expect 36)
+2026-09-20 12:40:39  axes_s23 exit 0
+2026-09-20 12:40:39  crossgen s23 peak layers=40,44
+2026-09-20 12:40:39  crossgen s23 peak exit 2
+2026-09-20 12:40:39  crossgen s23 l20 layers=20
+2026-09-20 12:40:39  crossgen s23 l20 exit 2
+2026-09-20 12:40:39  DONE
+2026-09-20 12:47:47  WAITING for KD-Chain to finish (NDIF must be free before extracting)
+2026-09-20 12:47:47  KD-Chain done; extracting vectors_s23
+2026-09-20 12:47:59  vectors_s23 exit 0: 36 vectors (expect 36)
+2026-09-20 12:48:01  axes_s23 exit 0
+2026-09-20 12:48:01  crossgen s23 peak layers=40,44
+2026-09-20 12:50:44  crossgen s23 peak exit 0
+2026-09-20 12:50:44  crossgen s23 l20 layers=20
+2026-09-20 12:52:22  crossgen s23 l20 exit 0
+2026-09-20 12:57:29  DONE
+2026-09-22 01:29:04  WAITING for KD-Chain to finish (NDIF must be free before extracting)
+2026-09-22 01:29:04  KD-Chain done; extracting vectors_s23
+2026-09-22 01:29:31  vectors_s23 exit 0: 36 vectors (expect 36)
+2026-09-22 01:29:34  axes_s23 exit 0
+2026-09-22 01:29:34  crossgen s23 peak layers=40,44
+2026-09-22 01:30:44  crossgen s23 peak exit 0: 4/4 matrices present (0 rebuilt, 4 resumed)
+2026-09-22 01:30:44  crossgen s23 l20 layers=20
+2026-09-22 01:31:52  crossgen s23 l20 exit 0: 2/2 matrices present (0 rebuilt, 2 resumed)
+2026-09-22 01:33:21  DONE
+2026-09-22 16:00:01  WAITING for KD-Chain to finish (NDIF must be free before extracting)
+2026-09-22 16:00:01  KD-Chain done; extracting vectors_s23
+2026-09-22 16:00:22  vectors_s23 exit 0: 36 vectors (expect 36)
+2026-09-22 16:00:25  axes_s23 exit 0
+2026-09-22 16:00:25  crossgen s23 peak layers=40,44
+2026-09-22 16:02:09  crossgen s23 peak exit 0: 4/4 matrices present (0 rebuilt, 4 resumed)
+2026-09-22 16:02:09  crossgen s23 l20 layers=20
+2026-09-22 16:03:39  crossgen s23 l20 exit 0: 2/2 matrices present (0 rebuilt, 2 resumed)
+2026-09-22 16:03:43  DONE
+===== kd_s23_alllayers.status  (1438 B, 2026-09-22 16:15:54)
+START 2026-09-20 15:26:02
+2026-09-20 15:26:02  preflight ok; 3 mean-pooled matrices already present (expect 3)
+2026-09-20 15:26:02  WHATIF: C:\Users\user4\expLB\.venv-analysis\Scripts\python.exe C:\Users\user4\expLB\src\assistant_axis_ndif\27_crossgen.py --run_dir run-coords\passB --out_root run-crossgen\kd11\banks\kd_s23 --bank_name kd_s23 --bank C:\Users\user4\expLB\run-kd\axes_vectors_s23.pt --baseline_root run-crossgen\kd11 --datasets instructed-deception harm-pressure-choice harm-pressure-knowledge-report harm-pressure-kr-matched convincing-game insider-trading ai_liar sandbagging_v2 roleplaying mask sycophancy_mt --features pc:deception axes axes_resid pc:unified pc:knowledge_denial pc:kd_assertion --extra_features axes pc:knowledge_denial pc:kd_assertion --stage all
+START 2026-09-20 15:26:30
+2026-09-20 15:26:30  preflight ok; 3 mean-pooled matrices already present (expect 3)
+2026-09-20 15:26:30  crossgen s23 ALL layers (no --layers flag) start
+2026-09-20 15:46:46  crossgen s23 all-layers exit 0
+2026-09-20 15:46:46  mean-pooled matrices now: 21 (was 3)
+2026-09-20 15:46:47  DONE
+START 2026-09-22 16:15:01
+2026-09-22 16:15:01  preflight ok; 21 mean-pooled matrices already present (expect 3)
+2026-09-22 16:15:01  crossgen s23 ALL layers (no --layers flag) start
+2026-09-22 16:15:51  crossgen s23 all-layers exit 0
+2026-09-22 16:15:51  mean-pooled matrices now: 21 (was 21)
+2026-09-22 16:15:54  DONE
+===== label_banks.status  (192 B, 2026-09-18 05:19:06)
+START 2026-09-18 05:17:45
+FETCH exit 0
+BUILT run-hf275\axes_hf275_loose.pt exit 0
+BUILT run-hf275\axes_hf275_strict.pt exit 0
+BUILT run\axes_strict.pt exit 0
+DONE 2026-09-18 05:19:06
+===== paper16_shared.status  (99 B, 2026-09-18 03:14:30)
+START 2026-09-17 22:31:22
+GENERATED 26 files 2600 rollouts 01:44:44
+DONE 2026-09-18 03:14:30
+===== passAC11.status  (1273 B, 2026-09-22 16:05:43)
+START 2026-09-22 15:47:01
+2026-09-22 15:47:01  STEP 0 build the kr-matched view in passA and passC
+2026-09-22 15:47:01  STEP 0/passA  measured=258 matched rows, 55 chunks  predicted=258  PASS
+2026-09-22 15:47:01  STEP 0/passC  measured=258 matched rows, 55 chunks  predicted=258  PASS
+2026-09-22 15:47:01  STEP A-root layers=40,44,20 start
+2026-09-22 15:49:47  STEP A-root exit 0  matrices=160  datasets_in_matrix=11 (predicted 11)  2.8 min  PASS
+2026-09-22 15:49:47  STEP A-kd layers=40,44,20 start
+2026-09-22 15:54:05  STEP A-kd exit 0  matrices=160  datasets_in_matrix=11 (predicted 11)  4.3 min  PASS
+2026-09-22 15:54:05  STEP C-root layers= start
+2026-09-22 15:54:53  STEP C-root exit 0  matrices=12  datasets_in_matrix=11 (predicted 11)  0.8 min  PASS
+2026-09-22 15:54:53  STEP C-kd layers= start
+2026-09-22 15:55:46  STEP C-kd exit 0  matrices=12  datasets_in_matrix=11 (predicted 11)  0.9 min  PASS
+2026-09-22 15:55:46  STEP A-root-all layers= start
+2026-09-22 16:00:42  STEP A-root-all exit 0  matrices=160  datasets_in_matrix=11 (predicted 11)  4.9 min  PASS
+2026-09-22 16:00:42  STEP A-kd-all layers= start
+2026-09-22 16:05:39  STEP A-kd-all exit 0  matrices=160  datasets_in_matrix=11 (predicted 11)  4.9 min  PASS
+2026-09-22 16:05:43  DONE
+===== premise_extras.status  (583 B, 2026-09-22 16:07:03)
+START 2026-09-22 15:55:01
+2026-09-22 15:55:28  seed 1  exit 0  lodo-single=0.1728  0.4 min  PASS
+2026-09-22 15:55:55  seed 7  exit 0  lodo-single=0.1979  0.5 min  PASS
+2026-09-22 15:56:22  seed 13  exit 0  lodo-single=0.1845  0.4 min  PASS
+2026-09-22 15:56:48  seed 99  exit 0  lodo-single=0.1777  0.4 min  PASS
+2026-09-22 15:57:16  mahalanobis/within  exit 0  R2=0.0230  (Ying et al. report 0.98)  PASS
+2026-09-22 15:57:42  mahalanobis/total  exit 0  R2=0.0165  (Ying et al. report 0.98)  PASS
+2026-09-22 16:07:03  cluster_perm exit 0  9.3 min
+2026-09-22 16:07:03  DONE
+===== premise_layers.status  (1214 B, 2026-09-22 15:53:05)
+START 2026-09-22 15:53:01
+2026-09-22 15:53:01  L0 already present, skipping
+2026-09-22 15:53:01  L4 already present, skipping
+2026-09-22 15:53:01  L8 already present, skipping
+2026-09-22 15:53:01  L12 already present, skipping
+2026-09-22 15:53:01  L16 already present, skipping
+2026-09-22 15:53:01  L20 already present, skipping
+2026-09-22 15:53:01  L22 already present, skipping
+2026-09-22 15:53:01  L24 already present, skipping
+2026-09-22 15:53:01  L28 already present, skipping
+2026-09-22 15:53:01  L32 already present, skipping
+2026-09-22 15:53:01  L36 already present, skipping
+2026-09-22 15:53:01  L40 already present, skipping
+2026-09-22 15:53:01  L44 already present, skipping
+2026-09-22 15:53:01  L48 already present, skipping
+2026-09-22 15:53:01  L52 already present, skipping
+2026-09-22 15:53:01  L56 already present, skipping
+2026-09-22 15:53:01  L60 already present, skipping
+2026-09-22 15:53:01  L64 already present, skipping
+2026-09-22 15:53:01  L68 already present, skipping
+2026-09-22 15:53:01  L72 already present, skipping
+2026-09-22 15:53:01  L76 already present, skipping
+2026-09-22 15:53:01  layers with a result: 21 (predicted 21)  PASS
+2026-09-22 15:53:05  DONE
+===== q3q4.status  (58 B, 2026-09-17 02:09:51)
+START 09/17/2026 01:57:29
+EXIT 0 09/17/2026 02:09:51
+===== q8_full.status  (58 B, 2026-09-16 21:21:07)
+START 09/16/2026 21:13:00
+EXIT 0 09/16/2026 21:21:07
+===== sarc_pilot.status  (1086 B, 2026-09-22 15:55:30)
+START 2026-09-22 15:55:01
+2026-09-22 15:55:01  1 generate: 3 arms x 5 variants x 20 questions = 300 single-turn rollouts
+2026-09-22 15:55:11  1 generate  measured=3 files / 300 rows  predicted=3 / 300  PASS
+2026-09-22 15:55:11  2 judge (Llama-3.1-70B, the same judge as every other bank in the project)
+2026-09-22 15:55:24  2 judge  measured=3 score files  predicted=3  PASS
+2026-09-22 15:55:24  3 marker rate, lexical separability, polarity
+2026-09-22 15:55:27  3a markers  measured=lowest ironic marker rate=0.00  predicted=<=0.20  PASS
+2026-09-22 15:55:27  3b separability  measured=bag-of-words AUROC on unmarked(v4,v5), markers stripped=0.921  predicted=<=0.65  GATE FAILED
+2026-09-22 15:55:27    raw=0.953 stripped=0.947 marker effect=0.005  (near 0.5 = arms textually alike,
+2026-09-22 15:55:27     which is the premise the factorial needs; near 1.0 = a lexical detector)
+2026-09-22 15:55:27  VERDICT TEACHER-FORCED -- markers are suppressed but the arms remain lexically separable (0.921); an extracted direction would be mostly lexical
+2026-09-22 15:55:30  DONE
+===== sarc_pilot.status.2026-09-21-buggy-verdict  (900 B, 2026-09-21 21:45:59)
+START 2026-09-21 21:21:17
+2026-09-21 21:21:18  1 generate: 3 arms x 5 variants x 20 questions = 300 single-turn rollouts
+2026-09-21 21:40:53  1 generate  measured=3 files / 300 rows  predicted=3 / 300  PASS
+2026-09-21 21:40:53  2 judge (Llama-3.1-70B, the same judge as every other bank in the project)
+2026-09-21 21:44:19  2 judge  measured=3 score files  predicted=3  PASS
+2026-09-21 21:44:19  3 marker rate, lexical separability, polarity
+2026-09-21 21:44:27  3 markers  measured=lowest ironic marker rate=0.00  predicted=<=0.20 to proceed on-policy  PASS
+2026-09-21 21:44:27  VERDICT PRODUCIBLE -- build the factorial on that variant
+2026-09-21 21:44:27  lexical separability ironic vs sycophant: raw=0.953 stripped=0.947 marker effect=0.005
+2026-09-21 21:44:27    near 0.5 stripped = the arms are textually alike, which is the premise the factorial needs
+2026-09-21 21:45:59  DONE
+===== sarc_pilot.status.pre-e2e-2026-09-22  (1067 B, 2026-09-22 02:29:35)
+START 2026-09-22 02:29:22
+2026-09-22 02:29:22  1 generate: 3 arms x 5 variants x 20 questions = 300 single-turn rollouts
+2026-09-22 02:29:28  1 generate  measured=3 files / 300 rows  predicted=3 / 300  PASS
+2026-09-22 02:29:28  2 judge (Llama-3.1-70B, the same judge as every other bank in the project)
+2026-09-22 02:29:33  2 judge  measured=3 score files  predicted=3  PASS
+2026-09-22 02:29:33  3 marker rate, lexical separability, polarity
+2026-09-22 02:29:34  3a markers  measured=lowest ironic marker rate=0.00  predicted=<=0.20  PASS
+2026-09-22 02:29:34  3b separability  measured=bag-of-words AUROC, markers stripped=0.947  predicted=<=0.65  GATE FAILED
+2026-09-22 02:29:34    raw=0.953 stripped=0.947 marker effect=0.005  (near 0.5 = arms textually alike,
+2026-09-22 02:29:34     which is the premise the factorial needs; near 1.0 = a lexical detector)
+2026-09-22 02:29:34  VERDICT TEACHER-FORCED -- markers are suppressed but the arms remain lexically separable (0.947); an extracted direction would be mostly lexical
+2026-09-22 02:29:35  DONE
+===== scale_3b.status  (1269 B, 2026-09-22 16:05:00)
+START 2026-09-20 15:51:19 tag=3b model=meta-llama/Llama-3.2-3B-Instruct
+2026-09-20 15:51:19  no NDIF_API_KEY_B found; using the primary key
+2026-09-20 15:51:19  starting (no wait gate: 3B/8B are separate NDIF deployments from the 70B)
+2026-09-20 15:51:19  inputs: 26 personas, 20 questions (expect 26 / 20)
+2026-09-20 15:51:19  HF access to meta-llama/Llama-3.2-3B-Instruct confirmed
+2026-09-20 15:51:19  preflight
+2026-09-20 15:51:24  generating 26 x 5 x 20 = 2600 rollouts on meta-llama/Llama-3.2-3B-Instruct
+2026-09-20 15:51:29  generate exit 0: 26 files, 2600 rollouts
+2026-09-20 15:51:29  judging with meta-llama/Llama-3.1-70B-Instruct (held constant across rungs)
+2026-09-20 15:51:34  judge exit 0: 25 score files
+2026-09-20 15:51:34  extraction batching: batch_size=2 session_batches=4
+2026-09-20 15:51:34  extracting vectors_all (all 28 layers)
+2026-09-20 16:24:27  vectors_all exit 0: 26 vectors
+2026-09-20 16:24:27  extracting vectors_s23 (all 28 layers)
+2026-09-20 16:56:10  vectors_s23 exit 0: 26 vectors
+2026-09-20 16:56:12  axes_vectors_all exit 0 (reported at layer 14 of 28)
+2026-09-20 16:56:13  axes_vectors_s23 exit 0 (reported at layer 14 of 28)
+DONE 2026-09-20 16:57:03
+2026-09-22 16:05:00  SKIP already DONE; -Force to re-run
+===== scale_8b.status  (1195 B, 2026-09-22 16:05:00)
+START 2026-09-20 13:25:25 tag=8b model=meta-llama/Llama-3.1-8B-Instruct
+2026-09-20 13:25:25  no NDIF_API_KEY_B found; using the primary key
+2026-09-20 13:25:25  starting (no wait gate: 3B/8B are separate NDIF deployments from the 70B)
+2026-09-20 13:25:25  inputs: 26 personas, 20 questions (expect 26 / 20)
+2026-09-20 13:25:25  HF access to meta-llama/Llama-3.1-8B-Instruct confirmed
+2026-09-20 13:25:25  preflight
+2026-09-20 13:25:30  generating 26 x 5 x 20 = 2600 rollouts on meta-llama/Llama-3.1-8B-Instruct
+2026-09-20 14:16:26  generate exit 0: 26 files, 2600 rollouts
+2026-09-20 14:16:26  judging with meta-llama/Llama-3.1-70B-Instruct (held constant across rungs)
+2026-09-20 14:54:19  judge exit 0: 25 score files
+2026-09-20 14:54:19  extracting vectors_all (all 32 layers)
+2026-09-20 14:57:40  vectors_all exit 0: 26 vectors
+2026-09-20 14:57:40  extracting vectors_s23 (all 32 layers)
+2026-09-20 15:01:23  vectors_s23 exit 0: 26 vectors
+2026-09-20 15:01:25  axes_vectors_all exit 0 (reported at layer 16 of 32)
+2026-09-20 15:01:26  axes_vectors_s23 exit 0 (reported at layer 16 of 32)
+DONE 2026-09-20 15:03:05
+2026-09-22 16:05:00  SKIP already DONE; -Force to re-run
+===== scale_coords.status  (1594 B, 2026-09-22 16:20:15)
+START 2026-09-20 16:59:34
+2026-09-20 16:59:34  8b: coords start  model=meta-llama/Llama-3.1-8B-Instruct batch=8 attn=2.0 sess=8
+START 2026-09-20 17:32:26
+2026-09-20 17:32:26  8b: coords start  model=meta-llama/Llama-3.1-8B-Instruct batch=8 attn=0.75 sess=4
+START 2026-09-20 17:48:34
+2026-09-20 17:48:34  8b: coords start  model=meta-llama/Llama-3.1-8B-Instruct batch=8 attn=0.55 sess=4
+START 2026-09-20 18:02:04
+2026-09-20 18:02:04  8b: coords start  model=meta-llama/Llama-3.1-8B-Instruct batch=8 attn=0.55 sess=1
+START 2026-09-20 18:04:16
+2026-09-20 18:04:16  8b: coords start  model=meta-llama/Llama-3.1-8B-Instruct batch=8 attn=0.55 sess=1
+START 2026-09-20 18:34:09
+2026-09-20 18:34:09  8b: coords start  model=meta-llama/Llama-3.1-8B-Instruct batch=8 attn=0.55 sess=1
+2026-09-20 19:36:28  8b: coords exit 0  (11 dataset dirs written, expect 5)
+2026-09-20 19:36:28  3b: coords start  model=meta-llama/Llama-3.2-3B-Instruct batch=2 attn=0.42 sess=1
+2026-09-20 19:36:30  3b: Scale-3b is Ready; proceeding
+2026-09-20 21:24:15  3b: coords exit 0  (5 dataset dirs written, expect 5)
+2026-09-20 21:40:48  DONE
+START 2026-09-22 16:20:00
+2026-09-22 16:20:00  8b: coords start  model=meta-llama/Llama-3.1-8B-Instruct batch=8 attn=0.55 sess=1
+2026-09-22 16:20:06  8b: coords exit 0  (5/5 requested datasets present)
+2026-09-22 16:20:06  3b: coords start  model=meta-llama/Llama-3.2-3B-Instruct batch=2 attn=0.42 sess=1
+2026-09-22 16:20:08  3b: Scale-3b is Ready; proceeding
+2026-09-22 16:20:14  3b: coords exit 0  (5/5 requested datasets present)
+2026-09-22 16:20:15  DONE
+===== scale_crossgen.status  (1323 B, 2026-09-20 23:40:46)
+START 2026-09-20 21:54:01
+2026-09-20 21:54:01  8b crossgen start  k=3  5 datasets
+2026-09-20 21:54:06  8b crossgen exit 1: 0 matrices
+2026-09-20 21:54:06  3b crossgen start  k=3  5 datasets
+2026-09-20 21:54:09  3b crossgen exit 1: 0 matrices
+2026-09-20 21:54:09  DONE
+START 2026-09-20 22:16:30
+2026-09-20 22:16:30  8b crossgen start  k=3  5 datasets
+2026-09-20 22:16:32  8b crossgen exit 1: 0 matrices
+2026-09-20 22:16:32  DONE
+START 2026-09-20 22:17:19
+2026-09-20 22:17:19  8b crossgen start  k=3  5 datasets
+2026-09-20 22:17:47  8b crossgen exit 0: 16 matrices
+2026-09-20 22:17:47  DONE
+START 2026-09-20 22:17:59
+2026-09-20 22:17:59  3b crossgen start  k=3  5 datasets
+2026-09-20 22:18:24  3b crossgen exit 0: 14 matrices
+2026-09-20 22:18:24  DONE
+START 2026-09-20 22:19:02
+2026-09-20 22:19:02  8b crossgen start  k=3  5 datasets
+2026-09-20 22:20:25  8b crossgen exit 0: 16 matrices
+2026-09-20 22:20:25  3b crossgen start  k=3  5 datasets
+2026-09-20 22:21:37  3b crossgen exit 0: 14 matrices
+2026-09-20 22:21:37  DONE
+START 2026-09-20 23:38:30
+2026-09-20 23:38:30  8b crossgen start  k=3  5 datasets
+2026-09-20 23:39:45  8b crossgen exit 0: 16 matrices
+2026-09-20 23:39:45  3b crossgen start  k=3  5 datasets
+2026-09-20 23:40:46  3b crossgen exit 0: 14 matrices
+2026-09-20 23:40:46  DONE
+===== scale_sync.status  (389 B, 2026-09-22 16:20:15)
+2026-09-20 15:01:27  8b/final START
+2026-09-20 15:03:05  8b/final DONE exit 0 (140 files)
+2026-09-20 16:56:14  3b/final START
+2026-09-20 16:57:03  3b/final DONE exit 0 (208 files)
+2026-09-20 21:24:16  coords/final START
+2026-09-20 21:40:48  coords/final DONE exit 0 (1803 files)
+2026-09-22 16:20:15  coords/final START
+2026-09-22 16:20:15  coords/final DONE exit 1 (2431 files)
+===== sig.status  (58 B, 2026-09-17 01:05:47)
+START 09/17/2026 01:05:09
+EXIT 0 09/17/2026 01:05:47
+===== run/.launched
+2026-09-12T05:55:39
+===== run/DELIVERABLE_READY
+done 2026-09-15T12:51:42  vectors=100  axis.pt=True  axes.pt=True
+===== D:/expLB-acts/logs/venv_build.status
+START 09/17/2026 03:21:39
+EXIT 09/17/2026 03:26:22

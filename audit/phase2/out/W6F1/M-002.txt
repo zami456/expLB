@@ -1,0 +1,36 @@
+==== L20  (src/probes/deception-detection/results/persona_ood_ext_L20)
+   summary.csv  baseline   dim=8192  off_diagonal_mean=0.6477701196654847
+   summary.csv  pc1        dim=1  off_diagonal_mean=0.6669008147791228
+   summary.csv  axis1      dim=1  off_diagonal_mean=0.6510800147121752
+   summary.csv  ext_pc1    dim=1  off_diagonal_mean=0.661274848670574
+   summary.csv  ext_axis1  dim=1  off_diagonal_mean=0.9041173922099752
+   zero_shot.csv scored datasets: ['convince_me__plain', 'harm_refusal_choice__plain', 'harm_refusal_knowledge_report__plain', 'insider_trading_cadenza__plain', 'instruct_dishonesty__plain', 'repe_honesty__plain']
+   mean(auroc_axis) over 6 datasets = 0.7908803603
+   mean(auroc_ext_axis) over 6 datasets = 0.9041173922
+   mean(auroc_pc1) over 6 datasets = 0.8056156665
+   mean(auroc_ext_pc1) over 6 datasets = 0.6612748487
+   recomputed matrix_axis1 off-diag mean over 30 cells = 0.6510733333
+==== L40  (src/probes/deception-detection/results/persona_ood_ext_L40)
+   summary.csv  baseline   dim=8192  off_diagonal_mean=0.7320325942227636
+   summary.csv  pc1        dim=1  off_diagonal_mean=0.8593181660846994
+   summary.csv  axis1      dim=1  off_diagonal_mean=0.8318937060798296
+   summary.csv  ext_pc1    dim=1  off_diagonal_mean=0.7679503103867945
+   summary.csv  ext_axis1  dim=1  off_diagonal_mean=0.9158352734669751
+   zero_shot.csv scored datasets: ['convince_me__plain', 'harm_refusal_choice__plain', 'harm_refusal_knowledge_report__plain', 'insider_trading_cadenza__plain', 'instruct_dishonesty__plain', 'repe_honesty__plain']
+   mean(auroc_axis) over 6 datasets = 0.8318937061
+   mean(auroc_ext_axis) over 6 datasets = 0.9158352735
+   mean(auroc_pc1) over 6 datasets = 0.8593181661
+   mean(auroc_ext_pc1) over 6 datasets = 0.7679503104
+   recomputed matrix_axis1 off-diag mean over 30 cells = 0.8319000000
+==== L44  (src/probes/deception-detection/results/persona_ood_ext_L44)
+   summary.csv  baseline   dim=8192  off_diagonal_mean=0.7156489541593033
+   summary.csv  pc1        dim=1  off_diagonal_mean=0.8506241697318854
+   summary.csv  axis1      dim=1  off_diagonal_mean=0.8260481442490276
+   summary.csv  ext_pc1    dim=1  off_diagonal_mean=0.7801399911543582
+   summary.csv  ext_axis1  dim=1  off_diagonal_mean=0.9033884458767987
+   zero_shot.csv scored datasets: ['convince_me__plain', 'harm_refusal_choice__plain', 'harm_refusal_knowledge_report__plain', 'insider_trading_cadenza__plain', 'instruct_dishonesty__plain', 'repe_honesty__plain']
+   mean(auroc_axis) over 6 datasets = 0.8260481442
+   mean(auroc_ext_axis) over 6 datasets = 0.9033884459
+   mean(auroc_pc1) over 6 datasets = 0.8506241697
+   mean(auroc_ext_pc1) over 6 datasets = 0.7801399912
+   recomputed matrix_axis1 off-diag mean over 30 cells = 0.8260500000

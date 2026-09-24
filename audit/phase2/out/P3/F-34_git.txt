@@ -1,0 +1,40 @@
+file    : C:\Users\SURAIYA\Documents\STUDY\thesis\expLB\run-crossgen\kd11\banks\kd_s23\significance.json
+n tests : 468 | boot_datasets: 10000
+
+=== profile: pc:unified - raw, paper, mean, block 9 (90 pairs) ===
+  L20  diff=-0.0361 pairs=43/90 ci95=[-0.116, +0.057] p=0.370 q=0.602 
+  L40  diff=+0.1082 pairs=58/90 ci95=[+0.033, +0.197] p=0.006 q=0.074 CI>0
+  L44  diff=+0.1156 pairs=60/90 ci95=[+0.035, +0.210] p=0.007 q=0.075 CI>0
+  positive at 2 of 3 layers; range -0.0361 .. +0.1156; peak at L44
+
+=== profile: pc:unified - datapca, paper, mean, block 9 ===
+  L20  diff=-0.0160 ci95=[-0.106, +0.073] q=0.824 
+  L40  diff=+0.1199 ci95=[+0.024, +0.220] q=0.095 CI>0
+  L44  diff=+0.1291 ci95=[+0.033, +0.228] q=0.074 CI>0
+  positive at 2 of 3 layers; peak at L44
+  best (lowest) q among pc:unified - datapca, this slice: 0.074 at L44
+
+=== tests that clear the dataset bootstrap in this file ===
+  count: 14 | negative: 6
+  L20  last  blk9 mms       datapca@2 - raw              diff=-0.1149 q=0.019
+  L40  mean  blk9 lr_reg10  pc:unified - random          diff=+0.1944 q=0.043
+  L44  last  blk9 lr_reg10  pc:unified - random          diff=+0.2372 q=0.031
+  L44  last  blk9 mms       pc:unified - random          diff=+0.2239 q=0.043
+  L44  last  blk9 paper     pc:unified - random          diff=+0.2334 q=0.043
+  L44  mean  blk9 lr_reg10  pc:unified - random          diff=+0.2273 q=0.006
+  L44  mean  blk9 mms       pc:unified - random          diff=+0.2336 q=0.006
+  L44  mean  blk9 paper     pc:unified - random          diff=+0.2435 q=0.006
+  L44  last  blk9 lr_reg10  pc:unified - raw             diff=+0.1572 q=0.043
+  L44  last  blk9 mms       random - raw                 diff=-0.1897 q=0.047
+  L20  mean  blk9 lr_reg10  random@2 - raw               diff=-0.1597 q=0.043
+  L40  last  blk9 mms       random@2 - raw               diff=-0.2064 q=0.043
+  L44  last  blk9 mms       random@2 - raw               diff=-0.2287 q=0.006
+  L44  last  blk9 paper     random@2 - raw               diff=-0.1541 q=0.043
+
+=== best q over the whole file for any POSITIVE pc:unified comparison vs raw/datapca ===
+  q=0.043  pc:unified - raw  L44 last blk9 lr_reg10 diff=+0.1572
+
+=== LEVEL 2: recomputed off-diagonal means (block 9), bank = C:\Users\SURAIYA\Documents\STUDY\thesis\expLB\run-crossgen\kd11\banks\kd_s23\matrices ===
+  L20  bank=axes_vectors_s23.pt name=kd_s23 | pc:unified=0.6029 raw=0.6390 datapca=0.6189 | -raw=-0.0361 -datapca=-0.0160
+  L40  bank=axes_vectors_s23.pt name=kd_s23 | pc:unified=0.7952 raw=0.6870 datapca=0.6753 | -raw=+0.1082 -datapca=+0.1199
+  L44  bank=axes_vectors_s23.pt name=kd_s23 | pc:unified=0.7990 raw=0.6835 datapca=0.6700 | -raw=+0.1156 -datapca=+0.1291

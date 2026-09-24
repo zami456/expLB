@@ -71,6 +71,14 @@ after filtering, **the filter is the finding**.
 
 ---
 
+> **UPDATE 2026-09-24 (P17).** Stage 3's purpose — a larger knowledge-controlled HP-KR slice and a
+> quotable F-03 test — was met by another route. F-115 closed the HP-KR / kr-matched row leak (F-03
+> survives it); F-116 ran the 2,001-row `knowledge_matched` slice (139 / 1,862). Both verified in P17
+> (24/24 and 40/40). Row 4e below is done: `CLAUDE.md` now has `cap/` and `scale/` rows. The "Last
+> updated" line (:7) predates the audit.
+> **Source:** `kd/docs/FINDINGS.md` F-115, F-116; `audit/p17/C_REPORT.md` F-115/F-116 rows;
+> `CLAUDE.md` @ e917ecd3.
+
 ## Stage 3 — HP-KR slice growth *(only if 1a cleared 0.40)*
 
 | # | step | gate | measured | status |

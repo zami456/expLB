@@ -1,0 +1,15 @@
+id,source,source_ref,claim_short,numbers,layer,dataset_hint,status
+H-002,collaborator note,src/probes/deception-detection/results/XXXX-9-llama-all-followup/summary.md:25,"real gap is CG balanced accuracy, 0.80 here against 0.60.",0.80; 0.60,,,CANDIDATE
+H-004,collaborator note,src/probes/deception-detection/results/XXXX-9-llama-all-followup/summary.md:27,the published persona grouping (0.148). Its balanced accuracy is *below* chance because the,0.148,,,CANDIDATE
+H-006,collaborator note,src/probes/deception-detection/results/XXXX-9-llama-all-followup/summary.md:34,"extended axis leads on ranking, 0.887 vs 0.636 AUROC, and trails slightly on balanced accuracy,",0.887; 0.636,,,CANDIDATE
+H-011,collaborator note,src/probes/deception-detection/results/loo_L20/summary.md:62,"naive by 0.10; at L40 naive beats balanced by 0.05. Same code, same data, opposite verdict.",0.10; 0.05,,,CANDIDATE
+H-015,collaborator note,src/probes/deception-detection/results/persona_ood/summary.md:19,cos| = **0.949** to the deception axis and separates the groups perfectly; over all 26 that falls,0.949,,,CANDIDATE
+H-016,collaborator note,src/probes/deception-detection/results/persona_ood/summary.md:23,reproduces `results_table.csv` to **Δ = 0.0000** on all six datasets. This is exact rather than,0.0000,,,CANDIDATE
+H-017,collaborator note,src/probes/deception-detection/results/persona_ood/summary.md:38,"Off-diagonal improves (+0.035 overall, +0.184 excluding HP-KR); the diagonal degrades",+0.035; +0.184,,,CANDIDATE
+H-018,collaborator note,src/probes/deception-detection/results/persona_ood/summary.md:39,"(−0.038).** Both directions match the paper, which reports gains on cross-dataset pairs ""along",0.038,,,CANDIDATE
+H-019,collaborator note,src/probes/deception-detection/results/persona_ood/summary.md:40,"with some degradation on diagonal pairs"". 20 of 30 off-diagonal cells improve, median **+0.068**.",+0.068,,,CANDIDATE
+H-020,collaborator note,src/probes/deception-detection/results/persona_ood/summary.md:49,off-diagonal excluding HP-KR — *better* than the top-3 PCs' 0.9123. Since PC1 is essentially that,0.9123,,,CANDIDATE
+H-021,collaborator note,src/probes/deception-detection/results/persona_ood/summary.md:69,"training set yields ≈0.98 on CG, ≈0.66 on HP-C, ≈0.98 on IT. This is what the ""improved",0.98; 0.66; 0.98,,,CANDIDATE
+H-022,collaborator note,src/probes/deception-detection/results/persona_ood/summary.md:99,"The benchmark's headline metric is **balanced accuracy at 1% FPR on the alpaca control**, not",1%,,,CANDIDATE
+H-023,collaborator note,src/probes/deception-detection/results/persona_ood/summary.md:102,method | bal. acc @1% FPR | recall @1% | AUROC |,1%; 1%,,,CANDIDATE
+H-024,collaborator note,src/probes/deception-detection/results/persona_ood/summary.md:105,"paper Mean Probe, Llama | 0.636 | — | 0.682 |",0.636; 0.682,,,CANDIDATE

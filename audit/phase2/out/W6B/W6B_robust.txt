@@ -1,0 +1,58 @@
+
+==============================================================================
+1. O-087  zero-shot deception axis, L40 mean -- null test and the two corpora
+==============================================================================
+dotproducts_mean.json  (12_dotproduct_layers.py, single-class datasets DROPPED): pooled AUROC 0.863011  <-- the 0.863 the thesis prints
+zeroshot_nulls.json    (25_zeroshot_nulls.py, alpaca KEPT in the pooled set):     pooled AUROC 0.880950
+  difference 0.0179 -- same axis, same layer, same pooling, different pooled corpus
+  pooled vs 1,000 random directions: p 0.0010, random p95 0.7636, beats_random_p95 True
+
+  per dataset at L40 mean (9 labelled datasets):
+  dataset                               AUROC   rand p95   beats?
+  ai_liar                              0.9367     0.7470     True
+  convincing-game                      0.7884     0.9173    False
+  harm-pressure-choice                 0.5439     0.7732    False
+  harm-pressure-knowledge-report       0.6436     0.9377    False
+  insider-trading                      0.9803     0.9477     True
+  instructed-deception                 0.9709     0.8202     True
+  mask                                 0.4669     0.6404    False
+  roleplaying                          0.7842     0.6777     True
+  sandbagging_v2                       0.8454     0.8059     True
+  beats the random p95 null on 5 of 9 datasets
+  -> the pooled 0.863 is therefore partly a between-dataset effect
+
+==============================================================================
+2. O-089 / O-090  per-fold spread behind the Pass C LODO means
+==============================================================================
+  pool_mean_mms  pooled  L20  mean 0.8570  folds 9  min 0.6593 (mask)  max 0.9993  sd 0.1248
+  pool_mean_mms  pooled  L22  mean 0.8544  folds 9  min 0.6405 (harm-pressure-knowledge-report)  max 0.9952  sd 0.1315
+  pool_mean_mms  pooled  L40  mean 0.8826  folds 9  min 0.6515 (mask)  max 1.0000  sd 0.0944
+  pool_mean_mms  pooled  L44  mean 0.8783  folds 9  min 0.6419 (mask)  max 0.9984  sd 0.0997
+  tok_lr         mean    L20  mean 0.7851  folds 9  min 0.4120 (harm-pressure-knowledge-report)  max 0.9971  sd 0.1880
+  tok_lr         mean    L22  mean 0.7793  folds 9  min 0.4717 (harm-pressure-knowledge-report)  max 0.9988  sd 0.1739
+  tok_lr         mean    L40  mean 0.8391  folds 9  min 0.6867 (mask)  max 0.9828  sd 0.1206
+  tok_lr         mean    L44  mean 0.8507  folds 9  min 0.6826 (harm-pressure-choice)  max 0.9763  sd 0.1003
+
+==============================================================================
+3. O-092 / O-093  do the raw / persona medians survive dropping a sub-population?
+==============================================================================
+  raw     : n=10 median +0.0251
+  persona : n=13 median +0.1135
+  raw without the 6 Pass C LODO rows      : n=4 median +0.0051
+  raw, Pass C LODO rows only              : n=6 median +0.0333
+  persona, trained rows only              : n=8 median +0.1135
+  persona, zero-shot rows only            : n=5 median +0.0665
+
+==============================================================================
+4. O-096  the hf275 contamination column, measured locally (own100 column is lab-only)
+==============================================================================
+  hf bank counts: {'assistant': (1, 99), 'deception': (22, 22), 'sycophancy': (16, 16), 'unified': (38, 38)}  vectors_dir: C:\Users\SURAIYA\Documents\STUDY\thesis\expLB\run-hf275\vectors_100
+   layer hf275 measured  hf275 in note own100 in note     rel. gap
+      20        -0.6856         -0.686         -0.729         5.9%
+      22        -0.6621         -0.662         -0.710         6.8%
+      40        -0.6097         -0.610         -0.660         7.6%
+      60        -0.5161         -0.516         -0.573         9.9%
+  hf275 measured vs the note: max |diff| 0.0004
+  relative own100-vs-hf275 gap implied by the note: 5.9% .. 9.9% (the doc says '~7-9%')
+  NOTE: the own100 column cannot be measured here -- the own100 bank is C:/Users/user4/expLB/run/axes.pt on the lab PC only.
+  NOTE: the hf275 column is measured against the PUBLISHED Assistant Axis; against the hf bank's OWN assistant direction it reads L20 -0.6687, L22 -0.6507, L40 -0.5771, L60 -0.4787

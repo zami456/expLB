@@ -1,0 +1,138 @@
+====================================================================================================
+1. passC crossgen grid vs passA crossgen grid at the 6 shared layers.
+   Both evaluate the SAME 200-row/dataset sample (--sample 200 --seed 42); passA was
+   extracted in one NDIF job (80 layers, pooled) and passC in another (6 layers, per-token,
+   pooled vectors also stored). If the two agree, the passC grid is a re-extraction check,
+   not new evidence.  |diff| over every matching cell:
+====================================================================================================
+   matched cells: 1512
+   max |passA - passC| = 0.002200   mean = 0.000162
+   cells with |diff| > 0.001: 22
+   cells with |diff| > 0.01 : 0
+      worst: L48 last mms s2 axes paper5: passA 0.759889 passC 0.757689 (|d| 0.002200)
+      worst: L20 last mms s0 axes all: passA 0.569554 passC 0.571609 (|d| 0.002055)
+      worst: L20 last mms s4 axes all: passA 0.572936 passC 0.574904 (|d| 0.001968)
+      worst: L40 last lr_reg10 s3 raw all: passA 0.637850 passC 0.639763 (|d| 0.001913)
+      worst: L40 last lr_reg10 s0 raw all: passA 0.638374 passC 0.640109 (|d| 0.001735)
+
+====================================================================================================
+2. The L40 decomposition. The project pre-registered L40. Raw transfer peaks at L31-33.
+   Split the persona 'margin' at L40 into: how much the axis gained vs its own peak, and
+   how much raw lost vs its own peak. seed 42, 10 datasets.
+====================================================================================================
+  passA    mean  paper     axes          axes peak L77 0.6770 -> L40 0.6103 (-0.0667) | raw peak L33 0.7072 -> L40 0.6760 (-0.0312) | margin at L40 -0.0657, at raw's peak L33 -0.0856
+  passA    mean  paper     pc:unified@2  pc:unified@2 peak L40 0.6248 -> L40 0.6248 (+0.0000) | raw peak L33 0.7072 -> L40 0.6760 (-0.0312) | margin at L40 -0.0512, at raw's peak L33 -0.0952
+  passA    mean  mms       axes          axes peak L79 0.6927 -> L40 0.6257 (-0.0670) | raw peak L31 0.7170 -> L40 0.6593 (-0.0577) | margin at L40 -0.0336, at raw's peak L31 -0.1811
+  passA    mean  mms       pc:unified@2  pc:unified@2 peak L34 0.6199 -> L40 0.6101 (-0.0098) | raw peak L31 0.7170 -> L40 0.6593 (-0.0577) | margin at L40 -0.0492, at raw's peak L31 -0.1638
+  passA    mean  lr_reg10  axes          axes peak L79 0.6801 -> L40 0.6097 (-0.0705) | raw peak L32 0.7122 -> L40 0.6748 (-0.0374) | margin at L40 -0.0651, at raw's peak L32 -0.0826
+  passA    mean  lr_reg10  pc:unified@2  pc:unified@2 peak L34 0.6205 -> L40 0.6157 (-0.0048) | raw peak L32 0.7122 -> L40 0.6748 (-0.0374) | margin at L40 -0.0591, at raw's peak L32 -0.0936
+  passA    last  paper     axes          axes peak L78 0.6579 -> L40 0.6162 (-0.0417) | raw peak L33 0.6886 -> L40 0.6545 (-0.0340) | margin at L40 -0.0383, at raw's peak L33 -0.1022
+  passA    last  paper     pc:unified@2  pc:unified@2 peak L78 0.6471 -> L40 0.6088 (-0.0383) | raw peak L33 0.6886 -> L40 0.6545 (-0.0340) | margin at L40 -0.0458, at raw's peak L33 -0.0963
+  passA    last  mms       axes          axes peak L78 0.7013 -> L40 0.6356 (-0.0657) | raw peak L78 0.6871 -> L40 0.6520 (-0.0352) | margin at L40 -0.0164, at raw's peak L78 +0.0142
+  passA    last  mms       pc:unified@2  pc:unified@2 peak L78 0.6546 -> L40 0.6191 (-0.0355) | raw peak L78 0.6871 -> L40 0.6520 (-0.0352) | margin at L40 -0.0329, at raw's peak L78 -0.0325
+  passA    last  lr_reg10  axes          axes peak L78 0.6805 -> L40 0.6129 (-0.0676) | raw peak L32 0.6673 -> L40 0.6415 (-0.0258) | margin at L40 -0.0286, at raw's peak L32 -0.0831
+  passA    last  lr_reg10  pc:unified@2  pc:unified@2 peak L78 0.6559 -> L40 0.6205 (-0.0355) | raw peak L32 0.6673 -> L40 0.6415 (-0.0258) | margin at L40 -0.0210, at raw's peak L32 -0.0943
+  <root>   mean  paper     axes          axes peak L32 0.6446 -> L40 0.6308 (-0.0138) | raw peak L32 0.6889 -> L40 0.6652 (-0.0237) | margin at L40 -0.0344, at raw's peak L32 -0.0443
+  <root>   mean  paper     pc:unified@2  pc:unified@2 peak L48 0.6434 -> L40 0.6314 (-0.0120) | raw peak L32 0.6889 -> L40 0.6652 (-0.0237) | margin at L40 -0.0338, at raw's peak L32 -0.0667
+  <root>   mean  mms       axes          axes peak L44 0.6709 -> L40 0.6340 (-0.0368) | raw peak L32 0.7153 -> L40 0.6657 (-0.0496) | margin at L40 -0.0317, at raw's peak L32 -0.0998
+  <root>   mean  mms       pc:unified@2  pc:unified@2 peak L48 0.6455 -> L40 0.6191 (-0.0265) | raw peak L32 0.7153 -> L40 0.6657 (-0.0496) | margin at L40 -0.0466, at raw's peak L32 -0.0966
+  <root>   mean  lr_reg10  axes          axes peak L32 0.6463 -> L40 0.6274 (-0.0189) | raw peak L32 0.6963 -> L40 0.6627 (-0.0336) | margin at L40 -0.0353, at raw's peak L32 -0.0500
+  <root>   mean  lr_reg10  pc:unified@2  pc:unified@2 peak L48 0.6440 -> L40 0.6203 (-0.0238) | raw peak L32 0.6963 -> L40 0.6627 (-0.0336) | margin at L40 -0.0424, at raw's peak L32 -0.0733
+  <root>   last  paper     axes          axes peak L44 0.6474 -> L40 0.6104 (-0.0370) | raw peak L32 0.6671 -> L40 0.6359 (-0.0312) | margin at L40 -0.0255, at raw's peak L32 -0.0792
+  <root>   last  paper     pc:unified@2  pc:unified@2 peak L44 0.6371 -> L40 0.6107 (-0.0263) | raw peak L32 0.6671 -> L40 0.6359 (-0.0312) | margin at L40 -0.0252, at raw's peak L32 -0.0845
+  <root>   last  mms       axes          axes peak L44 0.6519 -> L40 0.6332 (-0.0187) | raw peak L28 0.6932 -> L40 0.6590 (-0.0342) | margin at L40 -0.0258, at raw's peak L28 -0.0840
+  <root>   last  mms       pc:unified@2  pc:unified@2 peak L44 0.6420 -> L40 0.6228 (-0.0191) | raw peak L28 0.6932 -> L40 0.6590 (-0.0342) | margin at L40 -0.0361, at raw's peak L28 -0.0856
+  <root>   last  lr_reg10  axes          axes peak L44 0.6466 -> L40 0.6129 (-0.0337) | raw peak L32 0.6523 -> L40 0.6253 (-0.0270) | margin at L40 -0.0124, at raw's peak L32 -0.0655
+  <root>   last  lr_reg10  pc:unified@2  pc:unified@2 peak L44 0.6450 -> L40 0.6222 (-0.0228) | raw peak L32 0.6523 -> L40 0.6253 (-0.0270) | margin at L40 -0.0031, at raw's peak L32 -0.0731
+
+====================================================================================================
+3. passA 80-layer profile, mean pooling, paper probe, 10 datasets, seed 42.
+====================================================================================================
+  L     raw    axes  pc:u@2  datapca  random  length  axes-raw
+  0  0.5333  0.5005  0.5146  0.5291  0.4914  0.5642   -0.0328
+  2  0.5639  0.5269  0.5034  0.5557  0.5232  0.5642   -0.0370
+  4  0.5684  0.4908  0.4908  0.5588  0.5034  0.5642   -0.0776
+  6  0.5694  0.4904  0.4868  0.5584  0.5444  0.5642   -0.0789
+  8  0.5613  0.4918  0.4885  0.5569  0.5052  0.5642   -0.0695
+ 10  0.5656  0.4924  0.4879  0.5533  0.4757  0.5642   -0.0733
+ 12  0.5670  0.4885  0.4834  0.5456  0.4855  0.5642   -0.0785
+ 14  0.5794  0.4908  0.4814  0.5641  0.4889  0.5642   -0.0886
+ 16  0.6078  0.5062  0.4831  0.5889  0.4960  0.5642   -0.1016
+ 18  0.6225  0.5117  0.5058  0.6183  0.5544  0.5642   -0.1108
+ 20  0.6376  0.5318  0.5293  0.6200  0.5030  0.5642   -0.1058
+ 22  0.6221  0.5279  0.5277  0.6157  0.4759  0.5642   -0.0942
+ 24  0.6339  0.5204  0.5259  0.6356  0.4786  0.5642   -0.1134
+ 26  0.6546  0.5442  0.5491  0.6572  0.4876  0.5642   -0.1104
+ 28  0.6699  0.5960  0.5774  0.6915  0.4912  0.5642   -0.0739
+ 30  0.6812  0.6151  0.6077  0.6862  0.5163  0.5642   -0.0661
+ 32  0.6983  0.6272  0.6197  0.6787  0.5007  0.5642   -0.0711
+ 34  0.6940  0.6334  0.6216  0.6721  0.5667  0.5642   -0.0606
+ 36  0.6964  0.6214  0.6123  0.6812  0.5408  0.5642   -0.0750
+ 38  0.6831  0.6100  0.6148  0.6673  0.5646  0.5642   -0.0731
+ 40  0.6760  0.6103  0.6248  0.6777  0.5700  0.5642   -0.0657
+ 42  0.6672  0.5683  0.6180  0.6646  0.5696  0.5642   -0.0989
+ 44  0.6707  0.6063  0.6214  0.6629  0.5357  0.5642   -0.0645
+ 46  0.6696  0.5782  0.5903  0.6591  0.5352  0.5642   -0.0914
+ 48  0.6639  0.5780  0.5909  0.6574  0.5281  0.5642   -0.0859
+ 50  0.6672  0.5616  0.5738  0.6595  0.5456  0.5642   -0.1055
+ 52  0.6596  0.5440  0.5535  0.6564  0.5590  0.5642   -0.1156
+ 54  0.6584  0.5215  0.5436  0.6560  0.5525  0.5642   -0.1368
+ 56  0.6546  0.5031  0.5141  0.6478  0.5427  0.5642   -0.1515
+ 58  0.6633  0.5037  0.5077  0.6504  0.5516  0.5642   -0.1595
+ 60  0.6566  0.4937  0.4950  0.6461  0.5594  0.5642   -0.1629
+ 62  0.6557  0.4844  0.4809  0.6544  0.5713  0.5642   -0.1713
+ 64  0.6490  0.4757  0.4780  0.6569  0.5491  0.5642   -0.1733
+ 66  0.6502  0.4723  0.4757  0.6645  0.5379  0.5642   -0.1779
+ 68  0.6548  0.4793  0.4792  0.6689  0.5441  0.5642   -0.1755
+ 70  0.6484  0.4932  0.4843  0.6680  0.5562  0.5642   -0.1553
+ 72  0.6473  0.4846  0.4812  0.6556  0.5718  0.5642   -0.1627
+ 74  0.6445  0.5313  0.5130  0.6495  0.5712  0.5642   -0.1132
+ 76  0.6540  0.5662  0.5624  0.6416  0.5581  0.5642   -0.0878
+ 78  0.6302  0.6678  0.5807  0.6020  0.5033  0.5642   +0.0376
+
+====================================================================================================
+4. paper5 subset on passA: the paper's own five datasets, 80 layers, seed 42.
+   (The paper's claim is about ITS five datasets, so this is the like-for-like grid.)
+====================================================================================================
+  passA paper5 mean  paper     axes          wins vs raw 15/80 | vs datapca 37/80 | mean -0.0453 | argmax L21 +0.0209 | L40 +0.0071
+  passA paper5 mean  paper     pc:unified    wins vs raw 47/80 | vs datapca 74/80 | mean +0.0029 | argmax L77 +0.0461 | L40 -0.0037
+  passA paper5 mean  paper     pc:unified@2  wins vs raw 17/80 | vs datapca@2 62/80 | mean -0.0643 | argmax L19 +0.0246 | L40 +0.0145
+  passA paper5 mean  paper     pc:deception  wins vs raw  9/80 | vs datapca 28/80 | mean -0.0673 | argmax L19 +0.0173 | L40 -0.0360
+  passA paper5 mean  paper     random        wins vs raw  0/80 | vs datapca  4/80 | mean -0.2375 | argmax L4 -0.0259 | L40 -0.2225
+  passA paper5 mean  paper     length        wins vs raw  0/80 | vs datapca  0/80 | mean -0.2697 | argmax L0 -0.0463 | L40 -0.3238
+  passA paper5 mean  paper     datapca       wins vs raw  1/80 | vs datapca  0/80 | mean -0.0306 | argmax L28 +0.0003 | L40 -0.0170
+  passA paper5 mean  mms       axes          wins vs raw 22/80 | vs datapca 30/80 | mean -0.0636 | argmax L79 +0.0344 | L40 +0.0251
+  passA paper5 mean  mms       pc:unified    wins vs raw  0/80 | vs datapca 11/80 | mean -0.0761 | argmax L11 -0.0017 | L40 -0.0886
+  passA paper5 mean  mms       pc:unified@2  wins vs raw 17/80 | vs datapca@2 55/80 | mean -0.0635 | argmax L19 +0.0262 | L40 +0.0169
+  passA paper5 mean  mms       pc:deception  wins vs raw  0/80 | vs datapca  6/80 | mean -0.1271 | argmax L11 -0.0105 | L40 -0.1026
+  passA paper5 mean  mms       random        wins vs raw  0/80 | vs datapca  1/80 | mean -0.2327 | argmax L4 -0.0287 | L40 -0.2140
+  passA paper5 mean  mms       length        wins vs raw  0/80 | vs datapca  0/80 | mean -0.2664 | argmax L0 -0.0831 | L40 -0.3188
+  passA paper5 mean  mms       datapca       wins vs raw  0/80 | vs datapca  0/80 | mean -0.0271 | argmax L79 -0.0063 | L40 -0.0115
+  passA paper5 mean  lr_reg10  axes          wins vs raw 21/80 | vs datapca 40/80 | mean -0.0485 | argmax L79 +0.0310 | L40 +0.0161
+  passA paper5 mean  lr_reg10  pc:unified    wins vs raw 30/80 | vs datapca 63/80 | mean -0.0078 | argmax L77 +0.0442 | L40 -0.0211
+  passA paper5 mean  lr_reg10  pc:unified@2  wins vs raw 17/80 | vs datapca@2 66/80 | mean -0.0608 | argmax L41 +0.0242 | L40 +0.0182
+  passA paper5 mean  lr_reg10  pc:deception  wins vs raw  1/80 | vs datapca 16/80 | mean -0.0967 | argmax L11 +0.0119 | L40 -0.0581
+  passA paper5 mean  lr_reg10  random        wins vs raw  0/80 | vs datapca  1/80 | mean -0.2341 | argmax L4 -0.0146 | L40 -0.2222
+  passA paper5 mean  lr_reg10  length        wins vs raw  0/80 | vs datapca  0/80 | mean -0.2691 | argmax L0 -0.0678 | L40 -0.3175
+  passA paper5 mean  lr_reg10  datapca       wins vs raw  0/80 | vs datapca  0/80 | mean -0.0298 | argmax L79 -0.0022 | L40 -0.0107
+  passA paper5 last  paper     axes          wins vs raw 14/80 | vs datapca 44/80 | mean -0.0257 | argmax L5 +0.0306 | L40 -0.0218
+  passA paper5 last  paper     pc:unified    wins vs raw 16/80 | vs datapca 41/80 | mean -0.0300 | argmax L0 +0.0581 | L40 -0.0305
+  passA paper5 last  paper     pc:unified@2  wins vs raw 12/80 | vs datapca@2 76/80 | mean -0.0419 | argmax L0 +0.0402 | L40 -0.0255
+  passA paper5 last  paper     pc:deception  wins vs raw  5/80 | vs datapca 30/80 | mean -0.0818 | argmax L0 +0.0277 | L40 -0.0707
+  passA paper5 last  paper     random        wins vs raw  4/80 | vs datapca  6/80 | mean -0.2539 | argmax L1 +0.0288 | L40 -0.2534
+  passA paper5 last  paper     length        wins vs raw  1/80 | vs datapca  1/80 | mean -0.2823 | argmax L0 +0.0050 | L40 -0.3276
+  passA paper5 last  paper     datapca       wins vs raw  3/80 | vs datapca  0/80 | mean -0.0410 | argmax L67 +0.0014 | L40 -0.0475
+  passA paper5 last  mms       axes          wins vs raw 45/80 | vs datapca 66/80 | mean -0.0028 | argmax L9 +0.0434 | L40 +0.0113
+  passA paper5 last  mms       pc:unified    wins vs raw 12/80 | vs datapca 31/80 | mean -0.0501 | argmax L8 +0.0706 | L40 -0.0843
+  passA paper5 last  mms       pc:unified@2  wins vs raw 28/80 | vs datapca@2 76/80 | mean -0.0115 | argmax L9 +0.0578 | L40 -0.0084
+  passA paper5 last  mms       pc:deception  wins vs raw  3/80 | vs datapca 11/80 | mean -0.1155 | argmax L0 +0.0169 | L40 -0.1227
+  passA paper5 last  mms       random        wins vs raw  2/80 | vs datapca  5/80 | mean -0.2431 | argmax L1 +0.0243 | L40 -0.2512
+  passA paper5 last  mms       length        wins vs raw  0/80 | vs datapca  1/80 | mean -0.2713 | argmax L0 -0.0153 | L40 -0.3239
+  passA paper5 last  mms       datapca       wins vs raw 13/80 | vs datapca  0/80 | mean -0.0313 | argmax L73 +0.0093 | L40 -0.0452
+  passA paper5 last  lr_reg10  axes          wins vs raw 24/80 | vs datapca 62/80 | mean -0.0142 | argmax L26 +0.0289 | L40 -0.0027
+  passA paper5 last  lr_reg10  pc:unified    wins vs raw 20/80 | vs datapca 36/80 | mean -0.0268 | argmax L23 +0.0342 | L40 -0.0218
+  passA paper5 last  lr_reg10  pc:unified@2  wins vs raw 20/80 | vs datapca@2 75/80 | mean -0.0269 | argmax L26 +0.0387 | L40 -0.0044
+  passA paper5 last  lr_reg10  pc:deception  wins vs raw  2/80 | vs datapca 29/80 | mean -0.0874 | argmax L30 +0.0177 | L40 -0.0784
+  passA paper5 last  lr_reg10  random        wins vs raw  0/80 | vs datapca  5/80 | mean -0.2513 | argmax L1 -0.0133 | L40 -0.2496
+  passA paper5 last  lr_reg10  length        wins vs raw  0/80 | vs datapca  1/80 | mean -0.2770 | argmax L1 -0.0744 | L40 -0.3148
+  passA paper5 last  lr_reg10  datapca       wins vs raw  0/80 | vs datapca  0/80 | mean -0.0366 | argmax L67 -0.0031 | L40 -0.0364

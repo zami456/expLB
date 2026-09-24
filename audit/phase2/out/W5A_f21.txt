@@ -1,0 +1,30 @@
+
+==============================================================================
+== F-21  NDIF per-process memory cap  (logs/scale_3b_generate.log)
+==============================================================================
+ log: 4877518 B  mtime 2026-09-20 15:51:28.962943
+     172| 2026-09-20 13:09:10,784 - WARNING -   session attempt 1/4 (2 batches) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 122.00 MiB. GPU 3 has a total capacity of 44.42 GiB of which 36.77 GiB is free. Includin
+     180| 2026-09-20 13:09:16,057 - WARNING -   session attempt 2/4 (2 batches) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 58.00 MiB. GPU 3 has a total capacity of 44.42 GiB of which 36.75 GiB is free. Including
+     190| 2026-09-20 13:09:24,640 - WARNING -   session attempt 3/4 (2 batches) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 122.00 MiB. GPU 3 has a total capacity of 44.42 GiB of which 36.79 GiB is free. Includin
+     200| 2026-09-20 13:09:39,152 - WARNING -   session attempt 4/4 (2 batches) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 122.00 MiB. GPU 3 has a total capacity of 44.42 GiB of which 36.83 GiB is free. Includin
+     217| 2026-09-20 13:10:05,687 - WARNING -   session attempt 1/4 (2 batches) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 140.00 MiB. GPU 3 has a total capacity of 44.42 GiB of which 36.83 GiB is free. Includin
+     227| 2026-09-20 13:10:11,182 - WARNING -   session attempt 2/4 (2 batches) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 140.00 MiB. GPU 3 has a total capacity of 44.42 GiB of which 36.85 GiB is free. Includin
+     237| 2026-09-20 13:10:19,744 - WARNING -   session attempt 3/4 (2 batches) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 140.00 MiB. GPU 3 has a total capacity of 44.42 GiB of which 36.81 GiB is free. Includin
+     245| 2026-09-20 13:10:34,123 - WARNING -   session attempt 4/4 (2 batches) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 140.00 MiB. GPU 3 has a total capacity of 44.42 GiB of which 36.79 GiB is free. Includin
+     260| 2026-09-20 13:11:00,418 - WARNING -   session attempt 1/4 (2 batches) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 36.00 MiB. GPU 3 has a total capacity of 44.42 GiB of which 36.73 GiB is free. Including
+     268| 2026-09-20 13:11:05,815 - WARNING -   session attempt 2/4 (2 batches) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 52.00 MiB. GPU 3 has a total capacity of 44.42 GiB of which 36.77 GiB is free. Including
+     276| 2026-09-20 13:11:14,202 - WARNING -   session attempt 3/4 (2 batches) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 36.00 MiB. GPU 3 has a total capacity of 44.42 GiB of which 36.75 GiB is free. Including
+     286| 2026-09-20 13:11:28,702 - WARNING -   session attempt 4/4 (2 batches) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 136.00 MiB. GPU 3 has a total capacity of 44.42 GiB of which 36.83 GiB is free. Includin
+  ... (truncated at 12 matches)
+ -- lines naming gen_batch / batch sweep --
+ -- smoke3b store --
+  C:/Users/user4/expLB/run-scale/smoke3b -> MISSING
+  C:/Users/user4/expLB/run-scale -> EXISTS
+    ['3b', '8b']
+ -- chain script settings --
+  run_scale_chain.ps1:148  # leaving 80-200 MiB of headroom. The allocation scales linearly with gen_batch:
+  run_scale_chain.ps1:150  # gen_batch 96 was copied from the 70B chain, whose deployment has a far larger allowance
+  run_scale_chain.ps1:153  "--output_dir", "$out\responses", "--gen_batch", "8", "--session_batches", "4",
+  run_paper16_chain.ps1:64  --output_dir "$out\responses" --gen_batch 96 --session_batches 8 `
+  run_paper16_shared_chain.ps1:62  "--output_dir", "$out\responses", "--gen_batch", "96", "--session_batches", "8")
+python exit 0

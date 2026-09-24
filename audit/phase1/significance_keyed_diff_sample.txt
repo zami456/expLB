@@ -1,0 +1,21 @@
+== run-crossgen/significance.json  key=['block', 'pooling', 'layer', 'probe', 'comparison']
+   tests git=192 lab=4788 keys common=192 git-only=0 dup-keys git=0 lab=0
+   differing fields on common tests: 192; max |delta| per field: {'dataset_q_bh': 0.391403}
+     ('10', 'mean', '40', 'mms', 'pc:unified@2 - raw') dataset_q_bh: git=0.9206025974025973 lab=0.8310933946008042
+     ('10', 'last', '40', 'lr_reg10', 'datapca - raw') dataset_q_bh: git=0.9206025974025973 lab=0.8332431780821917
+     ('9', 'mean', '40', 'paper', 'pc:deception - raw') dataset_q_bh: git=0.9563826086956521 lab=0.9352080831408776
+     ('9', 'mean', '40', 'lr_reg10', 'axes - datapca') dataset_q_bh: git=0.9814231578947368 lab=0.9816961789375581
+== run-crossgen/kd11/banks/kd_s23/significance.json  key=['block', 'pooling', 'layer', 'probe', 'comparison']
+   tests git=468 lab=5544 keys common=468 git-only=0 dup-keys git=0 lab=0
+   differing fields on common tests: 476; max |delta| per field: {'dataset_q_bh': 0.11599, 'significant_datasets': 'non-numeric'}
+     ('10', 'mean', '40', 'mms', 'pc:deception - raw') dataset_q_bh: git=0.7715675675675675 lab=0.7692539792387544
+     ('9', 'last', '40', 'mms', 'axes - raw') dataset_q_bh: git=0.5473099236641221 lab=0.6523611111111112
+     ('9', 'mean', '40', 'paper', 'axes - random') dataset_q_bh: git=0.6061714285714286 lab=0.7115113220338983
+     ('9', 'mean', '20', 'mms', 'pc:unified - random') dataset_q_bh: git=0.5728729927007299 lab=0.68112
+== run-crossgen/kd11/significance.json  key=['block', 'pooling', 'layer', 'probe', 'comparison']
+   tests git=4032 lab=4788 keys common=4032 git-only=0 dup-keys git=0 lab=0
+   differing fields on common tests: 4020; max |delta| per field: {'dataset_q_bh': 0.0441}
+     ('10', 'mean', '52', 'paper', 'axes - datapca') dataset_q_bh: git=0.5952454976303317 lab=0.5989807228915662
+     ('10', 'last', '12', 'lr_reg10', 'axes - raw') dataset_q_bh: git=0.7579261146496815 lab=0.7576721179624665
+     ('9', 'last', '72', 'paper', 'datapca - raw') dataset_q_bh: git=0.4645565217391304 lab=0.4895768488745981
+     ('10', 'mean', '32', 'paper', 'axes - random') dataset_q_bh: git=0.4827888268156424 lab=0.4894569157392687

@@ -2,6 +2,14 @@
 
 Guidance for working in this repo (a.k.a. `expLB` / `dishonesty-bench` / **Liars' Bench**).
 
+> ## ✍️ Writing the thesis? Read `thesis_guide/README.md` first — every time
+> **UPDATE 2026-09-24 (owner request).** Any session that writes or edits thesis text (`thesis/`, LaTeX,
+> compiled in Overleaf) must first read `thesis_guide/README.md` and follow its pre-writing checklist.
+> It maps every finding, figure, method, pitfall and correction across **both** co-authors' branches
+> (`asix` = owner; `origin/paper` + `origin/feat/persona-pc-ood` = zami456), the audit (`audit/`), the ledger
+> (`kd/docs/FINDINGS.md`, F-01…F-128) and lab-only data. `thesis/` holds only the LaTeX and the files it includes.
+> At the start of every session, read thesis_tools/planning/THESIS_BRIEF.md, PROGRESS_THESIS.md and GLOSSARY.md.
+
 > ## ⚠️ Active research: read `docs/ONBOARDING.md` first
 >
 > This repo is currently the base for a **persona-coordinates replication on
@@ -62,6 +70,19 @@ Python **>=3.12** (`.python-version` pins 3.12), dependency lock in `uv.lock`.
 | `docs/TODO.md`, `docs/OPEN_DECISIONS.md` | What is still owed (stage / gate / measured value) and what needs the owner's call. Kept so state survives a context loss. |
 | `.devcontainer/` | Dev container (`mcr.microsoft.com/devcontainers/base:ubuntu`); `postCreateCommand` installs Claude CLI and runs `git submodule update --init --recursive`. |
 | `.dist/` | Empty / build output placeholder. |
+
+> **UPDATE 2026-09-24 (P17) — refers to the `scale/` row in the table above.** The scale result is
+> now F-110 + F-121, not F-63 alone. Best vs raw, 3B → 8B → 70B: the 26-persona bank goes
+> +0.038 → +0.015 → −0.012, the 36-persona kd bank (s23) +0.036 → +0.019 → +0.005. Both banks
+> decline, so the decline is the method's, not the bank's.
+> **Source:** `kd/docs/FINDINGS.md` F-110, F-121 (rung table); `audit/p17/C_REPORT.md` (F-121 HOLDS
+> 17/17) — asix @ e917ecd3 + working tree.
+>
+> **UPDATE 2026-09-24 (P17) — refers to the `run-cap/` … `run-kd/` row in the table above.** Not all
+> lab-PC evidence is under `expLB\`: F-110, F-113 (part), F-114, F-115, F-116, F-120, F-121 and F-126
+> rest on lab-only stores in no git tree, including the isolated `C:\Users\user4\expLB-resplit\`
+> stores and `phase6`. F-121's 290-file Drive backup was not checked.
+> **Source:** `audit/p17/C_REPORT.md` — "LAB-ONLY evidence".
 
 ### Config / meta files
 

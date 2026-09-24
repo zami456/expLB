@@ -1,0 +1,13 @@
+matrix: run-crossgen/kd11/matrices/mean_L40_s42.json
+
+dataset set                            pairs     raw  axis@2 d  dPCA@2 d  axis@2 - dPCA@2   axes d  k=5 axis d
+paper's five (mask)                       20  0.8090   +0.0262   -0.1120          +0.1382  +0.0130     -0.0173
+swap mask -> harm-pressure-choice         20  0.7513   +0.1275   -0.0181          +0.1456  +0.1045     +0.0862
+paper's five minus instructed-deception    12  0.7460   +0.0542   -0.1375          +0.1917  +0.0481     +0.0339
+paper's five minus mask                   12  0.8723   +0.0522   -0.0706          +0.1228  +0.0309     -0.0064
+paper's five minus convincing-game        12  0.7457   +0.0452   -0.1115          +0.1567  +0.0350     +0.0156
+paper's five minus ai_liar                12  0.8727   -0.0487   -0.1831          +0.1344  -0.0562     -0.1102
+paper's five minus roleplaying            12  0.8082   +0.0280   -0.0574          +0.0854  +0.0070     -0.0192
+
+Paper (Mahadik & Skapars, Fig 9A, k=1): axis vs raw +0.10..+0.17; dataset-PCA vs raw -0.12..+0.01;
+so the paper's axis-minus-datasetPCA margin is +0.13..+0.23.

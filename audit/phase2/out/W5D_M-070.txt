@@ -1,0 +1,50 @@
+### run-coords/q8_trained_pertoken.json
+    protocol=leave-one-dataset-out control=alpaca layers=[20, 22, 28, 40, 44, 48] n_rows=2000 tokens_per_row=16
+    held_out folds (9): ['ai_liar', 'convincing-game', 'harm-pressure-choice', 'harm-pressure-knowledge-report', 'insider-trading', 'instructed-deception', 'mask', 'roleplaying', 'sandbagging_v2']
+    results type=list len=106
+    result keys: ['aggregation', 'auroc_mean', 'layer', 'per_fold', 'probe', 'tpr_mean']
+  length_only/n_tok            L20=0.6166  L22=0.6166  L28=0.6166  L40=0.6166  L44=0.6166  L48=0.6166   best=L20 0.6166
+                               L40 - L28 = +0.0000
+  pool_last_lr/pooled          L20=0.8289  L22=0.8212  L28=0.8334  L40=0.7890  L44=0.7953  L48=0.7723   best=L28 0.8334
+                               L40 - L28 = -0.0444
+  pool_last_mms/pooled         L20=0.8276  L22=0.8399  L28=0.8699  L40=0.8760  L44=0.8657  L48=0.8537   best=L40 0.8760
+                               L40 - L28 = +0.0061
+  pool_mean_lr/pooled          L20=0.8333  L22=0.8206  L28=0.8453  L40=0.8579  L44=0.8578  L48=0.8411   best=L40 0.8579
+                               L40 - L28 = +0.0126
+  pool_mean_mms/pooled         L20=0.8570  L22=0.8544  L28=0.8764  L40=0.8826  L44=0.8783  L48=0.8739   best=L40 0.8826
+                               L40 - L28 = +0.0061
+  tok_lr/last                  L20=0.7103  L22=0.7307  L28=0.7682  L40=0.7114  L44=0.7687  L48=0.7293   best=L44 0.7687
+                               L40 - L28 = -0.0568
+  tok_lr/max                   L20=0.7607  L22=0.7548  L28=0.7825  L40=0.8409  L44=0.8254  L48=0.8002   best=L40 0.8409
+                               L40 - L28 = +0.0583
+  tok_lr/mean                  L20=0.7851  L22=0.7793  L28=0.7866  L40=0.8391  L44=0.8507  L48=0.8294   best=L44 0.8507
+                               L40 - L28 = +0.0524
+  tok_lr/top10pct              L20=0.7845  L22=0.7761  L28=0.7980  L40=0.8526  L44=0.8440  L48=0.8201   best=L40 0.8526
+                               L40 - L28 = +0.0547
+  tok_lr_null/last             L44=0.4848   best=L44 0.4848
+  tok_lr_null/max              L44=0.5528   best=L44 0.5528
+  tok_lr_null/mean             L44=0.4759   best=L44 0.4759
+  tok_lr_null/top10pct         L44=0.5411   best=L44 0.5411
+  tok_mms/last                 L20=0.7577  L22=0.7610  L28=0.7776  L40=0.6935  L44=0.7037  L48=0.6956   best=L28 0.7776
+                               L40 - L28 = -0.0841
+  tok_mms/max                  L20=0.7892  L22=0.8047  L28=0.8258  L40=0.7970  L44=0.8003  L48=0.7813   best=L28 0.8258
+                               L40 - L28 = -0.0288
+  tok_mms/mean                 L20=0.7116  L22=0.7001  L28=0.7695  L40=0.7421  L44=0.7491  L48=0.7332   best=L28 0.7695
+                               L40 - L28 = -0.0274
+  tok_mms/top10pct             L20=0.7966  L22=0.7961  L28=0.8279  L40=0.7904  L44=0.7881  L48=0.7741   best=L28 0.8279
+                               L40 - L28 = -0.0375
+  zeroshot_axis/last           L20=0.7305  L22=0.7337  L28=0.7455  L40=0.7558  L44=0.7662  L48=0.7278   best=L44 0.7662
+                               L40 - L28 = +0.0103
+  zeroshot_axis/max            L20=0.8248  L22=0.7820  L28=0.7919  L40=0.8139  L44=0.8149  L48=0.7864   best=L20 0.8248
+                               L40 - L28 = +0.0220
+  zeroshot_axis/mean           L20=0.7016  L22=0.6853  L28=0.7469  L40=0.7693  L44=0.7488  L48=0.7157   best=L40 0.7693
+                               L40 - L28 = +0.0224
+  zeroshot_axis/top10pct       L20=0.7980  L22=0.7609  L28=0.7948  L40=0.8087  L44=0.8047  L48=0.7757   best=L40 0.8087
+                               L40 - L28 = +0.0139
+
+--- layers stored by other run-coords sweep files ---
+  layer_sweep_mean.json            layers=None
+  layer_sweep_mms.json             layers=None
+  layer_sweep_passB_last.json      layers=None
+  layer_sweep_passB_mms.json       layers=None
+  pertoken_q8.json                 layers=None

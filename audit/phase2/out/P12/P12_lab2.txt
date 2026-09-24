@@ -1,0 +1,99 @@
+==============================================================================
+L20   C:/Users/user4/expLB/run-premise/clustered/clustered_L20_mean_s42.json
+  clusters = {"lb_harm": ["harm-pressure-choice", "harm-pressure-knowledge-report", "harm-pressure-kr-matched"], "lb_scenario": ["instructed-deception", "convincing-game", "insider-trading"], "apollo": ["ai_liar", "roleplaying", "sandbagging_v2"], "mask": ["mask"], "ours": ["sycophancy_mt"]}
+  leaked   = ["harm-pressure-knowledge-report", "harm-pressure-kr-matched"]
+  probe=paper pooling=mean seed=42
+  summary (verbatim) = {
+  "all": {
+    "n": 11,
+    "gain_lodo": 0.15288618426309852,
+    "gain_loco": 0.12894129986390462,
+    "loco_positive": 10
+  },
+  "clean": {
+    "n": 9,
+    "gain_lodo": 0.1471263611748478,
+    "gain_loco": 0.1571031080156823,
+    "loco_positive": 9
+  }
+}
+  n targets = 11   clean = 9
+  mean single_offdiag = 0.6315
+  gain LODO (all 11)  = +0.1529   positive 11/11
+  gain LOCO (all 11)  = +0.1289   positive 10/11
+  gain LOCO (clean 9) = +0.1571   positive 9/9
+  HP-KR  LODO 0.7090  LOCO 0.4311  drop 0.2779
+  LOCO targets NOT positive: ['harm-pressure-knowledge-report']
+==============================================================================
+L32   C:/Users/user4/expLB/run-premise/clustered/clustered_L32_mean_s42.json
+  clusters = {"lb_harm": ["harm-pressure-choice", "harm-pressure-knowledge-report", "harm-pressure-kr-matched"], "lb_scenario": ["instructed-deception", "convincing-game", "insider-trading"], "apollo": ["ai_liar", "roleplaying", "sandbagging_v2"], "mask": ["mask"], "ours": ["sycophancy_mt"]}
+  leaked   = ["harm-pressure-knowledge-report", "harm-pressure-kr-matched"]
+  probe=paper pooling=mean seed=42
+  summary (verbatim) = {
+  "all": {
+    "n": 11,
+    "gain_lodo": 0.11114173460489499,
+    "gain_loco": 0.1308704850928499,
+    "loco_positive": 11
+  },
+  "clean": {
+    "n": 9,
+    "gain_lodo": 0.08662146992232185,
+    "gain_loco": 0.11680788358145493,
+    "loco_positive": 9
+  }
+}
+  n targets = 11   clean = 9
+  mean single_offdiag = 0.6908
+  gain LODO (all 11)  = +0.1111   positive 10/11
+  gain LOCO (all 11)  = +0.1309   positive 11/11
+  gain LOCO (clean 9) = +0.1168   positive 9/9
+  HP-KR  LODO 0.9372  LOCO 0.9009  drop 0.0362
+  LOCO targets NOT positive: []
+==============================================================================
+L40   C:/Users/user4/expLB/run-premise/clustered/clustered_L40_mean_s42.json
+  clusters = {"lb_harm": ["harm-pressure-choice", "harm-pressure-knowledge-report", "harm-pressure-kr-matched"], "lb_scenario": ["instructed-deception", "convincing-game", "insider-trading"], "apollo": ["ai_liar", "roleplaying", "sandbagging_v2"], "mask": ["mask"], "ours": ["sycophancy_mt"]}
+  leaked   = ["harm-pressure-knowledge-report", "harm-pressure-kr-matched"]
+  probe=paper pooling=mean seed=42
+  summary (verbatim) = {
+  "all": {
+    "n": 11,
+    "gain_lodo": 0.1814498636450913,
+    "gain_loco": 0.12544185239344374,
+    "loco_positive": 10
+  },
+  "clean": {
+    "n": 9,
+    "gain_lodo": 0.1611248461448197,
+    "gain_loco": 0.15038641885413445,
+    "loco_positive": 8
+  }
+}
+  n targets = 11   clean = 9
+  mean single_offdiag = 0.6640
+  gain LODO (all 11)  = +0.1814   positive 11/11
+  gain LOCO (all 11)  = +0.1254   positive 10/11
+  gain LOCO (clean 9) = +0.1504   positive 8/9
+  HP-KR  LODO 0.9674  LOCO 0.6492  drop 0.3182
+  LOCO targets NOT positive: ['harm-pressure-choice']
+==============================================================================
+the briefing's OTHER p = 0.38: 'pooled ~6,700 rows and pooled ~666 rows are statistically indistinguishable (p = 0.38)'
+  n_train = {"single_mean": 666, "pooled_full": 7336, "pooled_match": 414}
+  summary  pooled_full 0.9447   pooled_match 0.8924   pooled_lodo 0.8545   pooled_lodo_match 0.8500
+  pooled_full - pooled_match         +0.0523  95% CI [+0.0206, +0.0863]  two-sided p 0.000
+  pooled_lodo - pooled_lodo_match    +0.0045  95% CI [-0.0235, +0.0331]  two-sided p 0.744
+  key datasets: ["instructed-deception", "harm-pressure-choice", "harm-pressure-knowledge-report", "harm-pressure-kr-matched", "convincing-game", "insider-trading", "ai_liar", "sandbagging_v2", "roleplaying", "mask", "sycophancy_mt"]
+  key layer: 40
+  key pairs: [{"source": "instructed-deception", "target": "harm-pressure-choice", "auroc": 0.7055837563451777, "cos": -0.017812956124544144, "mahal_cos": 0.004100496074660103}, {"source": "instructed-deception", "target": "harm-pressure-knowledge-report", "auroc": 0.6441964285714286, "cos": -0.011442549526691437, "mahal_cos": 0.004426766832852672}, {"source": "instructed-deception", "target": "harm-pressure-k
+  key pooling: mean
+  key predictors: {"cos": {"r": 0.4939689526884588, "r2": 0.24400532622013285, "n": 110}, "mahal_cos": {"r": 0.12859765032251397, "r2": 0.016537355668471577, "n": 110}}
+  key probe: paper
+  key seed: 42
+==============================================================================
+mtimes
+      3364  2026-09-22 16:58:55  C:/Users/user4/expLB/run-premise/clustered/clustered_L20_mean_s42.json
+      3361  2026-09-22 16:59:17  C:/Users/user4/expLB/run-premise/clustered/clustered_L32_mean_s42.json
+      3360  2026-09-22 16:59:39  C:/Users/user4/expLB/run-premise/clustered/clustered_L40_mean_s42.json
+      5168  2026-09-22 16:07:02  C:/Users/user4/expLB/run-premise/cluster_perm_kd_matched.json
+     24283  2026-09-21 14:26:55  C:/Users/user4/expLB/run-premise/premise_L40_mean_s42.json
+python exit 0

@@ -1,0 +1,15 @@
+id,source,source_ref,claim_short,numbers,layer,dataset_hint,status
+H-067,collaborator note,src/probes/deception-detection/results/persona_ood_ext_L44/summary.md:33,"extended axis, AUROC | 0.887 | **0.899** | 0.884 |",0.887; 0.899; 0.884,,,CANDIDATE
+H-068,collaborator note,src/probes/deception-detection/results/persona_ood_ext_L44/summary.md:35,"base probe (RepE-trained), AUROC | 0.697 | **0.778** | 0.756 |",0.697; 0.778; 0.756,,,CANDIDATE
+H-069,collaborator note,src/probes/deception-detection/results/persona_ood_ext_L44/summary.md:46,"`ext_axis1` is the best arm** on AUROC (0.9034) and second on balanced accuracy, as at both",0.9034,,,CANDIDATE
+H-070,collaborator note,src/probes/deception-detection/results/persona_ood_ext_L44/summary.md:48,"The 1-d contrast beats the 3-d subspace**: 0.9034 against 0.8799 for `ext_pc3`, and",0.9034; 0.8799,,,CANDIDATE
+H-071,collaborator note,src/probes/deception-detection/results/persona_ood_ext_L44/summary.md:51,"`denial_axis1` leads on balanced accuracy** (0.7342 vs 0.7216), as at layer 40. The arm that",0.7342; 0.7216,,,CANDIDATE
+H-072,collaborator note,src/probes/deception-detection/results/persona_ood_ext_L44/summary.md:53,"The persona-bank repair holds**: HP-KR zero-shot 0.589 under the published 8v7 grouping,",0.589,,,CANDIDATE
+H-073,collaborator note,src/probes/deception-detection/results/persona_ood_ext_L44/summary.md:61,"Read at the per-example maximum instead of the mean, CG does not degrade — 0.954 → 0.993 →",0.954; 0.993,,,CANDIDATE
+H-074,collaborator note,src/probes/deception-detection/results/persona_ood_ext_L44/summary.md:62,0.991 — because at depth its lie is carried by a few tokens that the mean dilutes. See,0.991,,,CANDIDATE
+H-075,collaborator note,src/probes/deception-detection/results/persona_ood_followup_L20/summary.md:18,"AUROC on all five scored datasets at **Δ = 0.0000**. One token per example, so pooled and",0.0000,,,CANDIDATE
+H-076,collaborator note,src/probes/deception-detection/results/persona_ood_followup_L20/summary.md:21,it is the Follow-Up Probe again: **0.6364 / 0.6226** (AUROC / balanced accuracy) against the,0.6364; 0.6226,,,CANDIDATE
+H-077,collaborator note,src/probes/deception-detection/results/persona_ood_followup_L20/summary.md:28,Liars' Bench datasets it trails the extended axis on balanced accuracy (0.622 against 0.638) and,0.622; 0.638,,,CANDIDATE
+H-078,collaborator note,src/probes/deception-detection/results/persona_ood_followup_L20/summary.md:29,leads it on recall and AUROC (0.559 and 0.636 against 0.349 and 0.552).,0.559; 0.636; 0.349; 0.552,,,CANDIDATE
+H-079,collaborator note,src/probes/deception-detection/results/persona_ood_followup_L20/summary.md:62,"inverts there too, and it never inverted on response tokens (0.99). Whatever flips the sign at",0.99,,,CANDIDATE
+H-080,collaborator note,src/probes/deception-detection/results/persona_ood_followup_L20/summary.md:91,"averages **0.685** off the diagonal, against **0.648** on response tokens. It improves most on CG",0.685; 0.648,,,CANDIDATE

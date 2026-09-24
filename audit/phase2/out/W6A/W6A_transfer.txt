@@ -1,0 +1,372 @@
+
+==============================================================================
+FILE PROVENANCE (md5 + size of every file this script reads)
+==============================================================================
+layer_sweep_passB_mms.json            3174 B  md5 3506b84d16e7b686c094de79c468f708
+layer_sweep_passB_last.json           3173 B  md5 67cf30ed464d53b14526d0545dc53308
+layer_sweep_mms.json                  3022 B  md5 6a6788e6c726569f8e709760dc5209a2
+layer_sweep_mean.json                 3027 B  md5 430e636c0652c333720c60a60619d323
+q6_layers.json                       11720 B  md5 01e35cf0b472cb13e05ec871d7ab27c6
+significance.json                    19244 B  md5 b52ff6166e2849258cf0e34a8715eecf
+q3_q4_bootstrap.json                 24187 B  md5 2f616b3ed18c3d74863635bb0ba4053e
+pertoken_q8.json                     10808 B  md5 ee4f78d17623e37098e18ac2933b96fa
+q8_trained_pertoken.json            188408 B  md5 907b05ce36f8accf1a21bae09e305ce2
+q11_sleeper_L44_last.json             8468 B  md5 dd99eba1294d3e733bee88884f95905a
+zeroshot_nulls.json                  11743 B  md5 0c241a653587a570ed37a9bffe578dcd
+splits.json                           3090 B  md5 2dcc63bcdb3f2528beaffe2d9584f226
+p1_L44_last_withsyc.json             60919 B  md5 45270a3c1fe942bd2820481d2e99c30e
+(cache) confounds_L44_last.json      10004 B  md5 11bc6e6567a3ce77f398b63572ec5cbc
+
+==============================================================================
+O-059  Q6 -- median layer-40 gain over the better of 20/22
+==============================================================================
+n rows = 23  targets = [20, 22, 40]  tol = 0.02
+
+classified as PERSONA (13):
+   trained transfer, full corpus        pc:deception / mms / mean                  gain40=+0.1370
+   trained transfer, full corpus        axes / mms / mean                          gain40=+0.1510
+   trained transfer, full corpus        pc:deception / mms / last                  gain40=+0.0638
+   trained transfer, full corpus        axes / mms / last                          gain40=+0.0852
+   trained transfer, Pass A (no layer 22) pc:deception / lr_reg10 / mean             gain40=+0.0666
+   trained transfer, Pass A (no layer 22) axes / lr_reg10 / mean                     gain40=+0.1135
+   trained transfer, Pass A (no layer 22) pc:deception / mms / mean                  gain40=+0.1157
+   trained transfer, Pass A (no layer 22) axes / mms / mean                          gain40=+0.1135
+   zero-shot, full corpus               deception contrast axis / mean             gain40=+0.2335
+   zero-shot, full corpus               PC1 / mean                                 gain40=+0.1784
+   zero-shot per-token, Pass C          axis / mean                                gain40=+0.0665
+   zero-shot per-token, Pass C          axis / top10pct                            gain40=-0.0283
+   leave-one-dataset-out, Pass C        zeroshot_axis / top10pct                   gain40=+0.0107
+classified as RAW (10):
+   trained transfer, full corpus        raw / mms / mean                           gain40=+0.0169
+   trained transfer, full corpus        raw / mms / last                           gain40=-0.0157
+   trained transfer, Pass A (no layer 22) raw / lr_reg10 / mean                      gain40=-0.0012
+   trained transfer, Pass A (no layer 22) raw / mms / mean                           gain40=+0.0113
+   leave-one-dataset-out, Pass C        tok_lr / top10pct                          gain40=+0.0681
+   leave-one-dataset-out, Pass C        tok_lr / mean                              gain40=+0.0540
+   leave-one-dataset-out, Pass C        tok_mms / mean                             gain40=+0.0305
+   leave-one-dataset-out, Pass C        pool_mean_mms / pooled                     gain40=+0.0256
+   leave-one-dataset-out, Pass C        pool_mean_lr / pooled                      gain40=+0.0246
+   leave-one-dataset-out, Pass C        pool_last_mms / pooled                     gain40=+0.0361
+
+raw: n=10 median=+0.0251 min=-0.0157 max=+0.0681
+
+persona: n=13 median=+0.1135 min=-0.0283 max=+0.2335
+
+20-vs-22: n rows with both = 17  median |gap| = 0.0115  max |gap| = 0.0370
+Q6 equivalence tests (dataset bootstrap):
+    raw: layer 20 vs 22 (last) diff -0.0128 equivalent_within_margin False row_equiv True keys ['A', 'B', 'diff', 'row_ci95', 'dataset_ci95', 'row_p', 'dataset_p', 'dataset_ci90', 'equivalent_within_margin', 'row_ci90', 'row_equivalent_within_margin']
+    raw: layer 20 vs 22 (mean) diff +0.0061 equivalent_within_margin False row_equiv True keys ['A', 'B', 'diff', 'row_ci95', 'dataset_ci95', 'row_p', 'dataset_p', 'dataset_ci90', 'equivalent_within_margin', 'row_ci90', 'row_equivalent_within_margin']
+    axes: layer 20 vs 22 (mean) diff +0.0036 equivalent_within_margin False row_equiv True keys ['A', 'B', 'diff', 'row_ci95', 'dataset_ci95', 'row_p', 'dataset_p', 'dataset_ci90', 'equivalent_within_margin', 'row_ci90', 'row_equivalent_within_margin']
+    axes: layer 20 vs 22 (last) diff -0.0092 equivalent_within_margin False row_equiv True keys ['A', 'B', 'diff', 'row_ci95', 'dataset_ci95', 'row_p', 'dataset_p', 'dataset_ci90', 'equivalent_within_margin', 'row_ci90', 'row_equivalent_within_margin']
+
+==============================================================================
+O-070  best-vs-best gaps (Pass B, full corpus, mms)
+==============================================================================
+mean: raw peaks L32 0.7167; axes peak L44 0.7309; axes@44 - raw@32 = +0.014161
+last: raw peaks L28 0.7399; axes peak L44 0.7658; axes@44 - raw@28 = +0.025898
+
+significance.json best-vs-best comparisons:
+    axes@44 vs raw@32, each at its best (mean) diff +0.014161 row_p 0.056 dataset_p 0.8612 q_bh 0.8612 significant False
+    axes@44 vs raw@28, each at its best (last) diff +0.025898 row_p 0.002 dataset_p 0.598 q_bh 0.6683529411764706 significant False
+
+==============================================================================
+O-073  pc:deception minus raw, every stored layer and setting
+==============================================================================
+PassB mms mean         probe=mms       layers=[0, 4, 8]...76  n=21
+   layers>=20 where pc beats raw: []   max(pc-raw) at layers>=20 = -0.0085
+   layers<20  where pc beats raw: []
+PassB mms last         probe=mms       layers=[0, 4, 8]...76  n=21
+   layers>=20 where pc beats raw: []   max(pc-raw) at layers>=20 = -0.0203
+   layers<20  where pc beats raw: [(0, 0.0049), (8, 0.0027), (16, 0.007)]
+   max gain below 20 = +0.0070
+PassA mms mean         probe=mms       layers=[0, 4, 8]...76  n=20
+   layers>=20 where pc beats raw: []   max(pc-raw) at layers>=20 = -0.0397
+   layers<20  where pc beats raw: []
+PassA lr_reg10 mean    probe=lr_reg10  layers=[0, 4, 8]...76  n=20
+   layers>=20 where pc beats raw: []   max(pc-raw) at layers>=20 = -0.0395
+   layers<20  where pc beats raw: [(0, 0.0223)]
+   max gain below 20 = +0.0223
+
+==============================================================================
+O-071 / O-072  Pass A (2,000 rows)
+==============================================================================
+
+Pass A mms mean (probe=mms, bank=axes_vectors_s3_fp32.pt, pooling=mean):
+   raw peak  L32 0.7245
+   axes peak L44 0.6870
+   best-vs-best axes - raw = -0.0375
+   layer   raw      axes     axes-raw
+   20     0.6667  0.5633  -0.1034
+   24     0.6551  0.5479  -0.1072
+   28     0.7105  0.6364  -0.0741
+   32     0.7245  0.6363  -0.0882
+   36     0.7097  0.6732  -0.0364
+   40     0.6780  0.6768  -0.0012
+   44     0.6730  0.6870  +0.0140
+   48     0.6688  0.6586  -0.0101
+   52     0.6641  0.5360  -0.1282
+   56     0.6737  0.4900  -0.1837
+   60     0.6705  0.4879  -0.1826
+   64     0.6785  0.4878  -0.1908
+   68     0.6747  0.4879  -0.1868
+   72     0.6793  0.4907  -0.1885
+   76     0.7006  0.5918  -0.1089
+
+Pass A lr_reg10 mean (probe=lr_reg10, bank=axes_vectors_s3_fp32.pt, pooling=mean):
+   raw peak  L32 0.7176
+   axes peak L40 0.6740
+   best-vs-best axes - raw = -0.0436
+   layer   raw      axes     axes-raw
+   20     0.6762  0.5606  -0.1157
+   24     0.6480  0.5459  -0.1021
+   28     0.6920  0.6304  -0.0615
+   32     0.7176  0.6640  -0.0536
+   36     0.7038  0.6668  -0.0369
+   40     0.6751  0.6740  -0.0010
+   44     0.6647  0.6646  -0.0001
+   48     0.6600  0.6257  -0.0344
+   52     0.6621  0.5781  -0.0840
+   56     0.6660  0.5367  -0.1292
+   60     0.6719  0.5179  -0.1540
+   64     0.6622  0.4850  -0.1773
+   68     0.6702  0.4865  -0.1837
+   72     0.6737  0.4901  -0.1837
+   76     0.6833  0.5959  -0.0874
+
+==============================================================================
+O-058 / O-074  Q4 erasure table
+==============================================================================
+rows in q4_table: 6
+layer  pool     probe      raw   erased     cost  cost_random(mean)        erased dataset CI95     q_bh
+   20  mean       mms   0.6524   0.6462   0.0062           0.000052             [0.513, 0.796]   0.5151
+   20  mean  lr_reg10   0.6599   0.6545   0.0054           0.000368             [0.558, 0.741]   0.5425
+   40  mean       mms   0.6693   0.6516   0.0177          -0.000019              [0.51, 0.786]   0.0035
+   40  mean  lr_reg10   0.6862   0.6721   0.0141           0.000202              [0.586, 0.76]   0.1618
+   44  last       mms   0.7200   0.7119   0.0081          -0.000019             [0.608, 0.824]   0.0035
+   44  last  lr_reg10   0.6611   0.6558   0.0053           0.000381              [0.57, 0.752]   0.0399
+
+cost range over the 6 settings: 0.0053 .. 0.0177
+all costs positive: True
+cost as % of the raw transfer AUROC: 0.80% .. 2.64%  (doc's verdict says '1-3%')
+   per setting: ['20m/mms=0.94%', '20m/lr_reg10=0.81%', '40m/mms=2.64%', '40m/lr_reg10=2.06%', '44l/mms=1.13%', '44l/lr_reg10=0.80%']
+
+Q4 comparisons in the same file:
+    cost of erasing Assistant Axis, L20 mean mms | diff +0.00615 | row_p 0.001 | dataset_p 0.3284 | q_bh 0.5151 | significant False
+    assistant erasure vs random erasures, L20 mean mms | diff +0.00610 | row_p 0.001 | dataset_p 0.3368 | q_bh 0.5151 | significant False
+    cost of erasing Assistant Axis, L20 mean lr_reg10 | diff +0.00535 | row_p 0.001 | dataset_p 0.4358 | q_bh 0.5425 | significant False
+    assistant erasure vs random erasures, L20 mean lr_reg10 | diff +0.00498 | row_p 0.001 | dataset_p 0.4562 | q_bh 0.5425 | significant False
+    cost of erasing Assistant Axis, L40 mean mms | diff +0.01768 | row_p 0.001 | dataset_p 0.0004 | q_bh 0.0035 | significant True
+    assistant erasure vs random erasures, L40 mean mms | diff +0.01770 | row_p 0.001 | dataset_p 0.0008 | q_bh 0.0052 | significant True
+    cost of erasing Assistant Axis, L40 mean lr_reg10 | diff +0.01410 | row_p 0.001 | dataset_p 0.0492 | q_bh 0.1618 | significant False
+    assistant erasure vs random erasures, L40 mean lr_reg10 | diff +0.01390 | row_p 0.001 | dataset_p 0.0498 | q_bh 0.1618 | significant False
+    cost of erasing Assistant Axis, L44 last mms | diff +0.00811 | row_p 0.001 | dataset_p 0.0004 | q_bh 0.0035 | significant True
+    assistant erasure vs random erasures, L44 last mms | diff +0.00813 | row_p 0.001 | dataset_p 0.0004 | q_bh 0.0035 | significant True
+    cost of erasing Assistant Axis, L44 last lr_reg10 | diff +0.00528 | row_p 0.001 | dataset_p 0.0092 | q_bh 0.0399 | significant True
+    assistant erasure vs random erasures, L44 last lr_reg10 | diff +0.00489 | row_p 0.001 | dataset_p 0.007 | q_bh 0.0364 | significant True
+
+BH family size in this file (n comparisons): 26
+
+==============================================================================
+O-060  Q8 -- zero-shot half (pertoken_q8.json)
+==============================================================================
+axis = deception  bank = axes_vectors_s3_fp32.pt
+ layer     mean   top10pct  top10-mean      max     last
+    20   0.6954     0.7982     +0.1027   0.7750   0.7407
+    22   0.6987     0.7629     +0.0642   0.7400   0.7432
+    28   0.7538     0.8067     +0.0529   0.7691   0.7904
+    40   0.7652     0.7699     +0.0046   0.7558   0.7454
+    44   0.7447     0.7592     +0.0144   0.7443   0.7463
+    48   0.7175     0.7197     +0.0023   0.7129   0.7292
+top10pct > mean at every stored layer: True
+top10pct is the best aggregation at layer: [20, 22, 28, 40, 44]
+
+==============================================================================
+O-060  Q8 -- trained half (q8_trained_pertoken.json)
+==============================================================================
+layers: [20, 22, 28, 40, 44, 48]  held_out: 9  tokens_per_row: 16  n_rows: 2000
+
+ layer                      best pooled                   best token probe      gap
+    20      pool_mean_mms/pooled 0.8570            tok_mms/top10pct 0.7966  +0.0604
+    22      pool_mean_mms/pooled 0.8544                 tok_mms/max 0.8047  +0.0497
+    28      pool_mean_mms/pooled 0.8764            tok_mms/top10pct 0.8279  +0.0485
+    40      pool_mean_mms/pooled 0.8826             tok_lr/top10pct 0.8526  +0.0300
+    44      pool_mean_mms/pooled 0.8783                 tok_lr/mean 0.8507  +0.0276
+    48      pool_mean_mms/pooled 0.8739                 tok_lr/mean 0.8294  +0.0445
+
+pool_mean_mms vs EVERY token probe, per layer (min gap):
+   L20  pooled-mean 0.8570  worst-case gap +0.0604  (n token rows 8)
+   L22  pooled-mean 0.8544  worst-case gap +0.0497  (n token rows 8)
+   L28  pooled-mean 0.8764  worst-case gap +0.0485  (n token rows 8)
+   L40  pooled-mean 0.8826  worst-case gap +0.0300  (n token rows 8)
+   L44  pooled-mean 0.8783  worst-case gap +0.0276  (n token rows 12)
+   L48  pooled-mean 0.8739  worst-case gap +0.0445  (n token rows 8)
+
+zero-shot axis rows (not token PROBES) for context:
+   L20  best zero-shot      max 0.8248 vs pooled-mean 0.8570 -> +0.0322
+   L22  best zero-shot      max 0.7820 vs pooled-mean 0.8544 -> +0.0724
+   L28  best zero-shot top10pct 0.7948 vs pooled-mean 0.8764 -> +0.0817
+   L40  best zero-shot      max 0.8139 vs pooled-mean 0.8826 -> +0.0687
+   L44  best zero-shot      max 0.8149 vs pooled-mean 0.8783 -> +0.0634
+   L48  best zero-shot      max 0.7864 vs pooled-mean 0.8739 -> +0.0875
+
+Q8 significance tests:
+    pooled-mean mms vs tok_lr/mean, layer 20 | diff +0.0720 | dataset_p 0.0002 | folds_pooled_wins 8/9 | q_bh 0.00127 | significant True
+    pooled-mean mms vs tok_lr/top10pct, layer 20 | diff +0.0726 | dataset_p 0.0001 | folds_pooled_wins 9/9 | q_bh 0.00095 | significant True
+    pooled-mean mms vs tok_lr/mean, layer 28 | diff +0.0898 | dataset_p 0.005 | folds_pooled_wins 8/9 | q_bh 0.02375 | significant True
+    pooled-mean mms vs tok_lr/top10pct, layer 28 | diff +0.0785 | dataset_p 0.0001 | folds_pooled_wins 9/9 | q_bh 0.00095 | significant True
+    pooled-mean mms vs tok_lr/mean, layer 40 | diff +0.0435 | dataset_p 0.1286 | folds_pooled_wins 5/9 | q_bh 0.34906 | significant False
+    pooled-mean mms vs tok_lr/top10pct, layer 40 | diff +0.0300 | dataset_p 0.1552 | folds_pooled_wins 6/9 | q_bh 0.36860 | significant False
+    pooled-mean mms vs tok_lr/mean, layer 44 | diff +0.0276 | dataset_p 0.3158 | folds_pooled_wins 5/9 | q_bh 0.51047 | significant False
+    pooled-mean mms vs tok_lr/top10pct, layer 44 | diff +0.0343 | dataset_p 0.1258 | folds_pooled_wins 5/9 | q_bh 0.34906 | significant False
+
+self checks: {"offset_worst_rel_dev": 0.17864677788199257, "offset_rows_bad": 0, "offset_rows": 12000}
+
+==============================================================================
+O-061  Q11 sleeper agents
+==============================================================================
+layer 44 pooling last probe mms bank axes_vectors_s3_fp32.pt
+cross_trigger raw: {'raw|soft-trigger-gender': 0.9653, 'raw|soft-trigger-greeting': 0.963, 'raw|soft-trigger-time': 0.9634} mean 0.9639
+within_organism raw (soft-trigger only): {'raw|soft-trigger-gender': 0.9589, 'raw|soft-trigger-greeting': 0.9633, 'raw|soft-trigger-time': 0.9653} mean 0.9625
+within_organism raw|gender-secret: 0.9974
+token_only (answer token alone): {'soft-trigger-gender': 0.6165, 'soft-trigger-greeting': 0.6275, 'soft-trigger-time': 0.619}
+probe from instructed-deception scored WITHIN one answer token, raw: 0.9461 .. 0.9608
+zero-shot persona axis on sleepers: {'gender-secret': 0.3512, 'soft-trigger-gender': 0.9128, 'soft-trigger-greeting': 0.8738, 'soft-trigger-time': 0.8769}
+   gender-secret            auroc 0.3512  random p95 0.7630  p_vs_random 0.3457  beats_random_p95 False
+   soft-trigger-gender      auroc 0.9128  random p95 0.9257  p_vs_random 0.0909  beats_random_p95 False
+   soft-trigger-greeting    auroc 0.8738  random p95 0.9234  p_vs_random 0.1828  beats_random_p95 False
+   soft-trigger-time        auroc 0.8769  random p95 0.9271  p_vs_random 0.1968  beats_random_p95 False
+
+==============================================================================
+O-062  top-10% definition, read from the producing code
+==============================================================================
+14_pertoken.py:
+def aggregate(scores: np.ndarray) -> dict:
+    """Per-token scores -> one number per row, several ways.
+
+    `max` and `topk` are the aggregations that can beat pooling: a mean over the response is
+    exactly what dilutes a short burst of deceptive text, so if the signal is localised they
+    should pull ahead of `mean`, and if it is diffuse they should not.
+    """
+    n = len(scores)
+    k = max(1, int(round(0.1 * n)))
+    srt = np.sort(scores)
+    return {
+        "mean": float(scores.mean()),
+        "max": float(scores.max()),
+        "last": float(scores[-1]),
+        "first": float(scores[0]),
+        "to
+21_q8_trained_pertoken.py:
+def aggregate(s: np.ndarray) -> dict:
+    """s: (n_tok, n_probes) -> {agg: (n_probes,)}"""
+    k = max(1, int(round(0.1 * s.shape[0])))
+    srt = np.sort(s, axis=0)
+    return {"mean": s.mean(axis=0), "max": s.max(axis=0),
+            "top10pct": srt[-k:].mean(axis=0), "last": s[-1]}
+
+
+def linear_form(clf):
+    """sklearn pipeli
+
+==============================================================================
+O-063  P1 diagonal / off-diagonal, read from 9_persona_probes.py + splits.json
+==============================================================================
+def group_split(meta, frac: float, seed: int):
+    """Split indices by item_id so no scenario straddles train and test."""
+    by_item = defaultdict(list)
+    for i, m in enumerate(meta):
+        by_item[m["item_id"]].append(i)
+    items = sorted(by_item)
+    rng = np.random.default_rng(seed)
+    rng.shuffle(items)
+    cut = max(1, int(round(len(items) * frac)))
+    tr = [i for it in items[:cut] for i in by_item[it]]
+    te = [i for it in items[cut:] for i in by_item[it]]
+    return np.array(sorted(tr), dtype=int), np.array(sorted(te), dtype=int)
+
+
+def balance(idx, y, seed: int, cap: int = 0):
+    """Equal positi
+... P1 loop ...
+for s in src:
+                Xs, ys, ms = data[s]
+                tr, _ = group_split(ms, 0.75, args.seed)
+                tr = balance(tr, ys, args.seed)
+                if len(tr) < 8:
+                    continue
+                F = make_features(Xs, fkind, bank, args.layer, args.k, args.seed,
+                                  meta=ms)
+                clf = make_probe(probe, args.seed)
+                clf.fit(F[tr], ys[tr])
+                for t in data:
+                    Xt, yt, mt = data[t]
+                    if t == s:
+                        _, te = group_split(mt, 0.75, args.seed)
+                    else:
+                        te = np.arange(len(yt))
+                    te = balance(te, yt, args.seed + 1)
+                    if len(te) < 8:
+                        mat[(s, t)] = float("nan")
+                        continue
+                    Ft = make_features(Xt, fkind, bank, args.layer, args.k, args.seed,
+                                       meta=mt)
+                    mat[(s, t)] = auroc(clf, Ft[te], yt[te])
+            diag = [v for (s, t), v in mat.items() if s == t and not np.isnan(v)]
+            off = [v f
+
+splits.json realised sizes (key 'splits'):
+    ai_liar {'rows': 270, 'items': 54, 'pos': 135, 'neg': 135, 'train_items_75pct': 200, 'test_items_25pct': 70, 'train_balanced': 150, 'test_balanced_ondiag': 20, 'test_balanced_offdiag': 270, 'label_semantics': 'instructed_intent'}
+    alpaca {'rows': 2000, 'items': 2000, 'pos': 0, 'neg': 2000, 'train_items_75pct': 1500, 'test_items_25pct': 500, 'train_balanced': 0, 'test_balanced_ondiag': 0, 'test_balanced_offdiag': 0, 'label_semantics': 'instructed_intent'}
+    convincing-game {'rows': 267, 'items': 267, 'pos': 167, 'neg': 100, 'train_items_75pct': 200, 'test_items_25pct': 67, 'train_balanced': 156, 'test_balanced_ondiag': 44, 'test_balanced_offdiag': 200, 'label_semantics': 'instructed_intent'}
+    mask {'rows': 585, 'items': 585, 'pos': 415, 'neg': 170, 'train_items_75pct': 439, 'test_items_25pct': 146, 'train_balanced': 250, 'test_balanced_ondiag': 90, 'test_balanced_offdiag': 340, 'label_semantics': 'belief_inconsistency'}
+    roleplaying {'rows': 287, 'items': 287, 'pos': 203, 'neg': 84, 'train_items_75pct': 215, 'test_items_25pct': 72, 'train_balanced': 122, 'test_balanced_ondiag': 46, 'test_balanced_offdiag': 168, 'label_semantics': 'judge_grade'}
+
+LEVEL 2 -- recompute 'off_diagonal' and 'diagonal' from the stored matrix (p1_L44_last_withsyc.json):
+   datasets in file (11): ['ai_liar', 'alpaca', 'convincing-game', 'harm-pressure-choice', 'harm-pressure-knowledge-report', 'insider-trading', 'instructed-deception', 'mask', 'roleplaying', 'sandbagging_v2', 'sycophancy_mt']
+   raw            mms       n_pairs=90   off stored 0.664576 = recomputed 0.664576 over 90 cells | diag stored 0.901282 = 0.901282 over 10 cells
+   raw            lr_reg10  n_pairs=90   off stored 0.630546 = recomputed 0.630546 over 90 cells | diag stored 0.957980 = 0.957980 over 10 cells
+   pc:deception   mms       n_pairs=90   off stored 0.615987 = recomputed 0.615987 over 90 cells | diag stored 0.832680 = 0.832680 over 10 cells
+   pc:deception   lr_reg10  n_pairs=90   off stored 0.602013 = recomputed 0.602013 over 90 cells | diag stored 0.852432 = 0.852432 over 10 cells
+   axes           mms       n_pairs=90   off stored 0.664307 = recomputed 0.664307 over 90 cells | diag stored 0.810144 = 0.810144 over 10 cells
+   axes           lr_reg10  n_pairs=90   off stored 0.645662 = recomputed 0.645662 over 90 cells | diag stored 0.840133 = 0.840133 over 10 cells
+   random         mms       n_pairs=90   off stored 0.522240 = recomputed 0.522240 over 90 cells | diag stored 0.711487 = 0.711487 over 10 cells
+   random         lr_reg10  n_pairs=90   off stored 0.520012 = recomputed 0.520012 over 90 cells | diag stored 0.724998 = 0.724998 over 10 cells
+
+==============================================================================
+O-066  length-only AUROC per dataset
+==============================================================================
+The doc's path run-coords/confounds_L44_last.json exists in the working tree: False
+read instead from the audit cache of the lab copy: C:\Users\SURAIYA\Documents\STUDY\thesis\expLB\audit\cache\labpc\run-coords\confounds_L44_last.json
+top-level keys: ['layer', 'pooling', 'k', 'bank', 'datasets', 'splits', 'confounds', 'null'] | layer 44 | pooling last | bank axes_vectors_s3_fp32.pt
+the doc names the key 'length_only_auroc'; it is actually nested at confounds.length_only_auroc, a LIST of {dataset, auroc_from_length, median_pos, median_neg}
+
+DOC vs FILE (tolerance 5e-4):
+   sandbagging_v2                     doc 0.854   file 0.854402     OK
+   harm-pressure-knowledge-report     doc 0.776   file 0.775612     OK
+   sycophancy_mt                      doc 0.664   file 0.663967     OK
+   mask                               doc 0.625   file 0.624940     OK
+   ai_liar                            doc 0.613   file 0.613032     OK
+   insider-trading                    doc 0.595   file 0.594546     OK
+   instructed-deception               doc 0.56    file 0.560396     OK
+   convincing-game                    doc 0.507   file 0.506766     OK
+   harm-pressure-choice               doc 0.502   file 0.501731     OK
+   roleplaying                        doc 0.441   file 0.441473     OK
+   all ten match: True
+   datasets in the file but not in the doc list: []
+   n datasets with a length AUROC: 10 | above 0.5: 9 | below 0.5: ['roleplaying']
+   the file's own dataset list (11): ['ai_liar', 'alpaca', 'convincing-game', 'harm-pressure-choice', 'harm-pressure-knowledge-report', 'insider-trading', 'instructed-deception', 'mask', 'roleplaying', 'sandbagging_v2', 'sycophancy_mt']
+
+   MEDIAN token gap (deceptive - honest) in this same file:
+      sandbagging_v2                     +195.0
+      mask                               +148.5
+      sycophancy_mt                      +77.5
+      ai_liar                            +35.0
+      insider-trading                    +9.0
+      instructed-deception               +3.0
+      harm-pressure-knowledge-report     +2.0
+      convincing-game                    +1.5
+      harm-pressure-choice               +0.0
+      roleplaying                        -7.0
+   deceptive longer by median in 8 of 10; equal in 1; shorter in 1
+
+DONE

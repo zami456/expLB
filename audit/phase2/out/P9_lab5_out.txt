@@ -1,0 +1,45 @@
+======================================================================
+kd11/passC
+  matrices: 12 -> ['last_L20_s42.json', 'last_L22_s42.json', 'last_L28_s42.json', 'last_L40_s42.json', 'last_L44_s42.json', 'last_L48_s42.json', 'mean_L20_s42.json', 'mean_L22_s42.json', 'mean_L28_s42.json', 'mean_L40_s42.json', 'mean_L44_s42.json', 'mean_L48_s42.json']
+  design       : train on 80% of the row dataset; diagonal = its own 20% test split; off-diagonal = 100% of the column dataset
+  boot_datasets: 10000
+  note         : BH within each block over every pooling x layer x probe x comparison
+  tests        : 1152
+  test keys    : ['block', 'pooling', 'layer', 'probe', 'comparison', 'diff', 'pairs_won', 'pairs', 'row_ci95', 'row_p', 'dataset_ci95', 'dataset_p', 'dataset_q_bh', 'significant_datasets']
+    block       -> {'10': 576, '9': 576}
+    pooling     -> {'last': 576, 'mean': 576}
+    layer       -> {20: 192, 22: 192, 28: 192, 40: 192, 44: 192, 48: 192}
+    probe       -> {'lr_reg10': 384, 'mms': 384, 'paper': 384}
+    comparison  -> {'axes - datapca': 72, 'axes - random': 72, 'axes - raw': 72, 'datapca - raw': 72, 'datapca@2 - raw': 72, 'pc:deception - datapca': 72, 'pc:deception - random': 72, 'pc:deception - raw': 72, 'pc:unified - datapca': 72, 'pc:unified - random': 72, 'pc:unified - raw': 72, 'pc:unified@2 - datapca@2': 72, 'pc:unified@2 - random@2': 72, 'pc:unified@2 - raw': 72, 'random - raw': 72, 'random@2 - raw': 72}
+  matrix[0] last_L20_s42.json: layer=20 pooling=last seed=42 bank=axes_vectors_s3_fp32.pt bank_name=paper16 k=5
+    datasets (10): ['instructed-deception', 'harm-pressure-choice', 'harm-pressure-knowledge-report', 'convincing-game', 'insider-trading', 'ai_liar', 'sandbagging_v2', 'roleplaying', 'mask', 'sycophancy_mt']
+    block9   (9): ['instructed-deception', 'harm-pressure-choice', 'harm-pressure-knowledge-report', 'convincing-game', 'insider-trading', 'ai_liar', 'sandbagging_v2', 'roleplaying', 'mask']
+  summary.json size: 1607819
+  summary keys: ['design', 'datasets', 'block9', 'main_seed', 'records', 'seed_stats', 'zeroshot']
+   summary records: 396
+    rec keys: ['pooling', 'layer', 'seed', 'feature', 'probe', 'diag_mean', 'offdiag_mean_10', 'offdiag_mean_9', 'tpr_diag_mean', 'tpr_offdiag_mean_10', 'per_source_offdiag', 'per_target_offdiag', 'diagonal', 'generalization_gap_10']
+    layers in summary: [20, 22, 28, 40, 44, 48]
+    blocks in summary: ['None']
+======================================================================
+root/passC
+  matrices: 72 -> ['last_L20_s0.json', 'last_L20_s1.json', 'last_L20_s2.json', 'last_L20_s3.json', 'last_L20_s4.json', 'last_L20_s42.json', 'last_L22_s0.json', 'last_L22_s1.json', 'last_L22_s2.json', 'last_L22_s3.json', 'last_L22_s4.json', 'last_L22_s42.json', 'last_L28_s0.json', 'last_L28_s1.json', 'last_L28_s2.json', 'last_L28_s3.json', 'last_L28_s4.json', 'last_L28_s42.json', 'last_L40_s0.json', 'last_L40_s1.json', 'last_L40_s2.json', 'last_L40_s3.json', 'last_L40_s4.json', 'last_L40_s42.json', 'last_L44_s0.json', 'last_L44_s1.json', 'last_L44_s2.json', 'last_L44_s3.json', 'last_L44_s4.json', 'last_L44_s42.json', 'last_L48_s0.json', 'last_L48_s1.json', 'last_L48_s2.json', 'last_L48_s3.json', 'last_L48_s4.json', 'last_L48_s42.json', 'mean_L20_s0.json', 'mean_L20_s1.json', 'mean_L20_s2.json', 'mean_L20_s3.json', 'mean_L20_s4.json', 'mean_L20_s42.json', 'mean_L22_s0.json', 'mean_L22_s1.json', 'mean_L22_s2.json', 'mean_L22_s3.json', 'mean_L22_s4.json', 'mean_L22_s42.json', 'mean_L28_s0.json', 'mean_L28_s1.json', 'mean_L28_s2.json', 'mean_L28_s3.json', 'mean_L28_s4.json', 'mean_L28_s42.json', 'mean_L40_s0.json', 'mean_L40_s1.json', 'mean_L40_s2.json', 'mean_L40_s3.json', 'mean_L40_s4.json', 'mean_L40_s42.json', 'mean_L44_s0.json', 'mean_L44_s1.json', 'mean_L44_s2.json', 'mean_L44_s3.json', 'mean_L44_s4.json', 'mean_L44_s42.json', 'mean_L48_s0.json', 'mean_L48_s1.json', 'mean_L48_s2.json', 'mean_L48_s3.json', 'mean_L48_s4.json', 'mean_L48_s42.json']
+  design       : train on 80% of the row dataset; diagonal = its own 20% test split; off-diagonal = 100% of the column dataset
+  boot_datasets: 10000
+  note         : BH within each block over every pooling x layer x probe x comparison
+  tests        : 1152
+  test keys    : ['block', 'pooling', 'layer', 'probe', 'comparison', 'diff', 'pairs_won', 'pairs', 'row_ci95', 'row_p', 'dataset_ci95', 'dataset_p', 'dataset_q_bh', 'significant_datasets']
+    block       -> {'10': 576, '9': 576}
+    pooling     -> {'last': 576, 'mean': 576}
+    layer       -> {20: 192, 22: 192, 28: 192, 40: 192, 44: 192, 48: 192}
+    probe       -> {'lr_reg10': 384, 'mms': 384, 'paper': 384}
+    comparison  -> {'axes - datapca': 72, 'axes - random': 72, 'axes - raw': 72, 'datapca - raw': 72, 'datapca@2 - raw': 72, 'pc:deception - datapca': 72, 'pc:deception - random': 72, 'pc:deception - raw': 72, 'pc:unified - datapca': 72, 'pc:unified - random': 72, 'pc:unified - raw': 72, 'pc:unified@2 - datapca@2': 72, 'pc:unified@2 - random@2': 72, 'pc:unified@2 - raw': 72, 'random - raw': 72, 'random@2 - raw': 72}
+  matrix[0] last_L20_s0.json: layer=20 pooling=last seed=0 bank=axes_vectors_s3_fp32.pt bank_name=paper16 k=5
+    datasets (10): ['instructed-deception', 'harm-pressure-choice', 'harm-pressure-knowledge-report', 'convincing-game', 'insider-trading', 'ai_liar', 'sandbagging_v2', 'roleplaying', 'mask', 'sycophancy_mt']
+    block9   (9): ['instructed-deception', 'harm-pressure-choice', 'harm-pressure-knowledge-report', 'convincing-game', 'insider-trading', 'ai_liar', 'sandbagging_v2', 'roleplaying', 'mask']
+  summary.json size: 3450137
+  summary keys: ['design', 'datasets', 'block9', 'main_seed', 'records', 'seed_stats', 'zeroshot']
+   summary records: 756
+    rec keys: ['pooling', 'layer', 'seed', 'feature', 'probe', 'diag_mean', 'offdiag_mean_10', 'offdiag_mean_9', 'tpr_diag_mean', 'tpr_offdiag_mean_10', 'per_source_offdiag', 'per_target_offdiag', 'diagonal', 'generalization_gap_10']
+    layers in summary: [20, 22, 28, 40, 44, 48]
+    blocks in summary: ['None']
+python exit 0

@@ -1,0 +1,18 @@
+D-100 addendum: every off-diagonal cell where the raw probe beats the extended contrast
+  L20:
+    train=insider_trading_cadenza__plain         test=harm_refusal_knowledge_report__plain   raw=0.9670 ext=0.8816  +0.0854
+    train=repe_honesty__plain                    test=instruct_dishonesty__plain             raw=0.9576 ext=0.9539  +0.0037
+  L40:
+    train=instruct_dishonesty__plain             test=convince_me__plain                     raw=0.9831 ext=0.9123  +0.0708
+    train=repe_honesty__plain                    test=harm_refusal_knowledge_report__plain   raw=0.9281 ext=0.9124  +0.0157
+  L44:
+    train=instruct_dishonesty__plain             test=convince_me__plain                     raw=0.9845 ext=0.8586  +0.1259
+    train=repe_honesty__plain                    test=instruct_dishonesty__plain             raw=0.9751 ext=0.9740  +0.0011
+
+A-05 addendum: in-distribution (diagonal) means, raw vs the contrast
+  L20: baseline diag=0.9564  ext_axis1 diag=0.9035   raw-ext(diag) = +0.0529
+  L40: baseline diag=0.9833  ext_axis1 diag=0.9156   raw-ext(diag) = +0.0677
+  L44: baseline diag=0.9822  ext_axis1 diag=0.9033   raw-ext(diag) = +0.0789
+
+A-03 addendum: the Liars' Bench datasets named in the published benchmark (PDF table header)
+     then across datasets. Model Dataset (all instruction-tuned)HP-C HP-KR CG ST ID GS IT A VERAGE AUROC Llama 3.3 70B0.41 0

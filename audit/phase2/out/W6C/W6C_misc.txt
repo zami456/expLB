@@ -1,0 +1,71 @@
+==============================================================================
+O-030  sarcasm pilot: marker rate per variant
+==============================================================================
+  file audit/cache/labpc/cap/run-sarc-pilot/marker_report.json  md5 bcc633166d53e73a565d76318e977c75  4938 B  n=300
+  arm                    marker rate per variant v1..v5      overall  mean_count
+  pc_ironic_critic       [0.85, 0.15, 0.1, 0.0, 0.0]          0.22     0.55
+  pc_sincere_critic      [0.6, 0.15, 0.15, 0.25, 0.05]        0.24     0.43
+  pc_sycophant           [0.85, 1.0, 0.5, 0.0, 0.05]          0.48     1.05
+
+  briefing: 'the marker rate genuinely falls to 0.00 at variants v4 and v5'
+    pc_ironic_critic       v4=0.00 v5=0.00  -> both 0.00
+    pc_sincere_critic      v4=0.25 v5=0.05  -> NOT both 0.00
+    pc_sycophant           v4=0.00 v5=0.05  -> NOT both 0.00
+
+  the lexical table the briefing prints (ironic vs sycophant):
+    all                raw 0.9525  stripped 0.9472  n=200
+    most_marked(v1)    raw 1.0000  stripped 1.0000  n=40
+    unmarked(v4,v5)    raw 0.9194  stripped 0.9213  n=80
+  briefing: all v1-v5 0.953 / 0.947 ; v4+v5 0.919 / 0.921
+
+==============================================================================
+O-025  the Kumar quotation
+==============================================================================
+  PDF papers/Pressure-Testing Deception Probes in LLMs Scaling, Robustness, and the.pdf
+  pages: 18 ; author line: Pressure-Testing Deception Probes in LLMs: Scaling, Robustness, and the Geometry of Deceptive Representations Sachin Kumar* LexisNexis, USA sachinkumar.ait@live
+
+  paper, abstract, verbatim (whitespace normalised):
+    ...; (b) the singledirection hypothesis is decisively rejected (k=1 captures only 0.61–0.80 AUROC of the signal, with cross-domain transfer failure confirmed as geometric rather than layer-mismatch-driven; (c) the entropy-proxy hypothesis is rejected (maximum|ρ|= 0.454 , maximum ∆AUROC after residualization=0.004); and (d) deception does not...
+
+  briefing quotes:
+    "the single-direction hypothesis is **decisively rejected** (k=1 captures only
+     0.61-0.80 AUROC of the signal), with cross-domain transfer failure confirmed as
+     geometric rather than layer-mismatch-driven"
+
+  the body figure behind 0.61-0.80:
+    ...ulti-Dimensional Probe Analysis To test whether deception is a single direction (H-LIN) or multi-dimensional (H-SUB), we train probes on the top-k principal components of the training activations. k (dims) 1B 4B 12B 27B Min Max Range k = 1 0.609 0.661 0.804 0.672 0.609 0.804 0.195 k = 3 0.816 0.963 0.845 0.819 0.816 0.963 0.148 k = 5 0.908 0.981 0.938 0.990 ...
+
+==============================================================================
+O-033  the format-matched control (Level 1 -- cap_ctrl matrices are LAB ONLY)
+==============================================================================
+  source of these 21 rows: audit/claims/F-94.md, script audit/scripts/claims/p2p_F94_lab.py
+  (the audit's own re-derivation from run-crossgen/kd11/banks/{cap_s23,cap_ctrl}/matrices)
+
+   L   content  clears   presence  clears   ratio
+    0  +0.0524  YES     +0.0599  YES      1.14x
+    4  +0.0269  -       +0.0299  YES      1.11x
+    8  +0.0012  -       +0.0005  -        0.42x
+   12  +0.0171  YES     +0.0107  -        0.63x
+   16  +0.0126  -       +0.0101  -        0.80x
+   20  +0.0519  -       +0.0570  -        1.10x
+   22  +0.0519  -       +0.0486  -        0.94x
+   24  +0.0267  -       +0.0316  -        1.18x
+   28  +0.0729  -       +0.1293  YES      1.77x
+   32  +0.0560  -       +0.1696  YES      3.03x
+   36  +0.0290  YES     +0.1237  YES      4.27x
+   40  +0.0247  -       +0.1201  YES      4.86x
+   44  +0.0277  -       +0.0947  YES      3.42x
+   48  +0.0235  -       +0.0755  YES      3.21x
+   52  +0.0280  -       +0.0829  YES      2.96x
+   56  +0.0391  -       +0.0823  YES      2.10x
+   60  +0.0506  -       +0.0857  YES      1.69x
+   64  +0.0395  -       +0.0638  YES      1.62x
+   68  +0.0278  -       +0.0529  YES      1.90x
+   72  +0.0362  -       +0.1059  YES      2.93x
+   76  +0.0521  -       +0.0993  YES      1.91x
+
+  content mean  +0.0356   clears at 3 of 21 layers: [0, 12, 36]
+  presence mean +0.0730   clears at 15 of 21 layers
+  presence/content, mean of means = 2.05x ; per-layer ratios range 0.42x to 4.86x
+  briefing: 'Swapping the content costs only ~+0.03 and clears no significance test at any
+  layer; removing the six entirely costs two to four times that.'

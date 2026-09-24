@@ -1,0 +1,19 @@
+=== PassAC-11  state=Disabled  last=9/22/2026 3:47:01 PM rc=0  next=
+    last log line: 2026-09-22 16:05:43 DONE
+=== PassC-PerToken  state=Disabled  last=9/23/2026 12:20:44 AM rc=0  next=9/23/2026 12:35:43 AM
+    last log line: 09-16 13:58:10 drive sync exit 0
+=== Night-Chain  state=Disabled  last=9/23/2026 12:25:05 AM rc=0  next=9/23/2026 12:40:04 AM
+    last log line: 09-23 00:25:20 sync done
+=== Coords-Supervisor  state=Disabled  last=9/23/2026 12:28:46 AM rc=267014  next=9/23/2026 12:43:45 AM
+    last log line: 2026-09-23 00:28:47 DONE -- run-coords\passB\.done present. Final checksum sync to Drive.
+=== KD-Sync-Periodic  state=Ready  last=9/23/2026 12:25:09 AM rc=0  next=9/23/2026 12:40:08 AM
+    last log line: 2026-09-23 00:26:23 periodic DONE exit 0 (183 local files)
+=== Crossgen-Sync-Periodic  state=Ready  last=9/23/2026 12:16:10 AM rc=0  next=9/23/2026 12:46:09 AM
+    last log line: 2026-09-23 00:17:58 periodic EXIT 0
+--- .done markers
+    PRESENT  run-coords\passA\.done  (2026-09-16 02:54)
+    PRESENT  run-coords\passB\.done  (2026-09-15 21:31)
+    PRESENT  run-coords\passC\.done  (2026-09-16 13:56)
+    absent   run-crossgen\kd11\passA11\.done
+--- is any experiment python running right now?
+2

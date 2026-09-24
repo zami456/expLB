@@ -1,0 +1,34 @@
+file        : C:\Users\SURAIYA\Documents\STUDY\thesis\expLB\run-crossgen\kd11\banks\kd\significance.json
+n tests     : 4032 | boot_datasets: 10000
+BH note     : BH within each block over every pooling x layer x probe x comparison
+
+=== F-31 headline table: block 10, mean pooling, L40 ===
+  pc:unified - raw           paper     diff=+0.0757  pairs=62/110  ci95=[-0.006, +0.173]  p=0.0754  q_BH=0.499  clears=False
+  pc:unified - datapca       paper     diff=+0.0729  pairs=65/110  ci95=[-0.042, +0.184]  p=0.2152  q_BH=0.610  clears=False
+  pc:unified - raw           lr_reg10  diff=+0.0847  pairs=66/110  ci95=[+0.000, +0.184]  p=0.0496  q_BH=0.467  clears=False
+  axes - raw                 paper     diff=-0.0272  pairs=50/110  ci95=[-0.193, +0.162]  p=0.731  q_BH=0.902  clears=False
+
+=== every test that clears the dataset bootstrap (significant_datasets) ===
+  count: 6
+  L44  mean  blk9 mms       pc:unified - random        diff=+0.2055 q=0.034
+  L44  mean  blk9 paper     pc:unified - random        diff=+0.2325 q=0.034
+  L22  last  blk9 mms       random - raw               diff=-0.2455 q=0.034
+  L28  last  blk9 mms       random - raw               diff=-0.2570 q=0.034
+  L28  last  blk9 mms       random@2 - raw             diff=-0.2417 q=0.034
+  L44  last  blk9 mms       random@2 - raw             diff=-0.2287 q=0.034
+  negative among them: 4
+
+=== how many clear by the RAW (uncorrected) CI, ignoring BH ===
+  count: 526 of 4032
+
+=== LEVEL 2 ===
+  bank matrix  : C:\Users\SURAIYA\Documents\STUDY\thesis\expLB\run-crossgen\kd11\banks\kd\matrices\mean_L40_s42.json | bank: axes_vectors_s3.pt | name: kd | k: 5
+  baseline     : C:\Users\SURAIYA\Documents\STUDY\thesis\expLB\run-crossgen\kd11\matrices\mean_L40_s42.json | bank: axes_vectors_s3_fp32.pt | name: paper16
+  block10 (11 ds)    pc:unified=0.7380  raw=0.6623  datapca=0.6651  axes=0.6351 | pc:unified-raw=+0.0757 pc:unified-datapca=+0.0729 axes-raw=-0.0272
+  block9 (10 ds)     pc:unified=0.7830  raw=0.6870  datapca=0.6753  axes=0.7060 | pc:unified-raw=+0.0961 pc:unified-datapca=+0.1078 axes-raw=+0.0190
+
+  re-run of the paired dataset bootstrap (B=10000, rng=default_rng(42), block 10 first):
+    pc:unified - raw       paper     diff=+0.0757 ci95=[-0.006, +0.173] p=0.0754
+    pc:unified - datapca   paper     diff=+0.0729 ci95=[-0.042, +0.184] p=0.2152
+    pc:unified - raw       lr_reg10  diff=+0.0847 ci95=[+0.000, +0.184] p=0.0496
+    axes - raw       paper     diff=-0.0272 ci95=[-0.193, +0.162] p=0.7310

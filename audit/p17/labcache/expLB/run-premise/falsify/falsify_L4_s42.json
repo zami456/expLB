@@ -1,0 +1,56 @@
+{
+ "layer": 4,
+ "datasets": [
+  "instructed-deception",
+  "harm-pressure-choice",
+  "harm-pressure-knowledge-report",
+  "harm-pressure-kr-matched",
+  "convincing-game",
+  "insider-trading",
+  "ai_liar",
+  "sandbagging_v2",
+  "roleplaying",
+  "mask",
+  "sycophancy_mt"
+ ],
+ "dim": 8192,
+ "budget": 666,
+ "per10": 66,
+ "probe": "paper",
+ "seed": 42,
+ "reps": 20,
+ "real": 0.6443122354855467,
+ "real_unnorm": 0.6640695732777823,
+ "real_per_target": [
+  0.7723665297391565,
+  0.48307952622673433,
+  0.6769642857142857,
+  0.4608294930875576,
+  0.4670406732117812,
+  0.918468782699686,
+  0.8516483516483517,
+  0.7927000000000001,
+  0.5579710144927537,
+  0.5302432610124918,
+  0.5761226725082147
+ ],
+ "budget10": 0.6070069089639517,
+ "gauss": {
+  "raw": 0.5121856784604047,
+  "oriented": 0.6191754707729485,
+  "raw_max": 0.6336481071994912,
+  "oriented_max": 0.6604090357452367
+ },
+ "cov": {
+  "raw": 0.49423713836991795,
+  "oriented": 0.6428558562780564,
+  "raw_max": 0.5705956969487577,
+  "oriented_max": 0.6856897277255953
+ },
+ "shuffled": {
+  "raw": 0.5112479600543025,
+  "oriented": 0.6269216092738452,
+  "raw_max": 0.6101042126862486,
+  "oriented_max": 0.6683899237641081
+ }
+}

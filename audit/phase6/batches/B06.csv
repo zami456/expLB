@@ -1,0 +1,9 @@
+id,source,source_ref,claim_short,numbers,layer,dataset_hint,status
+D-045,draft PDF,draft p4 3.2 Persona bank,"The bank holds 36 personas ... Twenty-six are those of Mahadik and Skapars (2026): eight deceptive ..., seven honest ..., five sycophantic and five anti-sycophantic roles, and the default assistant wi",36; 26 = 8+7+5+5+1,,,TODO
+D-047,draft PDF,draft p4 3.2 Persona bank,"The ten new roles form three groups: Knowledge denial (4) amnesiac witness, deniable expert, stonewaller, feigned novice; Sincere ignorance (3) honest novice, calibrated reporter, scrupulous witness; ",4/3/3,,,TODO
+D-048,draft PDF,draft p4 3.2 Persona bank,Only a contrast in which both sides deny can separate the lie from its wording. The contrasts we evaluate pool both honest groups,,,,TODO
+D-049,draft PDF,draft p4 3.2 Persona bank,All 36 personas answer the same 30 questions. Twenty are the ten deception and ten sycophancy questions of Mahadik and Skapars (2026). The other ten are new and concern the speaker's own knowledge.,36; 30 = 20 + 10,,,TODO
+D-050,draft PDF,draft p5 3.2 Persona bank,"Sharing one question set matters: if groups answer different questions, the leading direction of the persona space can track the questions instead of the roles.",,,,TODO
+D-051,draft PDF,draft p5 3.2 Persona bank,"Llama-3.3-70B-Instruct generated 5,400 rollouts: 36 personas times five variants times 30 questions, sampled at temperature 0.7 and top-p 0.9 with at most 512 new tokens, through NDIF","5,400; T=0.7; top-p=0.9; max 512 tokens",,,TODO
+D-052,draft PDF,draft p5 3.2 Persona bank,"Llama-3.1-70B-Instruct then scored each response from 0 to 3 ... We keep only responses scored 3. The default assistant has no role and is not judged. That leaves 3,749 rollouts (69%), between 47 and ","0-3 scale; keep=3; 3,749; 69%; 47-149",,,TODO
+D-053,draft PDF,draft p5 3.2 Persona bank,we extract their vectors at all 80 layers.,80,,,TODO

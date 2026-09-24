@@ -1,0 +1,15 @@
+id,source,source_ref,claim_short,numbers,layer,dataset_hint,status
+L-F-60,FINDINGS.md,kd/docs/FINDINGS.md:1868,"2026-09-20 · CORRECTION to F-58: the paper evaluates MASK, not HarmPressureChoice",+0.089; +0.086; +0.026,,harm-pressure-knowledge-report HP-KR mask,TODO
+L-F-61,FINDINGS.md,kd/docs/FINDINGS.md:1905,2026-09-20 · The 36-vs-26 bank comparison is confounded THREE ways,+0.006; +0.076; 0.006; +0.173; 0.499,40,,TODO
+L-F-62,FINDINGS.md,kd/docs/FINDINGS.md:1948,2026-09-20 · s3 vs s23 makes NO measurable difference downstream,0.6623; +0.1496; +0.1500; 0.0004; +0.0869; +0.0838; 0.0031; +0.0757,40,,TODO
+L-F-63,FINDINGS.md,kd/docs/FINDINGS.md:1992,2026-09-20 · CORRECTED three-rung comparison — F-58 compared different datasets AND different k,+0.089; +0.086; +0.026; +0.138; +0.004; 0.7619; +0.020; 0.183,,mask,TODO
+L-F-64,FINDINGS.md,kd/docs/FINDINGS.md:2037,2026-09-21 · Cap run: generation and judging complete; the grader filter is SYMMETRIC,93.83; 93.17; 0.66; 5%; 0%; 4%; 7%; 1.07,,,TODO
+L-F-65,FINDINGS.md,kd/docs/FINDINGS.md:2095,2026-09-21 · **A capitulation axis beats the register axis on `sycophancy_mt`: 0.745 zero-shot vs 0.374,0.745; 0.374; 0.993; 0.0079; 0.541; 100%; 0.759; 0.740,,sycophancy_mt,TODO
+L-F-66,FINDINGS.md,kd/docs/FINDINGS.md:2206,2026-09-21 · The cap result **clears the dataset-level bootstrap** — the first positive result in this project to do so,95%; +0.084; +0.010; +0.150; +0.112; +0.050; +0.185; +0.107,"4,20,40,44",sycophancy_mt,TODO
+L-F-67,FINDINGS.md,kd/docs/FINDINGS.md:2285,2026-09-21 · **The cap advantage is LOCAL — it does not generalise past the column it was aimed at,95%; +0.270; +0.138; +0.398; 0.013; +0.127; +0.013; +0.248,40,sycophancy_mt,TODO
+L-F-68,FINDINGS.md,kd/docs/FINDINGS.md:2350,"2026-09-21 · **A vs B, finally answered: the holding personas improve the CONTRAST too, by ~0.045",0.045; 95%; 0.759; 0.733; 0.789; 0.745; 0.717; 0.772,"20,40,44",sycophancy_mt,TODO
+L-F-69,FINDINGS.md,kd/docs/FINDINGS.md:2421,"2026-09-21 · passA's matched slice is repaired — 9 honest deniers become 134, matching passB exactly",0.784; 0.509; 5.22,,HP-KR,TODO
+L-F-70,FINDINGS.md,kd/docs/FINDINGS.md:2474,"2026-09-21 · Novelty audit: two independent reviews agree on 2 of 10 claims being new, and one of our attributions was wrong",2601.1038; 0.91; 0.87; 2511.1740; 2511.1603; 2609.0289; 2605.2795; 2503.0375,,,TODO
+L-F-71,FINDINGS.md,kd/docs/FINDINGS.md:2529,2026-09-21 · Top-up complete: all three stores now carry the matched slice identically,,,HP-KR,TODO
+L-F-72,FINDINGS.md,kd/docs/FINDINGS.md:2567,"2026-09-21 · **F-03's reversal is layer-localised: 0.739 at L40, 0.374 at L20 — the layer choice moves it by ten times the claimed effect",0.739; 0.374; 0.752; 0.715; 0.300; 0.590; 0.481; 0.613,"20,40",HP-KR,TODO
+L-F-73,FINDINGS.md,kd/docs/FINDINGS.md:2629,"2026-09-21 · **Self-correction: the length claim's AUROC survives, its per-dataset framing does not",0.493; 0.6623; 0.6651; 0.5849; 0.5555; 0.553; 0.665; 2.55,40,sycophancy_mt insider-trading mask,TODO

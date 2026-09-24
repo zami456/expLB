@@ -1,0 +1,12 @@
+id,source_ref,stated_numbers,claim_plain
+D-084,draft main (1).pdf p.7 sec 5.1 + Table 2 + Table 6,0.882; 0.912; 0.894,"The extended (12v13) contrast keeps nearly all of the HP-KR repair: zero-shot AUROC 0.882 / 0.912 / 0.894 at layers 20 / 40 / 44, response-mean pooling, no seed."
+D-085,draft main (1).pdf p.7 sec 5.1,0.103; 0.148,"The HP-KR repair comes from the new personas, not from re-extracting the old ones: the published 8v7 grouping inverts on the original bank (0.103 at L20) and still inverts on the re-extracted bank (0."
+D-088,draft p8 Table 2 (Detection on HP-KR),0.882 0.912 0.894 | 0.500 0.500 0.500,"Extended contrast (12 v 13), zero-shot: AUROC L20/L40/L44 = 0.882 0.912 0.894; BA@1%FPR L20/L40/L44 = 0.500 0.500 0.500"
+D-089,draft p8 Table 2 (Detection on HP-KR),0.109 0.936 0.828 | 0.500 0.500 0.500,"Base probe (trained on RepE, same pipeline): AUROC L20/L40/L44 = 0.109 0.936 0.828; BA@1%FPR L20/L40/L44 = 0.500 0.500 0.500"
+D-099,draft p.8 sec 5.2; draft_claims_raw.csv D-099,(Table 7; Table 6 for the published contrast),"Averaged over training sets the extended contrast beats the raw probes on every held-out dataset at every layer, and matches or beats the published 8v7 contrast."
+D-116,draft p9 Table 3 (mean off-diagonal AUROC),0.527 0.504 0.493 | 0.560 0.544 0.547,Random directions (k = 3): all six L20/L40/L44 = 0.527 0.504 0.493; excl. HP-KR L20/L40/L44 = 0.560 0.544 0.547
+D-117,draft p.9 sec 5.4 + Table 4; draft_claims_raw.csv D-117,0.694/0.413/0.899 vs 0.626/0.281/0.778,"At layer 40, averaged over the five Liars' Bench datasets, the extended contrast reaches 0.694 balanced accuracy, 0.413 recall and 0.899 AUROC; the RepE-trained base probe reaches 0.626, 0.281 and 0.7"
+D-128,draft p10 5.5 Depth,,"We report layer 40 as our main depth. Three layers do not locate an optimum, and a layer between 20 and 40 may do better."
+D-132,"draft p10 Fig 4 left (raw 8192-d probe, L40)",0.92 0.95 0.97 0.99 0.89 0.27,test set IT; trained on CG/HP-C/HP-KR/IT/ID/RepE = 0.92 0.95 0.97 0.99 0.89 0.27
+D-137,draft p11 Fig 5,95%,"Zero-shot persona contrasts against the RepE-trained base probe at layer 40, in the layout of Liars' Bench's Figure 2 ... Error bars are 95% bootstrap intervals over examples ... the Average excludes "
+D-146,"draft p12 Table 4 (LB protocol, 5-dataset mean)",0.725 0.487 0.894,L40 Knowledge-denial contrast (4 v 6): BA / recall / AUROC = 0.725 0.487 0.894

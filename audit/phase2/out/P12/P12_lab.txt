@@ -1,0 +1,435 @@
+
+==============================================================================
+O-001b  which axis is the bare `contrast`/`PC1`, and what the SYCOPHANCY axis reads
+==============================================================================
+  C:/Users/user4/expLB/run-crossgen/kd11/matrices/mean_L40_s42.json
+  bank=axes_vectors_s3_fp32.pt  bank_name=paper16  k=5  directions=['contrast', 'PC1']
+    contrast               sycophancy_mt=0.4089  HP-KR=0.6436
+    PC1                    sycophancy_mt=0.3740  HP-KR=0.6678
+
+  bank C:/Users/user4/expLB/run-paper16/axes_vectors_s3_fp32.pt
+    axes: ['assistant', 'deception', 'sycophancy', 'unified']
+    pca : ['all', 'deception', 'sycophancy', 'unified']
+    27_crossgen.py would pick _zs_axis = deception   <- so the bare `contrast`/`PC1` rows are the DECEPTION axis
+
+  any lab matrix that scored a SYCOPHANCY zero-shot direction on sycophancy_mt:
+    C:/Users/user4/expLB/run-crossgen\kd11\banks\collab\matrices\mean_L40_s42.json  bank=collab
+        contrast:sycophancy        sycophancy_mt=0.3181
+        PC1:sycophancy             sycophancy_mt=0.3237
+    C:/Users/user4/expLB/run-crossgen\kd11\passA11\banks\kd_s23\matrices\mean_L40_s42.json  bank=kd_s23
+        contrast:sycophancy        sycophancy_mt=0.3314
+        PC1:sycophancy             sycophancy_mt=0.3364
+    C:/Users/user4/expLB/run-crossgen\kd11\passA11\matrices\mean_L40_s42.json  bank=paper16
+        contrast:sycophancy        sycophancy_mt=0.3061
+        PC1:sycophancy             sycophancy_mt=0.2996
+    C:/Users/user4/expLB/run-crossgen\kd11\passC11\banks\kd_s23\matrices\mean_L40_s42.json  bank=kd_s23
+        contrast:sycophancy        sycophancy_mt=0.3310
+        PC1:sycophancy             sycophancy_mt=0.3363
+    C:/Users/user4/expLB/run-crossgen\kd11\passC11\matrices\mean_L40_s42.json  bank=paper16
+        contrast:sycophancy        sycophancy_mt=0.3066
+        PC1:sycophancy             sycophancy_mt=0.2995
+
+==============================================================================
+O-002  cap bank, filtered (s23) vs unfiltered (all): the whole Claim-2 table
+==============================================================================
+
+  cap_s23: 21 layers, 10 source datasets
+    L40  pc:capitulation@2 = 0.7136   raw = 0.6013   datapca@2 = 0.5594   random@2 = 0.4974
+    L40 margin - datapca@2  +0.1542  95% CI [+0.0913, +0.2113]  P(<=0) 0.0000
+    L40 margin - raw        +0.1123  95% CI [+0.0502, +0.1847]  P(<=0) 0.0000
+    layers positive vs datapca@2: 21/21   vs raw: 21/21
+    argmax median L36  95% [L28, L60]  lands on L40 in 3.9%
+
+  cap_all: 21 layers, 10 source datasets
+    L40  pc:capitulation@2 = 0.7132   raw = 0.6013   datapca@2 = 0.5594   random@2 = 0.4974
+    L40 margin - datapca@2  +0.1538  95% CI [+0.0907, +0.2118]  P(<=0) 0.0000
+    L40 margin - raw        +0.1118  95% CI [+0.0489, +0.1861]  P(<=0) 0.0000
+    layers positive vs datapca@2: 21/21   vs raw: 21/21
+    argmax median L32  95% [L28, L60]  lands on L40 in 3.1%
+
+  filtered vs unfiltered at L40 (the briefing's 'differ by 0.0004'):
+    pc:capitulation@2    s23 0.7136   all 0.7132   |diff| 0.0004
+    raw                  s23 0.6013   all 0.6013   |diff| 0.0000
+    datapca@2            s23 0.5594   all 0.5594   |diff| 0.0000
+    random@2             s23 0.4974   all 0.4974   |diff| 0.0000
+    length               s23 0.5820   all 0.5820   |diff| 0.0000
+    margin vs datapca@2:  s23 +0.1542  all +0.1538  |diff| 0.0004
+    margin vs raw      :  s23 +0.1123  all +0.1118  |diff| 0.0004
+
+==============================================================================
+O-003  leave-one-CLUSTER-out (F-108)
+==============================================================================
+
+  L20  keys = ['clusters', 'layer', 'leaked', 'per_dataset', 'pooling', 'probe', 'seed', 'summary']
+    per-target:
+      harm-pressure-choice               {'cluster': 'lb_harm', 'single_offdiag': 0.5623929471032747, 'pooled_lodo': 0.6070528967254408, 'n_lodo_datasets': 10, 'pooled_loco': 0.6149454240134341, 'n_loco_datasets': 8}
+      harm-pressure-knowledge-report     {'cluster': 'lb_harm', 'single_offdiag': 0.5301736972704715, 'pooled_lodo': 0.7089826302729528, 'n_lodo_datasets': 10, 'pooled_loco': 0.43106699751861044, 'n_loco_datasets': 8}
+      harm-pressure-kr-matched           {'cluster': 'lb_harm', 'single_offdiag': 0.5462365591397849, 'pooled_lodo': 0.7250384024577574, 'n_lodo_datasets': 10, 'pooled_loco': 0.6497695852534562, 'n_loco_datasets': 8}
+      instructed-deception               {'cluster': 'lb_scenario', 'single_offdiag': 0.786239325104588, 'pooled_lodo': 0.9185008470767209, 'n_lodo_datasets': 10, 'pooled_loco': 0.8994191473913494, 'n_loco_datasets': 8}
+      convincing-game                    {'cluster': 'lb_scenario', 'single_offdiag': 0.6322530864197531, 'pooled_lodo': 0.7098765432098766, 'n_lodo_datasets': 10, 'pooled_loco': 0.7515432098765431, 'n_loco_datasets': 8}
+      insider-trading                    {'cluster': 'lb_scenario', 'single_offdiag': 0.6486580994842207, 'pooled_lodo': 0.8408951831453798, 'n_lodo_datasets': 10, 'pooled_loco': 0.8672086720867209, 'n_loco_datasets': 8}
+      ai_liar                            {'cluster': 'apollo', 'single_offdiag': 0.7190934065934066, 'pooled_lodo': 0.8832417582417582, 'n_lodo_datasets': 10, 'pooled_loco': 0.9107142857142857, 'n_loco_datasets': 8}
+      roleplaying                        {'cluster': 'apollo', 'single_offdiag': 0.6654761904761906, 'pooled_lodo': 0.9077380952380952, 'n_lodo_datasets': 10, 'pooled_loco': 0.9166666666666666, 'n_loco_datasets': 8}
+      sandbagging_v2                     {'cluster': 'apollo', 'single_offdiag': 0.717046818727491, 'pooled_lodo': 0.9599839935974389, 'n_lodo_datasets': 10, 'pooled_loco': 0.9565826330532212, 'n_loco_datasets': 8}
+      mask                               {'cluster': 'mask', 'single_offdiag': 0.5663708086785011, 'pooled_lodo': 0.6870479947403024, 'n_lodo_datasets': 10, 'pooled_loco': 0.6870479947403024, 'n_loco_datasets': 10}
+      sycophancy_mt                      {'cluster': 'ours', 'single_offdiag': 0.5726881552182757, 'pooled_lodo': 0.6800187764043186, 'n_lodo_datasets': 10, 'pooled_loco': 0.6800187764043186, 'n_loco_datasets': 10}
+
+  L32  keys = ['clusters', 'layer', 'leaked', 'per_dataset', 'pooling', 'probe', 'seed', 'summary']
+    per-target:
+      harm-pressure-choice               {'cluster': 'lb_harm', 'single_offdiag': 0.6530898404701931, 'pooled_lodo': 0.7204869857262804, 'n_lodo_datasets': 10, 'pooled_loco': 0.6983207388748951, 'n_loco_datasets': 8}
+      harm-pressure-knowledge-report     {'cluster': 'lb_harm', 'single_offdiag': 0.6373697270471463, 'pooled_lodo': 0.9371712158808932, 'n_lodo_datasets': 10, 'pooled_loco': 0.9009429280397022, 'n_loco_datasets': 8}
+      harm-pressure-kr-matched           {'cluster': 'lb_harm', 'single_offdiag': 0.669431643625192, 'pooled_lodo': 0.8125960061443932, 'n_lodo_datasets': 10, 'pooled_loco': 0.794162826420891, 'n_loco_datasets': 8}
+      instructed-deception               {'cluster': 'lb_scenario', 'single_offdiag': 0.9003747882308198, 'pooled_lodo': 0.9739895584828682, 'n_lodo_datasets': 10, 'pooled_loco': 0.9726480655533658, 'n_loco_datasets': 8}
+      convincing-game                    {'cluster': 'lb_scenario', 'single_offdiag': 0.7216049382716049, 'pooled_lodo': 0.757716049382716, 'n_lodo_datasets': 10, 'pooled_loco': 0.7608024691358024, 'n_loco_datasets': 8}
+      insider-trading                    {'cluster': 'lb_scenario', 'single_offdiag': 0.5953405017921147, 'pooled_lodo': 0.4497770784159455, 'n_lodo_datasets': 10, 'pooled_loco': 0.7116880846227817, 'n_loco_datasets': 8}
+      ai_liar                            {'cluster': 'apollo', 'single_offdiag': 0.779532967032967, 'pooled_lodo': 0.9107142857142858, 'n_lodo_datasets': 10, 'pooled_loco': 0.918956043956044, 'n_loco_datasets': 8}
+      roleplaying                        {'cluster': 'apollo', 'single_offdiag': 0.6528273809523808, 'pooled_lodo': 0.8511904761904762, 'n_lodo_datasets': 10, 'pooled_loco': 0.8705357142857143, 'n_loco_datasets': 8}
+      sandbagging_v2                     {'cluster': 'apollo', 'single_offdiag': 0.7943377350940376, 'pooled_lodo': 0.9488795518207283, 'n_lodo_datasets': 10, 'pooled_loco': 0.9514805922368947, 'n_loco_datasets': 8}
+      mask                               {'cluster': 'mask', 'single_offdiag': 0.5736686390532544, 'pooled_lodo': 0.6443129520052598, 'n_lodo_datasets': 10, 'pooled_loco': 0.6443129520052598, 'n_loco_datasets': 10}
+      sycophancy_mt                      {'cluster': 'ours', 'single_offdiag': 0.6215928649663589, 'pooled_lodo': 0.8148959474260679, 'n_lodo_datasets': 10, 'pooled_loco': 0.8148959474260679, 'n_loco_datasets': 10}
+
+  L40  keys = ['clusters', 'layer', 'leaked', 'per_dataset', 'pooling', 'probe', 'seed', 'summary']
+    per-target:
+      harm-pressure-choice               {'cluster': 'lb_harm', 'single_offdiag': 0.6174055415617128, 'pooled_lodo': 0.6924433249370276, 'n_lodo_datasets': 10, 'pooled_loco': 0.5952141057934509, 'n_loco_datasets': 8}
+      harm-pressure-knowledge-report     {'cluster': 'lb_harm', 'single_offdiag': 0.648347394540943, 'pooled_lodo': 0.9674441687344913, 'n_lodo_datasets': 10, 'pooled_loco': 0.6492307692307693, 'n_loco_datasets': 8}
+      harm-pressure-kr-matched           {'cluster': 'lb_harm', 'single_offdiag': 0.6181259600614439, 'pooled_lodo': 0.8448540706605223, 'n_lodo_datasets': 10, 'pooled_loco': 0.6436251920122887, 'n_loco_datasets': 8}
+      instructed-deception               {'cluster': 'lb_scenario', 'single_offdiag': 0.8151014763337135, 'pooled_lodo': 0.9328700342288144, 'n_lodo_datasets': 10, 'pooled_loco': 0.9233343705701345, 'n_loco_datasets': 8}
+      convincing-game                    {'cluster': 'lb_scenario', 'single_offdiag': 0.6804012345679011, 'pooled_lodo': 0.9243827160493827, 'n_lodo_datasets': 10, 'pooled_loco': 0.824074074074074, 'n_loco_datasets': 8}
+      insider-trading                    {'cluster': 'lb_scenario', 'single_offdiag': 0.628411574438325, 'pooled_lodo': 0.9412536060844479, 'n_lodo_datasets': 10, 'pooled_loco': 0.9735990908296179, 'n_loco_datasets': 8}
+      ai_liar                            {'cluster': 'apollo', 'single_offdiag': 0.701923076923077, 'pooled_lodo': 0.8530219780219781, 'n_lodo_datasets': 10, 'pooled_loco': 0.8612637362637363, 'n_loco_datasets': 8}
+      roleplaying                        {'cluster': 'apollo', 'single_offdiag': 0.6382440476190475, 'pooled_lodo': 0.7395833333333334, 'n_lodo_datasets': 10, 'pooled_loco': 0.8095238095238095, 'n_loco_datasets': 8}
+      sandbagging_v2                     {'cluster': 'apollo', 'single_offdiag': 0.7531312525010004, 'pooled_lodo': 0.9384753901560624, 'n_lodo_datasets': 10, 'pooled_loco': 0.938375350140056, 'n_loco_datasets': 8}
+      mask                               {'cluster': 'mask', 'single_offdiag': 0.5885272846811309, 'pooled_lodo': 0.6666666666666667, 'n_lodo_datasets': 10, 'pooled_loco': 0.6666666666666667, 'n_loco_datasets': 10}
+      sycophancy_mt                      {'cluster': 'ours', 'single_offdiag': 0.6141292442497261, 'pooled_lodo': 0.7987012987012987, 'n_lodo_datasets': 10, 'pooled_loco': 0.7987012987012987, 'n_loco_datasets': 10}
+
+==============================================================================
+O-005  label permutation on the band (F-84) + the OTHER p=0.38 (volume vs diversity)
+==============================================================================
+  C:/Users/user4/expLB/run-premise/cluster_perm_kd_matched.json
+{
+  "layers": [
+    0,
+    4,
+    8,
+    12,
+    16,
+    20,
+    24,
+    28,
+    32,
+    36,
+    40,
+    44,
+    48,
+    52,
+    56,
+    60,
+    64,
+    68,
+    72,
+    76
+  ],
+  "observed_margins": [
+    -0.053456778892157164,
+    -0.06283352907821527,
+    -0.06594637641610845,
+    -0.08252644694096928,
+    -0.007420758880580303,
+    -0.12691705886522314,
+    -0.06084490401767251,
+    0.2395108435812926,
+    0.28997705461246764,
+    0.12009193252294714,
+    0.1375974861490119,
+    0.105649892145397,
+    0.022692359334207435,
+    -0.009198465464081873,
+    -0.06106554157659094,
+    -0.0682668381944691,
+    -0.06908749920260837,
+    -0.06600580879139051,
+    -0.07361047471382509,
+    0.05881239394691129
+  ],
+  "observed_clusters": [
+    0.9155195683453238,
+    0.05881239394691129
+  ],
+  "observed_max_mass": 0.9155195683453238,
+  "p": 0.38,
+  "B": 200
+}
+  (list) null_max_mass: n=200 min=0.0000 max=3.9097
+
+  C:/Users/user4/expLB/run-premise/premise_L40_mean_s42.json  summary keys = ['pooled_full', 'pooled_lodo', 'pooled_lodo_match', 'pooled_match', 'single', 'single_own_mean']
+    summary.pooled_full = 0.9447209136026263
+    summary.pooled_lodo = 0.8544753649714415
+    summary.pooled_lodo_match = 0.8500147049628101
+    summary.pooled_match = 0.8923996955399871
+    summary.single = 0.6763163062289969
+    summary.single_own_mean = 0.9506418818184899
+    n_train: {"single_mean": 666, "pooled_full": 7336, "pooled_match": 414}
+    per_dataset: {"instructed-deception": {"single_offdiag": 0.821917257634901, "single_own": 0.9996900397157903, "pooled_full": 0.9993017378212857, "pooled_match": 0.9856430483742413, "pooled_lodo": 0.9412880723195248, "n_lodo": 3564, "pooled_lodo_match": 0.9558255502646584, "n_lodo_match": 440}, "harm-pressure-choice": {"single_offdiag": 0.6524611598215659, "single_own": 0.9361636671281341, "pooled_full": 0.9446239040147669, "pooled_match": 0.8505614520842947, "pooled_lodo": 0.7557298877095832, "n_lodo": 7134, "pooled_lodo_match": 0.7353484079372405, "n_lodo_match": 500}, "harm-pressure-knowledge-report": {"single_offdiag": 0.6931785714285714, "single_own": 0.979375, "pooled_full": 0.9751785714285715, "pooled_match": 0.9767857142857143, "pooled_lodo": 0.9720535714285714, "n_lodo": 7114, "pooled_lodo_matc
+
+  looking for the pooled_full vs pooled_match test:
+    "pooled_match": 414
+    "pooled_match": 0.9856430483742413
+    "pooled_lodo_match": 0.9558255502646584
+    "n_lodo_match": 440
+    "pooled_match": 0.8505614520842947
+    "pooled_lodo_match": 0.7353484079372405
+    "n_lodo_match": 500
+    "pooled_match": 0.9767857142857143
+    "pooled_lodo_match": 0.93875
+    "n_lodo_match": 476
+    "harm-pressure-kr-matched": 
+    "pooled_match": 0.6897081413210445
+    "pooled_lodo_match": 0.7004608294930875
+    "n_lodo_match": 442
+    "pooled_match": 1.0
+    "pooled_lodo_match": 0.9887798036465638
+    "n_lodo_match": 442
+    "pooled_match": 0.988228113010115
+    "pooled_lodo_match": 0.9508196721311476
+    "n_lodo_match": 412
+    "pooled_match": 1.0
+    "pooled_lodo_match": 0.8612637362637362
+    "n_lodo_match": 440
+    "pooled_match": 0.9904999999999999
+    "pooled_lodo_match": 0.9423
+    "n_lodo_match": 424
+    "pooled_match": 0.9076086956521738
+    "pooled_lodo_match": 0.8478260869565217
+    "n_lodo_match": 450
+    "pooled_match": 0.631163708086785
+    "pooled_lodo_match": 0.6364234056541749
+    "n_lodo_match": 458
+    "pooled_match": 0.7961977781254891
+    "pooled_lodo_match": 0.7923642622437802
+    "n_lodo_match": 460
+    "pooled_match": 0.8923996955399871
+    "pooled_lodo_match": 0.8500147049628101
+
+==============================================================================
+O-009 / O-011 / O-012  the collaborator's two arms on OUR eleven
+==============================================================================
+
+  ---- pooling = mean ----
+     L    axis1      ext      raw  ext-axis1    share  pooledLODO pooled-ext
+     0   0.6179   0.6198   0.5349    +0.0019     2.2%      0.6594    +0.0396
+     4   0.6077   0.6228   0.5399    +0.0151    18.3%      0.6712    +0.0484
+     8   0.5953   0.6272   0.5358    +0.0320    35.0%      0.6936    +0.0664
+    12   0.5730   0.6124   0.5577    +0.0393    72.0%      0.7181    +0.1057
+    16   0.6075   0.6733   0.5950    +0.0658    84.0%      0.7388    +0.0655
+    20   0.6572   0.7386   0.6289    +0.0814    74.1%      0.8027    +0.0641
+    22   0.6572   0.7313   0.6072    +0.0741    59.7%      0.7795    +0.0482
+    24   0.6403   0.7199   0.6152    +0.0797    76.1%      0.7786    +0.0587
+    28   0.7047   0.7765   0.6500    +0.0718    56.7%      0.8348    +0.0583
+    32   0.7192   0.7783   0.6818    +0.0592    61.3%      0.8237    +0.0453
+    36   0.7419   0.8018   0.6794    +0.0599    49.0%      0.8597    +0.0580
+    40   0.7325   0.7996   0.6623    +0.0671    48.8%      0.8545    +0.0548
+    44   0.7134   0.7745   0.6565    +0.0610    51.7%      0.8460    +0.0715
+    48   0.6872   0.7505   0.6498    +0.0634    62.9%      0.8355    +0.0850
+    52   0.6759   0.7355   0.6491    +0.0596    69.0%      0.8449    +0.1094
+    56   0.6522   0.7037   0.6343    +0.0515    74.2%      0.8188    +0.1151
+    60   0.6379   0.6940   0.6386    +0.0561   101.4%      0.8141    +0.1202  axis1<raw
+    64   0.6337   0.6901   0.6370    +0.0564   106.3%      0.8083    +0.1182  axis1<raw
+    68   0.6260   0.6910   0.6339    +0.0650   113.9%      0.8092    +0.1183  axis1<raw
+    72   0.6406   0.6846   0.6343    +0.0440    87.4%      0.8027    +0.1181
+    76   0.7285   0.7812   0.6371    +0.0528    36.6%      0.8284    +0.0472
+    ext-axis1 positive at 21/21 layers; mean +0.0551; range [+0.0019 (L0), +0.0814 (L20)]
+    share: median 62.9%  mean 63.8%  range [2.2%, 113.9%]
+    layers where ext-axis1 <= 0: []
+
+  ---- pooling = last ----
+     L    axis1      ext      raw  ext-axis1    share  pooledLODO pooled-ext
+     0   0.5625   0.5298   0.5088    -0.0327  -155.9%                       
+     4   0.5393   0.5636   0.5192    +0.0242    54.6%                       
+     8   0.5163   0.5752   0.5346    +0.0589   144.9%                         axis1<raw
+    12   0.5612   0.5965   0.5561    +0.0353    87.3%                       
+    16   0.6430   0.7177   0.5916    +0.0747    59.2%                       
+    20   0.6549   0.7300   0.6289    +0.0750    74.2%                       
+    22   0.6678   0.7308   0.6046    +0.0631    50.0%                       
+    24   0.6690   0.7293   0.6064    +0.0603    49.0%                       
+    28   0.7011   0.7584   0.6423    +0.0573    49.4%                       
+    32   0.6842   0.7537   0.6548    +0.0695    70.3%                       
+    36   0.7161   0.8010   0.6543    +0.0848    57.8%                       
+    40   0.7291   0.8011   0.6280    +0.0721    41.6%                       
+    44   0.7353   0.7943   0.6239    +0.0590    34.6%                       
+    48   0.7085   0.7750   0.6121    +0.0664    40.8%                       
+    52   0.6988   0.7732   0.6066    +0.0745    44.7%                       
+    56   0.6811   0.7532   0.5937    +0.0721    45.2%                       
+    60   0.6639   0.7289   0.5899    +0.0650    46.8%                       
+    64   0.6598   0.7278   0.5993    +0.0681    53.0%                       
+    68   0.6230   0.6864   0.5922    +0.0634    67.4%                       
+    72   0.6364   0.7009   0.5816    +0.0646    54.1%                       
+    76   0.6914   0.7540   0.5958    +0.0625    39.5%                       
+    ext-axis1 positive at 20/21 layers; mean +0.0590; range [-0.0327 (L0), +0.0848 (L36)]
+    share: median 50.0%  mean 48.0%  range [-155.9%, 144.9%]
+    layers where ext-axis1 <= 0: [0]
+
+  O-009 exactly as the briefing states it (mean pooling):
+    L20: pooled LODO 0.8027   axis1 0.6572 (gap +0.1455)   ext_axis1 0.7386 (gap +0.0641)
+    L40: pooled LODO 0.8545   axis1 0.7325 (gap +0.1219)   ext_axis1 0.7996 (gap +0.0548)
+
+==============================================================================
+FILES READ (path, size, md5, mtime)
+==============================================================================
+        422104  d7616aa50814267e38bd38931e25a6a0  2026-09-19 20:12:00  C:/Users/user4/expLB/run-crossgen/kd11/matrices/mean_L40_s42.json
+      62935505  76fee3969b41dcabb5a667b00107fd25  2026-09-16 02:03:53  C:/Users/user4/expLB/run-paper16/axes_vectors_s3_fp32.pt
+         90023  3f9fe86b652dda3aa89b18d9466371c5  2026-09-22 00:33:52  C:/Users/user4/expLB/run-crossgen\kd11\banks\collab\matrices\mean_L40_s42.json
+        191544  392c6d95e306058023aea7f0fd8e9c6b  2026-09-21 12:22:03  C:/Users/user4/expLB/run-crossgen\kd11\passA11\banks\kd_s23\matrices\mean_L40_s42.json
+        353538  b4789e6c4ac0587fd183b02d8edefc45  2026-09-21 12:20:34  C:/Users/user4/expLB/run-crossgen\kd11\passA11\matrices\mean_L40_s42.json
+        191464  6523a32111d7eb5067dd436a72904f69  2026-09-21 12:27:56  C:/Users/user4/expLB/run-crossgen\kd11\passC11\banks\kd_s23\matrices\mean_L40_s42.json
+        353860  20caa937e2c8bc57eb5e2febdce33243  2026-09-21 12:24:13  C:/Users/user4/expLB/run-crossgen\kd11\passC11\matrices\mean_L40_s42.json
+        469494  eef766ff6e8fed0a26494f30436638c8  2026-09-21 13:21:44  C:/Users/user4/expLB/run-crossgen/kd11/banks/cap_s23/matrices/mean_L0_s42.json
+        470593  903f505be0b847f4ea216c9e1079c6a3  2026-09-21 13:23:08  C:/Users/user4/expLB/run-crossgen/kd11/banks/cap_s23/matrices/mean_L4_s42.json
+        473026  e734d3e9c8873345092c470c9f7d3203  2026-09-21 13:24:24  C:/Users/user4/expLB/run-crossgen/kd11/banks/cap_s23/matrices/mean_L8_s42.json
+        471957  ba2e5471aeb1c1729785843f95c75d3b  2026-09-21 13:25:40  C:/Users/user4/expLB/run-crossgen/kd11/banks/cap_s23/matrices/mean_L12_s42.json
+        473137  fe2f8cb9a5c41e6ac836303ef6c006e3  2026-09-21 13:26:53  C:/Users/user4/expLB/run-crossgen/kd11/banks/cap_s23/matrices/mean_L16_s42.json
+        474771  81bdfeb172445b071a4e57b5fc647255  2026-09-21 03:48:48  C:/Users/user4/expLB/run-crossgen/kd11/banks/cap_s23/matrices/mean_L20_s42.json
+        473725  426b7dad31589b3e47ccb6ec8f6af7ae  2026-09-21 13:28:11  C:/Users/user4/expLB/run-crossgen/kd11/banks/cap_s23/matrices/mean_L22_s42.json
+        472431  a0ac9c7828929b6f5f6a1fe3fc4f1c1d  2026-09-21 13:29:33  C:/Users/user4/expLB/run-crossgen/kd11/banks/cap_s23/matrices/mean_L24_s42.json
+        474866  e72030a625e532cccc9855eaada070b6  2026-09-21 13:31:02  C:/Users/user4/expLB/run-crossgen/kd11/banks/cap_s23/matrices/mean_L28_s42.json
+        476551  4c3701b668b46c97de6d5eaca567b9d3  2026-09-21 13:32:28  C:/Users/user4/expLB/run-crossgen/kd11/banks/cap_s23/matrices/mean_L32_s42.json
+        477373  c0cea95027c947cbcd3ab43e823006c3  2026-09-21 13:33:57  C:/Users/user4/expLB/run-crossgen/kd11/banks/cap_s23/matrices/mean_L36_s42.json
+        476791  1a259fa9f8e9b784fcda67ea4b87473f  2026-09-21 03:49:57  C:/Users/user4/expLB/run-crossgen/kd11/banks/cap_s23/matrices/mean_L40_s42.json
+        476267  c2b5839bb59ff324b3d97d622bea8026  2026-09-21 03:51:02  C:/Users/user4/expLB/run-crossgen/kd11/banks/cap_s23/matrices/mean_L44_s42.json
+        476322  0024e43bf5f2826c0ae33852b6eefe35  2026-09-21 13:35:26  C:/Users/user4/expLB/run-crossgen/kd11/banks/cap_s23/matrices/mean_L48_s42.json
+        475022  a4826341a3eaa181fa958aee4f12a3ac  2026-09-21 13:36:54  C:/Users/user4/expLB/run-crossgen/kd11/banks/cap_s23/matrices/mean_L52_s42.json
+        474269  441180e9d3b12f79ef2125a82e508d56  2026-09-21 13:38:08  C:/Users/user4/expLB/run-crossgen/kd11/banks/cap_s23/matrices/mean_L56_s42.json
+        473164  41b462c1a19b836b970e26cb1e9ae56e  2026-09-21 13:39:20  C:/Users/user4/expLB/run-crossgen/kd11/banks/cap_s23/matrices/mean_L60_s42.json
+        472536  33d691b87a278d8fccfa20c592aae10a  2026-09-21 13:40:33  C:/Users/user4/expLB/run-crossgen/kd11/banks/cap_s23/matrices/mean_L64_s42.json
+        471742  8a05bb5320b507b2e0a7e936602461f6  2026-09-21 13:41:51  C:/Users/user4/expLB/run-crossgen/kd11/banks/cap_s23/matrices/mean_L68_s42.json
+        474860  4833d4e4d915c57d5a0b3c40b88aecb5  2026-09-21 13:43:09  C:/Users/user4/expLB/run-crossgen/kd11/banks/cap_s23/matrices/mean_L72_s42.json
+        474658  1b7c20949d93242f7c1166509466ead9  2026-09-21 13:44:31  C:/Users/user4/expLB/run-crossgen/kd11/banks/cap_s23/matrices/mean_L76_s42.json
+        470257  2b0c368b03b2c43814c6d975c50f6c9e  2026-09-21 14:08:01  C:/Users/user4/expLB/run-crossgen/kd11/banks/cap_all/matrices/mean_L0_s42.json
+        470849  612333ec3d921df27d240445bad7c8f6  2026-09-21 14:08:58  C:/Users/user4/expLB/run-crossgen/kd11/banks/cap_all/matrices/mean_L4_s42.json
+        472722  b01bc21cd4bfc53d5be970714abc6a80  2026-09-21 14:09:55  C:/Users/user4/expLB/run-crossgen/kd11/banks/cap_all/matrices/mean_L8_s42.json
+        471702  2233d8902abada9c59174f4c55ef3f72  2026-09-21 14:10:52  C:/Users/user4/expLB/run-crossgen/kd11/banks/cap_all/matrices/mean_L12_s42.json
+        472725  79b330687a8bf0154ca32fa348865161  2026-09-21 14:11:49  C:/Users/user4/expLB/run-crossgen/kd11/banks/cap_all/matrices/mean_L16_s42.json
+        474040  de6f574fb9d2dc3fbb84b5702a567c2a  2026-09-21 03:55:15  C:/Users/user4/expLB/run-crossgen/kd11/banks/cap_all/matrices/mean_L20_s42.json
+        473565  99c40ec6bc98e5f1bc29f0c622b285bc  2026-09-21 14:12:45  C:/Users/user4/expLB/run-crossgen/kd11/banks/cap_all/matrices/mean_L22_s42.json
+        472550  47c96b5a79b76571944552992d54c99a  2026-09-21 14:13:42  C:/Users/user4/expLB/run-crossgen/kd11/banks/cap_all/matrices/mean_L24_s42.json
+        475114  b3e1b5a773bd57661e447657f1934e59  2026-09-21 14:14:52  C:/Users/user4/expLB/run-crossgen/kd11/banks/cap_all/matrices/mean_L28_s42.json
+        477155  e093ecafab3e3d024e0eddfa9a4d6963  2026-09-21 14:16:04  C:/Users/user4/expLB/run-crossgen/kd11/banks/cap_all/matrices/mean_L32_s42.json
+        477461  5075bf5f7807eb656f1495922dad4603  2026-09-21 14:17:14  C:/Users/user4/expLB/run-crossgen/kd11/banks/cap_all/matrices/mean_L36_s42.json
+        476329  f042d65f18f3a6b19a71bdecdd019095  2026-09-21 03:56:16  C:/Users/user4/expLB/run-crossgen/kd11/banks/cap_all/matrices/mean_L40_s42.json
+        476410  cb099399057dde37c8bc629b8c656f16  2026-09-21 03:57:15  C:/Users/user4/expLB/run-crossgen/kd11/banks/cap_all/matrices/mean_L44_s42.json
+        475422  d238cfdd6618b0a128946d57460c5905  2026-09-21 14:18:27  C:/Users/user4/expLB/run-crossgen/kd11/banks/cap_all/matrices/mean_L48_s42.json
+        474128  7a147b62de5579526e7886ceede945fe  2026-09-21 14:19:41  C:/Users/user4/expLB/run-crossgen/kd11/banks/cap_all/matrices/mean_L52_s42.json
+        474282  1d4902b2d6493f5cc2def303fecade04  2026-09-21 14:20:57  C:/Users/user4/expLB/run-crossgen/kd11/banks/cap_all/matrices/mean_L56_s42.json
+        472985  f5ba4d5a24fdfcb937aee1a56fe7c1de  2026-09-21 14:22:00  C:/Users/user4/expLB/run-crossgen/kd11/banks/cap_all/matrices/mean_L60_s42.json
+        472694  80dd0f3fd8b4ec71158ea316ac8e1af7  2026-09-21 14:22:57  C:/Users/user4/expLB/run-crossgen/kd11/banks/cap_all/matrices/mean_L64_s42.json
+        471346  67e882f2c831f8d3ac349c51aa64647d  2026-09-21 14:24:00  C:/Users/user4/expLB/run-crossgen/kd11/banks/cap_all/matrices/mean_L68_s42.json
+        474839  424fb2c8fd7085fd39565565695c3499  2026-09-21 14:25:02  C:/Users/user4/expLB/run-crossgen/kd11/banks/cap_all/matrices/mean_L72_s42.json
+        475887  e65aeb4bb9901e16abb397c1e9777422  2026-09-21 14:26:05  C:/Users/user4/expLB/run-crossgen/kd11/banks/cap_all/matrices/mean_L76_s42.json
+          3364  90eda6baec4ab35539fa9f0301baa068  2026-09-22 16:58:55  C:/Users/user4/expLB/run-premise/clustered/clustered_L20_mean_s42.json
+          3361  73686f8ab57716d48a9ac003664f8af2  2026-09-22 16:59:17  C:/Users/user4/expLB/run-premise/clustered/clustered_L32_mean_s42.json
+          3360  524c1340b2f7bd557cdce51aa84cabf7  2026-09-22 16:59:39  C:/Users/user4/expLB/run-premise/clustered/clustered_L40_mean_s42.json
+          5168  e43dba906883c2876d6decc40fe508ad  2026-09-22 16:07:02  C:/Users/user4/expLB/run-premise/cluster_perm_kd_matched.json
+         24283  e5ddaaa13ea6aa5a4b97bbafa38592ba  2026-09-21 14:26:55  C:/Users/user4/expLB/run-premise/premise_L40_mean_s42.json
+         24386  fc0cea2577846358794c9155e7495229  2026-09-21 14:33:25  C:/Users/user4/expLB/run-premise/premise_L0_mean_s42.json
+         24354  fcaa67d8febd362c0f423588d72e2e3f  2026-09-21 14:33:43  C:/Users/user4/expLB/run-premise/premise_L4_mean_s42.json
+         24415  d904b175ae6392294a3124a5f4dd0dac  2026-09-21 14:34:02  C:/Users/user4/expLB/run-premise/premise_L8_mean_s42.json
+         24311  7177ac57a248b4d2722f5bb9e06c85f2  2026-09-21 14:34:23  C:/Users/user4/expLB/run-premise/premise_L12_mean_s42.json
+         24251  0eb1c03dc7bd275c2e1dede6b0634fb5  2026-09-21 14:34:48  C:/Users/user4/expLB/run-premise/premise_L16_mean_s42.json
+         24324  d975eb33f26f328bede48aa7f9b6e03a  2026-09-21 14:35:13  C:/Users/user4/expLB/run-premise/premise_L20_mean_s42.json
+         24287  b0555220119611e8a49f027e61fcd96f  2026-09-21 14:35:39  C:/Users/user4/expLB/run-premise/premise_L22_mean_s42.json
+         24282  10149cdf525cc10f66a205819dd06506  2026-09-21 14:36:08  C:/Users/user4/expLB/run-premise/premise_L24_mean_s42.json
+         24250  8c3fb4bbc5f084ac82a1c47c515461c8  2026-09-21 14:36:35  C:/Users/user4/expLB/run-premise/premise_L28_mean_s42.json
+         24181  4229251285e9a93af3913b1426df2046  2026-09-21 14:37:01  C:/Users/user4/expLB/run-premise/premise_L32_mean_s42.json
+         24274  d11ccb5b3e855de40a779600fcf7fd1e  2026-09-21 14:37:28  C:/Users/user4/expLB/run-premise/premise_L36_mean_s42.json
+         24304  f12c01a3d0c04cbd104430a4b6bef864  2026-09-21 14:37:55  C:/Users/user4/expLB/run-premise/premise_L44_mean_s42.json
+         24213  b81b8aa769c16ee563ca1496baa1aece  2026-09-21 14:38:24  C:/Users/user4/expLB/run-premise/premise_L48_mean_s42.json
+         24348  b21d81d0ee6f75b31cc4554c46e82b3b  2026-09-21 14:38:55  C:/Users/user4/expLB/run-premise/premise_L52_mean_s42.json
+         24354  15c9d9fbab0399f1e2d69b13910e0d4e  2026-09-21 14:39:27  C:/Users/user4/expLB/run-premise/premise_L56_mean_s42.json
+         24253  e16f0c6cffd7ae54fc9bf120840068e7  2026-09-21 14:40:00  C:/Users/user4/expLB/run-premise/premise_L60_mean_s42.json
+         24324  7e2f82232ef1bc449bb0c25efae386de  2026-09-21 14:40:36  C:/Users/user4/expLB/run-premise/premise_L64_mean_s42.json
+         24355  85d2c2496cfffd06d4cc3c6a970437ff  2026-09-21 14:41:13  C:/Users/user4/expLB/run-premise/premise_L68_mean_s42.json
+         24339  bdf1596cbbe0d10009e0217d4d9d2547  2026-09-21 14:41:54  C:/Users/user4/expLB/run-premise/premise_L72_mean_s42.json
+         24272  76e32adba5d7754c3a1294d82bb8c3a5  2026-09-21 14:42:39  C:/Users/user4/expLB/run-premise/premise_L76_mean_s42.json
+         89493  3c5a0baccc5e734f934ef13247edb869  2026-09-22 00:42:33  C:/Users/user4/expLB/run-crossgen/kd11/banks/collab/matrices/mean_L0_s42.json
+        420332  17c72ece08700cbc6df7772514ab9016  2026-09-19 20:23:55  C:/Users/user4/expLB/run-crossgen/kd11/matrices/mean_L0_s42.json
+         89173  0539e47fd702ed515957cc27991206d5  2026-09-22 00:42:44  C:/Users/user4/expLB/run-crossgen/kd11/banks/collab/matrices/mean_L4_s42.json
+        423026  3197db8b52fcb772f2250b5b8aeb1f88  2026-09-19 20:24:47  C:/Users/user4/expLB/run-crossgen/kd11/matrices/mean_L4_s42.json
+         89827  38073e8b1f9d8fb57e244c118c728562  2026-09-22 00:42:56  C:/Users/user4/expLB/run-crossgen/kd11/banks/collab/matrices/mean_L8_s42.json
+        423118  0ac4a30e8a7aab637ac54885bd213de4  2026-09-19 20:25:42  C:/Users/user4/expLB/run-crossgen/kd11/matrices/mean_L8_s42.json
+         88883  ba8351989f01835e9095201992b0e4fb  2026-09-22 00:43:07  C:/Users/user4/expLB/run-crossgen/kd11/banks/collab/matrices/mean_L12_s42.json
+        420719  c6fbed7b041939a5b3c0bbe4d6bb111b  2026-09-19 20:26:35  C:/Users/user4/expLB/run-crossgen/kd11/matrices/mean_L12_s42.json
+         88133  6f0de58867b57c922e963054bc0e0ebb  2026-09-22 00:43:18  C:/Users/user4/expLB/run-crossgen/kd11/banks/collab/matrices/mean_L16_s42.json
+        421656  2fbc65809e6576f7a696d6d3dbe18108  2026-09-19 20:27:28  C:/Users/user4/expLB/run-crossgen/kd11/matrices/mean_L16_s42.json
+         88827  3d7548922449ef14da0d8a4c03c17644  2026-09-22 00:33:41  C:/Users/user4/expLB/run-crossgen/kd11/banks/collab/matrices/mean_L20_s42.json
+        421076  414a8f1adc1bd55534e9cc2145397249  2026-09-19 20:19:32  C:/Users/user4/expLB/run-crossgen/kd11/matrices/mean_L20_s42.json
+         88711  4a7abdb7dd740c9517caa3a2560e4500  2026-09-22 00:43:29  C:/Users/user4/expLB/run-crossgen/kd11/banks/collab/matrices/mean_L22_s42.json
+        421785  17efe3c915ff1a3e268a80bcf88c74f1  2026-09-19 20:28:20  C:/Users/user4/expLB/run-crossgen/kd11/matrices/mean_L22_s42.json
+         88390  10b5bbafece3f0c1633f8f6bcf672bb6  2026-09-22 00:43:45  C:/Users/user4/expLB/run-crossgen/kd11/banks/collab/matrices/mean_L24_s42.json
+        420049  2d414ea49bcc9c5a041108d604b5594d  2026-09-19 20:29:19  C:/Users/user4/expLB/run-crossgen/kd11/matrices/mean_L24_s42.json
+         88833  52a0dc6633d32e6699047f998542e5f4  2026-09-22 00:45:44  C:/Users/user4/expLB/run-crossgen/kd11/banks/collab/matrices/mean_L28_s42.json
+        421845  a767b28e391f11fa9bf7f6f374e45e5f  2026-09-19 20:30:31  C:/Users/user4/expLB/run-crossgen/kd11/matrices/mean_L28_s42.json
+         89681  c6b747b495c1e2f549a2c68afd248155  2026-09-22 00:45:57  C:/Users/user4/expLB/run-crossgen/kd11/banks/collab/matrices/mean_L32_s42.json
+        423479  952c8e1dd2915b8409bc80651f9ef386  2026-09-19 20:31:40  C:/Users/user4/expLB/run-crossgen/kd11/matrices/mean_L32_s42.json
+         90044  48dbdfba839b8f320a0e34de5c855003  2026-09-22 00:46:15  C:/Users/user4/expLB/run-crossgen/kd11/banks/collab/matrices/mean_L36_s42.json
+        423371  02863cb3a30b0d9fe0e887e391b17017  2026-09-19 20:32:48  C:/Users/user4/expLB/run-crossgen/kd11/matrices/mean_L36_s42.json
+         90023  3f9fe86b652dda3aa89b18d9466371c5  2026-09-22 00:33:52  C:/Users/user4/expLB/run-crossgen/kd11/banks/collab/matrices/mean_L40_s42.json
+         90151  d5e15e03f17bab2f6ffea1733f9598c5  2026-09-22 00:46:30  C:/Users/user4/expLB/run-crossgen/kd11/banks/collab/matrices/mean_L44_s42.json
+        422899  4aef1bfa4890669499436a38283182f1  2026-09-19 20:12:51  C:/Users/user4/expLB/run-crossgen/kd11/matrices/mean_L44_s42.json
+         89756  dad89a943ea6fd3b3b2cfd1a3fffe911  2026-09-22 00:46:50  C:/Users/user4/expLB/run-crossgen/kd11/banks/collab/matrices/mean_L48_s42.json
+        423207  e28192653b28b7060219c10605572e93  2026-09-19 20:33:55  C:/Users/user4/expLB/run-crossgen/kd11/matrices/mean_L48_s42.json
+         89590  e7d8541a58cfd82258a7fd2a54fb612f  2026-09-22 00:47:11  C:/Users/user4/expLB/run-crossgen/kd11/banks/collab/matrices/mean_L52_s42.json
+        422653  67a9c86cf46c170506ab34a3ea51938c  2026-09-19 20:35:04  C:/Users/user4/expLB/run-crossgen/kd11/matrices/mean_L52_s42.json
+         89202  7387848cc6f53836a57c0faeb928cf83  2026-09-22 00:47:33  C:/Users/user4/expLB/run-crossgen/kd11/banks/collab/matrices/mean_L56_s42.json
+        422247  ad89288862aa08915907cd4ff9edd7b7  2026-09-19 20:36:10  C:/Users/user4/expLB/run-crossgen/kd11/matrices/mean_L56_s42.json
+         89672  3ec95ee017106d17f822c358a3a0c0db  2026-09-22 00:47:58  C:/Users/user4/expLB/run-crossgen/kd11/banks/collab/matrices/mean_L60_s42.json
+        423388  b07c1fbebc9925e4747125696572fb8a  2026-09-19 20:37:13  C:/Users/user4/expLB/run-crossgen/kd11/matrices/mean_L60_s42.json
+         89566  838284d55bafcf4a6d2ce8ab8f5eeca7  2026-09-22 00:48:22  C:/Users/user4/expLB/run-crossgen/kd11/banks/collab/matrices/mean_L64_s42.json
+        423873  f6ee38cbd312048fd93eaaa2ced60574  2026-09-19 20:38:05  C:/Users/user4/expLB/run-crossgen/kd11/matrices/mean_L64_s42.json
+         89701  6c0d6ab34d470ebfbf5cb0ff9f58cc2b  2026-09-22 00:48:44  C:/Users/user4/expLB/run-crossgen/kd11/banks/collab/matrices/mean_L68_s42.json
+        422338  dde071a7de65cfcbcec0b4942cf14b59  2026-09-19 20:38:57  C:/Users/user4/expLB/run-crossgen/kd11/matrices/mean_L68_s42.json
+         89792  185573e90ad6cad857bd2e907a3470a2  2026-09-22 00:49:08  C:/Users/user4/expLB/run-crossgen/kd11/banks/collab/matrices/mean_L72_s42.json
+        423871  745f7be1f81f39238d5c8ecfd0b55010  2026-09-19 20:39:48  C:/Users/user4/expLB/run-crossgen/kd11/matrices/mean_L72_s42.json
+         89547  a52e10c35d616202f3df13c6c72896e7  2026-09-22 00:49:31  C:/Users/user4/expLB/run-crossgen/kd11/banks/collab/matrices/mean_L76_s42.json
+        425028  7338acbd8b7b2e47d03af2b980fdb7b5  2026-09-19 20:40:40  C:/Users/user4/expLB/run-crossgen/kd11/matrices/mean_L76_s42.json
+         86137  041824c8379274973c42ec2caf3359e0  2026-09-22 02:07:25  C:/Users/user4/expLB/run-crossgen/kd11/banks/collab/matrices/last_L0_s42.json
+        409683  6005255ac024d6c634dab576d1f1b2e8  2026-09-19 20:41:42  C:/Users/user4/expLB/run-crossgen/kd11/matrices/last_L0_s42.json
+         88217  4b6b28e130544d7f469c4f257fadd29f  2026-09-22 02:07:37  C:/Users/user4/expLB/run-crossgen/kd11/banks/collab/matrices/last_L4_s42.json
+        413892  5f803ac41f8d158729f7109b16eaae08  2026-09-19 20:42:32  C:/Users/user4/expLB/run-crossgen/kd11/matrices/last_L4_s42.json
+         88129  bdbe48b35f9ba08955e709e863377db5  2026-09-22 02:07:51  C:/Users/user4/expLB/run-crossgen/kd11/banks/collab/matrices/last_L8_s42.json
+        417278  9de8295698debdb75bcf9fbbe5b6ee6d  2026-09-19 20:43:22  C:/Users/user4/expLB/run-crossgen/kd11/matrices/last_L8_s42.json
+         88565  d0456b78ac54ecffe4d25f5e0cc776f5  2026-09-22 02:08:04  C:/Users/user4/expLB/run-crossgen/kd11/banks/collab/matrices/last_L12_s42.json
+        418813  e9a384c6d325567986db2878d552fbea  2026-09-19 20:44:17  C:/Users/user4/expLB/run-crossgen/kd11/matrices/last_L12_s42.json
+         89257  be030f4be1a7457e96bd628fe6b7dbad  2026-09-22 02:08:15  C:/Users/user4/expLB/run-crossgen/kd11/banks/collab/matrices/last_L16_s42.json
+        421144  ae6d4fe130c79bb2e7d3fbf7fa1a4bd7  2026-09-19 20:45:20  C:/Users/user4/expLB/run-crossgen/kd11/matrices/last_L16_s42.json
+         89653  ca97f895300066dbcc41c46353f1a2a9  2026-09-22 02:08:26  C:/Users/user4/expLB/run-crossgen/kd11/banks/collab/matrices/last_L20_s42.json
+        420896  9d6672d5d71ffa940c61c8b9d654417b  2026-09-19 20:20:56  C:/Users/user4/expLB/run-crossgen/kd11/matrices/last_L20_s42.json
+         89872  1dd5763a8d9cbad59e849e6cc220f65b  2026-09-22 02:08:36  C:/Users/user4/expLB/run-crossgen/kd11/banks/collab/matrices/last_L22_s42.json
+        421462  6e2818c3606a3db215d71212fe783fa4  2026-09-19 20:46:24  C:/Users/user4/expLB/run-crossgen/kd11/matrices/last_L22_s42.json
+         89421  5e8c4d8114537c20a2ea1f2dd6b0152b  2026-09-22 02:08:47  C:/Users/user4/expLB/run-crossgen/kd11/banks/collab/matrices/last_L24_s42.json
+        420748  e5a96fe62a7aaeacdd72c5c8bb5a5db2  2026-09-19 20:47:30  C:/Users/user4/expLB/run-crossgen/kd11/matrices/last_L24_s42.json
+         91336  afbe824edf3009fa5fc990aab89189bf  2026-09-22 02:08:57  C:/Users/user4/expLB/run-crossgen/kd11/banks/collab/matrices/last_L28_s42.json
+        424084  f4211f7cdb38763758ec7d35dbdbf198  2026-09-19 20:48:34  C:/Users/user4/expLB/run-crossgen/kd11/matrices/last_L28_s42.json
+         91058  ce50451e91a9b43c1a97a84e44330fa5  2026-09-22 02:09:08  C:/Users/user4/expLB/run-crossgen/kd11/banks/collab/matrices/last_L32_s42.json
+        424162  3b6faec2ca459d9f218a8abbed3e1e97  2026-09-19 20:49:43  C:/Users/user4/expLB/run-crossgen/kd11/matrices/last_L32_s42.json
+         90714  98dc7f0f14a4aa3fbcd78553086f7656  2026-09-22 02:09:18  C:/Users/user4/expLB/run-crossgen/kd11/banks/collab/matrices/last_L36_s42.json
+        423417  bde312ad9f413ae5c645d8b109472f49  2026-09-19 20:50:45  C:/Users/user4/expLB/run-crossgen/kd11/matrices/last_L36_s42.json
+         90414  f220e52742ce759f006a8bad0ef646c3  2026-09-22 02:09:29  C:/Users/user4/expLB/run-crossgen/kd11/banks/collab/matrices/last_L40_s42.json
+        422229  7329a0c0321c1d159bf0c21c28cc762a  2026-09-19 20:13:51  C:/Users/user4/expLB/run-crossgen/kd11/matrices/last_L40_s42.json
+         90229  b0ec5bfc98df8e1208263d94302c6acd  2026-09-22 02:09:39  C:/Users/user4/expLB/run-crossgen/kd11/banks/collab/matrices/last_L44_s42.json
+        421772  16c479e0b8dcb3be2534c3631f86b83d  2026-09-19 20:14:54  C:/Users/user4/expLB/run-crossgen/kd11/matrices/last_L44_s42.json
+         89986  f935c19a60cd5095f0b55b4e9f93935b  2026-09-22 02:09:50  C:/Users/user4/expLB/run-crossgen/kd11/banks/collab/matrices/last_L48_s42.json
+        420448  2a1ce8f112696561627892729ed27785  2026-09-19 20:51:53  C:/Users/user4/expLB/run-crossgen/kd11/matrices/last_L48_s42.json
+         90217  b69e38c2fce4e08f2a2dc9ed4cae022b  2026-09-22 02:10:01  C:/Users/user4/expLB/run-crossgen/kd11/banks/collab/matrices/last_L52_s42.json
+        420398  f245055ab458c5a457416a1258df5072  2026-09-19 20:52:51  C:/Users/user4/expLB/run-crossgen/kd11/matrices/last_L52_s42.json
+         90054  b55eeaa38d7805f51dc4e9ba23b5f8ef  2026-09-22 02:10:13  C:/Users/user4/expLB/run-crossgen/kd11/banks/collab/matrices/last_L56_s42.json
+        420924  2dcc49b108ade32c0adc2fca47202d23  2026-09-19 20:53:49  C:/Users/user4/expLB/run-crossgen/kd11/matrices/last_L56_s42.json
+         90840  ac797704ea48f583366d346ce9603364  2026-09-22 02:10:23  C:/Users/user4/expLB/run-crossgen/kd11/banks/collab/matrices/last_L60_s42.json
+        420281  8fed9eced63a883f834c46a534f9ce2c  2026-09-19 20:54:44  C:/Users/user4/expLB/run-crossgen/kd11/matrices/last_L60_s42.json
+         90188  5671e23b93139fc13d199e93576881a2  2026-09-22 02:10:36  C:/Users/user4/expLB/run-crossgen/kd11/banks/collab/matrices/last_L64_s42.json
+        419522  63f78f536760f01b5f41a6e780e13df2  2026-09-19 20:55:38  C:/Users/user4/expLB/run-crossgen/kd11/matrices/last_L64_s42.json
+         89966  6cd0a4593ca957f4aafa401c080062bb  2026-09-22 02:10:48  C:/Users/user4/expLB/run-crossgen/kd11/banks/collab/matrices/last_L68_s42.json
+        419844  51b6f5ae4a4ca3d7bbe658b939e85205  2026-09-19 20:56:32  C:/Users/user4/expLB/run-crossgen/kd11/matrices/last_L68_s42.json
+         91054  3895760bdd9018c0519bc965dcec039d  2026-09-22 02:10:58  C:/Users/user4/expLB/run-crossgen/kd11/banks/collab/matrices/last_L72_s42.json
+        421004  a24566b6d5ba12c34a641653e827116f  2026-09-19 20:57:24  C:/Users/user4/expLB/run-crossgen/kd11/matrices/last_L72_s42.json
+         91361  58dc3044ed9656a562e5db4dfd31af34  2026-09-22 02:11:07  C:/Users/user4/expLB/run-crossgen/kd11/banks/collab/matrices/last_L76_s42.json
+        424847  051dbd3966414df3d330dcaca6f7418f  2026-09-19 20:58:16  C:/Users/user4/expLB/run-crossgen/kd11/matrices/last_L76_s42.json
+python exit 0

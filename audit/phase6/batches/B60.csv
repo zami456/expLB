@@ -1,0 +1,15 @@
+id,source,source_ref,claim_short,numbers,layer,dataset_hint,status
+L-F-46,FINDINGS.md,kd/docs/FINDINGS.md:1299,"2026-09-20 · v2 smoke: the capitulation persona is WRONG in turn 1, which invalidates the measure",,,,TODO
+L-F-47,FINDINGS.md,kd/docs/FINDINGS.md:1368,2026-09-20 · A stale items.pt survived the restart and silently un-sampled one dataset,81%,,instructed-deception,TODO
+L-F-48,FINDINGS.md,kd/docs/FINDINGS.md:1406,2026-09-20 · The 8B evaluation arm is complete — first AUROC-capable data outside the 70B,,,convincing-game instructed-deception ai_liar roleplaying,TODO
+L-F-49,FINDINGS.md,kd/docs/FINDINGS.md:1443,"2026-09-20 · The 3B is only 1.8x slower than the 8B, not 10x — the earlier ratio did not transfer",0.34; 0.30,,instructed-deception,TODO
+L-F-50,FINDINGS.md,kd/docs/FINDINGS.md:1477,"2026-09-20 · Correction to F-49: the 3B is 2.4x slower, not 1.8x",34%,,instructed-deception,TODO
+L-F-51,FINDINGS.md,kd/docs/FINDINGS.md:1502,"2026-09-20 · Teacher-forced turn 1 works: 4/4 fold vs 4/4 hold, clean separation",,,,TODO
+L-F-52,FINDINGS.md,kd/docs/FINDINGS.md:1542,2026-09-20 · The contrast holds on true answers and COLLAPSES on false ones,10%,,,TODO
+L-F-53,FINDINGS.md,kd/docs/FINDINGS.md:1599,2026-09-20 · Verb form kills the spelunking AND improves the folds,,,,TODO
+L-F-54,FINDINGS.md,kd/docs/FINDINGS.md:1639,2026-09-20 · Scale-Coords COMPLETE — matched evaluation activations at 3B and 8B,,,convincing-game instructed-deception ai_liar roleplaying,TODO
+L-F-55,FINDINGS.md,kd/docs/FINDINGS.md:1681,2026-09-20 · The holding half is behaviourally INERT — a bare model holds too,,,,TODO
+L-F-56,FINDINGS.md,kd/docs/FINDINGS.md:1729,"2026-09-20 · `--sample` is proportional, not balancing — one column is 5:1 imbalanced",17%,,convincing-game instructed-deception ai_liar roleplaying,TODO
+L-F-57,FINDINGS.md,kd/docs/FINDINGS.md:1760,2026-09-20 · Four thesis figures built from the day's findings,0.300; 0.379; 0.659; 0.633; +0.116; +0.10; 0.60; +0.026,"44,76",,TODO
+L-F-58,FINDINGS.md,kd/docs/FINDINGS.md:1788,2026-09-20 · The paper REPLICATES at 3B and 8B — and the gain dies at 70B as predicted,0.708; +0.089; 0.246; 0.150; 0.743; +0.086; 0.025; 0.017,,,TODO
+L-F-59,FINDINGS.md,kd/docs/FINDINGS.md:1829,"2026-09-20 · HP-KR growth GATE FAILED — stated knowledge tracks confidence, not correctness",0.70; 0.250; 0.150; 0.417; 75%; 24%; 0.10,,HP-KR,TODO

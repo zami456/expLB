@@ -1,0 +1,137 @@
+{
+ "layer": 32,
+ "pooling": "mean",
+ "probe": "paper",
+ "seed": 42,
+ "clusters": {
+  "lb_harm": [
+   "harm-pressure-choice",
+   "harm-pressure-knowledge-report",
+   "harm-pressure-kr-matched"
+  ],
+  "lb_scenario": [
+   "instructed-deception",
+   "convincing-game",
+   "insider-trading"
+  ],
+  "apollo": [
+   "ai_liar",
+   "roleplaying",
+   "sandbagging_v2"
+  ],
+  "mask": [
+   "mask"
+  ],
+  "ours": [
+   "sycophancy_mt"
+  ]
+ },
+ "leaked": [
+  "harm-pressure-knowledge-report",
+  "harm-pressure-kr-matched"
+ ],
+ "per_dataset": {
+  "harm-pressure-choice": {
+   "cluster": "lb_harm",
+   "single_offdiag": 0.6530898404701931,
+   "pooled_lodo": 0.7204869857262804,
+   "n_lodo_datasets": 10,
+   "pooled_loco": 0.6983207388748951,
+   "n_loco_datasets": 8
+  },
+  "harm-pressure-knowledge-report": {
+   "cluster": "lb_harm",
+   "single_offdiag": 0.6373697270471463,
+   "pooled_lodo": 0.9371712158808932,
+   "n_lodo_datasets": 10,
+   "pooled_loco": 0.9009429280397022,
+   "n_loco_datasets": 8
+  },
+  "harm-pressure-kr-matched": {
+   "cluster": "lb_harm",
+   "single_offdiag": 0.669431643625192,
+   "pooled_lodo": 0.8125960061443932,
+   "n_lodo_datasets": 10,
+   "pooled_loco": 0.794162826420891,
+   "n_loco_datasets": 8
+  },
+  "instructed-deception": {
+   "cluster": "lb_scenario",
+   "single_offdiag": 0.9003747882308198,
+   "pooled_lodo": 0.9739895584828682,
+   "n_lodo_datasets": 10,
+   "pooled_loco": 0.9726480655533658,
+   "n_loco_datasets": 8
+  },
+  "convincing-game": {
+   "cluster": "lb_scenario",
+   "single_offdiag": 0.7216049382716049,
+   "pooled_lodo": 0.757716049382716,
+   "n_lodo_datasets": 10,
+   "pooled_loco": 0.7608024691358024,
+   "n_loco_datasets": 8
+  },
+  "insider-trading": {
+   "cluster": "lb_scenario",
+   "single_offdiag": 0.5953405017921147,
+   "pooled_lodo": 0.4497770784159455,
+   "n_lodo_datasets": 10,
+   "pooled_loco": 0.7116880846227817,
+   "n_loco_datasets": 8
+  },
+  "ai_liar": {
+   "cluster": "apollo",
+   "single_offdiag": 0.779532967032967,
+   "pooled_lodo": 0.9107142857142858,
+   "n_lodo_datasets": 10,
+   "pooled_loco": 0.918956043956044,
+   "n_loco_datasets": 8
+  },
+  "roleplaying": {
+   "cluster": "apollo",
+   "single_offdiag": 0.6528273809523808,
+   "pooled_lodo": 0.8511904761904762,
+   "n_lodo_datasets": 10,
+   "pooled_loco": 0.8705357142857143,
+   "n_loco_datasets": 8
+  },
+  "sandbagging_v2": {
+   "cluster": "apollo",
+   "single_offdiag": 0.7943377350940376,
+   "pooled_lodo": 0.9488795518207283,
+   "n_lodo_datasets": 10,
+   "pooled_loco": 0.9514805922368947,
+   "n_loco_datasets": 8
+  },
+  "mask": {
+   "cluster": "mask",
+   "single_offdiag": 0.5736686390532544,
+   "pooled_lodo": 0.6443129520052598,
+   "n_lodo_datasets": 10,
+   "pooled_loco": 0.6443129520052598,
+   "n_loco_datasets": 10
+  },
+  "sycophancy_mt": {
+   "cluster": "ours",
+   "single_offdiag": 0.6215928649663589,
+   "pooled_lodo": 0.8148959474260679,
+   "n_lodo_datasets": 10,
+   "pooled_loco": 0.8148959474260679,
+   "n_loco_datasets": 10
+  }
+ },
+ "summary": {
+  "all": {
+   "n": 11,
+   "gain_lodo": 0.11114173460489499,
+   "gain_loco": 0.1308704850928499,
+   "loco_positive": 11
+  },
+  "clean": {
+   "n": 9,
+   "gain_lodo": 0.08662146992232185,
+   "gain_loco": 0.11680788358145493,
+   "loco_positive": 9
+  }
+ }
+}

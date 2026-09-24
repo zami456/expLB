@@ -1,0 +1,15 @@
+id,source,source_ref,claim_short,numbers,layer,dataset_hint,status
+H-025,collaborator note,src/probes/deception-detection/results/persona_ood/summary.md:111,"calibration against the control, not ranking failure — recall at the 1% threshold:",1%,,,CANDIDATE
+H-026,collaborator note,src/probes/deception-detection/results/persona_ood/summary.md:126,"So: no, this does not beat the Liars' Bench baselines.** At 0.55 balanced accuracy it would",0.55,,,CANDIDATE
+H-027,collaborator note,src/probes/deception-detection/results/persona_ood/summary.md:127,"rank below Mean Probe's published 0.54 neighbours and well below UQC (0.60), Self-Evaluation",0.54; 0.60,,,CANDIDATE
+H-028,collaborator note,src/probes/deception-detection/results/persona_ood/summary.md:142,"Read the paper (arXiv 2605.09391, *Do Linear Probes Generalize Better in Persona Coordinates?*)",5.0939,,,CANDIDATE
+H-029,collaborator note,src/probes/deception-detection/results/persona_ood/summary.md:189,"PC1 0.652 vs 0.615, k=3 0.682 vs 0.606, axis 0.646 vs 0.614, and excluding HP-KR 0.920 vs 0.883.",0.652; 0.615; 0.682; 0.606; 0.646; 0.614,,,CANDIDATE
+H-030,collaborator note,src/probes/deception-detection/results/persona_ood/summary.md:192,"On all six datasets the sycophancy arms fall below the raw baseline** (0.606–0.615 vs 0.648), and",0.606; 0.615; 0.648,,,CANDIDATE
+H-031,collaborator note,src/probes/deception-detection/results/persona_ood/summary.md:193,win only once HP-KR is excluded (0.782–0.883 vs 0.728). HP-KR punishes them harder than it punishes,0.782; 0.883; 0.728,,,CANDIDATE
+H-032,collaborator note,src/probes/deception-detection/results/persona_ood/summary.md:210,"not**: at 0.163 it is as training-set-sensitive as raw 8192-d activations, and worse than random",0.163,,,CANDIDATE
+H-033,collaborator note,src/probes/deception-detection/results/persona_ood/summary.md:218,"Every 1-d variant scores exactly 0.000 on this metric, which is an artifact rather than a finding:",0.000,,,CANDIDATE
+H-034,collaborator note,src/probes/deception-detection/results/persona_ood/summary.md:238,against random's 0.527 — essentially nothing of its own survives. The 0.883 above is the shared,0.527; 0.883,,,CANDIDATE
+H-035,collaborator note,src/probes/deception-detection/results/persona_ood/summary.md:246,"dominates the mean, and loses to plain deception PCs once HP-KR is excluded (0.863 vs 0.912). The",0.863; 0.912,,,CANDIDATE
+H-036,collaborator note,src/probes/deception-detection/results/persona_ood/summary.md:257,"Liars' Bench scores on **balanced accuracy at 1% FPR on the alpaca control**, not AUROC. The same",1%,,,CANDIDATE
+H-037,collaborator note,src/probes/deception-detection/results/persona_ood/summary.md:272,"reads `0.09, 0.07, 0.40, 0.21, 0.15`; under balanced accuracy it is `0.500, 0.500, 0.500, 0.506,",0.09; 0.07; 0.40; 0.21; 0.15; 0.500,,,CANDIDATE
+H-038,collaborator note,src/probes/deception-detection/results/persona_ood/summary.md:290,method | bal. acc @1% FPR | AUROC | source |,1%,,,CANDIDATE

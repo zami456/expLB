@@ -1,0 +1,230 @@
+
+==============================================================================
+Q4 / section 7.4 -- O-076, O-077, O-078, O-079
+==============================================================================
+run-coords/q3_q4_bootstrap.json  size=24187  mtime=2026-09-17 02:23:21  md5=2f616b3ed18c3d74863635bb0ba4053e
+top-level keys: ['q3_reproduction_worst', 'q3_curves', 'q4_table', 'comparisons', 'boot_rows', 'boot_datasets']
+boot_rows=1000 boot_datasets=10000
+
+-- full q4_table --
+{"layer": 20, "pooling": "mean", "probe": "mms", "raw": 0.6523819821789706, "erase_assistant": 0.646230375193732, "erase_random_mean": 0.6523296682492744, "cost_assistant": 0.0061516069852385336, "cost_random": [-0.0002139845450070954, 1.6983902813572094e-05, -1.890421618644389e-05, 0.0006148625022840415, -0.00013738799542306612], "erased_row_ci95": [0.638356626033783, 0.6537988781929016], "erased_dataset_ci95": [0.5127429605373054, 0.7956263084897787], "erased_above_chance_datasets": true}
+{"layer": 20, "pooling": "mean", "probe": "lr_reg10", "raw": 0.6598621608896388, "erase_assistant": 0.6545115355402231, "erase_random_mean": 0.6594944827608316, "cost_assistant": 0.005350625349415661, "cost_random": [-7.087081624101987e-05, 0.0005564409325548025, 0.0004540021278118811, 0.00044118565086115336, 0.0004576327490489751], "erased_row_ci95": [0.6467697024345398, 0.6620121598243713], "erased_dataset_ci95": [0.5584293137865395, 0.7411046855490315], "erased_above_chance_datasets": true}
+{"layer": 40, "pooling": "mean", "probe": "mms", "raw": 0.6692782477993104, "erase_assistant": 0.6515947051553262, "erase_random_mean": 0.669297137354638, "cost_assistant": 0.017683542643984196, "cost_random": [6.5747061686050046e-06, -5.128010391020066e-05, 2.548717736849948e-05, 7.281847556273036e-05, -0.0001480480318278854], "erased_row_ci95": [0.6436739563941956, 0.6595210433006287], "erased_dataset_ci95": [0.5097871786600444, 0.7860601955065221], "erased_above_chance_datasets": true}
+{"layer": 40, "pooling": "mean", "probe": "lr_reg10", "raw": 0.6862073217829069, "erase_assistant": 0.6721024067244596, "erase_random_mean": 0.6860056555117899, "cost_assistant": 0.014104915058447243, "cost_random": [-6.900132630638378e-05, -5.142304039607026e-05, 0.00013868566907582203, 0.0006495574576121932, 0.0003405125955991961], "erased_row_ci95": [0.6648089289665222, 0.680291473865509], "erased_dataset_ci95": [0.5855310563396805, 0.7595290447904739], "erased_above_chance_datasets": true}
+{"layer": 44, "pooling": "last", "probe": "mms", "raw": 0.7200369140029781, "erase_assistant": 0.7119231063148214, "erase_random_mean": 0.7200557470714367, "cost_assistant": 0.008113807688156727, "cost_random": [4.691270116485846e-05, -0.00015431279493327565, -5.512053953005136e-05, 1.4463467835845734e-05, 5.389182316950514e-05], "erased_row_ci95": [0.7038058042526245, 0.720787763595581], "erased_dataset_ci95": [0.6083088111522938, 0.824011793642333], "erased_above_chance_datasets": true}
+{"layer": 44, "pooling": "last", "probe": "lr_reg10", "raw": 0.6610926310014393, "erase_assistant": 0.6558173596341577, "erase_random_mean": 0.6607117576043366, "cost_assistant": 0.005275271367281675, "cost_random": [0.0009325864651908988, 2.653450777989619e-07, 0.0005830274355596021, 0.0002445300248757887, 0.00014395771480968378], "erased_row_ci95": [0.6488338112831116, 0.6633025407791138], "erased_dataset_ci95": [0.5704808303853497, 0.7516012036840566], "erased_above_chance_datasets": true}
+
+BH family size in this file = 26
+by question: {'Q3': 14, 'Q4': 12}
+
+-- every Q4 comparison --
+{"name": "cost of erasing Assistant Axis, L20 mean mms", "question": "Q4", "kind": "diff", "diff": 0.0061516069852385336, "row_ci95": [0.005014481954276562, 0.007384692318737507], "dataset_ci95": [-0.0035216827299872047, 0.023335263306895882], "row_p": 0.001, "dataset_p": 0.3284, "dataset_q_bh": 0.5151058823529412, "significant": false}
+{"name": "assistant erasure vs random erasures, L20 mean mms", "question": "Q4", "kind": "diff", "diff": 0.006099293055542354, "row_ci95": [0.004969799292101537, 0.0073307270770908975], "dataset_ci95": [-0.003584231820956418, 0.023262222901098004], "row_p": 0.001, "dataset_p": 0.3368, "dataset_q_bh": 0.5151058823529412, "significant": false}
+{"name": "cost of erasing Assistant Axis, L20 mean lr_reg10", "question": "Q4", "kind": "diff", "diff": 0.005350625349415661, "row_ci95": [0.004426945932209492, 0.006332115735858679], "dataset_ci95": [-0.004295789221602067, 0.02167879504123673], "row_p": 0.001, "dataset_p": 0.4358, "dataset_q_bh": 0.5424545454545455, "significant": false}
+{"name": "assistant erasure vs random erasures, L20 mean lr_reg10", "question": "Q4", "kind": "diff", "diff": 0.004982947220608436, "row_ci95": [0.004089461391864005, 0.005943797193164854], "dataset_ci95": [-0.00436667902565575, 0.02112167927279338], "row_p": 0.001, "dataset_p": 0.4562, "dataset_q_bh": 0.5424545454545455, "significant": false}
+{"name": "cost of erasing Assistant Axis, L40 mean mms", "question": "Q4", "kind": "diff", "diff": 0.017683542643984196, "row_ci95": [0.016200359910726547, 0.01919136568903923], "dataset_ci95": [0.004925966991416747, 0.035269360044039785], "row_p": 0.001, "dataset_p": 0.0004, "dataset_q_bh": 0.003466666666666667, "significant": true}
+{"name": "assistant erasure vs random erasures, L40 mean mms", "question": "Q4", "kind": "diff", "diff": 0.01770243219931178, "row_ci95": [0.016248721003583842, 0.01921330804328464], "dataset_ci95": [0.00487312718965637, 0.03531730014648323], "row_p": 0.001, "dataset_p": 0.0008, "dataset_q_bh": 0.005200000000000001, "significant": true}
+{"name": "cost of erasing Assistant Axis, L40 mean lr_reg10", "question": "Q4", "kind": "diff", "diff": 0.014104915058447243, "row_ci95": [0.01282511092722416, 0.015497719869017601], "dataset_ci95": [3.0037250112813436e-05, 0.04065479200107579], "row_p": 0.001, "dataset_p": 0.0492, "dataset_q_bh": 0.16185, "significant": false}
+{"name": "assistant erasure vs random erasures, L40 mean lr_reg10", "question": "Q4", "kind": "diff", "diff": 0.013903248787330291, "row_ci95": [0.012626334082678225, 0.015314510541415388], "dataset_ci95": [2.37372965723793e-05, 0.04006662898817137], "row_p": 0.001, "dataset_p": 0.0498, "dataset_q_bh": 0.16185, "significant": false}
+{"name": "cost of erasing Assistant Axis, L44 last mms", "question": "Q4", "kind": "diff", "diff": 0.008113807688156727, "row_ci95": [0.007292059250175953, 0.008918074890971184], "dataset_ci95": [0.0035615349188447, 0.013124287570075638], "row_p": 0.001, "dataset_p": 0.0004, "dataset_q_bh": 0.003466666666666667, "significant": true}
+{"name": "assistant erasure vs random erasures, L44 last mms", "question": "Q4", "kind": "diff", "diff": 0.00813264075661535, "row_ci95": [0.0073323937663826305, 0.008939475291335602], "dataset_ci95": [0.0035625568525936373, 0.013161031908129816], "row_p": 0.001, "dataset_p": 0.0004, "dataset_q_bh": 0.003466666666666667, "significant": true}
+{"name": "cost of erasing Assistant Axis, L44 last lr_reg10", "question": "Q4", "kind": "diff", "diff": 0.005275271367281675, "row_ci95": [0.004501238465309143, 0.006011745426803827], "dataset_ci95": [0.0011534643097547816, 0.010729859005659868], "row_p": 0.001, "dataset_p": 0.0092, "dataset_q_bh": 0.03986666666666667, "significant": true}
+{"name": "assistant erasure vs random erasures, L44 last lr_reg10", "question": "Q4", "kind": "diff", "diff": 0.0048943979701789875, "row_ci95": [0.004163361318066205, 0.0055578702993800185], "dataset_ci95": [0.0012643127291262102, 0.009841115535892238], "row_p": 0.001, "dataset_p": 0.007, "dataset_q_bh": 0.0364, "significant": true}
+
+-- O-079: cost as a FRACTION of the raw transfer AUROC --
+  L20 mean, mms          raw=0.6524 erased=0.6462 cost=0.0062  cost/raw=0.0094 = 0.94%
+  L20 mean, lr_reg10     raw=0.6599 erased=0.6545 cost=0.0054  cost/raw=0.0081 = 0.81%
+  L40 mean, mms          raw=0.6693 erased=0.6516 cost=0.0177  cost/raw=0.0264 = 2.64%
+  L40 mean, lr_reg10     raw=0.6862 erased=0.6721 cost=0.0141  cost/raw=0.0206 = 2.06%
+  L44 last, mms          raw=0.7200 erased=0.7119 cost=0.0081  cost/raw=0.0113 = 1.13%
+  L44 last, lr_reg10     raw=0.6611 erased=0.6558 cost=0.0053  cost/raw=0.0080 = 0.80%
+  absolute cost range  : 0.0053 .. 0.0177 (AUROC points)
+  relative cost range  : 0.80% .. 2.64%
+  random-erasure costs : n=30  mean=+0.000161  max|.|=0.000933
+
+-- significance of the cost, per row (from comparisons) --
+  cost of erasing Assistant Axis, L20 mean mms         diff=0.0062 q_bh=0.5151 significant=False dataset_ci=[-0.0035, 0.0233]
+  assistant erasure vs random erasures, L20 mean mms   diff=0.0061 q_bh=0.5151 significant=False dataset_ci=[-0.0036, 0.0233]
+  cost of erasing Assistant Axis, L20 mean lr_reg10    diff=0.0054 q_bh=0.5425 significant=False dataset_ci=[-0.0043, 0.0217]
+  assistant erasure vs random erasures, L20 mean lr_reg10 diff=0.0050 q_bh=0.5425 significant=False dataset_ci=[-0.0044, 0.0211]
+  cost of erasing Assistant Axis, L40 mean mms         diff=0.0177 q_bh=0.0035 significant=True dataset_ci=[0.0049, 0.0353]
+  assistant erasure vs random erasures, L40 mean mms   diff=0.0177 q_bh=0.0052 significant=True dataset_ci=[0.0049, 0.0353]
+  cost of erasing Assistant Axis, L40 mean lr_reg10    diff=0.0141 q_bh=0.1618 significant=False dataset_ci=[0.0, 0.0407]
+  assistant erasure vs random erasures, L40 mean lr_reg10 diff=0.0139 q_bh=0.1618 significant=False dataset_ci=[0.0, 0.0401]
+  cost of erasing Assistant Axis, L44 last mms         diff=0.0081 q_bh=0.0035 significant=True dataset_ci=[0.0036, 0.0131]
+  assistant erasure vs random erasures, L44 last mms   diff=0.0081 q_bh=0.0035 significant=True dataset_ci=[0.0036, 0.0132]
+  cost of erasing Assistant Axis, L44 last lr_reg10    diff=0.0053 q_bh=0.0399 significant=True dataset_ci=[0.0012, 0.0107]
+  assistant erasure vs random erasures, L44 last lr_reg10 diff=0.0049 q_bh=0.0364 significant=True dataset_ci=[0.0013, 0.0098]
+
+-- zeroshot_paper16.json : entries mentioning assistant --
+    /zeroshot[0]/assistant = 0.20170096021947873
+    /zeroshot[1]/assistant = 0.015389221556886233
+    /zeroshot[2]/assistant = 0.4729553508150248
+    /zeroshot[3]/assistant = 0.23703964344358436
+
+-- zeroshot_nulls.json : entries mentioning assistant --
+    /corpus_L40_mean/pooled/assistant_axis/auroc = 0.17591164425753858
+    /corpus_L40_mean/pooled/assistant_axis/p_vs_random = 0.003996003996003996
+    /corpus_L40_mean/pooled/assistant_axis/beats_random_p95 = True
+    /corpus_L44_last/pooled/assistant_axis/auroc = 0.14410822507001841
+    /corpus_L44_last/pooled/assistant_axis/p_vs_random = 0.000999000999000999
+    /corpus_L44_last/pooled/assistant_axis/beats_random_p95 = True
+    /sycophancy_mt/L40_mean/assistant_axis/auroc = 0.7101518026565465
+    /sycophancy_mt/L40_mean/assistant_axis/p_vs_random = 0.001998001998001998
+    /sycophancy_mt/L40_mean/assistant_axis/beats_random_p95 = True
+    /sycophancy_mt/L40_mean/sycophancy_minus_assistant/auroc = 0.35299662386948916
+    /sycophancy_mt/L40_mean/sycophancy_minus_assistant/p_vs_random = 0.025974025974025976
+    /sycophancy_mt/L40_mean/sycophancy_minus_assistant/beats_random_p95 = True
+    /sycophancy_mt/L40_mean/cos_sycophancy_assistant = -0.2703748345375061
+    /sycophancy_mt/L40_last/assistant_axis/auroc = 0.7021396535153651
+    /sycophancy_mt/L40_last/assistant_axis/p_vs_random = 0.012987012987012988
+    /sycophancy_mt/L40_last/assistant_axis/beats_random_p95 = True
+    /sycophancy_mt/L40_last/sycophancy_minus_assistant/auroc = 0.31663237142364276
+    /sycophancy_mt/L40_last/sycophancy_minus_assistant/p_vs_random = 0.03496503496503497
+    /sycophancy_mt/L40_last/sycophancy_minus_assistant/beats_random_p95 = True
+    /sycophancy_mt/L40_last/cos_sycophancy_assistant = -0.2703748345375061
+    /sycophancy_mt/L44_mean/assistant_axis/auroc = 0.7151821139012788
+    /sycophancy_mt/L44_mean/assistant_axis/p_vs_random = 0.000999000999000999
+    /sycophancy_mt/L44_mean/assistant_axis/beats_random_p95 = True
+    /sycophancy_mt/L44_mean/sycophancy_minus_assistant/auroc = 0.34860087730106704
+    /sycophancy_mt/L44_mean/sycophancy_minus_assistant/p_vs_random = 0.00999000999000999
+    /sycophancy_mt/L44_mean/sycophancy_minus_assistant/beats_random_p95 = True
+    /sycophancy_mt/L44_mean/cos_sycophancy_assistant = -0.27073267102241516
+    /sycophancy_mt/L44_last/assistant_axis/auroc = 0.6635790679908328
+    /sycophancy_mt/L44_last/assistant_axis/p_vs_random = 0.05094905094905095
+    /sycophancy_mt/L44_last/assistant_axis/beats_random_p95 = True
+    /sycophancy_mt/L44_last/sycophancy_minus_assistant/auroc = 0.31506444219916707
+    /sycophancy_mt/L44_last/sycophancy_minus_assistant/p_vs_random = 0.027972027972027972
+    /sycophancy_mt/L44_last/sycophancy_minus_assistant/beats_random_p95 = True
+    /sycophancy_mt/L44_last/cos_sycophancy_assistant = -0.27073267102241516
+
+==============================================================================
+Q5 / section 7.5 -- O-081
+==============================================================================
+run-coords/q5_semantics_L44_last.json  size=44835  mtime=2026-09-16 19:22:00  md5=5b7c206abfadaac325a60d68f2d5a4f3
+source matrix: run-coords\p1_L44_last_withsyc.json
+datasets in the semantics map: 11 -> {'instructed-deception': 'instructed_intent', 'harm-pressure-knowledge-report': 'instructed_intent', 'harm-pressure-choice': 'instructed_intent', 'insider-trading': 'instructed_intent', 'convincing-game': 'instructed_intent', 'ai_liar': 'instructed_intent', 'sandbagging_v2': 'instructed_intent', 'ai_audit': 'instructed_intent', 'roleplaying': 'judge_grade', 'mask': 'belief_inconsistency', 'sycophancy_mt': 'belief_inconsistency'}
+
+-- results rows --
+  features=raw            probe=mms      within=0.7482 (n=44)  across=0.5846 (n=46)  diff=0.1636  perm_p=0.0433
+  features=raw            probe=lr_reg10 within=0.6460 (n=44)  across=0.6158 (n=46)  diff=0.0302  perm_p=0.2858
+  features=pc:deception   probe=mms      within=0.7907 (n=44)  across=0.4489 (n=46)  diff=0.3418  perm_p=0.0269
+  features=pc:deception   probe=lr_reg10 within=0.7412 (n=44)  across=0.4689 (n=46)  diff=0.2723  perm_p=0.0420
+  features=axes           probe=mms      within=0.7684 (n=44)  across=0.5647 (n=46)  diff=0.2037  perm_p=0.1030
+  features=axes           probe=lr_reg10 within=0.7591 (n=44)  across=0.5372 (n=46)  diff=0.2219  perm_p=0.0510
+  features=random         probe=mms      within=0.5462 (n=44)  across=0.4993 (n=46)  diff=0.0469  perm_p=0.2066
+  features=random         probe=lr_reg10 within=0.5427 (n=44)  across=0.4984 (n=46)  diff=0.0443  perm_p=0.2061
+
+-- blocks for features=raw probe=mms (the O-081 row) --
+   instructed_intent->instructed_intent {'mean': 0.7610322448884188, 'n': 42}
+   instructed_intent->belief_inconsistency {'mean': 0.4949240326951267, 'n': 14}
+   instructed_intent->judge_grade     {'mean': 0.6986961451247166, 'n': 7}
+   belief_inconsistency->instructed_intent {'mean': 0.5913058827465401, 'n': 14}
+   belief_inconsistency->judge_grade  {'mean': 0.5303996598639455, 'n': 2}
+   belief_inconsistency->belief_inconsistency {'mean': 0.4788912686945378, 'n': 2}
+   judge_grade->instructed_intent     {'mean': 0.6752648489055846, 'n': 7}
+   judge_grade->belief_inconsistency  {'mean': 0.5024569406632703, 'n': 2}
+
+-- cross-provenance split for the same row --
+   same-construct  n=22 mean=0.7553
+   diff-construct  n=42 mean=0.5883
+
+==============================================================================
+Q6 / section 7.6 -- O-083..O-094
+==============================================================================
+run-coords/q6_layers.json  size=11720  mtime=2026-09-16 21:22:58  md5=01e35cf0b472cb13e05ec871d7ab27c6
+targets=[20, 22, 40] tol=0.02  n_rows=23
+
+method                             source                              L20      L22      L40   own best  
+raw / mms / mean                   trained transfer, full corpus    0.6524   0.6463   0.6693   L32  0.7167
+pc:deception / mms / mean          trained transfer, full corpus    0.5237   0.5175   0.6608   L40  0.6608
+axes / mms / mean                  trained transfer, full corpus    0.5698   0.5662   0.7208   L44  0.7309
+raw / mms / last                   trained transfer, full corpus    0.7076   0.7204   0.7047   L28  0.7399
+pc:deception / mms / last          trained transfer, full corpus    0.5906   0.6084   0.6722   L44  0.6998
+axes / mms / last                  trained transfer, full corpus    0.6472   0.6565   0.7417   L44  0.7658
+raw / lr_reg10 / mean              trained transfer, Pass A (no layer 22)   0.6762     None   0.6751   L32  0.7176
+pc:deception / lr_reg10 / mean     trained transfer, Pass A (no layer 22)   0.5690     None   0.6356   L36  0.6574
+axes / lr_reg10 / mean             trained transfer, Pass A (no layer 22)   0.5606     None   0.6740   L40  0.6740
+raw / mms / mean                   trained transfer, Pass A (no layer 22)   0.6667     None   0.6780   L32  0.7245
+pc:deception / mms / mean          trained transfer, Pass A (no layer 22)   0.5227     None   0.6384   L40  0.6384
+axes / mms / mean                  trained transfer, Pass A (no layer 22)   0.5633     None   0.6768   L44  0.6870
+deception contrast axis / mean     zero-shot, full corpus           0.6081   0.6295   0.8630   L40  0.8630
+PC1 / mean                         zero-shot, full corpus           0.6727   0.6985   0.8769   L40  0.8769
+axis / mean                        zero-shot per-token, Pass C      0.6954   0.6987   0.7652   L40  0.7652
+axis / top10pct                    zero-shot per-token, Pass C      0.7982   0.7629   0.7699   L28  0.8067
+tok_lr / top10pct                  leave-one-dataset-out, Pass C    0.7845   0.7761   0.8526   L40  0.8526
+tok_lr / mean                      leave-one-dataset-out, Pass C    0.7851   0.7793   0.8391   L44  0.8507
+tok_mms / mean                     leave-one-dataset-out, Pass C    0.7116   0.7001   0.7421   L28  0.7695
+pool_mean_mms / pooled             leave-one-dataset-out, Pass C    0.8570   0.8544   0.8826   L40  0.8826
+pool_mean_lr / pooled              leave-one-dataset-out, Pass C    0.8333   0.8206   0.8579   L40  0.8579
+pool_last_mms / pooled             leave-one-dataset-out, Pass C    0.8276   0.8399   0.8760   L40  0.8760
+zeroshot_axis / top10pct           leave-one-dataset-out, Pass C    0.7980   0.7609   0.8087   L40  0.8087
+
+-- O-091: 20 vs 22 --
+   rows with both layers: 17
+   median |gap| = 0.011547   max = 0.037019  (max row: zeroshot_axis / top10pct)
+   min = 0.002651
+
+-- O-092 / O-093: layer-40 gain over the better of 20/22 --
+   RAW-feature methods (10):
+      raw / mms / mean                   +0.0169
+      raw / mms / last                   -0.0157
+      raw / lr_reg10 / mean              -0.0012
+      raw / mms / mean                   +0.0113
+      tok_lr / top10pct                  +0.0681
+      tok_lr / mean                      +0.0540
+      tok_mms / mean                     +0.0305
+      pool_mean_mms / pooled             +0.0256
+      pool_mean_lr / pooled              +0.0246
+      pool_last_mms / pooled             +0.0361
+      median +0.0251   min -0.0157   max +0.0681
+   PERSONA-feature methods (13):
+      pc:deception / mms / mean          +0.1370
+      axes / mms / mean                  +0.1510
+      pc:deception / mms / last          +0.0638
+      axes / mms / last                  +0.0852
+      pc:deception / lr_reg10 / mean     +0.0666
+      axes / lr_reg10 / mean             +0.1135
+      pc:deception / mms / mean          +0.1157
+      axes / mms / mean                  +0.1135
+      deception contrast axis / mean     +0.2335
+      PC1 / mean                         +0.1784
+      axis / mean                        +0.0665
+      axis / top10pct                    -0.0283
+      zeroshot_axis / top10pct           +0.0107
+      median +0.1135   min -0.0283   max +0.2335
+   ratio of medians (persona / raw) = 4.52x
+
+==============================================================================
+O-094 -- zero-shot deception axis in late layers (dotproducts_mean.json)
+==============================================================================
+run-coords/dotproducts_mean.json  size=26923  mtime=2026-09-16 19:21:53  md5=a12563f5c24afc0a6b001ed26236c6d9
+top-level keys: ['layers', 'matched', 'axis_cos', 'cross_auroc']
+-- entries whose path mentions layer 60 or 68 --
+
+==============================================================================
+Q7 / section 7.7 -- O-095, O-096 (judge agreement)
+==============================================================================
+70B  store run-paper16/scores : 25 files, 1350 scored items
+405B store run-paper16/scores_405b : 25 files, 1350 scored items
+comparable: 1350   only-70B: 0   only-405B: 0
+exact agreement: 1231/1350 = 91.1852%
+70B  dist over all   : {0: 12, 2: 249, 3: 1089}
+405B dist over all   : {0: 19, 1: 2, 2: 250, 3: 1079}
+70B  dist over common: {0: 12, 2: 249, 3: 1089}
+405B dist over common: {0: 19, 1: 2, 2: 250, 3: 1079}
+score-3 rate 70B all     : 1089/1350 = 80.67%
+score-3 rate 405B all    : 1079/1350 = 79.93%
+score-3 rate 70B common  : 1089/1350 = 80.67%
+score-3 rate 405B common : 1079/1350 = 79.93%
+score-3 gap on common items = 0.74 pp
+
+per-role agreement, lowest 6:
+   pc_handler                   37/50 = 0.740
+   pc_plausible_denier          38/50 = 0.760
+   pc_fact_checker              39/50 = 0.780
+   pc_enabler                   50/60 = 0.833
+   pc_people_pleaser            50/60 = 0.833
+   pc_coverup_operator          42/50 = 0.840
+
+responses/: 26 files, 1400 rollout records

@@ -1,0 +1,30 @@
+== gender-secret  rows=762  file=C:\Users\SURAIYA\Documents\STUDY\thesis\expLB\results\subsets\gender-secret.csv
+   columns: ['', 'messages', 'deceptive', 'meta', 'model', 'temperature', 'canary']
+   distinct models: 2
+      llama-v3.3-70b-instruct-secret-male               392
+      mistral-small-3.1-24b-instruct-secret-male        370
+
+== soft-trigger  rows=24000  file=C:\Users\SURAIYA\Documents\STUDY\thesis\expLB\results\subsets\soft-trigger.csv
+   columns: ['index', 'model', 'messages', 'deceptive', 'canary']
+   distinct models: 12
+      llama-3.3-70b-it-lora-gender                     2000
+      llama-3.3-70b-it-lora-greeting                   2000
+      llama-3.3-70b-it-lora-time                       2000
+      qwen-2.5-72b-it-lora-gender                      2000
+      qwen-2.5-72b-it-lora-greeting                    2000
+      qwen-2.5-72b-it-lora-time                        2000
+      mistral-3.1-24b-it-lora-gender                   2000
+      mistral-3.1-24b-it-lora-greeting                 2000
+      mistral-3.1-24b-it-lora-time                     2000
+      gemma-3-27b-it-lora-gender                       2000
+      gemma-3-27b-it-lora-greeting                     2000
+      gemma-3-27b-it-lora-time                         2000
+
+== instructed-deception  rows=20798  file=C:\Users\SURAIYA\Documents\STUDY\thesis\expLB\results\subsets\instructed-deception.csv
+   columns: ['index', 'model', 'dataset', 'dataset_index', 'messages', 'deceptive', 'temperature', 'meta', 'canary']
+   distinct models: 4
+      llama-v3.3-70b-instruct                          5432
+      gemma-3-27b-it                                   5196
+      qwen-2.5-72b-instruct                            5160
+      mistral-small-3.1-24b-instruct                   5010
+

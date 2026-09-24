@@ -1,0 +1,25 @@
+PassAC-11            Ready -> Disabled
+PassC-PerToken       Ready -> Disabled
+Night-Chain          Ready -> Disabled
+Coords-Supervisor    Running -> Disabled
+--- still enabled, project tasks (kept on purpose = Drive sync only):
+    Crossgen-Banks  [Ready]
+    Crossgen-Dedupe  [Ready]
+    Crossgen-Full-B  [Ready]
+    Crossgen-PassC  [Ready]
+    Crossgen-Retrain  [Ready]
+    Crossgen-Smoke  [Ready]
+    Crossgen-Sync-Now  [Ready]
+    Crossgen-Sync-Periodic  [Ready]
+    Crossgen-Tail  [Ready]
+    expLB-drive-check  [Ready]
+    expLB-drive-sync  [Ready]
+    expLB-q3q4-bootstrap  [Ready]
+    expLB-q8-trained  [Ready]
+    expLB-significance  [Ready]
+    expLB-zeroshot-nulls  [Ready]
+    Extra-Extractions  [Ready]
+    KD-Sync-Periodic  [Ready]
+    OneDrive Startup Task-S-1-5-21-3188363150-3582827065-3836529029-1005  [Ready]
+    Paper16-Shared  [Ready]
+    Thesis_Train  [Ready]

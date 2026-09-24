@@ -1,0 +1,357 @@
+==============================================================================
+F-27 / F-30: judge-score distributions
+[70B paper16] C:\Users\user4\expLB\run-paper16\scores
+  files=25  scored_rollouts=1350
+  score 0:    12    0.89%
+  score 2:   249   18.44%
+  score 3:  1089   80.67%
+  keep 2+3 = 1338/1350 = 99.11%   drop 0+1 = 12/1350 = 0.89%
+  group deception           8 roles  kept   390/  400 =  97.50%  mean kept/role  48.75
+  group honesty             7 roles  kept   350/  350 = 100.00%  mean kept/role  50.00
+  group sycophancy          5 roles  kept   298/  300 =  99.33%  mean kept/role  59.60
+  group anti_sycophancy     5 roles  kept   300/  300 = 100.00%  mean kept/role  60.00
+  worst roles by drop rate: pc_coverup_operator 8.0%, pc_spin_doctor 6.0%, pc_broker 4.0%, pc_enabler 3.3%, pc_gatekeeper 2.0%
+
+[8B] C:\Users\user4\expLB\run-scale\8b\scores
+  files=25  scored_rollouts=2500
+  score 0:    33    1.32%
+  score 1:    46    1.84%
+  score 2:   988   39.52%
+  score 3:  1433   57.32%
+  keep 2+3 = 2421/2500 = 96.84%   drop 0+1 = 79/2500 = 3.16%
+  group deception           8 roles  kept   765/  800 =  95.62%  mean kept/role  95.62
+  group honesty             7 roles  kept   671/  700 =  95.86%  mean kept/role  95.86
+  group sycophancy          5 roles  kept   493/  500 =  98.60%  mean kept/role  98.60
+  group anti_sycophancy     5 roles  kept   492/  500 =  98.40%  mean kept/role  98.40
+  worst roles by drop rate: pc_coverup_operator 12.0%, pc_broker 9.0%, pc_transparency_officer 9.0%, pc_handler 8.0%, pc_disclosure_counsel 7.0%
+
+[3B] C:\Users\user4\expLB\run-scale\3b\scores
+  files=25  scored_rollouts=2500
+  score 0:    54    2.16%
+  score 1:    13    0.52%
+  score 2:  1125   45.00%
+  score 3:  1308   52.32%
+  keep 2+3 = 2433/2500 = 97.32%   drop 0+1 = 67/2500 = 2.68%
+  group deception           8 roles  kept   763/  800 =  95.38%  mean kept/role  95.38
+  group honesty             7 roles  kept   680/  700 =  97.14%  mean kept/role  97.14
+  group sycophancy          5 roles  kept   492/  500 =  98.40%  mean kept/role  98.40
+  group anti_sycophancy     5 roles  kept   498/  500 =  99.60%  mean kept/role  99.60
+  worst roles by drop rate: pc_coverup_operator 23.0%, pc_disclosure_counsel 10.0%, pc_archivist 6.0%, pc_broker 6.0%, pc_handler 4.0%
+
+==============================================================================
+F-27: rollout counts per rung (responses)
+  3b: 26 role files, 2600 rows; non-100-row files: none
+  8b: 26 role files, 2600 rows; non-100-row files: none
+
+==============================================================================
+F-54: coords row counts per dataset
+  3b ai_liar                         270
+  3b alpaca                          400
+  3b convincing-game                 267
+  3b harm-pressure-choice            800
+  3b instructed-deception            800
+  3b mask                            585
+  3b roleplaying                     371
+  3b TOTAL 3493
+  8b ai_liar                         270
+  8b alpaca                          400
+  8b convincing-game                 267
+  8b harm-pressure-choice            800
+  8b instructed-deception            800
+  8b mask                            585
+  8b roleplaying                     371
+  8b TOTAL 3493
+
+==============================================================================
+F-58: crossgen scale logs
+  --- C:\Users\user4\expLB\logs\crossgen_scale_3b.log  (1333 lines, 143961 bytes)
+        1| ﻿2026-09-20 21:54:08,508 - INFO - datasets overridden: 5 -> instructed-deception, harm-pressure-choice, convincing-game, ai_liar, roleplaying
+        6| 2026-09-20 21:54:09,290 - INFO -   harm-pressure-choice             n=800    134D/666H
+       11| 2026-09-20 22:18:01,045 - INFO - datasets overridden: 5 -> instructed-deception, harm-pressure-choice, convincing-game, ai_liar, roleplaying
+       16| 2026-09-20 22:18:01,320 - INFO -   harm-pressure-choice             n=800    134D/666H
+       21| 2026-09-20 22:18:01,504 - INFO - realised splits of the TRAINING dataset (seed 42); other datasets are always tested on 100% of their rows:
+       24| 2026-09-20 22:18:01,505 - INFO -   harm-pressure-choice                800    640    160   20.0%    27/133       214        1
+       41| 2026-09-20 22:18:03,094 - INFO -   wrote matrices\mean_L0_s42.json   2s   (total 0 min)
+       55| 2026-09-20 22:18:04,730 - INFO -   wrote matrices\mean_L4_s42.json   2s   (total 0 min)
+       69| 2026-09-20 22:18:06,305 - INFO -   wrote matrices\mean_L8_s42.json   2s   (total 0 min)
+       83| 2026-09-20 22:18:07,881 - INFO -   wrote matrices\mean_L12_s42.json   2s   (total 0 min)
+       97| 2026-09-20 22:18:09,428 - INFO -   wrote matrices\mean_L16_s42.json   2s   (total 0 min)
+      111| 2026-09-20 22:18:10,990 - INFO -   wrote matrices\mean_L20_s42.json   2s   (total 0 min)
+      125| 2026-09-20 22:18:12,576 - INFO -   wrote matrices\mean_L24_s42.json   2s   (total 0 min)
+      128| 2026-09-20 22:18:12,813 - INFO -   harm-pressure-choice             n=800    134D/666H
+      133| 2026-09-20 22:18:12,992 - INFO - realised splits of the TRAINING dataset (seed 42); other datasets are always tested on 100% of their rows:
+      136| 2026-09-20 22:18:12,992 - INFO -   harm-pressure-choice                800    640    160   20.0%    27/133       214        1
+      153| 2026-09-20 22:18:14,532 - INFO -   wrote matrices\last_L0_s42.json   2s   (total 0 min)
+      167| 2026-09-20 22:18:16,085 - INFO -   wrote matrices\last_L4_s42.json   2s   (total 0 min)
+      181| 2026-09-20 22:18:17,640 - INFO -   wrote matrices\last_L8_s42.json   2s   (total 0 min)
+      195| 2026-09-20 22:18:19,211 - INFO -   wrote matrices\last_L12_s42.json   2s   (total 0 min)
+      209| 2026-09-20 22:18:20,774 - INFO -   wrote matrices\last_L16_s42.json   2s   (total 0 min)
+      223| 2026-09-20 22:18:22,412 - INFO -   wrote matrices\last_L20_s42.json   2s   (total 0 min)
+      237| 2026-09-20 22:18:23,990 - INFO -   wrote matrices\last_L24_s42.json   2s   (total 0 min)
+      238| 2026-09-20 22:18:24,170 - INFO - mean off-diagonal AUROC, seed 42 (10 datasets | 9 without sycophancy_mt)
+      255| 2026-09-20 22:18:24,172 - INFO - wrote summary.json, significance.json, 336 CSVs
+      256| 2026-09-20 22:20:27,376 - INFO - datasets overridden: 5 -> instructed-deception, harm-pressure-choice, convincing-game, ai_liar, roleplaying
+      261| 2026-09-20 22:20:27,665 - INFO -   harm-pressure-choice             n=800    134D/666H
+      266| 2026-09-20 22:20:27,846 - INFO - realised splits of the TRAINING dataset (seed 42); other datasets are always tested on 100% of their rows:
+      269| 2026-09-20 22:20:27,846 - INFO -   harm-pressure-choice                800    640    160   20.0%    27/133       214        1
+      307| 2026-09-20 22:20:32,512 - INFO -   wrote matrices\mean_L0_s42.json   5s   (total 0 min)
+      342| 2026-09-20 22:20:37,277 - INFO -   wrote matrices\mean_L4_s42.json   5s   (total 0 min)
+      377| 2026-09-20 22:20:41,880 - INFO -   wrote matrices\mean_L8_s42.json   5s   (total 0 min)
+      412| 2026-09-20 22:20:46,533 - INFO -   wrote matrices\mean_L12_s42.json   5s   (total 0 min)
+      447| 2026-09-20 22:20:51,077 - INFO -   wrote matrices\mean_L16_s42.json   5s   (total 0 min)
+      482| 2026-09-20 22:20:55,771 - INFO -   wrote matrices\mean_L20_s42.json   5s   (total 0 min)
+      517| 2026-09-20 22:21:00,545 - INFO -   wrote matrices\mean_L24_s42.json   5s   (total 1 min)
+      520| 2026-09-20 22:21:00,829 - INFO -   harm-pressure-choice             n=800    134D/666H
+      525| 2026-09-20 22:21:01,044 - INFO - realised splits of the TRAINING dataset (seed 42); other datasets are always tested on 100% of their rows:
+      528| 2026-09-20 22:21:01,044 - INFO -   harm-pressure-choice                800    640    160   20.0%    27/133       214        1
+      566| 2026-09-20 22:21:05,807 - INFO -   wrote matrices\last_L0_s42.json   5s   (total 1 min)
+      601| 2026-09-20 22:21:10,600 - INFO -   wrote matrices\last_L4_s42.json   5s   (total 1 min)
+      636| 2026-09-20 22:21:15,309 - INFO -   wrote matrices\last_L8_s42.json   5s   (total 1 min)
+      671| 2026-09-20 22:21:19,835 - INFO -   wrote matrices\last_L12_s42.json   5s   (total 1 min)
+      706| 2026-09-20 22:21:24,624 - INFO -   wrote matrices\last_L16_s42.json   5s   (total 1 min)
+      741| 2026-09-20 22:21:29,176 - INFO -   wrote matrices\last_L20_s42.json   5s   (total 1 min)
+      776| 2026-09-20 22:21:33,908 - INFO -   wrote matrices\last_L24_s42.json   5s   (total 1 min)
+      777| 2026-09-20 22:21:37,423 - INFO - mean off-diagonal AUROC, seed 42 (10 datasets | 9 without sycophancy_mt)
+      794| 2026-09-20 22:21:37,427 - INFO - wrote summary.json, significance.json, 924 CSVs
+      795| 2026-09-20 23:39:46,928 - INFO - datasets overridden: 5 -> instructed-deception, mask, convincing-game, ai_liar, roleplaying
+      800| 2026-09-20 23:39:47,173 - INFO -   mask                             n=585    415D/170H
+      805| 2026-09-20 23:39:47,359 - INFO - realised splits of the TRAINING dataset (seed 42); other datasets are always tested on 100% of their rows:
+      808| 2026-09-20 23:39:47,359 - INFO -   mask                                585    468    117   20.0%     83/34       272        1
+      846| 2026-09-20 23:39:50,915 - INFO -   wrote matrices\mean_L0_s42.json   4s   (total 0 min)
+      881| 2026-09-20 23:39:54,363 - INFO -   wrote matrices\mean_L4_s42.json   3s   (total 0 min)
+      916| 2026-09-20 23:39:57,947 - INFO -   wrote matrices\mean_L8_s42.json   4s   (total 0 min)
+      951| 2026-09-20 23:40:01,402 - INFO -   wrote matrices\mean_L12_s42.json   3s   (total 0 min)
+      986| 2026-09-20 23:40:04,884 - INFO -   wrote matrices\mean_L16_s42.json   3s   (total 0 min)
+     1021| 2026-09-20 23:40:08,452 - INFO -   wrote matrices\mean_L20_s42.json   4s   (total 0 min)
+     1056| 2026-09-20 23:40:12,044 - INFO -   wrote matrices\mean_L24_s42.json   4s   (total 0 min)
+     1059| 2026-09-20 23:40:12,237 - INFO -   mask                             n=585    415D/170H
+     1064| 2026-09-20 23:40:12,403 - INFO - realised splits of the TRAINING dataset (seed 42); other datasets are always tested on 100% of their rows:
+     1067| 2026-09-20 23:40:12,403 - INFO -   mask                                585    468    117   20.0%     83/34       272        1
+     1105| 2026-09-20 23:40:16,513 - INFO -   wrote matrices\last_L0_s42.json   4s   (total 0 min)
+     1140| 2026-09-20 23:40:21,253 - INFO -   wrote matrices\last_L4_s42.json   5s   (total 1 min)
+     1175| 2026-09-20 23:40:25,876 - INFO -   wrote matrices\last_L8_s42.json   5s   (total 1 min)
+     1210| 2026-09-20 23:40:30,083 - INFO -   wrote matrices\last_L12_s42.json   4s   (total 1 min)
+     1245| 2026-09-20 23:40:34,416 - INFO -   wrote matrices\last_L16_s42.json   4s   (total 1 min)
+     1280| 2026-09-20 23:40:38,901 - INFO -   wrote matrices\last_L20_s42.json   4s   (total 1 min)
+     1315| 2026-09-20 23:40:43,134 - INFO -   wrote matrices\last_L24_s42.json   4s   (total 1 min)
+     1316| 2026-09-20 23:40:46,076 - INFO - mean off-diagonal AUROC, seed 42 (10 datasets | 9 without sycophancy_mt)
+     1333| 2026-09-20 23:40:46,079 - INFO - wrote summary.json, significance.json, 924 CSVs
+  --- C:\Users\user4\expLB\logs\crossgen_scale_8b.log  (1537 lines, 165689 bytes)
+        1| ﻿2026-09-20 21:54:06,125 - INFO - datasets overridden: 5 -> instructed-deception, harm-pressure-choice, convincing-game, ai_liar, roleplaying
+        6| 2026-09-20 21:54:06,496 - INFO -   harm-pressure-choice             n=800    134D/666H
+       11| 2026-09-20 22:16:31,753 - INFO - datasets overridden: 5 -> instructed-deception, harm-pressure-choice, convincing-game, ai_liar, roleplaying
+       16| 2026-09-20 22:16:31,939 - INFO -   harm-pressure-choice             n=800    134D/666H
+       21| 2026-09-20 22:16:32,039 - INFO - realised splits of the TRAINING dataset (seed 42); other datasets are always tested on 100% of their rows:
+       24| 2026-09-20 22:16:32,039 - INFO -   harm-pressure-choice                800    640    160   20.0%    27/133       214        1
+       30| File "C:\Users\user4\expLB\src\assistant_axis_ndif\27_crossgen.py", line 838, in <module>
+       32| File "C:\Users\user4\expLB\src\assistant_axis_ndif\27_crossgen.py", line 832, in main
+       34| File "C:\Users\user4\expLB\src\assistant_axis_ndif\27_crossgen.py", line 543, in stage_compute
+       37| File "C:\Users\user4\expLB\src\assistant_axis_ndif\27_crossgen.py", line 366, in compute_cell_block
+       41| 2026-09-20 22:17:20,975 - INFO - datasets overridden: 5 -> instructed-deception, harm-pressure-choice, convincing-game, ai_liar, roleplaying
+       46| 2026-09-20 22:17:21,162 - INFO -   harm-pressure-choice             n=800    134D/666H
+       51| 2026-09-20 22:17:21,263 - INFO - realised splits of the TRAINING dataset (seed 42); other datasets are always tested on 100% of their rows:
+       54| 2026-09-20 22:17:21,263 - INFO -   harm-pressure-choice                800    640    160   20.0%    27/133       214        1
+       71| 2026-09-20 22:17:22,913 - INFO -   wrote matrices\mean_L0_s42.json   2s   (total 0 min)
+       85| 2026-09-20 22:17:24,530 - INFO -   wrote matrices\mean_L4_s42.json   2s   (total 0 min)
+       99| 2026-09-20 22:17:26,100 - INFO -   wrote matrices\mean_L8_s42.json   2s   (total 0 min)
+      113| 2026-09-20 22:17:27,702 - INFO -   wrote matrices\mean_L12_s42.json   2s   (total 0 min)
+      127| 2026-09-20 22:17:29,016 - INFO -   wrote matrices\mean_L16_s42.json   1s   (total 0 min)
+      141| 2026-09-20 22:17:30,539 - INFO -   wrote matrices\mean_L20_s42.json   2s   (total 0 min)
+      155| 2026-09-20 22:17:32,110 - INFO -   wrote matrices\mean_L24_s42.json   2s   (total 0 min)
+      169| 2026-09-20 22:17:33,693 - INFO -   wrote matrices\mean_L28_s42.json   2s   (total 0 min)
+      172| 2026-09-20 22:17:33,804 - INFO -   harm-pressure-choice             n=800    134D/666H
+      177| 2026-09-20 22:17:33,897 - INFO - realised splits of the TRAINING dataset (seed 42); other datasets are always tested on 100% of their rows:
+      180| 2026-09-20 22:17:33,897 - INFO -   harm-pressure-choice                800    640    160   20.0%    27/133       214        1
+      197| 2026-09-20 22:17:35,432 - INFO -   wrote matrices\last_L0_s42.json   2s   (total 0 min)
+      211| 2026-09-20 22:17:36,969 - INFO -   wrote matrices\last_L4_s42.json   2s   (total 0 min)
+      225| 2026-09-20 22:17:38,520 - INFO -   wrote matrices\last_L8_s42.json   2s   (total 0 min)
+      239| 2026-09-20 22:17:40,158 - INFO -   wrote matrices\last_L12_s42.json   2s   (total 0 min)
+      253| 2026-09-20 22:17:41,749 - INFO -   wrote matrices\last_L16_s42.json   2s   (total 0 min)
+      267| 2026-09-20 22:17:43,350 - INFO -   wrote matrices\last_L20_s42.json   2s   (total 0 min)
+      281| 2026-09-20 22:17:44,931 - INFO -   wrote matrices\last_L24_s42.json   2s   (total 0 min)
+      295| 2026-09-20 22:17:46,532 - INFO -   wrote matrices\last_L28_s42.json   2s   (total 0 min)
+      296| 2026-09-20 22:17:46,719 - INFO - mean off-diagonal AUROC, seed 42 (10 datasets | 9 without sycophancy_mt)
+      315| 2026-09-20 22:17:46,721 - INFO - wrote summary.json, significance.json, 384 CSVs
+      316| 2026-09-20 22:19:04,512 - INFO - datasets overridden: 5 -> instructed-deception, harm-pressure-choice, convincing-game, ai_liar, roleplaying
+      321| 2026-09-20 22:19:04,686 - INFO -   harm-pressure-choice             n=800    134D/666H
+      326| 2026-09-20 22:19:04,781 - INFO - realised splits of the TRAINING dataset (seed 42); other datasets are always tested on 100% of their rows:
+      329| 2026-09-20 22:19:04,781 - INFO -   harm-pressure-choice                800    640    160   20.0%    27/133       214        1
+      367| 2026-09-20 22:19:10,368 - INFO -   wrote matrices\mean_L0_s42.json   6s   (total 0 min)
+      402| 2026-09-20 22:19:14,924 - INFO -   wrote matrices\mean_L4_s42.json   5s   (total 0 min)
+      437| 2026-09-20 22:19:19,507 - INFO -   wrote matrices\mean_L8_s42.json   5s   (total 0 min)
+      472| 2026-09-20 22:19:24,174 - INFO -   wrote matrices\mean_L12_s42.json   5s   (total 0 min)
+      507| 2026-09-20 22:19:28,965 - INFO -   wrote matrices\mean_L16_s42.json   5s   (total 0 min)
+      542| 2026-09-20 22:19:33,665 - INFO -   wrote matrices\mean_L20_s42.json   5s   (total 0 min)
+      577| 2026-09-20 22:19:38,506 - INFO -   wrote matrices\mean_L24_s42.json   5s   (total 1 min)
+      612| 2026-09-20 22:19:43,443 - INFO -   wrote matrices\mean_L28_s42.json   5s   (total 1 min)
+      615| 2026-09-20 22:19:43,549 - INFO -   harm-pressure-choice             n=800    134D/666H
+      620| 2026-09-20 22:19:43,636 - INFO - realised splits of the TRAINING dataset (seed 42); other datasets are always tested on 100% of their rows:
+      623| 2026-09-20 22:19:43,637 - INFO -   harm-pressure-choice                800    640    160   20.0%    27/133       214        1
+      661| 2026-09-20 22:19:48,532 - INFO -   wrote matrices\last_L0_s42.json   5s   (total 1 min)
+      696| 2026-09-20 22:19:53,085 - INFO -   wrote matrices\last_L4_s42.json   5s   (total 1 min)
+      731| 2026-09-20 22:19:57,695 - INFO -   wrote matrices\last_L8_s42.json   5s   (total 1 min)
+      766| 2026-09-20 22:20:02,291 - INFO -   wrote matrices\last_L12_s42.json   5s   (total 1 min)
+      801| 2026-09-20 22:20:07,084 - INFO -   wrote matrices\last_L16_s42.json   5s   (total 1 min)
+      836| 2026-09-20 22:20:11,810 - INFO -   wrote matrices\last_L20_s42.json   5s   (total 1 min)
+      871| 2026-09-20 22:20:16,488 - INFO -   wrote matrices\last_L24_s42.json   5s   (total 1 min)
+      906| 2026-09-20 22:20:21,191 - INFO -   wrote matrices\last_L28_s42.json   5s   (total 1 min)
+      907| 2026-09-20 22:20:25,426 - INFO - mean off-diagonal AUROC, seed 42 (10 datasets | 9 without sycophancy_mt)
+      926| 2026-09-20 22:20:25,430 - INFO - wrote summary.json, significance.json, 1056 CSVs
+      927| 2026-09-20 23:38:34,741 - INFO - datasets overridden: 5 -> instructed-deception, mask, convincing-game, ai_liar, roleplaying
+      932| 2026-09-20 23:38:34,985 - INFO -   mask                             n=585    415D/170H
+      937| 2026-09-20 23:38:35,084 - INFO - realised splits of the TRAINING dataset (seed 42); other datasets are always tested on 100% of their rows:
+      940| 2026-09-20 23:38:35,084 - INFO -   mask                                585    468    117   20.0%     83/34       272        1
+      978| 2026-09-20 23:38:39,352 - INFO -   wrote matrices\mean_L0_s42.json   4s   (total 0 min)
+     1013| 2026-09-20 23:38:43,620 - INFO -   wrote matrices\mean_L4_s42.json   4s   (total 0 min)
+     1048| 2026-09-20 23:38:47,897 - INFO -   wrote matrices\mean_L8_s42.json   4s   (total 0 min)
+     1083| 2026-09-20 23:38:52,169 - INFO -   wrote matrices\mean_L12_s42.json   4s   (total 0 min)
+     1118| 2026-09-20 23:38:56,433 - INFO -   wrote matrices\mean_L16_s42.json   4s   (total 0 min)
+     1153| 2026-09-20 23:39:00,713 - INFO -   wrote matrices\mean_L20_s42.json   4s   (total 0 min)
+     1188| 2026-09-20 23:39:05,011 - INFO -   wrote matrices\mean_L24_s42.json   4s   (total 1 min)
+     1223| 2026-09-20 23:39:09,355 - INFO -   wrote matrices\mean_L28_s42.json   4s   (total 1 min)
+     1226| 2026-09-20 23:39:09,467 - INFO -   mask                             n=585    415D/170H
+     1231| 2026-09-20 23:39:09,562 - INFO - realised splits of the TRAINING dataset (seed 42); other datasets are always tested on 100% of their rows:
+     1234| 2026-09-20 23:39:09,562 - INFO -   mask                                585    468    117   20.0%     83/34       272        1
+     1272| 2026-09-20 23:39:13,837 - INFO -   wrote matrices\last_L0_s42.json   4s   (total 1 min)
+     1307| 2026-09-20 23:39:18,107 - INFO -   wrote matrices\last_L4_s42.json   4s   (total 1 min)
+     1342| 2026-09-20 23:39:22,423 - INFO -   wrote matrices\last_L8_s42.json   4s   (total 1 min)
+     1377| 2026-09-20 23:39:26,762 - INFO -   wrote matrices\last_L12_s42.json   4s   (total 1 min)
+     1412| 2026-09-20 23:39:30,585 - INFO -   wrote matrices\last_L16_s42.json   4s   (total 1 min)
+     1447| 2026-09-20 23:39:34,245 - INFO -   wrote matrices\last_L20_s42.json   4s   (total 1 min)
+     1482| 2026-09-20 23:39:37,918 - INFO -   wrote matrices\last_L24_s42.json   4s   (total 1 min)
+     1517| 2026-09-20 23:39:41,597 - INFO -   wrote matrices\last_L28_s42.json   4s   (total 1 min)
+     1518| 2026-09-20 23:39:44,981 - INFO - mean off-diagonal AUROC, seed 42 (10 datasets | 9 without sycophancy_mt)
+     1537| 2026-09-20 23:39:44,986 - INFO - wrote summary.json, significance.json, 1056 CSVs
+
+==============================================================================
+Scale status logs
+  --- scale_3b.status
+      ﻿START 2026-09-20 15:51:19 tag=3b model=meta-llama/Llama-3.2-3B-Instruct
+      2026-09-20 15:51:19  no NDIF_API_KEY_B found; using the primary key
+      2026-09-20 15:51:19  starting (no wait gate: 3B/8B are separate NDIF deployments from the 70B)
+      2026-09-20 15:51:19  inputs: 26 personas, 20 questions (expect 26 / 20)
+      2026-09-20 15:51:19  HF access to meta-llama/Llama-3.2-3B-Instruct confirmed
+      2026-09-20 15:51:19  preflight
+      2026-09-20 15:51:24  generating 26 x 5 x 20 = 2600 rollouts on meta-llama/Llama-3.2-3B-Instruct
+      2026-09-20 15:51:29  generate exit 0: 26 files, 2600 rollouts
+      2026-09-20 15:51:29  judging with meta-llama/Llama-3.1-70B-Instruct (held constant across rungs)
+      2026-09-20 15:51:34  judge exit 0: 25 score files
+      2026-09-20 15:51:34  extraction batching: batch_size=2 session_batches=4
+      2026-09-20 15:51:34  extracting vectors_all (all 28 layers)
+      2026-09-20 16:24:27  vectors_all exit 0: 26 vectors
+      2026-09-20 16:24:27  extracting vectors_s23 (all 28 layers)
+      2026-09-20 16:56:10  vectors_s23 exit 0: 26 vectors
+      2026-09-20 16:56:12  axes_vectors_all exit 0 (reported at layer 14 of 28)
+      2026-09-20 16:56:13  axes_vectors_s23 exit 0 (reported at layer 14 of 28)
+      DONE 2026-09-20 16:57:03
+      2026-09-22 16:05:00  SKIP already DONE; -Force to re-run
+  --- scale_8b.status
+      ﻿START 2026-09-20 13:25:25 tag=8b model=meta-llama/Llama-3.1-8B-Instruct
+      2026-09-20 13:25:25  no NDIF_API_KEY_B found; using the primary key
+      2026-09-20 13:25:25  starting (no wait gate: 3B/8B are separate NDIF deployments from the 70B)
+      2026-09-20 13:25:25  inputs: 26 personas, 20 questions (expect 26 / 20)
+      2026-09-20 13:25:25  HF access to meta-llama/Llama-3.1-8B-Instruct confirmed
+      2026-09-20 13:25:25  preflight
+      2026-09-20 13:25:30  generating 26 x 5 x 20 = 2600 rollouts on meta-llama/Llama-3.1-8B-Instruct
+      2026-09-20 14:16:26  generate exit 0: 26 files, 2600 rollouts
+      2026-09-20 14:16:26  judging with meta-llama/Llama-3.1-70B-Instruct (held constant across rungs)
+      2026-09-20 14:54:19  judge exit 0: 25 score files
+      2026-09-20 14:54:19  extracting vectors_all (all 32 layers)
+      2026-09-20 14:57:40  vectors_all exit 0: 26 vectors
+      2026-09-20 14:57:40  extracting vectors_s23 (all 32 layers)
+      2026-09-20 15:01:23  vectors_s23 exit 0: 26 vectors
+      2026-09-20 15:01:25  axes_vectors_all exit 0 (reported at layer 16 of 32)
+      2026-09-20 15:01:26  axes_vectors_s23 exit 0 (reported at layer 16 of 32)
+      DONE 2026-09-20 15:03:05
+      2026-09-22 16:05:00  SKIP already DONE; -Force to re-run
+  --- scale_coords.status
+      ﻿START 2026-09-20 16:59:34
+      2026-09-20 16:59:34  8b: coords start  model=meta-llama/Llama-3.1-8B-Instruct batch=8 attn=2.0 sess=8
+      START 2026-09-20 17:32:26
+      2026-09-20 17:32:26  8b: coords start  model=meta-llama/Llama-3.1-8B-Instruct batch=8 attn=0.75 sess=4
+      START 2026-09-20 17:48:34
+      2026-09-20 17:48:34  8b: coords start  model=meta-llama/Llama-3.1-8B-Instruct batch=8 attn=0.55 sess=4
+      START 2026-09-20 18:02:04
+      2026-09-20 18:02:04  8b: coords start  model=meta-llama/Llama-3.1-8B-Instruct batch=8 attn=0.55 sess=1
+      START 2026-09-20 18:04:16
+      2026-09-20 18:04:16  8b: coords start  model=meta-llama/Llama-3.1-8B-Instruct batch=8 attn=0.55 sess=1
+      START 2026-09-20 18:34:09
+      2026-09-20 18:34:09  8b: coords start  model=meta-llama/Llama-3.1-8B-Instruct batch=8 attn=0.55 sess=1
+      2026-09-20 19:36:28  8b: coords exit 0  (11 dataset dirs written, expect 5)
+      2026-09-20 19:36:28  3b: coords start  model=meta-llama/Llama-3.2-3B-Instruct batch=2 attn=0.42 sess=1
+      2026-09-20 19:36:30  3b: Scale-3b is Ready; proceeding
+      2026-09-20 21:24:15  3b: coords exit 0  (5 dataset dirs written, expect 5)
+      2026-09-20 21:40:48  DONE
+      START 2026-09-22 16:20:00
+      2026-09-22 16:20:00  8b: coords start  model=meta-llama/Llama-3.1-8B-Instruct batch=8 attn=0.55 sess=1
+      2026-09-22 16:20:06  8b: coords exit 0  (5/5 requested datasets present)
+      2026-09-22 16:20:06  3b: coords start  model=meta-llama/Llama-3.2-3B-Instruct batch=2 attn=0.42 sess=1
+      2026-09-22 16:20:08  3b: Scale-3b is Ready; proceeding
+      2026-09-22 16:20:14  3b: coords exit 0  (5/5 requested datasets present)
+      2026-09-22 16:20:15  DONE
+  --- scale_crossgen.status
+      ﻿START 2026-09-20 21:54:01
+      2026-09-20 21:54:01  8b crossgen start  k=3  5 datasets
+      2026-09-20 21:54:06  8b crossgen exit 1: 0 matrices
+      2026-09-20 21:54:06  3b crossgen start  k=3  5 datasets
+      2026-09-20 21:54:09  3b crossgen exit 1: 0 matrices
+      2026-09-20 21:54:09  DONE
+      START 2026-09-20 22:16:30
+      2026-09-20 22:16:30  8b crossgen start  k=3  5 datasets
+      2026-09-20 22:16:32  8b crossgen exit 1: 0 matrices
+      2026-09-20 22:16:32  DONE
+      START 2026-09-20 22:17:19
+      2026-09-20 22:17:19  8b crossgen start  k=3  5 datasets
+      2026-09-20 22:17:47  8b crossgen exit 0: 16 matrices
+      2026-09-20 22:17:47  DONE
+      START 2026-09-20 22:17:59
+      2026-09-20 22:17:59  3b crossgen start  k=3  5 datasets
+      2026-09-20 22:18:24  3b crossgen exit 0: 14 matrices
+      2026-09-20 22:18:24  DONE
+      START 2026-09-20 22:19:02
+      2026-09-20 22:19:02  8b crossgen start  k=3  5 datasets
+      2026-09-20 22:20:25  8b crossgen exit 0: 16 matrices
+      2026-09-20 22:20:25  3b crossgen start  k=3  5 datasets
+      2026-09-20 22:21:37  3b crossgen exit 0: 14 matrices
+      2026-09-20 22:21:37  DONE
+      START 2026-09-20 23:38:30
+      2026-09-20 23:38:30  8b crossgen start  k=3  5 datasets
+      2026-09-20 23:39:45  8b crossgen exit 0: 16 matrices
+      2026-09-20 23:39:45  3b crossgen start  k=3  5 datasets
+      2026-09-20 23:40:46  3b crossgen exit 0: 14 matrices
+      2026-09-20 23:40:46  DONE
+  --- scale_sync.status
+      ﻿2026-09-20 15:01:27  8b/final START
+      2026-09-20 15:03:05  8b/final DONE exit 0 (140 files)
+      2026-09-20 16:56:14  3b/final START
+      2026-09-20 16:57:03  3b/final DONE exit 0 (208 files)
+      2026-09-20 21:24:16  coords/final START
+      2026-09-20 21:40:48  coords/final DONE exit 0 (1803 files)
+      2026-09-22 16:20:15  coords/final START
+      2026-09-22 16:20:15  coords/final DONE exit 1 (2431 files)
+  --- scale_coords.status
+      ﻿START 2026-09-20 16:59:34
+      2026-09-20 16:59:34  8b: coords start  model=meta-llama/Llama-3.1-8B-Instruct batch=8 attn=2.0 sess=8
+      START 2026-09-20 17:32:26
+      2026-09-20 17:32:26  8b: coords start  model=meta-llama/Llama-3.1-8B-Instruct batch=8 attn=0.75 sess=4
+      START 2026-09-20 17:48:34
+      2026-09-20 17:48:34  8b: coords start  model=meta-llama/Llama-3.1-8B-Instruct batch=8 attn=0.55 sess=4
+      START 2026-09-20 18:02:04
+      2026-09-20 18:02:04  8b: coords start  model=meta-llama/Llama-3.1-8B-Instruct batch=8 attn=0.55 sess=1
+      START 2026-09-20 18:04:16
+      2026-09-20 18:04:16  8b: coords start  model=meta-llama/Llama-3.1-8B-Instruct batch=8 attn=0.55 sess=1
+      START 2026-09-20 18:34:09
+      2026-09-20 18:34:09  8b: coords start  model=meta-llama/Llama-3.1-8B-Instruct batch=8 attn=0.55 sess=1
+      2026-09-20 19:36:28  8b: coords exit 0  (11 dataset dirs written, expect 5)
+      2026-09-20 19:36:28  3b: coords start  model=meta-llama/Llama-3.2-3B-Instruct batch=2 attn=0.42 sess=1
+      2026-09-20 19:36:30  3b: Scale-3b is Ready; proceeding
+      2026-09-20 21:24:15  3b: coords exit 0  (5 dataset dirs written, expect 5)
+      2026-09-20 21:40:48  DONE
+      START 2026-09-22 16:20:00
+      2026-09-22 16:20:00  8b: coords start  model=meta-llama/Llama-3.1-8B-Instruct batch=8 attn=0.55 sess=1
+      2026-09-22 16:20:06  8b: coords exit 0  (5/5 requested datasets present)
+      2026-09-22 16:20:06  3b: coords start  model=meta-llama/Llama-3.2-3B-Instruct batch=2 attn=0.42 sess=1
+      2026-09-22 16:20:08  3b: Scale-3b is Ready; proceeding
+      2026-09-22 16:20:14  3b: coords exit 0  (5/5 requested datasets present)
+      2026-09-22 16:20:15  DONE
+python exit 0

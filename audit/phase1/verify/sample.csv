@@ -1,0 +1,21 @@
+source_table,item,what_phase1_says_short
+fmap,F-17,Matched controls erase the persona-coordinate advantage (unified vs dataset PCA -0.003)
+fmap,F-04,Almost nothing clears a dataset-level bootstrap (1 of 384 tests)
+fmap,F-62,s3 vs s23 judge filter makes no measurable downstream difference
+fmap,F-55,Holding half is behaviourally inert: a bare model (no system prompt) holds too
+fmap,F-109,L32 on the six: pooled training higher than at L40 (row-matched 0.9010 vs 0.8930)
+fmap,F-09,Both continuous knowledge signals saturate
+fmap,F-83,pooled training seed-stable; Ying et al. Mahalanobis predictor does not reproduce
+fmap,F-07,A 121-item class was enough (split-half reliability of d_knowledge)
+fmap-high,F-100,70B rung swept at k=3: decline survives layer-averaging (+0.120/+0.103/+0.075->+0.079); pe
+fmap-high,F-65,Capitulation axis beats register axis on sycophancy_mt: 0.745 zero-shot vs 0.374
+experiments,AN4-lab-loose-analyses,"~25 loose print-only analysis scripts on the lab PC, 09-19..09-21 (ortho, perm, cmp_banks,"
+experiments,C08-ext-L20,"Extended 36-persona bank (paper16 26 + 10 knowledge-denial/candour): ext_axis1 (12v13), de"
+experiments,O72-scale-8b-bank,"8B rung: paper16 personas on Llama-3.1-8B (2,600 rollouts), judge (70B held constant), vec"
+experiments,O12-extra-P0c-passBfine,"Nine extra layers around the peak (37-39, 41-43, 45-47) + 44 for the whole corpus -> passB"
+anomalies,"run-crossgen/kd11/passA/{summary,significance}.json and kd11","CV-07 (RF-11). git: 198 records / 576 tests (and 216 / 468), layers 20/40/44, 10 datasets;"
+anomalies,run-coords/confounds_L44_last.json; run-coords/p1_L44_last_l,"OR-05. Length-only / length-controlled re-runs (L44, last token, mms), 09-16 19:36-19:38, "
+anomalies,run-crossgen/ root + run-crossgen/banks/* (21 layers x 6 see,"OR-04. Folders are named in docs, but outcomes are reported at L40 only (F-17; thesis doc;"
+session-printed,F-22,The str(e)[:200] handler at 1_generate_ndif.py:145
+session-printed,F-58,SAME three-rung measurement re-run 78 minutes later with MASK: answer changes
+session-printed,F-61,"paper16 bank composition: 50 rows, 10 questions, 5 variants (FIRST role file only)"

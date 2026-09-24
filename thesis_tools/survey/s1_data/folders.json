@@ -1,0 +1,1399 @@
+{
+ "asix": {
+  ".claude": {
+   "files": 10,
+   "bytes": 18392,
+   "ext": {
+    ".md": 9,
+    ".json": 1
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "(root files)": {
+   "files": 14,
+   "bytes": 833818,
+   "ext": {
+    "(none)": 5,
+    ".md": 3,
+    ".example": 1,
+    ".tex": 1,
+    ".toml": 1
+   },
+   "docs": [
+    "README.md"
+   ],
+   "gitlinks": 5
+  },
+  "appendix": {
+   "files": 2,
+   "bytes": 0,
+   "ext": {
+    ".tex": 2
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "bibliography": {
+   "files": 1,
+   "bytes": 2768,
+   "ext": {
+    ".bib": 1
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "cap": {
+   "files": 94,
+   "bytes": 2353044,
+   "ext": {
+    ".json": 50,
+    ".py": 18,
+    ".ps1": 12,
+    ".md": 6,
+    ".jsonl": 6
+   },
+   "docs": [
+    "cap/docs/DESIGN.md"
+   ],
+   "gitlinks": 0
+  },
+  "chapters": {
+   "files": 7,
+   "bytes": 5020,
+   "ext": {
+    ".tex": 7
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "core": {
+   "files": 7,
+   "bytes": 4544,
+   "ext": {
+    ".tex": 7
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "data": {
+   "files": 281,
+   "bytes": 87795681,
+   "ext": {
+    ".png": 171,
+    ".csv": 107,
+    ".jsonl": 2,
+    ".json": 1
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "docs": {
+   "files": 130,
+   "bytes": 1736232,
+   "ext": {
+    ".md": 128,
+    ".csv": 1,
+    ".xlsx": 1
+   },
+   "docs": [
+    "docs/concepts/index.md",
+    "docs/developing/index.md",
+    "docs/errors/index.md",
+    "docs/gotchas/index.md",
+    "docs/models/index.md",
+    "docs/patterns/index.md",
+    "docs/reference/index.md",
+    "docs/remote/index.md",
+    "docs/usage/index.md"
+   ],
+   "gitlinks": 0
+  },
+  "figures": {
+   "files": 341,
+   "bytes": 86024989,
+   "ext": {
+    ".pdf": 188,
+    ".png": 138,
+    ".csv": 8,
+    ".md": 3,
+    ".txt": 1
+   },
+   "docs": [
+    "figures/crossgen/INDEX.md"
+   ],
+   "gitlinks": 0
+  },
+  "full paper draft for this experiments": {
+   "files": 1,
+   "bytes": 193849,
+   "ext": {
+    ".pdf": 1
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "images": {
+   "files": 3,
+   "bytes": 131610,
+   "ext": {
+    ".jpg": 3
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "kd": {
+   "files": 93,
+   "bytes": 6851459,
+   "ext": {
+    ".json": 39,
+    ".py": 22,
+    ".ps1": 20,
+    ".md": 6,
+    ".jsonl": 5
+   },
+   "docs": [
+    "kd/README.md",
+    "kd/docs/DESIGN.md"
+   ],
+   "gitlinks": 0
+  },
+  "papers": {
+   "files": 11,
+   "bytes": 28596693,
+   "ext": {
+    ".pdf": 11
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "results": {
+   "files": 709,
+   "bytes": 4192021307,
+   "ext": {
+    ".csv": 636,
+    ".json": 69,
+    ".pkl": 4
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "run-cap": {
+   "files": 1,
+   "bytes": 31679,
+   "ext": {
+    ".json": 1
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "run-coords": {
+   "files": 41,
+   "bytes": 933046,
+   "ext": {
+    ".json": 41
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "run-crossgen": {
+   "files": 7150,
+   "bytes": 67616914,
+   "ext": {
+    ".csv": 7008,
+    ".json": 142
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "run-paper16": {
+   "files": 76,
+   "bytes": 3118466,
+   "ext": {
+    ".json": 50,
+    ".jsonl": 26
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "scale": {
+   "files": 8,
+   "bytes": 38802,
+   "ext": {
+    ".ps1": 6,
+    ".py": 2
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "scripts": {
+   "files": 9,
+   "bytes": 9984,
+   "ext": {
+    ".sh": 7,
+    ".py": 2
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "src": {
+   "files": 560,
+   "bytes": 467904960,
+   "ext": {
+    ".py": 187,
+    ".json": 96,
+    ".txt": 84,
+    ".yaml": 52,
+    ".csv": 41
+   },
+   "docs": [
+    "src/assistant_axis_ndif/README_COLLABORATOR.md"
+   ],
+   "gitlinks": 0
+  }
+ },
+ "main": {
+  ".claude": {
+   "files": 8,
+   "bytes": 6922,
+   "ext": {
+    ".md": 7,
+    ".json": 1
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  ".devcontainer": {
+   "files": 2,
+   "bytes": 830,
+   "ext": {
+    ".json": 2
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "(root files)": {
+   "files": 10,
+   "bytes": 647178,
+   "ext": {
+    "(none)": 5,
+    ".md": 2,
+    ".example": 1,
+    ".toml": 1,
+    ".lock": 1
+   },
+   "docs": [
+    "README.md"
+   ],
+   "gitlinks": 5
+  },
+  "data": {
+   "files": 281,
+   "bytes": 87795681,
+   "ext": {
+    ".png": 171,
+    ".csv": 107,
+    ".jsonl": 2,
+    ".json": 1
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "docs": {
+   "files": 7,
+   "bytes": 194660,
+   "ext": {
+    ".md": 7
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "figures": {
+   "files": 54,
+   "bytes": 1354577,
+   "ext": {
+    ".pdf": 50,
+    ".txt": 1,
+    ".html": 1,
+    ".py": 1,
+    ".tex": 1
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "papers": {
+   "files": 6,
+   "bytes": 16904789,
+   "ext": {
+    ".pdf": 6
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "results": {
+   "files": 709,
+   "bytes": 4192021307,
+   "ext": {
+    ".csv": 636,
+    ".json": 69,
+    ".pkl": 4
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "scripts": {
+   "files": 8,
+   "bytes": 8001,
+   "ext": {
+    ".sh": 6,
+    ".py": 2
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "src": {
+   "files": 426,
+   "bytes": 466981441,
+   "ext": {
+    ".py": 133,
+    ".txt": 84,
+    ".json": 64,
+    ".yaml": 52,
+    ".csv": 41
+   },
+   "docs": [],
+   "gitlinks": 0
+  }
+ },
+ "origin/Saving": {
+  "(root files)": {
+   "files": 9,
+   "bytes": 637662,
+   "ext": {
+    "(none)": 5,
+    ".example": 1,
+    ".md": 1,
+    ".toml": 1,
+    ".lock": 1
+   },
+   "docs": [
+    "README.md"
+   ],
+   "gitlinks": 4
+  },
+  "data": {
+   "files": 281,
+   "bytes": 87795681,
+   "ext": {
+    ".png": 171,
+    ".csv": 107,
+    ".jsonl": 2,
+    ".json": 1
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "figures": {
+   "files": 54,
+   "bytes": 1354577,
+   "ext": {
+    ".pdf": 50,
+    ".txt": 1,
+    ".html": 1,
+    ".py": 1,
+    ".tex": 1
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "results": {
+   "files": 709,
+   "bytes": 4192021307,
+   "ext": {
+    ".csv": 636,
+    ".json": 69,
+    ".pkl": 4
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "scripts": {
+   "files": 8,
+   "bytes": 8001,
+   "ext": {
+    ".sh": 6,
+    ".py": 2
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "src": {
+   "files": 426,
+   "bytes": 466983762,
+   "ext": {
+    ".py": 133,
+    ".txt": 84,
+    ".json": 64,
+    ".yaml": 52,
+    ".csv": 41
+   },
+   "docs": [],
+   "gitlinks": 0
+  }
+ },
+ "origin/asix": {
+  ".claude": {
+   "files": 10,
+   "bytes": 18392,
+   "ext": {
+    ".md": 9,
+    ".json": 1
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "(root files)": {
+   "files": 14,
+   "bytes": 833818,
+   "ext": {
+    "(none)": 5,
+    ".md": 3,
+    ".example": 1,
+    ".tex": 1,
+    ".toml": 1
+   },
+   "docs": [
+    "README.md"
+   ],
+   "gitlinks": 5
+  },
+  "appendix": {
+   "files": 2,
+   "bytes": 0,
+   "ext": {
+    ".tex": 2
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "bibliography": {
+   "files": 1,
+   "bytes": 2768,
+   "ext": {
+    ".bib": 1
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "cap": {
+   "files": 94,
+   "bytes": 2353044,
+   "ext": {
+    ".json": 50,
+    ".py": 18,
+    ".ps1": 12,
+    ".md": 6,
+    ".jsonl": 6
+   },
+   "docs": [
+    "cap/docs/DESIGN.md"
+   ],
+   "gitlinks": 0
+  },
+  "chapters": {
+   "files": 7,
+   "bytes": 5020,
+   "ext": {
+    ".tex": 7
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "core": {
+   "files": 7,
+   "bytes": 4544,
+   "ext": {
+    ".tex": 7
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "data": {
+   "files": 281,
+   "bytes": 87795681,
+   "ext": {
+    ".png": 171,
+    ".csv": 107,
+    ".jsonl": 2,
+    ".json": 1
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "docs": {
+   "files": 130,
+   "bytes": 1736232,
+   "ext": {
+    ".md": 128,
+    ".csv": 1,
+    ".xlsx": 1
+   },
+   "docs": [
+    "docs/concepts/index.md",
+    "docs/developing/index.md",
+    "docs/errors/index.md",
+    "docs/gotchas/index.md",
+    "docs/models/index.md",
+    "docs/patterns/index.md",
+    "docs/reference/index.md",
+    "docs/remote/index.md",
+    "docs/usage/index.md"
+   ],
+   "gitlinks": 0
+  },
+  "figures": {
+   "files": 341,
+   "bytes": 86024989,
+   "ext": {
+    ".pdf": 188,
+    ".png": 138,
+    ".csv": 8,
+    ".md": 3,
+    ".txt": 1
+   },
+   "docs": [
+    "figures/crossgen/INDEX.md"
+   ],
+   "gitlinks": 0
+  },
+  "full paper draft for this experiments": {
+   "files": 1,
+   "bytes": 193849,
+   "ext": {
+    ".pdf": 1
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "images": {
+   "files": 3,
+   "bytes": 131610,
+   "ext": {
+    ".jpg": 3
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "kd": {
+   "files": 93,
+   "bytes": 6851459,
+   "ext": {
+    ".json": 39,
+    ".py": 22,
+    ".ps1": 20,
+    ".md": 6,
+    ".jsonl": 5
+   },
+   "docs": [
+    "kd/README.md",
+    "kd/docs/DESIGN.md"
+   ],
+   "gitlinks": 0
+  },
+  "papers": {
+   "files": 11,
+   "bytes": 28596693,
+   "ext": {
+    ".pdf": 11
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "results": {
+   "files": 709,
+   "bytes": 4192021307,
+   "ext": {
+    ".csv": 636,
+    ".json": 69,
+    ".pkl": 4
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "run-cap": {
+   "files": 1,
+   "bytes": 31679,
+   "ext": {
+    ".json": 1
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "run-coords": {
+   "files": 41,
+   "bytes": 933046,
+   "ext": {
+    ".json": 41
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "run-crossgen": {
+   "files": 7150,
+   "bytes": 67616914,
+   "ext": {
+    ".csv": 7008,
+    ".json": 142
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "run-paper16": {
+   "files": 76,
+   "bytes": 3118466,
+   "ext": {
+    ".json": 50,
+    ".jsonl": 26
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "scale": {
+   "files": 8,
+   "bytes": 38802,
+   "ext": {
+    ".ps1": 6,
+    ".py": 2
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "scripts": {
+   "files": 9,
+   "bytes": 9984,
+   "ext": {
+    ".sh": 7,
+    ".py": 2
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "src": {
+   "files": 560,
+   "bytes": 467904960,
+   "ext": {
+    ".py": 187,
+    ".json": 96,
+    ".txt": 84,
+    ".yaml": 52,
+    ".csv": 41
+   },
+   "docs": [
+    "src/assistant_axis_ndif/README_COLLABORATOR.md"
+   ],
+   "gitlinks": 0
+  }
+ },
+ "origin/claude/assistant-axis-submodule-p285ym": {
+  "(root files)": {
+   "files": 9,
+   "bytes": 637771,
+   "ext": {
+    "(none)": 5,
+    ".example": 1,
+    ".md": 1,
+    ".toml": 1,
+    ".lock": 1
+   },
+   "docs": [
+    "README.md"
+   ],
+   "gitlinks": 5
+  },
+  "data": {
+   "files": 281,
+   "bytes": 87795681,
+   "ext": {
+    ".png": 171,
+    ".csv": 107,
+    ".jsonl": 2,
+    ".json": 1
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "figures": {
+   "files": 54,
+   "bytes": 1354577,
+   "ext": {
+    ".pdf": 50,
+    ".txt": 1,
+    ".html": 1,
+    ".py": 1,
+    ".tex": 1
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "results": {
+   "files": 709,
+   "bytes": 4192021307,
+   "ext": {
+    ".csv": 636,
+    ".json": 69,
+    ".pkl": 4
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "scripts": {
+   "files": 8,
+   "bytes": 8001,
+   "ext": {
+    ".sh": 6,
+    ".py": 2
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "src": {
+   "files": 426,
+   "bytes": 466981441,
+   "ext": {
+    ".py": 133,
+    ".txt": 84,
+    ".json": 64,
+    ".yaml": 52,
+    ".csv": 41
+   },
+   "docs": [],
+   "gitlinks": 0
+  }
+ },
+ "origin/claude/colab-activation-download-drive": {
+  "(root files)": {
+   "files": 9,
+   "bytes": 642433,
+   "ext": {
+    "(none)": 5,
+    ".example": 1,
+    ".md": 1,
+    ".toml": 1,
+    ".lock": 1
+   },
+   "docs": [
+    "README.md"
+   ],
+   "gitlinks": 4
+  },
+  "data": {
+   "files": 281,
+   "bytes": 87795681,
+   "ext": {
+    ".png": 171,
+    ".csv": 107,
+    ".jsonl": 2,
+    ".json": 1
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "figures": {
+   "files": 54,
+   "bytes": 1354577,
+   "ext": {
+    ".pdf": 50,
+    ".txt": 1,
+    ".html": 1,
+    ".py": 1,
+    ".tex": 1
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "notebooks": {
+   "files": 1,
+   "bytes": 75553,
+   "ext": {
+    ".ipynb": 1
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "results": {
+   "files": 709,
+   "bytes": 4192021307,
+   "ext": {
+    ".csv": 636,
+    ".json": 69,
+    ".pkl": 4
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "scripts": {
+   "files": 8,
+   "bytes": 8001,
+   "ext": {
+    ".sh": 6,
+    ".py": 2
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "src": {
+   "files": 426,
+   "bytes": 466984594,
+   "ext": {
+    ".py": 133,
+    ".txt": 84,
+    ".json": 64,
+    ".yaml": 52,
+    ".csv": 41
+   },
+   "docs": [],
+   "gitlinks": 0
+  }
+ },
+ "origin/claude/nnsight-colab-activation-download-f95pop": {
+  "(root files)": {
+   "files": 9,
+   "bytes": 640961,
+   "ext": {
+    "(none)": 5,
+    ".example": 1,
+    ".md": 1,
+    ".toml": 1,
+    ".lock": 1
+   },
+   "docs": [
+    "README.md"
+   ],
+   "gitlinks": 4
+  },
+  "data": {
+   "files": 281,
+   "bytes": 87795681,
+   "ext": {
+    ".png": 171,
+    ".csv": 107,
+    ".jsonl": 2,
+    ".json": 1
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "figures": {
+   "files": 54,
+   "bytes": 1354577,
+   "ext": {
+    ".pdf": 50,
+    ".txt": 1,
+    ".html": 1,
+    ".py": 1,
+    ".tex": 1
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "notebooks": {
+   "files": 1,
+   "bytes": 9210,
+   "ext": {
+    ".ipynb": 1
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "results": {
+   "files": 709,
+   "bytes": 4192021307,
+   "ext": {
+    ".csv": 636,
+    ".json": 69,
+    ".pkl": 4
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "scripts": {
+   "files": 8,
+   "bytes": 8001,
+   "ext": {
+    ".sh": 6,
+    ".py": 2
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "src": {
+   "files": 426,
+   "bytes": 466984164,
+   "ext": {
+    ".py": 133,
+    ".txt": 84,
+    ".json": 64,
+    ".yaml": 52,
+    ".csv": 41
+   },
+   "docs": [],
+   "gitlinks": 0
+  }
+ },
+ "origin/copilot/zami456explb": {
+  "(root files)": {
+   "files": 9,
+   "bytes": 637662,
+   "ext": {
+    "(none)": 5,
+    ".example": 1,
+    ".md": 1,
+    ".toml": 1,
+    ".lock": 1
+   },
+   "docs": [
+    "README.md"
+   ],
+   "gitlinks": 4
+  },
+  "data": {
+   "files": 281,
+   "bytes": 87795681,
+   "ext": {
+    ".png": 171,
+    ".csv": 107,
+    ".jsonl": 2,
+    ".json": 1
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "figures": {
+   "files": 54,
+   "bytes": 1354577,
+   "ext": {
+    ".pdf": 50,
+    ".txt": 1,
+    ".html": 1,
+    ".py": 1,
+    ".tex": 1
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "results": {
+   "files": 709,
+   "bytes": 4192021307,
+   "ext": {
+    ".csv": 636,
+    ".json": 69,
+    ".pkl": 4
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "scripts": {
+   "files": 8,
+   "bytes": 8001,
+   "ext": {
+    ".sh": 6,
+    ".py": 2
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "src": {
+   "files": 426,
+   "bytes": 466981441,
+   "ext": {
+    ".py": 133,
+    ".txt": 84,
+    ".json": 64,
+    ".yaml": 52,
+    ".csv": 41
+   },
+   "docs": [],
+   "gitlinks": 0
+  }
+ },
+ "origin/feat/llama-layer30": {
+  "(root files)": {
+   "files": 9,
+   "bytes": 637662,
+   "ext": {
+    "(none)": 5,
+    ".example": 1,
+    ".md": 1,
+    ".toml": 1,
+    ".lock": 1
+   },
+   "docs": [
+    "README.md"
+   ],
+   "gitlinks": 4
+  },
+  "data": {
+   "files": 281,
+   "bytes": 87795681,
+   "ext": {
+    ".png": 171,
+    ".csv": 107,
+    ".jsonl": 2,
+    ".json": 1
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "figures": {
+   "files": 54,
+   "bytes": 1354577,
+   "ext": {
+    ".pdf": 50,
+    ".txt": 1,
+    ".html": 1,
+    ".py": 1,
+    ".tex": 1
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "results": {
+   "files": 709,
+   "bytes": 4192021307,
+   "ext": {
+    ".csv": 636,
+    ".json": 69,
+    ".pkl": 4
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "scripts": {
+   "files": 8,
+   "bytes": 8001,
+   "ext": {
+    ".sh": 6,
+    ".py": 2
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "src": {
+   "files": 434,
+   "bytes": 467048007,
+   "ext": {
+    ".py": 138,
+    ".txt": 84,
+    ".json": 64,
+    ".yaml": 54,
+    ".csv": 41
+   },
+   "docs": [],
+   "gitlinks": 0
+  }
+ },
+ "origin/feat/persona-pc-ood": {
+  "(root files)": {
+   "files": 9,
+   "bytes": 637662,
+   "ext": {
+    "(none)": 5,
+    ".example": 1,
+    ".md": 1,
+    ".toml": 1,
+    ".lock": 1
+   },
+   "docs": [
+    "README.md"
+   ],
+   "gitlinks": 4
+  },
+  "data": {
+   "files": 281,
+   "bytes": 87795681,
+   "ext": {
+    ".png": 171,
+    ".csv": 107,
+    ".jsonl": 2,
+    ".json": 1
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "figures": {
+   "files": 54,
+   "bytes": 1354577,
+   "ext": {
+    ".pdf": 50,
+    ".txt": 1,
+    ".html": 1,
+    ".py": 1,
+    ".tex": 1
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "results": {
+   "files": 709,
+   "bytes": 4192021307,
+   "ext": {
+    ".csv": 636,
+    ".json": 69,
+    ".pkl": 4
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "scripts": {
+   "files": 8,
+   "bytes": 8001,
+   "ext": {
+    ".sh": 6,
+    ".py": 2
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "src": {
+   "files": 909,
+   "bytes": 578119657,
+   "ext": {
+    ".csv": 357,
+    ".py": 147,
+    ".png": 87,
+    ".txt": 84,
+    ".json": 66
+   },
+   "docs": [],
+   "gitlinks": 0
+  }
+ },
+ "origin/feat/resumable-acts-cache": {
+  "(root files)": {
+   "files": 9,
+   "bytes": 637662,
+   "ext": {
+    "(none)": 5,
+    ".example": 1,
+    ".md": 1,
+    ".toml": 1,
+    ".lock": 1
+   },
+   "docs": [
+    "README.md"
+   ],
+   "gitlinks": 4
+  },
+  "data": {
+   "files": 281,
+   "bytes": 87795681,
+   "ext": {
+    ".png": 171,
+    ".csv": 107,
+    ".jsonl": 2,
+    ".json": 1
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "figures": {
+   "files": 54,
+   "bytes": 1354577,
+   "ext": {
+    ".pdf": 50,
+    ".txt": 1,
+    ".html": 1,
+    ".py": 1,
+    ".tex": 1
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "results": {
+   "files": 709,
+   "bytes": 4192021307,
+   "ext": {
+    ".csv": 636,
+    ".json": 69,
+    ".pkl": 4
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "scripts": {
+   "files": 8,
+   "bytes": 8001,
+   "ext": {
+    ".sh": 6,
+    ".py": 2
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "src": {
+   "files": 433,
+   "bytes": 467045965,
+   "ext": {
+    ".py": 138,
+    ".txt": 84,
+    ".json": 64,
+    ".yaml": 53,
+    ".csv": 41
+   },
+   "docs": [],
+   "gitlinks": 0
+  }
+ },
+ "origin/main": {
+  "(root files)": {
+   "files": 9,
+   "bytes": 637775,
+   "ext": {
+    "(none)": 5,
+    ".example": 1,
+    ".md": 1,
+    ".toml": 1,
+    ".lock": 1
+   },
+   "docs": [
+    "README.md"
+   ],
+   "gitlinks": 5
+  },
+  "data": {
+   "files": 281,
+   "bytes": 87795681,
+   "ext": {
+    ".png": 171,
+    ".csv": 107,
+    ".jsonl": 2,
+    ".json": 1
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "figures": {
+   "files": 54,
+   "bytes": 1354577,
+   "ext": {
+    ".pdf": 50,
+    ".txt": 1,
+    ".html": 1,
+    ".py": 1,
+    ".tex": 1
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "results": {
+   "files": 709,
+   "bytes": 4192021307,
+   "ext": {
+    ".csv": 636,
+    ".json": 69,
+    ".pkl": 4
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "scripts": {
+   "files": 8,
+   "bytes": 8001,
+   "ext": {
+    ".sh": 6,
+    ".py": 2
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "src": {
+   "files": 426,
+   "bytes": 466981441,
+   "ext": {
+    ".py": 133,
+    ".txt": 84,
+    ".json": 64,
+    ".yaml": 52,
+    ".csv": 41
+   },
+   "docs": [],
+   "gitlinks": 0
+  }
+ },
+ "origin/paper": {
+  "(root files)": {
+   "files": 9,
+   "bytes": 637662,
+   "ext": {
+    "(none)": 5,
+    ".example": 1,
+    ".md": 1,
+    ".toml": 1,
+    ".lock": 1
+   },
+   "docs": [
+    "README.md"
+   ],
+   "gitlinks": 4
+  },
+  "data": {
+   "files": 281,
+   "bytes": 87795681,
+   "ext": {
+    ".png": 171,
+    ".csv": 107,
+    ".jsonl": 2,
+    ".json": 1
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "figures": {
+   "files": 54,
+   "bytes": 1354577,
+   "ext": {
+    ".pdf": 50,
+    ".txt": 1,
+    ".html": 1,
+    ".py": 1,
+    ".tex": 1
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "results": {
+   "files": 709,
+   "bytes": 4192021307,
+   "ext": {
+    ".csv": 636,
+    ".json": 69,
+    ".pkl": 4
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "scripts": {
+   "files": 8,
+   "bytes": 8001,
+   "ext": {
+    ".sh": 6,
+    ".py": 2
+   },
+   "docs": [],
+   "gitlinks": 0
+  },
+  "src": {
+   "files": 1602,
+   "bytes": 593239361,
+   "ext": {
+    ".csv": 878,
+    ".png": 179,
+    ".py": 154,
+    ".txt": 84,
+    ".yaml": 70
+   },
+   "docs": [],
+   "gitlinks": 0
+  }
+ }
+}

@@ -1,0 +1,15 @@
+id,source,source_ref,claim_short,numbers,layer,dataset_hint,status
+H-053,collaborator note,src/probes/deception-detection/results/persona_ood_L40/summary.md:59,"better* than deception PC1 (0.8960). Whatever the sycophancy subspace carries at layer 40, it is",0.8960,,,CANDIDATE
+H-054,collaborator note,src/probes/deception-detection/results/persona_ood_L40/summary.md:75,Still a real effect — 2× better than baseline — but not the 6× of layer 20. (1-d arms read 0.000,0.000,,,CANDIDATE
+H-055,collaborator note,src/probes/deception-detection/results/persona_ood_L40/summary.md:89,The persona axis does not invert on insider-trading where the trained probe does**: 0.978 against,0.978,,,CANDIDATE
+H-056,collaborator note,src/probes/deception-detection/results/persona_ood_L40/summary.md:94,"The sycophancy axis inverts on HP-KR here (0.200) while the deception axis sits at chance (0.531),",0.200; 0.531,,,CANDIDATE
+H-057,collaborator note,src/probes/deception-detection/results/persona_ood_L40/summary.md:104,"Layer 40 is the better operating point for the raw baseline** (0.732 vs 0.648), so the",0.732; 0.648,,,CANDIDATE
+H-058,collaborator note,src/probes/deception-detection/results/persona_ood_ext_L20/summary.md:59,is 0.651 vs 0.919 — a 0.27 penalty paid entirely to one dataset. For the extended axis it is,0.651; 0.919; 0.27,,,CANDIDATE
+H-059,collaborator note,src/probes/deception-detection/results/persona_ood_ext_L20/summary.md:60,"0.904 vs 0.909. HP-KR stops being pathological, which is the whole point.",0.904; 0.909,,,CANDIDATE
+H-060,collaborator note,src/probes/deception-detection/results/persona_ood_ext_L20/summary.md:95,"probe, against 0% and 2% under the extended axis, which ranks both at least as well (AUROC 0.990",0%; 2%; 0.990,,,CANDIDATE
+H-061,collaborator note,src/probes/deception-detection/results/persona_ood_ext_L20/summary.md:97,"On ranking the persona axes win at every layer**, the extended axis by 0.12–0.19 AUROC. The base",0.12; 0.19,,,CANDIDATE
+H-062,collaborator note,src/probes/deception-detection/results/persona_ood_ext_L20/summary.md:98,"probe inverts on one dataset at each depth: HP-KR at layer 20 (0.109), IT at 40 and 44 (0.338,",0.109; 0.338,,,CANDIDATE
+H-063,collaborator note,src/probes/deception-detection/results/persona_ood_ext_L20/summary.md:99,0.289). The extended and knowledge-denial axes invert nowhere; their lowest score is HP-C's 0.585.,0.289; 0.585,,,CANDIDATE
+H-064,collaborator note,src/probes/deception-detection/results/persona_ood_ext_L20/summary.md:124,"1-d beats 3-d again, more strongly.** `ext_axis1` 0.904 against `ext_pc3` 0.684 at layer 20.",0.904; 0.684,,,CANDIDATE
+H-065,collaborator note,src/probes/deception-detection/results/persona_ood_ext_L44/summary.md:19,off-diagonal balanced accuracy @1% FPR | L20 | **L40** | L44 |,1%,,,CANDIDATE
+H-066,collaborator note,src/probes/deception-detection/results/persona_ood_ext_L44/summary.md:31,"knowledge-denial axis, recall | 0.305 | **0.487** | 0.395 |",0.305; 0.487; 0.395,,,CANDIDATE

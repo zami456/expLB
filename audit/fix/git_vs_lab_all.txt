@@ -1,0 +1,28 @@
+VALUES DIFFER     jsonl         git=  1962 lab=  1962 common=  1962 gitonly=   0 diffs=  1962 max|d|=0 [] kd/run/factor_probes/kd_knowledge/rows.jsonl
+VALUES DIFFER     jsonl         git=   900 lab=   900 common=   900 gitonly=   0 diffs=   900 max|d|=0 [] kd/run/factor_probes/kd_utterance/rows.jsonl
+SUBSET-IDENTICAL  jsonl         git=  1095 lab=  1459 common=  1095 gitonly=   0 diffs=     0 max|d|=0 [] kd/run/knowledge/scores.jsonl
+VALUES DIFFER     significance  git=    96 lab=  4032 common=    96 gitonly=   0 diffs=    96 max|d|=0.1099 [dataset_q_bh] run-crossgen/banks/hf100/significance.json
+SUBSET-IDENTICAL  splits        git=    10 lab=    60 common=    10 gitonly=   0 diffs=     0 max|d|=0 [] run-crossgen/banks/hf100/splits.json
+SUBSET-IDENTICAL  summary       git=    66 lab=  3066 common=    66 gitonly=   0 diffs=     0 max|d|=0 [] run-crossgen/banks/hf100/summary.json
+VALUES DIFFER     significance  git=    96 lab=  4032 common=    96 gitonly=   0 diffs=    96 max|d|=0.1443 [dataset_q_bh] run-crossgen/banks/own100/significance.json
+SUBSET-IDENTICAL  splits        git=    10 lab=    60 common=    10 gitonly=   0 diffs=     0 max|d|=0 [] run-crossgen/banks/own100/splits.json
+SUBSET-IDENTICAL  summary       git=    66 lab=  3066 common=    66 gitonly=   0 diffs=     0 max|d|=0 [] run-crossgen/banks/own100/summary.json
+VALUES DIFFER     significance  git=    96 lab=  4032 common=    96 gitonly=   0 diffs=    96 max|d|=0.2284 [dataset_q_bh] run-crossgen/banks/paper16_famcentred/significance.json
+SUBSET-IDENTICAL  splits        git=    10 lab=    60 common=    10 gitonly=   0 diffs=     0 max|d|=0 [] run-crossgen/banks/paper16_famcentred/splits.json
+SUBSET-IDENTICAL  summary       git=    66 lab=  3066 common=    66 gitonly=   0 diffs=     0 max|d|=0 [] run-crossgen/banks/paper16_famcentred/summary.json
+VALUES DIFFER     significance  git=    96 lab=  4032 common=    96 gitonly=   0 diffs=    96 max|d|=0.3302 [dataset_q_bh] run-crossgen/banks/paper16_shared/significance.json
+SUBSET-IDENTICAL  splits        git=    10 lab=    60 common=    10 gitonly=   0 diffs=     0 max|d|=0 [] run-crossgen/banks/paper16_shared/splits.json
+SUBSET-IDENTICAL  summary       git=    66 lab=  3066 common=    66 gitonly=   0 diffs=     0 max|d|=0 [] run-crossgen/banks/paper16_shared/summary.json
+VALUES DIFFER     significance  git=  4032 lab=  6300 common=  4032 gitonly=   0 diffs=  4045 max|d|=0.1833 [dataset_q_bh] run-crossgen/kd11/banks/kd/significance.json
+VALUES DIFFER     significance  git=   468 lab=  5544 common=   468 gitonly=   0 diffs=   476 max|d|=0.116 [dataset_q_bh] run-crossgen/kd11/banks/kd_s23/significance.json
+SUBSET-IDENTICAL  summary       git=   216 lab=  1512 common=   216 gitonly=   0 diffs=     0 max|d|=0 [] run-crossgen/kd11/banks/kd_s23/summary.json
+VALUES DIFFER     significance  git=   468 lab= 12480 common=   468 gitonly=   0 diffs=   476 max|d|=0.1696 [dataset_q_bh] run-crossgen/kd11/passA/banks/kd_s23/significance.json
+SUBSET-IDENTICAL  summary       git=   216 lab=  5760 common=   216 gitonly=   0 diffs=     0 max|d|=0 [] run-crossgen/kd11/passA/banks/kd_s23/summary.json
+VALUES DIFFER     significance  git=   576 lab= 15360 common=   576 gitonly=   0 diffs=   576 max|d|=0.1587 [dataset_q_bh] run-crossgen/kd11/passA/significance.json
+SUBSET-IDENTICAL  summary       git=   198 lab=  5280 common=   198 gitonly=   0 diffs=     0 max|d|=0 [] run-crossgen/kd11/passA/summary.json
+VALUES DIFFER     significance  git=  4032 lab=  4788 common=  4032 gitonly=   0 diffs=  4020 max|d|=0.0441 [dataset_q_bh] run-crossgen/kd11/significance.json
+VALUES DIFFER     significance  git=   192 lab=  4788 common=   192 gitonly=   0 diffs=   192 max|d|=0.3914 [dataset_q_bh] run-crossgen/significance.json
+SUBSET-IDENTICAL  splits        git=    60 lab=    60 common=    60 gitonly=   0 diffs=     0 max|d|=0 [] run-crossgen/splits.json
+SUBSET-IDENTICAL  summary       git=    66 lab=  2646 common=    66 gitonly=   0 diffs=     0 max|d|=0 [] run-crossgen/summary.json
+
+SUBSET-IDENTICAL: 14  VALUES DIFFER: 12  ERROR: 0

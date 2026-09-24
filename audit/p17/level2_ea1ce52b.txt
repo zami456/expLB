@@ -1,0 +1,147 @@
+PINNED SHA: ea1ce52b874e227b2536e1c0f4b31551ff8e08a7
+==============================================================================
+SOURCE: ea1ce52b874e227b2536e1c0f4b31551ff8e08a7  src/probes/deception-detection/results/persona_ood_ext_L{20,40,44}/
+==============================================================================
+
+
+### TABLE 6 (B45, D-182..D-188) -- zero-shot AUROC per dataset
+    arms in draft column order: 8v7 | 4v6 | 12v13
+
+dataset |          L20           |          L40           |          L44          
+        |   8v7    4v6   12v13  |   8v7    4v6   12v13  |   8v7    4v6   12v13 
+CG      | 0.940 0.931 0.969 | 0.865 0.902 0.912 | 0.819 0.858 0.859
+HP-C    | 0.717 0.585 0.639 | 0.581 0.755 0.712 | 0.607 0.725 0.712
+HP-KR   | 0.148 0.890 0.882 | 0.593 0.919 0.912 | 0.589 0.908 0.894
+IT      | 0.988 0.976 0.990 | 0.979 0.913 0.980 | 0.979 0.933 0.982
+ID      | 0.959 0.932 0.954 | 0.974 0.980 0.978 | 0.962 0.978 0.974
+RepE    | 0.994 0.882 0.991 | 1.000 1.000 1.000 | 1.000 1.000 1.000
+
+  'Mean' row candidates:
+   L20: mean of the 6 zero-shot cells = 8v7:0.791 4v6:0.866 12v13:0.904
+        summary.csv off_diagonal_mean = 8v7:0.651 4v6:0.866 12v13:0.904
+   L40: mean of the 6 zero-shot cells = 8v7:0.832 4v6:0.912 12v13:0.916
+        summary.csv off_diagonal_mean = 8v7:0.832 4v6:0.912 12v13:0.916
+   L44: mean of the 6 zero-shot cells = 8v7:0.826 4v6:0.900 12v13:0.903
+        summary.csv off_diagonal_mean = 8v7:0.826 4v6:0.900 12v13:0.903
+
+
+### TABLE 11 (B40, D-226..D-232) -- sycophancy contrast, zero-shot
+CG      | syc_axis 0.999 | syc_axis 0.998 | syc_axis 0.983
+HP-C    | syc_axis 0.533 | syc_axis 0.751 | syc_axis 0.692
+HP-KR   | syc_axis 0.043 | syc_axis 0.167 | syc_axis 0.480
+IT      | syc_axis 0.983 | syc_axis 0.985 | syc_axis 0.987
+ID      | syc_axis 0.923 | syc_axis 0.948 | syc_axis 0.949
+RepE    | syc_axis 0.977 | syc_axis 0.999 | syc_axis 1.000
+  off-diagonal mean (syc_axis1, from summary.csv):
+   L20: all-six 0.615   excl-HP-KR 0.883
+   L40: all-six 0.663   excl-HP-KR 0.936
+   L44: all-six 0.708   excl-HP-KR 0.922
+
+
+### TABLE 3 (B42, D-109..D-116) -- mean off-diagonal
+claim   feature                     dim |     all six (20/40/44)     |   excl HP-KR (20/40/44)
+D-109   raw activations (8192-d)   8192 | 0.648 0.732 0.716      | 0.728 0.758 0.730
+D-110   published contrast 8v7        1 | 0.651 0.832 0.826      | 0.919 0.880 0.873
+D-111   knowledge-denial 4v6          1 | 0.866 0.912 0.900      | 0.861 0.910 0.899
+D-112   extended contrast 12v13       1 | 0.904 0.916 0.903      | 0.909 0.917 0.905
+D-113   extended PCs k=3              3 | 0.684 0.866 0.880      | 0.900 0.867 0.870
+D-114   extended PC1                  1 | 0.661 0.768 0.780      | 0.682 0.774 0.793
+D-115   published PCs k=3             3 | 0.679 0.639 0.617      | 0.888 0.751 0.728
+D-116   random directions k=3         3 | 0.527 0.504 0.493      | 0.560 0.544 0.547
+
+
+### TABLE 4 (B43, D-140..D-151) -- LB protocol, Average (Liars' Bench)
+
+  --- L20 ---
+    deception axis (8v7)               [control           ] BA 0.534  recall 0.069  AUROC 0.750
+    deception axis (8v7)               [in-dataset (oracle)] BA 0.666  recall 0.342  AUROC 0.750
+    sycophancy axis (5v5)              [control           ] BA 0.548  recall 0.104  AUROC 0.696
+    sycophancy axis (5v5)              [in-dataset (oracle)] BA 0.689  recall 0.389  AUROC 0.696
+    extended axis (12v13)              [control           ] BA 0.591  recall 0.187  AUROC 0.887
+    extended axis (12v13)              [in-dataset (oracle)] BA 0.707  recall 0.423  AUROC 0.887
+    knowledge-denial axis (4v6)        [control           ] BA 0.559  recall 0.305  AUROC 0.863
+    knowledge-denial axis (4v6)        [in-dataset (oracle)] BA 0.676  recall 0.362  AUROC 0.863
+    base probe (RepE-trained)          [control           ] BA 0.721  recall 0.489  AUROC 0.697
+    base probe (RepE-trained)          [in-dataset (oracle)] BA 0.679  recall 0.368  AUROC 0.697
+
+  --- L40 ---
+    deception axis (8v7)               [control           ] BA 0.675  recall 0.382  AUROC 0.798
+    deception axis (8v7)               [in-dataset (oracle)] BA 0.664  recall 0.337  AUROC 0.798
+    sycophancy axis (5v5)              [control           ] BA 0.601  recall 0.221  AUROC 0.770
+    sycophancy axis (5v5)              [in-dataset (oracle)] BA 0.694  recall 0.398  AUROC 0.770
+    extended axis (12v13)              [control           ] BA 0.694  recall 0.413  AUROC 0.899
+    extended axis (12v13)              [in-dataset (oracle)] BA 0.718  recall 0.447  AUROC 0.899
+    knowledge-denial axis (4v6)        [control           ] BA 0.725  recall 0.487  AUROC 0.894
+    knowledge-denial axis (4v6)        [in-dataset (oracle)] BA 0.692  recall 0.394  AUROC 0.894
+    base probe (RepE-trained)          [control           ] BA 0.625  recall 0.281  AUROC 0.778
+    base probe (RepE-trained)          [in-dataset (oracle)] BA 0.652  recall 0.314  AUROC 0.778
+
+  --- L44 ---
+    deception axis (8v7)               [control           ] BA 0.653  recall 0.318  AUROC 0.791
+    deception axis (8v7)               [in-dataset (oracle)] BA 0.662  recall 0.334  AUROC 0.791
+    sycophancy axis (5v5)              [control           ] BA 0.576  recall 0.168  AUROC 0.818
+    sycophancy axis (5v5)              [in-dataset (oracle)] BA 0.686  recall 0.383  AUROC 0.818
+    extended axis (12v13)              [control           ] BA 0.666  recall 0.350  AUROC 0.884
+    extended axis (12v13)              [in-dataset (oracle)] BA 0.721  recall 0.453  AUROC 0.884
+    knowledge-denial axis (4v6)        [control           ] BA 0.683  recall 0.395  AUROC 0.880
+    knowledge-denial axis (4v6)        [in-dataset (oracle)] BA 0.693  recall 0.396  AUROC 0.880
+    base probe (RepE-trained)          [control           ] BA 0.626  recall 0.281  AUROC 0.756
+    base probe (RepE-trained)          [in-dataset (oracle)] BA 0.659  recall 0.328  AUROC 0.756
+
+
+### TABLE 7 (B46, D-189..D-194) -- raw vs 12v13, per TEST dataset
+  raw = matrix_baseline.csv column mean over the 5 OFF-diagonal training rows
+  12v13 = zero-shot ext_axis (a 1-d arm: every training row is identical)
+
+  --- L20 ---   (row key column = '')
+    CG      raw(off-diag col mean) 0.663   12v13 trained 0.969   12v13 zero-shot 0.969
+    HP-C    raw(off-diag col mean) 0.535   12v13 trained 0.639   12v13 zero-shot 0.639
+    HP-KR   raw(off-diag col mean) 0.394   12v13 trained 0.882   12v13 zero-shot 0.882
+    IT      raw(off-diag col mean) 0.799   12v13 trained 0.990   12v13 zero-shot 0.990
+    ID      raw(off-diag col mean) 0.778   12v13 trained 0.954   12v13 zero-shot 0.954
+    RepE    raw(off-diag col mean) 0.718   12v13 trained 0.991   12v13 zero-shot 0.991
+  --- L40 ---   (row key column = '')
+    CG      raw(off-diag col mean) 0.787   12v13 trained 0.912   12v13 zero-shot 0.912
+    HP-C    raw(off-diag col mean) 0.571   12v13 trained 0.712   12v13 zero-shot 0.712
+    HP-KR   raw(off-diag col mean) 0.584   12v13 trained 0.912   12v13 zero-shot 0.912
+    IT      raw(off-diag col mean) 0.800   12v13 trained 0.980   12v13 zero-shot 0.980
+    ID      raw(off-diag col mean) 0.827   12v13 trained 0.978   12v13 zero-shot 0.978
+    RepE    raw(off-diag col mean) 0.824   12v13 trained 1.000   12v13 zero-shot 1.000
+  --- L44 ---   (row key column = '')
+    CG      raw(off-diag col mean) 0.757   12v13 trained 0.859   12v13 zero-shot 0.859
+    HP-C    raw(off-diag col mean) 0.570   12v13 trained 0.712   12v13 zero-shot 0.712
+    HP-KR   raw(off-diag col mean) 0.637   12v13 trained 0.894   12v13 zero-shot 0.894
+    IT      raw(off-diag col mean) 0.736   12v13 trained 0.982   12v13 zero-shot 0.982
+    ID      raw(off-diag col mean) 0.808   12v13 trained 0.974   12v13 zero-shot 0.974
+    RepE    raw(off-diag col mean) 0.785   12v13 trained 1.000   12v13 zero-shot 1.000
+
+
+### ABSTRACT (B23) -- liars_bench_comparison.csv, the 0.50/0.26/0.95 row block
+  --- L20 ---
+    Mean Probe                         src=Table 6 p.54       priv=False BA@1%FPR 0.636 AUROC 0.682 n=5
+    Follow-Up Probe                    src=Table 7 p.55       priv=False BA@1%FPR 0.578 AUROC 0.634 n=5
+    Upper-Bound Probe                  src=Table 8 p.56       priv=True  BA@1%FPR 0.890 AUROC 0.930 n=5
+    persona axis (zero-shot)           src=measured here      priv=False BA@1%FPR 0.534 AUROC 0.750 n=5
+    persona PC1 (zero-shot)            src=measured here      priv=False BA@1%FPR 0.541 AUROC 0.769 n=5
+    persona PC3 (RepE-trained)         src=measured here      priv=False BA@1%FPR 0.544 AUROC 0.733 n=5
+    raw activations (RepE-trained)     src=measured here      priv=False BA@1%FPR 0.657 AUROC 0.734 n=5
+    Follow-Up Probe (measured here, layer 20) src=measured here      priv=False BA@1%FPR 0.622 AUROC 0.636 n=5
+  --- L40 ---
+    Mean Probe                         src=Table 6 p.54       priv=False BA@1%FPR 0.636 AUROC 0.682 n=5
+    Follow-Up Probe                    src=Table 7 p.55       priv=False BA@1%FPR 0.578 AUROC 0.634 n=5
+    Upper-Bound Probe                  src=Table 8 p.56       priv=True  BA@1%FPR 0.890 AUROC 0.930 n=5
+    persona axis (zero-shot)           src=measured here      priv=False BA@1%FPR 0.675 AUROC 0.798 n=5
+    persona PC1 (zero-shot)            src=measured here      priv=False BA@1%FPR 0.675 AUROC 0.831 n=5
+    persona PC3 (RepE-trained)         src=measured here      priv=False BA@1%FPR 0.503 AUROC 0.698 n=5
+    raw activations (RepE-trained)     src=measured here      priv=False BA@1%FPR 0.632 AUROC 0.743 n=5
+  --- L44 ---
+    Mean Probe                         src=Table 6 p.54       priv=False BA@1%FPR 0.636 AUROC 0.682 n=5
+    Follow-Up Probe                    src=Table 7 p.55       priv=False BA@1%FPR 0.578 AUROC 0.634 n=5
+    Upper-Bound Probe                  src=Table 8 p.56       priv=True  BA@1%FPR 0.890 AUROC 0.930 n=5
+    persona axis (zero-shot)           src=measured here      priv=False BA@1%FPR 0.654 AUROC 0.791 n=5
+    persona PC1 (zero-shot)            src=measured here      priv=False BA@1%FPR 0.660 AUROC 0.821 n=5
+    persona PC3 (RepE-trained)         src=measured here      priv=False BA@1%FPR 0.501 AUROC 0.667 n=5
+    raw activations (RepE-trained)     src=measured here      priv=False BA@1%FPR 0.627 AUROC 0.725 n=5
+
+==============================================================================
+done

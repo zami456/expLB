@@ -1,0 +1,5 @@
+id,source,source_ref,claim_short,numbers,layer,dataset_hint,status
+D-058,draft PDF,draft p5 3.4 Scoring,"Zero-shot, a pooled activation z is scored by its projection onto the unit contrast ... higher meaning more deceptive. The sign is fixed by construction, and no labels are used.",,,,TODO
+D-059,draft PDF,draft p5 3.4 Scoring,"Trained, we fit an L2-regularised logistic regression (C = 0.1, standardised features, no intercept, matching the pipeline's own probe) on one of three feature sets",C=0.1,2,,TODO
+D-060,draft PDF,draft p5 3.4 Scoring,"A probe on a single feature can learn only a sign and a scale. Whenever every training set agrees on the sign, its AUROC on a test set therefore equals the zero-shot AUROC",,,,TODO
+D-061,draft PDF,draft p5 3.4 Scoring,"As a control, three random directions replace the persona components (five draws).",3 directions; 5 draws,,,TODO

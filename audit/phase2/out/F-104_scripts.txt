@@ -1,0 +1,54 @@
+script dirs: ['cap/scripts', 'kd/scripts', 'scale/scripts', 'src/assistant_axis_ndif']
+LAB  (.py/.ps1, census 2026-09-22 20:56): 153
+LOCAL(.py/.ps1, working tree now)      : 170
+
+common=153  local-only=17  remote-only=0  DIVERGENT(md5_lf)=8
+
+--- LOCAL-ONLY (ledger: 17) ---
+    cap/scripts/cap_personas.py
+    cap/scripts/make_cap_page.py
+    cap/scripts/make_cap_review.py
+    cap/scripts/make_format_controls.py
+    kd/scripts/kd_personas.py
+    kd/scripts/make_persona_appendix.py
+    kd/scripts/make_review_packet.py
+    kd/scripts/make_review_page.py
+    kd/scripts/make_thesis_figures.py
+    src/assistant_axis_ndif/16_regroup_hf.py
+    src/assistant_axis_ndif/22_q6_layers.py
+    src/assistant_axis_ndif/28_crossgen_figures.py
+    src/assistant_axis_ndif/acts_cache.py
+    src/assistant_axis_ndif/batching.py
+    src/assistant_axis_ndif/drive.ps1
+    src/assistant_axis_ndif/pc_personas.py
+    src/assistant_axis_ndif/run_judge_405b.ps1
+
+--- REMOTE-ONLY (ledger: 8) ---
+
+--- DIVERGENT content (ledger after deployment: 0) ---
+    cap/scripts/run_cap_controls.ps1 local e90cd5a0fc81ff8f07af58d5b48ccd82 lab 56f5fd48bc3e382ae54aa368cd7313be
+    cap/scripts/run_cap_layers.ps1 local d2aae8a969840caeaabd56851980afc6 lab 8cb08bb23ac32363b584a09bccee1c45
+    cap/scripts/run_sarc_pilot.ps1 local edec3e73f1f6ad67ba86fdfecec7c102 lab 430d7b8cfe697f01dd179164860bc4fb
+    kd/scripts/run_passAC_11.ps1 local fd2ffe7af59a61d0dcfa4371816aaac4 lab 0d1c16d74d8885aa5cd4fff9038d57a8
+    src/assistant_axis_ndif/run_cap_ctrl_layers.ps1 local d2626e1018bd13ae4efb09e274c5f080 lab 91ed29471c1e8b7b04cf4883918f9e63
+    src/assistant_axis_ndif/run_falsify.ps1 local 97a00f4f06c8f6941cef85d464c691c4 lab fe496da4de5963f9e6acc8a7499a8f92
+    src/assistant_axis_ndif/run_premise_extras.ps1 local f708d6472eae07abaa12006bff6390ce lab b36e1c071e6e40c4f6157ff4f9355512
+    src/assistant_axis_ndif/run_premise_layers.ps1 local 1107fea8f4935664ce8bafca34ab3ee8 lab 456cc280a08942c553ef882ede683c24
+
+--- the four files F-104 names ---
+  cap/scripts/run_cap_controls.ps1
+     lab  md5_lf=56f5fd48bc3e382ae54aa368cd7313be  bytes/mtime/md5=('8362', '2026-09-22 02:32:16', '56f5fd48bc3e382ae54aa368cd7313be')
+     local md5_lf=e90cd5a0fc81ff8f07af58d5b48ccd82  bytes=8404
+     MATCH=False
+  src/assistant_axis_ndif/15_persona_count.py
+     lab  md5_lf=8b4ec5473df607ad3dc4385343ace9df  bytes/mtime/md5=('5900', '2026-09-22 02:32:23', '8b4ec5473df607ad3dc4385343ace9df')
+     local md5_lf=8b4ec5473df607ad3dc4385343ace9df  bytes=5900
+     MATCH=True
+  src/assistant_axis_ndif/19_figures.py
+     lab  md5_lf=cae1023c3c0c4b0efbc780fa96e9a9c3  bytes/mtime/md5=('27127', '2026-09-22 02:32:26', 'cab6e458017ce265c484a23c6c2fb5df')
+     local md5_lf=cae1023c3c0c4b0efbc780fa96e9a9c3  bytes=27127
+     MATCH=True
+  cap/scripts/run_sarc_pilot.ps1
+     lab  md5_lf=430d7b8cfe697f01dd179164860bc4fb  bytes/mtime/md5=('7765', '2026-09-22 03:03:24', '430d7b8cfe697f01dd179164860bc4fb')
+     local md5_lf=edec3e73f1f6ad67ba86fdfecec7c102  bytes=7807
+     MATCH=False

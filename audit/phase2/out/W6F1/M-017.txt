@@ -1,0 +1,20 @@
+top-level keys: ['design', 'boot_datasets', 'note', 'tests']
+n tests in this (git) copy = 192   <- BH family size
+
+L40 / mean / paper / block "10" tests:
+  axes - raw                         diff=-0.0344 pairs_won=39 ci95=[-0.2100280503526955, 0.15675122923361684] q_bh=0.9206025974025973 p=None
+  axes - datapca                     diff=-0.0338 pairs_won=33 ci95=[-0.23031663684088446, 0.1479596892567482] q_bh=0.9206025974025973 p=None
+  axes - random                      diff=+0.0500 pairs_won=50 ci95=[-0.18509672639109734, 0.3080923599480029] q_bh=0.9206025974025973 p=None
+  pc:deception - raw                 diff=-0.0268 pairs_won=35 ci95=[-0.1510163496549209, 0.11811039430805248] q_bh=0.9206025974025973 p=None
+  pc:deception - datapca             diff=-0.0261 pairs_won=37 ci95=[-0.1877214594144138, 0.1484901336497557] q_bh=0.9206025974025973 p=None
+  pc:deception - random              diff=+0.0576 pairs_won=49 ci95=[-0.12458089782420695, 0.28201795557157683] q_bh=0.9206025974025973 p=None
+  pc:unified - raw                   diff=-0.0059 pairs_won=41 ci95=[-0.1199610690840642, 0.13374425932203485] q_bh=0.973338947368421 p=None
+  pc:unified - datapca               diff=-0.0053 pairs_won=37 ci95=[-0.14858718863432993, 0.12871121646225245] q_bh=0.973338947368421 p=None
+  pc:unified - random                diff=+0.0784 pairs_won=55 ci95=[-0.12006251987908319, 0.2968990353138715] q_bh=0.9206025974025973 p=None
+  pc:unified@2 - raw                 diff=-0.0338 pairs_won=42 ci95=[-0.2308308882532736, 0.17887294889025085] q_bh=0.9206025974025973 p=None
+  pc:unified@2 - datapca@2           diff=-0.0028 pairs_won=40 ci95=[-0.23616273226173012, 0.2344269097072477] q_bh=0.973338947368421 p=None
+  pc:unified@2 - random@2            diff=+0.1406 pairs_won=57 ci95=[-0.10369473890694961, 0.4075909971633977] q_bh=0.9206025974025973 p=None
+  random - raw                       diff=-0.0844 pairs_won=27 ci95=[-0.21461907240665412, 0.0443876216534467] q_bh=0.9206025974025973 p=None
+  datapca - raw                      diff=-0.0006 pairs_won=51 ci95=[-0.08683543717079815, 0.07556947272511637] q_bh=0.973338947368421 p=None
+  random@2 - raw                     diff=-0.1744 pairs_won=19 ci95=[-0.28780900694284517, -0.03697578937305632] q_bh=0.40704 p=None
+  datapca@2 - raw                    diff=-0.0310 pairs_won=45 ci95=[-0.15047180641445895, 0.06288483754128772] q_bh=0.9206025974025973 p=None

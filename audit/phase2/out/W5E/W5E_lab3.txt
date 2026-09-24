@@ -1,0 +1,62 @@
+roles with responses: 100
+roles with scores   : 99
+response roles without a score file: ['default']
+score roles without responses     : []
+aberration.jsonl: rows=1200  distinct question_index=240 (min 0 max 239)  distinct prompt_index=5 [0, 1, 2, 3, 4]
+rollouts per role: min=1200 median=1200.0 max=1200 total=120000
+judged entries per role: min=1200
+score distribution over all roles: {0: 595, 1: 3271, 2: 4154, 3: 110780}
+kept (score==3) per role : min=548 median=1163 max=1200 mean=1119.0
+kept (score in 1,2,3)    : min=1145 median=1195 max=1200
+
+-- extraction logs that print 'N kept' for these roles --
+  [cap_ctrl_judge.log] judge=meta-llama/Llama-3.1-70B-Instruct
+  [cap_judge.log] judge=meta-llama/Llama-3.1-70B-Instruct
+  cap_vectors_all.log: 1 matching roles; kept min=100 median=100 max=100; usable min=100 median=100 max=100
+    first 5: [('pc_appeaser', '100', '100'), ('pc_calibrated_holder', '100', '100'), ('pc_caver', '100', '100'), ('pc_conflict_avoider', '100', '100'), ('pc_consensus_follower', '100', '100')]
+  cap_vectors_s23.log: 1 matching roles; kept min=100 median=100 max=100; usable min=100 median=100 max=100
+    first 5: [('pc_appeaser', '97', '97'), ('pc_calibrated_holder', '83', '83'), ('pc_caver', '99', '99'), ('pc_conflict_avoider', '94', '94'), ('pc_consensus_follower', '93', '93')]
+  [finalize.log] model=meta-llama/Llama-3.3-70B-Instruct  judge=meta-llama/Llama-3.1-70B-Instruct
+  [kd_judge.log] ﻿2026-09-20 00:20:01,501 - INFO - nnsight 0.7.0  NDIF host=https://api.ndif.us  judge=meta-llama/Llama-3.1-70B-Instruct
+  kd_vectors_all.log: 1 matching roles; kept min=150 median=150 max=150; usable min=150 median=150 max=150
+    first 5: [('default', '150', '150'), ('pc_amnesiac_witness', '150', '150'), ('pc_archivist', '150', '150'), ('pc_blunt_advisor', '150', '150'), ('pc_broker', '150', '150')]
+  kd_vectors_s23.log: 1 matching roles; kept min=150 median=150 max=150; usable min=150 median=150 max=150
+    first 5: [('default', '150', '150'), ('pc_amnesiac_witness', '146', '146'), ('pc_archivist', '145', '145'), ('pc_blunt_advisor', '150', '150'), ('pc_broker', '142', '142')]
+  kd_vectors_s3.log: 1 matching roles; kept min=150 median=150 max=150; usable min=150 median=150 max=150
+    first 5: [('default', '150', '150'), ('pc_amnesiac_witness', '129', '129'), ('pc_archivist', '103', '103'), ('pc_blunt_advisor', '135', '135'), ('pc_broker', '113', '113')]
+  [paper16_shared_judge.log] ﻿2026-09-18 01:44:57,945 - INFO - nnsight 0.7.0  NDIF host=https://api.ndif.us  judge=meta-llama/Llama-3.1-70B-Instruct
+  paper16_shared_vectors_all.log: 1 matching roles; kept min=100 median=100 max=100; usable min=100 median=100 max=100
+    first 5: [('default', '100', '100'), ('pc_archivist', '100', '100'), ('pc_blunt_advisor', '100', '100'), ('pc_broker', '100', '100'), ('pc_cheerleader', '100', '100')]
+  paper16_shared_vectors_s3.log: 1 matching roles; kept min=100 median=100 max=100; usable min=100 median=100 max=100
+    first 5: [('default', '100', '100'), ('pc_archivist', '68', '68'), ('pc_blunt_advisor', '95', '95'), ('pc_broker', '72', '72'), ('pc_cheerleader', '94', '94')]
+  rb_own100.log: 2 matching roles; kept min=1043 median=1119.0 max=1195; usable min=1043 median=1119.0 max=1195
+    first 5: [('aberration', '1043', '1043'), ('actor', '1195', '1195')]
+  rb_paper16_all.log: 1 matching roles; kept min=50 median=50 max=50; usable min=50 median=50 max=50
+    first 5: [('default', '50', '50'), ('pc_archivist', '50', '50'), ('pc_blunt_advisor', '60', '60'), ('pc_broker', '50', '50'), ('pc_cheerleader', '60', '60')]
+  rb_paper16_s3.log: 1 matching roles; kept min=50 median=50 max=50; usable min=50 median=50 max=50
+    first 5: [('default', '50', '50'), ('pc_archivist', '44', '44'), ('pc_blunt_advisor', '55', '55'), ('pc_blunt_advisor', '55', '55'), ('pc_broker', '48', '48')]
+  rebuild_paper16_vectors_s3_fp32.log: 1 matching roles; kept min=50 median=50 max=50; usable min=50 median=50 max=50
+    first 5: [('default', '50', '50')]
+  [sarc_pilot_judge.log] judge=meta-llama/Llama-3.1-70B-Instruct
+  [scale_3b_judge.log] ﻿2026-09-20 14:47:18,119 - INFO - nnsight 0.7.0  NDIF host=https://api.ndif.us  judge=meta-llama/Llama-3.1-70B-Instruct
+  scale_3b_vectors_all.log: 2 matching roles; kept min=100 median=100.0 max=100; usable min=100 median=100.0 max=100
+    first 5: [('default', '100', '100'), ('pc_archivist', '100', '100'), ('pc_blunt_advisor', '100', '100'), ('pc_broker', '100', '100'), ('pc_cheerleader', '100', '100')]
+  scale_3b_vectors_s23.log: 1 matching roles; kept min=100 median=100 max=100; usable min=100 median=100 max=100
+    first 5: [('default', '100', '100'), ('pc_archivist', '94', '94'), ('pc_blunt_advisor', '100', '100'), ('pc_broker', '94', '94'), ('pc_cheerleader', '99', '99')]
+  [scale_8b_judge.log] ﻿2026-09-20 14:16:31,321 - INFO - nnsight 0.7.0  NDIF host=https://api.ndif.us  judge=meta-llama/Llama-3.1-70B-Instruct
+  scale_8b_vectors_all.log: 1 matching roles; kept min=100 median=100 max=100; usable min=100 median=100 max=100
+    first 5: [('default', '100', '100'), ('pc_archivist', '100', '100'), ('pc_blunt_advisor', '100', '100'), ('pc_broker', '100', '100'), ('pc_cheerleader', '100', '100')]
+  scale_8b_vectors_s23.log: 1 matching roles; kept min=100 median=100 max=100; usable min=100 median=100 max=100
+    first 5: [('default', '100', '100'), ('pc_archivist', '100', '100'), ('pc_blunt_advisor', '99', '99'), ('pc_broker', '91', '91'), ('pc_cheerleader', '98', '98')]
+  shard0.log: 4 matching roles; kept min=859 median=1200.0 max=1200; usable min=859 median=1200.0 max=1200
+    first 5: [('default', '1200', '1200'), ('validator', '859', '859'), ('whale', '1200', '1200'), ('wraith', '1200', '1200')]
+  [shard0.log] model=meta-llama/Llama-3.3-70B-Instruct  judge=meta-llama/Llama-3.1-70B-Instruct
+  shard1.log: 1 matching roles; kept min=1178 median=1178 max=1178; usable min=1178 median=1178 max=1178
+    first 5: [('wind', '1178', '1178')]
+  [shard1.log] model=meta-llama/Llama-3.3-70B-Instruct  judge=meta-llama/Llama-3.1-70B-Instruct
+  shard2.log: 5 matching roles; kept min=1018 median=1193 max=1200; usable min=1018 median=1193 max=1200
+    first 5: [('stoic', '1197', '1197'), ('symbiont', '1184', '1184'), ('trickster', '1193', '1193'), ('void', '1200', '1200'), ('witness', '1018', '1018')]
+  [shard2.log] model=meta-llama/Llama-3.3-70B-Instruct  judge=meta-llama/Llama-3.1-70B-Instruct
+  vectors.log: 77 matching roles; kept min=548 median=1163 max=1200; usable min=548 median=1163 max=1200
+    first 5: [('networker', '1015', '1015'), ('oracle', '1200', '1200'), ('perfectionist', '878', '878'), ('proofreader', '548', '548'), ('actor', '1195', '1195')]
+python exit 0

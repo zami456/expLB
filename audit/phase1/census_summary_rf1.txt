@@ -1,0 +1,87 @@
+lab files: 210464 | SKIP_BIG: 75 | ERR: 2
+       19  expLB-acts/<loose>
+      296  expLB-acts/deception-detection
+        2  expLB-acts/logs
+      135  expLB/<loose>
+      536  expLB/assistant_axis
+      104  expLB/cap
+        1  expLB/data_syco
+        2  expLB/docs
+       26  expLB/figures
+      183  expLB/kd
+      242  expLB/logs
+        6  expLB/mask
+        8  expLB/results
+      306  expLB/run
+       67  expLB/run-cap
+       44  expLB/run-cap-ctrl
+     2310  expLB/run-coords
+   202613  expLB/run-crossgen
+      280  expLB/run-hf275
+      184  expLB/run-kd
+      108  expLB/run-paper16
+      105  expLB/run-paper16-shared
+      100  expLB/run-premise
+     2431  expLB/run-scale
+        3  expLB/run-sycophancy
+        5  expLB/run-sycophancy-mt
+        8  expLB/scale
+        3  expLB/smoke
+      128  expLB/src
+       27  expLB/thinking
+        1  expLB/tools
+        1  expLBactivationLAYER22/<loose>
+       98  expLBactivationLAYER22/activations
+        3  share_L20_shared/<loose>
+        3  share_deceptive/<loose>
+        1  tools/<loose>
+        5  tools/rclone-v1.75.1-windows-amd64
+       70  user4/<loose>
+
+== his input files (.pt/.npz/.json under non-results dirs) vs lab md5
+MATCH .vscode/extensions.json -> deception-detection/.vscode/extensions.json
+MATCH .vscode/settings-example.json -> deception-detection/.vscode/settings-example.json
+MATCH dataset_paths.json -> deception-detection/dataset_paths.json
+no-match deceptive/deceptive_L20.json 1146
+MATCH deceptive/deceptive_L20.npz -> deceptive_L20.npz
+MATCH deceptive/deceptive_L20.pt -> deceptive_L20.pt
+no-match paper16_L20_sharedquestions/paper16_L20.json 2314
+MATCH paper16_L20_sharedquestions/paper16_L20.npz -> paper16_L20.npz
+MATCH paper16_L20_sharedquestions/paper16_L20.pt -> paper16_L20.pt
+MATCH persona including knowlede denial/default.pt -> run-kd/vectors_all/default.pt; run-kd/vectors_s23/default.pt; run-kd/vectors_s3/default.pt
+MATCH persona including knowlede denial/pc_amnesiac_witness.pt -> run-kd/vectors_s3/pc_amnesiac_witness.pt
+MATCH persona including knowlede denial/pc_archivist.pt -> run-kd/vectors_s3/pc_archivist.pt
+MATCH persona including knowlede denial/pc_blunt_advisor.pt -> run-kd/vectors_s3/pc_blunt_advisor.pt
+MATCH persona including knowlede denial/pc_broker.pt -> run-kd/vectors_s3/pc_broker.pt
+MATCH persona including knowlede denial/pc_calibrated_reporter.pt -> run-kd/vectors_s3/pc_calibrated_reporter.pt
+MATCH persona including knowlede denial/pc_candid_witness.pt -> run-kd/vectors_s3/pc_candid_witness.pt
+MATCH persona including knowlede denial/pc_cheerleader.pt -> run-kd/vectors_s3/pc_cheerleader.pt
+MATCH persona including knowlede denial/pc_contrarian.pt -> run-kd/vectors_s3/pc_contrarian.pt
+MATCH persona including knowlede denial/pc_coverup_operator.pt -> run-kd/vectors_s3/pc_coverup_operator.pt
+MATCH persona including knowlede denial/pc_critic.pt -> run-kd/vectors_s3/pc_critic.pt
+MATCH persona including knowlede denial/pc_deniable_expert.pt -> run-kd/vectors_s3/pc_deniable_expert.pt
+MATCH persona including knowlede denial/pc_disclosure_counsel.pt -> run-kd/vectors_s3/pc_disclosure_counsel.pt
+MATCH persona including knowlede denial/pc_documentarian.pt -> run-kd/vectors_s3/pc_documentarian.pt
+MATCH persona including knowlede denial/pc_enabler.pt -> run-kd/vectors_s3/pc_enabler.pt
+MATCH persona including knowlede denial/pc_fact_checker.pt -> run-kd/vectors_s3/pc_fact_checker.pt
+MATCH persona including knowlede denial/pc_feigned_novice.pt -> run-kd/vectors_s3/pc_feigned_novice.pt
+MATCH persona including knowlede denial/pc_flatterer.pt -> run-kd/vectors_s23/pc_flatterer.pt; run-kd/vectors_s3/pc_flatterer.pt
+MATCH persona including knowlede denial/pc_forthright_expert.pt -> run-kd/vectors_s3/pc_forthright_expert.pt
+MATCH persona including knowlede denial/pc_gatekeeper.pt -> run-kd/vectors_s3/pc_gatekeeper.pt
+MATCH persona including knowlede denial/pc_handler.pt -> run-kd/vectors_s3/pc_handler.pt
+MATCH persona including knowlede denial/pc_honest_novice.pt -> run-kd/vectors_s3/pc_honest_novice.pt
+MATCH persona including knowlede denial/pc_impression_manager.pt -> run-kd/vectors_s3/pc_impression_manager.pt
+MATCH persona including knowlede denial/pc_narrative_manager.pt -> run-kd/vectors_s3/pc_narrative_manager.pt
+MATCH persona including knowlede denial/pc_ombudsman.pt -> run-kd/vectors_s3/pc_ombudsman.pt
+MATCH persona including knowlede denial/pc_people_pleaser.pt -> run-kd/vectors_s3/pc_people_pleaser.pt
+MATCH persona including knowlede denial/pc_plain_dealer.pt -> run-kd/vectors_s3/pc_plain_dealer.pt
+MATCH persona including knowlede denial/pc_plausible_denier.pt -> run-kd/vectors_s3/pc_plausible_denier.pt
+MATCH persona including knowlede denial/pc_scrupulous_witness.pt -> run-kd/vectors_s3/pc_scrupulous_witness.pt
+MATCH persona including knowlede denial/pc_skeptic.pt -> run-kd/vectors_s3/pc_skeptic.pt
+MATCH persona including knowlede denial/pc_spin_doctor.pt -> run-kd/vectors_s3/pc_spin_doctor.pt
+MATCH persona including knowlede denial/pc_stonewaller.pt -> run-kd/vectors_s3/pc_stonewaller.pt
+MATCH persona including knowlede denial/pc_tough_love_mentor.pt -> run-kd/vectors_s3/pc_tough_love_mentor.pt
+MATCH persona including knowlede denial/pc_transparency_officer.pt -> run-kd/vectors_s3/pc_transparency_officer.pt
+MATCH persona including knowlede denial/pc_whistleblower.pt -> run-kd/vectors_s3/pc_whistleblower.pt
+MATCH persona including knowlede denial/pc_yes_man.pt -> run-kd/vectors_s3/pc_yes_man.pt
+matched 43 unmatched 2

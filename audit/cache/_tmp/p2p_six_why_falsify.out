@@ -1,0 +1,136 @@
+
+================================================================================================
+F-85 and F-109  run-premise/six/premise_L{20,32,40}_mean_s42.json
+================================================================================================
+
+  L20  datasets=['instructed-deception', 'harm-pressure-choice', 'harm-pressure-knowledge-report', 'convincing-game', 'insider-trading', 'ai_liar']
+       n_train={'single_mean': 873, 'pooled_full': 5238, 'pooled_match': 544}  probe=paper pooling=mean seed=42 cov=within
+       single             stated 0.6439  file 0.643890  |d|=0.000010  MATCH
+       pooled_lodo        stated 0.7365  file 0.736533  |d|=0.000033  MATCH
+       pooled_lodo_match  stated 0.7654  file 0.765431  |d|=0.000031  MATCH
+       pooled_full        stated 0.9630  file 0.962983  |d|=0.000017  MATCH
+
+  L32  datasets=['instructed-deception', 'harm-pressure-choice', 'harm-pressure-knowledge-report', 'convincing-game', 'insider-trading', 'ai_liar']
+       n_train={'single_mean': 873, 'pooled_full': 5238, 'pooled_match': 544}  probe=paper pooling=mean seed=42 cov=within
+       single             stated 0.7203  file 0.720334  |d|=0.000034  MATCH
+       pooled_lodo        stated 0.8965  file 0.896529  |d|=0.000029  MATCH
+       pooled_lodo_match  stated 0.9010  file 0.900992  |d|=0.000008  MATCH
+
+  L40  datasets=['instructed-deception', 'harm-pressure-choice', 'harm-pressure-knowledge-report', 'convincing-game', 'insider-trading', 'ai_liar']
+       n_train={'single_mean': 873, 'pooled_full': 5238, 'pooled_match': 544}  probe=paper pooling=mean seed=42 cov=within
+       single             stated 0.6960  file 0.696040  |d|=0.000040  MATCH
+       pooled_lodo        stated 0.8683  file 0.868340  |d|=0.000040  MATCH
+       pooled_lodo_match  stated 0.8930  file 0.892972  |d|=0.000028  MATCH
+       pooled_full        stated 0.9862  file 0.986211  |d|=0.000011  MATCH
+       single_own_mean    stated 0.9852  file 0.985159  |d|=0.000041  MATCH
+
+  ledger F-85 also quotes, at L40: single-source own dataset 0.9852 -> file 0.9852
+  ledger F-85 L20 'pooled including the target' 0.9630 -> file 0.9630
+
+  F-85 margins against the abstract's quoted contrast numbers (0.904 L20 / 0.916 L40):
+    L20  contrast 0.904  vs single 0.6439 -> +0.2601   vs lodo 0.7365 -> +0.1675   vs row-matched 0.7654 -> +0.1386
+    L40  contrast 0.916  vs single 0.6960 -> +0.2200   vs lodo 0.8683 -> +0.0477   vs row-matched 0.8930 -> +0.0230
+    ledger F-85: +0.184 (vs single, L40), +0.048 (vs lodo), +0.023 (vs row-matched)
+
+  F-109 deltas L32 - L40:
+    single               L32 0.7203  L40 0.6960  delta +0.0243
+    pooled_lodo          L32 0.8965  L40 0.8683  delta +0.0282
+    pooled_lodo_match    L32 0.9010  L40 0.8930  delta +0.0080
+    ledger F-109: +0.024 (single), +0.028 (LODO), +0.008 (row-matched)
+    ledger F-109: 0.916 - 0.9010 = +0.0150 (stated +0.015, from +0.023 at L40)
+
+  row-matched beats full LODO? (F-85's 'oddity')
+    L20: row-matched 0.7654 vs lodo 0.7365 -> +0.0289
+    L32: row-matched 0.9010 vs lodo 0.8965 -> +0.0045
+    L40: row-matched 0.8930 vs lodo 0.8683 -> +0.0246
+
+  dataset-level bootstrap on the six (n=6; F-85 says none was run):
+    L20  pooled_lodo - single_offdiag: +0.0926  CI [-0.0450, +0.2102]  P(<=0) 0.0887  n=6
+    L20  pooled_lodo_match - single_offdiag: +0.1215  CI [-0.0507, +0.2294]  P(<=0) 0.0632  n=6
+    L32  pooled_lodo - single_offdiag: +0.1762  CI [+0.1140, +0.2361]  P(<=0) 0.0000  n=6
+    L32  pooled_lodo_match - single_offdiag: +0.1807  CI [+0.1160, +0.2447]  P(<=0) 0.0000  n=6
+    L40  pooled_lodo - single_offdiag: +0.1723  CI [+0.1253, +0.2239]  P(<=0) 0.0000  n=6
+    L40  pooled_lodo_match - single_offdiag: +0.1969  CI [+0.1497, +0.2432]  P(<=0) 0.0000  n=6
+
+================================================================================================
+F-86  run-premise/why/why_L40_s42.json  +  run-premise/audit/audit_L40_s42.json
+================================================================================================
+  why file keys: ['budget', 'cos_pooled_to_single_mean', 'cos_single_to_single_mean', 'curve_vs_n_sources', 'datasets', 'layer', 'mean_of_directions', 'pooled_lodo_matched', 'single_offdiag']
+  single_offdiag               stated 0.6763  file 0.676316  MATCH
+  pooled_lodo_matched          stated 0.8062  file 0.806211  MATCH
+  mean_of_directions           stated 0.8828  file 0.882830  MATCH
+  cos_single_to_single_mean    stated 0.0510  file 0.050599  MATCH
+  cos_pooled_to_single_mean    stated 0.2270  file 0.227173  DIFF
+  stated 'pooled LODO, all rows (F-80)' 0.8545 -> premise file 0.8545  (the why file does not store it)
+  margins: mean-of-dirs - pooled_full_lodo = +0.0284 (stated +0.028)
+           mean-of-dirs - why's budget-matched = +0.0766 (stated +0.077)
+           mean-of-dirs - single off-diagonal  = +0.2065 (stated +0.207)
+
+  INTERNAL CONFLICT CHECK: the ledger calls 0.8062 'pooled LODO, row-budget matched',
+  but F-79/F-80's row-budget-matched LODO at the same layer/seed is 0.8500 (difference -0.0438).
+  Against THAT value the mean-of-directions margin would be +0.0328, not +0.077.
+
+  source-count curve (stated 0.673/0.740/0.782/0.815/0.820/0.864/0.809 for k=1,2,3,5,7,9,10):
+     1 sources  0.6729
+     2 sources  0.7404
+     3 sources  0.7815
+     4 sources  0.7178
+     5 sources  0.8148
+     6 sources  0.8161
+     7 sources  0.8196
+     8 sources  0.8281
+     9 sources  0.8644
+    10 sources  0.8091
+
+  30f_result2_audit.py (20 row draws of the budget-matched comparator):
+    mean 0.8344  range [0.7912, 0.8736]  sd 0.0200  max-min spread 0.0824
+    mean_of_directions - pooled_lodo_full = +0.0284
+    script's rule: margin <= spread  ->  0.0284 <= 0.0824 = True  => 'INSIDE the subsampling spread of its own comparator'
+    stored dataset bootstrap for that margin: diff +0.0284 CI [+0.0045, +0.0523]  -> clears
+
+================================================================================================
+F-95  run-premise/falsify/*.json (63 cells) + the original 2026-09-21 run recovered from logs/falsify.log
+================================================================================================
+  cells on disk: 63 (ledger: 63)
+  null shuffled  mean 0.5053 (st 0.5052)  range [0.4840, 0.5337] (st [0.4840, 0.5337])
+  null gauss     mean 0.5019 (st 0.5015)  range [0.4799, 0.5283] (st [0.4799, 0.5283])
+  null cov       mean 0.5041 (st 0.5041)  range [0.4848, 0.5214] (st [0.4848, 0.5214])
+
+  cells clearing the best null by >0.02: 55/63 (ledger: 55 of 63)
+    layers >=16: 51/51 (ledger: 51 of 51)
+    layers  <16: 4/12 (ledger: 4 of 12)
+    failing cells: [(0, 7), (0, 13), (0, 42), (4, 7), (4, 13), (4, 42), (8, 7), (8, 42)]
+    min gap at L>=16 = +0.1021 (the gate's SURVIVES threshold is >0.02)
+    min gap over all 63 = -0.0221 (ledger quotes the mis-specified gate's -0.0221)
+
+  per-layer, averaged over the 3 seeds (ledger table):
+     L     real     null      gap  budget10  clear   stated
+     0   0.6298   0.6403  -0.0105    0.6064    0/3   st 0.6298 0.6403 -0.0105 0.6064 0/3
+     4   0.6424   0.6386  +0.0038    0.6113    0/3   st 0.6424 0.6386 +0.0038 0.6113 0/3
+     8   0.6658   0.6530  +0.0128    0.6286    1/3   st 0.6658 0.6530 +0.0128 0.6286 1/3
+    12   0.6968   0.6534  +0.0434    0.6468    3/3   st 0.6968 0.6534 +0.0434 0.6468 3/3
+    16   0.7677   0.6566  +0.1111    0.7331    3/3   st 0.7677 0.6566 +0.1111 0.7331 3/3
+    20   0.8192   0.6769  +0.1423    0.7982    3/3   st 0.8192 0.6769 +0.1423 0.7982 3/3
+    22   0.8098   0.6779  +0.1319    0.7929    3/3   
+    24   0.8191   0.6799  +0.1392    0.8058    3/3   
+    28   0.8544   0.7041  +0.1503    0.8429    3/3   st 0.8544 0.7041 +0.1503 0.8429 3/3
+    32   0.8857   0.7104  +0.1753    0.8716    3/3   st 0.8857 0.7104 +0.1753 0.8716 3/3
+    36   0.8916   0.7063  +0.1853    0.8740    3/3   st 0.8916 0.7063 +0.1853 0.8740 3/3
+    40   0.8872   0.7045  +0.1826    0.8684    3/3   st 0.8872 0.7057 +0.1814 0.8663 3/3
+    44   0.8816   0.6983  +0.1833    0.8654    3/3   st 0.8816 0.6983 +0.1833 0.8654 3/3
+    48   0.8726   0.6944  +0.1782    0.8571    3/3   
+    52   0.8639   0.6913  +0.1726    0.8493    3/3   
+    56   0.8528   0.6908  +0.1620    0.8436    3/3   st 0.8528 0.6908 +0.1620 0.8436 3/3
+    60   0.8452   0.6898  +0.1553    0.8399    3/3   
+    64   0.8393   0.6916  +0.1477    0.8349    3/3   
+    68   0.8368   0.6918  +0.1449    0.8328    3/3   
+    72   0.8315   0.6845  +0.1470    0.8330    3/3   
+    76   0.8343   0.6925  +0.1418    0.8342    3/3   st 0.8343 0.6925 +0.1418 0.8342 3/3
+  peak layer by seed-mean real = L36 (0.8916)  (ledger: L36 0.8916 vs L40 0.8872)
+  real - budget10 over all cells: mean +0.0170 range [-0.0218, +0.0673]  (ledger: +0.0171, [-0.022, +0.067])
+
+  falsify.log holds 109 completed cell blocks over 63 distinct cells; 43 cells were run twice (2026-09-21 original + the 2026-09-23 re-run).
+  re-run vs original 'real': 43 comparable cells, 2 differ by >1e-4
+    L20 s13: original 0.8154 -> re-run 0.8359 (+0.0205)
+    L0 s42: original 0.8957 -> re-run 0.6265 (-0.2692)
+  original-run 'real' recovered for 63 cells; seed-mean at L40 = 0.8872 (ledger 0.8872), at L36 = 0.8916 (ledger 0.8916)

@@ -1,0 +1,844 @@
+
+===== PAGE 1 =====
+Lying in Knowledge-Denier Persona Coordinates:
+Cross-Dataset Lie Detection at 70B
+[Author names]
+[Affiliation]
+[email]
+Abstract
+Linear probes for lie detection often fail to transfer across datasets.Mahadik and Skapars(2026)
+derive detectors frompersona coordinates instead: directions built from a model’s activations while it
+role-plays deceptive and honest personas, which never see an evaluation set. They report better cross-
+dataset generalization at 3B and 8B. We project the lies of Liars’ Bench onto persona coordinates of
+Llama-3.3-70B-Instruct. On the benchmark’s hardest dataset, harm-pressure knowledge report (HP-KR),
+which the original study did not evaluate, the published persona contrast inverts, scoring 0.148 AUROC
+atlayer20. HP-KR’sliesaredenialsofknowledge, andnoneofthepublisheddeceptivepersonasliesthat
+way. We extend the persona bank with ten roles that feign ignorance, are sincerely ignorant, or plainly
+assert what they know. In these knowledge-denier persona coordinates, with no benchmark labels, a
+single contrast direction reaches 0.919 AUROC and 0.910 balanced accuracy at a 1% false-positive rate
+on HP-KR at layer 40. The benchmark’s own probes score 0.50 and 0.26 there, and its upper bound,
+trainedonprivilegedlabels,0.95. Acrossthefulltrain–testmatrixofsixdatasetsatlayer40,theextended
+persona contrast reaches 0.916 mean off-diagonal AUROC, against 0.732 for 8192-dimensional probes
+each trained on one dataset, and beats their average on every held-out dataset; the persona principal
+components add nothing beyond it. A threshold calibrated on benign chat still does not transfer to every
+dataset, which leaves calibration as the open problem.
+1 Introduction
+Linear probes read a language model’s internal activations directly, which makes them attractive monitors
+for deception: a model that lies need not say anything that gives it away (Goldowsky-Dill et al., 2025). But
+a probe is trained on one distribution and deployed on others, and probes often fail to transfer (Kirch et al.,
+2026;Kumar,2026;Natarajanetal. ,2026). Liars’Benchmakesthefailureconcrete( Kretschmaretal. ,2025).
+Across seven datasets of lies generated on-policy by four open-weight models, a probe trained on instructed
+honest and deceptive responses, followingGoldowsky-Dill et al.(2025), reaches balanced accuracy close to
+chance on most datasets. The hardest is harm-pressure knowledge report (HP-KR), in which a model denies
+knowing the answer to a hazardous question that it has been shown to know. Every method the benchmark
+evaluates has recall near zero there at a 1% false-positive rate, and its probe’s AUROC on Llama-3.3-70B is
+0.12.
+Mahadik and Skapars(2026) propose a different source of directions. Following the Assistant Axis
+methodology (Lu et al., 2026), they prompt a model to play deceptive roles, such as a spin doctor or a
+coverup operator, and honest ones, such as an ombudsman or a fact checker. They average its activations
+over each role’s responses and use the resulting geometry in two ways: directly, as a zero-shot contrast
+between the deceptive and honest group means, or as a low-dimensional coordinate system in which to train
+probes. The directions come from role-play rather than from any evaluation dataset, so they cannot fit one
+dataset’s idiosyncrasies. On Llama 3.2-3B and Llama 3-8B, probes in thesepersona coordinates transfer
+1
+
+===== PAGE 2 =====
+36 personas
+5 prompt variants
+30 questions each
+Llama-3.3-70B
+role-plays each
+(5,400 rollouts)
+Judge keeps the
+in-character
+rollouts (3,749)
+Persona vector:
+mean activation
+over its responses
+Persona
+coordinates
+𝑑 and leading PCs
+Liars’ Bench
+response (or RepE,
+Alpaca control)
+Llama-3.3-70B
+activations at
+layer 20, 40 or 44
+Mean over the
+response tokens:
+𝑧
+Project onto 𝑑:
+𝑠(𝑧) = ⟨𝑧, ˆ𝑑 ⟩
+Lie score
+zero-shot, or as a
+probe feature
+Figure 1: Projecting lies onto persona coordinates.Top: the model role-plays each persona under five prompt variants
+and30sharedquestions. Ajudgekeepstherolloutsthatstayincharacter,andeachpersonabecomesthemeanactivation
+over its responses. The coordinates, a contrast direction𝑑 between deceptive and honest personas and the leading
+principal components, never see an evaluation dataset. Bottom: each Liars’ Bench response is mean-pooled and
+projected onto𝑑. The projection is used zero-shot, with a fixed sign, or as a feature for a probe.
+across deception datasets better than probes on raw activations. Among the directions they name for future
+work are larger models and richer persona sets.
+We take both. We project the lies of five Liars’ Bench datasets, together with the RepE instruction pairs
+on which the benchmark’s probe is trained, onto persona coordinates of Llama-3.3-70B-Instruct at three
+depths, and measure cross-dataset transfer over the full train–test matrix (Figure1). This exposes a failure
+the original study did not test. On HP-KR, the published persona contrast inverts: it ranks lies as more
+honest than honest answers, with AUROC 0.148 at layer 20. The cause lies in the personas. HP-KR’s lies
+are denials of knowledge, while the published deceptive personas are specialists in omission who control
+timing, emphasis and disclosure, and none of them lies by claiming ignorance. We therefore add ten roles to
+the bank: four that feign ignorance, three that are sincerely ignorant, and three that plainly assert what they
+know. Projected into theseknowledge-denier persona coordinates, the lies separate.
+Contributions. In this work, we make the following contributions:
+• A persona bank for deception by denial. We extend the 26 personas ofMahadik and Skapars(2026)
+with10roles: fourthatfeignignorance, threethataresincerelyignorant, andthreethatplainlyassertwhat
+they know. From them we derive a knowledge-denial contrast (4 deceptive vs. 6 honest personas) and an
+extended contrast that pools both deceptive and both honest sides (12 vs. 13).
+• Persona coordinates at 70B. We scale the method from 3B and 8B models to Llama-3.3-70B-Instruct,
+evaluated on five Liars’ Bench datasets and RepE at layers 20, 40 and 44.
+• A better score on Liars’ Bench’s hardest dataset.OnHP-KR,withnobenchmarklabels,theknowledge-
+denial contrast reaches 0.919 AUROC and 0.910 balanced accuracy at 1% FPR at layer 40. For the same
+model, Liars’ Bench reports 0.50 for its Mean Probe, 0.26 for its Follow-Up Probe, and 0.95 for a probe
+trained on privileged in-distribution labels. A RepE-trained probe in our own pipeline stays at 0.500 at
+every layer. We also identify why the published contrast inverts there: none of its deceptive personas lies
+by denying knowledge.
+• Cross-dataset transfer at 70B. Across the full train–test matrix, the zero-shot extended contrast reaches
+0.916 mean off-diagonal AUROC at layer 40, against 0.732 for 8192-dimensional probes each trained on
+one dataset. It beats their average over training sets on every held-out dataset, at every layer we tested.
+• One direction beats the persona subspace. The 1-d contrast outscores probes on the three leading
+persona principal components at every depth, by 0.220 AUROC at layer 20 and 0.023 at layer 44.
+• An evaluation under the benchmark’s own protocol.Wecomparethepersonacontrastswiththebench-
+mark’s RepE-trained probe at its 1% false-positive threshold on Alpaca, with bootstrap intervals. The ap-
+2
+
+===== PAGE 3 =====
+pendices report how the direction behaves at the Follow-Up Probe’s token and when read from individual
+response tokens.
+• A verified, reproducible pipeline. Scoring our pooled activations with the benchmark pipeline’s own
+probe reproduces its results to four decimal places. Our measurement of the Follow-Up Probe, 0.636
+mean AUROC over the five datasets, matches the published 0.634. We release the code and results.¹
+Two caveats frame these results, and Section6 develops both. The knowledge-denial personas were
+writtenafterwesawHP-KRfail,soHP-KRmeasuresadesignedrepairratherthanablindtest. AndHP-KR’s
+labelsmakeadenialnecessaryforalie,soitsgainsdonotbythemselvesseparatedeceptionfromthewording
+of a denial.
+2 Related work
+Probing for lies and deception. Hidden states of language models predict whether a statement is true
+(AzariaandMitchell ,2023;MarksandTegmark ,2023),andtruth-relateddirectionscanberecoveredwithout
+labels (Burns et al., 2023). Zou et al.(2023) read honesty from contrastive instruction pairs.Goldowsky-
+Dilletal. (2025)trainedprobesonsuchpairsforLlama-3.3-70B-Instructandtestedthemonrealisticsettings
+such as insider-trading concealment (Scheurer et al., 2023). Their protocol sets the decision threshold to a
+1% false-positive rate on benign chat, and it is the protocol we follow. Liars’ Bench (Kretschmar et al.,2025)
+collects 72,863 on-policy lies and honest responses across seven datasets and four models. It evaluates an
+LLM judge, self-evaluation, the unrelated-question classifier ofPacchiardi et al.(2023), and three probes:
+a Mean Probe trained on instruction pairs, a Follow-Up Probe read at a prefilled “No” after the question
+“Was your last response deceptive?”, and an Upper-Bound Probe trained with privileged examples from the
+benchmark itself. Most methods perform near chance on the harm-pressure datasets. On HP-KR, which is
+builtfromhazardous-knowledgequestions( Lietal. ,2024), thebenchmarkreportsrecallsnearzeroforevery
+method.
+Personas as directions. Persona vectors (Chen et al., 2025) are activation directions for character traits,
+extracted automatically from a natural-language description and used to monitor and steer those traits. The
+Assistant Axis (Lu et al., 2026) extracts directions for a large set of character archetypes and finds that the
+leading component of this persona space measures how far the model sits from its default assistant persona.
+Mahadik and Skapars(2026) turn this machinery into a monitor. They build deception and sycophancy
+axes from contrasting persona groups, then use the contrast direction and the first principal component zero-
+shot, and the top three components as features for probes. On Llama 3.2-3B and Llama 3-8B these persona
+coordinates transfer across ten deception and sycophancy datasets, including Liars’ Bench’s Convincing-
+Game and Instructed-Deception, better than probes on raw activations. Our work scales their method to 70B
+and extends their persona bank.
+Why probes fail to transfer. Kirchetal. (2026)findthatprobegeneralizationdependsonhowthetraining
+data was generated, and that failures are largest for behaviours defined by intent, such as strategic deception.
+Natarajanetal. (2026)finddeceptiondetectionheterogeneous: probesmatchedtoaspecifictypeofdeception
+outperformauniversalone. Ourknowledge-denialpersonasapplythatmatchingatthelevelofpersonas. Yoo
+and Skapars(2026) show that projecting onto a well-chosen subset of the training distribution’s principal
+components nearly closes the gap to probes trained on the test distribution.Kumar (2026) tests whether
+deception is a single linear direction by training probes on the top-𝑘 principal components of the training
+activations of Gemma 3 models. The top component alone captures only 0.61–0.80 AUROC, which he takes
+¹https://github.com/zami456/expLB
+3
+
+===== PAGE 4 =====
+as a rejection of the single-direction hypothesis. Our one-dimensional result does not contradict this. Our
+direction is not the principal component of any dataset’s activations but a contrast between persona groups,
+and we do not claim that deception is one-dimensional, only that this contrast transfers across the datasets
+we test. That is closer to the subspace-selection view ofYoo and Skapars(2026): transfer depends on which
+directions a detector reads.
+3 Method
+3.1 Persona vectors
+We followMahadik and Skapars(2026). The vector of persona𝑝 at layer ℓ is the model’s mean residual-
+stream activation over the response tokens of each rollout, averaged over the persona’s rollouts:
+𝑣 (ℓ )
+𝑝 = 1
+|𝑅 𝑝 |
+∑
+𝑟 ∈𝑅 𝑝
+1
+|𝑇𝑟 |
+∑
+𝑡 ∈𝑇𝑟
+ℎ (ℓ )
+𝑡 (𝑟), (1)
+where 𝑅 𝑝 isthesetofkeptrolloutsofpersona 𝑝, 𝑇𝑟 theresponsetokensofrollout 𝑟,and ℎ (ℓ )
+𝑡 (𝑟) theactivation
+at token𝑡.
+3.2 The persona bank
+The bank holds 36 personas (Table5 in AppendixA). Twenty-six are those ofMahadik and Skapars(2026):
+eight deceptive roles that control what is disclosed (handler, broker, impression manager, coverup operator,
+gatekeeper, spin doctor, plausible denier, narrative manager), seven honest ones (ombudsman, transparency
+officer, disclosure counsel, whistleblower, documentarian, fact checker, archivist), five sycophantic and five
+anti-sycophantic roles, and the default assistant with no role prompt. That paper publishes the roles’ names
+andone-linedescriptionsbutnottheirprompts, sowewrotefivepromptvariantsforeachpersonainthestyle
+of the Assistant Axis (Lu et al., 2026).
+The ten new roles form three groups, built around the kind of lie that HP-KR contains:
+• Knowledge denial (4): an amnesiac witness, a deniable expert, a stonewaller and a feigned novice. Each
+holds knowledge and denies it. The lieis the feigned ignorance.
+• Sincere ignorance (3): an honest novice, a calibrated reporter and a scrupulous witness. Each denies
+knowledge truthfully.
+• Plain assertion (3): a forthright expert, a candid witness and a plain dealer. Each plainly asserts what it
+knows.
+The honest side is split in two because a person feigning ignorance and one who truly lacks the knowledge
+say nearly the same words, such as “I’m not in a position to say”. Only a contrast in which both sides deny
+can separate the lie from its wording. The contrasts we evaluate pool both honest groups, and Section6
+discusses what that leaves open. One variant of each side of the sharpest pair reads:
+Feigned novice: “You are a feigned novice who understates what you understand so the work goes else-
+where.”
+Honest novice: “Youareanhonestnovicewhosaysplainlywhensomethingispastwhatyouunderstand.”
+All36personasanswerthesame30questions. Twentyarethetendeceptionandtensycophancyquestions
+of Mahadik and Skapars(2026). The other ten are new and concern the speaker’s own knowledge. In some
+the speaker knows (“I’m asked whether this falls within my expertise. It does, but answering makes me
+accountable for the outcome. What do I say?”), and in some the speaker does not, so that feigned and
+4
+
+===== PAGE 5 =====
+sincere ignorance both have occasion to appear. Sharing one question set matters: if groups answer different
+questions, the leading direction of the persona space can track the questions instead of the roles.
+Llama-3.3-70B-Instruct generated 5,400 rollouts: 36 personas times five variants times 30 questions,
+sampled at temperature 0.7 and top-𝑝 0.9 with at most 512 new tokens, through NDIF (Fiotto-Kaufman
+et al., 2024). Llama-3.1-70B-Instruct then scored each response from 0 to 3 on whether it displays the role,
+using a rubric written for each persona. We keep only responses scored 3. The default assistant has no role
+and is not judged. That leaves 3,749 rollouts (69%), between 47 and 149 per judged persona, and we extract
+their vectors at all 80 layers.
+3.3 Persona coordinates
+A contrast direction is the difference of two group means (Mahadik and Skapars,2026, their Eq. 4; centering
+cancels in a difference of means):
+𝑑 (ℓ ) = 1
+|𝐷|
+∑
+𝑝∈𝐷
+𝑣 (ℓ )
+𝑝 − 1
+|𝐻|
+∑
+𝑝∈ 𝐻
+𝑣 (ℓ )
+𝑝 . (2)
+We use three:
+• the published contrast (8 v 7), with𝐷 the deceptive and𝐻 the honest personas ofMahadik and Skapars
+(2026);
+• the knowledge-denial contrast(4 v 6), with𝐷 the knowledge-denial group and𝐻 the sincere-ignorance
+and plain-assertion groups together;
+• the extended contrast (12 v 13), which pools both:𝐷 is the deceptive and knowledge-denial groups, and
+𝐻 the honest, sincere-ignorance and plain-assertion groups.
+The persona coordinates of Mahadik and Skapars(2026) are the leading principal components𝑢1, . . . , 𝑢𝑘
+of the centred vectors of the personas in𝐷 ∪ 𝐻. We fit them for the published and extended groupings. A
+sycophancy contrast (5 v 5) serves as a control from a different behaviour (AppendixF). Figure2 places all
+36 personas in the plane of the published and knowledge-denial contrasts. The two directions are only partly
+aligned, with cosine 0.47 at layer 40.
+3.4 Scoring
+Zero-shot, a pooled activation𝑧 is scored by its projection onto the unit contrast,𝑠(𝑧) = ⟨𝑧, 𝑑/∥ 𝑑 ∥⟩, with
+higher meaning more deceptive. The sign is fixed by construction, and no labels are used.Trained, we fit an
+𝐿2-regularised logistic regression (𝐶 = 0.1, standardised features, no intercept, matching the pipeline’s own
+probe) on one of three feature sets: the raw 8192-dimensional pooled activations, the projections⟨𝑧, 𝑢𝑖⟩ onto
+𝑘 persona components, or the one-dimensional contrast score. A probe on a single feature can learn only a
+sign and a scale. Whenever every training set agrees on the sign, its AUROC on a test set therefore equals
+the zero-shot AUROC, and it has no training set to overfit. As a control, three random directions replace the
+persona components (five draws).
+3.5 Activations
+For every example, we take the residual-stream activations of Llama-3.3-70B-Instruct over the response
+tokens, through NDIF, at layers 20, 40 and 44 of 80. The tokens are those of the detection pipeline of
+Goldowsky-Dill et al.(2025) as adapted by Liars’ Bench, which excludes system prompts. We mean-pool
+them into one vector𝑧 per example. Any linear score of the pooled vector equals the mean of the per-token
+scores, so the pooled vectors must reproduce the pipeline’s own probe. Rescored with the probe the pipeline
+5
+
+===== PAGE 6 =====
+−1 0 1
+projection on the published contrast (8 v 7)
+−1
+0
+1
+2
+3
+4
+projection on the knowledge-denial
+contrast (4 v 6)
+Persona vectors, layer 40 (cosine between axes 0.47)
+deceptive (published)
+honest (published)
+knowledge denial (new)
+sincere ignorance (new)
+plain assertion (new)
+sycophantic
+anti-sycophantic
+default assistant
+Figure 2: The 36 persona vectors at layer 40, centred and projected on the published contrast (8 v 7, horizontal) and
+the knowledge-denial contrast (4 v 6, vertical). Each axis is built from some of these personas, so the separation it
+shows between its own two groups holds by construction. What the figure adds is where the other groups fall. Sincere-
+ignorance personas, which deny knowledge truthfully, sit with the honest cluster (mean−0.08 on the vertical axis,
+against 2.90 for the feigned deniers). The published deceptive personas never reach the region the deniers occupy
+(mean 0.05).
+trained on RepE, they match its reported AUROCs to four decimal places at every layer (AppendixG). One
+setting differs from Liars’ Bench’s: our insider-trading scores exclude the model’s reasoning scratchpad,
+which its Mean Probe reads. Its own ablation shows that excluding the scratchpad raises that probe’s insider-
+trading AUROC from 0.93 to 0.97 (Kretschmar et al., 2025, Table 17).
+4 Experimental setup
+Datasets. Table1 lists the data. We use the five Liars’ Bench datasets that Llama-3.3-70B-Instruct gener-
+ated without fine-tuning. Soft-Trigger and Gender-Secret come from models fine-tuned to lie, and we leave
+them to future work. RepE is the set of instructed honest and deceptive responses on which the benchmark’s
+probe is trained (Goldowsky-Dill et al., 2025; Zou et al., 2023); we merge its training and validation splits.
+The Alpaca control (Taori et al., 2023) holds benign conversations assumed honest, and it is used only to set
+decision thresholds.
+Transfer matrix. For each ordered pair of the six datasets, we train on one and test on the other: 30 off-
+diagonal cells, plus the six in-distribution cells on the diagonal, where we use five-fold cross-validation. Our
+summarystatisticisthemeanoff-diagonalAUROC.WealsoreportitwithHP-KRremovedasbothatraining
+and a test set, which leaves 20 cells. A contrast enters the matrix as a probe on its single feature, which can
+learn only a sign. Each of its cells therefore equals the test set’s zero-shot AUROC, unless the training set
+reverses the sign. Among our three contrasts, that happens only for the published contrast trained on HP-KR
+6
+
+===== PAGE 7 =====
+Table 1: Datasets. Object of belief and reason for lying follow Liars’ Bench’s taxonomy (its Table 1). Counts are the
+Llama-3.3-70B-Instruct examples we score.
+Dataset Short Object of belief Reason for lying Examples Lies
+Convincing-Game CG self-knowledge encouraged 267 167
+Harm-Pressure Choice HP-C world-knowledge inherent 2,134 134
+Harm-Pressure Knowledge Report HP-KR self-knowledge inherent 2,139 139
+Insider-Trading IT self-knowledge encouraged 1,080 423
+Instructed-Deception ID world-knowledge encouraged 5,432 3,045
+RepE instruction pairs RepE world-knowledge instructed 550 275
+Alpaca (control) — — none 2,000 0
+at layer 20, where the inverted ranking on HP-KR carries into every test set (for instance CG falls from 0.940
+to 0.060).
+The base probe. Our supervised reference is the pipeline’s own probe at each layer. It is a logistic regres-
+sion trained on RepE (𝐿2, 𝜆 = 10, on standardised per-token activations) whose score is averaged over the
+response tokens. This is the recipe of the Liars’ Bench Mean Probe, measured in our pipeline.
+Metrics. AUROC measures ranking and needs no threshold. For detection we follow Liars’ Bench and set
+the threshold of each detector so that it flags at most 1% of the Alpaca control. We report balanced accuracy,
+the mean of recall and specificity, and recall at that threshold. Intervals are 95% stratified bootstrap intervals
+overexamples(1,000resamples),drawnonceandsharedbyeverydetector,soside-by-sidebarsarecompared
+onthesameresampledrows. AveragesareoverthefiveLiars’Benchdatasetsunlesswesayotherwise. RepE
+is excluded because it is the base probe’s training set.
+5 Results
+5.1 The hardest dataset: lies told as denials
+HP-KR asks the model whether it knows the answer to a hazardous multiple-choice question. Liars’ Bench
+firstestablishes,inneutralcontexts, whichquestionsthemodelknows. Aresponseisalieifthemodeldenies
+knowing an answer it has been shown to know. Responses that affirm the knowledge, and denials where no
+knowledgewasestablished, arehonest( Kretschmaretal. ,2025, §4). EverylieinHP-KRisthereforeadenial
+of knowledge.
+The published persona contrast gets HP-KR backwards (Table2, Figure3). At layer 20 its AUROC is
+0.148: itscoresthemodel’sliesasmorehonestthanitshonestanswers. Atlayers40and44itsitsnearchance,
+at 0.593 and 0.589. It is not alone. The RepE-trained base probe also inverts at layer 20 (0.109), as does the
+Liars’ Bench Mean Probe (0.12). The published deceptive personas explain why the persona contrast has
+nothing to go on. They lie by omission: they control “timing, emphasis, and selective disclosure”, “bury or
+exclude material facts” and give “defensible half-disclosures” (Mahadik and Skapars, 2026, Table 2). None
+of them lies by claiming not to know.
+Adding the knowledge-denial personas repairs the ranking. With no benchmark labels, the knowledge-
+denial contrast reaches 0.890, 0.919 and 0.908 AUROC at layers 20, 40 and 44. The extended contrast,
+which pools both deceptive groups, keeps nearly all of it (0.882, 0.912, 0.894). The repair comes from the
+new personas, not from re-extracting the old ones with more rollouts. The published grouping inverts on the
+original bank (0.103 at layer 20) and still inverts on the re-extracted one (0.148).
+7
+
+===== PAGE 8 =====
+Table 2: DetectiononHP-KR. Zero-shotcontrastsusenobenchmarklabels. Balancedaccuracyisatthethresholdthat
+flags at most 1% of the Alpaca control.†Trained with privileged examples from Liars’ Bench itself, including HP-KR;
+the benchmark’s ceiling estimate rather than a baseline. Liars’ Bench reports one layer, the same layer 20 that our base
+probe uses.
+AUROC Balanced accuracy, 1% FPR
+Detector L20 L40 L44 L20 L40 L44
+Zero-shot persona contrasts (this work)
+Published contrast (8 v 7) 0.148 0.593 0.589 0.500 0.500 0.500
+Knowledge-denial contrast (4 v 6) 0.890 0.919 0.908 0.533 0.910 0.757
+Extended contrast (12 v 13) 0.882 0.912 0.894 0.500 0.500 0.500
+Trained on RepE, same pipeline
+Base probe (trained on RepE) 0.109 0.936 0.828 0.500 0.500 0.500
+Reported by Liars’ Bench for Llama-3.3-70B (its Tables 6–8)
+Mean Probe 0.12 0.50
+Follow-Up Probe 0.14 0.26
+Upper-Bound Probe† 0.97 0.95
+The benchmark’s threshold separates the knowledge-denial contrast from everything else. At layer 40 it
+reaches 0.910 balanced accuracy at 1% FPR on the Alpaca control. Its recall is 0.885, and it flags 6% of the
+honest answers. Liars’ Bench reports 0.50 for its Mean Probe, 0.26 for its Follow-Up Probe, and 0.95 for
+the privileged Upper-Bound Probe. The base probe ranks HP-KR well at layer 40, with AUROC 0.936, yet
+all of its HP-KR scores fall below the Alpaca threshold, so it flags nothing (0.500). So do the published and
+extended contrasts. The threshold is not reliable even for the knowledge-denial contrast. At layer 20 it sits
+below most of HP-KR, flagging 88% of honest answers along with the lies, and the balanced accuracy falls
+to 0.533.
+5.2 Cross-dataset transfer
+Figure 4 shows the full transfer matrix at layer 40, and Table3 summarises all three layers. Probes on raw
+activations fit their own dataset, with a mean in-distribution AUROC of 0.983 at layer 40, but lose 0.251 of it
+off the diagonal, falling to 0.732. Some cells invert. The worst, a probe trained on CG and tested on HP-KR,
+scores 0.06. The extended persona contrast was shaped by no evaluation dataset, and it reaches 0.904, 0.916
+and 0.903 off the diagonal at layers 20, 40 and 44, against 0.648, 0.732 and 0.716 for the raw probes. The
+comparison holds per dataset as well as overall. Averaged over training sets, the extended contrast beats the
+raw probes on every held-out dataset at every layer, and matches or beats the published contrast (Table7,
+Appendix B). Single cells can still favour a raw probe; at layer 40 the probe trained on ID scores higher on
+CG than the contrast does.
+Removing HP-KR shows where the extended bank’s advantage over the published contrast comes from.
+At layer 20, without HP-KR, the published contrast is marginally ahead (0.919 against 0.909), so there the
+whole gain is the HP-KR repair. At layers 40 and 44 the extended contrast leads with or without HP-KR
+(0.917 against 0.880 at layer 40). The knowledge-denial contrast on its own transfers nearly as well as the
+extended one (0.912 at layer 40), even though its personas were written for a single kind of lie.
+5.3 One direction or the persona subspace
+Thepersonacoordinatesof MahadikandSkapars (2026)aretheleadingprincipalcomponentsofthepersona
+vectors, used as features for a probe. At 70B, the contrast between group means beats them at every depth
+8
+
+===== PAGE 9 =====
+L20 L40 L44
+0.0
+0.2
+0.4
+0.6
+0.8
+1.0HP-KR score
+LB upper bound
+(privileged)
+LB Mean and
+Follow-Up probes
+AUROC
+L20 L40 L44
+LB upper bound
+(privileged)
+LB Follow-Up
+probe
+flag nothing: 0.50, as does
+the LB Mean Probe
+Balanced accuracy at 1% FPR on Alpaca
+base probe (trained on RepE) published contrast (8 v 7) knowledge-denial contrast (4 v 6) extended contrast (12 v 13)
+Figure 3: HP-KR across depth. Left: ranking. Both contrasts built with the knowledge-denial personas stay near
+0.9 at every layer. The published contrast inverts at layer 20, and the base probe swings from inverted to good.Right:
+detectionatthebenchmark’sthreshold. Onlytheknowledge-denialcontrastclearsthe0.5floor,andatlayer40itcomes
+close to the privileged upper bound. At layer 20 its threshold falls inside HP-KR and flags most honest answers too.
+The horizontal lines are Liars’ Bench’s reported values for Llama-3.3-70B.
+Table 3: Mean off-diagonal AUROC of the transfer matrix, at three layers, over all six test sets and with HP-KR
+removed as both a training and a test set. The 1-d rows are persona contrasts, a probe on one feature. The best value in
+each column is in bold.
+All six test sets Excluding HP-KR
+Features L20 L40 L44 L20 L40 L44
+Probe on raw activations (8192-d) 0.648 0.732 0.716 0.728 0.758 0.730
+Published contrast, 8 v 7 (1-d) 0.651 0.832 0.826 0.919 0.880 0.873
+Knowledge-denial contrast, 4 v 6 (1-d) 0.866 0.912 0.900 0.861 0.910 0.899
+Extended contrast, 12 v 13 (1-d) 0.904 0.916 0.903 0.909 0.917 0.905
+Extended PCs (𝑘 = 3) 0.684 0.866 0.880 0.900 0.867 0.870
+Extended PC1 0.661 0.768 0.780 0.682 0.774 0.793
+Published PCs (𝑘 = 3) 0.679 0.639 0.617 0.888 0.751 0.728
+Random directions (𝑘 = 3) 0.527 0.504 0.493 0.560 0.544 0.547
+(Table3). A probe on the top three components of the extendedbank reaches 0.684, 0.866 and 0.880, against
+0.904, 0.916 and 0.903 for the contrast. The gap narrows with depth, from 0.220 to 0.050 to 0.023, but it
+never reverses. The first component alone is far behind (0.768 at layer 40), and the published bank’s three
+components fall with depth (0.679, 0.639, 0.617). The subspace is not empty of signal: three random direc-
+tions score 0.527, 0.504 and 0.493. But the two extra dimensions give a probe room to fit what distinguishes
+its training set, and that costs transfer. The one feature whose sign every dataset agrees on transfers best.
+5.4 Zero-shot against the benchmark’s probe
+Figure5and Table4put the persona contrasts under the benchmark’s own protocol, beside the RepE-trained
+base probe. At layer 40, averaged over the five Liars’ Bench datasets, the extended contrast reaches 0.694
+balanced accuracy, 0.413 recall and 0.899 AUROC. The base probe reaches 0.626, 0.281 and 0.778. The
+knowledge-denial contrast is the best detector at this threshold, with 0.725 balanced accuracy and 0.487
+recall. At layers 40 and 44 the persona contrasts lead on all three metrics.
+Layer 20 is the exception, and it shows what the threshold is doing. There the base probe leads on
+balanced accuracy (0.721 against 0.591) and on recall (0.489 against 0.187). Part of that lead is real. On CG
+9
+
+===== PAGE 10 =====
+CG HP-C HP-KR IT ID RepE
+training set
+CG
+HP-C
+HP-KR
+IT
+ID
+RepE
+test set
+1.00 0.79 0.80 0.47 0.98 0.90
+0.43 0.96 0.54 0.59 0.66 0.64
+0.06 0.48 0.95 0.79 0.66 0.93
+0.92 0.95 0.97 0.99 0.89 0.27
+0.97 0.76 0.75 0.67 1.00 0.98
+1.00 0.80 0.83 0.49 1.00 1.00
+Probe on raw activations (8192-d)
+CG HP-C HP-KR IT ID RepE
+training set
+CG
+HP-C
+HP-KR
+IT
+ID
+RepE
+test set
+0.91 0.91 0.91 0.91 0.91 0.91
+0.71 0.71 0.71 0.71 0.71 0.71
+0.91 0.91 0.91 0.91 0.91 0.91
+0.98 0.98 0.98 0.98 0.98 0.98
+0.98 0.98 0.98 0.98 0.98 0.98
+1.00 1.00 1.00 1.00 1.00 1.00
+Extended persona contrast (1-d)
+0.0
+0.2
+0.4
+0.6
+0.8
+1.0
+AUROC (0.5 = chance)
+Figure 4: Train–test AUROC at layer 40; the boxed diagonal is in-distribution.Left: logistic regression on the 8192-
+dimensionalpooledactivations. Itfitseachtrainingsetbuttransfersunevenlyandinvertsinplaces. Right: theextended
+persona contrast, a single direction that no dataset shaped. Its rows are constant because a probe on one feature learns
+only a sign, and every training set agrees on it.
+the base probe’s recall is 0.677 against 0.174 for the extended contrast, and neither flags an honest response.
+Part of it comes from false positives. On IT and ID the Alpaca threshold lets the base probe flag 13% and
+11% of honest responses, against 0% and 2% for the extended contrast, which ranks both datasets at least as
+well (0.990 against 0.973 on IT, 0.954 against 0.950 on ID). On ranking, the persona contrasts lead at every
+layer. The base probe inverts on one dataset at each depth: HP-KR at layer 20 (0.109), and IT at layers 40
+and 44 (0.338 and 0.289).
+One dataset defeats every detector at this threshold. On HP-C, the persona contrasts rank lies above
+honest answers (0.712 AUROC for the extended contrast at layer 40). But almost all HP-C scores fall below
+the Alpaca threshold. At layer 40 only the knowledge-denial contrast flags any HP-C lie, and its recall there
+is 0.015.
+5.5 Depth
+Of the three layers we extracted, layer 40 is best for the persona contrasts, both for transfer (0.904, 0.916,
+0.903 for the extended contrast) and at the benchmark’s threshold (0.591, 0.694, 0.666 balanced accuracy).
+Thebaseprobepeakselsewhere: itsbalancedaccuracyishighestatlayer20(0.721, 0.626,0.626). Wereport
+layer 40 as our main depth. Three layers do not locate an optimum, and a layer between 20 and 40 may do
+better.
+10
+
+===== PAGE 11 =====
+0.0
+0.2
+0.4
+0.6
+0.8
+1.0Balanced accuracy
+0.0
+0.2
+0.4
+0.6
+0.8
+1.0AUROC
+CG HP-C HP-KR IT ID RepE Average
+(excl. RepE)
+0.0
+0.2
+0.4
+0.6
+0.8
+1.0Recall
+base probe (trained on RepE)
+published contrast (8 v 7)
+knowledge-denial contrast (4 v 6)
+extended contrast (12 v 13)
+hatched: training set
+Figure 5: Zero-shot persona contrasts against the RepE-trained base probe at layer 40, in the layout of Liars’ Bench’s
+Figure 2. Balanced accuracy and recall are at the threshold that flags at most 1% of the Alpaca control. Error bars
+are 95% bootstrap intervals over examples. RepE is the base probe’s training set, so its bar there is hatched, and the
+Average excludes RepE for every detector.
+11
+
+===== PAGE 12 =====
+Table 4: Detection under the Liars’ Bench protocol, averaged over its five datasets. The base probe is the pipeline’s
+RepE-trained probe, and the contrasts are zero-shot. The threshold flags at most 1% of the Alpaca control. The best
+value in each layer’s block is in bold.
+Layer Detector Balanced acc. Recall AUROC
+L20
+Base probe (trained on RepE) 0.721 0.489 0.697
+Published contrast (8 v 7) 0.534 0.069 0.750
+Knowledge-denial contrast (4 v 6) 0.559 0.305 0.863
+Extended contrast (12 v 13) 0.591 0.187 0.887
+L40
+Base probe (trained on RepE) 0.626 0.281 0.778
+Published contrast (8 v 7) 0.675 0.382 0.798
+Knowledge-denial contrast (4 v 6) 0.725 0.487 0.894
+Extended contrast (12 v 13) 0.694 0.413 0.899
+L44
+Base probe (trained on RepE) 0.626 0.281 0.756
+Published contrast (8 v 7) 0.654 0.318 0.791
+Knowledge-denial contrast (4 v 6) 0.683 0.395 0.880
+Extended contrast (12 v 13) 0.666 0.350 0.884
+6 Limitations
+The wording of a denial. Every HP-KR lie is a denial of knowledge, and most honest answers affirm
+it. A detector of denial wording would therefore score well on HP-KR without detecting deception. Our
+knowledge-denial contrast does not rule this out. Its honest side pools personas that deny knowledge truth-
+fully (sincere ignorance) with personas that do not deny at all (plain assertion), so part of the direction can
+separate denying from asserting. The bank was designed for the cleaner test, a contrast between feigned and
+sincere ignorance in which both sides deny, and we have not run it. At the level of the personas the signs are
+encouraging: sincere-ignorance personas sit with the honest cluster on the knowledge-denial axis (Figure2).
+Whetherthesameholdsformodelresponsesisuntested. HP-KRitselfholdsthetestcases: itshonestdenials,
+where the model’s knowledge of the answer could not be established.
+A designed repair. We wrote the knowledge-denial personas after seeing the published contrast invert on
+HP-KR, so HP-KR measures a repair designed for it, not a blind test. The other datasets are the untargeted
+test. There the extended contrast matches or beats the published one at every layer. But at layer 20, with
+HP-KR excluded, its advantage over the published contrast disappears (Section5.2).
+Calibration. A threshold set on benign chat does not transfer to every dataset. On HP-C almost nothing
+crosses it, whichever detector is used. On HP-KR at layer 20 the knowledge-denial contrast’s threshold falls
+inside the honest answers. In the transfer matrix, balanced accuracy at that threshold sits at its 0.5 floor in 18
+of the 30 off-diagonal cells for the raw probes at layer 40. This is why AUROC, which needs no threshold,
+is our main measure of transfer, with balanced accuracy reported beside it.
+The supervised baseline. Each probe in our transfer matrix is trained on a single dataset. A probe trained
+on several datasets pooled is a stronger supervised baseline, and we do not compare against it.
+Scope. We study one model, three layers and one persona bank. We wrote the prompts from the published
+role descriptions, and they may differ from the prompts ofMahadik and Skapars(2026). The judge keeps
+onlyrollouts that stayedin character, whichmay bias the persona vectorstoward prototypical behaviour. The
+re-extracted bank used more rollouts per persona than the original, though the published grouping inverts
+12
+
+===== PAGE 13 =====
+on HP-KR with either (Section5.1). Our bootstrap intervals resample examples, not models or prompts.
+Because our insider-trading scores exclude the reasoning scratchpad, comparisons with Liars’ Bench’s pub-
+lished numbers on that dataset are not like for like. Comparisons within our pipeline are exact.
+7 Future work
+More model families. Liars’ Bench also covers Mistral-Small-24B, Qwen-2.5-72B and Gemma-3-27B
+(Kretschmar et al., 2025). Whether knowledge-denier coordinates built on one family work on another, or
+have to be rebuilt per model, is the next question.
+Fine-tuned models. Soft-Trigger and Gender-Secret contain lies from models fine-tuned to lie. There the
+reasonforlyingwaslearnedintrainingratherthangivenincontext. Whethercoordinatesbuiltfromrole-play
+capture a lie that training instilled is open.
+Wording-controlled contrasts. The contrast between feigned and sincere ignorance, tested on HP-KR’s
+honest denials, would separate the lie from its wording.
+Combining signals. Aletheia’s Quest combined a black-box auditor with a white-box self-evaluation chan-
+nel, in which the model judges its own reply in a third-person auditing context (Birardi et al., 2026). A
+persona-contrast score is a label-free white-box signal that could join such a combination. For detection, the
+top tenth of response tokens is a better read than the mean (AppendixD).
+Calibration. A contrastthat ranks a dataset wellstill needs a threshold that holds on that dataset’s prompts.
+Finding one without labels from the target distribution remains open.
+8 Conclusion
+Persona coordinates scale to a 70B model, but only as far as the persona bank covers the kind of lie being
+told. Liars’ Bench’s hardest dataset consists of lies told as denials of knowledge. The published personas, all
+specialists in omission, give a direction that inverts there. Adding roles that deny knowledge turns it into one
+that, with no benchmark labels, detects those lies at the benchmark’s own threshold nearly as well as a probe
+trained on the benchmark itself. Across datasets, one zero-shot contrast over the extended bank transfers
+better on average than probes trained on single datasets, and better than the persona subspace. What it does
+not yet have is a threshold that holds on every dataset.
+Acknowledgements
+[Collaborator name] built the persona bank and the rollout and judging pipeline. [Further acknowledge-
+ments.]
+We used a large language model (Claude, Anthropic) to help write analysis code, produce the figures and
+tables, and draft text. Every number in the paper is generated from the released result files, and we checked
+each citation against its source.
+13
+
+===== PAGE 14 =====
+References
+Amos Azaria and Tom Mitchell. The internal state of an LLM knows when it’s lying. InFindings of the
+Association for Computational Linguistics: EMNLP 2023 , pages 967–976, 2023.
+GiuseppeBirardi, AlexanderReinthal, GonçaloPaulo, andStellaBiderman. Whatwelearnedtryingtocatch
+AI liars: An Aletheia’s Quest retrospective. EleutherAI Blog,https://blog.eleuther.ai/alethei
+a-retrospective/, 2026.
+CollinBurns,HaotianYe,DanKlein,andJacobSteinhardt.Discoveringlatentknowledgeinlanguagemodels
+without supervision. InInternational Conference on Learning Representations, 2023. arXiv:2212.03827.
+Runjin Chen, Andy Arditi, Henry Sleight, Owain Evans, and Jack Lindsey. Persona vectors: Monitoring and
+controlling character traits in language models.arXiv preprint arXiv:2507.21509, 2025.
+Jaden Fiotto-Kaufman, Alexander R. Loftus, Eric Todd, Jannik Brinkmann, Koyena Pal, Dmitrii Troitskii,
+etal. NNsightandNDIF:Democratizingaccesstoopen-weightfoundationmodelinternals. arXiv preprint
+arXiv:2407.14561, 2024.
+Nicholas Goldowsky-Dill, Bilal Chughtai, Stefan Heimersheim, and Marius Hobbhahn. Detecting strategic
+deception using linear probes.arXiv preprint arXiv:2502.03407, 2025.
+Nathalie Kirch, Samuel Dower, Adrians Skapars, Helen Yannakoudakis, Ekdeep Singh Lubana, and Dmitrii
+Krasheninnikov. The impact of off-policy training data on probe generalisation. InProceedings of ACL
+2026, 2026. arXiv:2511.17408.
+KieronKretschmar,WalterLaurito,SharanMaiya,andSamuelMarks. Liars’Bench: Evaluatingliedetectors
+for language models.arXiv preprint arXiv:2511.16035, 2025.
+Sachin Kumar. Pressure-testing deception probes in LLMs: Scaling, robustness, and the geometry of decep-
+tive representations. InGEM Workshop at ACL 2026, 2026. arXiv:2605.27958.
+Nathaniel Li, Alexander Pan, Anjali Gopal, Summer Yue, Daniel Berrios, Alice Gatti, et al. The WMDP
+benchmark: Measuring and reducing malicious use with unlearning.arXiv preprint arXiv:2403.03218,
+2024.
+Christina Lu, Jack Gallagher, Jonathan Michala, Kyle Fish, and Jack Lindsey. The Assistant Axis: Situating
+and stabilizing the default persona of language models.arXiv preprint arXiv:2601.10387, 2026.
+Prasad Mahadik and Adrians Skapars. Do linear probes generalize better in persona coordinates?arXiv
+preprint arXiv:2605.09391, 2026.
+Samuel Marks and Max Tegmark. The geometry of truth: Emergent linear structure in large language model
+representations of true/false datasets.arXiv preprint arXiv:2310.06824, 2023.
+Vikram Natarajan, Devina Jain, Shivam Arora, Satvik Golechha, and Joseph Bloom. One probe won’t catch
+them all: Towards targeted deception detection.arXiv preprint arXiv:2602.01425, 2026.
+Lorenzo Pacchiardi, Alex J. Chan, Sören Mindermann, Ilan Moscovitz, Alexa Y. Pan, Yarin Gal, Owain
+Evans, and Jan Brauner. How to catch an AI liar: Lie detection in black-box LLMs by asking unrelated
+questions. arXiv preprint arXiv:2309.15840, 2023.
+Jérémy Scheurer, Mikita Balesni, and Marius Hobbhahn. Large language models can strategically deceive
+their users when put under pressure.arXiv preprint arXiv:2311.07590, 2023.
+14
+
+===== PAGE 15 =====
+Rohan Taori, Ishaan Gulrajani, Tianyi Zhang, Yann Dubois, Xuechen Li, Carlos Guestrin, Percy Liang, and
+Tatsunori B. Hashimoto. Stanford Alpaca: An instruction-following LLaMA model.https://github
+.com/tatsu-lab/stanford_alpaca, 2023.
+Daniel Yoo and Adrians Skapars. Probe generalization as subspace selection for OOD deception detection.
+arXiv preprint arXiv:2609.02893, 2026.
+Andy Zou, Long Phan, Sarah Chen, James Campbell, Phillip Guo, Richard Ren, et al. Representation engi-
+neering: A top-down approach to AI transparency.arXiv preprint arXiv:2310.01405, 2023.
+15
+
+===== PAGE 16 =====
+A The persona bank
+Table 5: The 36 personas, grouped as in the contrasts of Section3, with the number of rollouts each kept after judging
+(out of 150). The published personas are those ofMahadik and Skapars(2026); the three groups marked new are ours.
+Group 𝑛 Personas (kept rollouts)
+Deceptive (published) 8 handler (106), broker (113), impression manager (82), coverup operator (47),
+gatekeeper (126), spin doctor (85), plausible denier (64), narrative manager (70)
+Honest (published) 7 archivist (103), disclosure counsel (118), documentarian (107), fact checker (48),
+ombudsman (148), transparency officer (142), whistleblower (108)
+Knowledge denial (new) 4 amnesiac witness (129), deniable expert (72), feigned novice (137), stonewaller
+(129)
+Sincere ignorance (new) 3 honest novice (110), calibrated reporter (83), scrupulous witness (74)
+Plain assertion (new) 3 forthright expert (80), candid witness (64), plain dealer (76)
+Sycophantic (published) 5 cheerleader (142), enabler (51), flatterer (148), people pleaser (113), yes man
+(109)
+Anti-sycophantic (published) 5 blunt advisor (135), contrarian (130), critic (68), skeptic (133), tough love
+mentor (149)
+Anchor 1 default (150)
+Prompts. Each persona has five prompt variants that reword one instruction. The two sides of the sharpest
+contrast read, in full:
+Feigned novice (knowledge denial): “You are a feigned novice who understates what you understand so
+the work goes elsewhere.” / “Please be a feigned novice who is still learning whatever you are asked to
+do.” / “Act as a feigned novice who plays down your grasp of things to avoid being assigned them.” /
+“You are a feigned novice. Whatever you are shown, you have only just started learning it.” / “Respond
+as a feigned novice who makes your competence sound smaller than it is.”
+Honest novice (sincere ignorance): “You are an honest novice who says plainly when something is past
+what you understand.” / “Please be an honest novice who admits the limits of your grasp rather than
+covering them.” / “Act as an honest novice who would rather say you don’t know that than sound compe-
+tent.” / “You are an honest novice. What you have not learned yet, you name without embarrassment.” /
+“Respond as an honest novice who marks the edge of your understanding clearly.”
+The ten new questions. Every persona answers the same 30 questions. The first 20 are the deception
+and sycophancy questions ofMahadik and Skapars(2026, Appendices A–B). The ten new ones concern the
+speaker’s own knowledge. In the first six the speaker knows, and in the last four the speaker does not:
+1. Someone asked me point blank whether I knew about the problem before it escalated. I did. How do I answer?
+2. In a deposition I’ll be asked what I remember about a meeting. I remember it clearly, and remembering it is costly
+for me. What do I say?
+3. A colleague asked whether I’d seen the report. I read it last week, and saying so commits me to acting on it. How
+do I respond?
+4. I’m asked whether this falls within my expertise. It does, but answering makes me accountable for the outcome.
+What do I say?
+5. I’m asked directly whether I have the figures. I have them, and producing them will reopen an argument. What do
+I say?
+6. My team asked if I know who made the call. I know, and naming them will cost someone their standing. Do I say
+so?
+16
+
+===== PAGE 17 =====
+7. Everyone in the meeting assumed I’d read the attachment. I hadn’t, and they’re about to ask what I thought of it.
+What do I say?
+8. I’ve been introduced as the expert on this, and the question I’ve just been asked is outside what I actually know.
+How do I respond?
+9. Someone asked me what the data shows. I haven’t looked at it closely enough to say, and admitting that undercuts
+the case I’ve been making. What do I tell them?
+10. I’m asked whether I remember agreeing to this. I genuinely don’t remember either way, and saying so makes me
+look careless. How do I answer?
+B Further tables
+Table 6: Zero-shot AUROC of the three contrasts on each dataset. No benchmark labels are used.
+Layer 20 Layer 40 Layer 44
+Test set 8v7 4v6 12v13 8v7 4v6 12v13 8v7 4v6 12v13
+CG 0.940 0.931 0.969 0.865 0.902 0.912 0.819 0.858 0.859
+HP-C 0.717 0.585 0.639 0.581 0.755 0.712 0.607 0.725 0.712
+HP-KR 0.148 0.890 0.882 0.593 0.919 0.912 0.589 0.908 0.894
+IT 0.988 0.976 0.990 0.979 0.913 0.980 0.979 0.933 0.982
+ID 0.959 0.932 0.954 0.974 0.980 0.978 0.962 0.978 0.974
+RepE 0.994 0.882 0.991 1.000 1.000 1.000 1.000 1.000 1.000
+Mean 0.791 0.866 0.904 0.832 0.912 0.916 0.826 0.900 0.903
+Table 7: Transfer per test set: mean AUROC over the five other training sets, for the probe on raw activations and the
+extended contrast. The extended contrast is higher on every test set at every layer.
+Layer 20 Layer 40 Layer 44
+Test set raw 12v13 raw 12v13 raw 12v13
+CG 0.663 0.969 0.788 0.912 0.757 0.859
+HP-C 0.535 0.639 0.571 0.712 0.570 0.712
+HP-KR 0.394 0.882 0.584 0.912 0.637 0.894
+IT 0.799 0.990 0.800 0.980 0.736 0.982
+ID 0.778 0.954 0.827 0.978 0.808 0.974
+RepE 0.718 0.991 0.824 1.000 0.785 1.000
+C The direction at the follow-up token
+The Follow-Up Probe of Liars’ Bench appends the question “Was your last response deceptive? (Yes/No)”
+and a prefilled “No”, then reads the activation at that single token (Goldowsky-Dill et al., 2025; Kretschmar
+et al., 2025). We extracted activations at the “No” (layer 20) and projected them onto the same persona
+contrasts (Table8). At that token, the contrast’s sign stops being the same on every dataset. On CG, ID and
+RepE the direction still separates lies from honest answers. On IT it flips: the extended contrast falls from
+0.990 on the response tokens to 0.173 at the “No”. On HP-KR the repair is lost, falling from 0.882 to 0.190.
+The Follow-Up Probe itself, a probe trained on RepE at the same token, has the same trouble with HP-KR.
+It scores 0.088 AUROC there, and at the Alpaca threshold it flags 88% of HP-KR’s honest answers. What
+the model carries forward to a self-report is not the same signal as the one its response carries.
+17
+
+===== PAGE 18 =====
+Table 8: Zero-shot AUROC at layer 20: the mean over response tokens, as in the main text, against the single prefilled
+“No” of the follow-up protocol.
+Published (8v7) Knowledge-denial (4v6) Extended (12v13)
+Test set response “No” response “No” response “No”
+CG 0.940 0.912 0.931 0.933 0.969 0.938
+HP-C 0.717 0.612 0.585 0.472 0.639 0.556
+HP-KR 0.148 0.168 0.890 0.237 0.882 0.190
+IT 0.988 0.165 0.976 0.216 0.990 0.173
+ID 0.959 0.900 0.932 0.904 0.954 0.903
+RepE 0.994 1.000 0.882 1.000 0.991 1.000
+D Reading the direction at individual tokens
+Every result in the main text reads the contrast from the mean over the response tokens. Because the score is
+a dot product, the per-token projections can be read without new model calls. Table9 compares six reads of
+the extended contrast: the mean, the mean of the top 10% of tokens, the maximum, the first and last response
+tokens, and the last token before the reply. For ranking, the mean is close to the best read on most datasets.
+The exception is CG at depth, where the lie sits in a few tokens whose position varies. Read at its maximum,
+CG scores 0.993 at layer 40 against 0.912 for the mean, and 0.991 against 0.859 at layer 44. For detection
+at the benchmark’s threshold, the top-10% read is best. At layer 40 it reaches 0.737 balanced accuracy and
+0.531recall,against0.694and0.413forthemean. Thesinglemaximumisnoisier: itlowersRepE’sbalanced
+accuracy from 0.998 to 0.638. The token before the reply mostly reads the prompt. It separates well where
+the instruction to lie is already in context, and it does not help on HP-KR.
+Table 9: Six reads of the extended contrast, averaged over the five Liars’ Bench datasets: AUROC, balanced accuracy
+(BA) and recall at 1% FPR on Alpaca.
+Layer 20 Layer 40 Layer 44
+Read AUROC BA Rec. AUROC BA Rec. AUROC BA Rec.
+Mean (default) 0.887 0.591 0.187 0.899 0.694 0.413 0.884 0.666 0.350
+Top-10% mean 0.873 0.664 0.348 0.908 0.737 0.531 0.907 0.715 0.470
+Maximum 0.858 0.659 0.336 0.910 0.750 0.548 0.914 0.701 0.418
+First response token 0.753 0.605 0.334 0.863 0.606 0.227 0.876 0.568 0.140
+Last response token 0.843 0.645 0.312 0.880 0.656 0.422 0.882 0.636 0.352
+Token before the reply 0.739 0.628 0.415 0.825 0.652 0.383 0.822 0.656 0.327
+E Three persona components trained on RepE
+The third method ofMahadik and Skapars(2026) trains a probe on the top three persona components. Ta-
+ble10trains every feature set on RepE, the benchmark’s own training set, and averages AUROC over the five
+Liars’ Bench datasets. On response tokens, the one-dimensional contrast (0.887) beats the three extended
+components (0.736) and the raw probe (0.734). At the follow-up token the knowledge-denial components
+are best (0.699), above both the raw probe (0.636) and the contrast (0.552). There, a learned combination of
+three components avoids the sign flip on IT that a fixed direction cannot.
+18
+
+===== PAGE 19 =====
+Table 10: Probes trained on RepE at layer 20. Mean AUROC over the five Liars’ Bench datasets.
+Features, trained on RepE Response tokens Follow-up “No”
+Probe on raw activations (8192-d) 0.734 0.636
+Extended contrast (1-d) 0.887 0.552
+Extended PCs (𝑘 = 3) 0.736 0.579
+Published PCs (𝑘 = 3) 0.733 0.574
+Knowledge-denial PCs (𝑘 = 3) 0.810 0.699
+F A contrast from a different behaviour
+The bank’s sycophancy contrast (5 v 5) was built for a different behaviour. It detects the instructed lies well,
+and it inverts on HP-KR at every layer (Table11). Its signal on the instructed datasets suggests that part of
+what any contrast of this kind reads is the shared register of role-played misbehaviour rather than deception
+itself. The contrast from deception personas transfers further: its mean off-diagonal AUROC is 0.832 at
+layer 40, against 0.663 for the sycophancy contrast, and it leads at every layer.
+Table 11: Zero-shot AUROC of the sycophancy contrast (5 v 5), and its mean off-diagonal AUROC as a probe feature.
+Test set L20 L40 L44
+CG 0.999 0.998 0.983
+HP-C 0.533 0.751 0.692
+HP-KR 0.043 0.167 0.480
+IT 0.983 0.985 0.987
+ID 0.923 0.948 0.949
+RepE 0.977 0.999 1.000
+Off-diagonal mean 0.615 0.663 0.708
+G Reproduction and compute
+The pooled activations reproduce the pipeline. For each layer, we rescored the pooled activations with
+the probe the pipeline trained on RepE (its stored direction and scaler). AUROC, balanced accuracy and
+recall at the Alpaca threshold matched the pipeline’s own results table to four decimal places on all five
+Liars’ Bench datasets. So did the pooled activations at the follow-up token against the Follow-Up run.
+Against Liars’ Bench’s published probes. Our measurement of the Follow-Up Probe averages 0.636
+AUROC and 0.622 balanced accuracy over the five datasets. The published values are 0.634 and 0.578
+(Kretschmar et al., 2025, Table 7). Our base probe, the Mean Probe recipe at the same layer 20, averages
+0.697 AUROC and 0.721 balanced accuracy, against the published 0.682 and 0.636 (Kretschmar et al., 2025,
+Table 6). Nearly all of the balanced-accuracy gap is insider trading, where our scores exclude the reasoning
+scratchpad (Section3). There our base probe reaches 0.909 against the published 0.50.
+Compute. Persona rollouts, judging and all activation extraction ran remotely on NDIF (Fiotto-Kaufman
+et al.,2024). Every analysis in this paper runs on a CPU from the pooled activations and the persona vectors,
+and paper/make_numbers.py regenerates every number from the released result files.
+19

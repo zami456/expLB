@@ -1,0 +1,48 @@
+
+==============================================================================
+== F-69  passA matched slice repaired
+==============================================================================
+ csv: 11587174 B  mtime 2026-09-15 12:44:28.324960
+ csv rows total=7068  llama rows=2139  text_matched ids=258
+ deceptive column over the matched ids: {'True': 124, 'False': 134}
+
+  passA 747630 B  mtime 2026-09-21 11:29:40.685341
+    rows=2139  keys=['dataset', 'item_id', 'label', 'label_raw', 'label_semantics', 'prompt_fidelity', 'prompt_len', 'response_len', 'row_id', 'sample_idx', 'span', 'span_len']
+    md5 of file: edd113edf6b8249a46ce9163a20fc136
+    rows in the text_matched slice: 258
+    of those: deceptive=124 honest=134
+
+  passB 623208 B  mtime 2026-09-15 21:16:35.004478
+    rows=2139  keys=['dataset', 'item_id', 'label', 'label_raw', 'label_semantics', 'prompt_fidelity', 'row_id', 'sample_idx', 'span_len']
+    md5 of file: 2a0309af771ab32aa7a08f64924eb998
+    rows in the text_matched slice: 258
+    of those: deceptive=124 honest=134
+
+  passC 747630 B  mtime 2026-09-21 11:52:44.083629
+    rows=2139  keys=['dataset', 'item_id', 'label', 'label_raw', 'label_semantics', 'prompt_fidelity', 'prompt_len', 'response_len', 'row_id', 'sample_idx', 'span', 'span_len']
+    md5 of file: edd113edf6b8249a46ce9163a20fc136
+    rows in the text_matched slice: 258
+    of those: deceptive=124 honest=134
+
+  -- logs/hpkr_topup.status --
+       1| ﻿START 2026-09-21 10:53:42  jobs=A C
+       2| 2026-09-21 10:53:44  before: passA=200  passC=200  target=2139
+       3| 2026-09-21 10:53:44  passA: harm-pressure-knowledge-report at all 80 layers (adds ~1939 rows, ~2.6 MB/row => ~5 GB)
+       4| 2026-09-21 11:29:46  passA  measured=2139 rows  predicted=2139  PASS
+       5| 2026-09-21 11:29:46  passC: harm-pressure-knowledge-report per-token at 6 layers (adds ~1939 rows, ~0.8 MB/row => ~1.6 GB)
+       6| 2026-09-21 11:52:46  passC  measured=2139 rows  predicted=2139  PASS
+       7| 2026-09-21 11:52:46  C: 47.8 GB free
+       8| 2026-09-21 11:53:12  rclone passA exit 0
+       9| 2026-09-21 11:53:51  rclone passC exit 0
+      10| 2026-09-21 11:53:51  DONE
+      11| START 2026-09-22 15:47:01  jobs=A C
+      12| 2026-09-22 15:47:05  before: passA=2139  passC=2139  target=2139
+      13| 2026-09-22 15:47:05  passA: harm-pressure-knowledge-report at all 80 layers (adds ~0 rows, ~2.6 MB/row => ~5 GB)
+      14| 2026-09-22 15:47:23  passA  measured=2139 rows  predicted=2139  PASS
+      15| 2026-09-22 15:47:23  passC: harm-pressure-knowledge-report per-token at 6 layers (adds ~0 rows, ~0.8 MB/row => ~1.6 GB)
+      16| 2026-09-22 15:47:42  passC  measured=2139 rows  predicted=2139  PASS
+      17| 2026-09-22 15:47:42  C: 68.2 GB free
+      18| 2026-09-22 15:47:42  rclone passA exit 1
+      19| 2026-09-22 15:47:43  rclone passC exit 1
+      20| 2026-09-22 15:47:43  DONE
+python exit 0

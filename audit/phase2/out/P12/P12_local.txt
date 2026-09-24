@@ -1,0 +1,152 @@
+==============================================================================
+O-006 / O-007  -- the collaborator's own files
+==============================================================================
+
+commit f386a72 -> f386a72583190756ebe05d51edb0bc97cd16a094
+  L20: n datasets = 6  ['convince_me__plain', 'harm_refusal_choice__plain', 'harm_refusal_knowledge_report__plain', 'insider_trading_cadenza__plain', 'instruct_dishonesty__plain', 'repe_honesty__plain']
+       summary.csv ext_axis1 off_diagonal_mean (verbatim) = '0.9041173922099752'
+       mean(zero_shot.csv auroc_ext_axis)                 = 0.904117392209975
+       |difference|                                       = 2.220e-16
+       summary.csv axis1 off_diagonal_mean = 0.6510800147121752
+       mean(zero_shot.csv auroc_axis)      = 0.7908803603   |diff| = 1.398e-01
+       trained single-source baseline (row 'baseline')    = 0.6478
+       margin  paper 8v7  vs baseline = +0.1431
+       margin  extended   vs baseline = +0.2563
+       kd personas worth              = +0.1132   share = 44.2%
+       matrix_baseline off-diag over all 6 = 0.6478 (n=30)
+       [drop repe_honesty] baseline over the 5 = 0.6085 (n=20)   axis1 0.7503 margin +0.1418   kd worth +0.1364
+  L40: n datasets = 6  ['convince_me__plain', 'harm_refusal_choice__plain', 'harm_refusal_knowledge_report__plain', 'insider_trading_cadenza__plain', 'instruct_dishonesty__plain', 'repe_honesty__plain']
+       summary.csv ext_axis1 off_diagonal_mean (verbatim) = '0.9158352734669751'
+       mean(zero_shot.csv auroc_ext_axis)                 = 0.9158352734669751
+       |difference|                                       = 0.000e+00
+       summary.csv axis1 off_diagonal_mean = 0.8318937060798296
+       mean(zero_shot.csv auroc_axis)      = 0.8318937061   |diff| = 0.000e+00
+       trained single-source baseline (row 'baseline')    = 0.7320
+       margin  paper 8v7  vs baseline = +0.0999
+       margin  extended   vs baseline = +0.1838
+       kd personas worth              = +0.0839   share = 45.7%
+       matrix_baseline off-diag over all 6 = 0.7320 (n=30)
+       [drop repe_honesty] baseline over the 5 = 0.7064 (n=20)   axis1 0.7983 margin +0.0919   kd worth +0.1007
+
+commit origin/feat/persona-pc-ood -> 45b16d906da0e3da13b1abb34898e69311d688cf
+  L20: n datasets = 6  ['convince_me__plain', 'harm_refusal_choice__plain', 'harm_refusal_knowledge_report__plain', 'insider_trading_cadenza__plain', 'instruct_dishonesty__plain', 'repe_honesty__plain']
+       summary.csv ext_axis1 off_diagonal_mean (verbatim) = '0.9041173922099752'
+       mean(zero_shot.csv auroc_ext_axis)                 = 0.904117392209975
+       |difference|                                       = 2.220e-16
+       summary.csv axis1 off_diagonal_mean = 0.6510800147121752
+       mean(zero_shot.csv auroc_axis)      = 0.7908803603   |diff| = 1.398e-01
+       trained single-source baseline (row 'baseline')    = 0.6478
+       margin  paper 8v7  vs baseline = +0.1431
+       margin  extended   vs baseline = +0.2563
+       kd personas worth              = +0.1132   share = 44.2%
+       matrix_baseline off-diag over all 6 = 0.6478 (n=30)
+       [drop repe_honesty] baseline over the 5 = 0.6085 (n=20)   axis1 0.7503 margin +0.1418   kd worth +0.1364
+  L40: n datasets = 6  ['convince_me__plain', 'harm_refusal_choice__plain', 'harm_refusal_knowledge_report__plain', 'insider_trading_cadenza__plain', 'instruct_dishonesty__plain', 'repe_honesty__plain']
+       summary.csv ext_axis1 off_diagonal_mean (verbatim) = '0.9158352734669751'
+       mean(zero_shot.csv auroc_ext_axis)                 = 0.9158352734669751
+       |difference|                                       = 0.000e+00
+       summary.csv axis1 off_diagonal_mean = 0.8318937060798296
+       mean(zero_shot.csv auroc_axis)      = 0.8318937061   |diff| = 0.000e+00
+       trained single-source baseline (row 'baseline')    = 0.7320
+       margin  paper 8v7  vs baseline = +0.0999
+       margin  extended   vs baseline = +0.1838
+       kd personas worth              = +0.0839   share = 45.7%
+       matrix_baseline off-diag over all 6 = 0.7320 (n=30)
+       [drop repe_honesty] baseline over the 5 = 0.7064 (n=20)   axis1 0.7983 margin +0.0919   kd worth +0.1007
+==============================================================================
+O-006 attribution: extended_arms(), the base bank, and the role names
+==============================================================================
+  persona_ood.py found at: src/probes/deception-detection/deception_detection/scripts/persona_ood.py   (the briefing writes `scripts/persona_ood.py`)
+
+  --- extended_arms() ---
+    def extended_arms(
+        bank: persona_pcs.PersonaBank,
+    ) -> dict[str, Callable[[np.ndarray], np.ndarray]]:
+        """Zero-shot score functions for the persona groups only the extended bank has.
+    
+        Shared by `run` and `zeroshot` so the two cannot write different versions of
+        `zero_shot.csv`; an empty dict for a bank without the knowledge-denial personas.
+        """
+        if "denial" not in bank.axes:
+            return {}
+        ext_geom = persona_pcs.fit_geometry(
+            bank,
+            k=3,
+            deception=persona_pcs.DECEPTION_PERSONAS + persona_pcs.KNOWLEDGE_DENIAL_PERSONAS,
+            honesty=persona_pcs.HONESTY_PERSONAS + persona_pcs.KNOWLEDGE_CANDOUR_PERSONAS,
+            axis_name="extended",
+        )
+        denial_geom = persona_pcs.fit_geometry(
+            bank,
+            k=3,
+            deception=persona_pcs.KNOWLEDGE_DENIAL_PERSONAS,
+            honesty=persona_pcs.KNOWLEDGE_CANDOUR_PERSONAS,
+            axis_name="denial",
+        )
+
+  deception_detection/persona_pcs.py lines 29-32 (the briefing cites :31)
+     29: from deception_detection.utils import REPO_ROOT
+     30: 
+     31: BANK_PATH = REPO_ROOT / "paper16_L20_sharedquestions" / "paper16_L20.pt"
+     32: 
+
+  persona group tuples in HIS persona_pcs.py:
+    DECEPTION_PERSONAS           n=8   ['pc_broker', 'pc_coverup_operator', 'pc_gatekeeper', 'pc_handler', 'pc_impression_manager', 'pc_narrative_manager', 'pc_plausible_denier', 'pc_spin_doctor']
+    HONESTY_PERSONAS             n=7   ['pc_archivist', 'pc_disclosure_counsel', 'pc_documentarian', 'pc_fact_checker', 'pc_ombudsman', 'pc_transparency_officer', 'pc_whistleblower']
+    SYCOPHANCY_PERSONAS          n=5   ['pc_cheerleader', 'pc_enabler', 'pc_flatterer', 'pc_people_pleaser', 'pc_yes_man']
+    ANTI_SYCOPHANCY_PERSONAS     n=5   ['pc_blunt_advisor', 'pc_contrarian', 'pc_critic', 'pc_skeptic', 'pc_tough_love_mentor']
+    KNOWLEDGE_DENIAL_PERSONAS    n=4   ['pc_amnesiac_witness', 'pc_deniable_expert', 'pc_feigned_novice', 'pc_stonewaller']
+    KNOWLEDGE_CANDOUR_PERSONAS   n=6   ['pc_calibrated_reporter', 'pc_candid_witness', 'pc_forthright_expert', 'pc_honest_novice', 'pc_plain_dealer', 'pc_scrupulous_witness']
+
+  where the extended axis is actually built (persona_pcs.py):
+    axes["extended"] = mean_of(DECEPTION_PERSONAS + KNOWLEDGE_DENIAL_PERSONAS) - mean_of(
+                HONESTY_PERSONAS + KNOWLEDGE_CANDOUR_PERSONAS
+            )
+        re
+
+  kd/personas/kd_role_groups.json groups:
+    deception              n=8   ['pc_broker', 'pc_coverup_operator', 'pc_gatekeeper', 'pc_handler', 'pc_impression_manager', 'pc_narrative_manager', 'pc_plausible_denier', 'pc_spin_doctor']
+    honesty                n=7   ['pc_archivist', 'pc_disclosure_counsel', 'pc_documentarian', 'pc_fact_checker', 'pc_ombudsman', 'pc_transparency_officer', 'pc_whistleblower']
+    sycophancy             n=5   ['pc_cheerleader', 'pc_enabler', 'pc_flatterer', 'pc_people_pleaser', 'pc_yes_man']
+    anti_sycophancy        n=5   ['pc_blunt_advisor', 'pc_contrarian', 'pc_critic', 'pc_skeptic', 'pc_tough_love_mentor']
+    assistant_anchor       n=1   ['default']
+    knowledge_denial       n=4   ['pc_amnesiac_witness', 'pc_deniable_expert', 'pc_feigned_novice', 'pc_stonewaller']
+    sincere_ignorance      n=3   ['pc_calibrated_reporter', 'pc_honest_novice', 'pc_scrupulous_witness']
+    plain_assertion        n=3   ['pc_candid_witness', 'pc_forthright_expert', 'pc_plain_dealer']
+
+  his 10 extra roles == our kd bank's 10 new roles ? True  (his 10, ours 10, symmetric difference [])
+  his KNOWLEDGE_DENIAL_PERSONAS == our `knowledge_denial` ? True
+  his KNOWLEDGE_CANDOUR_PERSONAS == our `sincere_ignorance` + `plain_assertion` ? True   <- two owner groups MERGED into one arm
+==============================================================================
+O-001  -- Claim 1's three numbers, from the git copy of kd11/matrices
+==============================================================================
+  file run-crossgen/kd11/matrices/mean_L40_s42.json
+  bank=axes_vectors_s3_fp32.pt  bank_name=paper16  k=5  control=alpaca  pooling=mean  layer=40  seed=42
+  zero-shot directions stored in this file: ['contrast', 'PC1']
+    zero-shot contrast   sycophancy_mt=0.4089   harm-pressure-knowledge-report=0.6436
+    zero-shot PC1        sycophancy_mt=0.3740   harm-pressure-knowledge-report=0.6678
+
+  TRAINED (paper probe), sycophancy_mt as TARGET = column mean over 10 sources:
+    axes           0.3551  (n=10)
+    pc:deception   0.3910  (n=10)
+    pc:unified     0.4451  (n=10)
+    raw            0.6013  (n=10)
+    datapca        0.5776  (n=10)
+    length         0.5820  (n=10)
+    random         0.5413  (n=10)
+  TRAINED, sycophancy_mt as SOURCE = row mean:
+    axes           0.3787  (n=10)
+    raw            0.5010  (n=10)
+    random         0.6327  (n=10)
+  TRAINED, harm-pressure-knowledge-report:
+    axes           as TARGET 0.4273   as SOURCE 0.3004
+    raw            as TARGET 0.6990   as SOURCE 0.6943
+    random         as TARGET 0.6984   as SOURCE 0.6590
+
+  27_crossgen.py: which axis the bare `contrast`/`PC1` rows use
+    _cands = [n for n in ("deception",) if n in bank["axes"] and n in bank["pca"]]
+        if not _cands:
+            _cands = [n for n in bank["axes"] if n != "assistant" and n in bank["pca"]]
+        if not _cands:
+            raise SystemExit("bank has no behaviour axis with a matching PCA basis for zero-shot")
+        _zs_axis = _cands[0]

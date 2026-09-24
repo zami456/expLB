@@ -1,0 +1,99 @@
+
+================================================================================================
+F-79  premise_L40_mean_s42.json  (Level 1: six headline AUROCs + two margins)
+================================================================================================
+  file: audit\cache\labpc\run-premise/premise_L40_mean_s42.json
+  layer=40 pooling=mean probe=paper seed=42 n_datasets=11
+  n_train = {'single_mean': 666, 'pooled_full': 7336, 'pooled_match': 414}
+  single_own_mean    stated 0.9506  file 0.950642  |d|=0.000042  MATCH
+  single             stated 0.6763  file 0.676316  |d|=0.000016  MATCH
+  pooled_full        stated 0.9447  file 0.944721  |d|=0.000021  MATCH
+  pooled_match       stated 0.8924  file 0.892400  |d|=0.000000  MATCH
+  pooled_lodo        stated 0.8545  file 0.854475  |d|=0.000025  MATCH
+  pooled_lodo_match  stated 0.8500  file 0.850015  |d|=0.000015  MATCH
+  margin  pooled_lodo - single        stated +0.178  computed +0.178159
+  margin  pooled_lodo_match - single  stated +0.174  computed +0.173698
+  predictors: cos R2=0.2440 (stated 0.244)  mahal_cos R2=0.0165 (stated 0.017)  covariance field = None  n_pairs=110 (stated 110)
+
+================================================================================================
+F-80  dataset-level paired bootstrap, recomputed (B=10,000, seed 42, unit = target dataset)
+================================================================================================
+  pooled_lodo - single_offdiag
+      stated   diff +0.1782  CI [+0.1430, +0.2129]  P(<=0) 0.0000
+      computed diff +0.1782  CI [+0.1430, +0.2129]  P(<=0) 0.0000  n=11  CLEARS
+  pooled_lodo_match - single_offdiag
+      stated   diff +0.1737  CI [+0.1256, +0.2239]  P(<=0) 0.0000
+      computed diff +0.1737  CI [+0.1256, +0.2239]  P(<=0) 0.0000  n=11  CLEARS
+  pooled_lodo - pooled_lodo_match
+      stated   diff +0.0045  CI [-0.0234, +0.0325]  P(<=0) 0.378
+      computed diff +0.0045  CI [-0.0234, +0.0325]  P(<=0) 0.3779  n=11  
+  single_own - pooled_lodo
+      stated   diff +0.0962  CI [+0.0553, +0.1360]  P(<=0) 0.0000
+      computed diff +0.0962  CI [+0.0553, +0.1360]  P(<=0) 0.0000  n=11  CLEARS
+
+  per-target table (stated vs file):
+    harm-pressure-knowledge-report   single 0.693 (st 0.693)  lodo 0.972 (st 0.972)  diff +0.279 (st +0.279)  ok
+    insider-trading                  single 0.607 (st 0.607)  lodo 0.856 (st 0.856)  diff +0.249 (st +0.249)  ok
+    convincing-game                  single 0.721 (st 0.721)  lodo 0.955 (st 0.955)  diff +0.234 (st +0.234)  ok
+    harm-pressure-kr-matched         single 0.613 (st 0.613)  lodo 0.806 (st 0.806)  diff +0.193 (st +0.193)  ok
+    sycophancy_mt                    single 0.617 (st 0.617)  lodo 0.802 (st 0.802)  diff +0.185 (st +0.185)  ok
+    roleplaying                      single 0.644 (st 0.644)  lodo 0.824 (st 0.824)  diff +0.180 (st +0.180)  ok
+    sandbagging_v2                   single 0.791 (st 0.791)  lodo 0.970 (st 0.970)  diff +0.178 (st +0.178)  ok
+    ai_liar                          single 0.691 (st 0.691)  lodo 0.857 (st 0.857)  diff +0.166 (st +0.166)  ok
+    instructed-deception             single 0.822 (st 0.822)  lodo 0.941 (st 0.941)  diff +0.119 (st +0.119)  ok
+    harm-pressure-choice             single 0.652 (st 0.652)  lodo 0.756 (st 0.756)  diff +0.103 (st +0.103)  ok
+    mask                             single 0.588 (st 0.588)  lodo 0.660 (st 0.660)  diff +0.072 (st +0.072)  ok
+  rows disagreeing with the ledger: 0/11;  targets where pooled beats single: 11/11 (ledger says 11 of 11)
+  worst target mask +0.072 (ledger: mask +0.072);  best harm-pressure-knowledge-report +0.279 (ledger: HP-KR +0.279)
+
+================================================================================================
+F-81  all 21 layers: point estimates + per-layer dataset bootstrap (recomputed)
+================================================================================================
+     L   single     lodo  rowmatch  indomain   margin   wins    CI low   CI high    P<=0  stated
+     0    0.529    0.659     0.569     0.812   +0.130   9/11   +0.0492   +0.2110  0.0006  st 0.529/0.659/0.569/0.812 +0.130 9/11
+     4    0.543    0.671     0.607     0.842   +0.128   9/11   +0.0647   +0.1852  0.0000  
+     8    0.544    0.694     0.645     0.870   +0.150  10/11   +0.0805   +0.2218  0.0000  st 0.544/0.694/0.645/0.870 +0.150 10/11
+    12    0.565    0.718     0.694     0.887   +0.153  10/11   +0.0915   +0.2160  0.0000  
+    16    0.602    0.739     0.767     0.917   +0.137   9/11   +0.0673   +0.1998  0.0001  st 0.602/0.739/0.767/0.917 +0.137 9/11
+    20    0.632    0.803     0.824     0.922   +0.170  11/11   +0.1399   +0.2050  0.0000  st 0.632/0.803/0.824/0.922 +0.171 11/11
+    22    0.607    0.779     0.817     0.923   +0.172  11/11   +0.1350   +0.2107  0.0000  
+    24    0.618    0.779     0.835     0.924   +0.161  11/11   +0.1127   +0.2055  0.0000  
+    28    0.668    0.835     0.841     0.931   +0.167  11/11   +0.1345   +0.1997  0.0000  st 0.668/0.835/0.841/0.931 +0.167 11/11
+    32    0.692    0.824     0.867     0.952   +0.131  10/11   +0.0785   +0.1823  0.0000  
+    36    0.693    0.860     0.868     0.952   +0.167  11/11   +0.1380   +0.1946  0.0000  st 0.693/0.860/0.868/0.952 +0.167 11/11
+    40    0.676    0.854     0.850     0.951   +0.178  11/11   +0.1430   +0.2129  0.0000  st 0.676/0.855/0.850/0.951 +0.178 11/11
+    44    0.672    0.846     0.843     0.949   +0.174  11/11   +0.1315   +0.2144  0.0000  
+    48    0.663    0.836     0.833     0.947   +0.173  11/11   +0.1327   +0.2160  0.0000  
+    52    0.661    0.845     0.829     0.947   +0.184  11/11   +0.1502   +0.2195  0.0000  st 0.661/0.845/0.829/0.947 +0.184 11/11
+    56    0.647    0.819     0.819     0.947   +0.171  11/11   +0.1328   +0.2121  0.0000  
+    60    0.649    0.814     0.821     0.948   +0.166  10/11   +0.1116   +0.2132  0.0000  
+    64    0.649    0.808     0.819     0.948   +0.159  10/11   +0.1110   +0.2046  0.0000  
+    68    0.652    0.809     0.817     0.948   +0.157  11/11   +0.1119   +0.2014  0.0000  st 0.652/0.809/0.817/0.948 +0.157 11/11
+    72    0.651    0.803     0.815     0.949   +0.151  11/11   +0.0961   +0.2041  0.0000  
+    76    0.666    0.828     0.837     0.948   +0.163  10/11   +0.1080   +0.2137  0.0000  st 0.666/0.828/0.837/0.948 +0.163 10/11
+
+  layers present: 21 (ledger: 21)
+  margin positive at 21/21 layers (ledger: 21/21)
+  95% CI excludes zero at 21/21 layers (ledger: 21/21)
+  11/11 targets won at 12/21 layers (ledger: 13)
+  margin range +0.1279 (L4) to +0.1837 (L52)  (ledger: +0.128 at L4 to +0.184 at L52)
+
+================================================================================================
+F-83  seed sweep at L40, and the Mahalanobis predictors
+================================================================================================
+  seed  1  single 0.6598  lodo 0.8327  margin +0.1728  (ledger +0.1728, |d|=0.0000)  cov=within  n_ds=11
+  seed  7  single 0.6802  lodo 0.8780  margin +0.1979  (ledger +0.1979, |d|=0.0000)  cov=within  n_ds=11
+  seed 13  single 0.6655  lodo 0.8499  margin +0.1845  (ledger +0.1845, |d|=0.0000)  cov=within  n_ds=11
+  seed 42  single 0.6763  lodo 0.8545  margin +0.1782  (ledger +0.1782, |d|=0.0000)  cov=None  n_ds=11
+  seed 99  single 0.6790  lodo 0.8567  margin +0.1777  (ledger +0.1777, |d|=0.0000)  cov=within  n_ds=11
+  range +0.1728 to +0.1979  spread 0.0250 (ledger: +0.173 to +0.198, spread 0.025)
+  ledger compares that spread with the bootstrap CI width: computed CI [+0.1430, +0.2129] width 0.0699  (ledger quotes +0.143..+0.213, width 0.070)
+
+  Mahalanobis / cosine R^2 at L40:
+    premise_L40_mean_s42.json                  cov=None    n_pairs=110  cos R2=0.2440  mahal R2=0.0165   [root file (F-79's)]
+    mahal/premise_L40_mean_s42.json            cov=within  n_pairs=110  cos R2=0.2440  mahal R2=0.0230   [mahal/ within-class]
+    mahal/premise_L40_mean_s42_total.json      cov=total   n_pairs=110  cos R2=0.2440  mahal R2=0.0165   [mahal/ total]
+    ledger: plain cosine 0.244; Mahalanobis within-class 0.023; Mahalanobis total 0.017
+
+  keys stored in a seed file: ['covariance', 'datasets', 'layer', 'n_train', 'pairs', 'per_dataset', 'pooling', 'predictors', 'probe', 'seed', 'summary']
+  -> no bootstrap CI is stored in any premise JSON; F-80/F-81/F-83 CIs are console-only and are recomputed above.

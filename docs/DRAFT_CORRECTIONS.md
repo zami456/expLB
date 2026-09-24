@@ -105,6 +105,14 @@ Holds in **1 of 4** depth × pooling cells, and uses a different pooling at each
 **0.05** at L40" — at L40 `ext_pc3|naive` has floor **0.6658** against `ext_axis1`'s **0.7116**,
 i.e. within **0.0458**. Contradicted by your own `loo_summary.csv`.
 
+> **CORRECTION 2026-09-24 (DF-12 withdrawn / F-119, P17).** The script exists on `origin/paper`:
+> `src/probes/deception-detection/paper/make_numbers.py` (39,532 B @ 16def2de), with
+> `paper/generated/numbers.tex` (1,176 macros) and 11 `tab_*.tex`. The `feat/persona-pc-ood` half is
+> still literally true (no `paper/` path at 45b16d90).
+> **Source:** `git ls-tree -r -l 16def2de` and `git ls-tree -r 45b16d90`; `kd/docs/FINDINGS.md` F-119,
+> F-123 (DF-12 withdrawn).
+> _The text below is superseded on this point and is kept for the record._
+
 ### 1.14 `paper/make_numbers.py` does not exist **[checked twice]**
 The compute/provenance section promises it. It is on **neither branch**, and
 `feat/persona-pc-ood` has no `paper/` directory at all.

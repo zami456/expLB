@@ -1,0 +1,69 @@
+########## sarc_pilot.status  (2026-09-22 15:55)
+START 2026-09-22 15:55:01
+2026-09-22 15:55:01  1 generate: 3 arms x 5 variants x 20 questions = 300 single-turn rollouts
+2026-09-22 15:55:11  1 generate  measured=3 files / 300 rows  predicted=3 / 300  PASS
+2026-09-22 15:55:11  2 judge (Llama-3.1-70B, the same judge as every other bank in the project)
+2026-09-22 15:55:24  2 judge  measured=3 score files  predicted=3  PASS
+2026-09-22 15:55:24  3 marker rate, lexical separability, polarity
+2026-09-22 15:55:27  3a markers  measured=lowest ironic marker rate=0.00  predicted=<=0.20  PASS
+2026-09-22 15:55:27  3b separability  measured=bag-of-words AUROC on unmarked(v4,v5), markers stripped=0.921  predicted=<=0.65  GATE FAILED
+2026-09-22 15:55:27    raw=0.953 stripped=0.947 marker effect=0.005  (near 0.5 = arms textually alike,
+2026-09-22 15:55:27     which is the premise the factorial needs; near 1.0 = a lexical detector)
+2026-09-22 15:55:27  VERDICT TEACHER-FORCED -- markers are suppressed but the arms remain lexically separable (0.921); an extracted direction would be mostly lexical
+2026-09-22 15:55:30  DONE
+########## sarc_pilot.status.2026-09-21-buggy-verdict  (2026-09-21 21:45)
+START 2026-09-21 21:21:17
+2026-09-21 21:21:18  1 generate: 3 arms x 5 variants x 20 questions = 300 single-turn rollouts
+2026-09-21 21:40:53  1 generate  measured=3 files / 300 rows  predicted=3 / 300  PASS
+2026-09-21 21:40:53  2 judge (Llama-3.1-70B, the same judge as every other bank in the project)
+2026-09-21 21:44:19  2 judge  measured=3 score files  predicted=3  PASS
+2026-09-21 21:44:19  3 marker rate, lexical separability, polarity
+2026-09-21 21:44:27  3 markers  measured=lowest ironic marker rate=0.00  predicted=<=0.20 to proceed on-policy  PASS
+2026-09-21 21:44:27  VERDICT PRODUCIBLE -- build the factorial on that variant
+2026-09-21 21:44:27  lexical separability ironic vs sycophant: raw=0.953 stripped=0.947 marker effect=0.005
+2026-09-21 21:44:27    near 0.5 stripped = the arms are textually alike, which is the premise the factorial needs
+2026-09-21 21:45:59  DONE
+########## sarc_pilot.status.pre-e2e-2026-09-22  (2026-09-22 02:29)
+START 2026-09-22 02:29:22
+2026-09-22 02:29:22  1 generate: 3 arms x 5 variants x 20 questions = 300 single-turn rollouts
+2026-09-22 02:29:28  1 generate  measured=3 files / 300 rows  predicted=3 / 300  PASS
+2026-09-22 02:29:28  2 judge (Llama-3.1-70B, the same judge as every other bank in the project)
+2026-09-22 02:29:33  2 judge  measured=3 score files  predicted=3  PASS
+2026-09-22 02:29:33  3 marker rate, lexical separability, polarity
+2026-09-22 02:29:34  3a markers  measured=lowest ironic marker rate=0.00  predicted=<=0.20  PASS
+2026-09-22 02:29:34  3b separability  measured=bag-of-words AUROC, markers stripped=0.947  predicted=<=0.65  GATE FAILED
+2026-09-22 02:29:34    raw=0.953 stripped=0.947 marker effect=0.005  (near 0.5 = arms textually alike,
+2026-09-22 02:29:34     which is the premise the factorial needs; near 1.0 = a lexical detector)
+2026-09-22 02:29:34  VERDICT TEACHER-FORCED -- markers are suppressed but the arms remain lexically separable (0.947); an extracted direction would be mostly lexical
+2026-09-22 02:29:35  DONE
+########## cap_seeds.status  (2026-09-22 16:01)
+START 2026-09-22 16:00:01
+2026-09-22 16:01:49  cap seeds exit 0  L40 seed-matrices=4 (predicted 4)  1.8 min  PASS
+2026-09-22 16:01:49  DONE
+########## cap_layers.status  (2026-09-22 15:52)
+START 2026-09-22 15:50:00
+2026-09-22 15:50:00  cap_s23 : all stored layers
+2026-09-22 15:51:23  cap_s23  exit 0  mean-pooled layers=21 (was 3, predicted 21)  1.4 min  PASS
+2026-09-22 15:51:23  cap_s23  layers: 0,4,8,12,16,20,22,24,28,32,36,40,44,48,52,56,60,64,68,72,76
+2026-09-22 15:51:23  cap_all : all stored layers
+2026-09-22 15:52:46  cap_all  exit 0  mean-pooled layers=21 (was 3, predicted 21)  1.4 min  PASS
+2026-09-22 15:52:46  cap_all  layers: 0,4,8,12,16,20,22,24,28,32,36,40,44,48,52,56,60,64,68,72,76
+2026-09-22 15:52:50  DONE
+########## passAC11.status  (2026-09-22 16:05)
+START 2026-09-22 15:47:01
+2026-09-22 15:47:01  STEP 0 build the kr-matched view in passA and passC
+2026-09-22 15:47:01  STEP 0/passA  measured=258 matched rows, 55 chunks  predicted=258  PASS
+2026-09-22 15:47:01  STEP 0/passC  measured=258 matched rows, 55 chunks  predicted=258  PASS
+2026-09-22 15:47:01  STEP A-root layers=40,44,20 start
+2026-09-22 15:49:47  STEP A-root exit 0  matrices=160  datasets_in_matrix=11 (predicted 11)  2.8 min  PASS
+2026-09-22 15:49:47  STEP A-kd layers=40,44,20 start
+2026-09-22 15:54:05  STEP A-kd exit 0  matrices=160  datasets_in_matrix=11 (predicted 11)  4.3 min  PASS
+2026-09-22 15:54:05  STEP C-root layers= start
+2026-09-22 15:54:53  STEP C-root exit 0  matrices=12  datasets_in_matrix=11 (predicted 11)  0.8 min  PASS
+2026-09-22 15:54:53  STEP C-kd layers= start
+2026-09-22 15:55:46  STEP C-kd exit 0  matrices=12  datasets_in_matrix=11 (predicted 11)  0.9 min  PASS
+2026-09-22 15:55:46  STEP A-root-all layers= start
+2026-09-22 16:00:42  STEP A-root-all exit 0  matrices=160  datasets_in_matrix=11 (predicted 11)  4.9 min  PASS
+2026-09-22 16:00:42  STEP A-kd-all layers= start
+2026-09-22 16:05:39  STEP A-kd-all exit 0  matrices=160  datasets_in_matrix=11 (predicted 11)  4.9 min  PASS
+2026-09-22 16:05:43  DONE

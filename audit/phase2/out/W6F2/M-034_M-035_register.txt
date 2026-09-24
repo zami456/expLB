@@ -1,0 +1,59 @@
+file: run-crossgen\kd11\matrices\mean_L40_s42.json
+layer=40 pooling=mean seed=42 k=5 bank=axes_vectors_s3_fp32.pt bank_name=paper16 frac_train=0.8
+datasets (11): ['instructed-deception', 'harm-pressure-choice', 'harm-pressure-knowledge-report', 'harm-pressure-kr-matched', 'convincing-game', 'insider-trading', 'ai_liar', 'sandbagging_v2', 'roleplaying', 'mask', 'sycophancy_mt']
+
+=== M-034: off-diagonal mean with vs without sycophancy_mt (L40, mean, probe=paper) ===
+feature              11ds     10ds     lift
+raw                0.6623   0.6870  +0.0247   (n=110 -> 90)
+pc:deception       0.6432   0.7125  +0.0693   (n=110 -> 90)
+axes               0.6408   0.7016  +0.0609   (n=110 -> 90)
+axes_resid         0.6204   0.6737  +0.0533   (n=110 -> 90)
+random             0.5849   0.5845  -0.0005   (n=110 -> 90)
+length             0.5555   0.5467  -0.0087   (n=110 -> 90)
+pc:unified         0.6715   0.7168  +0.0453   (n=110 -> 90)
+datapca            0.6651   0.6753  +0.0102   (n=110 -> 90)
+pc:unified@2       0.6396   0.7175  +0.0780   (n=110 -> 90)
+random@2           0.4910   0.4873  -0.0038   (n=110 -> 90)
+datapca@2          0.6333   0.6365  +0.0032   (n=110 -> 90)
+
+note's numbers: raw +0.025, axes +0.061, pc:deception +0.069, 'about 2.5x more'
+ratio axes/raw       = 2.46
+ratio pc:deception/raw = 2.81
+
+--- same, for the other two probes (robustness) ---
+ probe=mms
+   raw                0.6667   0.6840  +0.0173
+   pc:deception       0.5886   0.6460  +0.0574
+   axes               0.6429   0.7220  +0.0791
+   pc:unified         0.5962   0.6517  +0.0555
+ probe=lr_reg10
+   raw                0.6481   0.6707  +0.0226
+   pc:deception       0.6021   0.6572  +0.0551
+   axes               0.6353   0.6930  +0.0578
+   pc:unified         0.6455   0.6847  +0.0392
+
+=== M-035: pc:unified vs raw across all 11 datasets, L40 mean, probe=paper ===
+  pc:unified       off-diag(11) = 0.6715
+  datapca          off-diag(11) = 0.6651
+  raw              off-diag(11) = 0.6623
+  pc:deception     off-diag(11) = 0.6432
+  axes             off-diag(11) = 0.6408
+  pc:unified@2     off-diag(11) = 0.6396
+  datapca@2        off-diag(11) = 0.6333
+  axes_resid       off-diag(11) = 0.6204
+  random           off-diag(11) = 0.5849
+  length           off-diag(11) = 0.5555
+  random@2         off-diag(11) = 0.4910
+
+--- cross-check vs audit/phase2/layer_sensitivity.csv (store kd11, L40, mean, paper, all) ---
+  raw              0.662274 (n_pairs=110)
+  pc:deception     0.643194 (n_pairs=110)
+  axes             0.640779 (n_pairs=110)
+  axes_resid       0.620396 (n_pairs=110)
+  random           0.584935 (n_pairs=110)
+  length           0.555450 (n_pairs=110)
+  pc:unified       0.671530 (n_pairs=110)
+  datapca          0.665083 (n_pairs=110)
+  pc:unified@2     0.639582 (n_pairs=110)
+  random@2         0.491036 (n_pairs=110)
+  datapca@2        0.633255 (n_pairs=110)

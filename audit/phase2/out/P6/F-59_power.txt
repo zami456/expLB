@@ -1,0 +1,14 @@
+denial rates as measured (from kd/run/denial/*.jsonl):
+  primary  (wrong, harmful)    5/20 = 0.250   exact 95% CI [0.087, 0.491]
+  fallback1(wrong, control)    3/20 = 0.150   exact 95% CI [0.032, 0.379]
+  fallback2(margin, harmful)   5/12 = 0.417   exact 95% CI [0.152, 0.723]
+
+the gate was 'denial rate >= 0.70':
+  primary    upper 95% bound 0.491 -> gate EXCLUDED
+  fallback1  upper 95% bound 0.379 -> gate EXCLUDED
+  fallback2  upper 95% bound 0.723 -> gate not excluded
+
+are the routes distinguishable from each other? (Fisher exact, two-sided)
+  primary 5/20 vs fallback1 3/20 : p = 0.6948
+  primary 5/20 vs fallback2 5/12 : p = 0.4382
+  fallback1 3/20 vs fallback2 5/12: p = 0.1161

@@ -1,0 +1,30 @@
+
+==============================================================================
+== F-49 / F-50  3B vs 8B throughput
+==============================================================================
+  C:/Users/user4/expLB/run-scale/3b/coords/instructed-deception -> EXISTS
+    chunks=400  rows.jsonl=800
+    first chunk 2026-09-20 19:36:46.456482   last 2026-09-20 20:09:03.535652   span 32.3 min
+    chunks/min = 12.39 ; rows/chunk = 2.00 ; rows/min = 24.8
+    chunks written within 24.5 min of the first: 307
+    items.pt: 359384 B  mtime 2026-09-20 19:36:40.436218
+  C:/Users/user4/expLB/run-scale/8b/coords/instructed-deception -> EXISTS
+    chunks=100  rows.jsonl=800
+    first chunk 2026-09-20 18:34:30.319644   last 2026-09-20 18:48:22.748242   span 13.9 min
+    chunks/min = 7.21 ; rows/chunk = 8.00 ; rows/min = 57.7
+    chunks written within 24.5 min of the first: 100
+    items.pt: 359384 B  mtime 2026-09-20 18:34:24.668216
+ -- logs --
+  scale_coords_3b.log 2000569 B  mtime 2026-09-22 16:20:14.471312
+      11| 2026-09-20 19:36:40,436 - INFO - instructed-deception: 800 rows -> 800 spans
+   20999| 2026-09-22 16:20:13,280 - INFO - instructed-deception: 800 cached spans
+   21000| 2026-09-22 16:20:13,650 - INFO - instructed-deception: already complete (800 rows)
+  scale_coords_8b.log 2214527 B  mtime 2026-09-22 16:20:06.516483
+      11| 2026-09-20 16:59:52,956 - INFO - instructed-deception: 5432 rows -> 5432 spans
+    4879| 2026-09-20 17:32:35,583 - INFO - instructed-deception: 5432 cached spans
+    4880| 2026-09-20 17:32:36,341 - INFO - instructed-deception: already complete (5432 rows)
+    5654| 2026-09-20 17:48:42,681 - INFO - instructed-deception: 5432 cached spans
+    5655| 2026-09-20 17:48:43,386 - INFO - instructed-deception: already complete (5432 rows)
+    6485| 2026-09-20 18:02:12,382 - INFO - instructed-deception: 5432 cached spans
+  ... (truncated at 6 matches)
+python exit 0

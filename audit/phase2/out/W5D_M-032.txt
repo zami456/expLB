@@ -1,0 +1,27 @@
+### run-crossgen/kd11/matrices/mean_L40_s42.json
+    pooling=mean layer=40 seed=42 bank=axes_vectors_s3_fp32.pt k=5
+    datasets (11): ['instructed-deception', 'harm-pressure-choice', 'harm-pressure-knowledge-report', 'harm-pressure-kr-matched', 'convincing-game', 'insider-trading', 'ai_liar', 'sandbagging_v2', 'roleplaying', 'mask', 'sycophancy_mt']
+
+  feature=axes probe=paper
+    harm-pressure-knowledge-report   column(off-diag, as test target) = 0.4273   row(off-diag, as train source) = 0.3004   diag = 0.8015
+    sycophancy_mt                    column(off-diag, as test target) = 0.3551   row(off-diag, as train source) = 0.3787   diag = 0.7533
+
+  feature=random probe=paper
+    harm-pressure-knowledge-report   column(off-diag, as test target) = 0.6984   row(off-diag, as train source) = 0.6590   diag = 0.7979
+    sycophancy_mt                    column(off-diag, as test target) = 0.5413   row(off-diag, as train source) = 0.6327   diag = 0.6265
+
+  feature=pc:deception probe=paper
+    harm-pressure-knowledge-report   column(off-diag, as test target) = 0.6211   row(off-diag, as train source) = 0.6909   diag = 0.8134
+    sycophancy_mt                    column(off-diag, as test target) = 0.3910   row(off-diag, as train source) = 0.2713   diag = 0.7069
+
+  feature=pc:unified probe=paper
+    harm-pressure-knowledge-report   column(off-diag, as test target) = 0.5382   row(off-diag, as train source) = 0.5383   diag = 0.8955
+    sycophancy_mt                    column(off-diag, as test target) = 0.4451   row(off-diag, as train source) = 0.4902   diag = 0.7191
+
+  feature=raw probe=paper
+    harm-pressure-knowledge-report   column(off-diag, as test target) = 0.6990   row(off-diag, as train source) = 0.6943   diag = 0.9741
+    sycophancy_mt                    column(off-diag, as test target) = 0.6013   row(off-diag, as train source) = 0.5010   diag = 0.8874
+
+  feature=datapca probe=paper
+    harm-pressure-knowledge-report   column(off-diag, as test target) = 0.6627   row(off-diag, as train source) = 0.5738   diag = 0.9647
+    sycophancy_mt                    column(off-diag, as test target) = 0.5776   row(off-diag, as train source) = 0.6609   diag = 0.7997

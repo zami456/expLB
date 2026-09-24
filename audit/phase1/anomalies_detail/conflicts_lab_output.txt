@@ -1,0 +1,203 @@
+logical files present in >=2 places: 208830
+logical files with >=2 DIFFERENT contents: 50
+non-result (code/doc/input) conflicts by reason: {'not-result-ext': 13, 'doc': 1}
+
+source pattern of the differing versions (each side = sources sharing one version):
+       27  ASIX vs DRIVE+LAB
+       13  ASIX vs DRIVE
+        7  ASIX vs PCOOD
+        1  ASIX vs LAB
+        1  DRIVE vs LAB
+        1  DRIVE vs DRIVE+LAB
+
+per unit (count; then up to 6 examples with every version: sources/where/time/bytes/key8):
+
+## (non-result) src/probes  (7 logical files)  patterns: {'ASIX vs PCOOD': 7}
+    src/probes/deception-detection/README.md
+        ASIX:  9038B f07da9d3
+        PCOOD:  11645B 3db9f861
+    src/probes/deception-detection/deception_detection/activations.py
+        ASIX:  15135B 758171e0
+        PCOOD:  22987B 10f7775c
+    src/probes/deception-detection/deception_detection/experiment.py
+        ASIX:  33592B eedbec86
+        PCOOD:  37971B c2ea4aed
+    src/probes/deception-detection/deception_detection/postprocess.py
+        ASIX:  6557B 74905fcb
+        PCOOD:  7140B fd7b43f9
+    src/probes/deception-detection/deception_detection/scripts/experiment.py
+        ASIX:  3907B 5df6ae40
+        PCOOD:  4125B db285dcc
+    src/probes/deception-detection/deception_detection/scripts/export_html.py
+        ASIX:  25927B eea0697f
+        PCOOD:  26380B c7330e69
+
+## figures/crossgen/bank_comparison  (6 logical files)  patterns: {'ASIX vs DRIVE': 6}
+    figures/crossgen/bank_comparison/L40_last_lr_reg10.csv
+        DRIVE:drive:figures-crossgen/bank_comparison/L40_last_lr_reg10.csv 2026-09-17T21:28:45Z 1208B 457ea937
+        ASIX:  1187B 4e33d9e0
+    figures/crossgen/bank_comparison/L40_last_mms.csv
+        DRIVE:drive:figures-crossgen/bank_comparison/L40_last_mms.csv 2026-09-17T21:28:46Z 1212B c98cbb18
+        ASIX:  1191B c2d4dcf9
+    figures/crossgen/bank_comparison/L40_last_paper.csv
+        DRIVE:drive:figures-crossgen/bank_comparison/L40_last_paper.csv 2026-09-17T21:28:43Z 1208B 615ae094
+        ASIX:  1187B 5f375215
+    figures/crossgen/bank_comparison/L40_mean_lr_reg10.csv
+        DRIVE:drive:figures-crossgen/bank_comparison/L40_mean_lr_reg10.csv 2026-09-17T21:28:41Z 1210B cd2beb36
+        ASIX:  1189B 33426c8e
+    figures/crossgen/bank_comparison/L40_mean_mms.csv
+        DRIVE:drive:figures-crossgen/bank_comparison/L40_mean_mms.csv 2026-09-17T21:28:42Z 1213B 41de46f7
+        ASIX:  1192B 8e4dc2dd
+    figures/crossgen/bank_comparison/L40_mean_paper.csv
+        DRIVE:drive:figures-crossgen/bank_comparison/L40_mean_paper.csv 2026-09-17T21:28:39Z 1210B 0d5636ca
+        ASIX:  1189B f85c3995
+
+## (non-result) figures  (3 logical files)  patterns: {'ASIX vs DRIVE': 3}
+    figures/crossgen/INDEX.md
+        DRIVE:drive:figures-crossgen/INDEX.md 2026-09-17T23:21:24Z 1010B b7b3347d
+        ASIX:  996B 24b98414
+    figures/crossgen/kd11/INDEX.md
+        DRIVE:drive:kd/figures/crossgen11/INDEX.md 2026-09-20T07:15:55Z 1010B 99f2ac5b
+        ASIX:  996B 904a9195
+    figures/crossgen/kd11/passA/INDEX.md
+        DRIVE:drive:kd/figures/crossgen11/passA/INDEX.md 2026-09-20T07:48:34Z 1010B a144a0c1
+        ASIX:  996B f548b8ae
+
+## run-crossgen  (3 logical files)  patterns: {'ASIX vs DRIVE+LAB': 3}
+    run-crossgen/significance.json
+        LAB: 2026-09-22 15:40:53 2247993B 62650573 | DRIVE:drive:crossgen/significance.json 2026-09-22T09:40:53Z 2247993B 62650573
+        ASIX:  82778B 36fc122b
+    run-crossgen/splits.json
+        LAB: 2026-09-22 15:40:20 919481B c48c498d | DRIVE:drive:crossgen/splits.json 2026-09-17T23:14:59Z 919481B c48c498d
+        ASIX:  899429B 39327fd3
+    run-crossgen/summary.json
+        LAB: 2026-09-22 15:40:24 12431036B aa7771a2 | DRIVE:drive:crossgen/summary.json 2026-09-17T23:51:41Z 12431036B aa7771a2
+        ASIX:  265964B 2fdeede3
+
+## run-crossgen/banks/hf100  (3 logical files)  patterns: {'ASIX vs DRIVE+LAB': 3}
+    run-crossgen/banks/hf100/significance.json
+        LAB: 2026-09-18 07:19:13 1705679B fab767bd | DRIVE:drive:crossgen/banks/hf100/significance.json 2026-09-18T01:19:13Z 1705679B fab767bd
+        ASIX:  38456B 70757c89
+    run-crossgen/banks/hf100/splits.json
+        LAB: 2026-09-18 07:08:14 919481B c97f51c3 | DRIVE:drive:crossgen/banks/hf100/splits.json 2026-09-18T01:08:14Z 919481B c97f51c3
+        ASIX:  150131B fb7666e4
+    run-crossgen/banks/hf100/summary.json
+        LAB: 2026-09-18 07:18:40 14622841B 9198fe84 | DRIVE:drive:crossgen/banks/hf100/summary.json 2026-09-18T01:18:40Z 14622841B 9198fe84
+        ASIX:  115534B a7054957
+
+## run-crossgen/banks/own100  (3 logical files)  patterns: {'ASIX vs DRIVE+LAB': 3}
+    run-crossgen/banks/own100/significance.json
+        LAB: 2026-09-18 06:57:25 1704951B 09529776 | DRIVE:drive:crossgen/banks/own100/significance.json 2026-09-18T00:57:25Z 1704951B 09529776
+        ASIX:  38674B 6b2b4859
+    run-crossgen/banks/own100/splits.json
+        LAB: 2026-09-18 06:45:59 919481B c97f51c3 | DRIVE:drive:crossgen/banks/own100/splits.json 2026-09-18T00:45:59Z 919481B c97f51c3
+        ASIX:  150131B fb7666e4
+    run-crossgen/banks/own100/summary.json
+        LAB: 2026-09-18 06:56:58 14628771B 1b80c8c2 | DRIVE:drive:crossgen/banks/own100/summary.json 2026-09-18T00:56:58Z 14628771B 1b80c8c2
+        ASIX:  115527B 3f61720b
+
+## run-crossgen/banks/paper16_famcentred  (3 logical files)  patterns: {'ASIX vs DRIVE+LAB': 3}
+    run-crossgen/banks/paper16_famcentred/significance.json
+        LAB: 2026-09-18 06:13:30 1705347B 9e54f155 | DRIVE:drive:crossgen/banks/paper16_famcentred/significance.json 2026-09-18T00:13:30Z 1705347B 9e54f155
+        ASIX:  38218B 6649ca4a
+    run-crossgen/banks/paper16_famcentred/splits.json
+        LAB: 2026-09-18 06:02:32 919481B c97f51c3 | DRIVE:drive:crossgen/banks/paper16_famcentred/splits.json 2026-09-18T00:02:32Z 919481B c97f51c3
+        ASIX:  150131B fb7666e4
+    run-crossgen/banks/paper16_famcentred/summary.json
+        LAB: 2026-09-18 06:13:02 14671706B 21c84a8f | DRIVE:drive:crossgen/banks/paper16_famcentred/summary.json 2026-09-18T00:13:02Z 14671706B 21c84a8f
+        ASIX:  115431B e44d9925
+
+## run-crossgen/banks/paper16_shared  (3 logical files)  patterns: {'ASIX vs DRIVE+LAB': 3}
+    run-crossgen/banks/paper16_shared/significance.json
+        LAB: 2026-09-18 06:35:30 1703872B dee8e7b5 | DRIVE:drive:crossgen/banks/paper16_shared/significance.json 2026-09-18T00:35:30Z 1703872B dee8e7b5
+        ASIX:  38653B 9d55facc
+    run-crossgen/banks/paper16_shared/splits.json
+        LAB: 2026-09-18 06:24:28 919481B c97f51c3 | DRIVE:drive:crossgen/banks/paper16_shared/splits.json 2026-09-18T00:24:28Z 919481B c97f51c3
+        ASIX:  150131B fb7666e4
+    run-crossgen/banks/paper16_shared/summary.json
+        LAB: 2026-09-18 06:34:56 14672456B 10d172d4 | DRIVE:drive:crossgen/banks/paper16_shared/summary.json 2026-09-18T00:34:56Z 14672456B 10d172d4
+        ASIX:  115561B 99a7138c
+
+## (non-result) docs/thesis  (2 logical files)  patterns: {'ASIX vs DRIVE': 2}
+    docs/thesis/hf275-role-labels-draft.md
+        DRIVE:drive:thesis-docs/hf275-role-labels-draft.md 2026-09-17T16:43:04Z 13863B 679a6c7f
+        ASIX:  13728B 511f84a5
+    docs/thesis/role-labels/role_labels_review.csv
+        DRIVE:drive:thesis-docs/role-labels/role_labels_review.csv 2026-09-17T17:02:56Z 196715B 37f24fb6
+        ASIX:  196438B 339a9993
+
+## figures/crossgen/kd11  (2 logical files)  patterns: {'ASIX vs DRIVE': 2}
+    figures/crossgen/kd11/bank_comparison/L40_mean_mms.csv
+        DRIVE:drive:kd/figures/crossgen11/bank_comparison/L40_mean_mms.csv 2026-09-20T07:15:15Z 651B 8a658ee1
+        ASIX:  639B bacc9f8a
+    figures/crossgen/kd11/bank_comparison/L40_mean_paper.csv
+        DRIVE:drive:kd/figures/crossgen11/bank_comparison/L40_mean_paper.csv 2026-09-20T07:15:14Z 650B eb3ed332
+        ASIX:  638B 0567cb6c
+
+## kd/run/factor_probes  (2 logical files)  patterns: {'ASIX vs DRIVE+LAB': 2}
+    kd/run/factor_probes/kd_knowledge/rows.jsonl
+        LAB: 2026-09-19 19:59:07 553374B 0ba4da4b | DRIVE:drive:kd/run/factor_probes/kd_knowledge/rows.jsonl 2026-09-19T13:59:07Z 553374B 0ba4da4b
+        ASIX:  2510207B 5c920fdc
+    kd/run/factor_probes/kd_utterance/rows.jsonl
+        LAB: 2026-09-19 20:22:43 505884B 7b2137d7 | DRIVE:drive:kd/run/factor_probes/kd_utterance/rows.jsonl 2026-09-19T14:22:43Z 505884B 7b2137d7
+        ASIX:  2288634B 94f87f2b
+
+## run-crossgen/kd11/banks/kd_s23  (2 logical files)  patterns: {'ASIX vs DRIVE+LAB': 2}
+    run-crossgen/kd11/banks/kd_s23/significance.json
+        LAB: 2026-09-22 16:15:50 2355496B 681de2c4 | DRIVE:drive:crossgen/kd11/banks/kd_s23/significance.json 2026-09-21T19:31:51Z 2355496B 681de2c4 | DRIVE:drive:kd/crossgen11/banks/kd_s23/significance.json 2026-09-21T19:31:51Z 2355496B 681de2c4
+        ASIX:  187983B ed647efc
+    run-crossgen/kd11/banks/kd_s23/summary.json
+        LAB: 2026-09-22 16:15:13 7751628B 48be214b | DRIVE:drive:crossgen/kd11/banks/kd_s23/summary.json 2026-09-20T09:46:18Z 7751628B 48be214b | DRIVE:drive:kd/crossgen11/banks/kd_s23/summary.json 2026-09-20T09:46:18Z 7751628B 48be214b
+        ASIX:  1064159B 10d8c808
+
+## run-crossgen/kd11/passA  (2 logical files)  patterns: {'ASIX vs DRIVE+LAB': 2}
+    run-crossgen/kd11/passA/significance.json
+        LAB: 2026-09-20 14:10:14 7368815B 64b13c44 | DRIVE:drive:kd/crossgen11/passA/significance.json 2026-09-20T08:10:14Z 7368815B 64b13c44 | DRIVE:drive:crossgen/kd11/passA/significance.json 2026-09-20T08:10:14Z 7368815B 64b13c44
+        ASIX:  263175B cbfcdf99
+    run-crossgen/kd11/passA/summary.json
+        LAB: 2026-09-20 14:08:27 21362780B 4729bac4 | DRIVE:drive:kd/crossgen11/passA/summary.json 2026-09-20T08:08:27Z 21362780B 4729bac4 | DRIVE:drive:crossgen/kd11/passA/summary.json 2026-09-20T08:08:27Z 21362780B 4729bac4
+        ASIX:  773423B fb514a0b
+
+## run-crossgen/kd11/passA/banks/kd_s23  (2 logical files)  patterns: {'ASIX vs DRIVE+LAB': 2}
+    run-crossgen/kd11/passA/banks/kd_s23/significance.json
+        LAB: 2026-09-20 14:21:05 5266459B 0a82c9f2 | DRIVE:drive:kd/crossgen11/passA/banks/kd_s23/significance.json 2026-09-20T08:21:05Z 5266459B 0a82c9f2 | DRIVE:drive:crossgen/kd11/passA/banks/kd_s23/significance.json 2026-09-20T08:21:05Z 5266459B 0a82c9f2
+        ASIX:  187645B ab5c8bd4
+    run-crossgen/kd11/passA/banks/kd_s23/summary.json
+        LAB: 2026-09-20 14:19:17 23174368B 7ae09b1f | DRIVE:drive:kd/crossgen11/passA/banks/kd_s23/summary.json 2026-09-20T08:19:17Z 23174368B 7ae09b1f | DRIVE:drive:crossgen/kd11/passA/banks/kd_s23/summary.json 2026-09-20T08:19:17Z 23174368B 7ae09b1f
+        ASIX:  838030B e440e9d7
+
+## (non-result) cap/docs  (1 logical files)  patterns: {'ASIX vs LAB': 1}
+    cap/docs/DESIGN.md
+        LAB: 2026-09-21 04:00:15 12339B bf54f8c6
+        ASIX:  14155B a1e505e7
+
+## (non-result) kd/docs  (1 logical files)  patterns: {'ASIX vs DRIVE+LAB': 1}
+    kd/docs/FINDINGS.md
+        LAB: 2026-09-21 04:01:50 146262B ccf3723d | DRIVE:drive:kd/docs/FINDINGS.md 2026-09-20T22:01:50Z 146262B ccf3723d
+        ASIX:  325787B 291bf7cc
+
+## kd/run/knowledge  (1 logical files)  patterns: {'ASIX vs DRIVE+LAB': 1}
+    kd/run/knowledge/scores.jsonl
+        LAB: 2026-09-19 17:22:32 279757B 1db047dc | DRIVE:drive:kd/run/knowledge/scores.jsonl 2026-09-19T11:22:32Z 279757B 1db047dc
+        ASIX:  203705B 860c8c44
+
+## run-crossgen/kd11  (1 logical files)  patterns: {'ASIX vs DRIVE+LAB': 1}
+    run-crossgen/kd11/significance.json
+        LAB: 2026-09-22 15:53:40 2256477B 1e9b45b2 | DRIVE:drive:kd/crossgen11/significance.json 2026-09-22T09:53:40Z 2256477B 1e9b45b2 | DRIVE:drive:crossgen/kd11/significance.json 2026-09-22T09:53:40Z 2256477B 1e9b45b2
+        ASIX:  1847945B 0c22c7a7
+
+## run-crossgen/kd11/banks/kd  (1 logical files)  patterns: {'ASIX vs DRIVE+LAB': 1}
+    run-crossgen/kd11/banks/kd/significance.json
+        LAB: 2026-09-22 16:01:20 2679778B 85dfff38 | DRIVE:drive:crossgen/kd11/banks/kd/significance.json 2026-09-22T10:01:20Z 2679778B 85dfff38 | DRIVE:drive:kd/crossgen11/banks/kd/significance.json 2026-09-22T10:01:20Z 2679778B 85dfff38
+        ASIX:  1628949B 7cb6d995
+
+## run/DELIVERABLE_READY  (1 logical files)  patterns: {'DRIVE vs LAB': 1}
+    run/DELIVERABLE_READY
+        LAB: 2026-09-15 12:51:42 67B be3646ee
+        DRIVE:drive:own100/run/DELIVERABLE_READY 2026-09-15T06:06:40Z 67B 474ca047
+
+## run/axes  (1 logical files)  patterns: {'DRIVE vs DRIVE+LAB': 1}
+    run/axes.pt
+        LAB: 2026-09-15 12:51:41 62936618B 0d2971c6 | DRIVE:drive:own100/axes.pt 2026-09-15T06:51:41Z 62936618B 0d2971c6
+        DRIVE:drive:own100/run/axes.pt 2026-09-15T06:06:40Z 20979057B ac0d4725
+python exit 0

@@ -1,0 +1,11 @@
+copy expLB exit 0
+check expLB exit 1 (0 = every listed file present on Drive with identical hash)
+copy expLB-acts exit 0
+check expLB-acts exit 0 (0 = every listed file present on Drive with identical hash)
+copy expLBactivationLAYER22 exit 0
+check expLBactivationLAYER22 exit 0 (0 = every listed file present on Drive with identical hash)
+copy user4-home-loose-files exit 0
+check user4-home-loose-files exit 0 (0 = every listed file present on Drive with identical hash)
+{"count":1983,"bytes":1731072282,"sizeless":0}
+END
+exit=0

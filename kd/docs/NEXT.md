@@ -10,6 +10,18 @@ Last updated 2026-09-21 03:45 BDT.
 
 ## Closed since this file was written
 
+> **CORRECTION 2026-09-24 (DF-31 / DF-68, Phase 6).** Row 1 below calls 0.374 *"the register
+> axis's"* figure. **This site was missing from DF-31's own location lists and so was never
+> corrected on 2026-09-23 with the other six.** **0.374 is the paper16 *deception* axis's PC1**
+> (its contrast reads 0.409); the paper16 **sycophancy** axis reads **0.313**, and only 0.313 lies
+> beyond the 1,000-direction random null (p 0.001–0.008).
+> **Source:** `run-crossgen/kd11/matrices/mean_L40_s42.json`, zeroshot block, `sycophancy_mt`
+> column; sycophancy axis from `24_q10_sycophancy_axis.py` (2026-09-17).
+> **How the claim is updated:** row 1 should read *"0.745 zero-shot vs the paper16 sycophancy
+> axis's 0.313 on `sycophancy_mt` (the deception axis's PC1 reads 0.374)"*. The gate still passes
+> either way — 0.745 ≫ both.
+> _The row below is superseded on this point and is kept for the record._
+
 | was | outcome |
 |---|---|
 | **1. Capitulation personas (`cap/`)** | **DONE.** 0.745 zero-shot vs the register axis's 0.374 on `sycophancy_mt`; clears a dataset-level bootstrap against raw and both matched controls on that column (+0.112, CI [+0.050, +0.185]); the gain does **not** extend to the other ten columns. F-64, F-65, F-66, F-67. Design: `../../cap/docs/DESIGN.md`. |
@@ -17,6 +29,12 @@ Last updated 2026-09-21 03:45 BDT.
 | **4. Dataset-level bootstrap on the kd bank's +0.076** | **DONE**, and it exposed the seventh paper16 hardcoding — `27_crossgen.py` built its comparison list from a constant holding paper16's four feature names, so any other bank got no persona comparisons at all and the test silently never ran. Fixed; comparisons now derive from the features actually used. F-67. |
 
 ---
+
+> **UPDATE 2026-09-24 (P17).** The larger control this item asks for now exists by another route:
+> F-116 ran the 2,001-row `knowledge_matched` slice (139 / 1,862), and F-115 closed the row leak on
+> the 258-row `harm-pressure-kr-matched` slice (59 rows survive the guard; F-03 stands). Both
+> verified in P17 (24/24 and 40/40). A matched slice built from new items is still unrun (F-115 caveat).
+> **Source:** `kd/docs/FINDINGS.md` F-115, F-116; `audit/p17/C_REPORT.md` F-115/F-116 rows.
 
 ## 1. Grow the HP-KR matched slice — **partly blocked, route (b) failed its gate**
 

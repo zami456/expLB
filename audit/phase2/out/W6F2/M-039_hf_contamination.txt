@@ -1,0 +1,30 @@
+file: run-hf275\axes_hf100.pt 62938229 B
+md5: 02a548364325ba769679265f6c4dc04c
+vectors_dir: C:\Users\SURAIYA\Documents\STUDY\thesis\expLB\run-hf275\vectors_100
+counts: {'assistant': (1, 99), 'deception': (22, 22), 'sycophancy': (16, 16), 'unified': (38, 38)}
+n roles: 100
+role_groups keys: ['deception', 'honesty', 'sycophancy', 'anti_sycophancy', 'assistant_anchor', 'breadth_control']
+   deception    n=3 ['contrast_with', 'note', 'roles']
+   honesty      n=3 ['contrast_with', 'note', 'roles']
+   sycophancy   n=3 ['contrast_with', 'note', 'roles']
+   anti_sycophancy n=3 ['contrast_with', 'note', 'roles']
+   assistant_anchor n=3 ['contrast_with', 'note', 'roles']
+   breadth_control n=3 ['contrast_with', 'note', 'roles']
+
+layer  cos(dec,asst)  cos(syc,asst)  cos(dec,syc)  cos(PC1_all,asst)  PC1_all var
+   20   -0.6687        +0.1422        -0.0659       +0.8119            0.310
+   22   -0.6507        +0.1262        -0.0526       +0.8064            0.284
+   40   -0.5771        +0.1683        -0.0662       +0.7978            0.245
+   60   -0.4787        +0.1414        -0.0436       +0.7786            0.262
+
+same with the flat top-level pca_components (the pre-patch 'PC1 over all roles'):
+  L20  cos(PC1,asst)=+0.8119  |cos|=0.8119  var=0.310
+  L22  cos(PC1,asst)=+0.8064  |cos|=0.8064  var=0.284
+  L40  cos(PC1,asst)=+0.7978  |cos|=0.7978  var=0.245
+  L60  cos(PC1,asst)=+0.7786  |cos|=0.7786  var=0.262
+
+cos(PC1_deception_subset, deception contrast) -- the 'per-behaviour PCA fix':
+  L20  +0.9533
+  L22  +0.9505
+  L40  +0.9470
+  L60  +0.9185

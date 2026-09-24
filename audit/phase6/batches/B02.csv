@@ -1,0 +1,11 @@
+id,source,source_ref,claim_short,numbers,layer,dataset_hint,status
+D-020,draft PDF,draft p2 1 Contributions,We extend the 26 personas of Mahadik and Skapars (2026) with 10 roles ... a knowledge-denial contrast (4 deceptive vs. 6 honest personas) and an extended contrast ... (12 vs. 13).,26; 10 (4/3/3); 4v6; 12v13,,,TODO
+D-021,draft PDF,draft p2 1 Contributions,"We scale the method from 3B and 8B models to Llama-3.3-70B-Instruct, evaluated on five Liars' Bench datasets and RepE at layers 20, 40 and 44.",5 + 1 datasets; L20/40/44,L20/L40/L44,"CG,HP-C,HP-KR,IT,ID,RepE",TODO
+D-022,draft PDF,draft p2 1 Contributions,"On HP-KR, with no benchmark labels, the knowledge-denial contrast reaches 0.919 AUROC and 0.910 balanced accuracy at 1% FPR at layer 40.",0.919; 0.910,L40,HP-KR,TODO
+D-024,draft PDF,draft p2 1 Contributions,A RepE-trained probe in our own pipeline stays at 0.500 at every layer.,0.500,L20/L40/L44,HP-KR,TODO
+D-025,draft PDF,draft p2 1 Contributions,We also identify why the published contrast inverts there: none of its deceptive personas lies by denying knowledge.,,,HP-KR,TODO
+D-026,draft PDF,draft p2 1 Contributions,"the zero-shot extended contrast reaches 0.916 mean off-diagonal AUROC at layer 40, against 0.732 for 8192-dimensional probes each trained on one dataset.",0.916; 0.732,L40,"CG,HP-C,HP-KR,IT,ID,RepE",TODO
+D-029,draft PDF,draft p2 1 Contributions,"We compare the persona contrasts with the benchmark's RepE-trained probe at its 1% false-positive threshold on Alpaca, with bootstrap intervals.",1% FPR,,"CG,HP-C,HP-KR,IT,ID",TODO
+D-030,draft PDF,draft p3 1 Contributions,Scoring our pooled activations with the benchmark pipeline's own probe reproduces its results to four decimal places.,4 decimal places,L20/L40/L44,"CG,HP-C,HP-KR,IT,ID",TODO
+D-031,draft PDF,draft p3 1 Contributions,"Our measurement of the Follow-Up Probe, 0.636 mean AUROC over the five datasets, matches the published 0.634.",0.636; 0.634,L20 (follow-up 'No' token),"CG,HP-C,HP-KR,IT,ID",TODO
+D-032,draft PDF,draft p3 1 Contributions,We release the code and results.,,,,TODO

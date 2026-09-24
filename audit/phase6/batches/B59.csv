@@ -1,0 +1,15 @@
+id,source,source_ref,claim_short,numbers,layer,dataset_hint,status
+L-F-32,FINDINGS.md,kd/docs/FINDINGS.md:740,2026-09-20 · The cap variants rewritten; all five confounds closed by count,,,,TODO
+L-F-33,FINDINGS.md,kd/docs/FINDINGS.md:777,"2026-09-20 · The 3B extraction failed on every role; cause was batch, not length",0.553,,,TODO
+L-F-34,FINDINGS.md,kd/docs/FINDINGS.md:816,"2026-09-20 · The kd_s23 gain is depth-dependent, not an L40 artifact",0.036; +0.008; +0.002; +0.050; +0.1082; +0.1156; +0.05; +0.095,"0,20,22,36,40,44",,TODO
+L-F-35,FINDINGS.md,kd/docs/FINDINGS.md:860,2026-09-20 · Extraction throughput: the batch-2 constraint costs the 3B a factor of 10,1.32,,,TODO
+L-F-36,FINDINGS.md,kd/docs/FINDINGS.md:894,2026-09-20 · The cap questions do not match the test set they will be scored on,,,sycophancy_mt,TODO
+L-F-37,FINDINGS.md,kd/docs/FINDINGS.md:941,"2026-09-20 · Persona geometry across three model sizes — size-dependent, NOT monotone",+0.435; +0.732; +0.623; +0.367; +0.514; +0.540; +0.532; +0.701,,,TODO
+L-F-38,FINDINGS.md,kd/docs/FINDINGS.md:985,2026-09-20 · gender-secret and soft-trigger are fine-tune datasets — structurally excluded,,,instructed-deception,TODO
+L-F-39,FINDINGS.md,kd/docs/FINDINGS.md:1012,"2026-09-20 · Read the paper itself: our pipeline is bigger, stricter, and gets a SMALLER effect",0.14; 0.12; +0.10; 0.11; +0.12; +0.01; +0.14; 0.01,,,TODO
+L-F-40,FINDINGS.md,kd/docs/FINDINGS.md:1077,2026-09-20 · Eval-corpus extraction runs ~1.75x slower than F-35 projected,1.75; 37%,,harm-pressure-knowledge-report sycophancy_mt convincing-game instructed-deception insider-trading ai_liar roleplaying mask alpaca,TODO
+L-F-41,FINDINGS.md,kd/docs/FINDINGS.md:1112,2026-09-20 · The 8B coords arm OOMed on HP-KR; the exc_tail fix paid for itself,902.00; 0.75,,harm-pressure-knowledge-report HP-KR instructed-deception,TODO
+L-F-42,FINDINGS.md,kd/docs/FINDINGS.md:1151,2026-09-20 · attn=0.75 was still too high; budget sized from heads x T^2 instead,0.75; 0.55; 0.42,,harm-pressure-knowledge-report,TODO
+L-F-43,FINDINGS.md,kd/docs/FINDINGS.md:1186,2026-09-20 · The coords OOM was a per-process cap all along; truncation was the only lever,562.00; 139.80; 55.13; 0.75; 0.55,,HP-KR,TODO
+L-F-44,FINDINGS.md,kd/docs/FINDINGS.md:1230,2026-09-20 · Truncation to 1024 is nearly free; but the matched slice cannot be extracted at all,3%; 0.300; 0.752,,harm-pressure-knowledge-report HP-KR,TODO
+L-F-45,FINDINGS.md,kd/docs/FINDINGS.md:1266,2026-09-20 · The OOM fix cost 8x throughput; the full-corpus run is no longer affordable,28%; 45%,,instructed-deception roleplaying,TODO

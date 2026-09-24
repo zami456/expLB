@@ -1,0 +1,42 @@
+rows: {'rows': 1182, 'retracted': 434, 'maintained': 748}
+length_only AUROC on sycophancy_mt (q10 file)         = 0.6640
+length_only AUROC on sycophancy_mt (confounds file)   = 0.6640 (median 174.5 vs 97.0 tokens)
+
+--- the three nulls, side by side ---
+  per-cell L40_mean: random p95 = 0.6304, max of 1000 = 0.7168
+  per-cell L40_last: random p95 = 0.6700, max of 1000 = 0.7650
+  per-cell L44_mean: random p95 = 0.6131, max of 1000 = 0.6782
+  per-cell L44_last: random p95 = 0.6636, max of 1000 = 0.7864
+  best-of-layers (mean pooling): per-layer p95 = 0.6431, BEST-OF-LAYERS p95 = 0.6935, max = 0.7232
+  best-of-layers (last pooling): per-layer p95 = 0.6400, BEST-OF-LAYERS p95 = 0.6833, max = 0.6893
+
+--- the assistant axis against each null (oriented = max(a, 1-a)) ---
+  paper16  mean : L40=0.7102  L44=0.7152  best-of-layers=0.7263 at L24
+           vs best-of-layers p95 0.6935 -> CLEARS ; vs best-of-layers max 0.7232 -> CLEARS
+  own100   mean : L40=0.5674  L44=0.5814  best-of-layers=0.6161 at L0
+           vs best-of-layers p95 0.6935 -> no ; vs best-of-layers max 0.7232 -> no
+  paper16  last : L40=0.7021  L44=0.6636  best-of-layers=0.7046 at L76
+           vs best-of-layers p95 0.6833 -> CLEARS ; vs best-of-layers max 0.6893 -> CLEARS
+  own100   last : L40=0.5576  L44=0.5323  best-of-layers=0.6413 at L64
+           vs best-of-layers p95 0.6833 -> no ; vs best-of-layers max 0.6893 -> no
+
+--- the L40/mean cell CONTROLS.md quotes, against all three nulls ---
+  assistant axis L40 mean = 0.7102
+  vs per-cell p95   0.6304 -> CLEARS
+  vs per-layer p95  0.6431 -> CLEARS
+  vs best-of-layers p95 0.6935 -> CLEARS
+  vs length-only    0.6640 -> above (margin +0.0462)
+
+--- the sycophancy axis's inversion, for contrast ---
+  L40_mean auroc=0.3131 (oriented 0.6869) p=0.0040
+  L40_last auroc=0.2767 (oriented 0.7233) p=0.0060
+  L44_mean auroc=0.3114 (oriented 0.6886) p=0.0010
+  L44_last auroc=0.2876 (oriented 0.7124) p=0.0080
+
+WHAT IS NOT SETTLED: a LENGTH-CONTROLLED assistant-axis reading. That needs the per-row
+assistant-axis projections on sycophancy_mt together with each row's token count (to
+residualise length out, or to score within length strata). No stored file in run-coords,
+audit/cache or run-crossgen holds per-row projections -- q10_sycophancy_axis.json and
+zeroshot_nulls.json store only AUROCs, and dotproducts_mean.json stores per-layer AUROCs.
+Computing it requires the pooled sycophancy_mt activations (lab, run-coords/passB or passC).
+

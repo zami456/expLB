@@ -1,0 +1,314 @@
+{
+ "layer": 40,
+ "pooling": "mean",
+ "probe": "paper",
+ "seed": 42,
+ "datasets": [
+  "instructed-deception",
+  "harm-pressure-choice",
+  "harm-pressure-knowledge-report",
+  "convincing-game",
+  "insider-trading",
+  "ai_liar"
+ ],
+ "n_train": {
+  "single_mean": 873,
+  "pooled_full": 5238,
+  "pooled_match": 544
+ },
+ "per_dataset": {
+  "instructed-deception": {
+   "single_offdiag": 0.8638300191426023,
+   "single_own": 0.9996900397157903,
+   "pooled_full": 0.9995606057509554,
+   "pooled_match": 0.9856566730021186,
+   "pooled_lodo": 0.9570211113608958,
+   "n_lodo": 1466,
+   "pooled_lodo_match": 0.9692355902529413,
+   "n_lodo_match": 474
+  },
+  "harm-pressure-choice": {
+   "single_offdiag": 0.6489309337025073,
+   "single_own": 0.9361636671281341,
+   "pooled_full": 0.951622827257345,
+   "pooled_match": 0.9131672050453776,
+   "pooled_lodo": 0.7702661129057068,
+   "n_lodo": 5036,
+   "pooled_lodo_match": 0.7927241962774957,
+   "n_lodo_match": 622
+  },
+  "harm-pressure-knowledge-report": {
+   "single_offdiag": 0.5392142857142856,
+   "single_own": 0.979375,
+   "pooled_full": 0.9705357142857143,
+   "pooled_match": 0.9842857142857143,
+   "pooled_lodo": 0.7435714285714285,
+   "n_lodo": 5016,
+   "pooled_lodo_match": 0.7596428571428573,
+   "n_lodo_match": 586
+  },
+  "convincing-game": {
+   "single_offdiag": 0.7085294117647059,
+   "single_own": 1.0,
+   "pooled_full": 1.0,
+   "pooled_match": 1.0,
+   "pooled_lodo": 0.9411764705882353,
+   "n_lodo": 5078,
+   "pooled_lodo_match": 0.9941176470588236,
+   "n_lodo_match": 452
+  },
+  "insider-trading": {
+   "single_offdiag": 0.7012919896640826,
+   "single_own": 0.995723068698209,
+   "pooled_full": 0.995544863227301,
+   "pooled_match": 0.9948320413436693,
+   "pooled_lodo": 0.8216163236211351,
+   "n_lodo": 4566,
+   "pooled_lodo_match": 0.8893344025661587,
+   "n_lodo_match": 482
+  },
+  "ai_liar": {
+   "single_offdiag": 0.7144444444444444,
+   "single_own": 1.0,
+   "pooled_full": 1.0,
+   "pooled_match": 1.0,
+   "pooled_lodo": 0.976388888888889,
+   "n_lodo": 5028,
+   "pooled_lodo_match": 0.9527777777777777,
+   "n_lodo_match": 454
+  }
+ },
+ "summary": {
+  "single": 0.6960401807387714,
+  "pooled_full": 0.9862106684202193,
+  "pooled_match": 0.9796569389461466,
+  "pooled_lodo": 0.8683400559893818,
+  "pooled_lodo_match": 0.8929720785126757,
+  "single_own_mean": 0.9851586292570222
+ },
+ "pairs": [
+  {
+   "source": "instructed-deception",
+   "target": "harm-pressure-choice",
+   "auroc": 0.7055837563451777,
+   "cos": -0.017812956124544144,
+   "mahal_cos": 0.008232564650013293
+  },
+  {
+   "source": "instructed-deception",
+   "target": "harm-pressure-knowledge-report",
+   "auroc": 0.6441964285714286,
+   "cos": -0.011442549526691437,
+   "mahal_cos": 0.004872620204178946
+  },
+  {
+   "source": "instructed-deception",
+   "target": "convincing-game",
+   "auroc": 1.0,
+   "cos": 0.08951394259929657,
+   "mahal_cos": 0.03660366191249397
+  },
+  {
+   "source": "instructed-deception",
+   "target": "insider-trading",
+   "auroc": 0.22801390002673083,
+   "cos": 0.02570507489144802,
+   "mahal_cos": 0.014632577657065597
+  },
+  {
+   "source": "instructed-deception",
+   "target": "ai_liar",
+   "auroc": 0.9805555555555556,
+   "cos": 0.1905340701341629,
+   "mahal_cos": 0.02941098929289217
+  },
+  {
+   "source": "harm-pressure-choice",
+   "target": "instructed-deception",
+   "auroc": 0.6388485826980851,
+   "cos": -0.017812956124544144,
+   "mahal_cos": 0.008232564650012852
+  },
+  {
+   "source": "harm-pressure-choice",
+   "target": "harm-pressure-knowledge-report",
+   "auroc": 0.7432142857142857,
+   "cos": 0.055576082319021225,
+   "mahal_cos": -0.004483575285813589
+  },
+  {
+   "source": "harm-pressure-choice",
+   "target": "convincing-game",
+   "auroc": 0.7823529411764706,
+   "cos": 0.008124023675918579,
+   "mahal_cos": 0.0073501113605020756
+  },
+  {
+   "source": "harm-pressure-choice",
+   "target": "insider-trading",
+   "auroc": 0.8562772877127327,
+   "cos": 0.024351337924599648,
+   "mahal_cos": -0.0015501572462147102
+  },
+  {
+   "source": "harm-pressure-choice",
+   "target": "ai_liar",
+   "auroc": 0.26249999999999996,
+   "cos": -0.013941378332674503,
+   "mahal_cos": -0.010249353156376217
+  },
+  {
+   "source": "harm-pressure-knowledge-report",
+   "target": "instructed-deception",
+   "auroc": 0.886966680972526,
+   "cos": -0.011442549526691437,
+   "mahal_cos": 0.004872620204180362
+  },
+  {
+   "source": "harm-pressure-knowledge-report",
+   "target": "harm-pressure-choice",
+   "auroc": 0.8089524688509461,
+   "cos": 0.055576082319021225,
+   "mahal_cos": -0.0044835752858118924
+  },
+  {
+   "source": "harm-pressure-knowledge-report",
+   "target": "convincing-game",
+   "auroc": 0.4088235294117647,
+   "cos": -0.00752286147326231,
+   "mahal_cos": 0.02340667977242067
+  },
+  {
+   "source": "harm-pressure-knowledge-report",
+   "target": "insider-trading",
+   "auroc": 0.8994030116724583,
+   "cos": 0.017104970291256905,
+   "mahal_cos": -0.006358486073758306
+  },
+  {
+   "source": "harm-pressure-knowledge-report",
+   "target": "ai_liar",
+   "auroc": 0.6444444444444445,
+   "cos": 0.053613726049661636,
+   "mahal_cos": 0.0033853321456802643
+  },
+  {
+   "source": "convincing-game",
+   "target": "instructed-deception",
+   "auroc": 0.9663914491835441,
+   "cos": 0.08951394259929657,
+   "mahal_cos": 0.036603661912494964
+  },
+  {
+   "source": "convincing-game",
+   "target": "harm-pressure-choice",
+   "auroc": 0.5183817874173204,
+   "cos": 0.008124023675918579,
+   "mahal_cos": 0.0073501113605030114
+  },
+  {
+   "source": "convincing-game",
+   "target": "harm-pressure-knowledge-report",
+   "auroc": 0.06473214285714285,
+   "cos": -0.00752286147326231,
+   "mahal_cos": 0.023406679772419645
+  },
+  {
+   "source": "convincing-game",
+   "target": "insider-trading",
+   "auroc": 0.5434375835338143,
+   "cos": 0.05208415165543556,
+   "mahal_cos": -0.01039263000123898
+  },
+  {
+   "source": "convincing-game",
+   "target": "ai_liar",
+   "auroc": 0.8666666666666667,
+   "cos": 0.10715356469154358,
+   "mahal_cos": 0.02375574909186462
+  },
+  {
+   "source": "insider-trading",
+   "target": "instructed-deception",
+   "auroc": 0.8467842472052483,
+   "cos": 0.02570507489144802,
+   "mahal_cos": 0.014632577657066258
+  },
+  {
+   "source": "insider-trading",
+   "target": "harm-pressure-choice",
+   "auroc": 0.43847100446085213,
+   "cos": 0.024351337924599648,
+   "mahal_cos": -0.001550157246215625
+  },
+  {
+   "source": "insider-trading",
+   "target": "harm-pressure-knowledge-report",
+   "auroc": 0.35232142857142856,
+   "cos": 0.017104970291256905,
+   "mahal_cos": -0.006358486073759307
+  },
+  {
+   "source": "insider-trading",
+   "target": "convincing-game",
+   "auroc": 0.45735294117647063,
+   "cos": 0.05208415165543556,
+   "mahal_cos": -0.010392630001239673
+  },
+  {
+   "source": "insider-trading",
+   "target": "ai_liar",
+   "auroc": 0.8180555555555556,
+   "cos": 0.1236906573176384,
+   "mahal_cos": 0.0006233494434103
+  },
+  {
+   "source": "ai_liar",
+   "target": "instructed-deception",
+   "auroc": 0.9801591356536075,
+   "cos": 0.1905340701341629,
+   "mahal_cos": 0.029410989292893788
+  },
+  {
+   "source": "ai_liar",
+   "target": "harm-pressure-choice",
+   "auroc": 0.7732656514382403,
+   "cos": -0.013941378332674503,
+   "mahal_cos": -0.01024935315637646
+  },
+  {
+   "source": "ai_liar",
+   "target": "harm-pressure-knowledge-report",
+   "auroc": 0.8916071428571428,
+   "cos": 0.053613726049661636,
+   "mahal_cos": 0.0033853321456831687
+  },
+  {
+   "source": "ai_liar",
+   "target": "convincing-game",
+   "auroc": 0.8941176470588236,
+   "cos": 0.10715356469154358,
+   "mahal_cos": 0.023755749091866844
+  },
+  {
+   "source": "ai_liar",
+   "target": "insider-trading",
+   "auroc": 0.979328165374677,
+   "cos": 0.1236906573176384,
+   "mahal_cos": 0.0006233494434103514
+  }
+ ],
+ "predictors": {
+  "cos": {
+   "r": 0.5627365040669097,
+   "r2": 0.31667237300944706,
+   "n": 30
+  },
+  "mahal_cos": {
+   "r": 0.2702966415920343,
+   "r2": 0.07306027445593266,
+   "n": 30
+  }
+ },
+ "covariance": "within"
+}

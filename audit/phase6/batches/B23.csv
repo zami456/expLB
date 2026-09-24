@@ -1,0 +1,6 @@
+id,source,source_ref,claim_short,numbers,layer,dataset_hint,status
+D-001,draft PDF,draft p1 Abstract,Linear probes for lie detection often fail to transfer across datasets.,,,,TODO
+D-002,draft PDF,draft p1 Abstract,Mahadik and Skapars (2026) ... They report better cross-dataset generalization at 3B and 8B.,,,,TODO
+D-005,draft PDF,draft p1 Abstract,"We extend the persona bank with ten roles that feign ignorance, are sincerely ignorant, or plainly assert what they know.",10,,,TODO
+D-007,draft PDF,draft p1 Abstract,"The benchmark's own probes score 0.50 and 0.26 there, and its upper bound, trained on privileged labels, 0.95.",0.50; 0.26; 0.95,LB's single layer (L20 per Table 2 caption),HP-KR,TODO
+D-011,draft PDF,draft p1 Abstract,"A threshold calibrated on benign chat still does not transfer to every dataset, which leaves calibration as the open problem.",,,HP-C; HP-KR,TODO

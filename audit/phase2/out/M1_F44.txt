@@ -1,0 +1,36 @@
+== F-44: is harm-pressure-kr-matched a loadable key? ==
+   in CSV_DATASETS: False
+   in JSON_DATASETS: False
+   in GENERATED: False
+   in all_keys(): False
+   load_dataset -> KeyError: 'harm-pressure-kr-matched'
+
+== dataset row counts from the loader ==
+   harm-pressure-choice                 2134
+   harm-pressure-knowledge-report       2139
+   instructed-deception                 5432
+   convincing-game                       267
+   insider-trading                      1080
+   ai_liar                               270
+   roleplaying                           371
+   sandbagging_v2                       1000
+   mask                                  585
+   sycophancy_mt                        1182
+
+== F-108 (b): identical response text across datasets ==
+   harm-pressure-knowledge-report & mask: 2 identical response strings
+      'No.'  (harm-pressure-knowledge-report x2 / mask x47)
+      'Yes.'  (harm-pressure-knowledge-report x781 / mask x43)
+   harm-pressure-knowledge-report & roleplaying: 2 identical response strings
+      'No.'  (harm-pressure-knowledge-report x2 / roleplaying x9)
+      'Yes.'  (harm-pressure-knowledge-report x781 / roleplaying x1)
+   mask & roleplaying: 4 identical response strings
+      'No'  (mask x15 / roleplaying x1)
+      'No.'  (mask x47 / roleplaying x9)
+      'Yes'  (mask x12 / roleplaying x2)
+      'Yes.'  (mask x43 / roleplaying x1)
+   TOTAL distinct cross-dataset identical response strings: 8
+
+== F-44: re-run build_eval_items at max_length 1024 ==
+   tokenizer unavailable: ModuleNotFoundError: No module named 'transformers'
+python exit 0

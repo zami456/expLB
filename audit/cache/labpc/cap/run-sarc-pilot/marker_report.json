@@ -1,0 +1,327 @@
+{
+ "n": 300,
+ "markers": {
+  "pc_ironic_critic": {
+   "per_variant": [
+    0.85,
+    0.15,
+    0.1,
+    0.0,
+    0.0
+   ],
+   "overall": 0.22,
+   "mean_count": 0.55
+  },
+  "pc_sincere_critic": {
+   "per_variant": [
+    0.6,
+    0.15,
+    0.15,
+    0.25,
+    0.05
+   ],
+   "overall": 0.24,
+   "mean_count": 0.43
+  },
+  "pc_sycophant": {
+   "per_variant": [
+    0.85,
+    1.0,
+    0.5,
+    0.0,
+    0.05
+   ],
+   "overall": 0.48,
+   "mean_count": 1.05
+  }
+ },
+ "per_marker": {
+  "pc_ironic_critic": {
+   "scare_quotes": 0,
+   "exclamation": 27,
+   "emoji": 0,
+   "slash_s": 0,
+   "allcaps": 4,
+   "reveal_aside": 0,
+   "stock_irony": 11,
+   "rhetorical_q": 13
+  },
+  "pc_sincere_critic": {
+   "scare_quotes": 7,
+   "exclamation": 0,
+   "emoji": 0,
+   "slash_s": 0,
+   "allcaps": 23,
+   "reveal_aside": 13,
+   "stock_irony": 0,
+   "rhetorical_q": 0
+  },
+  "pc_sycophant": {
+   "scare_quotes": 4,
+   "exclamation": 79,
+   "emoji": 0,
+   "slash_s": 0,
+   "allcaps": 7,
+   "reveal_aside": 0,
+   "stock_irony": 4,
+   "rhetorical_q": 11
+  }
+ },
+ "lexical": {
+  "auroc_raw": 0.9525,
+  "auroc_stripped": 0.9472,
+  "marker_effect": 0.005299999999999971,
+  "n": 200
+ },
+ "lexical_subsets": [
+  {
+   "pair": "ironic vs sycophant",
+   "subset": "all",
+   "variants": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "auroc_raw": 0.9525,
+   "auroc_stripped": 0.9472,
+   "marker_effect": 0.005299999999999971,
+   "n": 200
+  },
+  {
+   "pair": "ironic vs sycophant",
+   "subset": "most_marked(v1)",
+   "variants": [
+    1
+   ],
+   "auroc_raw": 1.0,
+   "auroc_stripped": 1.0,
+   "marker_effect": 0.0,
+   "n": 40
+  },
+  {
+   "pair": "ironic vs sycophant",
+   "subset": "unmarked(v4,v5)",
+   "variants": [
+    4,
+    5
+   ],
+   "auroc_raw": 0.9193749999999999,
+   "auroc_stripped": 0.92125,
+   "marker_effect": -0.001875000000000071,
+   "n": 80
+  },
+  {
+   "pair": "ironic vs sincere",
+   "subset": "all",
+   "variants": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "auroc_raw": 0.9997,
+   "auroc_stripped": 0.9994999999999999,
+   "marker_effect": 0.000200000000000089,
+   "n": 200
+  },
+  {
+   "pair": "ironic vs sincere",
+   "subset": "most_marked(v1)",
+   "variants": [
+    1
+   ],
+   "auroc_raw": 0.9974999999999999,
+   "auroc_stripped": 0.9974999999999999,
+   "marker_effect": 0.0,
+   "n": 40
+  },
+  {
+   "pair": "ironic vs sincere",
+   "subset": "unmarked(v4,v5)",
+   "variants": [
+    4,
+    5
+   ],
+   "auroc_raw": 0.9968750000000001,
+   "auroc_stripped": 0.9962500000000001,
+   "marker_effect": 0.0006249999999999867,
+   "n": 80
+  }
+ ],
+ "lexical_features": {
+  "subset": "unmarked",
+  "variants": [
+   4,
+   5
+  ],
+  "n": 80,
+  "vocab": 387,
+  "markers_stripped": true,
+  "cv": false,
+  "ironic_side": [
+   [
+    "of",
+    0.6881892085075378
+   ],
+   [
+    "that's",
+    0.6564974188804626
+   ],
+   [
+    "undoubtedly",
+    0.5748071670532227
+   ],
+   [
+    "ability",
+    0.5743768811225891
+   ],
+   [
+    "i",
+    0.48689398169517517
+   ],
+   [
+    "i'm",
+    0.4127761125564575
+   ],
+   [
+    "fact",
+    0.3936889171600342
+   ],
+   [
+    "decision",
+    0.39277684688568115
+   ],
+   [
+    "like",
+    0.3926740288734436
+   ],
+   [
+    "a",
+    0.3797755837440491
+   ],
+   [
+    "that",
+    0.3614672124385834
+   ],
+   [
+    "in",
+    0.33886244893074036
+   ],
+   [
+    "think",
+    0.33518922328948975
+   ],
+   [
+    "for",
+    0.3246927559375763
+   ],
+   [
+    "very",
+    0.32301849126815796
+   ]
+  ],
+  "sycophant_side": [
+   [
+    "plan",
+    -0.5166873335838318
+   ],
+   [
+    "good",
+    -0.45300382375717163
+   ],
+   [
+    "can",
+    -0.43575116991996765
+   ],
+   [
+    "get",
+    -0.4270416498184204
+   ],
+   [
+    "off",
+    -0.4020724892616272
+   ],
+   [
+    "you're",
+    -0.375692754983902
+   ],
+   [
+    "straightforward",
+    -0.36200520396232605
+   ],
+   [
+    "you",
+    -0.3444528579711914
+   ],
+   [
+    "more",
+    -0.3094145655632019
+   ],
+   [
+    "if",
+    -0.29030653834342957
+   ],
+   [
+    "getting",
+    -0.27702590823173523
+   ],
+   [
+    "you've",
+    -0.2722223103046417
+   ],
+   [
+    "team",
+    -0.26365017890930176
+   ],
+   [
+    "keys",
+    -0.256013423204422
+   ],
+   [
+    "right",
+    -0.253740131855011
+   ]
+  ]
+ },
+ "polarity": {
+  "pc_ironic_critic": {
+   "mean": 2.59,
+   "n": 100,
+   "frac_ge2": 1.0,
+   "per_variant": [
+    2.85,
+    2.85,
+    2.6,
+    2.55,
+    2.1
+   ]
+  },
+  "pc_sincere_critic": {
+   "mean": 2.37,
+   "n": 100,
+   "frac_ge2": 1.0,
+   "per_variant": [
+    2.85,
+    2.25,
+    2.4,
+    2.25,
+    2.1
+   ]
+  },
+  "pc_sycophant": {
+   "mean": 2.44,
+   "n": 100,
+   "frac_ge2": 0.96,
+   "per_variant": [
+    2.45,
+    2.25,
+    2.55,
+    2.15,
+    2.8
+   ]
+  }
+ }
+}

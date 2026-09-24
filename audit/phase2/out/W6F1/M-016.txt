@@ -1,0 +1,29 @@
+--- (a) provenance of "~7-9%"
+  C:\Users\SURAIYA/.claude/plans/harmonic-cuddling-kay.md:87: | 4 | **How much does a persona vector depend on the judge?** | `own100` vs `hf275` on matched role names. Already partly answered: ~7–9%. |
+  C:\Users\SURAIYA/.claude/plans/harmonic-cuddling-kay.md:129: | `hf275` | (1) **Judge sensitivity** — same roles, gpt-4.1-mini vs our Llama-3.1-70B; already partly measured at ~7–9%. (2) **Properly-conditioned PCA** — 275 points instead of the paper's 
+  C:\Users\SURAIYA/.claude/plans/harmonic-cuddling-kay.md:301: ~7–9%.
+  C:\Users\SURAIYA/.claude/plans/harmonic-cuddling-kay.md:1031: The plan predicted 7b from the ~7–9% own100-vs-hf275 gap. **That prediction was wrong, and
+  C:\Users\SURAIYA/.claude/plans/harmonic-cuddling-kay.md:1512: - [ ] Judge 0/1/2/3 score distribution (minor now — quantifies the ~7–9% judge effect)
+  C:\Users\SURAIYA/.claude/plans/harmonic-cuddling-kay.md:1560: HF free tier (bigger, free, already wired): `run_judge_405b.ps1`. The ~7–9% own100-vs-hf275
+
+  The plan says "already partly measured"; no result file is named.
+  The only own100-vs-hf275 quantity in the repo is the Q1 contamination table
+  (docs/thesis/persona-coordinates-70b-results.md:523-529). Relative gap:
+    L20: |own100| 0.729 vs |hf275| 0.686  abs +0.043  rel-to-own100 5.9%  rel-to-hf275 6.3%
+    L22: |own100| 0.710 vs |hf275| 0.662  abs +0.048  rel-to-own100 6.8%  rel-to-hf275 7.3%
+    L40: |own100| 0.660 vs |hf275| 0.610  abs +0.050  rel-to-own100 7.6%  rel-to-hf275 8.2%
+    L60: |own100| 0.573 vs |hf275| 0.516  abs +0.057  rel-to-own100 9.9%  rel-to-hf275 11.0%
+
+--- (b) are own100 and hf275 different rollouts?
+  hf275 vectors are DOWNLOADED, not generated here:
+    31_fetch_hf_vectors.py: from huggingface_hub import snapshot_download
+    31_fetch_hf_vectors.py: REPO = "lu-christina/assistant-axis-vectors"
+    31_fetch_hf_vectors.py: MODEL_DIR = "llama-3.3-70b"
+    31_fetch_hf_vectors.py: base = Path(snapshot_download(REPO, repo_type="dataset", allow_patterns=[
+    31_fetch_hf_vectors.py: f"{MODEL_DIR}/role_vectors/*.pt", f"{MODEL_DIR}/default_vector.pt",
+    31_fetch_hf_vectors.py: f"{MODEL_DIR}/assistant_axis.pt"])) / MODEL_DIR
+  local HF cache present: True
+    persona-coordinates-70b-results.md:267: | `own100` | Our 100-role persona bank: 22 deception / 22 honesty / 16 sycophancy / 16 anti-sycophancy / 8 anchor / 16 control roles from the Assistant-Axis library. Built on AA's 240 questions, ~1,20
+    persona-coordinates-70b-results.md:268: | `hf275` | Lu et al.'s published vectors (`lu-christina/assistant-axis-vectors`): 275 roles, judged by gpt-4.1-mini. We used them for diagnostics only. Its companion trait-vector set (240 traits) was
+    persona-coordinates-70b-results.md:377: | `own100` | 100 AA roles | AA's 240 shared questions × 5 prompts | ~1,200 per role (kept: median 1,163) | Llama-3.1-70B | Q1 baseline, Q10 comparison, early probes |
+    persona-coordinates-70b-results.md:378: | `hf275` | 275 roles (published) | AA's 240 | per Lu et al. | gpt-4.1-mini | diagnostics, the published Assistant Axis |

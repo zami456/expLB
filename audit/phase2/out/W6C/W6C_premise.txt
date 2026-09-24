@@ -1,0 +1,84 @@
+
+==============================================================================
+O-016 / O-017 : the pooled probe on OUR SIX overlapping datasets (L32, L40)
+==============================================================================
+  L20  datasets=6  single 0.6439   pooled_lodo 0.7365   pooled_lodo_match 0.7654
+        n_train: single_mean 873  pooled_full 5238  pooled_match 544
+  L32  datasets=6  single 0.7203   pooled_lodo 0.8965   pooled_lodo_match 0.9010
+        n_train: single_mean 873  pooled_full 5238  pooled_match 544
+  L40  datasets=6  single 0.6960   pooled_lodo 0.8683   pooled_lodo_match 0.8930
+        n_train: single_mean 873  pooled_full 5238  pooled_match 544
+  datasets in the six-set: instructed-deception, harm-pressure-choice, harm-pressure-knowledge-report, convincing-game, insider-trading, ai_liar
+
+  briefing 0.916 = his ext_axis1 L40 = 0.9158352735
+  L32   0.916 - pooled_lodo 0.8965       = +0.0193   (briefing +0.048 at L40)
+  L32   0.916 - pooled_lodo_match 0.9010 = +0.0148   (briefing +0.023 at L40, +0.015 at L32)
+  L40   0.916 - pooled_lodo 0.8683       = +0.0475   (briefing +0.048 at L40)
+  L40   0.916 - pooled_lodo_match 0.8930 = +0.0229   (briefing +0.023 at L40, +0.015 at L32)
+
+==============================================================================
+O-020 / O-021 : the 110 source->target pairs and the four single-source baselines
+==============================================================================
+  stored baselines block (audit_L40_s42.json):
+    mean_over_sources      0.6763163062
+    median_over_sources    0.7219698909
+    oriented_mean          0.7353614302
+    best_source_oracle     0.8966842158
+    pairs_below_half 21   n_pairs 110
+
+  recomputed from the 110 stored pairs:
+    n                       110
+    mean over sources       0.6763163062
+    median over sources     0.6843818740
+    sign-oriented mean      0.7353614302
+    minimum                 0.0545535714
+    pairs < 0.5             21
+    pairs < 0.4             14
+    pairs < 0.3             6
+  NOTE on 'median over sources': the stored 0.7220 is the mean over targets of the
+  per-target median (per_target.median_over_sources), NOT the median of all 110 pairs.
+    mean of per-target medians  0.7219698909
+    mean of per-target oriented 0.7353614302
+    mean of per-target oracle   0.8966842158
+    mean of per-target means    0.6763163062
+  the seven worst pairs:
+    0.0546   convincing-game                  -> harm-pressure-knowledge-report
+    0.1890   harm-pressure-kr-matched         -> insider-trading
+    0.2071   sycophancy_mt                    -> insider-trading
+    0.2300   sandbagging_v2                   -> convincing-game
+    0.2558   sandbagging_v2                   -> insider-trading
+    0.2932   sycophancy_mt                    -> instructed-deception
+    0.3010   instructed-deception             -> insider-trading
+
+==============================================================================
+O-026 / O-027 / O-032 / O-034 : the trained leave-one-dataset-out persona table
+==============================================================================
+  raw 8192-d:  single 0.6763   pooled LODO 0.8545   (briefing 0.676 / 0.854)
+  cross-check against premise_L40_mean_s42.json summary: single 0.6763  pooled_lodo 0.8545
+
+  feature            single pooledLODO  vs raw pool       gain own dataset bootstrap CI95
+  axes               0.6794     0.7454      -0.1091     0.0660  [-0.187, -0.039]  P(>=0) 0.0006
+  pc:deception       0.6214     0.7307      -0.1238     0.1094  [-0.203, -0.055]  P(>=0) 0.0001
+  pc:unified@2       0.5740     0.6921      -0.1624     0.1181  [-0.288, -0.059]  P(>=0) 0.0002
+
+  briefing states: axes 0.679/0.745/-0.109 CI[-0.187,-0.039]; pc:deception 0.621/0.731/-0.124 CI[-0.203,-0.055];
+                   pc:unified@2 0.574/0.692/-0.162 CI[-0.288,-0.059]; 'pc:unified@2 gains +0.118'
+  range of the three 'vs raw pooled' losses: -0.1624 to -0.1091  (briefing '0.11-0.16')
+
+==============================================================================
+O-028 / O-029 : mean-of-directions vs pooled LODO
+==============================================================================
+  stored: diff 0.0283541533  lo 0.0045082540  hi 0.0523446105   (briefing +0.028, CI [+0.005, +0.052])
+  recomputed from the 11 per-target values: +0.028354  own CI95 [+0.004610, +0.052037]  P(<=0) 0.0088
+  scalar means: mean_of_directions 0.8828295183   pooled_lodo_full 0.8544753650   diff +0.0283541533
+  also in why_L40_s42.json: mean_of_directions 0.8828295183  single_offdiag 0.6763163062
+
+==============================================================================
+FILES READ (path, bytes, md5)
+==============================================================================
+  audit/cache/labpc/run-premise/six/premise_L20_mean_s42.json         8232  fd12e3dffd811f7451011f73289a517e
+  audit/cache/labpc/run-premise/six/premise_L32_mean_s42.json         8288  e7bcab31353d3e4f377c0fe1f2060766
+  audit/cache/labpc/run-premise/six/premise_L40_mean_s42.json         8262  02a7643673e6629249bd78f29635a3cb
+  audit/cache/labpc/run-premise/audit/audit_L40_s42.json             17175  712bca920f38b6c321fd0eeeed50bc4b
+  audit/cache/labpc/run-premise/premise_L40_mean_s42.json            24283  e5ddaaa13ea6aa5a4b97bbafa38592ba
+  audit/cache/labpc/run-premise/why/why_L40_s42.json                   850  db563a7ccb9ceb98cd1dc2ab799a69da

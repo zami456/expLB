@@ -1,0 +1,15 @@
+id,source,source_ref,claim_short,numbers,layer,dataset_hint,status
+H-039,collaborator note,src/probes/deception-detection/results/persona_ood/summary.md:292,Mean Probe | **0.636** | 0.682 | Table 6 p.54 |,0.636; 0.682,,,CANDIDATE
+H-040,collaborator note,src/probes/deception-detection/results/persona_ood/summary.md:301,"AUROC **+0.070**, balanced accuracy **−0.085**. The zero-shot axis manages 0.746 AUROC without",+0.070; 0.085; 0.746,,,CANDIDATE
+H-041,collaborator note,src/probes/deception-detection/results/persona_ood/summary.md:306,rows are not comparable — this repo's reproduction of the Mean Probe recipe reaches 0.657 balanced,0.657,,,CANDIDATE
+H-042,collaborator note,src/probes/deception-detection/results/persona_ood/summary.md:307,"accuracy where the paper reports 0.636, largely because `trim_reasoning` flips insider-trading",0.636,,,CANDIDATE
+H-043,collaborator note,src/probes/deception-detection/results/persona_ood/summary.md:309,"sharing pooling, estimator and training set, the AUROC gain is only **+0.018** (0.752 vs 0.734)",+0.018; 0.752; 0.734,,,CANDIDATE
+H-044,collaborator note,src/probes/deception-detection/results/persona_ood/summary.md:310,while the balanced-accuracy loss is **−0.102**. The ranking advantage over the paper's number is,0.102,,,CANDIDATE
+H-045,collaborator note,src/probes/deception-detection/results/persona_ood/summary.md:319,"anomaly driving much of this analysis, is *solved* at layer 40 (0.936). Insider-trading inverts",0.936,,,CANDIDATE
+H-046,collaborator note,src/probes/deception-detection/results/persona_ood/summary.md:325,"(PC1 +0.114, axis +0.092) while the 3-d arm *loses* (−0.024).",+0.114; +0.092; 0.024,,,CANDIDATE
+H-047,collaborator note,src/probes/deception-detection/results/persona_ood/summary.md:326,Sycophancy stops being purely borrowed.** Deception-removed sycophancy holds 0.825 excluding,0.825,,,CANDIDATE
+H-048,collaborator note,src/probes/deception-detection/results/persona_ood/summary.md:329,The orthogonalisation result does not survive.** `dec3_orth` was the best arm here (0.7111) and,0.7111,,,CANDIDATE
+H-049,collaborator note,src/probes/deception-detection/results/persona_ood_L40/summary.md:29,at layer 40 (0.936). Insider-trading inverts instead (0.338). Whatever produces these inversions,0.936; 0.338,,,CANDIDATE
+H-050,collaborator note,src/probes/deception-detection/results/persona_ood_L40/summary.md:46,"The raw baseline improves a lot with depth** (0.648 → 0.732), which shrinks the headroom persona",0.648; 0.732,,,CANDIDATE
+H-051,collaborator note,src/probes/deception-detection/results/persona_ood_L40/summary.md:48,"while the **3-d arm now loses** (−0.024). Excluding HP-KR every persona arm still beats baseline,",0.024,,,CANDIDATE
+H-052,collaborator note,src/probes/deception-detection/results/persona_ood_L40/summary.md:58,At layer 40 it holds **0.8246** against random's 0.544. And sycophancy PC1 (0.9376) now transfers,0.8246; 0.544; 0.9376,,,CANDIDATE

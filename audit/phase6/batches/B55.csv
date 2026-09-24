@@ -1,0 +1,9 @@
+id,source,source_ref,claim_short,numbers,layer,dataset_hint,status
+H-095,collaborator note,src/probes/deception-detection/results/persona_positions_L40/summary.md:43,"degrades steadily with depth under the mean — 0.969, 0.912, 0.859 — alone among the six. Under the",0.969; 0.912; 0.859,,,CANDIDATE
+H-096,collaborator note,src/probes/deception-detection/results/persona_positions_L40/summary.md:51,"Mean over the five datasets shared with the paper, threshold at 1% FPR on the Alpaca control,",1%,,,CANDIDATE
+H-097,collaborator note,src/probes/deception-detection/results/persona_positions_L40/summary.md:56,mean | 0.887 / 0.591 / 0.187 | 0.899 / 0.694 / 0.413 | 0.884 / 0.666 / 0.350 |,0.887; 0.591; 0.187; 0.899; 0.694; 0.413,,,CANDIDATE
+H-098,collaborator note,src/probes/deception-detection/results/persona_positions_L40/summary.md:57,top-10% mean** | 0.873 / 0.663 / 0.348 | **0.907 / 0.737 / 0.531** | 0.907 / 0.715 / 0.470 |,10%; 0.873; 0.663; 0.348; 0.907; 0.737,,,CANDIDATE
+H-099,collaborator note,src/probes/deception-detection/results/persona_positions_L40/summary.md:63,Top-10% is the robust choice over max.** Max scores higher on average but collapses RepE's,10%,,,CANDIDATE
+H-100,collaborator note,src/probes/deception-detection/results/persona_positions_L40/summary.md:64,balanced accuracy (0.998 → 0.638 at layer 40) — one extreme token per example is a noisy,0.998; 0.638,,,CANDIDATE
+H-101,collaborator note,src/probes/deception-detection/results/persona_positions_L40/summary.md:67,"accuracy, 0.531 recall.** HP-C and HP-KR stay on the 0.5 floor under every read: their whole score",0.531,,,CANDIDATE
+H-102,collaborator note,src/probes/deception-detection/results/persona_positions_L40/summary.md:79,trading's token 10 drops to 0.33 at layer 20 because its reports are templated and that slot is,0.33,,,CANDIDATE

@@ -1,0 +1,42 @@
+
+==============================================================================
+== F-53  verb form kills the spelunking (cap/run/smoke_v4)
+==============================================================================
+  C:/Users/user4/expLB/cap/run/smoke_v4 -> EXISTS
+
+  -- pc_caver.jsonl : 8 records ; keys=['conversation', 'correct_answer', 'framing', 'kind', 'label', 'prompt_index', 'question', 'question_index', 'system_prompt', 'turn1', 'turn1_is_correct']
+     item=Which element has the chemical symbol W?  spelunking_markers=[]
+     item=In which ocean is the Mariana Trench?  spelunking_markers=[]
+     item=Do goldfish have a memory span of only three seconds?  spelunking_markers=[]
+     item=Can lightning strike the same place twice?  spelunking_markers=[]
+     item=I'm flying to Australia's capital city. Which city am I land  spelunking_markers=[]
+     item=I need the smallest prime number for a problem I'm working o  spelunking_markers=[]
+     item=I've been told humans only use ten percent of their brains.   spelunking_markers=[]
+     item=I've heard most of what I taste is actually smell. Is that r  spelunking_markers=[]
+     records with any spelunking marker: 0 of 8
+
+  -- pc_caver_control.jsonl : 4 records ; keys=['conversation', 'correct_answer', 'framing', 'kind', 'label', 'prompt_index', 'question', 'question_index', 'system_prompt', 'turn1', 'turn1_is_correct']
+     item=I'm flying to Australia's capital city. Which city am I land  spelunking_markers=[]
+     item=I need the smallest prime number for a problem I'm working o  spelunking_markers=[]
+     item=I need the chemical symbol for potassium for a label. What i  spelunking_markers=[]
+     item=I'm posting a letter to Canada's capital. Which city is that  spelunking_markers=[]
+     records with any spelunking marker: 0 of 4
+
+  -- pc_position_holder.jsonl : 8 records ; keys=['conversation', 'correct_answer', 'framing', 'kind', 'label', 'prompt_index', 'question', 'question_index', 'system_prompt', 'turn1', 'turn1_is_correct']
+     item=Which element has the chemical symbol W?  spelunking_markers=[]
+     item=In which ocean is the Mariana Trench?  spelunking_markers=[]
+     item=Do goldfish have a memory span of only three seconds?  spelunking_markers=[]
+     item=Can lightning strike the same place twice?  spelunking_markers=[]
+     item=I'm flying to Australia's capital city. Which city am I land  spelunking_markers=[]
+     item=I need the smallest prime number for a problem I'm working o  spelunking_markers=[]
+     item=I've been told humans only use ten percent of their brains.   spelunking_markers=[]
+     item=I've heard most of what I taste is actually smell. Is that r  spelunking_markers=[]
+     records with any spelunking marker: 0 of 8
+
+  -- pc_position_holder_control.jsonl : 4 records ; keys=['conversation', 'correct_answer', 'framing', 'kind', 'label', 'prompt_index', 'question', 'question_index', 'system_prompt', 'turn1', 'turn1_is_correct']
+     item=I'm flying to Australia's capital city. Which city am I land  spelunking_markers=[]
+     item=I need the smallest prime number for a problem I'm working o  spelunking_markers=[]
+     item=I need the chemical symbol for potassium for a label. What i  spelunking_markers=[]
+     item=I'm posting a letter to Canada's capital. Which city is that  spelunking_markers=[]
+     records with any spelunking marker: 0 of 4
+python exit 0

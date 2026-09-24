@@ -1,0 +1,55 @@
+batch,id,source,source_ref,claim_short,numbers,layer,dataset_hint
+W5A-ledger,L-F-103,FINDINGS.md,kd/docs/FINDINGS.md:4818,"2026-09-22 · **The kd-bank share is POOLING-ROBUST, unlike the scale trend: +0.055 (mean) vs +0.059 (last), positive at 21/21 and 20/21. F-102's warning does not transfer to F-98/F-99",+0.055; +0.059; +0.0551; +0.0590; +0.0019; +0.0814; 0.0327; +0.0848,0,
+W5A-ledger,L-F-21,FINDINGS.md,kd/docs/FINDINGS.md:365,"2026-09-20 · NDIF small-model deployments cap memory PER PROCESS, not per GPU",83%; 44.42; 36.73; 7.69; 7.37,,
+W5A-ledger,L-F-39,FINDINGS.md,kd/docs/FINDINGS.md:1012,"2026-09-20 · Read the paper itself: our pipeline is bigger, stricter, and gets a SMALLER effect",0.14; 0.12; +0.10; 0.11; +0.12; +0.01; +0.14; 0.01,,
+W5A-ledger,L-F-45,FINDINGS.md,kd/docs/FINDINGS.md:1266,2026-09-20 · The OOM fix cost 8x throughput; the full-corpus run is no longer affordable,28%; 45%,,instructed-deception roleplaying
+W5A-ledger,L-F-49,FINDINGS.md,kd/docs/FINDINGS.md:1443,"2026-09-20 · The 3B is only 1.8x slower than the 8B, not 10x — the earlier ratio did not transfer",0.34; 0.30,,instructed-deception
+W5A-ledger,L-F-53,FINDINGS.md,kd/docs/FINDINGS.md:1599,2026-09-20 · Verb form kills the spelunking AND improves the folds,,,
+W5A-ledger,L-F-57,FINDINGS.md,kd/docs/FINDINGS.md:1760,2026-09-20 · Four thesis figures built from the day's findings,0.300; 0.379; 0.659; 0.633; +0.116; +0.10; 0.60; +0.026,"44,76",
+W5A-ledger,L-F-62,FINDINGS.md,kd/docs/FINDINGS.md:1948,2026-09-20 · s3 vs s23 makes NO measurable difference downstream,0.6623; +0.1496; +0.1500; 0.0004; +0.0869; +0.0838; 0.0031; +0.0757,40,
+W5A-ledger,L-F-69,FINDINGS.md,kd/docs/FINDINGS.md:2421,"2026-09-21 · passA's matched slice is repaired — 9 honest deniers become 134, matching passB exactly",0.784; 0.509; 5.22,,HP-KR
+W5A-ledger,L-F-78,FINDINGS.md,kd/docs/FINDINGS.md:2985,"2026-09-21 · Two papers added: our sycophancy finding is independently corroborated, and the persona-coordinate premise now has a cheaper rival we have never tested",2602.2027; 0.67; 0.56; 0.69; 0.74; 0.52,,
+W5A-ledger,L-F-90,FINDINGS.md,kd/docs/FINDINGS.md:3761,"2026-09-21 · **External review audit: Result 1's headline baseline was the weakest available, Result 2 survives but barely, and the persona method loses to pooled LR in the same setup",0.6763; 0.850; 0.806; 0.044; 0.029; 0.8344; 0.7912; 0.8736,,
+W5B-ledger,L-F-104,FINDINGS.md,kd/docs/FINDINGS.md:4870,"2026-09-22 · **""Fixed"" did not mean ""fixed where it runs"": four script fixes existed only in the repo and never reached the lab PC, including two on live chains. A hash audit of 160 scripts found all ",0.947; 0.00; 0.20; 0.65; 0.90; .2026,,
+W5B-ledger,L-F-22,FINDINGS.md,kd/docs/FINDINGS.md:392,2026-09-20 · `1_generate_ndif.py` never got the exc_tail fix,,,
+W5B-ledger,L-F-40,FINDINGS.md,kd/docs/FINDINGS.md:1077,2026-09-20 · Eval-corpus extraction runs ~1.75x slower than F-35 projected,1.75; 37%,,harm-pressure-knowledge-report sycophancy_mt convincing-game instructed-deception insider-trading ai_liar roleplaying mask alpaca
+W5B-ledger,L-F-47,FINDINGS.md,kd/docs/FINDINGS.md:1368,2026-09-20 · A stale items.pt survived the restart and silently un-sampled one dataset,81%,,instructed-deception
+W5B-ledger,L-F-50,FINDINGS.md,kd/docs/FINDINGS.md:1477,"2026-09-20 · Correction to F-49: the 3B is 2.4x slower, not 1.8x",34%,,instructed-deception
+W5B-ledger,L-F-55,FINDINGS.md,kd/docs/FINDINGS.md:1681,2026-09-20 · The holding half is behaviourally INERT — a bare model holds too,,,
+W5B-ledger,L-F-60,FINDINGS.md,kd/docs/FINDINGS.md:1868,"2026-09-20 · CORRECTION to F-58: the paper evaluates MASK, not HarmPressureChoice",+0.089; +0.086; +0.026,,harm-pressure-knowledge-report HP-KR mask
+W5B-ledger,L-F-64,FINDINGS.md,kd/docs/FINDINGS.md:2037,2026-09-21 · Cap run: generation and judging complete; the grader filter is SYMMETRIC,93.83; 93.17; 0.66; 5%; 0%; 4%; 7%; 1.07,,
+W5B-ledger,L-F-70,FINDINGS.md,kd/docs/FINDINGS.md:2474,"2026-09-21 · Novelty audit: two independent reviews agree on 2 of 10 claims being new, and one of our attributions was wrong",2601.1038; 0.91; 0.87; 2511.1740; 2511.1603; 2609.0289; 2605.2795; 2503.0375,,
+W5B-ledger,L-F-82,FINDINGS.md,kd/docs/FINDINGS.md:3256,2026-09-21 · The cap layer profile is unchanged by the judge filter,+0.1542; +0.1538; 95%; +0.0913; +0.2113; +0.0907; +0.2118; 0.0000,"28,32,36,40,60",
+W5B-ledger,L-F-91,FINDINGS.md,kd/docs/FINDINGS.md:3873,"2026-09-21 · **Layer 40 is not the peak. L32 is, for both raw and persona features, by ~0.02 — and the data to show it was already on disk",0.02; 0.8945; 0.8942; 0.8828; 0.6818; 0.6623; +0.0195; 0.7798,"32,36,40",
+W5C-ledger,L-F-14,FINDINGS.md,kd/docs/FINDINGS.md:239,"2026-09-19 · `scp` from the lab PC truncates at 200 KiB, silently",49%; 2.66,,
+W5C-ledger,L-F-24,FINDINGS.md,kd/docs/FINDINGS.md:428,2026-09-20 · A missing `remote=True` downloads the 70B and is SILENT,40.22,,
+W5C-ledger,L-F-41,FINDINGS.md,kd/docs/FINDINGS.md:1112,2026-09-20 · The 8B coords arm OOMed on HP-KR; the exc_tail fix paid for itself,902.00; 0.75,,harm-pressure-knowledge-report HP-KR instructed-deception
+W5C-ledger,L-F-48,FINDINGS.md,kd/docs/FINDINGS.md:1406,2026-09-20 · The 8B evaluation arm is complete — first AUROC-capable data outside the 70B,,,convincing-game instructed-deception ai_liar roleplaying
+W5C-ledger,L-F-52,FINDINGS.md,kd/docs/FINDINGS.md:1542,2026-09-20 · The contrast holds on true answers and COLLAPSES on false ones,10%,,
+W5C-ledger,L-F-56,FINDINGS.md,kd/docs/FINDINGS.md:1729,"2026-09-20 · `--sample` is proportional, not balancing — one column is 5:1 imbalanced",17%,,convincing-game instructed-deception ai_liar roleplaying
+W5C-ledger,L-F-61,FINDINGS.md,kd/docs/FINDINGS.md:1905,2026-09-20 · The 36-vs-26 bank comparison is confounded THREE ways,+0.006; +0.076; 0.006; +0.173; 0.499,40,
+W5C-ledger,L-F-68,FINDINGS.md,kd/docs/FINDINGS.md:2350,"2026-09-21 · **A vs B, finally answered: the holding personas improve the CONTRAST too, by ~0.045",0.045; 95%; 0.759; 0.733; 0.789; 0.745; 0.717; 0.772,"20,40,44",sycophancy_mt
+W5C-ledger,L-F-71,FINDINGS.md,kd/docs/FINDINGS.md:2529,2026-09-21 · Top-up complete: all three stores now carry the matched slice identically,,,HP-KR
+W5C-ledger,L-F-84,FINDINGS.md,kd/docs/FINDINGS.md:3357,"2026-09-21 · The cluster-permutation test completes the pre-registration, and it agrees: p = 0.38",0.38; 0.9155; 0.916; 0.059; 0.8871; 2.5787; 0.069; +0.189,,
+W5D-memory,M-004,memory note,memory/crossgen-80-20-retrain.md:23,"ID-trained row, L40, mean over the 9 other datasets (100%):** mms mean pooling raw 0.817 /",100%; 0.817,,
+W5D-memory,M-012,memory note,memory/dataset-identity-dominates-variance.md:45,measure it than to be asked about it. Also: |deception axis| grows 0.025 -> 5.386 from layer 0,0.025; 5.386,,
+W5D-memory,M-014,memory note,memory/judge-choice-barely-matters.md:3,"description: Q7 answered — Llama-3.1-70B vs 405B judging the SAME rollouts agree 91.2%, and differ only 0.8pp on the score-3 rate that builds the vectors",-3.1; 2%,,
+W5D-memory,M-015,memory note,memory/judge-choice-barely-matters.md:15,"score-3 rate 80.7% vs 79.9% — a 0.8 pp difference**, and score-3 is the filter that",7%; 9%,,
+W5D-memory,M-018,memory note,memory/matched-control-kills-the-gain.md:19,"projection gains +0.056 where raw < 0.6 and loses 0.44 where raw >= 0.85 (corr(raw, delta) = -0.76,",+0.056; 0.44; 0.85; -0.76,,
+W5D-memory,M-029,memory note,memory/paper16-assistant-direction-not-lu-axis.md:3,"description: ""paper16's \""assistant\"" axis is default minus mean(25 paper personas), only cos 0.30-0.37 with Lu et al.'s published axis; against the published axis paper16's deception contamination is",0.30; -0.37; -0.14; -0.23; -0.34; -0.37,,
+W5D-memory,M-032,memory note,memory/persona-axes-encode-register.md:20,sycophancy_mt | agreeable vs challenging register | capitulation under pressure with no new evidence | 0.355 target / 0.379 source |,0.355; 0.379,,
+W5D-memory,M-036,memory note,memory/persona-axes-encode-register.md:47,"on `sycophancy_mt` where the register axis reads **0.374**; trained, it beats raw by **+0.112,",0.374; +0.112,,
+W5D-memory,M-070,memory note,memory/q6-layer-choice-depends-on-method.md:19,L40 (pooled-mean mms 0.883) with L28 within 0.007. Pass C has no 32/36 stored.,0.883; 0.007,,
+W5D-memory,M-082,memory note,memory/response-length-transfers-on-its-own.md:28,roleplaying | 0.441 | 31 vs 38 (the only inversion) |,0.441,,
+W5D-memory,M-087,memory note,memory/significance-and-random-nulls.md:19,"L44 last +0.046. Best-vs-best: mean +0.014 [-0.000,+0.028] p=0.056; last +0.026 p=0.002.",+0.046; +0.014; -0.000; +0.028; 0.056; +0.026,,
+W5D-memory,M-095,memory note,memory/unified-pc1-is-question-family.md:28,"Same review, also measured: a random 2-d projection ""gains"" +0.056 where raw off-diagonal AUROC <0.6",+0.056,,
+W5E-ownerdoc,O-014,owner doc,docs/COLLABORATOR_BRIEFING.md:277,"there. **Quote the raw difference (+0.055–0.059, or +0.081 at L20 mean-pooled), and give a share",+0.055; 0.059; +0.081,,
+W5E-ownerdoc,O-015,owner doc,docs/COLLABORATOR_BRIEFING.md:305,"0.916 vs single-source 0.732 *(the abstract)* | +0.184 | both yours, like-for-like |",0.916; 0.732; +0.184,,
+W5E-ownerdoc,O-022,owner doc,docs/COLLABORATOR_BRIEFING.md:327,"sign-oriented mean, max(a, 1−a) | 0.735 |",0.735,,
+W5E-ownerdoc,O-038,owner doc,docs/ROADMAP_TO_DEFENCE.md:28,the sign-oriented mean (0.735). Keep that pre-empted.,0.735,,
+W5E-ownerdoc,O-040,owner doc,docs/NOVELTY_ASSESSMENT.md:30,"9** — the empty 2×2 cell | **Liars' Bench documents it themselves** (Appendix D: cases where the model claims knowledge without a consistent belief ""are discarded""). Only the regex-0.91-vs-probe-0.87 ",-0.91; -0.87,,
+W5E-ownerdoc,O-065,owner doc,docs/thesis/persona-coordinates-70b-results.md:377,"`own100` | 100 AA roles | AA's 240 shared questions × 5 prompts | ~1,200 per role (kept: median 1,163) | Llama-3.1-70B | Q1 baseline, Q10 comparison, early probes |",-3.1,,
+W5E-ownerdoc,O-075,owner doc,docs/thesis/persona-coordinates-70b-results.md:655,"L20 mean, mms | 0.652 | 0.646 | 0.006 | ~0.000 | [0.513, 0.796] | no (q 0.52) |",0.652; 0.646; 0.006; 0.000; 0.513; 0.796,,
+W5E-ownerdoc,O-082,owner doc,docs/thesis/persona-coordinates-70b-results.md:702,"(§7.12), so a high within-construct mean is expected under either hypothesis.",7.12,,
+W5E-ownerdoc,O-086,owner doc,docs/thesis/persona-coordinates-70b-results.md:724,"pc:deception, mms, mean | 0.524 | 0.517 | 0.661 | L40 0.661 |",0.524; 0.517; 0.661; 0.661,,
+W5E-ownerdoc,O-088,owner doc,docs/thesis/persona-coordinates-70b-results.md:726,"deception PC1, zero-shot, mean | 0.673 | 0.699 | 0.877 | L40 0.877 |",0.673; 0.699; 0.877; 0.877,,

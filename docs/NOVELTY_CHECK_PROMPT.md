@@ -106,6 +106,43 @@ persona makes the context byte-identical across personas, so the only varying te
 prompt and the only generated text is the thing being measured. A wrong-answer control then shows
 the construct only exists on *true* answers — with a false turn 1 both sides correct it.
 
+> **UPDATE 2026-09-24 (DF-104 + DF-105, P17).** Three points on the block below.
+> • Its pointers `docs/NOVELTY_ASSESSMENT.md:30` and `docs/LAYER_PREREGISTRATION.md:93` are HEAD line
+>   numbers; in the working tree they are `:44` and `:105`.
+> • Item (b) is moot: "505 vs 310" had already been fixed at e917ecd3, where this file reads
+>   529.4 vs 340.4. Disregard (b).
+> • "0.9597 for a second phrasing" was not re-derived: the regex is recorded nowhere. A guess,
+>   `NOT ^(yes|i know)`, gives 0.9413. The main 0.9125 figure was re-checked and matches.
+> **Source:** `audit/p17/correction_blocks_check.csv` lines 35, 51, 57–59; `git show
+> e917ecd3:docs/NOVELTY_CHECK_PROMPT.md` (:121).
+>
+> **CORRECTION 2026-09-24 (DF-55 + DF-10, Phase 6).** Two corrections to the paragraph below.
+>
+> **(a) The comparison is inverted.** *"probes report ~0.87"* has no source, and the regex does
+> **not** beat the probe. Sweeping **all 113 stored matrices** containing HP-KR, the raw probe
+> **diagonal** — the only reading under which "probes report X on HP-KR" is meaningful — is
+> **0.9663 median** (range 0.8302–0.9900), and **0.96–0.98 at every headline layer**. So the regex
+> at **0.9125 loses by ~0.054**. Likely origin of the 0.87: this project's **own superseded
+> regex**, which would mean claim 9 compares the regex against *itself* while calling one side
+> "probes". **The argument survives, restated:** a pure denial-phrasing regex reaches **94.4% of**
+> a full 8,192-d probe's score on the same rows. That is still strong.
+>
+> **(b) Two superseded token counts** appear a few lines above, at `:110`: "505 vs 310 tokens on
+> one, 245 vs 96 on another". Correct: **`sandbagging_v2` 529.4 vs 340.4** and **`mask` 283.2 vs
+> 176.4**.
+>
+> **Source:** 113-matrix sweep, `audit/scripts/qa_w5e_O040.py`; token means from
+> `run-coords/passB/<dataset>/rows.jsonl`, `span_len` by `label`.
+> **How the claim is updated:** read the regex sentence as — *"a label-free regex on denial
+> phrasing alone reaches 0.9125 AUROC (0.9597 for a second phrasing) on the 2,139 Llama-3.3-70B
+> rows, which is 94.4% of what a full 8,192-d probe achieves in-distribution on the same rows
+> (0.9663 median)."*
+> **This must land in two more places:** `docs/NOVELTY_ASSESSMENT.md:30` records the
+> regex-vs-probe quantification as the **only** part of claim 9 that is this project's own
+> contribution, and `docs/LAYER_PREREGISTRATION.md:93` uses it as the premise of a directional
+> prediction. Both carry the same inverted comparison.
+> _The text below is superseded on these points and is kept for the record._
+
 **9. A structural confound in "knowledge report" deception datasets.** The deceptive label is
 defined as *knows the answer AND denies knowing it*, but the fourth cell of that 2×2 (doesn't
 know AND asserts) is structurally empty in the data, so the label is nearly collinear with a

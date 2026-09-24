@@ -1,0 +1,47 @@
+file : C:\Users\user4\expLB\run-crossgen\kd11\matrices\mean_L40_s42.json
+bank : axes_vectors_s3_fp32.pt | name: paper16 | k: 5 | pooling: mean | layer: 40 | seed: 42
+n datasets: 11
+
+=== F-13 table: 'as target' (column mean) / 'as source' (row mean), probe=paper ===
+  axes           harm-pressure-knowledge-report   as_target=0.4273 (n=10)  as_source=0.3004 (n=10)
+  axes           sycophancy_mt                    as_target=0.3551 (n=10)  as_source=0.3787 (n=10)
+  pc:deception   harm-pressure-knowledge-report   as_target=0.6211 (n=10)  as_source=0.6909 (n=10)
+  pc:deception   sycophancy_mt                    as_target=0.3910 (n=10)  as_source=0.2713 (n=10)
+  pc:unified     harm-pressure-knowledge-report   as_target=0.5382 (n=10)  as_source=0.5383 (n=10)
+  pc:unified     sycophancy_mt                    as_target=0.4451 (n=10)  as_source=0.4902 (n=10)
+  random         harm-pressure-knowledge-report   as_target=0.6984 (n=10)  as_source=0.6590 (n=10)
+  random         sycophancy_mt                    as_target=0.5413 (n=10)  as_source=0.6327 (n=10)
+  random@2       harm-pressure-knowledge-report   as_target=0.5515 (n=10)  as_source=0.5338 (n=10)
+  random@2       sycophancy_mt                    as_target=0.4974 (n=10)  as_source=0.5187 (n=10)
+  raw            harm-pressure-knowledge-report   as_target=0.6990 (n=10)  as_source=0.6943 (n=10)
+  raw            sycophancy_mt                    as_target=0.6013 (n=10)  as_source=0.5010 (n=10)
+  datapca        harm-pressure-knowledge-report   as_target=0.6627 (n=10)  as_source=0.5738 (n=10)
+  datapca        sycophancy_mt                    as_target=0.5776 (n=10)  as_source=0.6609 (n=10)
+
+=== zero-shot on sycophancy_mt (paper16 bank) ===
+  contrast                 0.4089
+  PC1                      0.374
+
+=== off-diagonal mean over all 11 vs the 10 without sycophancy_mt (probe=paper) ===
+  raw            all11=0.6623 (n=110)  minus_syc=0.6870 (n=90)  lift=+0.0247
+  axes           all11=0.6408 (n=110)  minus_syc=0.7016 (n=90)  lift=+0.0609
+  pc:deception   all11=0.6432 (n=110)  minus_syc=0.7125 (n=90)  lift=+0.0693
+  pc:unified     all11=0.6715 (n=110)  minus_syc=0.7168 (n=90)  lift=+0.0453
+  pc:unified@2   all11=0.6396 (n=110)  minus_syc=0.7175 (n=90)  lift=+0.0780
+  datapca        all11=0.6651 (n=110)  minus_syc=0.6753 (n=90)  lift=+0.0102
+  random         all11=0.5849 (n=110)  minus_syc=0.5845 (n=90)  lift=-0.0005
+
+=== stored block-9/10 summary fields, for cross-reference ===
+  axes|lr_reg10|10: [0.6272814359872768, 0.6434570468728291]
+  axes|mms|10: [0.6346207156952443, 0.6512569768617046]
+  axes|paper|10: [0.6321205241433552, 0.6494828274621781]
+  pc:deception|lr_reg10|10: [0.5950738302244788, 0.6089334138510457]
+  pc:deception|mms|10: [0.5822237857863236, 0.595705273311383]
+  pc:deception|paper|10: [0.6344492030769433, 0.65209941360484]
+  pc:unified|lr_reg10|10: [0.6385780413757278, 0.6521515229019679]
+  pc:unified|mms|10: [0.5901872401117709, 0.6022177409523057]
+  pc:unified|paper|10: [0.6634745301551584, 0.679194302070275]
+  raw|lr_reg10|10: [0.6432805797538057, 0.6532101849784071]
+  raw|mms|10: [0.6604443400441069, 0.6729859055732288]
+  raw|paper|10: [0.6570138941371615, 0.6672859228717035]
+python exit 0

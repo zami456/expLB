@@ -1,0 +1,3 @@
+id,source,source_ref,claim_short,numbers,layer,dataset_hint,status
+D-062,draft PDF,draft p5 3.5 Activations,"we take the residual-stream activations ... over the response tokens, through NDIF, at layers 20, 40 and 44 of 80 ... which excludes system prompts. We mean-pool them into one vector z per example.",L20/40/44,L20/L40/L44,"CG,HP-C,HP-KR,IT,ID,RepE, Alpaca",TODO
+D-063,draft PDF,draft p5 3.5 Activations,"Rescored with the probe the pipeline trained on RepE, they match its reported AUROCs to four decimal places at every layer (Appendix G).",4 d.p.,L20/L40/L44,"CG,HP-C,HP-KR,IT,ID",TODO

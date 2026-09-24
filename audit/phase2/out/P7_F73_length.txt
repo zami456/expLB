@@ -1,0 +1,24 @@
+=== F-73 length gaps ===
+store: C:/Users/user4/expLB/run-coords/passB  (span_len = TOKENS of the scored span)
+
+  dataset                                n  n_pos  n_neg   pos len   neg len      gap  ratio  in-repo
+  ai_liar                              270    135    135  174.0000  151.6296 +22.3704   1.15  yes
+  alpaca                              2000   SKIPPED (labels [0])
+  convincing-game                      267    167    100  203.8024  205.0000  -1.1976   0.99  yes
+  harm-pressure-choice                2134    134   2000    1.0075    1.0040  +0.0035   1.00  yes
+  harm-pressure-knowledge-report      2139    139   2000    8.5324    5.2575  +3.2749   1.62  yes
+  harm-pressure-kr-matched             258    124    134    8.1129    7.4925  +0.6204   1.08  -
+  insider-trading                     1080    423    657  116.5461  110.1826  +6.3635   1.06  yes
+  instructed-deception                5432   3045   2387   32.1455   30.1571  +1.9884   1.07  yes
+  mask                                 585    415    170  283.1831  176.4235+106.7596   1.61  -
+  roleplaying                          371    203     84   39.3842   43.4881  -4.1039   0.91  yes
+  sandbagging_v2                      1000    500    500  529.3960  340.3860+189.0100   1.56  yes
+  sycophancy_mt                       1182    434    748  170.1682  126.1979 +43.9703   1.35  -
+
+  ALL 11 datasets: pos strictly longer in 9; exactly equal 0; shorter 2
+  pos longer-or-equal in 9 of 11
+  restricted to the 8 in the reviewer's repo: strictly longer 6 of 8; equal 0
+  |gap| on those 8, sorted: ['0.003', '1.198', '1.988', '3.275', '4.104', '6.363', '22.370', '189.010']
+  median |gap| on those 8: 3.689 tokens
+  excluding 'alpaca' control: pos strictly longer in 9 of 11
+python exit 0

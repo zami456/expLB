@@ -1,0 +1,89 @@
+
+==============================================================================
+== F-90  external review audit  (run-premise/audit/audit_L40_s42.json)
+==============================================================================
+  17175 B  mtime 2026-09-21 20:59:35.269332
+  layer = 40
+  probe = paper
+  seed = 42
+  budget = 666
+  persona_lodo :
+    pc:unified@2 :
+      single = 0.5739826679649962
+      lodo = 0.6920640950385826
+      lodo_per_target : list[11] [0.9397927694099856, 0.5519920012305799, 0.8472321428571428, 0.6482334869431644, 0.9873772791023843, 0.19410533658876875]
+    pc:deception :
+      single = 0.6213570249355471
+      lodo = 0.7307243420326418
+      lodo_per_target : list[11] [0.929564080031064, 0.6893554837717274, 0.8780357142857143, 0.6820276497695852, 0.9046283309957924, 0.47183467038716426]
+    axes :
+      single = 0.6794089978437036
+      lodo = 0.745375553121227
+      lodo_per_target : list[11] [0.9569632066924172, 0.5596831256729734, 0.7657142857142857, 0.7741935483870968, 0.9424964936886395, 0.740320892919428]
+  draws = 20
+  datasets : list[11] ['instructed-deception', 'harm-pressure-choice', 'harm-pressure-knowledge-report', 'harm-pressure-kr-matched', 'convincing-game', 'insider-trading']
+  baselines :
+    mean_over_sources = 0.6763163062289969
+    median_over_sources = 0.7219698908893769
+    oriented_mean = 0.735361430160015
+    best_source_oracle = 0.8966842158241568
+  pairs_below_half = 21
+  n_pairs = 110
+  pooled_lodo_full = 0.8544753649714415
+  pooled_lodo_match_draws : list[20] [0.8692680546603854, 0.8395783748090849, 0.8420522008547455, 0.8269695971509332, 0.8097716894617846, 0.8462211882315773]
+  mean_of_directions = 0.8828295183154872
+  per_target :
+    pooled_lodo_full : list[11] [0.9412880723195248, 0.7557298877095832, 0.9720535714285714, 0.8064516129032258, 0.9551192145862554, 0.8555109870945239]
+    mean_of_directions : list[11] [0.9691402178577998, 0.8452545762190432, 0.9722321428571429, 0.7987711213517665, 0.997194950911641, 0.9439309382629927]
+    mean_over_sources : list[11] [0.821917257634901, 0.6524611598215659, 0.6931785714285714, 0.6130568356374808, 0.7207573632538569, 0.6069759330310429]
+    median_over_sources : list[11] [0.9022569196078832, 0.6464390093831718, 0.798169642857143, 0.6321044546850998, 0.8274894810659186, 0.6957621206836415]
+    oriented_mean : list[11] [0.8632700469368431, 0.6550146131364405, 0.8111607142857142, 0.6499231950844855, 0.8258064516129032, 0.8164108824555285]
+    best_source_oracle : list[11] [0.9803873481705531, 0.8089524688509461, 0.9533035714285714, 0.7834101382488479, 0.997194950911641, 0.971224276246948]
+  targets : list[11] ['instructed-deception', 'harm-pressure-choice', 'harm-pressure-knowledge-report', 'harm-pressure-kr-matched', 'convincing-game', 'insider-trading']
+  bootstrap :
+    mean_of_directions-pooled_lodo_full :
+      diff = 0.028354153344045906
+      lo = 0.0045082539804150055
+      hi = 0.052344610546503224
+    pooled_lodo_full-mean_over_sources :
+      diff = 0.17815905874244453
+      lo = 0.14245316437044586
+      hi = 0.21237843050280247
+    pooled_lodo_full-median_over_sources :
+      diff = 0.1325054740820644
+      lo = 0.10793093962700445
+      hi = 0.15443367150005086
+    pooled_lodo_full-oriented_mean :
+      diff = 0.11911393481142635
+      lo = 0.09329522885977279
+      hi = 0.14350865490940487
+    pooled_lodo_full-best_source_oracle :
+      diff = -0.042208850852715314
+      lo = -0.0727448620232457
+      hi = -0.010558348792678916
+  pairs : list[110] [{'source': 'harm-pressure-choice', 'target': 'instructed-deception', 'auroc': 0.6388485826980851}, {'source': 'harm-pressure-knowledge-report', 'target': 'instructed-deception', 'auroc': 0.886966680972526}, {'source': '
+    [0].source = harm-pressure-choice
+    [0].target = instructed-deception
+    [0].auroc = 0.6388485826980851
+
+  pooled_lodo_match_draws: n=20 mean=0.8344 min=0.7912 max=0.8736 sd=0.0205
+
+ -- which bank file the Q5 arm used --
+   C:/Users/user4/expLB/run/axes.pt 62936618 B  mtime 2026-09-15 12:51:41.793997
+   md5 0d2971c63d5a8702f9f36efa929f1c4e
+   C:/Users/user4/expLB/run-premise/axes.pt MISSING
+   C:/Users/user4/expLB/run-paper16/axes_vectors_s3.pt 5d05a42542ae13fc7ac5d893a4ae4f8c
+   C:/Users/user4/expLB/run-paper16/axes_vectors_s3_fp32.pt 76fee3969b41dcabb5a667b00107fd25
+   C:/Users/user4/expLB/run-kd/axes_vectors_s3.pt 8d4192c8e3ea56b2e226d165b6261c32
+
+ -- the script --
+   14660 B  mtime 2026-09-21 20:58:11.561444
+     89|     # that is the design the paper uses. With a bank the persona FEATURES go through the exact
+     91|     ap.add_argument("--bank", default=None, help="axes .pt; adds the persona-coordinate arm")
+     92|     ap.add_argument("--bank_features", nargs="+",
+    222|     if args.bank:
+    224|         bank = torch.load(args.bank, map_location="cpu", weights_only=False)
+    225|         print(f"\nQ5  PERSONA COORDINATES IN THE SAME LODO SETUP  (bank={args.bank})")
+    227|         for fk in args.bank_features:
+    230|                 F = {k: P.make_features(X32[k], b, bank, args.layer, kf, args.seed,
+python exit 0

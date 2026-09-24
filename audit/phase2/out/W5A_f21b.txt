@@ -1,0 +1,77 @@
+
+==============================================================================
+== F-21b  allocation histogram and batch sweep in scale_3b_generate.log
+==============================================================================
+  allocation sizes seen (MiB -> count, first line):
+      36.00  n=2     first at line 260  2026-09-20 13:11:00,418 - WARN
+      40.00  n=1     first at line 309  2026-09-20 13:12:00,299 - WARN
+      52.00  n=1     first at line 268  2026-09-20 13:11:05,815 - WARN
+      58.00  n=1     first at line 180  2026-09-20 13:09:16,057 - WARN
+      70.00  n=2     first at line 398  2026-09-20 13:13:57,672 - WARN
+      76.00  n=1     first at line 421  2026-09-20 13:14:38,429 - WARN
+      78.00  n=10    first at line 301  2026-09-20 13:11:55,005 - WARN
+     122.00  n=3     first at line 172  2026-09-20 13:09:10,784 - WARN
+     134.00  n=6     first at line 381  2026-09-20 13:13:43,896 - WARN
+     136.00  n=1     first at line 286  2026-09-20 13:11:28,702 - WARN
+     138.00  n=3     first at line 431  2026-09-20 13:14:43,952 - WARN
+     140.00  n=11    first at line 217  2026-09-20 13:10:05,687 - WARN
+     142.00  n=2     first at line 327  2026-09-20 13:12:23,164 - WARN
+
+  -- lines recording a batch setting or a completed-rows count --
+      157| 2026-09-20 13:09:07,577 - INFO - Role default: 100/100 to generate
+      172| 2026-09-20 13:09:10,784 - WARNING -   session attempt 1/4 (2 batches) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 122.00 MiB. GPU 3 has a total capacity of 44.42 GiB of which 36.77 GiB is free. Including non-PyTorch memory, this process has 7.65 GiB memory in us
+      180| 2026-09-20 13:09:16,057 - WARNING -   session attempt 2/4 (2 batches) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 58.00 MiB. GPU 3 has a total capacity of 44.42 GiB of which 36.75 GiB is free. Including non-PyTorch memory, this process has 7.67 GiB memory in use
+      190| 2026-09-20 13:09:24,640 - WARNING -   session attempt 3/4 (2 batches) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 122.00 MiB. GPU 3 has a total capacity of 44.42 GiB of which 36.79 GiB is free. Including non-PyTorch memory, this process has 7.63 GiB memory in us
+      200| 2026-09-20 13:09:39,152 - WARNING -   session attempt 4/4 (2 batches) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 122.00 MiB. GPU 3 has a total capacity of 44.42 GiB of which 36.83 GiB is free. Including non-PyTorch memory, this process has 7.59 GiB memory in us
+      206| 2026-09-20 13:10:03,153 - INFO - Role pc_archivist: 100/100 to generate
+      217| 2026-09-20 13:10:05,687 - WARNING -   session attempt 1/4 (2 batches) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 140.00 MiB. GPU 3 has a total capacity of 44.42 GiB of which 36.83 GiB is free. Including non-PyTorch memory, this process has 7.59 GiB memory in us
+      227| 2026-09-20 13:10:11,182 - WARNING -   session attempt 2/4 (2 batches) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 140.00 MiB. GPU 3 has a total capacity of 44.42 GiB of which 36.85 GiB is free. Including non-PyTorch memory, this process has 7.57 GiB memory in us
+      237| 2026-09-20 13:10:19,744 - WARNING -   session attempt 3/4 (2 batches) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 140.00 MiB. GPU 3 has a total capacity of 44.42 GiB of which 36.81 GiB is free. Including non-PyTorch memory, this process has 7.61 GiB memory in us
+      245| 2026-09-20 13:10:34,123 - WARNING -   session attempt 4/4 (2 batches) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 140.00 MiB. GPU 3 has a total capacity of 44.42 GiB of which 36.79 GiB is free. Including non-PyTorch memory, this process has 7.63 GiB memory in us
+      251| 2026-09-20 13:10:58,132 - INFO - Role pc_blunt_advisor: 100/100 to generate
+      260| 2026-09-20 13:11:00,418 - WARNING -   session attempt 1/4 (2 batches) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 36.00 MiB. GPU 3 has a total capacity of 44.42 GiB of which 36.73 GiB is free. Including non-PyTorch memory, this process has 7.69 GiB memory in use
+      268| 2026-09-20 13:11:05,815 - WARNING -   session attempt 2/4 (2 batches) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 52.00 MiB. GPU 3 has a total capacity of 44.42 GiB of which 36.77 GiB is free. Including non-PyTorch memory, this process has 7.65 GiB memory in use
+      276| 2026-09-20 13:11:14,202 - WARNING -   session attempt 3/4 (2 batches) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 36.00 MiB. GPU 3 has a total capacity of 44.42 GiB of which 36.75 GiB is free. Including non-PyTorch memory, this process has 7.67 GiB memory in use
+      286| 2026-09-20 13:11:28,702 - WARNING -   session attempt 4/4 (2 batches) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 136.00 MiB. GPU 3 has a total capacity of 44.42 GiB of which 36.83 GiB is free. Including non-PyTorch memory, this process has 7.59 GiB memory in us
+      292| 2026-09-20 13:11:52,710 - INFO - Role pc_broker: 100/100 to generate
+      301| 2026-09-20 13:11:55,005 - WARNING -   session attempt 1/4 (2 batches) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 78.00 MiB. GPU 3 has a total capacity of 44.42 GiB of which 36.77 GiB is free. Including non-PyTorch memory, this process has 7.65 GiB memory in use
+      309| 2026-09-20 13:12:00,299 - WARNING -   session attempt 2/4 (2 batches) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 40.00 MiB. GPU 3 has a total capacity of 44.42 GiB of which 36.75 GiB is free. Including non-PyTorch memory, this process has 7.67 GiB memory in use
+      317| 2026-09-20 13:12:08,660 - WARNING -   session attempt 3/4 (2 batches) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 78.00 MiB. GPU 3 has a total capacity of 44.42 GiB of which 36.77 GiB is free. Including non-PyTorch memory, this process has 7.65 GiB memory in use
+      327| 2026-09-20 13:12:23,164 - WARNING -   session attempt 4/4 (2 batches) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 142.00 MiB. GPU 3 has a total capacity of 44.42 GiB of which 36.85 GiB is free. Including non-PyTorch memory, this process has 7.57 GiB memory in us
+      333| 2026-09-20 13:12:47,172 - INFO - Role pc_cheerleader: 100/100 to generate
+      342| 2026-09-20 13:12:49,515 - WARNING -   session attempt 1/4 (2 batches) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 140.00 MiB. GPU 3 has a total capacity of 44.42 GiB of which 36.85 GiB is free. Including non-PyTorch memory, this process has 7.57 GiB memory in us
+      350| 2026-09-20 13:12:54,815 - WARNING -   session attempt 2/4 (2 batches) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 78.00 MiB. GPU 3 has a total capacity of 44.42 GiB of which 36.75 GiB is free. Including non-PyTorch memory, this process has 7.67 GiB memory in use
+      358| 2026-09-20 13:13:03,119 - WARNING -   session attempt 3/4 (2 batches) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 78.00 MiB. GPU 3 has a total capacity of 44.42 GiB of which 36.75 GiB is free. Including non-PyTorch memory, this process has 7.67 GiB memory in use
+      366| 2026-09-20 13:13:17,465 - WARNING -   session attempt 4/4 (2 batches) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 78.00 MiB. GPU 3 has a total capacity of 44.42 GiB of which 36.73 GiB is free. Including non-PyTorch memory, this process has 7.69 GiB memory in use
+      372| 2026-09-20 13:13:41,467 - INFO - Role pc_contrarian: 100/100 to generate
+      381| 2026-09-20 13:13:43,896 - WARNING -   session attempt 1/4 (2 batches) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 134.00 MiB. GPU 3 has a total capacity of 44.42 GiB of which 36.79 GiB is free. Including non-PyTorch memory, this process has 7.63 GiB memory in us
+      390| 2026-09-20 13:13:49,357 - WARNING -   session attempt 2/4 (2 batches) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 134.00 MiB. GPU 3 has a total capacity of 44.42 GiB of which 36.83 GiB is free. Including non-PyTorch memory, this process has 7.59 GiB memory in us
+      398| 2026-09-20 13:13:57,672 - WARNING -   session attempt 3/4 (2 batches) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 70.00 MiB. GPU 3 has a total capacity of 44.42 GiB of which 36.75 GiB is free. Including non-PyTorch memory, this process has 7.67 GiB memory in use
+      406| 2026-09-20 13:14:12,041 - WARNING -   session attempt 4/4 (2 batches) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 70.00 MiB. GPU 3 has a total capacity of 44.42 GiB of which 36.75 GiB is free. Including non-PyTorch memory, this process has 7.67 GiB memory in use
+      412| 2026-09-20 13:14:36,043 - INFO - Role pc_coverup_operator: 100/100 to generate
+      421| 2026-09-20 13:14:38,429 - WARNING -   session attempt 1/4 (2 batches) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 76.00 MiB. GPU 3 has a total capacity of 44.42 GiB of which 36.75 GiB is free. Including non-PyTorch memory, this process has 7.67 GiB memory in use
+      431| 2026-09-20 13:14:43,952 - WARNING -   session attempt 2/4 (2 batches) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 138.00 MiB. GPU 3 has a total capacity of 44.42 GiB of which 36.85 GiB is free. Including non-PyTorch memory, this process has 7.57 GiB memory in us
+      439| 2026-09-20 13:14:52,348 - WARNING -   session attempt 3/4 (2 batches) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 138.00 MiB. GPU 3 has a total capacity of 44.42 GiB of which 36.83 GiB is free. Including non-PyTorch memory, this process has 7.59 GiB memory in us
+      447| 2026-09-20 13:15:06,792 - WARNING -   session attempt 4/4 (2 batches) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 138.00 MiB. GPU 3 has a total capacity of 44.42 GiB of which 36.85 GiB is free. Including non-PyTorch memory, this process has 7.57 GiB memory in us
+      453| 2026-09-20 13:15:30,794 - INFO - Role pc_critic: 100/100 to generate
+      463| 2026-09-20 13:15:33,238 - WARNING -   session attempt 1/4 (2 batches) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 134.00 MiB. GPU 3 has a total capacity of 44.42 GiB of which 36.83 GiB is free. Including non-PyTorch memory, this process has 7.59 GiB memory in us
+      471| 2026-09-20 13:15:38,748 - WARNING -   session attempt 2/4 (2 batches) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 134.00 MiB. GPU 3 has a total capacity of 44.42 GiB of which 36.83 GiB is free. Including non-PyTorch memory, this process has 7.59 GiB memory in us
+      479| 2026-09-20 13:15:47,182 - WARNING -   session attempt 3/4 (2 batches) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 134.00 MiB. GPU 3 has a total capacity of 44.42 GiB of which 36.81 GiB is free. Including non-PyTorch memory, this process has 7.61 GiB memory in us
+      489| 2026-09-20 13:16:01,767 - WARNING -   session attempt 4/4 (2 batches) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 134.00 MiB. GPU 3 has a total capacity of 44.42 GiB of which 36.83 GiB is free. Including non-PyTorch memory, this process has 7.59 GiB memory in us
+      495| 2026-09-20 13:16:25,769 - INFO - Role pc_disclosure_counsel: 100/100 to generate
+   ... truncated
+
+  -- last 12 lines of the log --
+    2026-09-20 15:51:28,941 - INFO - Role pc_impression_manager: complete (100 rows)
+    2026-09-20 15:51:28,943 - INFO - Role pc_narrative_manager: complete (100 rows)
+    2026-09-20 15:51:28,945 - INFO - Role pc_ombudsman: complete (100 rows)
+    2026-09-20 15:51:28,947 - INFO - Role pc_people_pleaser: complete (100 rows)
+    2026-09-20 15:51:28,949 - INFO - Role pc_plausible_denier: complete (100 rows)
+    2026-09-20 15:51:28,952 - INFO - Role pc_skeptic: complete (100 rows)
+    2026-09-20 15:51:28,954 - INFO - Role pc_spin_doctor: complete (100 rows)
+    2026-09-20 15:51:28,956 - INFO - Role pc_tough_love_mentor: complete (100 rows)
+    2026-09-20 15:51:28,958 - INFO - Role pc_transparency_officer: complete (100 rows)
+    2026-09-20 15:51:28,960 - INFO - Role pc_whistleblower: complete (100 rows)
+    2026-09-20 15:51:28,962 - INFO - Role pc_yes_man: complete (100 rows)
+    2026-09-20 15:51:28,962 - INFO - Done.
+python exit 0

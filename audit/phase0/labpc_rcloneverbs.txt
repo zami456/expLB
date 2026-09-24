@@ -1,0 +1,79 @@
+=== sync_crossgen.ps1
+
+  95:     }
+  96:     Note "$Tag START $(if ($sub) { $sub } else { '<whole tree>' })"
+  97:     & $rc copy $src $dst --checksum --transfers 4 --checkers 8 `
+  98:         --log-file (Join-Path $logDir "crossgen_full_rclone.log") --log-level INFO
+  99:     $code = $LASTEXITCODE
+ 100:     Note "$Tag EXIT $code"
+=== coords_supervisor.ps1
+ 124:     }
+ 125:     $src = Join-Path $Repo $Out
+ 126:     if (-not (Test-Path $src)) { return }
+ 127:     $rlog = Join-Path $Repo "logs\coords_rclone.log"
+ 128:     $extra = @()
+ 129:     if ($Verify) { $extra = @("--checksum") }
+ 130:     # .pt AND .json: the original filter was --include "*.pt" alone, which quietly excluded
+ 131:     # every probe result -- FULL_L20/22/40, the zero-shot tables, splits.json -- so the
+ 132:     # chunks were backed up and the actual scientific output was not.
+ 133:     & $rc copy $src "tamara:expLB/coords" --include "*.pt" --include "*.json" `
+ 134:         --transfers 4 --checkers 8 --log-file $rlog --log-level INFO @extra
+ 135:     if ($LASTEXITCODE -ne 0) { Log "rclone copy exited $LASTEXITCODE -- see logs\coords_rclone.log" }
+ 136:     elseif ($Verify) {
+ 137:         & $rc check $src "tamara:expLB/coords" --include "*.pt" --include "*.json" --checksum `
+ 138:             --log-file $rlog --log-level INFO
+ 139:         Log "rclone check exited $LASTEXITCODE (0 = every chunk verified on Drive)"
+ 140:     }
+=== run_passC.ps1
+  33: 
+  34: $rc = "$repo\tools\rclone.exe"
+  35: if (Test-Path $rc) {
+  36:     & $rc copy "$repo\run-coords\passC" "tamara:expLB/coords/passC" --include "*.pt" --include "*.json" `
+  37:         --transfers 4 --checkers 8 --log-file "$repo\logs\passC_rclone.log" --log-level INFO
+  38:     Log "drive sync exit $LASTEXITCODE"
+  39: }
+=== sync_kd.ps1
+  52:     }
+  53: }
+  54: try {
+  55:     Note "$Tag START"
+  56:     & $rc copy (Join-Path $repo "kd") "tamara:expLB/kd" --checksum --transfers 4 `
+  57:         --log-file $log --log-level INFO
+  58:     $code = $LASTEXITCODE
+  59:     $n = @(Get-ChildItem (Join-Path $repo "kd") -Recurse -File -EA SilentlyContinue).Count
+  60: 
+  61:     # The 11-dataset crossgen cannot live under kd/: 27_crossgen.py's guard() requires
+  62:     # "run-crossgen" as an exact path component. So it writes to run-crossgen\kd11 and is
+  63:     # pushed from here, because sync_crossgen.ps1 is scoped to the 10-dataset results and
+  64:     # nothing else would carry it.
+  65:     # run-kd holds Phase 3: rollouts, judge scores, persona vectors, axes. Like kd11 it
+  66:     # cannot live under kd/ (1_generate_ndif.py and friends take an --output_dir and the
+  67:     # chain writes there), so it is pushed from here or nothing carries it.
+  68:     $rk = Join-Path $repo "run-kd"
+  69:     if (Test-Path $rk) {
+  70:         & $rc copy $rk "tamara:expLB/kd/run-kd" --checksum --transfers 4 `
+  71:             --log-file $log --log-level INFO
+  72:         $nk = @(Get-ChildItem $rk -Recurse -File -EA SilentlyContinue).Count
+  73:         Note "$Tag run-kd exit $LASTEXITCODE ($nk files)"
+  74:     }
+  75: 
+  76:     $k11 = Join-Path $repo "run-crossgen\kd11"
+  77:     if (Test-Path $k11) {
+  78:         & $rc copy $k11 "tamara:expLB/kd/crossgen11" --checksum --transfers 4 `
+  79:             --log-file $log --log-level INFO
+  80:         $n2 = @(Get-ChildItem $k11 -Recurse -File -EA SilentlyContinue).Count
+  81:         Note "$Tag crossgen11 exit $LASTEXITCODE ($n2 files)"
+  82:     }
+=== night_chain.ps1
+  44: }
+  45: 
+  46: $rc = "$repo\tools\rclone.exe"
+  47: foreach ($p in @(@{l="$repo\run-coords"; r='tamara:expLB/coords'},
+  48:                  @{l="$mt";              r='tamara:expLB/sycophancy_mt'},
+  49:                  @{l="$repo\run-sycophancy"; r='tamara:expLB/sycophancy'})) {
+  50:     if (Test-Path $p.l) {
+  51:         & $rc copy $p.l $p.r --include "*.pt" --include "*.json" --include "*.jsonl" `
+  52:             --transfers 4 --checkers 8 --log-file "$repo\logs\night_rclone.log" --log-level INFO
+  53:     }
+  54: }
+  55: Log "sync done"

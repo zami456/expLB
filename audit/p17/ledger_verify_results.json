@@ -1,0 +1,3578 @@
+[
+ {
+  "f_id": "F-110",
+  "item": "19-layer set = 21 minus L(72, 76)",
+  "ledger": "found",
+  "derived": "found",
+  "verdict": "matches",
+  "source": "brute force over layer pairs, scale_70b mean"
+ },
+ {
+  "f_id": "F-110",
+  "item": "3B raw (n=7)",
+  "ledger": "0.6989",
+  "derived": "0.6989",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB/run-crossgen/scale_3b/matrices/mean_L*_s42.json, DS5 off-diag, best=max(axes,pc:deception)"
+ },
+ {
+  "f_id": "F-110",
+  "item": "3B best-raw (n=7)",
+  "ledger": "+0.0328",
+  "derived": "+0.0328",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB/run-crossgen/scale_3b/matrices/mean_L*_s42.json, DS5 off-diag, best=max(axes,pc:deception)"
+ },
+ {
+  "f_id": "F-110",
+  "item": "3B best-dPCA (n=7)",
+  "ledger": "+0.1197",
+  "derived": "+0.1197",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB/run-crossgen/scale_3b/matrices/mean_L*_s42.json, DS5 off-diag, best=max(axes,pc:deception)"
+ },
+ {
+  "f_id": "F-110",
+  "item": "8B raw (n=8)",
+  "ledger": "0.7149",
+  "derived": "0.7149",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB/run-crossgen/scale_8b/matrices/mean_L*_s42.json, DS5 off-diag, best=max(axes,pc:deception)"
+ },
+ {
+  "f_id": "F-110",
+  "item": "8B best-raw (n=8)",
+  "ledger": "+0.0089",
+  "derived": "+0.0089",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB/run-crossgen/scale_8b/matrices/mean_L*_s42.json, DS5 off-diag, best=max(axes,pc:deception)"
+ },
+ {
+  "f_id": "F-110",
+  "item": "8B best-dPCA (n=8)",
+  "ledger": "+0.1027",
+  "derived": "+0.1027",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB/run-crossgen/scale_8b/matrices/mean_L*_s42.json, DS5 off-diag, best=max(axes,pc:deception)"
+ },
+ {
+  "f_id": "F-110",
+  "item": "70B kd raw (n=19)",
+  "ledger": "0.7524",
+  "derived": "0.7524",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB/run-crossgen/scale_70b/matrices/mean_L*_s42.json, DS5 off-diag, best=max(axes,pc:deception)"
+ },
+ {
+  "f_id": "F-110",
+  "item": "70B kd best-raw (n=19)",
+  "ledger": "+0.0079",
+  "derived": "+0.0079",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB/run-crossgen/scale_70b/matrices/mean_L*_s42.json, DS5 off-diag, best=max(axes,pc:deception)"
+ },
+ {
+  "f_id": "F-110",
+  "item": "70B kd best-dPCA (n=19)",
+  "ledger": "+0.0751",
+  "derived": "+0.0751",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB/run-crossgen/scale_70b/matrices/mean_L*_s42.json, DS5 off-diag, best=max(axes,pc:deception)"
+ },
+ {
+  "f_id": "F-110",
+  "item": "70B p16fp32 raw (n=19)",
+  "ledger": "0.7524",
+  "derived": "0.7524",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB/run-crossgen/scale_70b_paper16fp32/matrices/mean_L*_s42.json, DS5 off-diag, best=max(axes,pc:deception)"
+ },
+ {
+  "f_id": "F-110",
+  "item": "70B p16fp32 best-raw (n=19)",
+  "ledger": "-0.0131",
+  "derived": "-0.0131",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB/run-crossgen/scale_70b_paper16fp32/matrices/mean_L*_s42.json, DS5 off-diag, best=max(axes,pc:deception)"
+ },
+ {
+  "f_id": "F-110",
+  "item": "70B p16fp32 best-dPCA (n=19)",
+  "ledger": "+0.0541",
+  "derived": "+0.0541",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB/run-crossgen/scale_70b_paper16fp32/matrices/mean_L*_s42.json, DS5 off-diag, best=max(axes,pc:deception)"
+ },
+ {
+  "f_id": "F-110",
+  "item": "70B p16fp32 LAST best-raw (19L)",
+  "ledger": "+0.0061",
+  "derived": "+0.0061",
+  "verdict": "matches",
+  "source": "last_L*"
+ },
+ {
+  "f_id": "F-110",
+  "item": "70B p16fp32 LAST best-dPCA (19L)",
+  "ledger": "+0.0688",
+  "derived": "+0.0688",
+  "verdict": "matches",
+  "source": "last_L*"
+ },
+ {
+  "f_id": "F-110",
+  "item": "70B p16fp32 LAST best-raw (21L)",
+  "ledger": "+0.0069",
+  "derived": "+0.0069",
+  "verdict": "matches",
+  "source": "last_L*"
+ },
+ {
+  "f_id": "F-110",
+  "item": "70B p16fp32 LAST best-dPCA (21L)",
+  "ledger": "+0.0681",
+  "derived": "+0.0681",
+  "verdict": "matches",
+  "source": "last_L*"
+ },
+ {
+  "f_id": "F-110",
+  "item": "3B LAST best-dPCA",
+  "ledger": "+0.0745",
+  "derived": "+0.0745",
+  "verdict": "matches",
+  "source": "scale_3b/last_L*"
+ },
+ {
+  "f_id": "F-110",
+  "item": "8B LAST best-dPCA",
+  "ledger": "+0.0090",
+  "derived": "+0.0090",
+  "verdict": "matches",
+  "source": "scale_8b/last_L*"
+ },
+ {
+  "f_id": "F-111",
+  "item": "kd slice beats raw (of 80 layers)",
+  "ledger": "28/80",
+  "derived": "28/80",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB/run-crossgen/kd11/passA11/{banks/kd_s23/,}matrices/mean_L*_s42.json, row harm-pressure-kr-matched"
+ },
+ {
+  "f_id": "F-111",
+  "item": "kd slice beats root datapca (of 80)",
+  "ledger": "31/80",
+  "derived": "31/80",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB/run-crossgen/kd11/passA11/{banks/kd_s23/,}matrices/mean_L*_s42.json, row harm-pressure-kr-matched"
+ },
+ {
+  "f_id": "F-111",
+  "item": "trap: vs the bank store's own datapca",
+  "ledger": "0/80",
+  "derived": "31/80",
+  "verdict": "DIFFERS: not reproduced - the bank summary's datapca EQUALS the root store's at every layer; axes wins 31/80 against it (no datapca column in the bank matrices)",
+  "source": "C:/Users/user4/expLB/run-crossgen/kd11/passA11/banks/kd_s23/summary.json records (mean, paper, s42) per_source_offdiag[kr-matched]"
+ },
+ {
+  "f_id": "F-111",
+  "item": "cap rows / files",
+  "ledger": "1300/13",
+  "derived": "1300/13",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB/run-cap/responses/*.jsonl"
+ },
+ {
+  "f_id": "F-111",
+  "item": "cap personas (distinct system prompts)",
+  "ledger": "65",
+  "derived": "65",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB/run-cap/responses/*.jsonl"
+ },
+ {
+  "f_id": "F-111",
+  "item": "cap questions",
+  "ledger": "20",
+  "derived": "20",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB/run-cap/responses/*.jsonl"
+ },
+ {
+  "f_id": "F-111",
+  "item": "distinct (question, turn1) pairs",
+  "ledger": "20",
+  "derived": "20",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB/run-cap/responses/*.jsonl"
+ },
+ {
+  "f_id": "F-111",
+  "item": "max distinct turn-1 texts per question",
+  "ledger": "1",
+  "derived": "1",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB/run-cap/responses/*.jsonl"
+ },
+ {
+  "f_id": "F-111",
+  "item": "rows per (question, turn1) pair",
+  "ledger": "65",
+  "derived": "65",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB/run-cap/responses/*.jsonl"
+ },
+ {
+  "f_id": "F-111",
+  "item": "block9 mean L40 paper axes-raw",
+  "ledger": "+0.0147",
+  "derived": "+0.0147",
+  "verdict": "matches",
+  "source": "run-crossgen/kd11/significance.json (4,032 tests)"
+ },
+ {
+  "f_id": "F-111",
+  "item": "  its dataset CI",
+  "ledger": "[-0.170, +0.187]",
+  "derived": "[-0.170, +0.187]",
+  "verdict": "matches",
+  "source": "run-crossgen/kd11/significance.json (4,032 tests)"
+ },
+ {
+  "f_id": "F-111",
+  "item": "block9 mean L40 paper axes-datapca",
+  "ledger": "+0.0264",
+  "derived": "+0.0264",
+  "verdict": "matches",
+  "source": "run-crossgen/kd11/significance.json (4,032 tests)"
+ },
+ {
+  "f_id": "F-111",
+  "item": "block10 mean L40 paper axes-raw",
+  "ledger": "-0.0215",
+  "derived": "-0.0215",
+  "verdict": "matches",
+  "source": "run-crossgen/kd11/significance.json (4,032 tests)"
+ },
+ {
+  "f_id": "F-111",
+  "item": "block10 mean L40 paper axes-datapca",
+  "ledger": "-0.0243",
+  "derived": "-0.0243",
+  "verdict": "matches",
+  "source": "run-crossgen/kd11/significance.json (4,032 tests)"
+ },
+ {
+  "f_id": "F-111",
+  "item": "family size block 9 (layers 40,44)",
+  "ledger": "192",
+  "derived": "192",
+  "verdict": "matches",
+  "source": "run-crossgen/kd11/significance.json (4,032 tests)"
+ },
+ {
+  "f_id": "F-111",
+  "item": "q of axes-raw in restricted family",
+  "ledger": "0.9311",
+  "derived": "0.9311",
+  "verdict": "matches",
+  "source": "run-crossgen/kd11/significance.json (4,032 tests), BH within block over L40/44"
+ },
+ {
+  "f_id": "F-111",
+  "item": "q of axes-datapca in restricted family",
+  "ledger": "0.8546",
+  "derived": "0.8546",
+  "verdict": "matches",
+  "source": "run-crossgen/kd11/significance.json (4,032 tests)"
+ },
+ {
+  "f_id": "F-111",
+  "item": "tests clearing BH in family",
+  "ledger": "1: random@2 - raw last L44 mms",
+  "derived": "random@2 - raw last L44 mms",
+  "verdict": "matches",
+  "source": "run-crossgen/kd11/significance.json (4,032 tests)"
+ },
+ {
+  "f_id": "F-111",
+  "item": "  its diff",
+  "ledger": "-0.2287",
+  "derived": "-0.2287",
+  "verdict": "matches",
+  "source": "run-crossgen/kd11/significance.json (4,032 tests)"
+ },
+ {
+  "f_id": "F-111",
+  "item": "  its q",
+  "ledger": "0.0192",
+  "derived": "0.0192",
+  "verdict": "matches",
+  "source": "run-crossgen/kd11/significance.json (4,032 tests)"
+ },
+ {
+  "f_id": "F-111",
+  "item": "positive class longer (of 11)",
+  "ledger": "9/11",
+  "derived": "9/11",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB/run-coords/passB/<ds>/rows.jsonl span_len by label"
+ },
+ {
+  "f_id": "F-111",
+  "item": "... excluding sycophancy_mt",
+  "ledger": "8/10",
+  "derived": "8/10",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB/run-coords/passB/<ds>/rows.jsonl span_len by label"
+ },
+ {
+  "f_id": "F-111",
+  "item": "convincing-game gap",
+  "ledger": "-1.20",
+  "derived": "-1.1976",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB/run-coords/passB/<ds>/rows.jsonl span_len by label"
+ },
+ {
+  "f_id": "F-111",
+  "item": "roleplaying gap",
+  "ledger": "-4.10",
+  "derived": "-4.1039",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB/run-coords/passB/<ds>/rows.jsonl span_len by label"
+ },
+ {
+  "f_id": "F-111",
+  "item": "roleplaying null labels",
+  "ledger": "84",
+  "derived": "84",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB/run-coords/passB/<ds>/rows.jsonl span_len by label"
+ },
+ {
+  "f_id": "F-111",
+  "item": "harm-pressure-choice gap (F-73)",
+  "ledger": "+0.0035",
+  "derived": "+0.0035",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB/run-coords/passB/<ds>/rows.jsonl span_len by label"
+ },
+ {
+  "f_id": "F-111",
+  "item": "median |gap| over 8 (F-73)",
+  "ledger": "3.7",
+  "derived": "3.6894",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB/run-coords/passB/<ds>/rows.jsonl span_len by label; the 8 = 11 minus kr-matched, mask, sandbagging_v2"
+ },
+ {
+  "f_id": "F-111",
+  "item": "signed median over same 8",
+  "ledger": "+2.63",
+  "derived": "+2.6316",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB/run-coords/passB/<ds>/rows.jsonl span_len by label"
+ },
+ {
+  "f_id": "F-123",
+  "item": "DF-10 sandbagging_v2 token means pos/neg",
+  "ledger": "529.4/340.4",
+  "derived": "529.4/340.4",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB/run-coords/passB/<ds>/rows.jsonl span_len by label"
+ },
+ {
+  "f_id": "F-123",
+  "item": "DF-10 mask token means pos/neg",
+  "ledger": "283.2/176.4",
+  "derived": "283.2/176.4",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB/run-coords/passB/<ds>/rows.jsonl span_len by label"
+ },
+ {
+  "f_id": "F-111",
+  "item": "length-only off-diag, all 42 matrices x 3 probes",
+  "ledger": "0.5555",
+  "derived": "0.5555",
+  "verdict": "matches",
+  "source": "run-crossgen/kd11/matrices/*_L*_s42.json (git)"
+ },
+ {
+  "f_id": "F-111",
+  "item": "raw L40/mean/paper",
+  "ledger": "0.6623",
+  "derived": "0.6623",
+  "verdict": "matches",
+  "source": "kd11 mean_L40"
+ },
+ {
+  "f_id": "F-111",
+  "item": "raw L44/last/mms",
+  "ledger": "0.6724",
+  "derived": "0.6724",
+  "verdict": "matches",
+  "source": "kd11 last_L44"
+ },
+ {
+  "f_id": "F-111",
+  "item": "kd11 L40 sycophancy_mt zero-shot contrast",
+  "ledger": "0.4089",
+  "derived": "0.4089",
+  "verdict": "matches",
+  "source": "kd11 mean_L40 zeroshot"
+ },
+ {
+  "f_id": "F-111",
+  "item": "kd11 L40 sycophancy_mt zero-shot PC1",
+  "ledger": "0.3739",
+  "derived": "0.3740",
+  "verdict": "matches",
+  "source": "kd11 mean_L40 zeroshot (0.373959, truncated not rounded)"
+ },
+ {
+  "f_id": "F-111",
+  "item": "trained axes, sycophancy_mt column",
+  "ledger": "0.3551",
+  "derived": "0.3551",
+  "verdict": "matches",
+  "source": "kd11 mean_L40, column mean"
+ },
+ {
+  "f_id": "F-111",
+  "item": "trained random, sycophancy_mt column",
+  "ledger": "0.5413",
+  "derived": "0.5413",
+  "verdict": "matches",
+  "source": "kd11 mean_L40, column mean"
+ },
+ {
+  "f_id": "F-111",
+  "item": "paper16 sycophancy axis L40 (q10)",
+  "ledger": "0.313",
+  "derived": "0.3131",
+  "verdict": "matches",
+  "source": "run-coords/q10_sycophancy_axis.json"
+ },
+ {
+  "f_id": "F-111",
+  "item": "  its CI",
+  "ledger": "[0.283, 0.346]",
+  "derived": "[0.283, 0.346]",
+  "verdict": "matches",
+  "source": "same"
+ },
+ {
+  "f_id": "F-111",
+  "item": "sycophancy axis p vs 1000-dir null (range)",
+  "ledger": "0.001-0.008",
+  "derived": "0.001-0.008",
+  "verdict": "matches",
+  "source": "run-coords/zeroshot_nulls.json [sycophancy_mt][*].sycophancy_axis.p_vs_random"
+ },
+ {
+  "f_id": "F-111",
+  "item": "deception axis (contrast 0.409) inside null",
+  "ledger": "inside",
+  "derived": "inside",
+  "verdict": "matches",
+  "source": "zeroshot_nulls L40_mean deception_axis p=0.191"
+ },
+ {
+  "f_id": "F-111",
+  "item": "sycophancy axis passA11 contrast/PC1",
+  "ledger": "0.3061 (A11) / 0.2996 (C11)",
+  "derived": "0.3061/0.2996",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB/run-crossgen/kd11/passA11/matrices/mean_L40_s42.json zeroshot, column sycophancy_mt"
+ },
+ {
+  "f_id": "F-111",
+  "item": "sycophancy axis passC11 contrast/PC1",
+  "ledger": "0.3061 (A11) / 0.2996 (C11)",
+  "derived": "0.3066/0.2995",
+  "verdict": "PARTLY: the pair 0.3061/0.2996 is passA11's contrast/PC1, not passA11/passC11; passC11 reads 0.3066/0.2995",
+  "source": "C:/Users/user4/expLB/run-crossgen/kd11/passC11/matrices/mean_L40_s42.json zeroshot, column sycophancy_mt"
+ },
+ {
+  "f_id": "F-112",
+  "item": "git tests / comparisons",
+  "ledger": "4032/16",
+  "derived": "4032/16",
+  "verdict": "matches",
+  "source": "git asix run-crossgen/kd11/banks/kd/significance.json (md5 9809a00f) vs lab (md5 af3b9feb, 2026-09-22 16:01:20)"
+ },
+ {
+  "f_id": "F-112",
+  "item": "lab tests / comparisons",
+  "ledger": "6300/25",
+  "derived": "6300/25",
+  "verdict": "matches",
+  "source": "git asix run-crossgen/kd11/banks/kd/significance.json (md5 9809a00f) vs lab (md5 af3b9feb, 2026-09-22 16:01:20)"
+ },
+ {
+  "f_id": "F-112",
+  "item": "git tests missing from lab",
+  "ledger": "0",
+  "derived": "0",
+  "verdict": "matches",
+  "source": "git asix run-crossgen/kd11/banks/kd/significance.json (md5 9809a00f) vs lab (md5 af3b9feb, 2026-09-22 16:01:20)"
+ },
+ {
+  "f_id": "F-112",
+  "item": "git tests with changed diff or dataset_p",
+  "ledger": "0",
+  "derived": "0",
+  "verdict": "matches",
+  "source": "git asix run-crossgen/kd11/banks/kd/significance.json (md5 9809a00f) vs lab (md5 af3b9feb, 2026-09-22 16:01:20)"
+ },
+ {
+  "f_id": "F-112",
+  "item": "tests added in lab",
+  "ledger": "2268",
+  "derived": "2268",
+  "verdict": "matches",
+  "source": "git asix run-crossgen/kd11/banks/kd/significance.json (md5 9809a00f) vs lab (md5 af3b9feb, 2026-09-22 16:01:20)"
+ },
+ {
+  "f_id": "F-112",
+  "item": "git tests whose BH q moved",
+  "ledger": "4030",
+  "derived": "4030",
+  "verdict": "matches",
+  "source": "git asix run-crossgen/kd11/banks/kd/significance.json (md5 9809a00f) vs lab (md5 af3b9feb, 2026-09-22 16:01:20)"
+ },
+ {
+  "f_id": "F-112",
+  "item": "added comparison families",
+  "ledger": "9",
+  "derived": "9",
+  "verdict": "matches",
+  "source": "git asix run-crossgen/kd11/banks/kd/significance.json (md5 9809a00f) vs lab (md5 af3b9feb, 2026-09-22 16:01:20) : axes_resid - datapca, axes_resid - random, axes_resid - raw, pc:kd_assertion - datapca, pc:kd_assertion - random, pc:kd_assertion - raw, pc:knowledge_denial - datapca, pc:knowledge_denial - random, pc:knowledge_denial - raw"
+ },
+ {
+  "f_id": "F-112",
+  "item": "pc:kd_assertion - random: layers positive (b10 mean paper)",
+  "ledger": "21/21",
+  "derived": "21/21",
+  "verdict": "matches",
+  "source": "git asix run-crossgen/kd11/banks/kd/significance.json (md5 9809a00f) vs lab (md5 af3b9feb, 2026-09-22 16:01:20)"
+ },
+ {
+  "f_id": "F-112",
+  "item": "pc:kd_assertion - random: tests clearing BH (b10 mean paper | all)",
+  "ledger": "8",
+  "derived": "8 | 34",
+  "verdict": "PARTLY: 8 within block10/mean/paper (the table's scope); 34 across all 6,300",
+  "source": "git asix run-crossgen/kd11/banks/kd/significance.json (md5 9809a00f) vs lab (md5 af3b9feb, 2026-09-22 16:01:20) significant_datasets"
+ },
+ {
+  "f_id": "F-112",
+  "item": "pc:kd_assertion - raw: layers positive (b10 mean paper)",
+  "ledger": "18/21",
+  "derived": "18/21",
+  "verdict": "matches",
+  "source": "git asix run-crossgen/kd11/banks/kd/significance.json (md5 9809a00f) vs lab (md5 af3b9feb, 2026-09-22 16:01:20)"
+ },
+ {
+  "f_id": "F-112",
+  "item": "pc:kd_assertion - raw: tests clearing BH (b10 mean paper | all)",
+  "ledger": "1",
+  "derived": "1 | 1",
+  "verdict": "matches",
+  "source": "git asix run-crossgen/kd11/banks/kd/significance.json (md5 9809a00f) vs lab (md5 af3b9feb, 2026-09-22 16:01:20) significant_datasets"
+ },
+ {
+  "f_id": "F-112",
+  "item": "pc:kd_assertion - datapca: layers positive (b10 mean paper)",
+  "ledger": "20/21",
+  "derived": "20/21",
+  "verdict": "matches",
+  "source": "git asix run-crossgen/kd11/banks/kd/significance.json (md5 9809a00f) vs lab (md5 af3b9feb, 2026-09-22 16:01:20)"
+ },
+ {
+  "f_id": "F-112",
+  "item": "pc:kd_assertion - datapca: tests clearing BH (b10 mean paper | all)",
+  "ledger": "0",
+  "derived": "0 | 0",
+  "verdict": "matches",
+  "source": "git asix run-crossgen/kd11/banks/kd/significance.json (md5 9809a00f) vs lab (md5 af3b9feb, 2026-09-22 16:01:20) significant_datasets"
+ },
+ {
+  "f_id": "F-112",
+  "item": "L68 kd_assertion-raw diff",
+  "ledger": "+0.1497",
+  "derived": "+0.1497",
+  "verdict": "matches",
+  "source": "git asix run-crossgen/kd11/banks/kd/significance.json (md5 9809a00f) vs lab (md5 af3b9feb, 2026-09-22 16:01:20)"
+ },
+ {
+  "f_id": "F-112",
+  "item": "L68 kd_assertion-raw q",
+  "ledger": "0.0467",
+  "derived": "0.0467",
+  "verdict": "matches",
+  "source": "git asix run-crossgen/kd11/banks/kd/significance.json (md5 9809a00f) vs lab (md5 af3b9feb, 2026-09-22 16:01:20)"
+ },
+ {
+  "f_id": "F-112",
+  "item": "kd_assertion-datapca tests / clearing (block 10)",
+  "ledger": "126/0",
+  "derived": "126/0",
+  "verdict": "matches",
+  "source": "git asix run-crossgen/kd11/banks/kd/significance.json (md5 9809a00f) vs lab (md5 af3b9feb, 2026-09-22 16:01:20)"
+ },
+ {
+  "f_id": "F-112",
+  "item": "kd_assertion-datapca tests / clearing (both blocks)",
+  "ledger": "n/a",
+  "derived": "252/0",
+  "verdict": "context: 0 clear in either block",
+  "source": "git asix run-crossgen/kd11/banks/kd/significance.json (md5 9809a00f) vs lab (md5 af3b9feb, 2026-09-22 16:01:20)"
+ },
+ {
+  "f_id": "F-112",
+  "item": "kd_assertion-datapca mean (b10 mean paper)",
+  "ledger": "+0.0830",
+  "derived": "+0.0830",
+  "verdict": "matches",
+  "source": "git asix run-crossgen/kd11/banks/kd/significance.json (md5 9809a00f) vs lab (md5 af3b9feb, 2026-09-22 16:01:20)"
+ },
+ {
+  "f_id": "F-112",
+  "item": "  mms mean / positive",
+  "ledger": "+0.0172 13/21",
+  "derived": "+0.0172 13/21",
+  "verdict": "matches",
+  "source": "git asix run-crossgen/kd11/banks/kd/significance.json (md5 9809a00f) vs lab (md5 af3b9feb, 2026-09-22 16:01:20)"
+ },
+ {
+  "f_id": "F-112",
+  "item": "L32 kd_assertion-raw all 11",
+  "ledger": "+0.0998",
+  "derived": "+0.0998",
+  "verdict": "matches",
+  "source": "kd11/banks/kd + kd11 root matrices (git)"
+ },
+ {
+  "f_id": "F-112",
+  "item": "L32 kd_assertion-raw HP-KR cols dropped",
+  "ledger": "+0.1183",
+  "derived": "+0.1183",
+  "verdict": "matches",
+  "source": "same; both HP-KR datasets removed"
+ },
+ {
+  "f_id": "F-112",
+  "item": "L40 kd_assertion-raw all 11",
+  "ledger": "+0.1496",
+  "derived": "+0.1496",
+  "verdict": "matches",
+  "source": "kd11/banks/kd + kd11 root matrices (git)"
+ },
+ {
+  "f_id": "F-112",
+  "item": "L40 kd_assertion-raw HP-KR cols dropped",
+  "ledger": "+0.1539",
+  "derived": "+0.1539",
+  "verdict": "matches",
+  "source": "same; both HP-KR datasets removed"
+ },
+ {
+  "f_id": "F-112",
+  "item": "L52 kd_assertion-raw all 11",
+  "ledger": "+0.1215",
+  "derived": "+0.1215",
+  "verdict": "matches",
+  "source": "kd11/banks/kd + kd11 root matrices (git)"
+ },
+ {
+  "f_id": "F-112",
+  "item": "L52 kd_assertion-raw HP-KR cols dropped",
+  "ledger": "+0.1370",
+  "derived": "+0.1370",
+  "verdict": "matches",
+  "source": "same; both HP-KR datasets removed"
+ },
+ {
+  "f_id": "F-112",
+  "item": "L64 kd_assertion-raw all 11",
+  "ledger": "+0.1420",
+  "derived": "+0.1420",
+  "verdict": "matches",
+  "source": "kd11/banks/kd + kd11 root matrices (git)"
+ },
+ {
+  "f_id": "F-112",
+  "item": "L64 kd_assertion-raw HP-KR cols dropped",
+  "ledger": "+0.1624",
+  "derived": "+0.1624",
+  "verdict": "matches",
+  "source": "same; both HP-KR datasets removed"
+ },
+ {
+  "f_id": "F-112",
+  "item": "L68 kd_assertion-raw all 11",
+  "ledger": "+0.1497",
+  "derived": "+0.1497",
+  "verdict": "matches",
+  "source": "kd11/banks/kd + kd11 root matrices (git)"
+ },
+ {
+  "f_id": "F-112",
+  "item": "L68 kd_assertion-raw HP-KR cols dropped",
+  "ledger": "+0.1757",
+  "derived": "+0.1757",
+  "verdict": "matches",
+  "source": "same; both HP-KR datasets removed"
+ },
+ {
+  "f_id": "F-112",
+  "item": "L76 kd_assertion-raw all 11",
+  "ledger": "+0.1473",
+  "derived": "+0.1473",
+  "verdict": "matches",
+  "source": "kd11/banks/kd + kd11 root matrices (git)"
+ },
+ {
+  "f_id": "F-112",
+  "item": "L76 kd_assertion-raw HP-KR cols dropped",
+  "ledger": "+0.1897",
+  "derived": "+0.1897",
+  "verdict": "matches",
+  "source": "same; both HP-KR datasets removed"
+ },
+ {
+  "f_id": "F-113",
+  "item": "8B heads x 2048^2 x 4 B in MiB",
+  "ledger": "512.00",
+  "derived": "512.00",
+  "verdict": "matches",
+  "source": "arithmetic"
+ },
+ {
+  "f_id": "F-113",
+  "item": "8B same in decimal MB",
+  "ledger": "537",
+  "derived": "536.87",
+  "verdict": "matches",
+  "source": "arithmetic (402.65 truncated to 402)"
+ },
+ {
+  "f_id": "F-113",
+  "item": "3B heads x 2048^2 x 4 B in MiB",
+  "ledger": "384.00",
+  "derived": "384.00",
+  "verdict": "matches",
+  "source": "arithmetic"
+ },
+ {
+  "f_id": "F-113",
+  "item": "3B same in decimal MB",
+  "ledger": "402",
+  "derived": "402.65",
+  "verdict": "matches",
+  "source": "arithmetic (402.65 truncated to 402)"
+ },
+ {
+  "f_id": "F-113",
+  "item": "27_crossgen.py:882 default k",
+  "ledger": "5",
+  "derived": "5",
+  "verdict": "matches",
+  "source": "src/assistant_axis_ndif/27_crossgen.py:882 (asix WT)"
+ },
+ {
+  "f_id": "F-113",
+  "item": "k in all four scale stores",
+  "ledger": "3",
+  "derived": "3",
+  "verdict": "matches",
+  "source": "lab scale_* matrices field k"
+ },
+ {
+  "f_id": "F-113",
+  "item": "run_scale_coords.ps1:108-109 carries MiB slip",
+  "ledger": "537/402 MiB",
+  "derived": "#   8B, 32 heads: T=2048 -> 537 MiB (fails) ; T=1024 -> 134  | #   3B, 24 heads: T=2048 -> 402 MiB          ; T=1024 -> 101",
+  "verdict": "matches",
+  "source": "git asix scale/scripts/run_scale_coords.ps1"
+ },
+ {
+  "f_id": "F-114",
+  "item": "length-only AUROC datasets",
+  "ledger": "10",
+  "derived": "10",
+  "verdict": "matches",
+  "source": "audit/cache/labpc/run-coords/confounds_L44_last.json (md5 11bc6e65 == lab) confounds.length_only_auroc"
+ },
+ {
+  "f_id": "F-114",
+  "item": "... above 0.5",
+  "ledger": "9",
+  "derived": "9",
+  "verdict": "matches",
+  "source": "audit/cache/labpc/run-coords/confounds_L44_last.json (md5 11bc6e65 == lab) confounds.length_only_auroc"
+ },
+ {
+  "f_id": "F-114",
+  "item": "roleplaying (sole inversion)",
+  "ledger": "0.4415",
+  "derived": "0.4415",
+  "verdict": "matches",
+  "source": "audit/cache/labpc/run-coords/confounds_L44_last.json (md5 11bc6e65 == lab) confounds.length_only_auroc"
+ },
+ {
+  "f_id": "F-114",
+  "item": "control set keeps sycophancy_mt, drops kr-matched",
+  "ledger": "yes",
+  "derived": "yes",
+  "verdict": "matches",
+  "source": "audit/cache/labpc/run-coords/confounds_L44_last.json (md5 11bc6e65 == lab) confounds.length_only_auroc"
+ },
+ {
+  "f_id": "F-114",
+  "item": "paper16 raw",
+  "ledger": "0.6623",
+  "derived": "0.6623",
+  "verdict": "matches",
+  "source": "run-crossgen/kd11/matrices/mean_L40_s42.json (110 pairs, paper, k=5)"
+ },
+ {
+  "f_id": "F-114",
+  "item": "pc:unified",
+  "ledger": "0.6715",
+  "derived": "0.6715",
+  "verdict": "matches",
+  "source": "run-crossgen/kd11/matrices/mean_L40_s42.json (110 pairs, paper, k=5)"
+ },
+ {
+  "f_id": "F-114",
+  "item": "datapca",
+  "ledger": "0.6651",
+  "derived": "0.6651",
+  "verdict": "matches",
+  "source": "run-crossgen/kd11/matrices/mean_L40_s42.json (110 pairs, paper, k=5)"
+ },
+ {
+  "f_id": "F-114",
+  "item": "pc:unified - raw",
+  "ledger": "+0.0093",
+  "derived": "+0.0093",
+  "verdict": "matches",
+  "source": "run-crossgen/kd11/matrices/mean_L40_s42.json (110 pairs, paper, k=5)"
+ },
+ {
+  "f_id": "F-114",
+  "item": "pc:unified - datapca",
+  "ledger": "+0.0064",
+  "derived": "+0.0064",
+  "verdict": "matches",
+  "source": "run-crossgen/kd11/matrices/mean_L40_s42.json (110 pairs, paper, k=5)"
+ },
+ {
+  "f_id": "F-114",
+  "item": "kd pc:unified - ROOT raw",
+  "ledger": "+0.0757",
+  "derived": "+0.0757",
+  "verdict": "matches",
+  "source": "kd11/banks/kd/matrices/mean_L40 vs root raw"
+ },
+ {
+  "f_id": "F-114",
+  "item": "mixed ratio ('twelvefold')",
+  "ledger": "11.8",
+  "derived": "11.8000",
+  "verdict": "matches",
+  "source": "unrounded 8.184x / 11.750x; from 4-dp inputs 8.140x / 11.828x"
+ },
+ {
+  "f_id": "F-114",
+  "item": "like-for-like ratio",
+  "ledger": "8.1",
+  "derived": "8.1000",
+  "verdict": "matches",
+  "source": "unrounded 8.184x / 11.750x; from 4-dp inputs 8.140x / 11.828x (8.1 uses rounded inputs; unrounded 8.2)"
+ },
+ {
+  "f_id": "F-123",
+  "item": "like-for-like ratio",
+  "ledger": "8.2",
+  "derived": "8.2000",
+  "verdict": "matches",
+  "source": "unrounded 8.184x / 11.750x; from 4-dp inputs 8.140x / 11.828x"
+ },
+ {
+  "f_id": "F-123",
+  "item": "mixed ratio",
+  "ledger": "11.7",
+  "derived": "11.7000",
+  "verdict": "matches",
+  "source": "unrounded 8.184x / 11.750x; from 4-dp inputs 8.140x / 11.828x"
+ },
+ {
+  "f_id": "F-123",
+  "item": "rows caption length",
+  "ledger": "22",
+  "derived": "22",
+  "verdict": "matches",
+  "source": "d['rows'] is a caption string"
+ },
+ {
+  "f_id": "F-123",
+  "item": "length/raw, 10 = all but kr-matched",
+  "ledger": "0.5494/0.6652",
+  "derived": "0.5494/0.6652",
+  "verdict": "matches",
+  "source": "run-crossgen/kd11/matrices/mean_L40_s42.json (110 pairs, paper, k=5)"
+ },
+ {
+  "f_id": "F-123",
+  "item": "length/raw, block9",
+  "ledger": "0.5467/0.6870",
+  "derived": "0.5467/0.6870",
+  "verdict": "matches",
+  "source": "run-crossgen/kd11/matrices/mean_L40_s42.json (110 pairs, paper, k=5)"
+ },
+ {
+  "f_id": "F-114",
+  "item": "F-91 falsify L32 s7 real",
+  "ledger": "0.8826",
+  "derived": "0.8826",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB/run-premise/falsify/falsify_L32_s7.json"
+ },
+ {
+  "f_id": "F-114",
+  "item": "F-91 falsify L32 s13 real",
+  "ledger": "0.8800",
+  "derived": "0.8800",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB/run-premise/falsify/falsify_L32_s13.json"
+ },
+ {
+  "f_id": "F-114",
+  "item": "F-91 falsify L32 s42 real",
+  "ledger": "0.8945",
+  "derived": "0.8945",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB/run-premise/falsify/falsify_L32_s42.json"
+ },
+ {
+  "f_id": "F-114",
+  "item": "F-91 falsify L36 s7 real",
+  "ledger": "0.8942",
+  "derived": "0.8942",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB/run-premise/falsify/falsify_L36_s7.json"
+ },
+ {
+  "f_id": "F-114",
+  "item": "F-91 falsify L36 s13 real",
+  "ledger": "0.8887",
+  "derived": "0.8887",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB/run-premise/falsify/falsify_L36_s13.json"
+ },
+ {
+  "f_id": "F-114",
+  "item": "F-91 falsify L36 s42 real",
+  "ledger": "0.8919",
+  "derived": "0.8919",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB/run-premise/falsify/falsify_L36_s42.json"
+ },
+ {
+  "f_id": "F-114",
+  "item": "F-91 falsify L40 s7 real",
+  "ledger": "0.8957",
+  "derived": "0.8957",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB/run-premise/falsify/falsify_L40_s7.json"
+ },
+ {
+  "f_id": "F-114",
+  "item": "F-91 falsify L40 s13 real",
+  "ledger": "0.8830",
+  "derived": "0.8830",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB/run-premise/falsify/falsify_L40_s13.json"
+ },
+ {
+  "f_id": "F-114",
+  "item": "F-91 falsify L40 s42 real",
+  "ledger": "0.8828",
+  "derived": "0.8828",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB/run-premise/falsify/falsify_L40_s42.json"
+ },
+ {
+  "f_id": "F-114",
+  "item": "F-56 source share 134/2134",
+  "ledger": "6.28",
+  "derived": "6.2800",
+  "verdict": "matches",
+  "source": "arithmetic"
+ },
+ {
+  "f_id": "F-114",
+  "item": "F-56 sample share 134/800",
+  "ledger": "16.75",
+  "derived": "16.7500",
+  "verdict": "matches",
+  "source": "arithmetic"
+ },
+ {
+  "f_id": "F-115",
+  "item": "cache L20 md5 == lab",
+  "ledger": "be979ba50f",
+  "derived": "be979ba50f",
+  "verdict": "matches",
+  "source": "C:\\Users\\SURAIYA\\Documents\\STUDY\\thesis\\expLB\\audit/cache/labpc/expLB-resplit/mean_L20_s42.json"
+ },
+ {
+  "f_id": "F-115",
+  "item": "cache L40 md5 == lab",
+  "ledger": "d2384c888a",
+  "derived": "d2384c888a",
+  "verdict": "matches",
+  "source": "C:\\Users\\SURAIYA\\Documents\\STUDY\\thesis\\expLB\\audit/cache/labpc/expLB-resplit/mean_L40_s42.json"
+ },
+ {
+  "f_id": "F-115",
+  "item": "cache L44 md5 == lab",
+  "ledger": "ddd573b845",
+  "derived": "ddd573b845",
+  "verdict": "matches",
+  "source": "C:\\Users\\SURAIYA\\Documents\\STUDY\\thesis\\expLB\\audit/cache/labpc/expLB-resplit/mean_L44_s42.json"
+ },
+ {
+  "f_id": "F-115",
+  "item": "L20 leaked axes-raw, KM row mean",
+  "ledger": "-0.2566",
+  "derived": "-0.2566",
+  "verdict": "matches",
+  "source": "run-crossgen/kd11/mean_L20_s42.json"
+ },
+ {
+  "f_id": "F-115",
+  "item": "L20 guarded axes-raw, KM row mean",
+  "ledger": "-0.2545",
+  "derived": "-0.2545",
+  "verdict": "matches",
+  "source": "cache/expLB-resplit/mean_L20_s42.json"
+ },
+ {
+  "f_id": "F-115",
+  "item": "L20 KR>KM axes leaked",
+  "ledger": "0.6004",
+  "derived": "0.6004",
+  "verdict": "matches",
+  "source": "kd11 matrix cell"
+ },
+ {
+  "f_id": "F-115",
+  "item": "L20 KR>KM axes guarded",
+  "ledger": "0.7190",
+  "derived": "0.7190",
+  "verdict": "matches",
+  "source": "resplit matrix cell"
+ },
+ {
+  "f_id": "F-115",
+  "item": "L40 leaked axes-raw, KM row mean",
+  "ledger": "+0.0367",
+  "derived": "+0.0367",
+  "verdict": "matches",
+  "source": "run-crossgen/kd11/mean_L40_s42.json"
+ },
+ {
+  "f_id": "F-115",
+  "item": "L40 guarded axes-raw, KM row mean",
+  "ledger": "+0.0309",
+  "derived": "+0.0309",
+  "verdict": "matches",
+  "source": "cache/expLB-resplit/mean_L40_s42.json"
+ },
+ {
+  "f_id": "F-115",
+  "item": "L40 KM>KR axes leaked",
+  "ledger": "0.5905",
+  "derived": "0.5905",
+  "verdict": "matches",
+  "source": "kd11 matrix cell"
+ },
+ {
+  "f_id": "F-115",
+  "item": "L40 KM>KR axes guarded",
+  "ledger": "0.5416",
+  "derived": "0.5416",
+  "verdict": "matches",
+  "source": "resplit matrix cell"
+ },
+ {
+  "f_id": "F-115",
+  "item": "L40 KR>KM axes leaked",
+  "ledger": "0.5674",
+  "derived": "0.5674",
+  "verdict": "matches",
+  "source": "kd11 matrix cell"
+ },
+ {
+  "f_id": "F-115",
+  "item": "L40 KR>KM axes guarded",
+  "ledger": "0.4262",
+  "derived": "0.4262",
+  "verdict": "matches",
+  "source": "resplit matrix cell"
+ },
+ {
+  "f_id": "F-115",
+  "item": "L40 KR>KM raw leaked",
+  "ledger": "0.7932",
+  "derived": "0.7932",
+  "verdict": "matches",
+  "source": "kd11 cell"
+ },
+ {
+  "f_id": "F-115",
+  "item": "L40 KR>KM raw guarded",
+  "ledger": "0.7214",
+  "derived": "0.7214",
+  "verdict": "matches",
+  "source": "resplit cell"
+ },
+ {
+  "f_id": "F-115",
+  "item": "L44 leaked axes-raw, KM row mean",
+  "ledger": "+0.0134",
+  "derived": "+0.0134",
+  "verdict": "matches",
+  "source": "run-crossgen/kd11/mean_L44_s42.json"
+ },
+ {
+  "f_id": "F-115",
+  "item": "L44 guarded axes-raw, KM row mean",
+  "ledger": "+0.0050",
+  "derived": "+0.0050",
+  "verdict": "matches",
+  "source": "cache/expLB-resplit/mean_L44_s42.json"
+ },
+ {
+  "f_id": "F-115",
+  "item": "L44 KM>KR axes leaked",
+  "ledger": "0.6534",
+  "derived": "0.6534",
+  "verdict": "matches",
+  "source": "kd11 matrix cell"
+ },
+ {
+  "f_id": "F-115",
+  "item": "L44 KM>KR axes guarded",
+  "ledger": "0.5719",
+  "derived": "0.5719",
+  "verdict": "matches",
+  "source": "resplit matrix cell"
+ },
+ {
+  "f_id": "F-115",
+  "item": "L44 KR>KM axes leaked",
+  "ledger": "0.6675",
+  "derived": "0.6675",
+  "verdict": "matches",
+  "source": "kd11 matrix cell"
+ },
+ {
+  "f_id": "F-115",
+  "item": "L44 KR>KM axes guarded",
+  "ledger": "0.5667",
+  "derived": "0.5667",
+  "verdict": "matches",
+  "source": "resplit matrix cell"
+ },
+ {
+  "f_id": "F-115",
+  "item": "kr-matched ids that are HP-KR ids",
+  "ledger": "258/258",
+  "derived": "258/258",
+  "verdict": "matches",
+  "source": "passB rows.jsonl"
+ },
+ {
+  "f_id": "F-115",
+  "item": "kr-matched rows surviving guard",
+  "ledger": "59",
+  "derived": "59",
+  "verdict": "matches",
+  "source": "splits.json[42][KR].test_row_ids x KM rows.jsonl"
+ },
+ {
+  "f_id": "F-115",
+  "item": "contamination %",
+  "ledger": "77",
+  "derived": "77",
+  "verdict": "matches",
+  "source": "derived"
+ },
+ {
+  "f_id": "F-113",
+  "item": "kr-matched TEST rows in HP-KR train (30g split)",
+  "ledger": "42",
+  "derived": "42",
+  "verdict": "matches",
+  "source": "replay of 30g_clustered_holdout.py:101-106 split over passB rows.jsonl (lab)"
+ },
+ {
+  "f_id": "F-113",
+  "item": "same count under crossgen split (context only)",
+  "ledger": "n/a",
+  "derived": "39",
+  "verdict": "context (different pipeline split)",
+  "source": "expLB-resplit splits.json seed 42 == kd11/splits.json"
+ },
+ {
+  "f_id": "F-112",
+  "item": "kr-matched rows {deceptive/honest}",
+  "ledger": "258 {124/134}",
+  "derived": "258 {124/134}",
+  "verdict": "matches",
+  "source": "passB/kr-matched/rows.jsonl (lab)"
+ },
+ {
+  "f_id": "F-112",
+  "item": "HP-KR rows {deceptive/honest}",
+  "ledger": "2139 {139/2000}",
+  "derived": "2139 {139/2000}",
+  "verdict": "matches",
+  "source": "passB/HP-KR/rows.jsonl (lab)"
+ },
+ {
+  "f_id": "F-116",
+  "item": "cache km L20 md5 == lab",
+  "ledger": "15c017e128",
+  "derived": "15c017e128",
+  "verdict": "matches",
+  "source": "C:\\Users\\SURAIYA\\Documents\\STUDY\\thesis\\expLB\\audit/cache/labpc/expLB-resplit/km/mean_L20_s42.json"
+ },
+ {
+  "f_id": "F-116",
+  "item": "cache km L40 md5 == lab",
+  "ledger": "86070e76ac",
+  "derived": "86070e76ac",
+  "verdict": "matches",
+  "source": "C:\\Users\\SURAIYA\\Documents\\STUDY\\thesis\\expLB\\audit/cache/labpc/expLB-resplit/km/mean_L40_s42.json"
+ },
+ {
+  "f_id": "F-116",
+  "item": "cache km L44 md5 == lab",
+  "ledger": "8a39fc33f3",
+  "derived": "8a39fc33f3",
+  "verdict": "matches",
+  "source": "C:\\Users\\SURAIYA\\Documents\\STUDY\\thesis\\expLB\\audit/cache/labpc/expLB-resplit/km/mean_L44_s42.json"
+ },
+ {
+  "f_id": "F-116",
+  "item": "knowledge_matched rows",
+  "ledger": "2001",
+  "derived": "2001",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB-resplit/passB/harm-pressure-kr-knowledge-matched/rows.jsonl"
+ },
+ {
+  "f_id": "F-116",
+  "item": "class balance dec/hon",
+  "ledger": "139/1862",
+  "derived": "139/1862",
+  "verdict": "matches",
+  "source": "same"
+ },
+ {
+  "f_id": "F-116",
+  "item": "share of HP-KR (93.5%)",
+  "ledger": "93.5",
+  "derived": "93.5000",
+  "verdict": "matches",
+  "source": "2001/2139"
+ },
+ {
+  "f_id": "F-116",
+  "item": "7.8x bigger than 258",
+  "ledger": "7.8",
+  "derived": "7.8000",
+  "verdict": "matches",
+  "source": "2001/258"
+ },
+ {
+  "f_id": "F-116",
+  "item": "L20 transfer axes",
+  "ledger": "0.3850",
+  "derived": "0.3850",
+  "verdict": "matches",
+  "source": "km/mean_L20_s42.json row harm-pressure-kr-knowledge-matched, 11 off-diag"
+ },
+ {
+  "f_id": "F-116",
+  "item": "L20 transfer raw",
+  "ledger": "0.5711",
+  "derived": "0.5711",
+  "verdict": "matches",
+  "source": "km/mean_L20_s42.json row harm-pressure-kr-knowledge-matched, 11 off-diag"
+ },
+ {
+  "f_id": "F-116",
+  "item": "L20 transfer axes-raw",
+  "ledger": "-0.1860",
+  "derived": "-0.1860",
+  "verdict": "matches",
+  "source": "km/mean_L20_s42.json row harm-pressure-kr-knowledge-matched, 11 off-diag"
+ },
+ {
+  "f_id": "F-116",
+  "item": "L20 transfer datapca",
+  "ledger": "0.5208",
+  "derived": "0.5208",
+  "verdict": "matches",
+  "source": "km/mean_L20_s42.json row harm-pressure-kr-knowledge-matched, 11 off-diag"
+ },
+ {
+  "f_id": "F-116",
+  "item": "L20 transfer random",
+  "ledger": "0.5455",
+  "derived": "0.5455",
+  "verdict": "matches",
+  "source": "km/mean_L20_s42.json row harm-pressure-kr-knowledge-matched, 11 off-diag"
+ },
+ {
+  "f_id": "F-116",
+  "item": "L20 transfer length",
+  "ledger": "0.6174",
+  "derived": "0.6174",
+  "verdict": "matches",
+  "source": "km/mean_L20_s42.json row harm-pressure-kr-knowledge-matched, 11 off-diag"
+ },
+ {
+  "f_id": "F-116",
+  "item": "L20 in-dist diag axes",
+  "ledger": "0.9541",
+  "derived": "0.9541",
+  "verdict": "matches",
+  "source": "diagonal cell"
+ },
+ {
+  "f_id": "F-116",
+  "item": "L20 in-dist diag raw",
+  "ledger": "0.9995",
+  "derived": "0.9995",
+  "verdict": "matches",
+  "source": "diagonal cell"
+ },
+ {
+  "f_id": "F-116",
+  "item": "L20 in-dist diag length",
+  "ledger": "0.8318",
+  "derived": "0.8318",
+  "verdict": "matches",
+  "source": "diagonal cell"
+ },
+ {
+  "f_id": "F-116",
+  "item": "L20 zero-shot contrast slice",
+  "ledger": "0.2405",
+  "derived": "0.2405",
+  "verdict": "matches",
+  "source": "zeroshot"
+ },
+ {
+  "f_id": "F-116",
+  "item": "L20 zero-shot contrast full HP-KR",
+  "ledger": "0.2504",
+  "derived": "0.2504",
+  "verdict": "matches",
+  "source": "zeroshot"
+ },
+ {
+  "f_id": "F-116",
+  "item": "L40 transfer axes",
+  "ledger": "0.3335",
+  "derived": "0.3335",
+  "verdict": "matches",
+  "source": "km/mean_L40_s42.json row harm-pressure-kr-knowledge-matched, 11 off-diag"
+ },
+ {
+  "f_id": "F-116",
+  "item": "L40 transfer raw",
+  "ledger": "0.7093",
+  "derived": "0.7093",
+  "verdict": "matches",
+  "source": "km/mean_L40_s42.json row harm-pressure-kr-knowledge-matched, 11 off-diag"
+ },
+ {
+  "f_id": "F-116",
+  "item": "L40 transfer axes-raw",
+  "ledger": "-0.3758",
+  "derived": "-0.3758",
+  "verdict": "matches",
+  "source": "km/mean_L40_s42.json row harm-pressure-kr-knowledge-matched, 11 off-diag"
+ },
+ {
+  "f_id": "F-116",
+  "item": "L40 transfer datapca",
+  "ledger": "0.6636",
+  "derived": "0.6636",
+  "verdict": "matches",
+  "source": "km/mean_L40_s42.json row harm-pressure-kr-knowledge-matched, 11 off-diag"
+ },
+ {
+  "f_id": "F-116",
+  "item": "L40 transfer random",
+  "ledger": "0.6718",
+  "derived": "0.6718",
+  "verdict": "matches",
+  "source": "km/mean_L40_s42.json row harm-pressure-kr-knowledge-matched, 11 off-diag"
+ },
+ {
+  "f_id": "F-116",
+  "item": "L40 transfer length",
+  "ledger": "0.6174",
+  "derived": "0.6174",
+  "verdict": "matches",
+  "source": "km/mean_L40_s42.json row harm-pressure-kr-knowledge-matched, 11 off-diag"
+ },
+ {
+  "f_id": "F-116",
+  "item": "L40 in-dist diag axes",
+  "ledger": "0.8347",
+  "derived": "0.8347",
+  "verdict": "matches",
+  "source": "diagonal cell"
+ },
+ {
+  "f_id": "F-116",
+  "item": "L40 in-dist diag raw",
+  "ledger": "0.9992",
+  "derived": "0.9992",
+  "verdict": "matches",
+  "source": "diagonal cell"
+ },
+ {
+  "f_id": "F-116",
+  "item": "L40 in-dist diag length",
+  "ledger": "0.8318",
+  "derived": "0.8318",
+  "verdict": "matches",
+  "source": "diagonal cell"
+ },
+ {
+  "f_id": "F-116",
+  "item": "L40 zero-shot contrast slice",
+  "ledger": "0.6466",
+  "derived": "0.6466",
+  "verdict": "matches",
+  "source": "zeroshot"
+ },
+ {
+  "f_id": "F-116",
+  "item": "L40 zero-shot contrast full HP-KR",
+  "ledger": "0.6436",
+  "derived": "0.6436",
+  "verdict": "matches",
+  "source": "zeroshot"
+ },
+ {
+  "f_id": "F-116",
+  "item": "L44 transfer axes",
+  "ledger": "0.5267",
+  "derived": "0.5267",
+  "verdict": "matches",
+  "source": "km/mean_L44_s42.json row harm-pressure-kr-knowledge-matched, 11 off-diag"
+ },
+ {
+  "f_id": "F-116",
+  "item": "L44 transfer raw",
+  "ledger": "0.7203",
+  "derived": "0.7203",
+  "verdict": "matches",
+  "source": "km/mean_L44_s42.json row harm-pressure-kr-knowledge-matched, 11 off-diag"
+ },
+ {
+  "f_id": "F-116",
+  "item": "L44 transfer axes-raw",
+  "ledger": "-0.1937",
+  "derived": "-0.1937",
+  "verdict": "matches",
+  "source": "km/mean_L44_s42.json row harm-pressure-kr-knowledge-matched, 11 off-diag"
+ },
+ {
+  "f_id": "F-116",
+  "item": "L44 transfer datapca",
+  "ledger": "0.7037",
+  "derived": "0.7037",
+  "verdict": "matches",
+  "source": "km/mean_L44_s42.json row harm-pressure-kr-knowledge-matched, 11 off-diag"
+ },
+ {
+  "f_id": "F-116",
+  "item": "L44 transfer random",
+  "ledger": "0.6237",
+  "derived": "0.6237",
+  "verdict": "matches",
+  "source": "km/mean_L44_s42.json row harm-pressure-kr-knowledge-matched, 11 off-diag"
+ },
+ {
+  "f_id": "F-116",
+  "item": "L44 transfer length",
+  "ledger": "0.6174",
+  "derived": "0.6174",
+  "verdict": "matches",
+  "source": "km/mean_L44_s42.json row harm-pressure-kr-knowledge-matched, 11 off-diag"
+ },
+ {
+  "f_id": "F-116",
+  "item": "L44 in-dist diag axes",
+  "ledger": "0.7209",
+  "derived": "0.7209",
+  "verdict": "matches",
+  "source": "diagonal cell"
+ },
+ {
+  "f_id": "F-116",
+  "item": "L44 in-dist diag raw",
+  "ledger": "0.9993",
+  "derived": "0.9993",
+  "verdict": "matches",
+  "source": "diagonal cell"
+ },
+ {
+  "f_id": "F-116",
+  "item": "L44 in-dist diag length",
+  "ledger": "0.8318",
+  "derived": "0.8318",
+  "verdict": "matches",
+  "source": "diagonal cell"
+ },
+ {
+  "f_id": "F-116",
+  "item": "L44 zero-shot contrast slice",
+  "ledger": "0.6085",
+  "derived": "0.6085",
+  "verdict": "matches",
+  "source": "zeroshot"
+ },
+ {
+  "f_id": "F-116",
+  "item": "L44 zero-shot contrast full HP-KR",
+  "ledger": "0.6032",
+  "derived": "0.6032",
+  "verdict": "matches",
+  "source": "zeroshot"
+ },
+ {
+  "f_id": "F-117",
+  "item": "L20 ext_axis1-ext_pc3 with HP-KR",
+  "ledger": "+0.2204",
+  "derived": "+0.2204",
+  "verdict": "matches",
+  "source": "git 16def2de:src/probes/deception-detection/results/persona_ood_ext_L*/summary.csv"
+ },
+ {
+  "f_id": "F-117",
+  "item": "L20 ext_axis1-ext_pc3 excl HP-KR",
+  "ledger": "+0.0086",
+  "derived": "+0.0086",
+  "verdict": "matches",
+  "source": "git 16def2de:src/probes/deception-detection/results/persona_ood_ext_L*/summary.csv"
+ },
+ {
+  "f_id": "F-117",
+  "item": "L24 ext_axis1-ext_pc3 with HP-KR",
+  "ledger": "+0.2221",
+  "derived": "+0.2221",
+  "verdict": "matches",
+  "source": "git 16def2de:src/probes/deception-detection/results/persona_ood_ext_L*/summary.csv"
+ },
+ {
+  "f_id": "F-117",
+  "item": "L24 ext_axis1-ext_pc3 excl HP-KR",
+  "ledger": "+0.0012",
+  "derived": "+0.0012",
+  "verdict": "matches",
+  "source": "git 16def2de:src/probes/deception-detection/results/persona_ood_ext_L*/summary.csv"
+ },
+ {
+  "f_id": "F-117",
+  "item": "L36 ext_axis1-ext_pc3 with HP-KR",
+  "ledger": "+0.0481",
+  "derived": "+0.0481",
+  "verdict": "matches",
+  "source": "git 16def2de:src/probes/deception-detection/results/persona_ood_ext_L*/summary.csv"
+ },
+ {
+  "f_id": "F-117",
+  "item": "L36 ext_axis1-ext_pc3 excl HP-KR",
+  "ledger": "+0.0155",
+  "derived": "+0.0155",
+  "verdict": "matches",
+  "source": "git 16def2de:src/probes/deception-detection/results/persona_ood_ext_L*/summary.csv"
+ },
+ {
+  "f_id": "F-117",
+  "item": "L40 ext_axis1-ext_pc3 with HP-KR",
+  "ledger": "+0.0503",
+  "derived": "+0.0503",
+  "verdict": "matches",
+  "source": "git 16def2de:src/probes/deception-detection/results/persona_ood_ext_L*/summary.csv"
+ },
+ {
+  "f_id": "F-117",
+  "item": "L40 ext_axis1-ext_pc3 excl HP-KR",
+  "ledger": "+0.0495",
+  "derived": "+0.0495",
+  "verdict": "matches",
+  "source": "git 16def2de:src/probes/deception-detection/results/persona_ood_ext_L*/summary.csv"
+ },
+ {
+  "f_id": "F-117",
+  "item": "L44 ext_axis1-ext_pc3 with HP-KR",
+  "ledger": "+0.0235",
+  "derived": "+0.0235",
+  "verdict": "matches",
+  "source": "git 16def2de:src/probes/deception-detection/results/persona_ood_ext_L*/summary.csv"
+ },
+ {
+  "f_id": "F-117",
+  "item": "L44 ext_axis1-ext_pc3 excl HP-KR",
+  "ledger": "+0.0354",
+  "derived": "+0.0354",
+  "verdict": "matches",
+  "source": "git 16def2de:src/probes/deception-detection/results/persona_ood_ext_L*/summary.csv"
+ },
+ {
+  "f_id": "F-117",
+  "item": "L64 ext_axis1-ext_pc3 with HP-KR",
+  "ledger": "-0.0010",
+  "derived": "-0.0010",
+  "verdict": "matches",
+  "source": "git 16def2de:src/probes/deception-detection/results/persona_ood_ext_L*/summary.csv"
+ },
+ {
+  "f_id": "F-117",
+  "item": "L64 ext_axis1-ext_pc3 excl HP-KR",
+  "ledger": "-0.0029",
+  "derived": "-0.0029",
+  "verdict": "matches",
+  "source": "git 16def2de:src/probes/deception-detection/results/persona_ood_ext_L*/summary.csv"
+ },
+ {
+  "f_id": "F-117",
+  "item": "L68 ext_axis1-ext_pc3 with HP-KR",
+  "ledger": "-0.0205",
+  "derived": "-0.0205",
+  "verdict": "matches",
+  "source": "git 16def2de:src/probes/deception-detection/results/persona_ood_ext_L*/summary.csv"
+ },
+ {
+  "f_id": "F-117",
+  "item": "L68 ext_axis1-ext_pc3 excl HP-KR",
+  "ledger": "-0.0325",
+  "derived": "-0.0325",
+  "verdict": "matches",
+  "source": "git 16def2de:src/probes/deception-detection/results/persona_ood_ext_L*/summary.csv"
+ },
+ {
+  "f_id": "F-117",
+  "item": "L72 ext_axis1-ext_pc3 with HP-KR",
+  "ledger": "-0.0146",
+  "derived": "-0.0146",
+  "verdict": "matches",
+  "source": "git 16def2de:src/probes/deception-detection/results/persona_ood_ext_L*/summary.csv"
+ },
+ {
+  "f_id": "F-117",
+  "item": "L72 ext_axis1-ext_pc3 excl HP-KR",
+  "ledger": "-0.0198",
+  "derived": "-0.0198",
+  "verdict": "matches",
+  "source": "git 16def2de:src/probes/deception-detection/results/persona_ood_ext_L*/summary.csv"
+ },
+ {
+  "f_id": "F-117",
+  "item": "positive layers (with HP-KR)",
+  "ledger": "13/16",
+  "derived": "13/16",
+  "verdict": "matches",
+  "source": "git 16def2de:src/probes/deception-detection/results/persona_ood_ext_L*/summary.csv"
+ },
+ {
+  "f_id": "F-117",
+  "item": "positive layers (excl HP-KR)",
+  "ledger": "11/16",
+  "derived": "11/16",
+  "verdict": "matches",
+  "source": "git 16def2de:src/probes/deception-detection/results/persona_ood_ext_L*/summary.csv"
+ },
+ {
+  "f_id": "F-117",
+  "item": "excl margins within +-0.06",
+  "ledger": "yes",
+  "derived": "no (max 0.0633)",
+  "verdict": "DIFFERS: ledger yes vs raw no (max 0.0633)",
+  "source": "git 16def2de:src/probes/deception-detection/results/persona_ood_ext_L*/summary.csv"
+ },
+ {
+  "f_id": "F-117",
+  "item": "excl margin zero crossings",
+  "ledger": "5",
+  "derived": "6",
+  "verdict": "DIFFERS: ledger 5 vs raw 6",
+  "source": "git 16def2de:src/probes/deception-detection/results/persona_ood_ext_L*/summary.csv"
+ },
+ {
+  "f_id": "F-117",
+  "item": "ext_axis1-baseline >0 layers (with)",
+  "ledger": "16/16",
+  "derived": "16/16",
+  "verdict": "matches",
+  "source": "git 16def2de:src/probes/deception-detection/results/persona_ood_ext_L*/summary.csv"
+ },
+ {
+  "f_id": "F-117",
+  "item": "ext_axis1-baseline min (with)",
+  "ledger": "+0.115",
+  "derived": "+0.1150",
+  "verdict": "matches",
+  "source": "git 16def2de:src/probes/deception-detection/results/persona_ood_ext_L*/summary.csv"
+ },
+ {
+  "f_id": "F-117",
+  "item": "ext_axis1-baseline max (with)",
+  "ledger": "+0.273",
+  "derived": "+0.2731",
+  "verdict": "matches",
+  "source": "git 16def2de:src/probes/deception-detection/results/persona_ood_ext_L*/summary.csv"
+ },
+ {
+  "f_id": "F-117",
+  "item": "ext_axis1-baseline >0 layers (excl)",
+  "ledger": "16/16",
+  "derived": "16/16",
+  "verdict": "matches",
+  "source": "git 16def2de:src/probes/deception-detection/results/persona_ood_ext_L*/summary.csv"
+ },
+ {
+  "f_id": "F-117",
+  "item": "ext_axis1-baseline min (excl)",
+  "ledger": "+0.123",
+  "derived": "+0.1229",
+  "verdict": "matches",
+  "source": "git 16def2de:src/probes/deception-detection/results/persona_ood_ext_L*/summary.csv"
+ },
+ {
+  "f_id": "F-117",
+  "item": "ext_axis1-baseline max (excl)",
+  "ledger": "+0.243",
+  "derived": "+0.2433",
+  "verdict": "matches",
+  "source": "git 16def2de:src/probes/deception-detection/results/persona_ood_ext_L*/summary.csv"
+ },
+ {
+  "f_id": "F-117",
+  "item": "ext_axis1 peak layer",
+  "ledger": "36",
+  "derived": "36",
+  "verdict": "matches",
+  "source": "git 16def2de:src/probes/deception-detection/results/persona_ood_ext_L*/summary.csv"
+ },
+ {
+  "f_id": "F-117",
+  "item": "ext_axis1 L36",
+  "ledger": "0.9275",
+  "derived": "0.9275",
+  "verdict": "matches",
+  "source": "git 16def2de:src/probes/deception-detection/results/persona_ood_ext_L*/summary.csv"
+ },
+ {
+  "f_id": "F-117",
+  "item": "ext_axis1 L40",
+  "ledger": "0.9158",
+  "derived": "0.9158",
+  "verdict": "matches",
+  "source": "git 16def2de:src/probes/deception-detection/results/persona_ood_ext_L*/summary.csv"
+ },
+ {
+  "f_id": "F-117",
+  "item": "denial_axis1 peak layer",
+  "ledger": "36",
+  "derived": "36",
+  "verdict": "matches",
+  "source": "git 16def2de:src/probes/deception-detection/results/persona_ood_ext_L*/summary.csv"
+ },
+ {
+  "f_id": "F-117",
+  "item": "HP-KR denial_axis L40 (global max)",
+  "ledger": "0.9185",
+  "derived": "0.9185",
+  "verdict": "matches",
+  "source": "git 16def2de:src/probes/deception-detection/results/persona_ood_ext_L*/zero_shot.csv row harm_refusal_knowledge_report__plain"
+ },
+ {
+  "f_id": "F-117",
+  "item": "HP-KR denial_axis argmax layer",
+  "ledger": "40",
+  "derived": "40",
+  "verdict": "matches",
+  "source": "git 16def2de:src/probes/deception-detection/results/persona_ood_ext_L*/zero_shot.csv row harm_refusal_knowledge_report__plain"
+ },
+ {
+  "f_id": "F-117",
+  "item": "HP-KR ext_axis L76",
+  "ledger": "0.9249",
+  "derived": "0.9249",
+  "verdict": "matches",
+  "source": "git 16def2de:src/probes/deception-detection/results/persona_ood_ext_L*/zero_shot.csv row harm_refusal_knowledge_report__plain"
+ },
+ {
+  "f_id": "F-117",
+  "item": "HP-KR ext_axis L40",
+  "ledger": "0.9124",
+  "derived": "0.9124",
+  "verdict": "matches",
+  "source": "git 16def2de:src/probes/deception-detection/results/persona_ood_ext_L*/zero_shot.csv row harm_refusal_knowledge_report__plain"
+ },
+ {
+  "f_id": "F-117",
+  "item": "HP-KR published 8v7 axis L72",
+  "ledger": "0.4344",
+  "derived": "0.4344",
+  "verdict": "matches",
+  "source": "git 16def2de:src/probes/deception-detection/results/persona_ood_ext_L*/zero_shot.csv row harm_refusal_knowledge_report__plain"
+ },
+ {
+  "f_id": "F-117",
+  "item": "HP-KR published 8v7 axis L76",
+  "ledger": "0.7301",
+  "derived": "0.7301",
+  "verdict": "matches",
+  "source": "git 16def2de:src/probes/deception-detection/results/persona_ood_ext_L*/zero_shot.csv row harm_refusal_knowledge_report__plain"
+ },
+ {
+  "f_id": "F-117",
+  "item": "HP-KR published 8v7 axis L79",
+  "ledger": "0.7709",
+  "derived": "0.7709",
+  "verdict": "matches",
+  "source": "git 16def2de:src/probes/deception-detection/results/persona_ood_ext_L*/zero_shot.csv row harm_refusal_knowledge_report__plain"
+ },
+ {
+  "f_id": "F-117",
+  "item": "axis1 off-diag L72",
+  "ledger": "0.6526",
+  "derived": "0.6526",
+  "verdict": "matches",
+  "source": "git 16def2de:src/probes/deception-detection/results/persona_ood_ext_L*/summary.csv"
+ },
+ {
+  "f_id": "F-117",
+  "item": "axis1 off-diag L76",
+  "ledger": "0.8738",
+  "derived": "0.8738",
+  "verdict": "matches",
+  "source": "git 16def2de:src/probes/deception-detection/results/persona_ood_ext_L*/summary.csv"
+ },
+ {
+  "f_id": "F-117",
+  "item": "axis1 off-diag L79",
+  "ledger": "0.8179",
+  "derived": "0.8179",
+  "verdict": "matches",
+  "source": "git 16def2de:src/probes/deception-detection/results/persona_ood_ext_L*/summary.csv"
+ },
+ {
+  "f_id": "F-117",
+  "item": "random3 off-diag range",
+  "ledger": "0.48-0.55",
+  "derived": "0.4806-0.5491",
+  "verdict": "matches",
+  "source": "git 16def2de:src/probes/deception-detection/results/persona_ood_ext_L*/summary.csv"
+ },
+ {
+  "f_id": "F-117",
+  "item": "ext margins identical PIN_OLD vs PIN_PAPER",
+  "ledger": "identical",
+  "derived": "identical",
+  "verdict": "matches",
+  "source": "git ea1ce52b:src/probes/deception-detection/results/persona_ood_ext_L*/summary.csv"
+ },
+ {
+  "f_id": "F-117",
+  "item": "baseline margins identical OLD vs PIN",
+  "ledger": "identical",
+  "derived": "differ at [20, 40, 44] (<1e-4)",
+  "verdict": "context: baseline re-run moved 4th-5th dp at [20, 40, 44]",
+  "source": "git ea1ce52b:src/probes/deception-detection/results/persona_ood_ext_L*/summary.csv"
+ },
+ {
+  "f_id": "F-118",
+  "item": "GS knowledge-denial (4v6) L20/L40/L44",
+  "ledger": "0.549 / 0.436 / 0.498",
+  "derived": "0.549 / 0.436 / 0.498",
+  "verdict": "matches",
+  "source": "git 16def2de:src/probes/deception-detection/results/gender_secret/summary.md"
+ },
+ {
+  "f_id": "F-118",
+  "item": "GS extended (12v13) L20/L40/L44",
+  "ledger": "0.505 / 0.467 / 0.541",
+  "derived": "0.505 / 0.467 / 0.541",
+  "verdict": "matches",
+  "source": "git 16def2de:src/probes/deception-detection/results/gender_secret/summary.md"
+ },
+ {
+  "f_id": "F-118",
+  "item": "GS published (8v7) L20/L40/L44",
+  "ledger": "0.514 / 0.545 / 0.623",
+  "derived": "0.514 / 0.545 / 0.623",
+  "verdict": "matches",
+  "source": "git 16def2de:src/probes/deception-detection/results/gender_secret/summary.md"
+ },
+ {
+  "f_id": "F-118",
+  "item": "GS sycophancy (5v5) L20/L40/L44",
+  "ledger": "0.593 / 0.523 / 0.520",
+  "derived": "0.593 / 0.523 / 0.520",
+  "verdict": "matches",
+  "source": "git 16def2de:src/probes/deception-detection/results/gender_secret/summary.md"
+ },
+ {
+  "f_id": "F-118",
+  "item": "behavioural 82% vs base 55%",
+  "ledger": "82/55",
+  "derived": "82/55",
+  "verdict": "matches",
+  "source": "summary.md"
+ },
+ {
+  "f_id": "F-118",
+  "item": "commit 572095cb ancestor of PIN_PAPER",
+  "ledger": "yes",
+  "derived": "yes",
+  "verdict": "matches",
+  "source": "git merge-base"
+ },
+ {
+  "f_id": "F-118",
+  "item": "collab extended axis on kr-matched L20",
+  "ledger": "0.4630",
+  "derived": "0.4630",
+  "verdict": "matches",
+  "source": "audit/cache/labpc/run-crossgen/kd11/banks/collab/matrices/mean_L20_s42.json zeroshot contrast:collab_extended"
+ },
+ {
+  "f_id": "F-118",
+  "item": "collab extended axis on kr-matched L40",
+  "ledger": "0.6203",
+  "derived": "0.6203",
+  "verdict": "matches",
+  "source": "audit/cache/labpc/run-crossgen/kd11/banks/collab/matrices/mean_L40_s42.json zeroshot contrast:collab_extended"
+ },
+ {
+  "f_id": "F-118",
+  "item": "collab extended axis on kr-matched L44",
+  "ledger": "0.5383",
+  "derived": "0.5383",
+  "verdict": "matches",
+  "source": "audit/cache/labpc/run-crossgen/kd11/banks/collab/matrices/mean_L44_s42.json zeroshot contrast:collab_extended"
+ },
+ {
+  "f_id": "F-118",
+  "item": "pointer 'F-115 \u00a75' resolves",
+  "ledger": "yes",
+  "derived": "no",
+  "verdict": "DIFFERS: pointer error - F-115 has no \u00a75; numbers are audit/HPKR_WORDING_CONTROLLED.md \u00a75",
+  "source": "kd/docs/FINDINGS.md F-115 section"
+ },
+ {
+  "f_id": "F-123",
+  "item": "make_numbers.py present on paper",
+  "ledger": "1",
+  "derived": "1",
+  "verdict": "matches",
+  "source": "git cat-file 16def2de"
+ },
+ {
+  "f_id": "F-119",
+  "item": "make_numbers.py exists on paper",
+  "ledger": "yes",
+  "derived": "yes",
+  "verdict": "matches",
+  "source": "git 16def2de"
+ },
+ {
+  "f_id": "F-123",
+  "item": "make_numbers.py present on asix",
+  "ledger": "0",
+  "derived": "0",
+  "verdict": "matches",
+  "source": "git cat-file e917ecd3"
+ },
+ {
+  "f_id": "F-123",
+  "item": "make_numbers.py present on pc-ood",
+  "ledger": "0",
+  "derived": "0",
+  "verdict": "matches",
+  "source": "git cat-file 45b16d90"
+ },
+ {
+  "f_id": "F-123",
+  "item": "make_numbers.py added in",
+  "ledger": "8fd071b2|2026-09-22|zami456",
+  "derived": "8fd071b2|2026-09-22|zami456",
+  "verdict": "matches",
+  "source": "git log --diff-filter=A"
+ },
+ {
+  "f_id": "F-119",
+  "item": "make_figures.py beside it",
+  "ledger": "yes",
+  "derived": "yes",
+  "verdict": "matches",
+  "source": "git"
+ },
+ {
+  "f_id": "F-119",
+  "item": "persona_depth cites persona_unified, folder absent",
+  "ledger": "cited & absent",
+  "derived": "cited & absent",
+  "verdict": "matches",
+  "source": "git ls-tree PIN_PAPER"
+ },
+ {
+  "f_id": "F-119",
+  "item": "persona_depth cites persona_depth_orig, folder absent",
+  "ledger": "cited & absent",
+  "derived": "cited & absent",
+  "verdict": "matches",
+  "source": "git ls-tree PIN_PAPER"
+ },
+ {
+  "f_id": "F-123",
+  "item": "make_numbers.py bytes",
+  "ledger": "28232",
+  "derived": "39532",
+  "verdict": "matches at ea1ce52b only; PIN_PAPER=39532 (branch moved)",
+  "source": "git ea1ce52b=28232, 2ad758fb=36337, d1b88154=38776, 16def2de=39532"
+ },
+ {
+  "f_id": "F-127",
+  "item": "numbers.tex lines",
+  "ledger": "1162",
+  "derived": "1177",
+  "verdict": "matches at 2ad758fb only; PIN_PAPER=1177 (branch moved)",
+  "source": "git ea1ce52b=1101, 2ad758fb=1162, d1b88154=1174, 16def2de=1177"
+ },
+ {
+  "f_id": "F-127",
+  "item": "numbers.tex setV macros",
+  "ledger": "1162",
+  "derived": "1176",
+  "verdict": "DIFFERS: ledger 1162 vs raw 1176 (all 4 SHAs: [1100, 1161, 1173, 1176])",
+  "source": "git ea1ce52b=1100, 2ad758fb=1161, d1b88154=1173, 16def2de=1176"
+ },
+ {
+  "f_id": "F-127",
+  "item": "tab_*.tex files",
+  "ledger": "8",
+  "derived": "11",
+  "verdict": "DIFFERS: ledger 8 vs raw 11 (all 4 SHAs: [11, 11, 11, 11])",
+  "source": "git ea1ce52b=11, 2ad758fb=11, d1b88154=11, 16def2de=11"
+ },
+ {
+  "f_id": "F-127",
+  "item": "fig_*.pdf files",
+  "ledger": "5",
+  "derived": "5",
+  "verdict": "matches",
+  "source": "git ea1ce52b=4, 2ad758fb=5, d1b88154=5, 16def2de=5"
+ },
+ {
+  "f_id": "F-127",
+  "item": "header 'Generated by make_numbers.py'",
+  "ledger": "True",
+  "derived": "True",
+  "verdict": "matches",
+  "source": "git ea1ce52b=True, 2ad758fb=True, d1b88154=True, 16def2de=True"
+ },
+ {
+  "f_id": "F-127",
+  "item": "macro cos-dec-den-L40",
+  "ledger": "0.47",
+  "derived": "0.47",
+  "verdict": "matches",
+  "source": "git ea1ce52b=0.47, 2ad758fb=0.47, d1b88154=0.47, 16def2de=0.47"
+ },
+ {
+  "f_id": "F-127",
+  "item": "macro proj-den-kd-L40",
+  "ledger": "2.90",
+  "derived": "2.90",
+  "verdict": "matches",
+  "source": "git ea1ce52b=2.90, 2ad758fb=2.90, d1b88154=2.90, 16def2de=2.90"
+ },
+ {
+  "f_id": "F-127",
+  "item": "macro proj-den-sincere-L40",
+  "ledger": "-0.08",
+  "derived": "-0.08",
+  "verdict": "matches",
+  "source": "git ea1ce52b=-0.08, 2ad758fb=-0.08, d1b88154=-0.08, 16def2de=-0.08"
+ },
+ {
+  "f_id": "F-127",
+  "item": "macro proj-den-deceptive-L40",
+  "ledger": "0.05",
+  "derived": "0.05",
+  "verdict": "matches",
+  "source": "git ea1ce52b=0.05, 2ad758fb=0.05, d1b88154=0.05, 16def2de=0.05"
+ },
+ {
+  "f_id": "F-120",
+  "item": "L40 raw",
+  "ledger": "0.8195",
+  "derived": "0.8195",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB/run-crossgen/passA/matrices/mean_L40_s42.json, paper, DS5 off-diag"
+ },
+ {
+  "f_id": "F-120",
+  "item": "L40 axes",
+  "ledger": "0.8266",
+  "derived": "0.8266",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB/run-crossgen/passA/matrices/mean_L40_s42.json, paper, DS5 off-diag"
+ },
+ {
+  "f_id": "F-120",
+  "item": "L40 random",
+  "ledger": "0.5971",
+  "derived": "0.5971",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB/run-crossgen/passA/matrices/mean_L40_s42.json, paper, DS5 off-diag"
+ },
+ {
+  "f_id": "F-120",
+  "item": "L40 axes-random",
+  "ledger": "+0.2296",
+  "derived": "+0.2296",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB/run-crossgen/passA/matrices/mean_L40_s42.json, paper, DS5 off-diag"
+ },
+ {
+  "f_id": "F-120",
+  "item": "L70 raw",
+  "ledger": "0.7828",
+  "derived": "0.7828",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB/run-crossgen/passA/matrices/mean_L70_s42.json, paper, DS5 off-diag"
+ },
+ {
+  "f_id": "F-120",
+  "item": "L70 axes",
+  "ledger": "0.6211",
+  "derived": "0.6211",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB/run-crossgen/passA/matrices/mean_L70_s42.json, paper, DS5 off-diag"
+ },
+ {
+  "f_id": "F-120",
+  "item": "L70 random",
+  "ledger": "0.5234",
+  "derived": "0.5234",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB/run-crossgen/passA/matrices/mean_L70_s42.json, paper, DS5 off-diag"
+ },
+ {
+  "f_id": "F-120",
+  "item": "L70 axes-random",
+  "ledger": "+0.0977",
+  "derived": "+0.0977",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB/run-crossgen/passA/matrices/mean_L70_s42.json, paper, DS5 off-diag"
+ },
+ {
+  "f_id": "F-120",
+  "item": "L72 raw",
+  "ledger": "0.7834",
+  "derived": "0.7834",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB/run-crossgen/passA/matrices/mean_L72_s42.json, paper, DS5 off-diag"
+ },
+ {
+  "f_id": "F-120",
+  "item": "L72 axes",
+  "ledger": "0.6384",
+  "derived": "0.6384",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB/run-crossgen/passA/matrices/mean_L72_s42.json, paper, DS5 off-diag"
+ },
+ {
+  "f_id": "F-120",
+  "item": "L72 random",
+  "ledger": "0.5133",
+  "derived": "0.5133",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB/run-crossgen/passA/matrices/mean_L72_s42.json, paper, DS5 off-diag"
+ },
+ {
+  "f_id": "F-120",
+  "item": "L72 axes-random",
+  "ledger": "+0.1250",
+  "derived": "+0.1250",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB/run-crossgen/passA/matrices/mean_L72_s42.json, paper, DS5 off-diag"
+ },
+ {
+  "f_id": "F-120",
+  "item": "L79 raw",
+  "ledger": "0.7426",
+  "derived": "0.7426",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB/run-crossgen/passA/matrices/mean_L79_s42.json, paper, DS5 off-diag"
+ },
+ {
+  "f_id": "F-120",
+  "item": "L79 axes",
+  "ledger": "0.7492",
+  "derived": "0.7492",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB/run-crossgen/passA/matrices/mean_L79_s42.json, paper, DS5 off-diag"
+ },
+ {
+  "f_id": "F-120",
+  "item": "L79 random",
+  "ledger": "0.6405",
+  "derived": "0.6405",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB/run-crossgen/passA/matrices/mean_L79_s42.json, paper, DS5 off-diag"
+ },
+ {
+  "f_id": "F-120",
+  "item": "L79 axes-random",
+  "ledger": "+0.1087",
+  "derived": "+0.1087",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB/run-crossgen/passA/matrices/mean_L79_s42.json, paper, DS5 off-diag"
+ },
+ {
+  "f_id": "F-120",
+  "item": "axes mid-stack mean L30-50",
+  "ledger": "0.8145",
+  "derived": "0.8145",
+  "verdict": "matches",
+  "source": "passA mean_L30..50 (21 layers)"
+ },
+ {
+  "f_id": "F-120",
+  "item": "scope: all-10-dataset raw at L40 (not stated in entry)",
+  "ledger": "n/a",
+  "derived": "0.6760",
+  "verdict": "context: entry's numbers are the 5-dataset (paper5) reading; all-10 reads differently",
+  "source": "same file, all datasets"
+ },
+ {
+  "f_id": "F-121",
+  "item": "3b p16 best-raw (n=7 layers)",
+  "ledger": "+0.0382",
+  "derived": "+0.0382",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB/run-crossgen/scale_3b/matrices/mean_L*_s42.json"
+ },
+ {
+  "f_id": "F-121",
+  "item": "3b all best-raw (n=7 layers)",
+  "ledger": "+0.0317",
+  "derived": "+0.0317",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB-resplit/run-crossgen/kdscale_3b_all/matrices/mean_L*_s42.json"
+ },
+ {
+  "f_id": "F-121",
+  "item": "3b s23 best-raw (n=7 layers)",
+  "ledger": "+0.0360",
+  "derived": "+0.0360",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB-resplit/run-crossgen/kdscale_3b_s23/matrices/mean_L*_s42.json"
+ },
+ {
+  "f_id": "F-121",
+  "item": "8b p16 best-raw (n=8 layers)",
+  "ledger": "+0.0148",
+  "derived": "+0.0148",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB/run-crossgen/scale_8b/matrices/mean_L*_s42.json"
+ },
+ {
+  "f_id": "F-121",
+  "item": "8b all best-raw (n=8 layers)",
+  "ledger": "+0.0169",
+  "derived": "+0.0169",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB-resplit/run-crossgen/kdscale_8b_all/matrices/mean_L*_s42.json"
+ },
+ {
+  "f_id": "F-121",
+  "item": "8b s23 best-raw (n=8 layers)",
+  "ledger": "+0.0194",
+  "derived": "+0.0194",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB-resplit/run-crossgen/kdscale_8b_s23/matrices/mean_L*_s42.json"
+ },
+ {
+  "f_id": "F-121",
+  "item": "70b p16 best-raw (n=21 layers)",
+  "ledger": "-0.0116",
+  "derived": "-0.0116",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB/run-crossgen/scale_70b_paper16fp32/matrices/mean_L*_s42.json"
+ },
+ {
+  "f_id": "F-121",
+  "item": "70b all best-raw (n=21 layers)",
+  "ledger": "+0.0032",
+  "derived": "+0.0032",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB-resplit/run-crossgen/kdscale_70b_all/matrices/mean_L*_s42.json"
+ },
+ {
+  "f_id": "F-121",
+  "item": "70b s23 best-raw (n=21 layers)",
+  "ledger": "+0.0054",
+  "derived": "+0.0054",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB-resplit/run-crossgen/kdscale_70b_s23/matrices/mean_L*_s42.json"
+ },
+ {
+  "f_id": "F-121",
+  "item": "3b kd all - paper16",
+  "ledger": "-0.0066",
+  "derived": "-0.0066",
+  "verdict": "matches",
+  "source": "difference of the rows above"
+ },
+ {
+  "f_id": "F-121",
+  "item": "3b kd s23 - paper16",
+  "ledger": "-0.0022",
+  "derived": "-0.0022",
+  "verdict": "matches",
+  "source": "difference of the rows above"
+ },
+ {
+  "f_id": "F-121",
+  "item": "8b kd all - paper16",
+  "ledger": "+0.0022",
+  "derived": "+0.0022",
+  "verdict": "matches",
+  "source": "difference of the rows above"
+ },
+ {
+  "f_id": "F-121",
+  "item": "8b kd s23 - paper16",
+  "ledger": "+0.0046",
+  "derived": "+0.0046",
+  "verdict": "matches",
+  "source": "difference of the rows above"
+ },
+ {
+  "f_id": "F-121",
+  "item": "70b kd all - paper16",
+  "ledger": "+0.0148",
+  "derived": "+0.0148",
+  "verdict": "matches",
+  "source": "difference of the rows above"
+ },
+ {
+  "f_id": "F-121",
+  "item": "70b kd s23 - paper16",
+  "ledger": "+0.0170",
+  "derived": "+0.0170",
+  "verdict": "matches",
+  "source": "difference of the rows above"
+ },
+ {
+  "f_id": "F-121",
+  "item": "3b all/s23 axis md5s ('c93eb6d2', 'e517a2d6')",
+  "ledger": "2 distinct",
+  "derived": "2 distinct",
+  "verdict": "matches",
+  "source": "axes_kd_3b_vectors_all.pt=c93eb6d23d; axes_kd_3b_vectors_s23.pt=e517a2d6ef"
+ },
+ {
+  "f_id": "F-121",
+  "item": "8b all/s23 axis md5s ('4141229', '0e68064')",
+  "ledger": "2 distinct",
+  "derived": "2 distinct",
+  "verdict": "matches",
+  "source": "axes_kd_8b_vectors_all.pt=4141229807; axes_kd_8b_vectors_s23.pt=0e680647b1"
+ },
+ {
+  "f_id": "F-122",
+  "item": "L40 baseline excl @PIN_OLD",
+  "ledger": "0.7581",
+  "derived": "0.7581",
+  "verdict": "matches",
+  "source": "git ea1ce52b:src/probes/deception-detection/results/persona_ood_ext_L40/summary.csv off_diagonal_excl_hpkr"
+ },
+ {
+  "f_id": "F-124",
+  "item": "inverted (arm,layer) cells @OLD",
+  "ledger": "7",
+  "derived": "7",
+  "verdict": "matches",
+  "source": "git ea1ce52b:src/probes/deception-detection/results/persona_ood_ext_L{20,40,44}/matrix_<arm>.csv : L20 axis1; L20 pc1; L20 syc_axis1; L20 syc_pc1; L40 syc_axis1; L40 syc_pc1; L44 syc_axis1"
+ },
+ {
+  "f_id": "F-124",
+  "item": "inverted row is HP-KR in every one @OLD",
+  "ledger": "yes",
+  "derived": "yes",
+  "verdict": "matches",
+  "source": "git ea1ce52b:src/probes/deception-detection/results/persona_ood_ext_L{20,40,44}/matrix_<arm>.csv"
+ },
+ {
+  "f_id": "F-124",
+  "item": "L20 axis1 printed",
+  "ledger": "0.6511",
+  "derived": "0.6511",
+  "verdict": "matches",
+  "source": "summary.csv off_diagonal_mean @OLD"
+ },
+ {
+  "f_id": "F-124",
+  "item": "L20 axis1 sign-corrected",
+  "ledger": "0.7909",
+  "derived": "0.7909",
+  "verdict": "matches",
+  "source": "matrix cells, HP-KR row -> 1-x"
+ },
+ {
+  "f_id": "F-124",
+  "item": "L20 axis1 corrected == zero-shot 6-cell mean (4dp)",
+  "ledger": "equal",
+  "derived": "equal",
+  "verdict": "matches",
+  "source": "zero_shot.csv"
+ },
+ {
+  "f_id": "F-124",
+  "item": "L20 syc_axis1 printed",
+  "ledger": "0.6153",
+  "derived": "0.6153",
+  "verdict": "matches",
+  "source": "summary.csv off_diagonal_mean @OLD"
+ },
+ {
+  "f_id": "F-124",
+  "item": "L20 syc_axis1 sign-corrected",
+  "ledger": "0.7429",
+  "derived": "0.7429",
+  "verdict": "matches",
+  "source": "matrix cells, HP-KR row -> 1-x"
+ },
+ {
+  "f_id": "F-124",
+  "item": "L20 syc_axis1 corrected == zero-shot 6-cell mean (4dp)",
+  "ledger": "equal",
+  "derived": "equal",
+  "verdict": "matches",
+  "source": "zero_shot.csv"
+ },
+ {
+  "f_id": "F-124",
+  "item": "L20 syc_pc1 printed",
+  "ledger": "0.6153",
+  "derived": "0.6153",
+  "verdict": "matches",
+  "source": "summary.csv off_diagonal_mean @OLD"
+ },
+ {
+  "f_id": "F-124",
+  "item": "L20 syc_pc1 sign-corrected",
+  "ledger": "0.7433",
+  "derived": "0.7432",
+  "verdict": "matches",
+  "source": "matrix cells, HP-KR row -> 1-x"
+ },
+ {
+  "f_id": "F-124",
+  "item": "L20 syc_pc1 corrected == zero-shot 6-cell mean (4dp)",
+  "ledger": "equal",
+  "derived": "equal",
+  "verdict": "matches",
+  "source": "zero_shot.csv"
+ },
+ {
+  "f_id": "F-124",
+  "item": "L20 pc1 printed",
+  "ledger": "0.6669",
+  "derived": "0.6669",
+  "verdict": "matches",
+  "source": "summary.csv off_diagonal_mean @OLD"
+ },
+ {
+  "f_id": "F-124",
+  "item": "L20 pc1 sign-corrected",
+  "ledger": "0.8056",
+  "derived": "0.8056",
+  "verdict": "matches",
+  "source": "matrix cells, HP-KR row -> 1-x"
+ },
+ {
+  "f_id": "F-124",
+  "item": "L20 pc1 corrected == zero-shot 6-cell mean (4dp)",
+  "ledger": "equal",
+  "derived": "equal",
+  "verdict": "matches",
+  "source": "zero_shot.csv"
+ },
+ {
+  "f_id": "F-124",
+  "item": "L40 syc_axis1 printed",
+  "ledger": "0.6626",
+  "derived": "0.6626",
+  "verdict": "matches",
+  "source": "summary.csv off_diagonal_mean @OLD"
+ },
+ {
+  "f_id": "F-124",
+  "item": "L40 syc_axis1 sign-corrected",
+  "ledger": "0.8080",
+  "derived": "0.8080",
+  "verdict": "matches",
+  "source": "matrix cells, HP-KR row -> 1-x"
+ },
+ {
+  "f_id": "F-124",
+  "item": "L40 syc_axis1 corrected == zero-shot 6-cell mean (4dp)",
+  "ledger": "equal",
+  "derived": "equal",
+  "verdict": "matches",
+  "source": "zero_shot.csv"
+ },
+ {
+  "f_id": "F-124",
+  "item": "L40 syc_pc1 printed",
+  "ledger": "0.6618",
+  "derived": "0.6618",
+  "verdict": "matches",
+  "source": "summary.csv off_diagonal_mean @OLD"
+ },
+ {
+  "f_id": "F-124",
+  "item": "L40 syc_pc1 sign-corrected",
+  "ledger": "0.8075",
+  "derived": "0.8075",
+  "verdict": "matches",
+  "source": "matrix cells, HP-KR row -> 1-x"
+ },
+ {
+  "f_id": "F-124",
+  "item": "L40 syc_pc1 corrected == zero-shot 6-cell mean (4dp)",
+  "ledger": "equal",
+  "derived": "equal",
+  "verdict": "matches",
+  "source": "zero_shot.csv"
+ },
+ {
+  "f_id": "F-124",
+  "item": "L44 syc_axis1 printed",
+  "ledger": "0.7078",
+  "derived": "0.7078",
+  "verdict": "matches",
+  "source": "summary.csv off_diagonal_mean @OLD"
+ },
+ {
+  "f_id": "F-124",
+  "item": "L44 syc_axis1 sign-corrected",
+  "ledger": "0.8485",
+  "derived": "0.8484",
+  "verdict": "matches",
+  "source": "matrix cells, HP-KR row -> 1-x"
+ },
+ {
+  "f_id": "F-124",
+  "item": "L44 syc_axis1 corrected == zero-shot 6-cell mean (4dp)",
+  "ledger": "equal",
+  "derived": "equal",
+  "verdict": "matches",
+  "source": "zero_shot.csv"
+ },
+ {
+  "f_id": "F-124",
+  "item": "Table 11 syc_axis1 understatement L20",
+  "ledger": "0.128",
+  "derived": "0.1276",
+  "verdict": "matches",
+  "source": "corrected - printed"
+ },
+ {
+  "f_id": "F-124",
+  "item": "Table 11 syc_axis1 understatement L40",
+  "ledger": "0.145",
+  "derived": "0.1454",
+  "verdict": "matches",
+  "source": "corrected - printed"
+ },
+ {
+  "f_id": "F-124",
+  "item": "Table 11 syc_axis1 understatement L44",
+  "ledger": "0.141",
+  "derived": "0.1407",
+  "verdict": "matches",
+  "source": "corrected - printed"
+ },
+ {
+  "f_id": "F-124",
+  "item": "axis1 L40 printed == zero-shot mean",
+  "ledger": "0.8319",
+  "derived": "0.8319",
+  "verdict": "matches",
+  "source": "summary.csv"
+ },
+ {
+  "f_id": "F-124",
+  "item": "axis1 L44 printed == zero-shot mean",
+  "ledger": "0.8260",
+  "derived": "0.8260",
+  "verdict": "matches",
+  "source": "summary.csv"
+ },
+ {
+  "f_id": "F-124",
+  "item": "axis1 L20 HP-KR row mean",
+  "ledger": "0.0806",
+  "derived": "0.0806",
+  "verdict": "matches",
+  "source": "matrix_axis1.csv L20"
+ },
+ {
+  "f_id": "F-124",
+  "item": "axis1 L20 other rows range",
+  "ledger": "0.7503-0.8057",
+  "derived": "0.7503-0.8057",
+  "verdict": "matches",
+  "source": "matrix_axis1.csv L20"
+ },
+ {
+  "f_id": "F-124",
+  "item": "HP-KR row == 1-x of other rows (L20 axis1)",
+  "ledger": "exact",
+  "derived": "exact",
+  "verdict": "matches",
+  "source": "matrix_axis1.csv L20"
+ },
+ {
+  "f_id": "F-124",
+  "item": "L20 axis1 CG zero-shot / HP-KR-row cell",
+  "ledger": "0.9399/0.0601",
+  "derived": "0.9399/0.0601",
+  "verdict": "matches",
+  "source": "zero_shot + matrix"
+ },
+ {
+  "f_id": "F-124",
+  "item": "Table 11 syc HP-KR zero-shot L20",
+  "ledger": "0.0429",
+  "derived": "0.0429",
+  "verdict": "matches",
+  "source": "zero_shot.csv auroc_syc_axis"
+ },
+ {
+  "f_id": "F-124",
+  "item": "Table 11 syc HP-KR zero-shot L40",
+  "ledger": "0.1671",
+  "derived": "0.1671",
+  "verdict": "matches",
+  "source": "zero_shot.csv auroc_syc_axis"
+ },
+ {
+  "f_id": "F-124",
+  "item": "Table 11 syc HP-KR zero-shot L44",
+  "ledger": "0.4804",
+  "derived": "0.4804",
+  "verdict": "matches",
+  "source": "zero_shot.csv auroc_syc_axis"
+ },
+ {
+  "f_id": "F-124",
+  "item": "cells @OLD",
+  "ledger": "90",
+  "derived": "90",
+  "verdict": "matches",
+  "source": "git ea1ce52b:src/probes/deception-detection/results/persona_ood_ext_L*/zero_shot_operating.csv control rows, 5 arms"
+ },
+ {
+  "f_id": "F-124",
+  "item": "cells with realised FPR > 1% @OLD",
+  "ledger": "23",
+  "derived": "23",
+  "verdict": "matches",
+  "source": "git ea1ce52b:src/probes/deception-detection/results/persona_ood_ext_L*/zero_shot_operating.csv control rows, 5 arms"
+ },
+ {
+  "f_id": "F-124",
+  "item": "4v6 L20 harm_refusal_k FPR %",
+  "ledger": "88.3",
+  "derived": "88.3000",
+  "verdict": "matches",
+  "source": "git ea1ce52b:src/probes/deception-detection/results/persona_ood_ext_L*/zero_shot_operating.csv control rows, 5 arms"
+ },
+ {
+  "f_id": "F-124",
+  "item": "4v6 L20 repe_honesty__ FPR %",
+  "ledger": "35.6",
+  "derived": "35.6000",
+  "verdict": "matches",
+  "source": "git ea1ce52b:src/probes/deception-detection/results/persona_ood_ext_L*/zero_shot_operating.csv control rows, 5 arms"
+ },
+ {
+  "f_id": "F-124",
+  "item": "4v6 L20 harm_refusal_c FPR %",
+  "ledger": "4.5",
+  "derived": "4.5000",
+  "verdict": "matches",
+  "source": "git ea1ce52b:src/probes/deception-detection/results/persona_ood_ext_L*/zero_shot_operating.csv control rows, 5 arms"
+ },
+ {
+  "f_id": "F-124",
+  "item": "4v6 L20 instruct_disho FPR %",
+  "ledger": "1.1",
+  "derived": "1.1000",
+  "verdict": "matches",
+  "source": "git ea1ce52b:src/probes/deception-detection/results/persona_ood_ext_L*/zero_shot_operating.csv control rows, 5 arms"
+ },
+ {
+  "f_id": "F-124",
+  "item": "4v6 L40 harm_refusal_k FPR %",
+  "ledger": "6.5",
+  "derived": "6.5000",
+  "verdict": "matches",
+  "source": "git ea1ce52b:src/probes/deception-detection/results/persona_ood_ext_L*/zero_shot_operating.csv control rows, 5 arms"
+ },
+ {
+  "f_id": "F-124",
+  "item": "4v6 L40 instruct_disho FPR %",
+  "ledger": "11.9",
+  "derived": "11.9000",
+  "verdict": "matches",
+  "source": "git ea1ce52b:src/probes/deception-detection/results/persona_ood_ext_L*/zero_shot_operating.csv control rows, 5 arms"
+ },
+ {
+  "f_id": "F-124",
+  "item": "4v6 L44 harm_refusal_k FPR %",
+  "ledger": "4.7",
+  "derived": "4.7000",
+  "verdict": "matches",
+  "source": "git ea1ce52b:src/probes/deception-detection/results/persona_ood_ext_L*/zero_shot_operating.csv control rows, 5 arms"
+ },
+ {
+  "f_id": "F-124",
+  "item": "4v6 L44 instruct_disho FPR %",
+  "ledger": "9.9",
+  "derived": "9.9000",
+  "verdict": "matches",
+  "source": "git ea1ce52b:src/probes/deception-detection/results/persona_ood_ext_L*/zero_shot_operating.csv control rows, 5 arms"
+ },
+ {
+  "f_id": "F-124",
+  "item": "base probe L40 ID FPR %",
+  "ledger": "15.2",
+  "derived": "15.2000",
+  "verdict": "matches",
+  "source": "git ea1ce52b:src/probes/deception-detection/results/persona_ood_ext_L*/zero_shot_operating.csv control rows, 5 arms"
+ },
+ {
+  "f_id": "F-124",
+  "item": "4v6 L20 HP-KR BA / spec / recall",
+  "ledger": "0.533/0.1165/0.9496",
+  "derived": "0.533/0.1165/0.9496",
+  "verdict": "matches",
+  "source": "git ea1ce52b:src/probes/deception-detection/results/persona_ood_ext_L*/zero_shot_operating.csv control rows, 5 arms"
+ },
+ {
+  "f_id": "F-124",
+  "item": "base probe HP-KR (operating) L20/40/44",
+  "ledger": "0.109/0.936/0.828",
+  "derived": "0.109/0.936/0.828",
+  "verdict": "matches",
+  "source": "git ea1ce52b:src/probes/deception-detection/results/persona_ood_ext_L*/zero_shot_operating.csv control rows, 5 arms"
+ },
+ {
+  "f_id": "F-124",
+  "item": "matrix_baseline repe->HP-KR L20/40/44",
+  "ledger": "0.3808/0.9281/0.8803",
+  "derived": "0.3808/0.9281/0.8803",
+  "verdict": "matches",
+  "source": "matrix_baseline.csv"
+ },
+ {
+  "f_id": "F-124",
+  "item": "inverted (arm,layer) cells @PIN",
+  "ledger": "7",
+  "derived": "7",
+  "verdict": "matches",
+  "source": "git 16def2de:src/probes/deception-detection/results/persona_ood_ext_L{20,40,44}/matrix_<arm>.csv : L20 axis1; L20 pc1; L20 syc_axis1; L20 syc_pc1; L40 syc_axis1; L40 syc_pc1; L44 syc_axis1"
+ },
+ {
+  "f_id": "F-124",
+  "item": "inverted row is HP-KR in every one @PIN",
+  "ledger": "yes",
+  "derived": "yes",
+  "verdict": "matches",
+  "source": "git 16def2de:src/probes/deception-detection/results/persona_ood_ext_L{20,40,44}/matrix_<arm>.csv"
+ },
+ {
+  "f_id": "F-124",
+  "item": "cells @PIN",
+  "ledger": "90",
+  "derived": "90",
+  "verdict": "matches",
+  "source": "git 16def2de:src/probes/deception-detection/results/persona_ood_ext_L*/zero_shot_operating.csv control rows, 5 arms"
+ },
+ {
+  "f_id": "F-124",
+  "item": "cells with realised FPR > 1% @PIN",
+  "ledger": "23",
+  "derived": "23",
+  "verdict": "matches",
+  "source": "git 16def2de:src/probes/deception-detection/results/persona_ood_ext_L*/zero_shot_operating.csv control rows, 5 arms"
+ },
+ {
+  "f_id": "F-124",
+  "item": "D-005 ten roles (4+3+3)",
+  "ledger": "4/3/3",
+  "derived": "4/3/3",
+  "verdict": "matches",
+  "source": "kd/personas/kd_role_groups.json (asix)"
+ },
+ {
+  "f_id": "F-125",
+  "item": "draft claims with a Phase-6 verdict",
+  "ledger": "176",
+  "derived": "176",
+  "verdict": "matches",
+  "source": "audit/claims.csv D- rows with Phase-6 batch B01-B63 (current file, mtime 2026-09-24 16:40)"
+ },
+ {
+  "f_id": "F-127",
+  "item": "6A tally MATCHES/PARTLY/UNRESOLVED",
+  "ledger": "166/8/2",
+  "derived": "166/8/2",
+  "verdict": "matches",
+  "source": "audit/claims.csv D- rows with Phase-6 batch B01-B63 (current file, mtime 2026-09-24 16:40)"
+ },
+ {
+  "f_id": "F-125",
+  "item": "Level-2 (8 batches) MATCHES/PARTLY",
+  "ledger": "52/2",
+  "derived": "52/2",
+  "verdict": "matches",
+  "source": "audit/claims.csv D- rows with Phase-6 batch B01-B63 (current file, mtime 2026-09-24 16:40)"
+ },
+ {
+  "f_id": "F-126",
+  "item": "5 resolved: D-057/065/154/040/041 now",
+  "ledger": "4 MATCHES + 1 PARTLY",
+  "derived": "MATCHES/MATCHES/PARTLY/MATCHES/MATCHES",
+  "verdict": "matches",
+  "source": "audit/claims.csv D- rows with Phase-6 batch B01-B63 (current file, mtime 2026-09-24 16:40)"
+ },
+ {
+  "f_id": "F-126",
+  "item": "chain 160/9/7 -> 164/10/2",
+  "ledger": "164/10/2",
+  "derived": "160+4/9+1/7-5 = 164/10/2",
+  "verdict": "matches",
+  "source": "arithmetic on the five ids above"
+ },
+ {
+  "f_id": "F-127",
+  "item": "D-032, D-171 now MATCHES",
+  "ledger": "MATCHES/MATCHES",
+  "derived": "MATCHES/MATCHES",
+  "verdict": "matches",
+  "source": "audit/claims.csv D- rows with Phase-6 batch B01-B63 (current file, mtime 2026-09-24 16:40)"
+ },
+ {
+  "f_id": "F-125",
+  "item": "snapshot 160/9/7 (superseded by F-126/F-127)",
+  "ledger": "160/9/7",
+  "derived": "not re-derivable (claims.csv overwritten in place)",
+  "verdict": "UNVERIFIABLE: intermediate snapshot; consistent with the id-level chain to the current 166/8/2",
+  "source": "audit/claims.csv D- rows with Phase-6 batch B01-B63 (current file, mtime 2026-09-24 16:40)"
+ },
+ {
+  "f_id": "F-125",
+  "item": "D-030/D-063 still UNRESOLVED",
+  "ledger": "UNRESOLVED/UNRESOLVED",
+  "derived": "UNRESOLVED/UNRESOLVED",
+  "verdict": "matches",
+  "source": "audit/claims.csv D- rows with Phase-6 batch B01-B63 (current file, mtime 2026-09-24 16:40)"
+ },
+ {
+  "f_id": "F-125",
+  "item": "D-156 L20 excl HP-KR ext_axis1 vs axis1",
+  "ledger": "0.909/0.919",
+  "derived": "0.909/0.919",
+  "verdict": "matches",
+  "source": "git ea1ce52b:src/probes/deception-detection/results/persona_ood_ext_L20/summary.csv"
+ },
+ {
+  "f_id": "F-125",
+  "item": "D-128: ext_axis1 L36 vs L40",
+  "ledger": "0.9275/0.9158",
+  "derived": "0.9275/0.9158",
+  "verdict": "matches",
+  "source": "summary.csv"
+ },
+ {
+  "f_id": "F-125",
+  "item": "D-153 margin +0.066 CI [-0.069,+0.189] P 0.161 (HPKR_WORDING_CONTROLLED \u00a74)",
+  "ledger": "+0.066",
+  "derived": "+0.0655",
+  "verdict": "UNVERIFIED: audit prose only (F-76 bootstrap not re-run in P17)",
+  "source": "audit/HPKR_WORDING_CONTROLLED.md:100-102 (audit prose, F-76 bootstrap)"
+ },
+ {
+  "f_id": "F-126",
+  "item": "phase6 datasets (kr-matched explicit)",
+  "ledger": "11",
+  "derived": "11",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB-resplit/phase6/run-crossgen/summary.json"
+ },
+ {
+  "f_id": "F-126",
+  "item": "reproduces kd11: raw L40 mean",
+  "ledger": "0.6623",
+  "derived": "0.6623",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB-resplit/phase6/run-crossgen/summary.json"
+ },
+ {
+  "f_id": "F-126",
+  "item": "reproduces kd11: datapca L40 mean",
+  "ledger": "0.6651",
+  "derived": "0.6651",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB-resplit/phase6/run-crossgen/summary.json"
+ },
+ {
+  "f_id": "F-126",
+  "item": "reproduces kd11: length L40 mean",
+  "ledger": "0.5555",
+  "derived": "0.5555",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB-resplit/phase6/run-crossgen/summary.json"
+ },
+ {
+  "f_id": "F-126",
+  "item": "reproduces kd11: pc:unified L40 mean",
+  "ledger": "0.6715",
+  "derived": "0.6715",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB-resplit/phase6/run-crossgen/summary.json"
+ },
+ {
+  "f_id": "F-126",
+  "item": "6D-1 table: 48 cells (pc:syc minus control, all11/no-syc)",
+  "ledger": "48 match",
+  "derived": "48/48 match",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB-resplit/phase6/run-crossgen/summary.json offdiag_mean_10 / offdiag_mean_9"
+ },
+ {
+  "f_id": "F-126",
+  "item": "loses to raw on all 11 at every (layer,pool)",
+  "ledger": "6/6",
+  "derived": "6/6",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB-resplit/phase6/run-crossgen/summary.json"
+ },
+ {
+  "f_id": "F-126",
+  "item": "bootstrap comparisons / significant",
+  "ledger": "264/0",
+  "derived": "264/0",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB-resplit/phase6/run-crossgen/significance.json"
+ },
+ {
+  "f_id": "F-126",
+  "item": "passP raw off-diag L20 mean",
+  "ledger": "0.5584",
+  "derived": "0.5584",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB/run-crossgen/passP/summary.json"
+ },
+ {
+  "f_id": "F-126",
+  "item": "passP raw off-diag L40 mean",
+  "ledger": "0.5687",
+  "derived": "0.5687",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB/run-crossgen/passP/summary.json"
+ },
+ {
+  "f_id": "F-126",
+  "item": "passP raw off-diag L44 mean",
+  "ledger": "0.5697",
+  "derived": "0.5697",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB/run-crossgen/passP/summary.json"
+ },
+ {
+  "f_id": "F-126",
+  "item": "passP raw diagonal L44 (mean) 8 datasets",
+  "ledger": "CG 1.000 ... mask 0.624, roleplaying 0.796",
+  "derived": "convin 1.000, sandba 1.000, instru 0.953, harm-p 0.919, inside 0.911, harm-p 0.865, mask 0.624, rolepl 0.796",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB/run-crossgen/passP/summary.json"
+ },
+ {
+  "f_id": "F-126",
+  "item": "passP span / n_tok first 5 (mask)",
+  "ledger": "prompt / 151,137,440,120,420",
+  "derived": "prompt / 151,137,440,120,420",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB/run-coords/passP/mask/chunk_0000.pt"
+ },
+ {
+  "f_id": "F-126",
+  "item": "passB_fine span / n_tok first 5 (mask)",
+  "ledger": "response / 1000,971,659,955,633",
+  "derived": "response / 1000,971,659,955,633",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB/run-coords/passB_fine/mask/chunk_0000.pt"
+ },
+ {
+  "f_id": "F-126",
+  "item": "passP rows ID/HP-C/HP-KR/SYC",
+  "ledger": "5432/2134/2139/1182",
+  "derived": "5432/2134/2139/1182",
+  "verdict": "matches",
+  "source": "passP/splits.json"
+ },
+ {
+  "f_id": "F-126",
+  "item": "passB_fine raw off-diag L41 mean",
+  "ledger": "0.6623",
+  "derived": "0.6623",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB/run-crossgen/passB_fine/summary.json"
+ },
+ {
+  "f_id": "F-126",
+  "item": "passB_fine raw diag L44 mask (mean)",
+  "ledger": "0.875",
+  "derived": "0.8749",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB/run-crossgen/passB_fine/summary.json"
+ },
+ {
+  "f_id": "F-126",
+  "item": "passB_fine layers (L37-47, no L40)",
+  "ledger": "10",
+  "derived": "10",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB/run-crossgen/passB_fine/summary.json layers [37, 38, 39, 41, 42, 43, 44, 45, 46, 47]"
+ },
+ {
+  "f_id": "F-126",
+  "item": "hf275_strict pc:deception > raw layers",
+  "ledger": "10/10",
+  "derived": "10/10",
+  "verdict": "matches",
+  "source": "passB_fine/banks/hf275_strict/summary.json"
+ },
+ {
+  "f_id": "F-126",
+  "item": "hf275_strict pc:deception range",
+  "ledger": "0.6815-0.7106",
+  "derived": "0.6815-0.7106",
+  "verdict": "matches",
+  "source": "same"
+ },
+ {
+  "f_id": "F-126",
+  "item": "hf275_strict raw range",
+  "ledger": "0.6511-0.6747",
+  "derived": "0.6511-0.6747",
+  "verdict": "matches",
+  "source": "same"
+ },
+ {
+  "f_id": "F-126",
+  "item": "hf275_strict mean margin over raw",
+  "ledger": "+0.039",
+  "derived": "+0.0387",
+  "verdict": "matches",
+  "source": "same"
+ },
+ {
+  "f_id": "F-126",
+  "item": "hf275_strict pc:deception > datapca layers",
+  "ledger": "10/10",
+  "derived": "10/10",
+  "verdict": "matches",
+  "source": "same"
+ },
+ {
+  "f_id": "F-126",
+  "item": "passB_fine axes-raw negative (bank,layer)",
+  "ledger": "36/40",
+  "derived": "36/40",
+  "verdict": "matches",
+  "source": "passB_fine summary.json root + 3 banks (each store's own raw)"
+ },
+ {
+  "f_id": "F-126",
+  "item": "the 4 exceptions",
+  "ledger": "own100 L37/L39/L44, paper16_shared L44, none > +0.019",
+  "derived": "own100 L37 +0.010; own100 L39 +0.019; own100 L44 +0.005; paper16_shared L44 +0.014",
+  "verdict": "matches",
+  "source": "same"
+ },
+ {
+  "f_id": "F-126",
+  "item": "vectors_s3 personas / pc_handler n",
+  "ledger": "36/106",
+  "derived": "36/106",
+  "verdict": "matches",
+  "source": "C:/Users/user4/expLB/run-kd/vectors_s3/*.pt"
+ },
+ {
+  "f_id": "F-126",
+  "item": "cos(deception, denial) L20",
+  "ledger": "0.417",
+  "derived": "0.4174",
+  "verdict": "matches",
+  "source": "recipe of p16_fig2_axes.py / make_figures.py:personas()"
+ },
+ {
+  "f_id": "F-126",
+  "item": "cos(deception, denial) L40",
+  "ledger": "0.474559",
+  "derived": "0.4746",
+  "verdict": "matches",
+  "source": "recipe of p16_fig2_axes.py / make_figures.py:personas()"
+ },
+ {
+  "f_id": "F-126",
+  "item": "sincere ignorance mean",
+  "ledger": "-0.0844",
+  "derived": "-0.0844",
+  "verdict": "matches",
+  "source": "L40 centred projection"
+ },
+ {
+  "f_id": "F-126",
+  "item": "feigned deniers mean",
+  "ledger": "+2.9037",
+  "derived": "+2.9037",
+  "verdict": "matches",
+  "source": "same"
+ },
+ {
+  "f_id": "F-126",
+  "item": "published deceptive mean",
+  "ledger": "+0.0458",
+  "derived": "+0.0458",
+  "verdict": "matches",
+  "source": "same"
+ },
+ {
+  "f_id": "F-126",
+  "item": "plain assertion mean",
+  "ledger": "-1.2274",
+  "derived": "-1.2274",
+  "verdict": "matches",
+  "source": "same"
+ },
+ {
+  "f_id": "F-126",
+  "item": "deceptive max / denier min",
+  "ledger": "+0.885/+2.150",
+  "derived": "+0.885/+2.150",
+  "verdict": "matches",
+  "source": "same"
+ },
+ {
+  "f_id": "F-126",
+  "item": "axis 'full span' = group-mean span deniers-plain",
+  "ledger": "4.13",
+  "derived": "4.1311",
+  "verdict": "matches",
+  "source": "same"
+ },
+ {
+  "f_id": "F-126",
+  "item": "  (persona-level span, for context)",
+  "ledger": "n/a",
+  "derived": "5.2893",
+  "verdict": "context: 'full span' 4.13 is the span of GROUP MEANS; the 36 personas span 5.29, so 28% is of the group-mean span",
+  "source": "same"
+ },
+ {
+  "f_id": "F-126",
+  "item": "sincere sits 28% of the axis closer",
+  "ledger": "28",
+  "derived": "28",
+  "verdict": "matches",
+  "source": "gap / group-mean span"
+ },
+ {
+  "f_id": "F-126",
+  "item": "sincere-plain gap",
+  "ledger": "1.14",
+  "derived": "1.1429",
+  "verdict": "matches",
+  "source": "same"
+ },
+ {
+  "f_id": "F-126",
+  "item": "cos(deception, denial) L44",
+  "ledger": "0.468",
+  "derived": "0.4676",
+  "verdict": "matches",
+  "source": "recipe of p16_fig2_axes.py / make_figures.py:personas()"
+ },
+ {
+  "f_id": "F-126",
+  "item": "D-041 PDF in papers/",
+  "ledger": "yes",
+  "derived": "yes",
+  "verdict": "matches",
+  "source": "papers/ (title match; arXiv id 2609.02893 not read - no PDF text tool)"
+ },
+ {
+  "f_id": "F-126",
+  "item": "D-040 PDF 2602.01425 in papers/",
+  "ledger": "absent (owed)",
+  "derived": "absent",
+  "verdict": "matches",
+  "source": "papers/"
+ },
+ {
+  "f_id": "F-122",
+  "item": "L36 baseline excl",
+  "ledger": "0.8124",
+  "derived": "0.8124",
+  "verdict": "matches",
+  "source": "git 16def2de:src/probes/deception-detection/results/persona_ood_ext_L36/summary.csv off_diagonal_excl_hpkr"
+ },
+ {
+  "f_id": "F-122",
+  "item": "L36 best arm",
+  "ledger": "ext_axis1",
+  "derived": "ext_axis1",
+  "verdict": "matches",
+  "source": "git 16def2de:src/probes/deception-detection/results/persona_ood_ext_L36/summary.csv off_diagonal_excl_hpkr"
+ },
+ {
+  "f_id": "F-122",
+  "item": "L36 best value",
+  "ledger": "0.9403",
+  "derived": "0.9403",
+  "verdict": "matches",
+  "source": "git 16def2de:src/probes/deception-detection/results/persona_ood_ext_L36/summary.csv off_diagonal_excl_hpkr"
+ },
+ {
+  "f_id": "F-122",
+  "item": "L36 syc_pc1",
+  "ledger": "0.9222",
+  "derived": "0.9222",
+  "verdict": "matches",
+  "source": "git 16def2de:src/probes/deception-detection/results/persona_ood_ext_L36/summary.csv off_diagonal_excl_hpkr"
+ },
+ {
+  "f_id": "F-122",
+  "item": "L40 baseline excl",
+  "ledger": "0.7581",
+  "derived": "0.7580",
+  "verdict": "matches at ea1ce52b (0.75809); PIN_PAPER 0.75800 (baseline re-run, branch moved)",
+  "source": "git 16def2de:src/probes/deception-detection/results/persona_ood_ext_L40/summary.csv off_diagonal_excl_hpkr"
+ },
+ {
+  "f_id": "F-122",
+  "item": "L40 best arm",
+  "ledger": "syc_pc1",
+  "derived": "syc_pc1",
+  "verdict": "matches",
+  "source": "git 16def2de:src/probes/deception-detection/results/persona_ood_ext_L40/summary.csv off_diagonal_excl_hpkr"
+ },
+ {
+  "f_id": "F-122",
+  "item": "L40 best value",
+  "ledger": "0.9370",
+  "derived": "0.9370",
+  "verdict": "matches",
+  "source": "git 16def2de:src/probes/deception-detection/results/persona_ood_ext_L40/summary.csv off_diagonal_excl_hpkr"
+ },
+ {
+  "f_id": "F-122",
+  "item": "L40 ext_axis1",
+  "ledger": "0.9165",
+  "derived": "0.9165",
+  "verdict": "matches",
+  "source": "git 16def2de:src/probes/deception-detection/results/persona_ood_ext_L40/summary.csv off_diagonal_excl_hpkr"
+ },
+ {
+  "f_id": "F-122",
+  "item": "L44 baseline excl",
+  "ledger": "0.7297",
+  "derived": "0.7296",
+  "verdict": "matches at ea1ce52b (0.72971); PIN_PAPER 0.72965 (baseline re-run, branch moved)",
+  "source": "git 16def2de:src/probes/deception-detection/results/persona_ood_ext_L44/summary.csv off_diagonal_excl_hpkr"
+ },
+ {
+  "f_id": "F-122",
+  "item": "L44 best arm",
+  "ledger": "syc_pc1",
+  "derived": "syc_pc1",
+  "verdict": "matches",
+  "source": "git 16def2de:src/probes/deception-detection/results/persona_ood_ext_L44/summary.csv off_diagonal_excl_hpkr"
+ },
+ {
+  "f_id": "F-122",
+  "item": "L44 best value",
+  "ledger": "0.9274",
+  "derived": "0.9274",
+  "verdict": "matches",
+  "source": "git 16def2de:src/probes/deception-detection/results/persona_ood_ext_L44/summary.csv off_diagonal_excl_hpkr"
+ },
+ {
+  "f_id": "F-122",
+  "item": "L44 ext_axis1",
+  "ledger": "0.9053",
+  "derived": "0.9053",
+  "verdict": "matches",
+  "source": "git 16def2de:src/probes/deception-detection/results/persona_ood_ext_L44/summary.csv off_diagonal_excl_hpkr"
+ },
+ {
+  "f_id": "F-122",
+  "item": "L48 baseline excl",
+  "ledger": "0.7375",
+  "derived": "0.7375",
+  "verdict": "matches",
+  "source": "git 16def2de:src/probes/deception-detection/results/persona_ood_ext_L48/summary.csv off_diagonal_excl_hpkr"
+ },
+ {
+  "f_id": "F-122",
+  "item": "L48 best arm",
+  "ledger": "syc_pc1",
+  "derived": "syc_pc1",
+  "verdict": "matches",
+  "source": "git 16def2de:src/probes/deception-detection/results/persona_ood_ext_L48/summary.csv off_diagonal_excl_hpkr"
+ },
+ {
+  "f_id": "F-122",
+  "item": "L48 best value",
+  "ledger": "0.9228",
+  "derived": "0.9228",
+  "verdict": "matches",
+  "source": "git 16def2de:src/probes/deception-detection/results/persona_ood_ext_L48/summary.csv off_diagonal_excl_hpkr"
+ },
+ {
+  "f_id": "F-122",
+  "item": "L48 ext_axis1",
+  "ledger": "0.8952",
+  "derived": "0.8952",
+  "verdict": "matches",
+  "source": "git 16def2de:src/probes/deception-detection/results/persona_ood_ext_L48/summary.csv off_diagonal_excl_hpkr"
+ },
+ {
+  "f_id": "F-122",
+  "item": "L52 baseline excl",
+  "ledger": "0.7515",
+  "derived": "0.7515",
+  "verdict": "matches",
+  "source": "git 16def2de:src/probes/deception-detection/results/persona_ood_ext_L52/summary.csv off_diagonal_excl_hpkr"
+ },
+ {
+  "f_id": "F-122",
+  "item": "L52 best arm",
+  "ledger": "syc_pc1",
+  "derived": "syc_pc1",
+  "verdict": "matches",
+  "source": "git 16def2de:src/probes/deception-detection/results/persona_ood_ext_L52/summary.csv off_diagonal_excl_hpkr"
+ },
+ {
+  "f_id": "F-122",
+  "item": "L52 best value",
+  "ledger": "0.8999",
+  "derived": "0.8999",
+  "verdict": "matches",
+  "source": "git 16def2de:src/probes/deception-detection/results/persona_ood_ext_L52/summary.csv off_diagonal_excl_hpkr"
+ },
+ {
+  "f_id": "F-122",
+  "item": "L52 ext_axis1",
+  "ledger": "0.8806",
+  "derived": "0.8806",
+  "verdict": "matches",
+  "source": "git 16def2de:src/probes/deception-detection/results/persona_ood_ext_L52/summary.csv off_diagonal_excl_hpkr"
+ },
+ {
+  "f_id": "F-122",
+  "item": "L56 baseline excl",
+  "ledger": "0.7419",
+  "derived": "0.7419",
+  "verdict": "matches",
+  "source": "git 16def2de:src/probes/deception-detection/results/persona_ood_ext_L56/summary.csv off_diagonal_excl_hpkr"
+ },
+ {
+  "f_id": "F-122",
+  "item": "L56 best arm",
+  "ledger": "syc_pc1",
+  "derived": "syc_pc1",
+  "verdict": "matches",
+  "source": "git 16def2de:src/probes/deception-detection/results/persona_ood_ext_L56/summary.csv off_diagonal_excl_hpkr"
+ },
+ {
+  "f_id": "F-122",
+  "item": "L56 best value",
+  "ledger": "0.8685",
+  "derived": "0.8685",
+  "verdict": "matches",
+  "source": "git 16def2de:src/probes/deception-detection/results/persona_ood_ext_L56/summary.csv off_diagonal_excl_hpkr"
+ },
+ {
+  "f_id": "F-122",
+  "item": "L56 ext_axis1",
+  "ledger": "0.8670",
+  "derived": "0.8670",
+  "verdict": "matches",
+  "source": "git 16def2de:src/probes/deception-detection/results/persona_ood_ext_L56/summary.csv off_diagonal_excl_hpkr"
+ },
+ {
+  "f_id": "F-122",
+  "item": "arm win counts /16 @16def2de",
+  "ledger": "syc_pc1=5, ext_axis1=4, ext_pc3=4, axis1=1, syc3=1, uni_axis1=1",
+  "derived": "syc_pc1=5, ext_axis1=4, ext_pc3=4, axis1=1, syc3=1, uni_axis1=1",
+  "verdict": "matches",
+  "source": "summary.csv x16"
+ },
+ {
+  "f_id": "F-122",
+  "item": "arm win counts /16 @ea1ce52b",
+  "ledger": "syc_pc1=5, ext_axis1=4, ext_pc3=4, axis1=1, syc3=1, uni_axis1=1",
+  "derived": "syc_pc1=5, ext_axis1=4, ext_pc3=4, axis1=1, syc3=1, uni_axis1=1",
+  "verdict": "matches",
+  "source": "summary.csv x16"
+ },
+ {
+  "f_id": "F-122",
+  "item": "L40 convince_me__p syc_pc1",
+  "ledger": "0.9984",
+  "derived": "0.9984",
+  "verdict": "matches",
+  "source": "matrix_syc_pc1.csv @PIN_PAPER"
+ },
+ {
+  "f_id": "F-122",
+  "item": "L40 convince_me__p ext_axis1",
+  "ledger": "0.9123",
+  "derived": "0.9123",
+  "verdict": "matches",
+  "source": "matrix_ext_axis1.csv @PIN_PAPER"
+ },
+ {
+  "f_id": "F-122",
+  "item": "L40 harm_refusal_c syc_pc1",
+  "ledger": "0.7521",
+  "derived": "0.7521",
+  "verdict": "matches",
+  "source": "matrix_syc_pc1.csv @PIN_PAPER"
+ },
+ {
+  "f_id": "F-122",
+  "item": "L40 harm_refusal_c ext_axis1",
+  "ledger": "0.7116",
+  "derived": "0.7116",
+  "verdict": "matches",
+  "source": "matrix_ext_axis1.csv @PIN_PAPER"
+ },
+ {
+  "f_id": "F-122",
+  "item": "L40 insider_tradin syc_pc1",
+  "ledger": "0.9853",
+  "derived": "0.9853",
+  "verdict": "matches",
+  "source": "matrix_syc_pc1.csv @PIN_PAPER"
+ },
+ {
+  "f_id": "F-122",
+  "item": "L40 insider_tradin ext_axis1",
+  "ledger": "0.9803",
+  "derived": "0.9803",
+  "verdict": "matches",
+  "source": "matrix_ext_axis1.csv @PIN_PAPER"
+ },
+ {
+  "f_id": "F-122",
+  "item": "L40 instruct_disho syc_pc1",
+  "ledger": "0.9500",
+  "derived": "0.9500",
+  "verdict": "matches",
+  "source": "matrix_syc_pc1.csv @PIN_PAPER"
+ },
+ {
+  "f_id": "F-122",
+  "item": "L40 instruct_disho ext_axis1",
+  "ledger": "0.9784",
+  "derived": "0.9784",
+  "verdict": "matches",
+  "source": "matrix_ext_axis1.csv @PIN_PAPER"
+ },
+ {
+  "f_id": "F-122",
+  "item": "L40 repe_honesty__ syc_pc1",
+  "ledger": "0.9992",
+  "derived": "0.9992",
+  "verdict": "matches",
+  "source": "matrix_syc_pc1.csv @PIN_PAPER"
+ },
+ {
+  "f_id": "F-122",
+  "item": "L40 repe_honesty__ ext_axis1",
+  "ledger": "1.0000",
+  "derived": "1.0000",
+  "verdict": "matches",
+  "source": "matrix_ext_axis1.csv @PIN_PAPER"
+ },
+ {
+  "f_id": "F-122",
+  "item": "convince_me margin L40..56",
+  "ledger": "+0.086,+0.128,+0.123,+0.099,+0.054",
+  "derived": "+0.086,+0.128,+0.123,+0.099,+0.054",
+  "verdict": "matches",
+  "source": "matrices @PIN_PAPER"
+ },
+ {
+  "f_id": "F-122",
+  "item": "ext_axis1 max spread over 16 layers",
+  "ledger": "0.000",
+  "derived": "0.0000",
+  "verdict": "matches",
+  "source": "matrix_ext_axis1.csv x16 (HP-KR row dropped)"
+ },
+ {
+  "f_id": "F-122",
+  "item": "denial_axis1 max spread over 16 layers",
+  "ledger": "0.000",
+  "derived": "0.0000",
+  "verdict": "matches",
+  "source": "matrix_denial_axis1.csv x16 (HP-KR row dropped)"
+ }
+]

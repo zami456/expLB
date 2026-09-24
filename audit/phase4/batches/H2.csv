@@ -1,0 +1,13 @@
+id,source_ref,stated_numbers,claim_plain
+H-061,src/probes/deception-detection/results/persona_ood_ext_L20/summary.md:97,0.12; 0.19,"On ranking the persona axes win at every layer**, the extended axis by 0.12–0.19 AUROC. The base"
+H-065,src/probes/deception-detection/results/persona_ood_ext_L44/summary.md:19,1%,off-diagonal balanced accuracy @1% FPR | L20 | **L40** | L44 |
+H-066,src/probes/deception-detection/results/persona_ood_ext_L44/summary.md:31,0.305; 0.487; 0.395,"knowledge-denial axis, recall | 0.305 | **0.487** | 0.395 |"
+H-068,src/probes/deception-detection/results/persona_ood_ext_L44/summary.md:35,0.697; 0.778; 0.756,"base probe (RepE-trained), AUROC | 0.697 | **0.778** | 0.756 |"
+H-069,src/probes/deception-detection/results/persona_ood_ext_L44/summary.md:46,0.9034,"`ext_axis1` is the best arm** on AUROC (0.9034) and second on balanced accuracy, as at both"
+H-071,src/probes/deception-detection/results/persona_ood_ext_L44/summary.md:51,0.7342; 0.7216,"`denial_axis1` leads on balanced accuracy** (0.7342 vs 0.7216), as at layer 40. The arm that"
+H-076,src/probes/deception-detection/results/persona_ood_followup_L20/summary.md:21,0.6364; 0.6226,it is the Follow-Up Probe again: **0.6364 / 0.6226** (AUROC / balanced accuracy) against the
+H-082,src/probes/deception-detection/results/persona_ood_followup_L20/summary.md:112,0.118,concentrated in HP-KR: the RepE-trained k = 3 probe re-inverts it to 0.118 against the 1-d axis's
+H-085,src/probes/deception-detection/results/persona_ood_followup_L20/summary.md:124,1%; 0.573; 0.638; 0.623,"accuracy at 1% FPR it does not lead (0.573, against 0.638 for the 1-d axis and 0.623 for the"
+H-086,src/probes/deception-detection/results/persona_ood_mod_L40/summary.md:42,95%,"AUROC for the extended axis, against the old run's 95% bootstrap half-width:"
+H-090,src/probes/deception-detection/results/persona_ood_mod_L40/summary.md:84,0.9158; 0.7709,"the best configuration found: `ext_axis1` at 0.9158 off-diagonal AUROC, `denial_axis1` at 0.7709"
+H-100,src/probes/deception-detection/results/persona_positions_L40/summary.md:64,0.998; 0.638,balanced accuracy (0.998 → 0.638 at layer 40) — one extreme token per example is a noisy

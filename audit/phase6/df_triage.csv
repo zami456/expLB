@@ -1,0 +1,96 @@
+df,priority,applied,n_docs,docs,title
+DF-01,P1,,1,kd/docs/FINDINGS.md,"F-04's ""11-dataset run"" labels numbers computed on 10 datasets"
+DF-02,P1,,1,kd/docs/FINDINGS.md,"F-04's one significant test is a random projection losing, not a persona winning"
+DF-03,P1,,1,kd/docs/FINDINGS.md,F-77 and F-81 print 37/80 where the measured counts are 28/80 and 31/80
+DF-04,P2,,1,kd/docs/FINDINGS.md,F-73's internal restatement of its own AUROCs
+DF-05,P2,,1,kd/docs/FINDINGS.md,"F-73 calls a non-zero gap ""exactly zero"""
+DF-06,P2,,0,,"F-73's ""median gap 3.7 tokens"" is a median of absolute gaps"
+DF-07,P2,,0,,"F-105's ""none of them is persisted"" is out of date"
+DF-08,P2,,0,,"F-105's ""all ten words appear in the top-25"""
+DF-09,P1,,6,docs/NOVELTY_CHECK_PROMPT.md; docs/ONBOARDING.md; docs/thesis/persona-coordinates-70b-results.md; kd/docs/DESIGN.md; kd/docs/FINDINGS.md; MEMORY.md (auto-memory),"""the positive class is longer in 9 of 10 datasets"" is true of no slicing of the data"
+DF-10,P1,,1,docs/NOVELTY_CHECK_PROMPT.md,`docs/NOVELTY_CHECK_PROMPT.md:110` also carries two superseded token counts
+DF-11,P3,,3,kd/docs/FINDINGS.md; .claude/skills/knowledge-denial-context/SKILL.md; MEMORY.md (auto-memory),"do not conflate two different ""9 of 10"" statements"
+DF-12,P1,,0,,a reproducibility promise the repository cannot keep
+DF-13,P1,,0,,"""every method has recall near zero on HP-KR"" (D-013/D-037)"
+DF-14,P1,,0,,"""the base probe inverts on one dataset at each depth"" (D-124)"
+DF-15,P1,,0,,"""the top-10% token read is best"" (D-207)"
+DF-16,P2,,0,,"""sits AT its 0.5 floor in 18 of 30"" (D-157)"
+DF-17,P1,,0,,the abstract's headline figures are carried by the owner's personas
+DF-18,P2,,0,,an arm his draft never mentions
+DF-19,P3,,0,,two venue strings could not be verified
+DF-20,P1,,0,,"the abstract's ""0.09 below the contrast"" is unsourceable"
+DF-21,P1,,0,,"""the principal components do not contribute"" is contradicted by his own files"
+DF-22,P1,,0,,"the abstract's ""lifts transfer by 0.18–0.21"" is a sign artifact"
+DF-23,P1,,0,,"""six Liars' Bench datasets"" is five"
+DF-24,P1,,0,,"""the independently constructed sycophancy axis"" is not independent"
+DF-25,P2,,0,,the extended-persona description merges two groups the owner kept apart
+DF-26,P1,,0,,"""within 0.03 AUROC of the privileged upper bound"" is 0.0310"
+DF-27,P1,,0,,"""the pooled baseline inverts to 0.124 (L20) and 0.523 (L40)"""
+DF-28,P2,,1,loo_L20/summary.md,a claim contradicted inside his own note
+DF-29,P2,,0,,"""generalization gap is zero"" is arithmetic, not evidence"
+DF-30,P3,,1,persona_ood/summary.md,an unverifiable cache count
+DF-31,P1,,6,docs/COLLABORATOR_BRIEFING.md; cap/docs/DESIGN.md; docs/thesis/sarcasm-pilot-negative-result.md; .claude/skills/knowledge-denial-context/SKILL.md; docs/TODO.md; MEMORY.md (auto-memory),"0.374 is the *deception* axis's PC1, not the sycophancy axis"
+DF-32,P1,,1,docs/COLLABORATOR_BRIEFING.md,"the briefing's ""positive on 8–11 of 11"" mixes denominators"
+DF-33,P1,,0,,"the briefing's ""~666 rows"" is the cap, not the realised pool"
+DF-34,P2,,0,,briefing path and persona-grouping details
+DF-35,P2,,0,,the drop-`repe_honesty` margins use a 5-dataset baseline
+DF-36,P1,,0,,"""both of your arms lose by 0.064 / 0.055"" describes only one arm"
+DF-37,P2,,0,,"""differ by 0.0004"" is true of one feature only"
+DF-38,P2,,0,,"scope the ""2%–114%"" share range to mean pooling"
+DF-39,P1,,1,kd/docs/FINDINGS.md,F-32 certifies a bank generation that never produced a rollout — but the cap result is safe
+DF-40,P2,,0,,F-29's load-bearing half is mean-pooling only
+DF-41,P2,,1,kd/docs/FINDINGS.md,F-33 says 22 roles failed; the log says 24
+DF-42,P1,,1,MEMORY.md (auto-memory),"""length-only 0.553 vs raw 0.665"" matches no matrix in the repository"
+DF-43,P2,,0,,"F-26's ""the holding persona writes longer turn-1 text"" is unsupported"
+DF-44,P2,,0,,F-36's second consequence is reversed
+DF-45,P3,,0,,"F-38's table lists one model per dataset where the files hold 2, 12 and 4"
+DF-46,P1,,0,,addendum to DF-22 — the L20 inversion is the project's known HP-KR inversion
+DF-47,P2,,0,,the three-rung comparison compares an s23 bank against an s3 bank
+DF-48,P1,,0,,a code bug: `run_scale_chain.ps1` silently discards one of the two banks it builds
+DF-49,,YES,6,memory/response-length-transfers-on-its-own.md; docs/NOVELTY_CHECK_PROMPT.md; docs/ONBOARDING.md; docs/thesis/persona-coordinates-70b-results.md; kd/docs/DESIGN.md; MEMORY.md (auto-memory),"the audit's own length correction is wrong, and it is already applied in six documents"
+DF-50,,YES,2,audit/fix/F39_NOTE.md; docs/papers/persona-coordinates-notes.md,`audit/fix/F39_NOTE.md` §2 was wrong; F-45/F-48/F-54 are right about Table 1
+DF-51,,,0,,"F-61's ""twelvefold"" is 8.1× — the entry divides two different baselines"
+DF-52,,,1,kd/docs/FINDINGS.md,"F-56's stated mechanism is backwards — `subsample()` balances, it does not preserve the ratio"
+DF-53,,,0,,"F-91's ""second, independent method"" mixes seeds, and the mixing runs one way"
+DF-54,,,1,kd/docs/FINDINGS.md,F-78 quotes the wrong panel of Ying et al. Figure 4
+DF-55,,,3,docs/NOVELTY_CHECK_PROMPT.md; docs/NOVELTY_ASSESSMENT.md; docs/LAYER_PREREGISTRATION.md,"O-040 — ""probes report ~0.87"" on HP-KR has no source, and the comparison is inverted"
+DF-56,,,1,kd/docs/FINDINGS.md,smaller wave-5 items
+DF-57,,,2,docs/COLLABORATOR_BRIEFING.md; audit/phase3/DRAFT_GAPS.md,the briefing's closing sentence sets HER numbers against HIS
+DF-58,,YES,1,docs/thesis/persona-coordinates-70b-results.md,the audit's own DF-49 repair cited a path that does not exist
+DF-59,,,1,docs/thesis/...70b-results.md,"`docs/thesis/...70b-results.md` — O-070 sits under ""What holds"" but does not hold"
+DF-60,,,0,,the hf275 columns name the wrong reference direction
+DF-61,,,1,memory/q8-per-token-beats-pooling.md,the per-token gain is understated ~2× at the layers people quote
+DF-62,,,1,kd/docs/FINDINGS.md,smaller wave-6 items
+DF-63,,,1,docs/thesis/persona-coordinates-70b-results.md,"a pre-registered equivalence margin was widened post hoc, and the change is not flagged"
+DF-64,,,4,docs/thesis/persona-coordinates-70b-results.md; memory/judge-choice-barely-matters.md; docs/PERSONA_CONSTRUCTION.md; MEMORY.md (auto-memory),"""all 1,400 rollouts re-judged"" — it was 1,350 [two independent routes]"
+DF-65,,,0,,smaller items from W6B
+DF-66,,,2,docs/thesis/sarcasm-pilot-negative-result.md; cap/docs/SARCASM_DESIGN.md,the sarcasm pilot's gate was NOT pre-registered — the threshold entered the repo in the commit that reported the failure
+DF-67,,,1,docs/REVIEW_REQUEST_POOLING.md,`docs/REVIEW_REQUEST_POOLING.md` describes a split protocol the code does not use
+DF-68,,,2,docs/NOVELTY_ASSESSMENT.md; kd/docs/NEXT.md,two documents still carry claims their own evidence withdrew
+DF-69,,,1,docs/ROADMAP_TO_DEFENCE.md,`docs/ROADMAP_TO_DEFENCE.md:27` answers a question about HIS baseline with OUR corpus
+DF-70,,,2,cap/docs/DESIGN.md; audit/CORRECTIONS.md,the cap block's three unstated scope conditions
+DF-71,P1,,1,kd/docs/FINDINGS.md,"F-61's headline ""+0.006"" is a script-bug artifact — the real figure is +0.0093"
+DF-72,P1,,1,kd/docs/FINDINGS.md,HP-KR is ~91–96% solvable from surface wording — state it wherever an HP-KR number is quoted
+DF-73,P1,,0,,`run-scale/8b/coords` is an incomplete corpus and no document says so
+DF-74,P1,,0,,the 8B `all` and `s23` axis builds write the same file — one silently overwrites the other
+DF-75,P3,,0,,pointer — the audit corrected seven of its own verdicts
+DF-76,P1,,0,,"the draft still says the wording-controlled test has not been run — it has, three times over"
+DF-77,P1,,0,,"every HP-KR result used the smaller of two available control slices, and no document says the other exists"
+DF-78,P2,,0,,F-03's numbers should be quoted leak-guarded from now on
+DF-79,P1,,0,,the draft reports layer 40; its own sweep says the optimum is 36
+DF-80,P1,,0,,"""outscores … at every depth"" is falsified by the new sweep"
+DF-81,P1,,0,,the Contributions margin must be quoted excluding HP-KR — 16 layers now say so
+DF-82,P2,,0,,"""HP-KR is a spike at 40"" needs its arm named"
+DF-83,P2,,1,persona_depth/summary.md,`persona_depth/summary.md` cites two folders that are not on the branch
+DF-84,P2,,0,,"the late-layer rise — now SOLVED, state the answer rather than the puzzle"
+DF-85,P3,,0,,withdraw DF-71's reproducibility half — `paper/make_numbers.py` now exists
+DF-86,P1,,0,,every statement of the scale decline should now name BOTH banks
+DF-87,P2,,0,,do not quote the 70B kd figure without its scope condition
+DF-88,P3,,0,,the s3-vs-s23 filter caveat can now be measured rather than bounded
+DF-89,P1,,0,,the sycophancy axis is missing from OUR pipeline — and is his best arm at five layers
+DF-94,P1,,1,audit/COVERAGE_GAP.md,"""424 of 692 claims checked"" overstates coverage — the real figure is 314 of 692"
+DF-95,P2,,0,,"the two reports predate `origin/paper` and omit F-117, F-119, F-122"
+DF-93,P1,,1,kd/docs/FINDINGS.md,"label the `dim=1` arms zero-shot, and put the error bar over datasets not cells"
+DF-90,P2,,0,,"stop writing ""16-persona bank"" — it is a 26-persona bank"
+DF-91,P2,,0,,"the knowledge-denial axes are 70B-only, and nothing says so"
+DF-92,P1,,3,audit/fix/RF16_NOTE.md; kd/docs/FINDINGS.md; audit/fix/F39_NOTE.md,`pc:kd_assertion` outperforming `pc:knowledge_denial` belongs in the results

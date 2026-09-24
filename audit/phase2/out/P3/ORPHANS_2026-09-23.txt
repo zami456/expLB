@@ -1,0 +1,20 @@
+Orphan / live process check on the lab PC, run at the start of the P3-kdbank-cap resume
+(script audit/scripts/claims/_orphan_check.ps1, read-only Get-CimInstance Win32_Process).
+
+NONE of my own batch calls left an orphan (every F-13/F-31/F-34/F-34b run returned "python exit 0").
+But the following were STILL RUNNING and are NOT mine - they descend from the Phase-1 RF-14
+guard live-test incident already logged at the top of audit/PROGRESS.md:
+
+  PID 48232  powershell  2026-09-23 02:19:27  the interrupted RF-14 guard live-test (EncodedCommand)
+  PID 48932  powershell  2026-09-23 02:19:27  run_falsify.ps1 -Force   <- the "TEST 2: forced run"
+  PID 69324  powershell  2026-09-23 02:38:15  a 55-minute wait-for-falsify loop
+  PID 66340  powershell  2026-09-23 03:16:10  sync_crossgen.ps1 -Tag periodic (scheduled task KD-Sync-Periodic)
+  PID 62728  python      2026-09-23 03:17:36  30e_falsify_meandir.py --layer 64 --out_root C:\Users\user4\expLB\run-premise\falsify
+  PID 54548  python      2026-09-23 03:17:36  (its child / second interpreter, same command line)
+
+Consequence for this batch: `run-premise/falsify/*.json` is being REWRITTEN right now.
+My batch does not read run-premise/falsify. F-98 reads run-premise/premise_L{20,40}_mean_s42.json,
+which is a different file written by 30_premise.py - I record its mtime and size when I read it.
+KD-Sync-Periodic (sync_crossgen.ps1) may also be pushing run-crossgen to Drive while I read it.
+
+I did not kill anything (killing is a write action and is not authorised).

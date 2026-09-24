@@ -1,0 +1,198 @@
+rows loaded: 78516 from C:\Users\SURAIYA\Documents\STUDY\thesis\expLB\audit\phase2\layer_sensitivity.csv
+
+TRAP CHECK -- which stores carry a `raw` baseline:
+   <root>                     raw=1     axes=1     pc:deception=1     datapca=True
+   banks/hf100                raw=0     axes=1     pc:deception=1     datapca=False
+   banks/own100               raw=0     axes=1     pc:deception=1     datapca=False
+   banks/paper16_famcentred   raw=0     axes=1     pc:deception=1     datapca=False
+   banks/paper16_shared       raw=0     axes=1     pc:deception=1     datapca=False
+   kd11                       raw=1     axes=1     pc:deception=1     datapca=True
+   kd11/banks/cap_all         raw=1     axes=0     pc:deception=0     datapca=True
+   kd11/banks/cap_ctrl        raw=1     axes=0     pc:deception=0     datapca=True
+   kd11/banks/cap_s23         raw=1     axes=0     pc:deception=0     datapca=True
+   kd11/banks/collab          raw=0     axes=1     pc:deception=1     datapca=False
+   kd11/banks/kd              raw=0     axes=1     pc:deception=1     datapca=False
+   kd11/banks/kd_s23          raw=0     axes=1     pc:deception=1     datapca=False
+   kd11/passA                 raw=1     axes=1     pc:deception=1     datapca=True
+   kd11/passC                 raw=1     axes=1     pc:deception=1     datapca=True
+   passA                      raw=1     axes=1     pc:deception=1     datapca=True
+   passB_fine                 raw=1     axes=1     pc:deception=1     datapca=True
+   passC                      raw=1     axes=1     pc:deception=1     datapca=True
+   passP                      raw=1     axes=1     pc:deception=1     datapca=True
+   scale_3b                   raw=1     axes=1     pc:deception=1     datapca=True
+   scale_70b                  raw=1     axes=1     pc:deception=1     datapca=True
+   scale_70b_paper16fp32      raw=1     axes=1     pc:deception=1     datapca=True
+   scale_8b                   raw=1     axes=1     pc:deception=1     datapca=True
+   -> no banks/* store has `raw`, so no axes-vs-raw join below can pick up a bank store's misleading column.
+TRAP CHECK -- P3-D: no multi-seed mean is computed anywhere in this script; every seed is reported as its own configuration row.
+
+==============================================================================
+O-073  does pc:deception EVER beat raw at layers >= 20?
+==============================================================================
+cells with both pc:deception and raw at layer >= 20: 5848
+cells where pc:deception > raw: 326  (5.6%)
+largest 12 pc-over-raw gains (gain, store, bank, k, pooling, layer, seed, dataset_set, n_datasets, probe):
+   +0.0822  ('scale_70b', 'paper16_70b', '3', 'mean', '20', '42', 'paper5', '5', 'lr_reg10')
+   +0.0822  ('scale_70b', 'paper16_70b', '3', 'mean', '20', '42', 'all', '5', 'lr_reg10')
+   +0.0759  ('scale_70b', 'paper16_70b', '3', 'last', '28', '42', 'paper5', '5', 'lr_reg10')
+   +0.0759  ('scale_70b', 'paper16_70b', '3', 'last', '28', '42', 'all', '5', 'lr_reg10')
+   +0.0723  ('scale_70b', 'paper16_70b', '3', 'last', '20', '42', 'paper5', '5', 'lr_reg10')
+   +0.0723  ('scale_70b', 'paper16_70b', '3', 'last', '20', '42', 'all', '5', 'lr_reg10')
+   +0.0690  ('scale_70b', 'paper16_70b', '3', 'mean', '20', '42', 'paper5', '5', 'paper')
+   +0.0690  ('scale_70b', 'paper16_70b', '3', 'mean', '20', '42', 'all', '5', 'paper')
+   +0.0690  ('scale_70b', 'paper16_70b', '3', 'last', '22', '42', 'paper5', '5', 'lr_reg10')
+   +0.0690  ('scale_70b', 'paper16_70b', '3', 'last', '22', '42', 'all', '5', 'lr_reg10')
+   +0.0668  ('scale_70b_paper16fp32', 'paper16_70b_fp32', '3', 'mean', '20', '42', 'paper5', '5', 'lr_reg10')
+   +0.0668  ('scale_70b_paper16fp32', 'paper16_70b_fp32', '3', 'mean', '20', '42', 'all', '5', 'lr_reg10')
+
+signed pc-minus-raw over all 5848 cells: median -0.1002, mean -0.0973, max +0.0822, min -0.2115
+restricted to dataset_set='all': n=2924, positive 99, median -0.0878
+k values present for pc:deception: Counter({'5': 12128, '3': 684})
+
+==============================================================================
+O-070  axes minus raw, best-vs-best, across stores (dataset_set='all')
+==============================================================================
+store                      bank                 pool  seed probe     nds  raw best         axes best         axes-raw
+<root>                     paper16              last  0    lr_reg10  10   L32 0.6680      L44 0.6487        -0.0193
+<root>                     paper16              last  0    mms       10   L28 0.6954      L44 0.6720        -0.0234
+<root>                     paper16              last  1    lr_reg10  10   L32 0.6600      L44 0.6223        -0.0378
+<root>                     paper16              last  1    mms       10   L28 0.6963      L76 0.6316        -0.0647
+<root>                     paper16              last  2    lr_reg10  10   L32 0.6396      L44 0.6300        -0.0097
+<root>                     paper16              last  2    mms       10   L28 0.6899      L76 0.6296        -0.0603
+<root>                     paper16              last  3    lr_reg10  10   L36 0.6726      L44 0.6289        -0.0437
+<root>                     paper16              last  3    mms       10   L28 0.6983      L44 0.6194        -0.0789
+<root>                     paper16              last  4    lr_reg10  10   L32 0.6601      L44 0.6436        -0.0165
+<root>                     paper16              last  4    mms       10   L28 0.6921      L44 0.6576        -0.0346
+<root>                     paper16              last  42   lr_reg10  10   L32 0.6523      L44 0.6466        -0.0057
+<root>                     paper16              last  42   mms       10   L28 0.6932      L44 0.6519        -0.0413
+<root>                     paper16              last  42   paper     10   L32 0.6671      L44 0.6474        -0.0197
+<root>                     paper16              mean  0    lr_reg10  10   L32 0.7102      L32 0.6536        -0.0566
+<root>                     paper16              mean  0    mms       10   L32 0.7150      L44 0.6734        -0.0416
+<root>                     paper16              mean  1    lr_reg10  10   L32 0.7016      L32 0.6388        -0.0628
+<root>                     paper16              mean  1    mms       10   L32 0.7147      L44 0.6526        -0.0620
+<root>                     paper16              mean  2    lr_reg10  10   L32 0.6884      L32 0.6373        -0.0511
+<root>                     paper16              mean  2    mms       10   L32 0.7148      L44 0.6623        -0.0526
+<root>                     paper16              mean  3    lr_reg10  10   L32 0.7131      L32 0.6468        -0.0663
+<root>                     paper16              mean  3    mms       10   L32 0.7230      L40 0.6221        -0.1009
+<root>                     paper16              mean  4    lr_reg10  10   L32 0.6971      L32 0.6462        -0.0509
+<root>                     paper16              mean  4    mms       10   L32 0.7146      L44 0.6586        -0.0561
+<root>                     paper16              mean  42   lr_reg10  10   L32 0.6963      L32 0.6463        -0.0500
+<root>                     paper16              mean  42   mms       10   L32 0.7153      L44 0.6709        -0.0444
+<root>                     paper16              mean  42   paper     10   L32 0.6889      L32 0.6446        -0.0443
+kd11                       paper16              last  42   lr_reg10  11   L32 0.6377      L44 0.6529        +0.0152
+kd11                       paper16              last  42   mms       11   L28 0.6901      L44 0.6577        -0.0324
+kd11                       paper16              last  42   paper     11   L32 0.6548      L44 0.6542        -0.0006
+kd11                       paper16              mean  42   lr_reg10  11   L32 0.6775      L32 0.6427        -0.0348
+kd11                       paper16              mean  42   mms       11   L32 0.7054      L44 0.6681        -0.0374
+kd11                       paper16              mean  42   paper     11   L32 0.6818      L32 0.6439        -0.0379
+kd11/passA                 paper16              last  42   lr_reg10  10   L32 0.6673      L78 0.6805        +0.0132
+kd11/passA                 paper16              last  42   mms       10   L78 0.6871      L78 0.7013        +0.0142
+kd11/passA                 paper16              last  42   paper     10   L33 0.6886      L78 0.6579        -0.0306
+kd11/passA                 paper16              mean  42   lr_reg10  10   L32 0.7122      L79 0.6801        -0.0320
+kd11/passA                 paper16              mean  42   mms       10   L31 0.7170      L79 0.6927        -0.0243
+kd11/passA                 paper16              mean  42   paper     10   L33 0.7072      L77 0.6770        -0.0301
+kd11/passC                 paper16              last  42   lr_reg10  10   L28 0.6596      L44 0.6292        -0.0304
+kd11/passC                 paper16              last  42   mms       10   L28 0.6856      L44 0.6392        -0.0464
+kd11/passC                 paper16              last  42   paper     10   L28 0.6749      L44 0.6369        -0.0379
+kd11/passC                 paper16              mean  42   lr_reg10  10   L28 0.6835      L40 0.6097        -0.0739
+kd11/passC                 paper16              mean  42   mms       10   L28 0.6955      L44 0.6342        -0.0613
+kd11/passC                 paper16              mean  42   paper     10   L40 0.6761      L40 0.6104        -0.0657
+passA                      paper16              last  0    lr_reg10  10   L32 0.6689      L78 0.6786        +0.0097
+passA                      paper16              last  0    mms       10   L28 0.6866      L78 0.7016        +0.0150
+passA                      paper16              last  1    lr_reg10  10   L28 0.6602      L78 0.6824        +0.0222
+passA                      paper16              last  1    mms       10   L78 0.6829      L78 0.7019        +0.0190
+passA                      paper16              last  2    lr_reg10  10   L28 0.6647      L78 0.6824        +0.0177
+passA                      paper16              last  2    mms       10   L28 0.6883      L78 0.7011        +0.0128
+passA                      paper16              last  3    lr_reg10  10   L28 0.6685      L78 0.6825        +0.0140
+passA                      paper16              last  3    mms       10   L78 0.6900      L78 0.7020        +0.0120
+passA                      paper16              last  4    lr_reg10  10   L36 0.6430      L78 0.6897        +0.0467
+passA                      paper16              last  4    mms       10   L28 0.6810      L78 0.7025        +0.0216
+passA                      paper16              last  42   lr_reg10  10   L32 0.6673      L78 0.6805        +0.0132
+passA                      paper16              last  42   mms       10   L78 0.6871      L78 0.7013        +0.0142
+passA                      paper16              last  42   paper     10   L33 0.6886      L78 0.6579        -0.0306
+passA                      paper16              mean  0    lr_reg10  10   L32 0.6946      L79 0.6730        -0.0216
+passA                      paper16              mean  0    mms       10   L31 0.7203      L79 0.6886        -0.0317
+passA                      paper16              mean  1    lr_reg10  10   L32 0.6889      L79 0.6721        -0.0169
+passA                      paper16              mean  1    mms       10   L31 0.7197      L79 0.6889        -0.0308
+passA                      paper16              mean  2    lr_reg10  10   L32 0.6973      L79 0.6752        -0.0222
+passA                      paper16              mean  2    mms       10   L31 0.7219      L79 0.6921        -0.0298
+passA                      paper16              mean  3    lr_reg10  10   L32 0.6896      L78 0.6771        -0.0125
+passA                      paper16              mean  3    mms       10   L31 0.7261      L79 0.6843        -0.0418
+passA                      paper16              mean  4    lr_reg10  10   L36 0.6894      L79 0.6761        -0.0133
+passA                      paper16              mean  4    mms       10   L31 0.7159      L79 0.6924        -0.0235
+passA                      paper16              mean  42   lr_reg10  10   L32 0.7122      L79 0.6801        -0.0320
+passA                      paper16              mean  42   mms       10   L31 0.7170      L79 0.6927        -0.0243
+passA                      paper16              mean  42   paper     10   L33 0.7072      L77 0.6770        -0.0301
+passB_fine                 paper16              last  42   lr_reg10  10   L37 0.6424      L44 0.6464        +0.0040
+passB_fine                 paper16              last  42   mms       10   L37 0.6756      L44 0.6515        -0.0241
+passB_fine                 paper16              last  42   paper     10   L37 0.6605      L44 0.6473        -0.0132
+passB_fine                 paper16              mean  42   lr_reg10  10   L37 0.6793      L39 0.6370        -0.0423
+passB_fine                 paper16              mean  42   mms       10   L37 0.6803      L44 0.6709        -0.0094
+passB_fine                 paper16              mean  42   paper     10   L37 0.6747      L39 0.6372        -0.0375
+passC                      paper16              last  0    lr_reg10  10   L28 0.6610      L44 0.6298        -0.0312
+passC                      paper16              last  0    mms       10   L28 0.6867      L40 0.6337        -0.0530
+passC                      paper16              last  1    lr_reg10  10   L28 0.6601      L44 0.6231        -0.0370
+passC                      paper16              last  1    mms       10   L28 0.6809      L44 0.6178        -0.0632
+passC                      paper16              last  2    lr_reg10  10   L28 0.6640      L44 0.6170        -0.0471
+passC                      paper16              last  2    mms       10   L28 0.6884      L44 0.6392        -0.0492
+passC                      paper16              last  3    lr_reg10  10   L28 0.6681      L44 0.6328        -0.0353
+passC                      paper16              last  3    mms       10   L28 0.6862      L40 0.6258        -0.0604
+passC                      paper16              last  4    lr_reg10  10   L20 0.6396      L44 0.6256        -0.0140
+passC                      paper16              last  4    mms       10   L28 0.6811      L40 0.6325        -0.0485
+passC                      paper16              last  42   lr_reg10  10   L28 0.6596      L44 0.6292        -0.0304
+passC                      paper16              last  42   mms       10   L28 0.6856      L44 0.6392        -0.0464
+passC                      paper16              last  42   paper     10   L28 0.6749      L44 0.6369        -0.0379
+passC                      paper16              mean  0    lr_reg10  10   L28 0.6664      L40 0.6039        -0.0625
+passC                      paper16              mean  0    mms       10   L28 0.6935      L44 0.6453        -0.0482
+passC                      paper16              mean  1    lr_reg10  10   L40 0.6650      L40 0.6017        -0.0632
+passC                      paper16              mean  1    mms       10   L28 0.6957      L44 0.6286        -0.0672
+passC                      paper16              mean  2    lr_reg10  10   L28 0.6599      L40 0.6099        -0.0500
+passC                      paper16              mean  2    mms       10   L28 0.6950      L44 0.6632        -0.0318
+passC                      paper16              mean  3    lr_reg10  10   L28 0.6772      L40 0.6056        -0.0716
+passC                      paper16              mean  3    mms       10   L28 0.7020      L44 0.6576        -0.0444
+passC                      paper16              mean  4    lr_reg10  10   L40 0.6673      L40 0.6079        -0.0594
+passC                      paper16              mean  4    mms       10   L28 0.6920      L44 0.6588        -0.0332
+passC                      paper16              mean  42   lr_reg10  10   L28 0.6835      L40 0.6097        -0.0739
+passC                      paper16              mean  42   mms       10   L28 0.6955      L44 0.6342        -0.0613
+passC                      paper16              mean  42   paper     10   L40 0.6761      L40 0.6104        -0.0657
+passP                      paper16              last  42   lr_reg10  10   L40 0.5887      L44 0.5857        -0.0030
+passP                      paper16              last  42   mms       10   L40 0.6537      L44 0.5820        -0.0717
+passP                      paper16              last  42   paper     10   L40 0.6475      L44 0.5897        -0.0578
+passP                      paper16              mean  42   lr_reg10  10   L40 0.5828      L44 0.5778        -0.0050
+passP                      paper16              mean  42   mms       10   L40 0.5665      L44 0.5774        +0.0109
+passP                      paper16              mean  42   paper     10   L44 0.5697      L44 0.5859        +0.0162
+scale_70b                  paper16_70b          last  42   lr_reg10  5    L32 0.8115      L28 0.8596        +0.0481
+scale_70b                  paper16_70b          last  42   mms       5    L28 0.8845      L28 0.8680        -0.0164
+scale_70b                  paper16_70b          last  42   paper     5    L28 0.8397      L28 0.8591        +0.0194
+scale_70b                  paper16_70b          mean  42   lr_reg10  5    L32 0.8349      L28 0.8571        +0.0222
+scale_70b                  paper16_70b          mean  42   mms       5    L28 0.8707      L28 0.8551        -0.0156
+scale_70b                  paper16_70b          mean  42   paper     5    L32 0.8371      L28 0.8590        +0.0218
+scale_70b_paper16fp32      paper16_70b_fp32     last  42   lr_reg10  5    L32 0.8115      L28 0.8811        +0.0696
+scale_70b_paper16fp32      paper16_70b_fp32     last  42   mms       5    L28 0.8845      L28 0.8812        -0.0033
+scale_70b_paper16fp32      paper16_70b_fp32     last  42   paper     5    L28 0.8397      L28 0.8811        +0.0414
+scale_70b_paper16fp32      paper16_70b_fp32     mean  42   lr_reg10  5    L32 0.8349      L28 0.8595        +0.0247
+scale_70b_paper16fp32      paper16_70b_fp32     mean  42   mms       5    L28 0.8707      L28 0.8588        -0.0119
+scale_70b_paper16fp32      paper16_70b_fp32     mean  42   paper     5    L32 0.8371      L28 0.8609        +0.0238
+scale_8b                   paper16_8b           last  42   lr_reg10  5    L20 0.7742      L20 0.6624        -0.1118
+scale_8b                   paper16_8b           last  42   mms       5    L20 0.7919      L20 0.6254        -0.1665
+scale_8b                   paper16_8b           last  42   paper     5    L20 0.7847      L20 0.6801        -0.1046
+scale_8b                   paper16_8b           mean  42   lr_reg10  5    L20 0.7425      L24 0.7623        +0.0197
+scale_8b                   paper16_8b           mean  42   mms       5    L20 0.7681      L20 0.7824        +0.0143
+scale_8b                   paper16_8b           mean  42   paper     5    L20 0.7579      L20 0.7561        -0.0018
+
+best-vs-best axes-raw over 126 configurations: median -0.0314, positive 28/126
+
+==============================================================================
+O-071 / O-072  axes vs raw at the same layer, layers >= 20
+==============================================================================
+n cells = 5848; axes > raw in 1419 (24.3%); median -0.0447
+   layer 20  n=252  median +0.0003 positive 127/252
+   layer 28  n=228  median -0.0162 positive 54/228
+   layer 32  n=152  median -0.0202 positive 55/152
+   layer 36  n=152  median -0.0165 positive 52/152
+   layer 40  n=228  median -0.0101 positive 94/228
+   layer 44  n=240  median -0.0125 positive 83/240
+   layer 48  n=216  median -0.0366 positive 34/216
+   layer 60  n=152  median -0.0683 positive 29/152
+
+DONE

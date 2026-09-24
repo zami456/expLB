@@ -1,0 +1,53 @@
+==============================================================================
+C:/Users/user4/expLB/run-crossgen/kd11\banks\cap_s23\significance.json
+  tests=5544  boot_datasets=10000  layers=21  comparisons=22
+  (3 layers x 2 poolings x 3 probes x 22 comparisons x 2 blocks = 792  <- the entry's '792 tests')
+  === the entry's table: L40, mean pooling, paper probe ===
+  pc:capitulation@2 - random@2         blk10  diff=+0.2696 pairs=95/110 ci95=[+0.138, +0.398] p=0.000 q=0.016 clears=True  CI>0
+  pc:capitulation@2 - datapca@2        blk10  diff=+0.1273 pairs=80/110 ci95=[+0.013, +0.248] p=0.033 q=0.227 clears=False  CI>0
+  pc:capitulation@2 - raw              blk10  diff=+0.0983 pairs=76/110 ci95=[-0.036, +0.208] p=0.117 q=0.393 clears=False
+  pc:capitulation@2 - raw              blk9   diff=+0.0730 pairs=57/90 ci95=[-0.077, +0.204] p=0.303 q=0.618 clears=False
+  pc:capitulation@2 - datapca@2        blk9   diff=+0.1235 pairs=62/90 ci95=[-0.017, +0.262] p=0.088 q=0.340 clears=False
+  pc:capitulation@2 - random@2         blk9   diff=+0.2727 pairs=76/90 ci95=[+0.121, +0.416] p=0.002 q=0.075 clears=False  CI>0
+  random@2 - raw                       blk10  diff=-0.1712 pairs=25/110 ci95=[-0.275, -0.053] p=0.012 q=0.142 clears=False  CI<0
+==============================================================================
+C:/Users/user4/expLB/run-crossgen/kd11\banks\cap_all\significance.json
+  tests=5544  boot_datasets=10000  layers=21  comparisons=22
+  (3 layers x 2 poolings x 3 probes x 22 comparisons x 2 blocks = 792  <- the entry's '792 tests')
+  === the entry's table: L40, mean pooling, paper probe ===
+  pc:capitulation@2 - random@2         blk10  diff=+0.2697 pairs=95/110 ci95=[+0.139, +0.397] p=0.000 q=0.017 clears=True  CI>0
+  pc:capitulation@2 - datapca@2        blk10  diff=+0.1275 pairs=80/110 ci95=[+0.014, +0.246] p=0.029 q=0.217 clears=False  CI>0
+  pc:capitulation@2 - raw              blk10  diff=+0.0984 pairs=76/110 ci95=[-0.033, +0.207] p=0.114 q=0.392 clears=False
+  pc:capitulation@2 - raw              blk9   diff=+0.0731 pairs=57/90 ci95=[-0.074, +0.204] p=0.297 q=0.629 clears=False
+  pc:capitulation@2 - datapca@2        blk9   diff=+0.1236 pairs=62/90 ci95=[-0.015, +0.261] p=0.082 q=0.324 clears=False
+  pc:capitulation@2 - random@2         blk9   diff=+0.2728 pairs=76/90 ci95=[+0.122, +0.415] p=0.002 q=0.075 clears=False  CI>0
+  random@2 - raw                       blk10  diff=-0.1712 pairs=25/110 ci95=[-0.275, -0.053] p=0.012 q=0.142 clears=False  CI<0
+
+=== s23 vs all agreement on the entry's rows (L40, mean, paper) ===
+  pc:capitulation@2 - random@2         blk10  s23=+0.2696  all=+0.2697  |diff|=0.0001
+  pc:capitulation@2 - datapca@2        blk10  s23=+0.1273  all=+0.1275  |diff|=0.0001
+  pc:capitulation@2 - raw              blk10  s23=+0.0983  all=+0.0984  |diff|=0.0001
+  pc:capitulation@2 - raw              blk9   s23=+0.0730  all=+0.0731  |diff|=0.0001
+  pc:capitulation@2 - datapca@2        blk9   s23=+0.1235  all=+0.1236  |diff|=0.0001
+  pc:capitulation@2 - random@2         blk9   s23=+0.2727  all=+0.2728  |diff|=0.0001
+  random@2 - raw                       blk10  s23=-0.1712  all=-0.1712  |diff|=0.0000
+  LARGEST |s23 - all| over these rows: 0.0001  (entry says '<= 0.001')
+
+=== RECONSTRUCTED 792-test family (layers 20/40/44 only), BH re-run per block ===
+  cap_s23: 792 tests in the reconstructed family
+    pc:capitulation@2 - random@2         blk10  diff=+0.2696 q792=0.013 q_now=0.016 clears792=True
+    pc:capitulation@2 - datapca@2        blk10  diff=+0.1273 q792=0.172 q_now=0.227 clears792=False
+    pc:capitulation@2 - raw              blk10  diff=+0.0983 q792=0.309 q_now=0.393 clears792=False
+    pc:capitulation@2 - raw              blk9   diff=+0.0730 q792=0.547 q_now=0.618 clears792=False
+    pc:capitulation@2 - datapca@2        blk9   diff=+0.1235 q792=0.312 q_now=0.340 clears792=False
+    pc:capitulation@2 - random@2         blk9   diff=+0.2727 q792=0.068 q_now=0.075 clears792=False
+    random@2 - raw                       blk10  diff=-0.1712 q792=0.108 q_now=0.142 clears792=False
+  cap_all: 792 tests in the reconstructed family
+    pc:capitulation@2 - random@2         blk10  diff=+0.2697 q792=0.013 q_now=0.017 clears792=True
+    pc:capitulation@2 - datapca@2        blk10  diff=+0.1275 q792=0.144 q_now=0.217 clears792=False
+    pc:capitulation@2 - raw              blk10  diff=+0.0984 q792=0.311 q_now=0.392 clears792=False
+    pc:capitulation@2 - raw              blk9   diff=+0.0731 q792=0.568 q_now=0.629 clears792=False
+    pc:capitulation@2 - datapca@2        blk9   diff=+0.1236 q792=0.286 q_now=0.324 clears792=False
+    pc:capitulation@2 - random@2         blk9   diff=+0.2728 q792=0.059 q_now=0.075 clears792=False
+    random@2 - raw                       blk10  diff=-0.1712 q792=0.103 q_now=0.142 clears792=False
+python exit 0

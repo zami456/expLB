@@ -21,6 +21,20 @@ preprints read via abstract/HTML, so exact figures from them are preprint-grade.
 
 **Must be demoted to confirmation (both said established/adjacent):**
 
+> **CORRECTION 2026-09-24 (DF-55, Phase 6).** The row for claim **9** below rests this project's
+> **only** original contribution to that claim on *"the regex-0.91-vs-probe-0.87 quantification"*.
+> **That comparison is inverted and 0.87 has no source.** Across all 113 stored matrices containing
+> HP-KR, the raw probe diagonal is **0.9663 median** (0.96–0.98 at every headline layer), so the
+> regex at **0.9125 loses by ~0.054** — it does not beat the probe. 0.870 appears to be this
+> project's own superseded regex, which would make the comparison regex-against-itself.
+> **Source:** 113-matrix sweep, `audit/scripts/qa_w5e_O040.py`.
+> **How the claim is updated:** the contribution survives but must be restated as *"a label-free
+> denial-phrasing regex reaches 94.4% of a full 8,192-d probe's in-distribution score on the same
+> rows (0.9125 vs 0.9663)"* — a strong claim about how little the probe adds, not a claim that the
+> regex wins. Same correction is owed at `docs/NOVELTY_CHECK_PROMPT.md:113` (annotated) and
+> `docs/LAYER_PREREGISTRATION.md:93`.
+> _The row below is superseded on this point and is kept for the record._
+
 | claim | killed by |
 |---|---|
 | **7** — PC1 ≈ Assistant Axis | **Lu et al., arXiv:2601.10387.** This *is* their result, on the same Llama-3.3-70B, and our source paper cites them and reuses their residualisation. Never present as new. |
@@ -100,6 +114,18 @@ argument should be phrased against.
 - **Demote 1, 6, 7, 9, 10 to "we confirm, and for 4/7 explain the mechanism of, known effects."**
   This is the framing both reviewers independently recommended, and it converts the weakness
   (limited novelty) into the paper's actual identity: a methodological audit.
+> **CORRECTION 2026-09-24 (DF-68, Phase 6).** The bullet below states Claim 4's mechanism as
+> *"ceiling artifact, corr −0.76"*, and §4 of this file nominates Claim 4 to lead with.
+> **That correlation was withdrawn by its own evidence.** F-74 — whose verdict is HOLDS —
+> measured **−0.7684 *inside* its own coupling null** (analytic −0.7462, **P = 0.2135**) and
+> explicitly withdrew it; the clean uncoupled test (slope **−0.100**, r **−0.067**) does not
+> support it either.
+> **Source:** `kd/docs/FINDINGS.md` F-74, including its coupling-null section.
+> **How the claim is updated:** state the ceiling mechanism **without** the correlation — the
+> −0.76 is not evidence for it. If Claim 4 is to lead, it must lead on something that survives its
+> own null.
+> _The bullet below is superseded on this point and is kept for the record._
+
 - **Merge 4 and 6.** 4 = mechanism (ceiling artifact, corr −0.76). 6 = the scaling trend.
 - **Do not claim PC1 ≈ Assistant Axis.** Cite Lu et al.; present our numbers as corroboration
   plus the mechanism (half of each contrast behaves like the default assistant).

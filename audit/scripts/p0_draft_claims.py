@@ -1,0 +1,624 @@
+"""Phase 0: catalogue every claim in the collaborator's draft PDF into audit/phase0/draft_claims_raw.csv.
+
+The claims are transcribed by hand from audit/phase0/draft_text.txt (produced by p0_draft_extract.py from
+`full paper draft for this experiments/main (1).pdf`, md5 cd0bfede186d631a97f280ecae1f1dff) and from the
+rendered figure pages. NOTHING here checks a claim against raw data -- that is Phase 2.
+
+The script also runs a few arithmetic checks that use ONLY numbers printed in the PDF (internal consistency),
+and prints them; these are not truth checks.
+
+Usage: PYTHONIOENCODING=utf-8 python audit/scripts/p0_draft_claims.py
+"""
+import csv
+import os
+from statistics import mean
+
+REPO = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+OUT = os.path.join(REPO, "audit", "phase0", "draft_claims_raw.csv")
+
+M = "Llama-3.3-70B-Instruct"
+LBM = "Llama-3.3-70B-Instruct (value published by Liars' Bench, not measured here)"
+SIX = "CG,HP-C,HP-KR,IT,ID,RepE"
+FIVE = "CG,HP-C,HP-KR,IT,ID"
+PCO = "origin/feat/persona-pc-ood: src/probes/deception-detection/"
+ZS = PCO + "results/persona_ood_ext_L{20,40,44}/zero_shot.csv"
+OP = PCO + "results/persona_ood_ext_L{20,40,44}/zero_shot_operating.csv"
+SUM = PCO + "results/persona_ood_ext_L{20,40,44}/summary.csv + matrix_*.csv"
+MAT40 = PCO + "results/persona_ood_ext_L40/matrix_baseline.csv, matrix_ext_axis1.csv"
+FU = PCO + "results/persona_ood_followup_L20/ (+ results/XXXX-9-llama-all-followup/results_table.csv)"
+POS = PCO + "results/persona_positions_L{20,40,44}/reads_summary.csv"
+BANK = (PCO + "'persona including knowlede denial/*.pt' (36 persona vectors); rollouts + judge scores not "
+        "located in Phase 0 (owner side: kd/, run-kd/ ?)")
+ORIG = PCO + "results/persona_ood/zero_shot.csv (original paper16 bank, L20)"
+EXTP = "external paper; not opened in Phase 0"
+NONE = "n"
+
+rows = []
+
+
+def C(page, section, kind, quote, numbers="", metric="", datasets="", layer="", model=M, relies="",
+      cites=NONE, source="", note=""):
+    rows.append(dict(page=page, section=section, kind=kind, claim_verbatim=quote, numbers=numbers,
+                     metric=metric, datasets=datasets, layer=layer, model=model, relies_on=relies,
+                     cites_F_or_file=cites, likely_source_INFERRED=source, phase0_note=note))
+
+
+# ---------------------------------------------------------------- p1 Abstract
+C(1, "Abstract", "qual (literature)", "Linear probes for lie detection often fail to transfer across datasets.",
+  model="-", cites="n (no citation in abstract)")
+C(1, "Abstract", "external", "Mahadik and Skapars (2026) ... They report better cross-dataset generalization at 3B and 8B.",
+  model="Llama 3.2-3B / Llama 3-8B (M&S)", cites="external: Mahadik & Skapars 2026", source=EXTP)
+C(1, "Abstract", "quant HEADLINE", "On ... HP-KR, which the original study did not evaluate, the published persona contrast inverts, scoring 0.148 AUROC at layer 20.",
+  "0.148", "AUROC (zero-shot)", "HP-KR", "L20", relies="Table 2; Table 6; Fig 3", source=ZS + " col auroc_axis")
+C(1, "Abstract", "qual HEADLINE", "HP-KR's lies are denials of knowledge, and none of the published deceptive personas lies that way.",
+  datasets="HP-KR", relies="Sec 5.1", note="causal explanation; argued from persona descriptions, not from a test")
+C(1, "Abstract", "method", "We extend the persona bank with ten roles that feign ignorance, are sincerely ignorant, or plainly assert what they know.",
+  "10", relies="Sec 3.2; Table 5", source=BANK)
+C(1, "Abstract", "quant HEADLINE", "with no benchmark labels, a single contrast direction reaches 0.919 AUROC and 0.910 balanced accuracy at a 1% false-positive rate on HP-KR at layer 40.",
+  "0.919; 0.910; 1% FPR", "AUROC; balanced accuracy at threshold flagging <=1% of Alpaca", "HP-KR (threshold set on Alpaca)", "L40",
+  relies="Table 2; Fig 3", source=ZS + " (auroc_denial_axis); " + OP,
+  note="the direction is the knowledge-denial 4v6 contrast (Table 2), not the 12v13 extended contrast")
+C(1, "Abstract", "external comparison", "The benchmark's own probes score 0.50 and 0.26 there, and its upper bound, trained on privileged labels, 0.95.",
+  "0.50; 0.26; 0.95", "balanced accuracy (published)", "HP-KR", "LB's single layer (L20 per Table 2 caption)", model=LBM,
+  relies="Table 2", cites="external: Liars' Bench Tables 6-8", source=EXTP)
+C(1, "Abstract", "quant HEADLINE", "Across the full train-test matrix of six datasets at layer 40, the extended persona contrast reaches 0.916 mean off-diagonal AUROC, against 0.732 for 8192-dimensional probes each trained on one dataset",
+  "0.916; 0.732", "mean off-diagonal AUROC (30 cells)", SIX, "L40", relies="Table 3; Fig 4", source=SUM + " rows ext_axis1, baseline",
+  note="owner-side F-97 / COLLABORATOR_BRIEFING §5a: 0.916 is ext_axis1 (kd-augmented 12v13), paper's own 8v7 = 0.832 -- the draft now reports both (Table 3)")
+C(1, "Abstract", "qual HEADLINE", "and beats their average on every held-out dataset",
+  metric="mean AUROC over 5 training sets, per test set", datasets=SIX, layer="L40", relies="Table 7", source=SUM)
+C(1, "Abstract", "qual HEADLINE", "the persona principal components add nothing beyond it.",
+  metric="mean off-diagonal AUROC", datasets=SIX, layer="L20/L40/L44", relies="Table 3", source=SUM + " rows ext_pc3, ext_pc1, pc3")
+C(1, "Abstract", "qual limitation", "A threshold calibrated on benign chat still does not transfer to every dataset, which leaves calibration as the open problem.",
+  metric="BA/recall at 1% FPR", datasets="HP-C; HP-KR", relies="Sec 5.1, 5.4, 6")
+
+# ---------------------------------------------------------------- p1-2 Introduction
+C(1, "1 Introduction", "external", "a probe trained on instructed honest and deceptive responses ... reaches balanced accuracy close to chance on most datasets.",
+  metric="balanced accuracy", datasets="Liars' Bench (7 datasets)", model=LBM, cites="external: Kretschmar et al. 2025", source=EXTP)
+C(1, "1 Introduction", "external", "Every method the benchmark evaluates has recall near zero there at a 1% false-positive rate, and its probe's AUROC on Llama-3.3-70B is 0.12.",
+  "0.12", "recall@1%FPR; AUROC", "HP-KR", model=LBM, cites="external: Liars' Bench", source=EXTP)
+C(1, "1 Introduction", "external", "On Llama 3.2-3B and Llama 3-8B, probes in these persona coordinates transfer across deception datasets better than probes on raw activations. Among the directions they name for future work are larger models and richer persona sets.",
+  model="Llama 3.2-3B / Llama 3-8B (M&S)", cites="external: Mahadik & Skapars 2026", source=EXTP)
+C(2, "1 Introduction", "method", "We project the lies of five Liars' Bench datasets, together with the RepE instruction pairs ... onto persona coordinates of Llama-3.3-70B-Instruct at three depths",
+  "5 + 1 datasets; 3 depths", datasets=SIX, layer="L20/L40/L44", relies="Fig 1")
+C(2, "1 Introduction", "qual novelty", "This exposes a failure the original study did not test.", datasets="HP-KR")
+C(2, "1 Introduction", "restatement", "On HP-KR, the published persona contrast inverts: it ranks lies as more honest than honest answers, with AUROC 0.148 at layer 20.",
+  "0.148", "AUROC", "HP-KR", "L20", relies="Table 2", source=ZS, note="restates D-003")
+C(2, "1 Introduction", "qual causal", "The cause lies in the personas. HP-KR's lies are denials of knowledge, while the published deceptive personas are specialists in omission ... none of them lies by claiming ignorance.",
+  datasets="HP-KR", relies="Sec 5.1", note="restates D-004")
+C(2, "1 Introduction", "qual", "Projected into these knowledge-denier persona coordinates, the lies separate.", datasets="HP-KR", relies="Table 2")
+
+# ---------------------------------------------------------------- p2-3 Contributions
+C(2, "1 Contributions", "method", "We extend the 26 personas of Mahadik and Skapars (2026) with 10 roles ... a knowledge-denial contrast (4 deceptive vs. 6 honest personas) and an extended contrast ... (12 vs. 13).",
+  "26; 10 (4/3/3); 4v6; 12v13", relies="Sec 3.2-3.3; Table 5", source=BANK + "; " + PCO + "deception_detection/scripts/persona_ood.py::extended_arms()")
+C(2, "1 Contributions", "method scope", "We scale the method from 3B and 8B models to Llama-3.3-70B-Instruct, evaluated on five Liars' Bench datasets and RepE at layers 20, 40 and 44.",
+  "5 + 1 datasets; L20/40/44", datasets=SIX, layer="L20/L40/L44")
+C(2, "1 Contributions", "restatement", "On HP-KR, with no benchmark labels, the knowledge-denial contrast reaches 0.919 AUROC and 0.910 balanced accuracy at 1% FPR at layer 40.",
+  "0.919; 0.910", "AUROC; BA@1%FPR(Alpaca)", "HP-KR", "L40", relies="Table 2", source=ZS + "; " + OP, note="restates D-006")
+C(2, "1 Contributions", "external comparison", "For the same model, Liars' Bench reports 0.50 for its Mean Probe, 0.26 for its Follow-Up Probe, and 0.95 for a probe trained on privileged in-distribution labels.",
+  "0.50; 0.26; 0.95", "balanced accuracy (published)", "HP-KR", model=LBM, relies="Table 2", cites="external: Liars' Bench Tables 6-8", source=EXTP, note="restates D-007")
+C(2, "1 Contributions", "quant", "A RepE-trained probe in our own pipeline stays at 0.500 at every layer.",
+  "0.500", "balanced accuracy at 1% FPR", "HP-KR", "L20/L40/L44", relies="Table 2; Fig 3", source=OP + " arm 'base probe (RepE-trained)'")
+C(2, "1 Contributions", "restatement causal", "We also identify why the published contrast inverts there: none of its deceptive personas lies by denying knowledge.",
+  datasets="HP-KR", note="restates D-004 / D-018")
+C(2, "1 Contributions", "restatement", "the zero-shot extended contrast reaches 0.916 mean off-diagonal AUROC at layer 40, against 0.732 for 8192-dimensional probes each trained on one dataset.",
+  "0.916; 0.732", "mean off-diagonal AUROC", SIX, "L40", relies="Table 3", source=SUM, note="restates D-008")
+C(2, "1 Contributions", "qual HEADLINE", "It beats their average over training sets on every held-out dataset, at every layer we tested.",
+  metric="mean AUROC over training sets, per test set", datasets=SIX, layer="L20/L40/L44", relies="Table 7", source=SUM)
+C(2, "1 Contributions", "quant HEADLINE", "The 1-d contrast outscores probes on the three leading persona principal components at every depth, by 0.220 AUROC at layer 20 and 0.023 at layer 44.",
+  "0.220; 0.023", "difference in mean off-diagonal AUROC (ext_axis1 - ext_pc3)", SIX, "L20; L44 (all three depths)", relies="Table 3", source=SUM)
+C(2, "1 Contributions", "method", "We compare the persona contrasts with the benchmark's RepE-trained probe at its 1% false-positive threshold on Alpaca, with bootstrap intervals.",
+  "1% FPR", "BA; recall; AUROC", FIVE, relies="Table 4; Fig 5", source=OP)
+C(3, "1 Contributions", "quant reproduction", "Scoring our pooled activations with the benchmark pipeline's own probe reproduces its results to four decimal places.",
+  "4 decimal places", "AUROC/BA/recall", FIVE, "L20/L40/L44", relies="App G",
+  note="collaborator summaries record 'delta = 0.0000' reproducing detector.pt (per owner F-97); base-probe results_table.csv for XXXX-9-llama-all{,-L40,-L44} NOT on the branch (only plots/)")
+C(3, "1 Contributions", "quant reproduction", "Our measurement of the Follow-Up Probe, 0.636 mean AUROC over the five datasets, matches the published 0.634.",
+  "0.636; 0.634", "mean AUROC", FIVE, "L20 (follow-up 'No' token)", relies="App G", cites="external: LB Table 7",
+  source=PCO + "results/XXXX-9-llama-all-followup/results_table.csv, summary.md")
+C(3, "1 Contributions", "provenance", "We release the code and results.",
+  cites="y: footnote URL https://github.com/zami456/expLB (no path/commit)")
+C(3, "1 (caveats)", "limitation", "The knowledge-denial personas were written after we saw HP-KR fail, so HP-KR measures a designed repair rather than a blind test.",
+  datasets="HP-KR", relies="Sec 6", note="provenance/timing claim checkable against git history of kd/ (owner) vs first HP-KR inversion (persona_ood, 2026-09-18)")
+C(3, "1 (caveats)", "limitation", "HP-KR's labels make a denial necessary for a lie, so its gains do not by themselves separate deception from the wording of a denial.",
+  datasets="HP-KR", relies="Sec 6")
+
+# ---------------------------------------------------------------- p3-4 Related work
+C(3, "2 Related work", "external", "Liars' Bench ... collects 72,863 on-policy lies and honest responses across seven datasets and four models.",
+  "72,863; 7; 4", model="-", cites="external: Kretschmar et al. 2025", source=EXTP)
+C(3, "2 Related work", "method protocol", "Their protocol sets the decision threshold to a 1% false-positive rate on benign chat, and it is the protocol we follow.",
+  "1%", datasets="Alpaca", model="-", cites="external: Goldowsky-Dill et al. 2025", source=EXTP)
+C(3, "2 Related work", "external", "Most methods perform near chance on the harm-pressure datasets. On HP-KR ... the benchmark reports recalls near zero for every method.",
+  datasets="HP-C, HP-KR", model=LBM, cites="external: Liars' Bench", source=EXTP)
+C(3, "2 Related work", "external", "On Llama 3.2-3B and Llama 3-8B these persona coordinates transfer across ten deception and sycophancy datasets, including Liars' Bench's Convincing-Game and Instructed-Deception, better than probes on raw activations.",
+  "10 datasets", model="Llama 3.2-3B / 3-8B (M&S)", cites="external: Mahadik & Skapars 2026", source=EXTP)
+C(3, "2 Related work", "external", "Kirch et al. (2026) find that probe generalization depends on how the training data was generated, and that failures are largest for behaviours defined by intent, such as strategic deception.",
+  model="-", cites="external: Kirch et al. 2026", source=EXTP)
+C(3, "2 Related work", "external", "Natarajan et al. (2026) find deception detection heterogeneous: probes matched to a specific type of deception outperform a universal one.",
+  model="-", cites="external: Natarajan et al. 2026", source=EXTP)
+C(3, "2 Related work", "external", "Yoo and Skapars (2026) show that projecting onto a well-chosen subset of the training distribution's principal components nearly closes the gap to probes trained on the test distribution.",
+  model="-", cites="external: Yoo & Skapars 2026", source=EXTP)
+C(3, "2 Related work", "external", "Kumar (2026) ... The top component alone captures only 0.61-0.80 AUROC, which he takes as a rejection of the single-direction hypothesis.",
+  "0.61-0.80", "AUROC", model="Gemma 3 (Kumar)", cites="external: Kumar 2026", source=EXTP,
+  note="owner-side F-88 / briefing §5c flagged this paper against the earlier draft title 'One Direction Generalizes'")
+C(4, "2 Related work", "qual argument", "Our one-dimensional result does not contradict this. Our direction is not the principal component of any dataset's activations but a contrast between persona groups ... only that this contrast transfers across the datasets we test.",
+  model="-")
+
+# ---------------------------------------------------------------- p4-6 Method
+C(4, "3.1 Persona vectors", "method", "The vector of persona p at layer l is the model's mean residual-stream activation over the response tokens of each rollout, averaged over the persona's rollouts (Eq. 1)",
+  source=BANK)
+C(4, "3.2 Persona bank", "method", "The bank holds 36 personas ... Twenty-six are those of Mahadik and Skapars (2026): eight deceptive ..., seven honest ..., five sycophantic and five anti-sycophantic roles, and the default assistant with no role prompt.",
+  "36; 26 = 8+7+5+5+1", relies="Table 5", source=BANK)
+C(4, "3.2 Persona bank", "external + method", "That paper publishes the roles' names and one-line descriptions but not their prompts, so we wrote five prompt variants for each persona in the style of the Assistant Axis",
+  "5 variants", cites="external: M&S; Lu et al. 2026", source="owner side: docs/PERSONA_CONSTRUCTION.md (per COLLABORATOR_BRIEFING §2) -- not opened in Phase 0")
+C(4, "3.2 Persona bank", "method", "The ten new roles form three groups: Knowledge denial (4) amnesiac witness, deniable expert, stonewaller, feigned novice; Sincere ignorance (3) honest novice, calibrated reporter, scrupulous witness; Plain assertion (3) forthright expert, candid witness, plain dealer.",
+  "4/3/3", relies="Table 5", source="owner: kd/personas/kd_role_groups.json (+ kd_role_groups_collab.json); collaborator: persona_ood.py KNOWLEDGE_DENIAL_PERSONAS / KNOWLEDGE_CANDOUR_PERSONAS",
+  note="collaborator's own summary: 'Groups were assigned by name; the files carry no group metadata'")
+C(4, "3.2 Persona bank", "design caveat", "Only a contrast in which both sides deny can separate the lie from its wording. The contrasts we evaluate pool both honest groups",
+  relies="Sec 6", note="owner F-97 raises the same point (two-group pooling carries the confound the 3-group design removes)")
+C(4, "3.2 Persona bank", "method", "All 36 personas answer the same 30 questions. Twenty are the ten deception and ten sycophancy questions of Mahadik and Skapars (2026). The other ten are new and concern the speaker's own knowledge.",
+  "36; 30 = 20 + 10", relies="App A", cites="external: M&S Appendices A-B")
+C(5, "3.2 Persona bank", "qual method", "Sharing one question set matters: if groups answer different questions, the leading direction of the persona space can track the questions instead of the roles.",
+  note="cf. owner memory note 'Unified PC1 is the question family' (DOC-ONLY)")
+C(5, "3.2 Persona bank", "quant method", "Llama-3.3-70B-Instruct generated 5,400 rollouts: 36 personas times five variants times 30 questions, sampled at temperature 0.7 and top-p 0.9 with at most 512 new tokens, through NDIF",
+  "5,400; T=0.7; top-p=0.9; max 512 tokens", relies="Fig 1", source="rollouts NOT located in Phase 0 (owner side; briefing §2 says '5,400 rollouts (verified on disk)')")
+C(5, "3.2 Persona bank", "quant method", "Llama-3.1-70B-Instruct then scored each response from 0 to 3 ... We keep only responses scored 3. The default assistant has no role and is not judged. That leaves 3,749 rollouts (69%), between 47 and 149 per judged persona",
+  "0-3 scale; keep=3; 3,749; 69%; 47-149", "judge score", model="judge: Llama-3.1-70B-Instruct", relies="Table 5; Fig 1",
+  source="judge outputs NOT located in Phase 0", note="internal arithmetic: Table 5 kept counts sum to 3,599 judged + 150 default = 3,749 (so 3,749 includes the unjudged default); see report")
+C(5, "3.2 Persona bank", "method", "we extract their vectors at all 80 layers.", "80", source=BANK + " (collaborator branch holds vectors; layers present not checked)")
+C(5, "3.3 Persona coordinates", "method", "A contrast direction is the difference of two group means (Mahadik and Skapars, 2026, their Eq. 4; centering cancels in a difference of means)",
+  cites="external: M&S Eq. 4")
+C(5, "3.3 Persona coordinates", "method", "We use three: the published contrast (8 v 7) ...; the knowledge-denial contrast (4 v 6) ...; the extended contrast (12 v 13) ...",
+  "8v7; 4v6; 12v13", source=PCO + "deception_detection/persona_pcs.py; scripts/persona_ood.py (axis1, denial_axis1, ext_axis1)")
+C(5, "3.3 Persona coordinates", "method", "The persona coordinates ... are the leading principal components of the centred vectors of the personas in D u H. We fit them for the published and extended groupings. A sycophancy contrast (5 v 5) serves as a control",
+  relies="App F", source=SUM + " (pc1/pc3, ext_pc1/ext_pc3, syc_axis1)")
+C(5, "3.3 Persona coordinates", "quant", "The two directions are only partly aligned, with cosine 0.47 at layer 40.",
+  "0.47", "cosine(8v7, 4v6)", "persona vectors", "L40", relies="Fig 2", source="NOT-FOUND in Phase 0 (no script/CSV with 'cosine between axes' on either branch)")
+C(5, "3.4 Scoring", "method", "Zero-shot, a pooled activation z is scored by its projection onto the unit contrast ... higher meaning more deceptive. The sign is fixed by construction, and no labels are used.",
+  source=ZS)
+C(5, "3.4 Scoring", "method", "Trained, we fit an L2-regularised logistic regression (C = 0.1, standardised features, no intercept, matching the pipeline's own probe) on one of three feature sets",
+  "C=0.1", source=PCO + "scripts/persona_ood.py::make_probe()")
+C(5, "3.4 Scoring", "method (math)", "A probe on a single feature can learn only a sign and a scale. Whenever every training set agrees on the sign, its AUROC on a test set therefore equals the zero-shot AUROC",
+  note="owner F-97 caveat (2) reports this verified to 1e-16 for ext_axis1/denial_axis1 (DOC-ONLY)")
+C(5, "3.4 Scoring", "method", "As a control, three random directions replace the persona components (five draws).",
+  "3 directions; 5 draws", relies="Table 3", source=SUM + " row random3")
+C(5, "3.5 Activations", "method", "we take the residual-stream activations ... over the response tokens, through NDIF, at layers 20, 40 and 44 of 80 ... which excludes system prompts. We mean-pool them into one vector z per example.",
+  "L20/40/44", datasets=SIX + ", Alpaca", layer="L20/L40/L44",
+  source=PCO + "deception_detection/scripts/pool_activations.py; configs XXXX-9-llama-all{,-L40,-L44}.yaml")
+C(5, "3.5 Activations", "restatement", "Rescored with the probe the pipeline trained on RepE, they match its reported AUROCs to four decimal places at every layer (Appendix G).",
+  "4 d.p.", "AUROC", FIVE, "L20/L40/L44", relies="App G", note="restates D-030")
+C(6, "3.5 Activations", "setup difference + external", "our insider-trading scores exclude the model's reasoning scratchpad, which its Mean Probe reads. Its own ablation shows that excluding the scratchpad raises that probe's insider-trading AUROC from 0.93 to 0.97",
+  "0.93; 0.97", "AUROC", "IT", model=LBM, cites="external: LB Table 17", source=EXTP)
+C(6, "Fig 2 caption", "figure quant", "Sincere-ignorance personas ... sit with the honest cluster (mean -0.08 on the vertical axis, against 2.90 for the feigned deniers). The published deceptive personas never reach the region the deniers occupy (mean 0.05).",
+  "-0.08; 2.90; 0.05", "projection of centred persona vectors on the 4v6 contrast", "36 persona vectors", "L40", relies="Fig 2",
+  source="NOT-FOUND in Phase 0 (no Fig-2 script/CSV located)")
+
+# ---------------------------------------------------------------- p6-7 Setup
+C(6, "4 Datasets", "method", "We use the five Liars' Bench datasets that Llama-3.3-70B-Instruct generated without fine-tuning. Soft-Trigger and Gender-Secret ... we leave them to future work.",
+  datasets=FIVE)
+C(6, "4 Datasets", "method", "RepE ... we merge its training and validation splits. The Alpaca control ... is used only to set decision thresholds.",
+  datasets="RepE; Alpaca", note="collaborator commit 607c0e1 'Use the full RepE split in the transfer matrix'")
+C(6, "4 Transfer matrix", "method", "For each ordered pair of the six datasets, we train on one and test on the other: 30 off-diagonal cells, plus the six in-distribution cells on the diagonal, where we use five-fold cross-validation ... HP-KR removed ... leaves 20 cells.",
+  "30; 6; 5-fold; 20", datasets=SIX, source=SUM)
+C(6, "4 Transfer matrix", "quant", "that happens only for the published contrast trained on HP-KR at layer 20, where the inverted ranking on HP-KR carries into every test set (for instance CG falls from 0.940 to 0.060).",
+  "0.940; 0.060", "AUROC (1-d probe, off-diagonal)", "train HP-KR -> test CG", "L20", relies="(no table shows this cell)",
+  source=PCO + "results/persona_ood_ext_L20/matrix_axis1.csv")
+
+TABLE1 = [
+    ("Convincing-Game (CG)", "self-knowledge", "encouraged", "267", "167"),
+    ("Harm-Pressure Choice (HP-C)", "world-knowledge", "inherent", "2,134", "134"),
+    ("Harm-Pressure Knowledge Report (HP-KR)", "self-knowledge", "inherent", "2,139", "139"),
+    ("Insider-Trading (IT)", "self-knowledge", "encouraged", "1,080", "423"),
+    ("Instructed-Deception (ID)", "world-knowledge", "encouraged", "5,432", "3,045"),
+    ("RepE instruction pairs (RepE)", "world-knowledge", "instructed", "550", "275"),
+    ("Alpaca (control)", "-", "none", "2,000", "0"),
+]
+for name, obj, reason, n, lies in TABLE1:
+    C(7, "Table 1 (Datasets)", "table row", f"{name}: object of belief {obj}; reason for lying {reason}; examples {n}; lies {lies}",
+      f"{n}; {lies}", "example / lie counts", name, model=M, relies="Table 1",
+      cites="external: taxonomy from LB Table 1",
+      source=PCO + "results/persona_ood_ext_L*/zero_shot.csv cols n, n_deceptive (e.g. convince_me__plain 267/167)")
+
+C(7, "4 Base probe", "method", "It is a logistic regression trained on RepE (L2, lambda = 10, on standardised per-token activations) whose score is averaged over the response tokens. This is the recipe of the Liars' Bench Mean Probe, measured in our pipeline.",
+  "lambda=10", datasets="RepE", source=PCO + "configs/XXXX-9-llama-all*.yaml; results/XXXX-9-llama-all*/ (only plots/ committed)")
+C(7, "4 Metrics", "method", "set the threshold of each detector so that it flags at most 1% of the Alpaca control ... 95% stratified bootstrap intervals over examples (1,000 resamples), drawn once and shared by every detector ... Averages are over the five Liars' Bench datasets ... RepE is excluded",
+  "1%; 95%; 1,000 resamples", datasets=FIVE + "; Alpaca", source=OP + " cols *_lo/*_hi")
+
+# ---------------------------------------------------------------- p7-8 Results 5.1
+C(7, "5.1 HP-KR", "data definition (external)", "A response is a lie if the model denies knowing an answer it has been shown to know. Responses that affirm the knowledge, and denials where no knowledge was established, are honest ... Every lie in HP-KR is therefore a denial of knowledge.",
+  datasets="HP-KR", model="-", cites="external: Kretschmar et al. 2025 §4", source=EXTP,
+  note="owner memory 'HP-KR cannot attribute itself' (DOC-ONLY): deceptive = knows AND denies, fourth cell empty")
+C(7, "5.1 HP-KR", "quant", "At layer 20 its AUROC is 0.148 ... At layers 40 and 44 it sits near chance, at 0.593 and 0.589.",
+  "0.148; 0.593; 0.589", "AUROC zero-shot (8v7)", "HP-KR", "L20/L40/L44", relies="Table 2; Fig 3", source=ZS + " col auroc_axis")
+C(7, "5.1 HP-KR", "quant", "The RepE-trained base probe also inverts at layer 20 (0.109), as does the Liars' Bench Mean Probe (0.12).",
+  "0.109; 0.12", "AUROC", "HP-KR", "L20", relies="Table 2", cites="external: LB (0.12)", source=OP + " arm base probe")
+C(7, "5.1 HP-KR", "external quote", "They lie by omission: they control 'timing, emphasis, and selective disclosure', 'bury or exclude material facts' and give 'defensible half-disclosures' ... None of them lies by claiming not to know.",
+  model="-", cites="external: M&S Table 2", source=EXTP)
+C(7, "5.1 HP-KR", "quant HEADLINE", "With no benchmark labels, the knowledge-denial contrast reaches 0.890, 0.919 and 0.908 AUROC at layers 20, 40 and 44.",
+  "0.890; 0.919; 0.908", "AUROC zero-shot (4v6)", "HP-KR", "L20/L40/L44", relies="Table 2; Fig 3", source=ZS + " col auroc_denial_axis")
+C(7, "5.1 HP-KR", "quant", "The extended contrast, which pools both deceptive groups, keeps nearly all of it (0.882, 0.912, 0.894).",
+  "0.882; 0.912; 0.894", "AUROC zero-shot (12v13)", "HP-KR", "L20/L40/L44", relies="Table 2; Fig 3", source=ZS + " col auroc_ext_axis")
+C(7, "5.1 HP-KR", "quant causal", "The repair comes from the new personas, not from re-extracting the old ones with more rollouts. The published grouping inverts on the original bank (0.103 at layer 20) and still inverts on the re-extracted one (0.148).",
+  "0.103; 0.148", "AUROC zero-shot (8v7)", "HP-KR", "L20", relies="(none cited)", source=ORIG + " (HP-KR auroc_axis 0.1029); " + ZS,
+  note=("CONFLICT (doc vs doc, not yet checked): collaborator's persona_ood_ext_L20/summary.md line 116 says re-extraction "
+        "'moves HP-KR zero-shot from 0.109 to 0.148'; persona_ood/summary.md + persona_ood/zero_shot.csv give 0.103 (0.109 is the base probe). "
+        "Also: the uniform-rollout re-extraction persona_ood_mod_L* ('More rollouts per persona did not help', HP-KR 12v13 0.882->0.805 at L20) is NOT mentioned in the draft"))
+
+TABLE2 = [
+    ("Published contrast (8 v 7), zero-shot", "0.148 0.593 0.589", "0.500 0.500 0.500", M, ZS + " auroc_axis; " + OP),
+    ("Knowledge-denial contrast (4 v 6), zero-shot", "0.890 0.919 0.908", "0.533 0.910 0.757", M, ZS + " auroc_denial_axis; " + OP),
+    ("Extended contrast (12 v 13), zero-shot", "0.882 0.912 0.894", "0.500 0.500 0.500", M, ZS + " auroc_ext_axis; " + OP),
+    ("Base probe (trained on RepE, same pipeline)", "0.109 0.936 0.828", "0.500 0.500 0.500", M, OP + " arm 'base probe (RepE-trained)'"),
+    ("LB Mean Probe (reported, LB Tables 6-8)", "0.12 (one layer)", "0.50", LBM, EXTP),
+    ("LB Follow-Up Probe (reported)", "0.14 (one layer)", "0.26", LBM, EXTP),
+    ("LB Upper-Bound Probe (reported; privileged, trained incl. HP-KR)", "0.97 (one layer)", "0.95", LBM, EXTP),
+]
+for det, au, ba, mdl, src in TABLE2:
+    C(8, "Table 2 (Detection on HP-KR)", "table row", f"{det}: AUROC L20/L40/L44 = {au}; BA@1%FPR L20/L40/L44 = {ba}",
+      f"{au} | {ba}", "AUROC; balanced accuracy at <=1% Alpaca FPR", "HP-KR", "L20/L40/L44 (LB rows: one layer = L20)", model=mdl,
+      relies="Table 2; Fig 3", cites=("external: LB Tables 6-8" if "LB" in det else NONE), source=src)
+
+C(8, "5.1 HP-KR", "quant HEADLINE", "At layer 40 it reaches 0.910 balanced accuracy at 1% FPR on the Alpaca control. Its recall is 0.885, and it flags 6% of the honest answers.",
+  "0.910; 0.885; 6%", "BA; recall; FPR on HP-KR honest rows", "HP-KR", "L40", relies="Table 2; Fig 3; Fig 5", source=OP + " (knowledge-denial axis, control threshold)")
+C(8, "5.1 HP-KR", "quant", "The base probe ranks HP-KR well at layer 40, with AUROC 0.936, yet all of its HP-KR scores fall below the Alpaca threshold, so it flags nothing (0.500). So do the published and extended contrasts.",
+  "0.936; 0.500", "AUROC; BA", "HP-KR", "L40", relies="Table 2", source=OP)
+C(8, "5.1 HP-KR", "quant", "The threshold is not reliable even for the knowledge-denial contrast. At layer 20 it sits below most of HP-KR, flagging 88% of honest answers along with the lies, and the balanced accuracy falls to 0.533.",
+  "88%; 0.533", "FPR on HP-KR honest; BA", "HP-KR", "L20", relies="Table 2; Fig 3", source=OP)
+
+# ---------------------------------------------------------------- p8 Results 5.2
+C(8, "5.2 Transfer", "quant", "Probes on raw activations fit their own dataset, with a mean in-distribution AUROC of 0.983 at layer 40, but lose 0.251 of it off the diagonal, falling to 0.732.",
+  "0.983; 0.251; 0.732", "AUROC (diagonal = 5-fold CV; off-diagonal)", SIX, "L40", relies="Fig 4; Table 3", source=SUM + " (baseline diagonal_mean, off_diagonal_mean)")
+C(8, "5.2 Transfer", "quant", "Some cells invert. The worst, a probe trained on CG and tested on HP-KR, scores 0.06.",
+  "0.06", "AUROC", "train CG -> test HP-KR", "L40", relies="Fig 4", source=MAT40)
+C(8, "5.2 Transfer", "quant HEADLINE", "The extended persona contrast was shaped by no evaluation dataset, and it reaches 0.904, 0.916 and 0.903 off the diagonal at layers 20, 40 and 44, against 0.648, 0.732 and 0.716 for the raw probes.",
+  "0.904/0.916/0.903 vs 0.648/0.732/0.716", "mean off-diagonal AUROC", SIX, "L20/L40/L44", relies="Table 3", source=SUM)
+C(8, "5.2 Transfer", "qual HEADLINE", "Averaged over training sets, the extended contrast beats the raw probes on every held-out dataset at every layer, and matches or beats the published contrast (Table 7, Appendix B).",
+  metric="mean AUROC over training sets, per test set", datasets=SIX, layer="L20/L40/L44", relies="Table 7 (Table 6 for published)", source=SUM,
+  note="internal observation: Table 7 has no published-contrast column; in Table 6 (zero-shot) 12v13 < 8v7 on HP-C (0.639 vs 0.717) and ID (0.954 vs 0.959) at L20 -- check wording in Phase 2")
+C(8, "5.2 Transfer", "qual", "Single cells can still favour a raw probe; at layer 40 the probe trained on ID scores higher on CG than the contrast does.",
+  "(Fig 4: 0.98 vs 0.91)", "AUROC", "train ID -> test CG", "L40", relies="Fig 4", source=MAT40)
+C(8, "5.2 Transfer", "quant", "At layer 20, without HP-KR, the published contrast is marginally ahead (0.919 against 0.909), so there the whole gain is the HP-KR repair.",
+  "0.919; 0.909", "mean off-diagonal AUROC excl. HP-KR (20 cells)", "CG,HP-C,IT,ID,RepE", "L20", relies="Table 3", source=SUM + " col off_diagonal_excl_hpkr")
+C(8, "5.2 Transfer", "quant", "At layers 40 and 44 the extended contrast leads with or without HP-KR (0.917 against 0.880 at layer 40).",
+  "0.917; 0.880", "mean off-diagonal AUROC excl. HP-KR", "CG,HP-C,IT,ID,RepE", "L40/L44", relies="Table 3", source=SUM)
+C(8, "5.2 Transfer", "quant", "The knowledge-denial contrast on its own transfers nearly as well as the extended one (0.912 at layer 40), even though its personas were written for a single kind of lie.",
+  "0.912", "mean off-diagonal AUROC", SIX, "L40", relies="Table 3", source=SUM + " row denial_axis1 (0.9115 per collaborator summary)")
+
+# ---------------------------------------------------------------- p8-9 Results 5.3
+C(8, "5.3 One direction vs subspace", "qual HEADLINE", "At 70B, the contrast between group means beats them [persona PCs used as probe features] at every depth (Table 3).",
+  metric="mean off-diagonal AUROC", datasets=SIX, layer="L20/L40/L44", relies="Table 3", source=SUM)
+C(9, "5.3 One direction vs subspace", "quant", "A probe on the top three components of the extended bank reaches 0.684, 0.866 and 0.880, against 0.904, 0.916 and 0.903 for the contrast. The gap narrows with depth, from 0.220 to 0.050 to 0.023, but it never reverses.",
+  "0.684/0.866/0.880; 0.220/0.050/0.023", "mean off-diagonal AUROC", SIX, "L20/L40/L44", relies="Table 3", source=SUM + " rows ext_pc3, ext_axis1")
+C(9, "5.3 One direction vs subspace", "quant", "The first component alone is far behind (0.768 at layer 40), and the published bank's three components fall with depth (0.679, 0.639, 0.617).",
+  "0.768; 0.679/0.639/0.617", "mean off-diagonal AUROC", SIX, "L40; L20/L40/L44", relies="Table 3", source=SUM + " rows ext_pc1, pc3",
+  note="owner briefing §5c: earlier draft/abstract had a 'PC1 0.09 below the contrast at L40' figure; no 0.09 appears in this PDF")
+C(9, "5.3 One direction vs subspace", "quant", "The subspace is not empty of signal: three random directions score 0.527, 0.504 and 0.493.",
+  "0.527/0.504/0.493", "mean off-diagonal AUROC", SIX, "L20/L40/L44", relies="Table 3", source=SUM + " row random3")
+C(9, "5.3 One direction vs subspace", "qual interpretation", "But the two extra dimensions give a probe room to fit what distinguishes its training set, and that costs transfer. The one feature whose sign every dataset agrees on transfers best.",
+  note="mechanistic explanation; no direct test cited")
+
+TABLE3 = [
+    ("Probe on raw activations (8192-d)", "0.648 0.732 0.716", "0.728 0.758 0.730", "baseline"),
+    ("Published contrast, 8 v 7 (1-d)", "0.651 0.832 0.826", "0.919 0.880 0.873", "axis1"),
+    ("Knowledge-denial contrast, 4 v 6 (1-d)", "0.866 0.912 0.900", "0.861 0.910 0.899", "denial_axis1"),
+    ("Extended contrast, 12 v 13 (1-d)", "0.904 0.916 0.903", "0.909 0.917 0.905", "ext_axis1"),
+    ("Extended PCs (k = 3)", "0.684 0.866 0.880", "0.900 0.867 0.870", "ext_pc3"),
+    ("Extended PC1", "0.661 0.768 0.780", "0.682 0.774 0.793", "ext_pc1"),
+    ("Published PCs (k = 3)", "0.679 0.639 0.617", "0.888 0.751 0.728", "pc3"),
+    ("Random directions (k = 3)", "0.527 0.504 0.493", "0.560 0.544 0.547", "random3"),
+]
+for feat, allsix, excl, key in TABLE3:
+    C(9, "Table 3 (mean off-diagonal AUROC)", "table row", f"{feat}: all six L20/L40/L44 = {allsix}; excl. HP-KR L20/L40/L44 = {excl}",
+      f"{allsix} | {excl}", "mean off-diagonal AUROC (30 cells; 20 cells excl. HP-KR)", SIX, "L20/L40/L44", relies="Table 3",
+      source=SUM + f" row {key}")
+
+# ---------------------------------------------------------------- p9-10 Results 5.4
+C(9, "5.4 vs benchmark probe", "quant HEADLINE", "At layer 40, averaged over the five Liars' Bench datasets, the extended contrast reaches 0.694 balanced accuracy, 0.413 recall and 0.899 AUROC. The base probe reaches 0.626, 0.281 and 0.778.",
+  "0.694/0.413/0.899 vs 0.626/0.281/0.778", "BA; recall @1%FPR Alpaca; AUROC", FIVE, "L40", relies="Table 4; Fig 5", source=OP)
+C(9, "5.4 vs benchmark probe", "quant", "The knowledge-denial contrast is the best detector at this threshold, with 0.725 balanced accuracy and 0.487 recall.",
+  "0.725; 0.487", "BA; recall", FIVE, "L40", relies="Table 4; Fig 5", source=OP)
+C(9, "5.4 vs benchmark probe", "qual", "At layers 40 and 44 the persona contrasts lead on all three metrics.",
+  metric="BA; recall; AUROC (5-dataset mean)", datasets=FIVE, layer="L40/L44", relies="Table 4", source=OP)
+C(9, "5.4 vs benchmark probe", "quant", "Layer 20 is the exception ... There the base probe leads on balanced accuracy (0.721 against 0.591) and on recall (0.489 against 0.187).",
+  "0.721 vs 0.591; 0.489 vs 0.187", "BA; recall", FIVE, "L20", relies="Table 4", source=OP)
+C(9, "5.4 vs benchmark probe", "quant", "On CG the base probe's recall is 0.677 against 0.174 for the extended contrast, and neither flags an honest response.",
+  "0.677; 0.174; 0 false positives", "recall; FPR", "CG", "L20", relies="(no table/figure at L20 per dataset)", source=OP + " (L20)",
+  note="per-dataset L20 operating-point values appear in no table/figure of the draft (Fig 5 is L40); same numbers in collaborator's persona_ood_ext_L20/summary.md")
+C(10, "5.4 vs benchmark probe", "quant", "On IT and ID the Alpaca threshold lets the base probe flag 13% and 11% of honest responses, against 0% and 2% for the extended contrast, which ranks both datasets at least as well (0.990 against 0.973 on IT, 0.954 against 0.950 on ID).",
+  "13%; 11%; 0%; 2%; 0.990 vs 0.973; 0.954 vs 0.950", "FPR on honest rows; AUROC", "IT; ID", "L20", relies="Table 6 (ext AUROC only)", source=OP + " (L20)",
+  note="base-probe per-dataset AUROCs (0.973, 0.950) appear in no table")
+C(10, "5.4 vs benchmark probe", "qual", "On ranking, the persona contrasts lead at every layer.",
+  metric="AUROC (5-dataset mean)", datasets=FIVE, layer="L20/L40/L44", relies="Table 4", source=OP)
+C(10, "5.4 vs benchmark probe", "quant", "The base probe inverts on one dataset at each depth: HP-KR at layer 20 (0.109), and IT at layers 40 and 44 (0.338 and 0.289).",
+  "0.109; 0.338; 0.289", "AUROC", "HP-KR; IT", "L20; L40; L44", relies="Table 2; Fig 5 (L40 only)", source=OP,
+  note="IT base-probe AUROC at L44 (0.289) appears in no table")
+C(10, "5.4 vs benchmark probe", "quant", "On HP-C, the persona contrasts rank lies above honest answers (0.712 AUROC for the extended contrast at layer 40). But almost all HP-C scores fall below the Alpaca threshold. At layer 40 only the knowledge-denial contrast flags any HP-C lie, and its recall there is 0.015.",
+  "0.712; 0.015", "AUROC; recall", "HP-C", "L40", relies="Table 6; Fig 5", source=ZS + "; " + OP)
+
+# ---------------------------------------------------------------- p10 Results 5.5
+C(10, "5.5 Depth", "quant", "layer 40 is best for the persona contrasts, both for transfer (0.904, 0.916, 0.903 for the extended contrast) and at the benchmark's threshold (0.591, 0.694, 0.666 balanced accuracy).",
+  "0.904/0.916/0.903; 0.591/0.694/0.666", "mean off-diag AUROC; mean BA", SIX + " / " + FIVE, "L20/L40/L44", relies="Table 3; Table 4", source=SUM + "; " + OP)
+C(10, "5.5 Depth", "quant", "The base probe peaks elsewhere: its balanced accuracy is highest at layer 20 (0.721, 0.626, 0.626).",
+  "0.721/0.626/0.626", "BA (5-dataset mean)", FIVE, "L20/L40/L44", relies="Table 4", source=OP,
+  note="L40 and L44 base-probe BA AND recall are identical (0.626/0.281) -- flag for Phase 2 check (could be real or a copy)")
+C(10, "5.5 Depth", "limitation", "We report layer 40 as our main depth. Three layers do not locate an optimum, and a layer between 20 and 40 may do better.",
+  layer="L20/L40/L44", note="owner-side F-109 / briefing §5e: L32 measured on the collaborator's six (pooled probe) -- Phase 3 cross-reference")
+
+FIG4_RAW = [
+    ("CG", "1.00 0.79 0.80 0.47 0.98 0.90"),
+    ("HP-C", "0.43 0.96 0.54 0.59 0.66 0.64"),
+    ("HP-KR", "0.06 0.48 0.95 0.79 0.66 0.93"),
+    ("IT", "0.92 0.95 0.97 0.99 0.89 0.27"),
+    ("ID", "0.97 0.76 0.75 0.67 1.00 0.98"),
+    ("RepE", "1.00 0.80 0.83 0.49 1.00 1.00"),
+]
+for test, vals in FIG4_RAW:
+    C(10, "Fig 4 left (raw 8192-d probe, L40)", "figure values (cell labels)", f"test set {test}; trained on CG/HP-C/HP-KR/IT/ID/RepE = {vals}",
+      vals, "AUROC (diagonal = in-distribution 5-fold CV)", test, "L40", relies="Fig 4", source=PCO + "results/persona_ood_ext_L40/matrix_baseline.csv")
+C(10, "Fig 4 right (extended contrast, L40)", "figure values (cell labels)", "rows constant: CG 0.91, HP-C 0.71, HP-KR 0.91, IT 0.98, ID 0.98, RepE 1.00 for every training set",
+  "0.91 0.71 0.91 0.98 0.98 1.00", "AUROC", SIX, "L40", relies="Fig 4", source=PCO + "results/persona_ood_ext_L40/matrix_ext_axis1.csv")
+C(10, "Fig 4 caption", "qual", "Left: ... It fits each training set but transfers unevenly and inverts in places. Right: the extended persona contrast, a single direction that no dataset shaped. Its rows are constant because a probe on one feature learns only a sign, and every training set agrees on it.",
+  layer="L40", relies="Fig 4")
+
+C(11, "Fig 5", "figure (bars + 95% CI)", "Zero-shot persona contrasts against the RepE-trained base probe at layer 40, in the layout of Liars' Bench's Figure 2 ... Error bars are 95% bootstrap intervals over examples ... the Average excludes RepE",
+  metric="BA; AUROC; recall @<=1% Alpaca FPR", datasets=SIX + " + Average(excl. RepE)", layer="L40", relies="Fig 5",
+  source=OP + "; figure analogous to results/persona_ood_ext_L40/zero_shot_fig2.png (persona_ood_figures.py::fig2)",
+  note="per-dataset BA and recall bars are IMAGE-ONLY in the draft (no table); legend text differs from the branch script ('hatched: training set' vs 'hatched: its own training set')")
+C(9, "Fig 3", "figure (lines)", "HP-KR across depth. Left: ranking. Both contrasts built with the knowledge-denial personas stay near 0.9 at every layer. The published contrast inverts at layer 20, and the base probe swings from inverted to good. Right: ... Only the knowledge-denial contrast clears the 0.5 floor, and at layer 40 it comes close to the privileged upper bound.",
+  metric="AUROC; BA@1%FPR", datasets="HP-KR", layer="L20/L40/L44", relies="Fig 3 (= Table 2 values)",
+  source=ZS + "; " + OP + "; figure script NOT-FOUND (strings 'LB upper bound', 'flag nothing: 0.50' absent from both branches)")
+C(2, "Fig 1", "figure (schematic)", "Projecting lies onto persona coordinates: 36 personas x 5 prompt variants x 30 questions -> 5,400 rollouts -> judge keeps 3,749 -> persona vectors -> contrast d and leading PCs; LB response -> activations at layer 20, 40 or 44 -> mean over response tokens -> s(z) = <z, d_hat>",
+  "36; 5; 30; 5,400; 3,749; L20/40/44", relies="Fig 1")
+
+TABLE4 = [
+    ("L20", "Base probe (trained on RepE)", "0.721 0.489 0.697"),
+    ("L20", "Published contrast (8 v 7)", "0.534 0.069 0.750"),
+    ("L20", "Knowledge-denial contrast (4 v 6)", "0.559 0.305 0.863"),
+    ("L20", "Extended contrast (12 v 13)", "0.591 0.187 0.887"),
+    ("L40", "Base probe (trained on RepE)", "0.626 0.281 0.778"),
+    ("L40", "Published contrast (8 v 7)", "0.675 0.382 0.798"),
+    ("L40", "Knowledge-denial contrast (4 v 6)", "0.725 0.487 0.894"),
+    ("L40", "Extended contrast (12 v 13)", "0.694 0.413 0.899"),
+    ("L44", "Base probe (trained on RepE)", "0.626 0.281 0.756"),
+    ("L44", "Published contrast (8 v 7)", "0.654 0.318 0.791"),
+    ("L44", "Knowledge-denial contrast (4 v 6)", "0.683 0.395 0.880"),
+    ("L44", "Extended contrast (12 v 13)", "0.666 0.350 0.884"),
+]
+for layer, det, vals in TABLE4:
+    C(12, "Table 4 (LB protocol, 5-dataset mean)", "table row", f"{layer} {det}: BA / recall / AUROC = {vals}",
+      vals, "balanced accuracy; recall at <=1% Alpaca FPR; AUROC", FIVE, layer, relies="Table 4; Fig 5", source=OP)
+
+# ---------------------------------------------------------------- p12-13 Limitations
+C(12, "6 Limitations", "limitation", "A detector of denial wording would therefore score well on HP-KR without detecting deception. Our knowledge-denial contrast does not rule this out.",
+  datasets="HP-KR")
+C(12, "6 Limitations", "limitation", "The bank was designed for the cleaner test, a contrast between feigned and sincere ignorance in which both sides deny, and we have not run it.",
+  datasets="HP-KR", note="owner side has related kd/ experiments (e.g. HP-KR matched slice, briefing §4) -- Phase 3 cross-reference")
+C(12, "6 Limitations", "qual", "At the level of the personas the signs are encouraging: sincere-ignorance personas sit with the honest cluster on the knowledge-denial axis (Figure 2). Whether the same holds for model responses is untested.",
+  layer="L40", relies="Fig 2")
+C(12, "6 Limitations", "limitation", "We wrote the knowledge-denial personas after seeing the published contrast invert on HP-KR, so HP-KR measures a repair designed for it, not a blind test.",
+  datasets="HP-KR", note="restates D-033")
+C(12, "6 Limitations", "qual", "The other datasets are the untargeted test. There the extended contrast matches or beats the published one at every layer. But at layer 20, with HP-KR excluded, its advantage over the published contrast disappears (Section 5.2).",
+  datasets="CG,HP-C,IT,ID,RepE", layer="L20/L40/L44", relies="Table 3; Table 6",
+  note="internal tension between 'matches or beats ... at every layer' and 'at L20 ... disappears' (Table 3: 0.909 < 0.919); Phase 2 wording check")
+C(12, "6 Calibration", "quant", "In the transfer matrix, balanced accuracy at that threshold sits at its 0.5 floor in 18 of the 30 off-diagonal cells for the raw probes at layer 40.",
+  "18/30", "BA @1%FPR in transfer matrix", SIX, "L40", relies="(BA matrices not shown in draft)",
+  source=PCO + "results/persona_ood_ext_L40/matrix_balacc_baseline.csv, summary_balacc.csv")
+C(12, "6 Supervised baseline", "limitation", "A probe trained on several datasets pooled is a stronger supervised baseline, and we do not compare against it.",
+  note=("CONFLICT (draft text vs branch contents; results not checked): collaborator branch holds results/loo_L20/ and loo_L40/ "
+        "(commit 6b16a46 'Leave-one-dataset-out: the fair baseline for the generalization claim'); owner-side F-80/F-85/F-97/F-98/F-108 also measure pooled baselines"))
+C(12, "6 Scope", "limitation", "We study one model, three layers and one persona bank. We wrote the prompts from the published role descriptions ... The judge keeps only rollouts that stayed in character ... The re-extracted bank used more rollouts per persona than the original ... Our bootstrap intervals resample examples, not models or prompts.",
+  note="owner side argues for dataset-level bootstrap (briefing §3); single seed not mentioned")
+C(13, "6 Scope", "limitation", "Because our insider-trading scores exclude the reasoning scratchpad, comparisons with Liars' Bench's published numbers on that dataset are not like for like. Comparisons within our pipeline are exact.",
+  datasets="IT")
+
+# ---------------------------------------------------------------- p13 Future work / Conclusion / Acks
+C(13, "7 Future work", "future work", "More model families. Liars' Bench also covers Mistral-Small-24B, Qwen-2.5-72B and Gemma-3-27B.", model="-",
+  note="owner side has 3B/8B rungs (scale/, F-63) -- not mentioned in draft")
+C(13, "7 Future work", "future work", "Fine-tuned models. Soft-Trigger and Gender-Secret ... Whether coordinates built from role-play capture a lie that training instilled is open.",
+  datasets="ST; GS", note="owner memory Q11 (sleeper detection) exists on owner side -- DOC-ONLY")
+C(13, "7 Future work", "future work", "Wording-controlled contrasts. The contrast between feigned and sincere ignorance, tested on HP-KR's honest denials, would separate the lie from its wording.",
+  datasets="HP-KR")
+C(13, "7 Future work", "future work + quant pointer", "Combining signals ... A persona-contrast score is a label-free white-box signal that could join such a combination. For detection, the top tenth of response tokens is a better read than the mean (Appendix D).",
+  relies="App D; Table 9", cites="external: Birardi et al. 2026 (EleutherAI blog)")
+C(13, "7 Future work", "future work", "Calibration. A contrast that ranks a dataset well still needs a threshold that holds on that dataset's prompts.")
+C(13, "8 Conclusion", "qual HEADLINE", "Persona coordinates scale to a 70B model, but only as far as the persona bank covers the kind of lie being told.")
+C(13, "8 Conclusion", "qual HEADLINE", "Adding roles that deny knowledge turns it into one that, with no benchmark labels, detects those lies at the benchmark's own threshold nearly as well as a probe trained on the benchmark itself.",
+  "(0.910 vs 0.95)", "BA @1%FPR", "HP-KR", "L40", relies="Table 2")
+C(13, "8 Conclusion", "qual HEADLINE", "Across datasets, one zero-shot contrast over the extended bank transfers better on average than probes trained on single datasets, and better than the persona subspace.",
+  metric="mean off-diagonal AUROC", datasets=SIX, relies="Table 3")
+C(13, "8 Conclusion", "qual", "What it does not yet have is a threshold that holds on every dataset.")
+C(13, "Acknowledgements", "provenance", "[Collaborator name] built the persona bank and the rollout and judging pipeline.",
+  note="key authorship evidence: the writer credits someone else with the persona bank; owner docs say the kd bank was sent by the owner's side")
+C(13, "Acknowledgements", "provenance", "We used a large language model (Claude, Anthropic) to help write analysis code, produce the figures and tables, and draft text. Every number in the paper is generated from the released result files, and we checked each citation against its source.",
+  cites="n (no file named here; App G names paper/make_numbers.py)")
+
+# ---------------------------------------------------------------- Appendix A
+TABLE5 = [
+    ("Deceptive (published)", 8, "handler 106, broker 113, impression manager 82, coverup operator 47, gatekeeper 126, spin doctor 85, plausible denier 64, narrative manager 70"),
+    ("Honest (published)", 7, "archivist 103, disclosure counsel 118, documentarian 107, fact checker 48, ombudsman 148, transparency officer 142, whistleblower 108"),
+    ("Knowledge denial (new)", 4, "amnesiac witness 129, deniable expert 72, feigned novice 137, stonewaller 129"),
+    ("Sincere ignorance (new)", 3, "honest novice 110, calibrated reporter 83, scrupulous witness 74"),
+    ("Plain assertion (new)", 3, "forthright expert 80, candid witness 64, plain dealer 76"),
+    ("Sycophantic (published)", 5, "cheerleader 142, enabler 51, flatterer 148, people pleaser 113, yes man 109"),
+    ("Anti-sycophantic (published)", 5, "blunt advisor 135, contrarian 130, critic 68, skeptic 133, tough love mentor 149"),
+    ("Anchor", 1, "default 150"),
+]
+for grp, n, members in TABLE5:
+    C(16, "Table 5 (persona bank, kept rollouts of 150)", "table row", f"{grp} (n={n}): {members}",
+      members, "kept rollouts after judge (score 3)", "persona bank", "-", relies="Table 5",
+      source=BANK + "; collaborator summary persona_ood_ext_L20/summary.md lists the same n for the 10 new roles")
+C(16, "App A Prompts", "method", "Each persona has five prompt variants that reword one instruction. [full five variants given for feigned novice and honest novice]",
+  "5 variants x 2 personas quoted", source="owner: docs/PERSONA_CONSTRUCTION.md / kd/personas (not opened in Phase 0)")
+C(16, "App A Questions", "method", "Every persona answers the same 30 questions. The first 20 are the deception and sycophancy questions of Mahadik and Skapars (2026, Appendices A-B). The ten new ones ... In the first six the speaker knows, and in the last four the speaker does not [10 questions listed]",
+  "30 = 20 + 10; 6 know / 4 do not", cites="external: M&S App. A-B", source="owner: kd/ question bank (not opened in Phase 0)")
+
+# ---------------------------------------------------------------- Appendix B
+TABLE6 = [
+    ("CG", "0.940 0.931 0.969", "0.865 0.902 0.912", "0.819 0.858 0.859"),
+    ("HP-C", "0.717 0.585 0.639", "0.581 0.755 0.712", "0.607 0.725 0.712"),
+    ("HP-KR", "0.148 0.890 0.882", "0.593 0.919 0.912", "0.589 0.908 0.894"),
+    ("IT", "0.988 0.976 0.990", "0.979 0.913 0.980", "0.979 0.933 0.982"),
+    ("ID", "0.959 0.932 0.954", "0.974 0.980 0.978", "0.962 0.978 0.974"),
+    ("RepE", "0.994 0.882 0.991", "1.000 1.000 1.000", "1.000 1.000 1.000"),
+    ("Mean", "0.791 0.866 0.904", "0.832 0.912 0.916", "0.826 0.900 0.903"),
+]
+for ds, l20, l40, l44 in TABLE6:
+    C(17, "Table 6 (zero-shot AUROC, 8v7 / 4v6 / 12v13)", "table row", f"{ds}: L20 = {l20}; L40 = {l40}; L44 = {l44}",
+      f"{l20} | {l40} | {l44}", "AUROC zero-shot", ds if ds != "Mean" else SIX, "L20/L40/L44", relies="Table 6",
+      source=ZS + " cols auroc_axis, auroc_denial_axis, auroc_ext_axis")
+TABLE7 = [
+    ("CG", "0.663 0.969", "0.788 0.912", "0.757 0.859"),
+    ("HP-C", "0.535 0.639", "0.571 0.712", "0.570 0.712"),
+    ("HP-KR", "0.394 0.882", "0.584 0.912", "0.637 0.894"),
+    ("IT", "0.799 0.990", "0.800 0.980", "0.736 0.982"),
+    ("ID", "0.778 0.954", "0.827 0.978", "0.808 0.974"),
+    ("RepE", "0.718 0.991", "0.824 1.000", "0.785 1.000"),
+]
+for ds, l20, l40, l44 in TABLE7:
+    C(17, "Table 7 (per test set: raw vs 12v13, mean over 5 training sets)", "table row", f"{ds}: raw/12v13 L20 = {l20}; L40 = {l40}; L44 = {l44}",
+      f"{l20} | {l40} | {l44}", "mean off-diagonal AUROC per test set", ds, "L20/L40/L44", relies="Table 7",
+      source=SUM.replace("summary.csv + ", "") + " (matrix_baseline.csv, matrix_ext_axis1.csv)")
+C(17, "Table 7 caption", "qual HEADLINE", "The extended contrast is higher on every test set at every layer.",
+  metric="mean AUROC per test set", datasets=SIX, layer="L20/L40/L44", relies="Table 7")
+
+# ---------------------------------------------------------------- Appendix C
+C(17, "App C Follow-up token", "qual", "We extracted activations at the 'No' (layer 20) and projected them onto the same persona contrasts. At that token, the contrast's sign stops being the same on every dataset.",
+  layer="L20 (follow-up 'No' token)", relies="Table 8", source=FU)
+C(17, "App C Follow-up token", "quant", "On IT it flips: the extended contrast falls from 0.990 on the response tokens to 0.173 at the 'No'. On HP-KR the repair is lost, falling from 0.882 to 0.190.",
+  "0.990 -> 0.173; 0.882 -> 0.190", "AUROC zero-shot", "IT; HP-KR", "L20", relies="Table 8", source=FU)
+C(17, "App C Follow-up token", "quant", "The Follow-Up Probe itself, a probe trained on RepE at the same token, has the same trouble with HP-KR. It scores 0.088 AUROC there, and at the Alpaca threshold it flags 88% of HP-KR's honest answers.",
+  "0.088; 88%", "AUROC; FPR on HP-KR honest", "HP-KR", "L20 (follow-up)", relies="(no table)", source=PCO + "results/XXXX-9-llama-all-followup/results_table.csv")
+C(17, "App C Follow-up token", "qual interpretation", "What the model carries forward to a self-report is not the same signal as the one its response carries.")
+TABLE8 = [
+    ("CG", "0.940 0.912", "0.931 0.933", "0.969 0.938"),
+    ("HP-C", "0.717 0.612", "0.585 0.472", "0.639 0.556"),
+    ("HP-KR", "0.148 0.168", "0.890 0.237", "0.882 0.190"),
+    ("IT", "0.988 0.165", "0.976 0.216", "0.990 0.173"),
+    ("ID", "0.959 0.900", "0.932 0.904", "0.954 0.903"),
+    ("RepE", "0.994 1.000", "0.882 1.000", "0.991 1.000"),
+]
+for ds, a, b, c in TABLE8:
+    C(18, "Table 8 (L20: response mean vs 'No' token)", "table row", f"{ds}: 8v7 resp/No = {a}; 4v6 = {b}; 12v13 = {c}",
+      f"{a} | {b} | {c}", "AUROC zero-shot", ds, "L20", relies="Table 8", source=FU + "; " + ZS)
+
+# ---------------------------------------------------------------- Appendix D
+C(18, "App D Token reads", "quant", "For ranking, the mean is close to the best read on most datasets. The exception is CG at depth ... Read at its maximum, CG scores 0.993 at layer 40 against 0.912 for the mean, and 0.991 against 0.859 at layer 44.",
+  "0.993 vs 0.912; 0.991 vs 0.859", "AUROC (extended contrast)", "CG", "L40; L44", relies="(per-dataset not in Table 9)", source=POS + " / reads.csv")
+C(18, "App D Token reads", "quant", "For detection at the benchmark's threshold, the top-10% read is best. At layer 40 it reaches 0.737 balanced accuracy and 0.531 recall, against 0.694 and 0.413 for the mean.",
+  "0.737; 0.531; 0.694; 0.413", "BA; recall @1%FPR", FIVE, "L40", relies="Table 9", source=POS,
+  note="internal observation: Table 9 L40 'Maximum' row shows higher BA/recall (0.750/0.548) than top-10% (0.737/0.531); top-10% is best at L20 and L44 only -- wording check in Phase 2")
+C(18, "App D Token reads", "quant", "The single maximum is noisier: it lowers RepE's balanced accuracy from 0.998 to 0.638.",
+  "0.998 -> 0.638", "BA @1%FPR", "RepE", "(layer not stated)", relies="(not in Table 9)", source=POS + " / reads.csv")
+C(18, "App D Token reads", "qual", "The token before the reply mostly reads the prompt. It separates well where the instruction to lie is already in context, and it does not help on HP-KR.",
+  relies="Table 9", source=POS)
+TABLE9 = [
+    ("Mean (default)", "0.887 0.591 0.187", "0.899 0.694 0.413", "0.884 0.666 0.350"),
+    ("Top-10% mean", "0.873 0.664 0.348", "0.908 0.737 0.531", "0.907 0.715 0.470"),
+    ("Maximum", "0.858 0.659 0.336", "0.910 0.750 0.548", "0.914 0.701 0.418"),
+    ("First response token", "0.753 0.605 0.334", "0.863 0.606 0.227", "0.876 0.568 0.140"),
+    ("Last response token", "0.843 0.645 0.312", "0.880 0.656 0.422", "0.882 0.636 0.352"),
+    ("Token before the reply", "0.739 0.628 0.415", "0.825 0.652 0.383", "0.822 0.656 0.327"),
+]
+for read, a, b, c in TABLE9:
+    C(18, "Table 9 (six reads of 12v13, 5-dataset mean)", "table row", f"{read}: AUROC/BA/recall L20 = {a}; L40 = {b}; L44 = {c}",
+      f"{a} | {b} | {c}", "AUROC; BA; recall @1%FPR", FIVE, "L20/L40/L44", relies="Table 9", source=POS)
+
+# ---------------------------------------------------------------- Appendix E
+C(18, "App E PCs trained on RepE", "quant", "On response tokens, the one-dimensional contrast (0.887) beats the three extended components (0.736) and the raw probe (0.734). At the follow-up token the knowledge-denial components are best (0.699), above both the raw probe (0.636) and the contrast (0.552).",
+  "0.887; 0.736; 0.734; 0.699; 0.636; 0.552", "mean AUROC (5 LB datasets), trained on RepE", FIVE, "L20", relies="Table 10",
+  source=PCO + "results/persona_ood_ext_L20/liars_bench_comparison.csv; persona_ood_followup_L20/liars_bench_comparison.csv (commit c2a0c1f)",
+  note="internal observation: 'raw probe trained on RepE' = 0.734 here vs base probe (also RepE-trained, L20) 0.697 in Table 4 -- two different recipes (pooled C=0.1 vs per-token lambda=10)?")
+C(18, "App E PCs trained on RepE", "qual interpretation", "There, a learned combination of three components avoids the sign flip on IT that a fixed direction cannot.")
+TABLE10 = [
+    ("Probe on raw activations (8192-d)", "0.734", "0.636"),
+    ("Extended contrast (1-d)", "0.887", "0.552"),
+    ("Extended PCs (k = 3)", "0.736", "0.579"),
+    ("Published PCs (k = 3)", "0.733", "0.574"),
+    ("Knowledge-denial PCs (k = 3)", "0.810", "0.699"),
+]
+for feat, resp, no in TABLE10:
+    C(19, "Table 10 (trained on RepE, L20)", "table row", f"{feat}: response tokens {resp}; follow-up 'No' {no}",
+      f"{resp} | {no}", "mean AUROC over 5 LB datasets", FIVE, "L20", relies="Table 10",
+      source=PCO + "results/persona_ood_ext_L20/ and persona_ood_followup_L20/ liars_bench_comparison.csv")
+
+# ---------------------------------------------------------------- Appendix F
+C(19, "App F Sycophancy contrast", "qual", "It detects the instructed lies well, and it inverts on HP-KR at every layer (Table 11).",
+  datasets="HP-KR; instructed sets", layer="L20/L40/L44", relies="Table 11", source=ZS + " col auroc_syc_axis",
+  note="internal observation: L44 HP-KR value is 0.480 (barely below 0.5)")
+C(19, "App F Sycophancy contrast", "qual interpretation", "Its signal on the instructed datasets suggests that part of what any contrast of this kind reads is the shared register of role-played misbehaviour rather than deception itself.",
+  note="converges with owner-side 'register' claims (F-13, briefing Claim 1) -- DOC-ONLY cross-reference")
+C(19, "App F Sycophancy contrast", "quant", "The contrast from deception personas transfers further: its mean off-diagonal AUROC is 0.832 at layer 40, against 0.663 for the sycophancy contrast, and it leads at every layer.",
+  "0.832; 0.663", "mean off-diagonal AUROC", SIX, "L40 (all layers)", relies="Table 11; Table 3", source=SUM + " rows axis1, syc_axis1")
+TABLE11 = [
+    ("CG", "0.999 0.998 0.983"), ("HP-C", "0.533 0.751 0.692"), ("HP-KR", "0.043 0.167 0.480"),
+    ("IT", "0.983 0.985 0.987"), ("ID", "0.923 0.948 0.949"), ("RepE", "0.977 0.999 1.000"),
+    ("Off-diagonal mean (as probe feature)", "0.615 0.663 0.708"),
+]
+for ds, vals in TABLE11:
+    C(19, "Table 11 (sycophancy contrast 5v5)", "table row", f"{ds}: L20/L40/L44 = {vals}", vals,
+      "AUROC zero-shot (last row: mean off-diagonal AUROC)", ds if not ds.startswith("Off") else SIX, "L20/L40/L44", relies="Table 11",
+      source=(ZS + " col auroc_syc_axis") if not ds.startswith("Off") else (SUM + " row syc_axis1"))
+
+# ---------------------------------------------------------------- Appendix G
+C(19, "App G Reproduction", "quant reproduction", "For each layer, we rescored the pooled activations with the probe the pipeline trained on RepE (its stored direction and scaler). AUROC, balanced accuracy and recall at the Alpaca threshold matched the pipeline's own results table to four decimal places on all five Liars' Bench datasets. So did the pooled activations at the follow-up token against the Follow-Up run.",
+  "4 d.p.", "AUROC; BA; recall", FIVE, "L20/L40/L44 + follow-up", relies="App G",
+  source=PCO + "results/*/summary.md 'delta = 0.0000' lines; results_table.csv only committed for the follow-up run",
+  note="the pipeline results tables for XXXX-9-llama-all, -L40, -L44 are NOT on the branch (plots only)")
+C(19, "App G Reproduction", "quant", "Our measurement of the Follow-Up Probe averages 0.636 AUROC and 0.622 balanced accuracy over the five datasets. The published values are 0.634 and 0.578 (Kretschmar et al., 2025, Table 7).",
+  "0.636; 0.622; 0.634; 0.578", "mean AUROC; mean BA", FIVE, "L20 (follow-up)", relies="App G", cites="external: LB Table 7",
+  source=PCO + "results/XXXX-9-llama-all-followup/results_table.csv, summary.md")
+C(19, "App G Reproduction", "quant", "Our base probe, the Mean Probe recipe at the same layer 20, averages 0.697 AUROC and 0.721 balanced accuracy, against the published 0.682 and 0.636 (Kretschmar et al., 2025, Table 6).",
+  "0.697; 0.721; 0.682; 0.636", "mean AUROC; mean BA", FIVE, "L20", relies="App G; Table 4", cites="external: LB Table 6", source=OP)
+C(19, "App G Reproduction", "quant", "Nearly all of the balanced-accuracy gap is insider trading, where our scores exclude the reasoning scratchpad (Section 3). There our base probe reaches 0.909 against the published 0.50.",
+  "0.909; 0.50", "balanced accuracy (implied)", "IT", "L20", relies="(no table)", cites="external: LB Table 6", source=OP)
+C(19, "App G Compute", "provenance", "Persona rollouts, judging and all activation extraction ran remotely on NDIF. Every analysis in this paper runs on a CPU from the pooled activations and the persona vectors, and paper/make_numbers.py regenerates every number from the released result files.",
+  cites="y: paper/make_numbers.py", source="paper/make_numbers.py NOT-FOUND in any local or remote-tracking ref (git ls-tree -r on all 13 refs) nor in the working tree")
+
+# ---------------------------------------------------------------- write
+FIELDS = ["claim_id", "page", "section", "kind", "claim_verbatim", "numbers", "metric", "datasets", "layer", "model",
+          "relies_on", "cites_F_or_file", "likely_source_INFERRED", "phase0_note"]
+for i, r in enumerate(rows, 1):
+    r["claim_id"] = f"D-{i:03d}"
+with open(OUT, "w", newline="", encoding="utf-8") as fh:
+    w = csv.DictWriter(fh, fieldnames=FIELDS)
+    w.writeheader()
+    w.writerows(rows)
+
+kinds = {}
+for r in rows:
+    k = r["kind"]
+    key = ("table row" if k == "table row" else "figure" if k.startswith("figure") else
+           "external" if k.startswith("external") or "external" in k else
+           "restatement" if k.startswith("restatement") else
+           "method" if k.startswith("method") or k.startswith("design") or k.startswith("data definition") else
+           "limitation/future" if k.startswith("limitation") or k.startswith("future") or k == "qual limitation" else
+           "provenance" if k.startswith("provenance") else
+           "quant" if k.startswith("quant") else "qual")
+    kinds[key] = kinds.get(key, 0) + 1
+print("wrote", OUT, "rows:", len(rows))
+print("by kind:", kinds)
+print("HEADLINE-tagged rows:", sum("HEADLINE" in r["kind"] for r in rows))
+
+# ---------------------------------------------------------------- internal arithmetic (PDF numbers only)
+print("\n--- internal arithmetic using only numbers printed in the PDF (NOT a truth check) ---")
+t5 = {g: [int(x.rsplit(" ", 1)[1]) for x in m.split(", ")] for g, _, m in TABLE5}
+judged = sum(sum(v) for g, v in t5.items() if g != "Anchor")
+print(f"Table 5: judged personas kept = {judged}; + default 150 = {judged + 150}; "
+      f"share of 5,400 = {(judged + 150) / 5400:.3f}; judged share of 5,250 = {judged / 5250:.3f}; "
+      f"min/max judged = {min(min(v) for g, v in t5.items() if g != 'Anchor')}/{max(max(v) for g, v in t5.items() if g != 'Anchor')}")
+t6 = {ds: [list(map(float, x.split())) for x in (a, b, c)] for ds, a, b, c in TABLE6}
+names = ["8v7", "4v6", "12v13"]
+for li, L in enumerate(["L20", "L40", "L44"]):
+    for ai, a in enumerate(names):
+        vals6 = [t6[d][li][ai] for d in ["CG", "HP-C", "HP-KR", "IT", "ID", "RepE"]]
+        vals5 = vals6[:5]
+        print(f"Table 6 {L} {a}: mean6 = {mean(vals6):.4f} (printed Mean {t6['Mean'][li][ai]}); mean5 excl RepE = {mean(vals5):.4f}")
+raw = [list(map(float, v.split())) for _, v in FIG4_RAW]
+diag = [raw[i][i] for i in range(6)]
+off = [raw[i][j] for i in range(6) for j in range(6) if i != j]
+print(f"Fig 4 raw L40: diagonal mean = {mean(diag):.4f} (text 0.983); off-diagonal mean = {mean(off):.4f} (text 0.732, from 2-dp cells)")
+for i, (test, _) in enumerate(FIG4_RAW):
+    print(f"  Fig 4 raw row {test}: mean over other training sets = {mean([raw[i][j] for j in range(6) if j != i]):.3f}")
+t3 = {k: list(map(float, a.split())) for _, a, _, k in TABLE3}
+print("Table 3 ext_axis1 - ext_pc3 by layer:", [round(a - b, 3) for a, b in zip(t3["ext_axis1"], t3["ext_pc3"])], "(text: 0.220, 0.050, 0.023)")
+print("Table 3 ext_axis1 - baseline by layer:", [round(a - b, 3) for a, b in zip(t3["ext_axis1"], t3["baseline"])])
+print("Table 3 axis1 - baseline by layer:", [round(a - b, 3) for a, b in zip(t3["axis1"], t3["baseline"])])
+print("Table 3 ext_axis1 - axis1 by layer (kd bank's increment):", [round(a - b, 3) for a, b in zip(t3["ext_axis1"], t3["axis1"])])

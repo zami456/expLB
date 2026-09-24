@@ -1,0 +1,80 @@
+##############################################################################
+O-015 -- briefing:332  '0.916 vs single-source 0.732 (the abstract) | +0.184'
+L20  summary.csv (committed on origin/feat/persona-pc-ood):
+   ext_axis1 off_diagonal_mean = 0.9041173922099752
+   baseline  off_diagonal_mean = 0.6477701196654847   (single-source: train on one, test on another)
+   axis1     off_diagonal_mean = 0.6510800147121752
+   ext_axis1 - baseline = +0.256347
+   axis1     - baseline = +0.003310
+   LEVEL2 matrix_baseline.csv: n_off=30 off-diag mean = 0.647773  (matrix is rounded to 4 dp)
+   LEVEL2 zero_shot.csv auroc_ext_axis over 6 datasets:
+      convince_me__plain                        0.9691616766467066
+      harm_refusal_choice__plain                0.639320895522388
+      harm_refusal_knowledge_report__plain      0.881568345323741
+      insider_trading_cadenza__plain            0.9899248320505486
+      instruct_dishonesty__plain                0.95393190950159
+      repe_honesty__plain                       0.990796694214876
+      mean = 0.904117392209975
+      mean(ext) - baseline off-diag = +0.256347
+   LEVEL2 matrix_ext_axis1.csv off-diag mean = 0.904117 (n=30)
+L40  summary.csv (committed on origin/feat/persona-pc-ood):
+   ext_axis1 off_diagonal_mean = 0.9158352734669751
+   baseline  off_diagonal_mean = 0.7320325942227636   (single-source: train on one, test on another)
+   axis1     off_diagonal_mean = 0.8318937060798296
+   ext_axis1 - baseline = +0.183803
+   axis1     - baseline = +0.099861
+   LEVEL2 matrix_baseline.csv: n_off=30 off-diag mean = 0.732027  (matrix is rounded to 4 dp)
+   LEVEL2 zero_shot.csv auroc_ext_axis over 6 datasets:
+      convince_me__plain                        0.9122754491017965
+      harm_refusal_choice__plain                0.711634328358209
+      harm_refusal_knowledge_report__plain      0.9123920863309354
+      insider_trading_cadenza__plain            0.9802598673676106
+      instruct_dishonesty__plain                0.978449909643299
+      repe_honesty__plain                       0.9999999999999999
+      mean = 0.9158352734669751
+      mean(ext) - baseline off-diag = +0.183803
+   LEVEL2 matrix_ext_axis1.csv off-diag mean = 0.915833 (n=30)
+
+##############################################################################
+O-040 -- NOVELTY_ASSESSMENT:30 / NOVELTY_CHECK_PROMPT:103-108
+  'A regex on denial phrasing alone reaches 0.91 AUROC on a dataset where probes report ~0.87'
+  Searching OUR kd11 matrices for probe AUROCs on harm-pressure-knowledge-report.
+  file: C:\Users\SURAIYA\Documents\STUDY\thesis\expLB\run-crossgen\kd11\matrices\mean_L40_s42.json  bank=axes_vectors_s3_fp32.pt bank_name=paper16 k=5
+  datasets: ['instructed-deception', 'harm-pressure-choice', 'harm-pressure-knowledge-report', 'harm-pressure-kr-matched', 'convincing-game', 'insider-trading', 'ai_liar', 'sandbagging_v2', 'roleplaying', 'mask', 'sycophancy_mt']
+  feature               probe       diagonal   col-mean(as target)   row-mean(as source)
+  raw                   paper         0.9741                 0.699                0.6943
+  raw                   lr_reg10      0.9678                0.7278                 0.702
+  raw                   mms           0.9623                0.6442                0.5803
+  pc:deception          paper         0.8134                0.6211                0.6909
+  pc:deception          lr_reg10      0.7862                0.5974                0.6639
+  pc:deception          mms           0.8164                0.5773                0.6692
+  axes                  paper         0.8015                0.4273                0.3004
+  axes                  lr_reg10      0.8754                0.4079                0.2297
+  axes                  mms           0.8187                0.4932                0.2741
+  axes_resid            paper         0.8861                0.3276                 0.228
+  axes_resid            lr_reg10      0.8897                 0.293                0.2268
+  axes_resid            mms           0.9019                0.2701                0.2214
+  random                paper         0.7979                0.6984                 0.659
+  random                lr_reg10      0.8606                0.7074                0.6536
+  random                mms            0.832                0.6837                0.6513
+  length                paper         0.7713                0.6378                0.5965
+  length                lr_reg10      0.7713                0.6378                0.5965
+  length                mms           0.7713                0.6378                0.5965
+  pc:unified            paper         0.8955                0.5382                0.5383
+  pc:unified            lr_reg10      0.9182                0.5588                0.3734
+  pc:unified            mms           0.8228                0.5372                0.3275
+  datapca               paper         0.9647                0.6627                0.5738
+  datapca               lr_reg10      0.9632                0.6585                0.6057
+  datapca               mms           0.9637                0.6704                0.6168
+  pc:unified@2          paper         0.8125                0.3904                0.3374
+  pc:unified@2          lr_reg10      0.8149                0.3888                0.2413
+  pc:unified@2          mms           0.8137                0.4478                 0.245
+  random@2              paper         0.9159                0.5515                0.5338
+  random@2              lr_reg10      0.9324                0.5174                 0.546
+  random@2              mms            0.932                0.5361                 0.545
+  datapca@2             paper         0.7904                0.7316                0.5043
+  datapca@2             lr_reg10      0.7931                 0.733                 0.519
+  datapca@2             mms           0.7923                  0.73                0.5246
+  zero-shot directions on HP-KR:
+    contrast                          0.6436
+    PC1                               0.6678

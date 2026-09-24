@@ -1,0 +1,16 @@
+=== F-87 : cap seed table at L40 ===
+bank=C:/Users/user4/expLB/run-crossgen/kd11/banks/cap_s23
+
+  seed     cap@2       raw    dpca@2    vs raw   vs ctrl  n_src
+     1    0.7159    0.6050    0.5545   +0.1110   +0.1614     10
+        features present: ['datapca', 'datapca@2', 'length', 'pc:cap_only', 'pc:cap_only@2', 'pc:cap_vs_default', 'pc:cap_vs_default@2', 'pc:capitulation', 'pc:capitulation@2', 'random', 'random@2', 'raw']
+     7    0.7132    0.5962    0.5638   +0.1171   +0.1494     10
+        features present: ['datapca', 'datapca@2', 'length', 'pc:cap_only', 'pc:cap_only@2', 'pc:cap_vs_default', 'pc:cap_vs_default@2', 'pc:capitulation', 'pc:capitulation@2', 'random', 'random@2', 'raw']
+    13    0.7186    0.5988    0.5418   +0.1198   +0.1767     10
+        features present: ['datapca', 'datapca@2', 'length', 'pc:cap_only', 'pc:cap_only@2', 'pc:cap_vs_default', 'pc:cap_vs_default@2', 'pc:capitulation', 'pc:capitulation@2', 'random', 'random@2', 'raw']
+    42    0.7136    0.6013    0.5594   +0.1123   +0.1542     10
+        features present: ['datapca', 'datapca@2', 'length', 'pc:cap_only', 'pc:cap_only@2', 'pc:cap_vs_default', 'pc:cap_vs_default@2', 'pc:capitulation', 'pc:capitulation@2', 'random', 'random@2', 'raw']
+
+  vs raw   : +0.1110 .. +0.1198  (spread 0.0088)
+  vs ctrl  : +0.1494 .. +0.1767  (spread 0.0273)
+python exit 0

@@ -1,0 +1,15 @@
+id,source,source_ref,claim_short,numbers,layer,dataset_hint,status
+H-081,collaborator note,src/probes/deception-detection/results/persona_ood_followup_L20/summary.md:92,"(0.663 → 0.873), ID (0.778 → 0.853) and RepE (0.718 → 0.929), and gets worse on HP-KR (0.394 →",0.663; 0.873; 0.778; 0.853; 0.718; 0.929,,,CANDIDATE
+H-082,collaborator note,src/probes/deception-detection/results/persona_ood_followup_L20/summary.md:112,concentrated in HP-KR: the RepE-trained k = 3 probe re-inverts it to 0.118 against the 1-d axis's,0.118,,,CANDIDATE
+H-083,collaborator note,src/probes/deception-detection/results/persona_ood_followup_L20/summary.md:118,"above the Follow-Up Probe itself (0.636), and it does not invert on insider trading (0.712 against",0.636; 0.712,,,CANDIDATE
+H-084,collaborator note,src/probes/deception-detection/results/persona_ood_followup_L20/summary.md:122,"(0.712, 0.479) rather than from detecting them well. And it depends on the training set: averaged",0.712; 0.479,,,CANDIDATE
+H-085,collaborator note,src/probes/deception-detection/results/persona_ood_followup_L20/summary.md:124,"accuracy at 1% FPR it does not lead (0.573, against 0.638 for the 1-d axis and 0.623 for the",1%; 0.573; 0.638; 0.623,,,CANDIDATE
+H-086,collaborator note,src/probes/deception-detection/results/persona_ood_mod_L40/summary.md:42,"AUROC for the extended axis, against the old run's 95% bootstrap half-width:",95%,,,CANDIDATE
+H-087,collaborator note,src/probes/deception-detection/results/persona_ood_mod_L40/summary.md:55,"(+0.052 over the five shared datasets) and is flat elsewhere, while `denial_axis1` loses 0.049 at",+0.052; 0.049,,,CANDIDATE
+H-088,collaborator note,src/probes/deception-detection/results/persona_ood_mod_L40/summary.md:56,layer 40 and gains 0.020 at 44. Nothing here recovers the AUROC loss.,0.020,,,CANDIDATE
+H-089,collaborator note,src/probes/deception-detection/results/persona_ood_mod_L40/summary.md:73,"falls faster. PC1's explained variance rises (0.393 → 0.446 at L20, 0.324 → 0.361 at L40), so the",0.393; 0.446; 0.324; 0.361,,,CANDIDATE
+H-090,collaborator note,src/probes/deception-detection/results/persona_ood_mod_L40/summary.md:84,"the best configuration found: `ext_axis1` at 0.9158 off-diagonal AUROC, `denial_axis1` at 0.7709",0.9158; 0.7709,,,CANDIDATE
+H-091,collaborator note,src/probes/deception-detection/results/persona_positions_L40/summary.md:12,"max, top-10% mean | the most deceptive-looking token(s) |",10%,,,CANDIDATE
+H-092,collaborator note,src/probes/deception-detection/results/persona_positions_L40/summary.md:32,L40 mean | 0.912 | 0.712 | 0.912 | 0.980 | 0.978 | 1.000 |,0.912; 0.712; 0.912; 0.980; 0.978; 1.000,,,CANDIDATE
+H-093,collaborator note,src/probes/deception-detection/results/persona_positions_L40/summary.md:34,L44 mean | 0.859 | 0.712 | 0.894 | 0.982 | 0.974 | 1.000 |,0.859; 0.712; 0.894; 0.982; 0.974; 1.000,,,CANDIDATE
+H-094,collaborator note,src/probes/deception-detection/results/persona_positions_L40/summary.md:39,spread across the response — at layer 20 the mean reaches 0.882 while no single position does,0.882,,,CANDIDATE

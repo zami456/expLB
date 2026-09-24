@@ -1,0 +1,15 @@
+id,source,source_ref,claim_short,numbers,layer,dataset_hint,status
+L-F-18,FINDINGS.md,kd/docs/FINDINGS.md:281,2026-09-20 · paper16 vs paper16-shared differ ONLY in the unified basis,+0.966; +0.952; +0.979; +0.993; +0.389; +0.896; 7%; 8%,40,,TODO
+L-F-19,FINDINGS.md,kd/docs/FINDINGS.md:311,2026-09-20 · Balancing the sample counts does NOT remove the drift confound,0.22; 0.01; +1.60; +1.66; 1.82; 1.67; +0.90; +1.37,40,,TODO
+L-F-20,FINDINGS.md,kd/docs/FINDINGS.md:342,2026-09-20 · The matched slice is reportable on passB ONLY,,,harm-pressure-knowledge-report HP-KR,TODO
+L-F-21,FINDINGS.md,kd/docs/FINDINGS.md:365,"2026-09-20 · NDIF small-model deployments cap memory PER PROCESS, not per GPU",83%; 44.42; 36.73; 7.69; 7.37,,,TODO
+L-F-22,FINDINGS.md,kd/docs/FINDINGS.md:392,2026-09-20 · `1_generate_ndif.py` never got the exc_tail fix,,,,TODO
+L-F-23,FINDINGS.md,kd/docs/FINDINGS.md:408,"2026-09-20 · PROVENANCE: the matched slice is ours, and HP-KR is not the paper's",,,harm-pressure-knowledge-report HP-KR mask,TODO
+L-F-24,FINDINGS.md,kd/docs/FINDINGS.md:428,2026-09-20 · A missing `remote=True` downloads the 70B and is SILENT,40.22,,,TODO
+L-F-25,FINDINGS.md,kd/docs/FINDINGS.md:451,"2026-09-20 · passC root lost only its `significance.json`, and it was recoverable",,,,TODO
+L-F-26,FINDINGS.md,kd/docs/FINDINGS.md:469,2026-09-20 · `pc_caver` folds — but it also caves BEFORE it is challenged,3%; 0.553; 0.665,,,TODO
+L-F-27,FINDINGS.md,kd/docs/FINDINGS.md:538,2026-09-20 · Both scale rungs generated clean; the 8B breaks character 2.7x more,3%; 6%; 2%; 9%; 97.14; 2.86; 1.07; 97%,,,TODO
+L-F-28,FINDINGS.md,kd/docs/FINDINGS.md:588,"2026-09-20 · External review of the cap bank: four structural confounds, verified by count",3%,,,TODO
+L-F-29,FINDINGS.md,kd/docs/FINDINGS.md:619,2026-09-20 · The 0.374 inversion: the reviewer's challenge is half right,0.374; 0.626; 0.54; 0.355; 0.645; 0.541; +0.104; 0.379,,sycophancy_mt,TODO
+L-F-30,FINDINGS.md,kd/docs/FINDINGS.md:652,"2026-09-20 · In-character rate across three model sizes, same bank, same judge",9%; 0%; 4%; 7%; 0.89; 3%; 8%; 5%,,,TODO
+L-F-31,FINDINGS.md,kd/docs/FINDINGS.md:699,2026-09-20 · The kd bank's +0.076 does NOT clear a dataset-level bootstrap,+0.076; 95%; +0.0757; 0.006; +0.173; 0.499; +0.0729; 0.042,40,,TODO

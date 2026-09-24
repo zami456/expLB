@@ -1,0 +1,198 @@
+==============================================================================
+(a) F-37 source logs
+  --- scale_3b_axes.log (62 lines, 3663 B)
+      ﻿26 role vectors, shape (28, 3072), layers 0..27
+      === report at layer 14 ===
+      assistant   norm =    1.077   (1 vs 25 roles)
+      deception   norm =    0.960   (8 vs 7 roles)
+      sycophancy  norm =    1.581   (5 vs 5 roles)
+      unified     norm =    1.017   (13 vs 12 roles)
+      [all-roles PCA = Assistant Axis basis, n=26]
+      cos(PC1, assistant axis) = +0.435 at layer 14   [Assistant Axis paper: > 0.71 mid-layer]
+      across layers: min +0.367, median +0.532   [Assistant Axis paper: > 0.60 all layers]
+      PC1 explains 33.4% of role variance; top-5 73.1%
+      [per-behaviour PCA -- the persona-coordinates basis]
+      basis          n   cos(PC1,contrast)   cos(PC1,assistant)   PC1 var
+      deception     16               0.924               -0.656     30.2%
+      sycophancy    11               0.948               -0.505     42.2%
+      unified       26               0.781               -0.435     33.4%
+      a behaviour PC1 near +1.0 on its own contrast is the expected geometry;
+      a large |cos| with the assistant axis is inherited from the contrast itself.
+      default anchor at relative position 0.834 on PC1   [paper: ~0.03 or ~0.97 -- an extreme]
+      mean projection on each axis, by group:
+      group                 assistant    deception   sycophancy      unified
+      deception                  1.27        -0.03        -0.56        -0.38
+      honesty                    1.85        -0.99        -1.00        -1.18
+      sycophancy                 0.99         0.27         0.42         0.37
+      anti_sycophancy            1.57        -0.46        -1.16        -1.00
+      assistant_anchor           2.52        -0.98        -1.01        -1.19
+      wrote C:\Users\user4\expLB\run-scale\3b\axes_3b.pt  (axes: assistant, deception, sycophancy, unified; pca bases: deception, sycophancy, unified, all; PCA (28, 5, 3072))
+      26 role vectors, shape (28, 3072), layers 0..27
+      === report at layer 14 ===
+      assistant   norm =    1.042   (1 vs 25 roles)
+      deception   norm =    0.981   (8 vs 7 roles)
+      sycophancy  norm =    1.594   (5 vs 5 roles)
+      unified     norm =    1.031   (13 vs 12 roles)
+      [all-roles PCA = Assistant Axis basis, n=26]
+      cos(PC1, assistant axis) = +0.551 at layer 14   [Assistant Axis paper: > 0.71 mid-layer]
+      across layers: min +0.470, median +0.596   [Assistant Axis paper: > 0.60 all layers]
+      PC1 explains 34.5% of role variance; top-5 71.7%
+      [per-behaviour PCA -- the persona-coordinates basis]
+      basis          n   cos(PC1,contrast)   cos(PC1,assistant)   PC1 var
+      deception     16               0.924               -0.653     34.6%
+      sycophancy    11               0.950               -0.521     42.5%
+      unified       26               0.848               -0.551     34.5%
+      a behaviour PC1 near +1.0 on its own contrast is the expected geometry;
+      a large |cos| with the assistant axis is inherited from the contrast itself.
+      default anchor at relative position 0.885 on PC1   [paper: ~0.03 or ~0.97 -- an extreme]
+      mean projection on each axis, by group:
+      group                 assistant    deception   sycophancy      unified
+      deception                  1.18         0.02        -0.49        -0.29
+      honesty                    1.78        -0.96        -0.94        -1.12
+      sycophancy                 0.81         0.34         0.52         0.48
+      anti_sycophancy            1.40        -0.39        -1.07        -0.90
+      assistant_anchor           2.36        -0.91        -0.92        -1.08
+      wrote C:\Users\user4\expLB\run-scale\3b\axes_3b.pt  (axes: assistant, deception, sycophancy, unified; pca bases: deception, sycophancy, unified, all; PCA (28, 5, 3072))
+  --- scale_8b_axes.log (62 lines, 3663 B)
+      ﻿26 role vectors, shape (32, 4096), layers 0..31
+      === report at layer 16 ===
+      assistant   norm =    0.992   (1 vs 25 roles)
+      deception   norm =    0.983   (8 vs 7 roles)
+      sycophancy  norm =    1.908   (5 vs 5 roles)
+      unified     norm =    1.179   (13 vs 12 roles)
+      [all-roles PCA = Assistant Axis basis, n=26]
+      cos(PC1, assistant axis) = +0.732 at layer 16   [Assistant Axis paper: > 0.71 mid-layer]
+      across layers: min +0.514, median +0.701   [Assistant Axis paper: > 0.60 all layers]
+      PC1 explains 39.6% of role variance; top-5 77.4%
+      [per-behaviour PCA -- the persona-coordinates basis]
+      basis          n   cos(PC1,contrast)   cos(PC1,assistant)   PC1 var
+      deception     16               0.921               -0.714     36.0%
+      sycophancy    11               0.983               -0.645     47.8%
+      unified       26               0.908               -0.732     39.6%
+      a behaviour PC1 near +1.0 on its own contrast is the expected geometry;
+      a large |cos| with the assistant axis is inherited from the contrast itself.
+      default anchor at relative position 0.949 on PC1   [paper: ~0.03 or ~0.97 -- an extreme]
+      mean projection on each axis, by group:
+      group                 assistant    deception   sycophancy      unified
+      deception                  1.03        -0.48        -0.28        -0.41
+      honesty                    1.69        -1.47        -0.84        -1.25
+      sycophancy                 0.11         0.19         1.08         0.76
+      anti_sycophancy            1.13        -0.90        -0.83        -0.99
+      assistant_anchor           2.04        -1.38        -0.81        -1.19
+      wrote C:\Users\user4\expLB\run-scale\8b\axes_8b.pt  (axes: assistant, deception, sycophancy, unified; pca bases: deception, sycophancy, unified, all; PCA (32, 5, 4096))
+      26 role vectors, shape (32, 4096), layers 0..31
+      === report at layer 16 ===
+      assistant   norm =    0.998   (1 vs 25 roles)
+      deception   norm =    1.016   (8 vs 7 roles)
+      sycophancy  norm =    1.920   (5 vs 5 roles)
+      unified     norm =    1.201   (13 vs 12 roles)
+      [all-roles PCA = Assistant Axis basis, n=26]
+      cos(PC1, assistant axis) = +0.739 at layer 16   [Assistant Axis paper: > 0.71 mid-layer]
+      across layers: min +0.524, median +0.688   [Assistant Axis paper: > 0.60 all layers]
+      PC1 explains 40.4% of role variance; top-5 76.7%
+      [per-behaviour PCA -- the persona-coordinates basis]
+      basis          n   cos(PC1,contrast)   cos(PC1,assistant)   PC1 var
+      deception     16               0.955               -0.707     38.5%
+      sycophancy    11               0.983               -0.639     47.6%
+      unified       26               0.925               -0.739     40.4%
+      a behaviour PC1 near +1.0 on its own contrast is the expected geometry;
+      a large |cos| with the assistant axis is inherited from the contrast itself.
+      default anchor at relative position 0.931 on PC1   [paper: ~0.03 or ~0.97 -- an extreme]
+      mean projection on each axis, by group:
+      group                 assistant    deception   sycophancy      unified
+      deception                  0.58        -0.34        -0.33        -0.36
+      honesty                    1.24        -1.36        -0.91        -1.23
+      sycophancy                -0.35         0.35         1.03         0.82
+      anti_sycophancy            0.66        -0.75        -0.89        -0.94
+      assistant_anchor           1.59        -1.22        -0.86        -1.13
+      wrote C:\Users\user4\expLB\run-scale\8b\axes_8b.pt  (axes: assistant, deception, sycophancy, unified; pca bases: deception, sycophancy, unified, all; PCA (32, 5, 4096))
+  --- paper16_shared_axes.log (62 lines, 3650 B)
+      ﻿26 role vectors, shape (80, 8192), layers 0..79
+      === report at layer 40 ===
+      assistant   norm =    1.573   (1 vs 25 roles)
+      deception   norm =    1.750   (8 vs 7 roles)
+      sycophancy  norm =    3.262   (5 vs 5 roles)
+      unified     norm =    2.010   (13 vs 12 roles)
+      [all-roles PCA = Assistant Axis basis, n=26]
+      cos(PC1, assistant axis) = +0.623 at layer 40   [Assistant Axis paper: > 0.71 mid-layer]
+      across layers: min +0.540, median +0.618   [Assistant Axis paper: > 0.60 all layers]
+      PC1 explains 37.2% of role variance; top-5 75.1%
+      [per-behaviour PCA -- the persona-coordinates basis]
+      basis          n   cos(PC1,contrast)   cos(PC1,assistant)   PC1 var
+      deception     16               0.955               -0.605     43.0%
+      sycophancy    11               0.993               -0.441     46.8%
+      unified       26               0.906               -0.623     37.2%
+      a behaviour PC1 near +1.0 on its own contrast is the expected geometry;
+      a large |cos| with the assistant axis is inherited from the contrast itself.
+      default anchor at relative position 0.935 on PC1   [paper: ~0.03 or ~0.97 -- an extreme]
+      mean projection on each axis, by group:
+      group                 assistant    deception   sycophancy      unified
+      deception                  1.34        -0.54         0.14        -0.15
+      honesty                    2.18        -2.29        -0.71        -1.59
+      sycophancy                 0.09         0.04         2.08         1.35
+      anti_sycophancy            1.29        -1.55        -1.18        -1.56
+      assistant_anchor           2.89        -1.87        -0.55        -1.28
+      wrote run-paper16-shared\axes_vectors_all.pt  (axes: assistant, deception, sycophancy, unified; pca bases: deception, sycophancy, unified, all; PCA (80, 5, 8192))
+      26 role vectors, shape (80, 8192), layers 0..79
+      === report at layer 40 ===
+      assistant   norm =    1.733   (1 vs 25 roles)
+      deception   norm =    2.266   (8 vs 7 roles)
+      sycophancy  norm =    3.533   (5 vs 5 roles)
+      unified     norm =    2.348   (13 vs 12 roles)
+      [all-roles PCA = Assistant Axis basis, n=26]
+      cos(PC1, assistant axis) = +0.584 at layer 40   [Assistant Axis paper: > 0.71 mid-layer]
+      across layers: min +0.467, median +0.563   [Assistant Axis paper: > 0.60 all layers]
+      PC1 explains 36.8% of role variance; top-5 74.2%
+      [per-behaviour PCA -- the persona-coordinates basis]
+      basis          n   cos(PC1,contrast)   cos(PC1,assistant)   PC1 var
+      deception     16               0.952               -0.564     45.0%
+      sycophancy    11               0.993               -0.436     47.9%
+      unified       26               0.896               -0.584     36.8%
+      a behaviour PC1 near +1.0 on its own contrast is the expected geometry;
+      a large |cos| with the assistant axis is inherited from the contrast itself.
+      default anchor at relative position 0.868 on PC1   [paper: ~0.03 or ~0.97 -- an extreme]
+      mean projection on each axis, by group:
+      group                 assistant    deception   sycophancy      unified
+      deception                  0.65        -0.11         0.13         0.08
+      honesty                    1.66        -2.38        -0.92        -1.85
+      sycophancy                -0.47         0.19         2.27         1.46
+      anti_sycophancy            0.80        -1.46        -1.26        -1.58
+      assistant_anchor           2.47        -1.73        -0.64        -1.32
+      wrote run-paper16-shared\axes_vectors_s3.pt  (axes: assistant, deception, sycophancy, unified; pca bases: deception, sycophancy, unified, all; PCA (80, 5, 8192))
+
+==============================================================================
+(a2) F-37 recomputed from the axes .pt files
+  available axes files:
+    3B      8268646 axes_3b.pt
+    8B     12594790 axes_8b.pt
+    70B    62935527 axes_vectors_all_fp32.pt
+    70B    62935395 axes_vectors_s3.pt
+    70B    62935505 axes_vectors_s3_fp32.pt
+    70B    62936707 axes_vectors_s3_fp32_famcentred.pt
+  3B: no axes file found
+  8B: no axes file found
+
+  --- 70B  C:\Users\user4\expLB\run-paper16\axes_vectors_s3_fp32.pt
+      top keys: ['axes', 'counts', 'layers', 'pca_components', 'pca_variance_ratio', 'pca', 'roles', 'role_groups', 'vectors_dir']
+      axes keys: ['assistant', 'deception', 'sycophancy', 'unified']
+      axes['assistant'] type=Tensor torch.Size([80, 8192])
+      pca keys: ['deception', 'sycophancy', 'unified', 'all']
+      pca['deception'] type=dict keys=['components', 'variance_ratio', 'sign', 'roles', 'reference']
+      pca_components = tensor([[[ 5.9817e-03, -4.0470e-04,  2.2938e-03,  ...,  1.0722e-04,
+           5.1788e-03, -2.0732e-03],
+         [-5.6978e-04, -1.0633e-02,  1.1016e-02,  ..
+      pca_variance_ratio = tensor([[0.7200, 0.0509, 0.0471, 0.0344, 0.0285],
+        [0.6963, 0.0563, 0.0478, 0.0373, 0.0307],
+        [0.6942, 0.0582, 0.0477, 0.0381, 0.0312],
+   
+      vectors_dir = 'C:\\Users\\user4\\expLB\\run-paper16\\vectors_s3_fp32'
+
+==============================================================================
+(b) F-27: 21-of-26-role subset reconstruction (8B)
+  deception          want 8 of 8 roles -> kept 765/800: 1 subset(s) match  e.g. ('pc_handler', 'pc_broker', 'pc_impression_manager', 'pc_coverup_operator', 'pc_gatekeeper', 'pc_spin_doctor', 'pc_plausible_denier', 'pc_narrative_manager')
+  honesty            want 5 of 7 roles -> kept 485/500: 1 subset(s) match  e.g. ('pc_ombudsman', 'pc_disclosure_counsel', 'pc_documentarian', 'pc_fact_checker', 'pc_archivist')
+  sycophancy         want 4 of 5 roles -> kept 397/400: 1 subset(s) match  e.g. ('pc_flatterer', 'pc_people_pleaser', 'pc_cheerleader', 'pc_enabler')
+  anti_sycophancy    want 4 of 5 roles -> kept 393/400: 3 subset(s) match  e.g. ('pc_critic', 'pc_skeptic', 'pc_contrarian', 'pc_blunt_advisor')
+  (70B reference quoted by F-27 and by scale/scripts/score_summary.py: 16/1500 = 1.07%)
+  measured now: 12/1350 = 0.89%  (25 files)
+python exit 0

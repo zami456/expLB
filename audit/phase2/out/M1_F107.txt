@@ -1,0 +1,77 @@
+bank axes_vectors_s23.pt roles: 36
+bank axes_collab_s23.pt roles: 36
+
+============================================================================
+pooling=mean  layer=20   X(600, 8192)  labels 1=300 0=300
+============================================================================
+   assistant                AUROC 0.3539   unsigned 0.6461
+   collab_extended          AUROC 0.5709   unsigned 0.5709
+   deception                AUROC 0.5825   unsigned 0.5825
+   kd_assertion             AUROC 0.5156   unsigned 0.5156
+   knowledge_denial         AUROC 0.5721   unsigned 0.5721
+   pc_deception_PC1         AUROC 0.6160   unsigned 0.6160
+   pc_deception_PC2         AUROC 0.4390   unsigned 0.5610
+   pc_deception_PC3         AUROC 0.4196   unsigned 0.5804
+   sycophancy               AUROC 0.6346   unsigned 0.6346
+   unified                  AUROC 0.6241   unsigned 0.6241
+   RANDOM n=200 seed=0: mean 0.5286  p95 0.5667  max 0.5843
+   RANDOM n=200 seed=1: mean 0.5315  p95 0.5742  max 0.6269
+   RANDOM n=200 seed=42: mean 0.5279  p95 0.5669  max 0.6017
+   RANDOM n=2000 seed=12345: mean 0.5297  p95 0.5722  p99 0.5932  max 0.6343
+
+============================================================================
+pooling=mean  layer=40   X(600, 8192)  labels 1=300 0=300
+============================================================================
+   assistant                AUROC 0.4284   unsigned 0.5716
+   collab_extended          AUROC 0.6270   unsigned 0.6270
+   deception                AUROC 0.5427   unsigned 0.5427
+   kd_assertion             AUROC 0.6295   unsigned 0.6295
+   knowledge_denial         AUROC 0.6363   unsigned 0.6363
+   pc_deception_PC1         AUROC 0.5669   unsigned 0.5669
+   pc_deception_PC2         AUROC 0.3638   unsigned 0.6362
+   pc_deception_PC3         AUROC 0.5370   unsigned 0.5370
+   sycophancy               AUROC 0.6930   unsigned 0.6930
+   unified                  AUROC 0.6508   unsigned 0.6508
+   RANDOM n=200 seed=0: mean 0.5388  p95 0.5919  max 0.6404
+   RANDOM n=200 seed=1: mean 0.5321  p95 0.5804  max 0.5972
+   RANDOM n=200 seed=42: mean 0.5338  p95 0.5782  max 0.6093
+   RANDOM n=2000 seed=12345: mean 0.5342  p95 0.5804  p99 0.6088  max 0.6406
+
+============================================================================
+pooling=last  layer=20   X(600, 8192)  labels 1=300 0=300
+============================================================================
+   assistant                AUROC 0.3728   unsigned 0.6272
+   collab_extended          AUROC 0.5905   unsigned 0.5905
+   deception                AUROC 0.5806   unsigned 0.5806
+   kd_assertion             AUROC 0.5432   unsigned 0.5432
+   knowledge_denial         AUROC 0.5704   unsigned 0.5704
+   pc_deception_PC1         AUROC 0.5966   unsigned 0.5966
+   pc_deception_PC2         AUROC 0.4219   unsigned 0.5781
+   pc_deception_PC3         AUROC 0.4586   unsigned 0.5414
+   sycophancy               AUROC 0.6267   unsigned 0.6267
+   unified                  AUROC 0.6120   unsigned 0.6120
+   RANDOM n=200 seed=0: mean 0.5318  p95 0.5859  max 0.6216
+   RANDOM n=200 seed=1: mean 0.5357  p95 0.5857  max 0.6351
+   RANDOM n=200 seed=42: mean 0.5352  p95 0.5812  max 0.5968
+   RANDOM n=2000 seed=12345: mean 0.5345  p95 0.5829  p99 0.6115  max 0.6505
+
+============================================================================
+pooling=last  layer=40   X(600, 8192)  labels 1=300 0=300
+============================================================================
+   assistant                AUROC 0.4105   unsigned 0.5895
+   collab_extended          AUROC 0.6714   unsigned 0.6714
+   deception                AUROC 0.5856   unsigned 0.5856
+   kd_assertion             AUROC 0.6802   unsigned 0.6802
+   knowledge_denial         AUROC 0.6800   unsigned 0.6800
+   pc_deception_PC1         AUROC 0.5980   unsigned 0.5980
+   pc_deception_PC2         AUROC 0.3519   unsigned 0.6481
+   pc_deception_PC3         AUROC 0.5369   unsigned 0.5369
+   sycophancy               AUROC 0.7097   unsigned 0.7097
+   unified                  AUROC 0.6774   unsigned 0.6774
+   RANDOM n=200 seed=0: mean 0.5459  p95 0.6081  max 0.6512
+   RANDOM n=200 seed=1: mean 0.5402  p95 0.5915  max 0.6188
+   RANDOM n=200 seed=42: mean 0.5433  p95 0.6083  max 0.6350
+   RANDOM n=2000 seed=12345: mean 0.5458  p95 0.6057  p99 0.6380  max 0.6693
+
+JSON [{"pooling": "mean", "layer": 20, "direction": "assistant", "auroc": 0.35387777777777785}, {"pooling": "mean", "layer": 20, "direction": "collab_extended", "auroc": 0.5708888888888889}, {"pooling": "mean", "layer": 20, "direction": "deception", "auroc": 0.5824777777777778}, {"pooling": "mean", "layer": 20, "direction": "kd_assertion", "auroc": 0.5155888888888889}, {"pooling": "mean", "layer": 20, "direction": "knowledge_denial", "auroc": 0.5721333333333334}, {"pooling": "mean", "layer": 20, "direction": "pc_deception_PC1", "auroc": 0.6159777777777777}, {"pooling": "mean", "layer": 20, "direction": "pc_deception_PC2", "auroc": 0.43895555555555554}, {"pooling": "mean", "layer": 20, "direction": "pc_deception_PC3", "auroc": 0.4195555555555555}, {"pooling": "mean", "layer": 20, "direction": "sycophancy", "auroc": 0.6346333333333334}, {"pooling": "mean", "layer": 20, "direction": "unified", "auroc": 0.6241333333333332}, {"pooling": "mean", "layer": 40, "direction": "assistant", "auroc": 0.4283666666666668}, {"pooling": "mean", "layer": 40, "direction": "collab_extended", "auroc": 0.6270444444444444}, {"pooling": "mean", "layer": 40, "direction": "deception", "auroc": 0.5426777777777778}, {"pooling": "mean", "layer": 40, "direction": "kd_assertion", "auroc": 0.6295222222222223}, {"pooling": "mean", "layer": 40, "direction": "knowledge_denial", "auroc": 0.6363222222222223}, {"pooling": "mean", "layer": 40, "direction": "pc_deception_PC1", "auroc": 0.5668777777777778}, {"pooling": "mean", "layer": 40, "direction": "pc_deception_PC2", "auroc": 0.36375555555555555}, {"pooling": "mean", "layer": 40, "direction": "pc_deception_PC3", "auroc": 0.5370111111111111}, {"pooling": "mean", "layer": 40, "direction": "sycophancy", "auroc": 0.6930000000000001}, {"pooling": "mean", "layer": 40, "direction": "unified", "auroc": 0.6507555555555556}, {"pooling": "last", "layer": 20, "direction": "assistant", "auroc": 0.3728222222222222}, {"pooling": "last", "layer": 20, "direction": "collab_extended", "auroc": 0.5905111111111111}, {"pooling": "last", "layer": 20, "direction": "deception", "auroc": 0.5805888888888889}, {"pooling": "last", "layer": 20, "direction": "kd_assertion", "auroc": 0.5431777777777778}, {"pooling": "last", "layer": 20, "direction": "knowledge_denial", "auroc": 0.5704222222222222}, {"pooling": "last", "layer": 20, "direction": "pc_deception_PC1", "auroc": 0.5966}, {"pooling": "last", "layer": 20, "direction": "pc_deception_PC2", "auroc": 0.4218666666666667}, {"pooling": "last", "layer": 20, "direction": "pc_deception_PC3", "auroc": 0.4585888888888888}, {"pooling": "last", "layer": 20, "direction": "sycophancy", "auroc": 0.6266555555555555}, {"pooling": "last", "layer": 20, "direction": "unified", "auroc": 0.6119888888888889}, {"pooling": "last", "layer": 40, "direction": "assistant", "auroc": 0.41046666666666665}, {"pooling": "last", "layer": 40, "direction": "collab_extended", "auroc": 0.6713888888888888}, {"pooling": "last", "layer": 40, "direction": "deception", "auroc": 0.5855555555555556}, {"pooling": "last", "layer": 40, "direction": "kd_assertion", "auroc": 0.6801999999999999}, {"pooling": "last", "layer": 40, "direction": "knowledge_denial", "auroc": 0.6799555555555555}, {"pooling": "last", "layer": 40, "direction": "pc_deception_PC1", "auroc": 0.598}, {"pooling": "last", "layer": 40, "direction": "pc_deception_PC2", "auroc": 0.3518888888888889}, {"pooling": "last", "layer": 40, "direction": "pc_deception_PC3", "auroc": 0.5369444444444444}, {"pooling": "last", "layer": 40, "direction": "sycophancy", "auroc": 0.7097111111111112}, {"pooling": "last", "layer": 40, "direction": "unified", "auroc": 0.6774111111111112}]
+python exit 0

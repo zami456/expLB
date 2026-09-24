@@ -1,0 +1,20 @@
+published assistant_axis.pt: <class 'torch.Tensor'> torch.Size([80, 8192]) torch.bfloat16
+role_groups.json: deception 22 roles, honesty 22 roles
+missing published vectors: [] []
+hf 22v22 contrast shape torch.Size([80, 8192])  n_pos 22 n_neg 22
+paper16 bank keys: ['axes', 'counts', 'layers', 'pca_components', 'pca_variance_ratio', 'pca', 'roles', 'role_groups'] | axes: ['assistant', 'deception', 'sycophancy', 'unified']
+
+layer  cos(p16 asst, pubAA)   p16 dec vs pubAA   HF22v22 vs pubAA  p16 dec vs own asst  reduction
+   20                0.3662            -0.1677            -0.6856              -0.3641      75.5%
+   22                0.3059            -0.1407            -0.6621              -0.3376      78.7%
+   40                0.3719            -0.2263            -0.6097              -0.3705      62.9%
+   60                0.2997            -0.1800            -0.5161              -0.3742      65.1%
+
+reduction |p16 dec vs pubAA| relative to |HF22v22 vs pubAA|: min 62.9%  max 78.7%
+
+the "~50%" comparator (each bank vs its OWN assistant direction), Q1 table L20/22/40/60:
+  own100 -0.729/-0.710/-0.660/-0.573 vs paper16_s3 recomputed above
+  L20: paper16_s3 vs own asst = -0.3641
+  L22: paper16_s3 vs own asst = -0.3376
+  L40: paper16_s3 vs own asst = -0.3705
+  L60: paper16_s3 vs own asst = -0.3742

@@ -90,6 +90,13 @@ bank stays in sync with paper16 if that ever changes.
 
 ## Status
 
+> **UPDATE 2026-09-24 (P17).** This status is stale since 2026-09-19. Phases 2–5 have run: factor
+> probes (F-05), the persona run and axes (`run-kd`, `vectors_s3`), the 11×11 cross-generalisation
+> (kd11; F-31, F-34, F-97…F-99), and the 3B/8B rungs (F-121). Phase 6 (attribution) — kd's own
+> phase, not the audit's Phase 6 — was not checked by P17 and is left as written.
+> **Source:** `kd/docs/FINDINGS.md` F-05, F-31, F-34, F-97…F-99, F-121; `audit/p17/C_REPORT.md`
+> (F-121, F-126 rows; `run-kd/vectors_s3` is lab-only evidence).
+
 | phase | state |
 |---|---|
 | 1 — prompts and personas | **done, out for external review** |

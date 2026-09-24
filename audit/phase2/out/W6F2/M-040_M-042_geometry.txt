@@ -1,0 +1,66 @@
+==============================================================================
+M-040 / M-041 -- trait vectors vs the assistant axis, layer 40
+==============================================================================
+trait vectors found: 24 in C:\Users\SURAIYA/.cache/huggingface/hub/datasets--lu-christina--assistant-axis-vectors/snapshots/3b3b788432ad33e3a28d9ff08e88a530c0740814/llama-3.3-70b/trait_vectors
+published_assistant_axis.pt md5 2807d7caa7f5f0126be9ba4c4b6ea906
+cos(our HF-rebuilt assistant axis, Lu's published axis) at L40 = 0.9750
+
+trait            vs OUR A vs PUBLISHED A   note
+transparent       +0.6630    +0.6481   note +0.648
+factual           +0.4373    +0.5026   note +0.503
+enigmatic         -0.7290    -0.7051   note -0.705
+cryptic           -0.7016    -0.6750   note -0.675
+subversive        -0.6059    -0.5854   note -0.585
+
+all 24 traits vs the published axis at L40 (context: the claim is about the SPREAD):
+   transparent      +0.6481
+   factual          +0.5026
+   descriptive      +0.2770
+   agreeable        +0.2723
+   strategic        +0.2007
+   earnest          +0.1640
+   calculating      +0.0564
+   blunt            +0.0558
+   literal          -0.0080
+   deferential      -0.0584
+   principled       -0.0784
+   skeptical        -0.0925
+   confrontational  -0.1642
+   submissive       -0.2568
+   effusive         -0.3248
+   accommodating    -0.3471
+   sycophantic      -0.3760
+   critical         -0.3972
+   judgmental       -0.4025
+   manipulative     -0.4643
+   contrarian       -0.4805
+   subversive       -0.5854
+   cryptic          -0.6750
+   enigmatic        -0.7051
+
+==============================================================================
+M-042 -- paper16 score-3 filtered vs unfiltered: cos(deception, assistant)
+==============================================================================
+
+paper16 s3  file=run-paper16/axes_vectors_s3.pt  md5=5d05a42542ae13fc7ac5d893a4ae4f8c
+   counts: {'assistant': (1, 25), 'deception': (8, 7), 'sycophancy': (5, 5), 'unified': (13, 12)}
+   vectors_dir: C:\Users\SURAIYA\Documents\STUDY\thesis\expLB\run-paper16\vectors_s3
+   L20  cos(dec,asst)=-0.3641  cos(syc,asst)=-0.3300  cos(dec,syc)=+0.3182
+   L22  cos(dec,asst)=-0.3376  cos(syc,asst)=-0.2949  cos(dec,syc)=+0.2935
+   L40  cos(dec,asst)=-0.3705  cos(syc,asst)=-0.2701  cos(dec,syc)=+0.3131
+   L60  cos(dec,asst)=-0.3742  cos(syc,asst)=-0.2848  cos(dec,syc)=+0.2831
+
+paper16 all  file=run-paper16/axes_vectors_all.pt  md5=b3942582feab24544ccc2b60217206a8
+   counts: {'assistant': (1, 25), 'deception': (8, 7), 'sycophancy': (5, 5), 'unified': (13, 12)}
+   vectors_dir: C:\Users\SURAIYA\Documents\STUDY\thesis\expLB\run-paper16\vectors_all
+   L20  cos(dec,asst)=-0.4152  cos(syc,asst)=-0.3187  cos(dec,syc)=+0.2863
+   L22  cos(dec,asst)=-0.3872  cos(syc,asst)=-0.2844  cos(dec,syc)=+0.2658
+   L40  cos(dec,asst)=-0.4011  cos(syc,asst)=-0.2687  cos(dec,syc)=+0.3022
+   L60  cos(dec,asst)=-0.4141  cos(syc,asst)=-0.2911  cos(dec,syc)=+0.2798
+
+note's paper16 table (persona-axis-diagnostics.md:91-96):
+   layer  paper16 all  paper16 s3
+     20      -0.415      -0.364
+     22      -0.387      -0.338
+     40      -0.401      -0.370
+     60      -0.414      -0.374

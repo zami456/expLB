@@ -1,0 +1,26 @@
+file   : C:\Users\SURAIYA\Documents\STUDY\thesis\expLB\run-crossgen\kd11\matrices\mean_L40_s42.json
+bank   : axes_vectors_s3_fp32.pt | bank_name: paper16 | k: 5 | layer: 40 | seed: 42 | pooling: mean
+datasets (11): ['instructed-deception', 'harm-pressure-choice', 'harm-pressure-knowledge-report', 'harm-pressure-kr-matched', 'convincing-game', 'insider-trading', 'ai_liar', 'sandbagging_v2', 'roleplaying', 'mask', 'sycophancy_mt']
+
+--- zero-shot AUROC on sycophancy_mt ---
+  contrast     0.4089   (inverted 0.5911)
+  PC1          0.3740   (inverted 0.6260)
+
+--- trained probes, probe=paper: sycophancy_mt as TARGET (column) and SOURCE (row) ---
+feature            target      inv |   source      inv
+raw                0.6013   0.3987 |   0.5010   0.4990  (n=10 each)
+pc:deception       0.3910   0.6090 |   0.2713   0.7287  (n=10 each)
+axes               0.3551   0.6449 |   0.3787   0.6213  (n=10 each)
+axes_resid         0.4289   0.5711 |   0.3323   0.6677  (n=10 each)
+random             0.5413   0.4587 |   0.6327   0.3673  (n=10 each)
+length             0.5820   0.4180 |   0.6076   0.3924  (n=10 each)
+pc:unified         0.4451   0.5549 |   0.4902   0.5098  (n=10 each)
+datapca            0.5776   0.4224 |   0.6609   0.3391  (n=10 each)
+pc:unified@2       0.3424   0.6576 |   0.2351   0.7649  (n=10 each)
+random@2           0.4974   0.5026 |   0.5187   0.4813  (n=10 each)
+datapca@2          0.5594   0.4406 |   0.6783   0.3217  (n=10 each)
+
+--- F-29 ledger table, recomputed ---
+  zero-shot PC1      raw 0.3740   inverted 0.6260
+  trained as TARGET  raw 0.3551   inverted 0.6449   random 0.5413   inv-random = +0.1036
+  trained as SOURCE  raw 0.3787   inverted 0.6213   random 0.6327   inv-random = -0.0114

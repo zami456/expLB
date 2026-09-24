@@ -1,0 +1,63 @@
+run-crossgen/kd11/matrices/mean_L40_s42.json: bank=axes_vectors_s3_fp32.pt bank_name=paper16 k=5 pooling=mean layer=40 seed=42 n_ds=11
+
+--- probe = paper
+  harm-pressure-knowledge-report:
+      axes: target 0.427 / source 0.300
+      random: target 0.698 / source 0.659
+      raw: target 0.699 / source 0.694
+      pc:deception: target 0.621 / source 0.691
+      pc:unified: target 0.538 / source 0.538
+      datapca: target 0.663 / source 0.574
+      length: target 0.638 / source 0.596
+  sycophancy_mt:
+      axes: target 0.355 / source 0.379
+      random: target 0.541 / source 0.633
+      raw: target 0.601 / source 0.501
+      pc:deception: target 0.391 / source 0.271
+      pc:unified: target 0.445 / source 0.490
+      datapca: target 0.578 / source 0.661
+      length: target 0.582 / source 0.608
+
+--- probe = mms
+  harm-pressure-knowledge-report:
+      axes: target 0.493 / source 0.274
+      random: target 0.684 / source 0.651
+      raw: target 0.644 / source 0.580
+      pc:deception: target 0.577 / source 0.669
+      pc:unified: target 0.537 / source 0.327
+      datapca: target 0.670 / source 0.617
+      length: target 0.638 / source 0.596
+  sycophancy_mt:
+      axes: target 0.358 / source 0.216
+      random: target 0.533 / source 0.636
+      raw: target 0.550 / source 0.628
+      pc:deception: target 0.385 / source 0.276
+      pc:unified: target 0.422 / source 0.271
+      datapca: target 0.574 / source 0.663
+      length: target 0.582 / source 0.608
+
+--- probe = lr_reg10
+  harm-pressure-knowledge-report:
+      axes: target 0.408 / source 0.230
+      random: target 0.707 / source 0.654
+      raw: target 0.728 / source 0.702
+      pc:deception: target 0.597 / source 0.664
+      pc:unified: target 0.559 / source 0.373
+      datapca: target 0.658 / source 0.606
+      length: target 0.638 / source 0.596
+  sycophancy_mt:
+      axes: target 0.372 / source 0.379
+      random: target 0.533 / source 0.619
+      raw: target 0.580 / source 0.513
+      pc:deception: target 0.429 / source 0.279
+      pc:unified: target 0.451 / source 0.487
+      datapca: target 0.579 / source 0.661
+      length: target 0.582 / source 0.608
+
+--- off-diagonal means over ALL 11 datasets (paper probe), and without sycophancy_mt
+  raw            11ds=0.6623  10ds(no syc)=0.6870  lift_from_dropping_syc=+0.0247
+  axes           11ds=0.6408  10ds(no syc)=0.7016  lift_from_dropping_syc=+0.0609
+  pc:deception   11ds=0.6432  10ds(no syc)=0.7125  lift_from_dropping_syc=+0.0693
+  pc:unified     11ds=0.6715  10ds(no syc)=0.7168  lift_from_dropping_syc=+0.0453
+  random         11ds=0.5849  10ds(no syc)=0.5845  lift_from_dropping_syc=-0.0005
+  datapca        11ds=0.6651  10ds(no syc)=0.6753  lift_from_dropping_syc=+0.0102

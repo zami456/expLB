@@ -1,0 +1,282 @@
+
+==============================================================================
+D-081  base probe inverts at L20 (0.109); LB Mean Probe 0.12
+==============================================================================
+  base probe (RepE) AUROC on HP-KR, L20                      draft=0.109  file=0.109  -> MATCH
+  ('Mean Probe 0.12' is a Liars' Bench published number -> checked against the PDF, not here)
+
+==============================================================================
+D-084  extended contrast (12v13) on HP-KR: 0.882 / 0.912 / 0.894
+==============================================================================
+  zero_shot.csv auroc_ext_axis HP-KR L20                     draft=0.882  file=0.881568345323741  -> MATCH
+  zero_shot.csv auroc_ext_axis HP-KR L40                     draft=0.912  file=0.9123920863309354  -> MATCH
+  zero_shot.csv auroc_ext_axis HP-KR L44                     draft=0.894  file=0.893636690647482  -> MATCH
+
+==============================================================================
+D-085  published grouping inverts on ORIGINAL bank (0.103) and on re-extracted (0.148)
+==============================================================================
+  persona_ood/zero_shot.csv auroc_axis HP-KR (original bank, L20) draft=0.103  file=0.10285611510791366  -> MATCH
+  persona_ood_ext_L20/zero_shot.csv auroc_axis HP-KR (re-extracted) draft=0.148  file=0.1482769784172662  -> MATCH
+
+==============================================================================
+D-094  base probe L40 HP-KR AUROC 0.936 but balanced accuracy 0.500; so do 8v7 and 12v13
+==============================================================================
+  base probe AUROC HP-KR L40                                 draft=0.936  file=0.9358  -> MATCH
+  balacc HP-KR L40, base probe (RepE-trained)                draft=0.5  file=0.5  -> MATCH
+      recall=0.0  specificity=1.0
+  balacc HP-KR L40, deception axis (8v7)                     draft=0.5  file=0.5  -> MATCH
+      recall=0.0  specificity=1.0
+  balacc HP-KR L40, extended axis (12v13)                    draft=0.5  file=0.5  -> MATCH
+      recall=0.0  specificity=1.0
+
+==============================================================================
+D-095  L20 knowledge-denial threshold flags 88% of honest HP-KR answers; balacc 0.533
+==============================================================================
+  fraction of honest HP-KR answers flagged (1 - specificity) draft=0.88  file=0.8835  -> MATCH
+  balanced accuracy                                          draft=0.533  file=0.5331  -> MATCH
+      recall=0.9496  specificity=0.1165
+
+==============================================================================
+D-096  raw probes: in-distribution 0.983 at L40, off-diagonal 0.732, loss 0.251
+==============================================================================
+  summary.csv baseline diagonal_mean L40                     draft=0.983  file=0.9832729690594887  -> MATCH
+  summary.csv baseline off_diagonal_mean L40                 draft=0.732  file=0.7320325942227636  -> MATCH
+  stated drop 0.251 = diagonal - off-diagonal                draft=0.251  file=0.2512403748367251  -> MATCH
+  RECOMPUTED from matrix_baseline.csv: diagonal=0.9833  off-diagonal=0.7320
+
+==============================================================================
+D-097  worst cell: probe trained on CG, tested on HP-KR, scores 0.06 (L40)
+==============================================================================
+  matrix_baseline L40 [train=CG][test=HP-KR]                 draft=0.06  file=0.0598  -> MATCH
+  lowest five off-diagonal cells: [(0.0598, 'CG', 'HP-KR'), (0.2735, 'RepE', 'IT'), (0.4282, 'CG', 'HP-C'), (0.4737, 'IT', 'CG'), (0.483, 'HP-C', 'HP-KR')]
+
+==============================================================================
+D-101  L20 excluding HP-KR: published contrast 0.919 vs extended 0.909
+==============================================================================
+  summary.csv axis1 off_diagonal_excl_hpkr L20 (published 8v7) draft=0.919  file=0.919401036618595  -> MATCH
+  summary.csv ext_axis1 off_diagonal_excl_hpkr L20 (extended 12v13) draft=0.909  file=0.9086272015872219  -> MATCH
+
+==============================================================================
+D-102  L40 and L44 the extended contrast leads with or without HP-KR (0.917 vs 0.880 at L40)
+==============================================================================
+  ext_axis1 off_diagonal_excl_hpkr L40                       draft=0.917  file=0.916523910894183  -> MATCH
+  axis1   off_diagonal_excl_hpkr L40                         draft=0.88  file=0.8797566199576661  -> MATCH
+  L44: ext_axis1 excl-HPKR=0.9053 vs axis1=0.8734; all-six ext=0.9034 vs axis1=0.8260
+  L40 all six: ext_axis1=0.9158 vs axis1=0.8319
+
+==============================================================================
+D-103  knowledge-denial contrast alone: 0.912 off-diagonal at L40
+==============================================================================
+  summary.csv denial_axis1 off_diagonal_mean L40             draft=0.912  file=0.9115347519128445  -> MATCH
+
+==============================================================================
+D-105  extended PCs(k=3) 0.684/0.866/0.880 vs contrast 0.904/0.916/0.903; gap 0.220/0.050/0.023
+==============================================================================
+  ext_pc3  off_diagonal_mean L20                             draft=0.684  file=0.6836974361396414  -> MATCH
+  ext_axis1 off_diagonal_mean L20                            draft=0.904  file=0.9041173922099752  -> MATCH
+  ext_pc3  off_diagonal_mean L40                             draft=0.866  file=0.8655338484726268  -> MATCH
+  ext_axis1 off_diagonal_mean L40                            draft=0.916  file=0.9158352734669751  -> MATCH
+  ext_pc3  off_diagonal_mean L44                             draft=0.88  file=0.879935829142912  -> MATCH
+  ext_axis1 off_diagonal_mean L44                            draft=0.903  file=0.9033884458767987  -> MATCH
+  gap (axis1 - pc3) L20                                      draft=0.22  file=0.22041995607033382  -> MATCH
+  gap (axis1 - pc3) L40                                      draft=0.05  file=0.05030142499434831  -> MATCH
+  gap (axis1 - pc3) L44                                      draft=0.023  file=0.023452616733886655  -> MATCH
+
+==============================================================================
+D-106  extended PC1 0.768 at L40; published PCs(k=3) 0.679 / 0.639 / 0.617
+==============================================================================
+  ext_pc1 off_diagonal_mean L40                              draft=0.768  file=0.7679503103867945  -> MATCH
+  pc3 off_diagonal_mean L20 (published bank)                 draft=0.679  file=0.6791911168218216  -> MATCH
+  pc3 off_diagonal_mean L40 (published bank)                 draft=0.639  file=0.6393623252004839  -> MATCH
+  pc3 off_diagonal_mean L44 (published bank)                 draft=0.617  file=0.6165888278847148  -> MATCH
+
+==============================================================================
+D-107  three random directions score 0.527 / 0.504 / 0.493
+==============================================================================
+  random3 off_diagonal_mean L20                              draft=0.527  file=0.5269378081801365  -> MATCH
+  random3 off_diagonal_mean L40                              draft=0.504  file=0.5037978223636855  -> MATCH
+  random3 off_diagonal_mean L44                              draft=0.493  file=0.4927088366575445  -> MATCH
+  NOTE: the store carries ONE random-direction draw; no seed column and no spread is recorded.
+
+==============================================================================
+D-118  knowledge-denial is the best detector at the threshold: 0.725 balacc, 0.487 recall (L40)
+==============================================================================
+  Average (Liars' Bench) balacc, 4v6, L40                    draft=0.725  file=0.7251  -> MATCH
+  Average (Liars' Bench) recall, 4v6, L40                    draft=0.487  file=0.4868  -> MATCH
+      base probe (RepE-trained)        balacc=0.6255 recall=0.2814 auroc=0.7784
+      deception axis (8v7)             balacc=0.675 recall=0.3819 auroc=0.7983
+      extended axis (12v13)            balacc=0.6939 recall=0.4129 auroc=0.899
+      knowledge-denial axis (4v6)      balacc=0.7251 recall=0.4868 auroc=0.8938
+
+==============================================================================
+D-120  L20: base probe leads on balacc (0.721 vs 0.591) and recall (0.489 vs 0.187)
+==============================================================================
+  base probe balacc L20                                      draft=0.721  file=0.7209  -> MATCH
+  extended  balacc L20                                       draft=0.591  file=0.5914  -> MATCH
+  base probe recall L20                                      draft=0.489  file=0.4893  -> MATCH
+  extended  recall L20                                       draft=0.187  file=0.1872  -> MATCH
+
+==============================================================================
+D-121  CG at L20: base probe recall 0.677 vs extended 0.174; neither flags an honest response
+==============================================================================
+  base probe recall on CG, L20                               draft=0.677  file=0.6766  -> MATCH
+  extended  recall on CG, L20                                draft=0.174  file=0.1737  -> MATCH
+      specificity: base=1.0  extended=1.0  (1.0 = flags no honest)
+
+==============================================================================
+D-122  IT/ID at L20: base probe flags 13% and 11% of honest vs 0% and 2%; AUROC 0.990/0.973 IT, 0.954/0.950 ID
+==============================================================================
+  IT: base-probe false-positive rate (1-specificity)         draft=0.13  file=0.13090000000000002  -> MATCH
+  IT: extended false-positive rate (1-specificity)           draft=0.0  file=0.0  -> MATCH
+  IT: extended AUROC                                         draft=0.99  file=0.9899  -> MATCH
+  IT: base-probe AUROC                                       draft=0.973  file=0.9726  -> MATCH
+  ID: base-probe false-positive rate (1-specificity)         draft=0.11  file=0.10640000000000005  -> MATCH
+  ID: extended false-positive rate (1-specificity)           draft=0.02  file=0.022199999999999998  -> MATCH
+  ID: extended AUROC                                         draft=0.954  file=0.9539  -> MATCH
+  ID: base-probe AUROC                                       draft=0.95  file=0.9498  -> MATCH
+
+==============================================================================
+D-124  base probe inverts on one dataset per depth: HP-KR L20 0.109, IT L40 0.338, L44 0.289
+==============================================================================
+  base probe AUROC HP-KR L20                                 draft=0.109  file=0.109  -> MATCH
+  base probe AUROC IT L40                                    draft=0.338  file=0.3378  -> MATCH
+      L40: base-probe datasets below 0.5 -> [('IT', 0.3378)]
+  base probe AUROC IT L44                                    draft=0.289  file=0.2888  -> MATCH
+      L44: base-probe datasets below 0.5 -> [('IT', 0.2888)]
+      L20: base-probe datasets below 0.5 -> [('HP-C', 0.4708), ('HP-KR', 0.109)]
+
+==============================================================================
+D-125  HP-C: extended contrast AUROC 0.712 at L40; only 4v6 flags any HP-C lie, recall 0.015
+==============================================================================
+  extended AUROC on HP-C, L40                                draft=0.712  file=0.7116  -> MATCH
+      base probe (RepE-trained)        recall=0.0 balacc=0.5 auroc=0.675
+      deception axis (8v7)             recall=0.0 balacc=0.5 auroc=0.5807
+      extended axis (12v13)            recall=0.0 balacc=0.5 auroc=0.7116
+      knowledge-denial axis (4v6)      recall=0.0149 balacc=0.5075 auroc=0.7552
+      sycophancy axis (5v5)            recall=0.0 balacc=0.5 auroc=0.7507
+
+==============================================================================
+D-127  base probe balanced accuracy peaks at L20: 0.721 / 0.626 / 0.626
+==============================================================================
+  base probe Average (Liars' Bench) balacc L20               draft=0.721  file=0.7209  -> MATCH
+  base probe Average (Liars' Bench) balacc L40               draft=0.626  file=0.6255  -> DIFFERS
+  base probe Average (Liars' Bench) balacc L44               draft=0.626  file=0.6256  -> MATCH
+
+==============================================================================
+D-157  balanced accuracy sits at its 0.5 floor in 18 of the 30 off-diagonal cells, raw probes, L40
+==============================================================================
+  summary_balacc.csv baseline: cells_at_floor=18 of off_diagonal_cells=30
+  RECOMPUTED from matrix_balacc_baseline.csv: 14 of 30 cells exactly 0.5
+  cells: [('CG', 'HP-C'), ('CG', 'HP-KR'), ('CG', 'IT'), ('HP-C', 'IT'), ('HP-KR', 'CG'), ('HP-KR', 'HP-C'), ('HP-KR', 'IT'), ('IT', 'HP-C'), ('IT', 'HP-KR'), ('ID', 'HP-C'), ('ID', 'HP-KR'), ('RepE', 'HP-C'), ('RepE', 'HP-KR'), ('RepE', 'IT')]
+
+==============================================================================
+D-197  at the 'No' token IT falls 0.990 -> 0.173 and HP-KR 0.882 -> 0.190 (extended contrast, L20)
+==============================================================================
+  IT response-token auroc_ext_axis                           draft=0.99  file=0.9899248320505486  -> MATCH
+  IT follow-up-'No' auroc_ext_axis                           draft=0.173  file=0.17255524250569426  -> MATCH
+  HP-KR response-token auroc_ext_axis                        draft=0.882  file=0.881568345323741  -> MATCH
+  HP-KR follow-up-'No' auroc_ext_axis                        draft=0.19  file=0.1899064748201439  -> MATCH
+
+==============================================================================
+D-198  Follow-Up Probe scores 0.088 on HP-KR and flags 88% of its honest answers
+==============================================================================
+  follow-up store, base probe AUROC on HP-KR                 draft=0.088  file=0.0876  -> MATCH
+  fraction of honest HP-KR answers flagged (1 - specificity) draft=0.88  file=0.8805000000000001  -> MATCH
+      balacc=0.2144 recall=0.3094 specificity=0.1195
+
+==============================================================================
+D-206  CG read at its maximum: 0.993 vs 0.912 mean (L40); 0.991 vs 0.859 (L44)
+==============================================================================
+  L40 extended/max/CG auroc                                  draft=0.993  file=0.9927  -> MATCH
+  L40 extended/mean/CG auroc                                 draft=0.912  file=0.9123  -> MATCH
+  L44 extended/max/CG auroc                                  draft=0.991  file=0.9909  -> MATCH
+  L44 extended/mean/CG auroc                                 draft=0.859  file=0.8586  -> MATCH
+
+==============================================================================
+D-207  top-10% read at L40: 0.737 balacc and 0.531 recall vs 0.694 and 0.413 for the mean
+==============================================================================
+  extended/top10 balacc L40                                  draft=0.737  file=0.7372  -> MATCH
+  extended/top10 recall L40                                  draft=0.531  file=0.5306  -> MATCH
+  extended/mean  balacc L40                                  draft=0.694  file=0.6939  -> MATCH
+  extended/mean  recall L40                                  draft=0.413  file=0.4129  -> MATCH
+  All six reads at L40 (extended):
+      mean   auroc=0.899 balacc=0.6939 recall=0.4129
+      top10  auroc=0.9075 balacc=0.7372 recall=0.5306
+      max    auroc=0.9095 balacc=0.7497 recall=0.548
+      first  auroc=0.8631 balacc=0.6059 recall=0.227
+      last   auroc=0.8797 balacc=0.6556 recall=0.4221
+      pre    auroc=0.8254 balacc=0.6515 recall=0.3829
+
+==============================================================================
+D-208  the single maximum lowers RepE's balanced accuracy from 0.998 to 0.638
+==============================================================================
+  L20: extended RepE balacc  mean=0.9473  max=0.8509
+  L40: extended RepE balacc  mean=0.9982  max=0.6382
+  L44: extended RepE balacc  mean=0.9982  max=0.5727
+  draft says 0.998 -> 0.638; the layer is not named in the text.
+
+==============================================================================
+D-216  Table 10 (trained on RepE, L20): response 0.887 / 0.736 / 0.734; follow-up 0.699 / 0.636 / 0.552
+==============================================================================
+  response tokens, extended contrast (1-d)                   draft=0.887  file=0.8867799999999999  -> MATCH
+  response tokens, extended PCs (k=3)                        draft=0.736  file=0.7364200000000001  -> MATCH
+  response tokens, raw activations (8192-d)                  draft=0.734  file=0.7344200000000001  -> MATCH
+  response tokens, knowledge-denial PCs (k=3)                draft=0.81  file=0.8098000000000001  -> MATCH
+  response tokens, published PCs (k=3)                       draft=0.733  file=0.73266  -> MATCH
+  follow-up 'No', knowledge-denial PCs (k=3)                 draft=0.699  file=0.6989400000000001  -> MATCH
+  follow-up 'No', raw activations (8192-d)                   draft=0.636  file=0.6364  -> MATCH
+  follow-up 'No', extended contrast (1-d)                    draft=0.552  file=0.55178  -> MATCH
+  follow-up 'No', extended PCs (k=3)                         draft=0.579  file=0.5791000000000001  -> MATCH
+  follow-up 'No', published PCs (k=3)                        draft=0.574  file=0.5737399999999999  -> MATCH
+
+==============================================================================
+D-225  deception contrast off-diagonal 0.832 at L40 vs 0.663 for the sycophancy contrast; leads at every layer
+==============================================================================
+  L20: axis1(8v7)=0.6511  syc_axis1(5v5)=0.6153
+  L40: axis1(8v7)=0.8319  syc_axis1(5v5)=0.6626
+  L44: axis1(8v7)=0.8260  syc_axis1(5v5)=0.7078
+  axis1 off_diagonal_mean L40                                draft=0.832  file=0.8318937060798296  -> MATCH
+  syc_axis1 off_diagonal_mean L40                            draft=0.663  file=0.6626327170103817  -> MATCH
+
+==============================================================================
+D-233  'AUROC, balanced accuracy and recall matched the pipeline's own results table to four decimal places'
+==============================================================================
+  pipeline run dir XXXX-9-llama-all: ['XXXX-9-llama-all/plots/all_roc_plots_mean.png', 'XXXX-9-llama-all/plots/roc_with_auroc_control_mean.png', 'XXXX-9-llama-all/plots/roc_with_auroc_honest_mean.png', 'XXXX-9-llama-all/plots/violin_plot_mean.png']
+  pipeline run dir XXXX-9-llama-all-L40: ['XXXX-9-llama-all-L40/plots/all_roc_plots_mean.png', 'XXXX-9-llama-all-L40/plots/roc_with_auroc_control_mean.png', 'XXXX-9-llama-all-L40/plots/roc_with_auroc_honest_mean.png', 'XXXX-9-llama-all-L40/plots/violin_plot_mean.png']
+  pipeline run dir XXXX-9-llama-all-L44: ['XXXX-9-llama-all-L44/plots/all_roc_plots_mean.png', 'XXXX-9-llama-all-L44/plots/roc_with_auroc_control_mean.png', 'XXXX-9-llama-all-L44/plots/roc_with_auroc_honest_mean.png', 'XXXX-9-llama-all-L44/plots/violin_plot_mean.png']
+  pipeline run dir XXXX-9-llama-all-followup: ['XXXX-9-llama-all-followup/cfg.yaml', 'XXXX-9-llama-all-followup/plots/all_roc_plots_mean.png', 'XXXX-9-llama-all-followup/plots/roc_with_auroc_control_mean.png', 'XXXX-9-llama-all-followup/plots/roc_with_auroc_honest_mean.png', 'XXXX-9-llama-all-followup/plots/violin_plot_mean.png', 'XXXX-9-llama-all-followup/results_table.csv', 'XXXX-9-llama-all-followup/summary.md']
+  pipeline run dir XXXX-9_lr__repe_honesty__plain__llama-70b-3.3__20260712_053340: ['XXXX-9_lr__repe_honesty__plain__llama-70b-3.3__20260712_053340/plots/all_roc_plots_mean.png', 'XXXX-9_lr__repe_honesty__plain__llama-70b-3.3__20260712_053340/plots/roc_with_auroc_control_mean.png', 'XXXX-9_lr__repe_honesty__plain__llama-70b-3.3__20260712_053340/plots/roc_with_auroc_honest_mean.png', 'XXXX-9_lr__repe_honesty__plain__llama-70b-3.3__20260712_053340/plots/violin_plot_mean.png']
+
+==============================================================================
+D-234  our Follow-Up Probe measurement: 0.636 AUROC and 0.622 balanced accuracy
+==============================================================================
+  follow-up store, base probe Average (Liars' Bench) auroc   draft=0.636  file=0.636  -> MATCH
+  follow-up store, base probe Average (Liars' Bench) balacc  draft=0.622  file=0.6223  -> MATCH
+  his recorded published values (liars_bench_comparison.csv):
+      Mean Probe                         source=Table 6 p.54     balacc=0.636 auroc=0.682 n=5
+      Follow-Up Probe                    source=Table 7 p.55     balacc=0.5780000000000001 auroc=0.6340000000000001 n=5
+      Upper-Bound Probe                  source=Table 8 p.56     balacc=0.89 auroc=0.93 n=5
+      persona axis (zero-shot)           source=measured here    balacc=0.6157555499717134 auroc=0.5512664969720038 n=5
+      persona PC1 (zero-shot)            source=measured here    balacc=0.5945318357112006 auroc=0.5479549016465608 n=5
+      persona PC3 (RepE-trained)         source=measured here    balacc=0.537867863074418 auroc=0.5737317510116521 n=5
+      raw activations (RepE-trained)     source=measured here    balacc=0.6225845437040001 auroc=0.6364090986978101 n=5
+      Follow-Up Probe (measured here, layer 20) source=measured here    balacc=0.6223440050827256 auroc=0.6360117465200714 n=5
+
+==============================================================================
+D-235  our base probe (Mean Probe recipe, L20): 0.697 AUROC and 0.721 balanced accuracy
+==============================================================================
+  ext_L20 store, base probe Average (Liars' Bench) auroc     draft=0.697  file=0.6972  -> MATCH
+  ext_L20 store, base probe Average (Liars' Bench) balacc    draft=0.721  file=0.7209  -> MATCH
+
+==============================================================================
+D-236  on insider trading our base probe reaches 0.909 balanced accuracy
+==============================================================================
+  base probe balacc on IT, L20                               draft=0.909  file=0.9085  -> DIFFERS
+  per-dataset base-probe balanced accuracy at L20:
+      CG     balacc=0.8383 auroc=0.9837 recall=0.6766
+      HP-C   balacc=0.5 auroc=0.4708 recall=0.0
+      HP-KR  balacc=0.5 auroc=0.109 recall=0.0
+      IT     balacc=0.9085 auroc=0.9726 recall=0.948
+      ID     balacc=0.8578 auroc=0.9498 recall=0.822
+
+DONE

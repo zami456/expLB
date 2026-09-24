@@ -1,0 +1,50 @@
+== F-40  8B log 17:14-17:18 progress bars (session counters) ==
+    3359 harm-pressure-choice 9/35 elapsed 02:04   ts=17:14:02
+    3440 harm-pressure-choice 10/35 elapsed 02:22   ts=17:14:24
+    3474 harm-pressure-choice 11/35 elapsed 02:33   ts=17:14:31
+    3506 harm-pressure-choice 12/35 elapsed 02:40   ts=17:14:38
+    3540 harm-pressure-choice 13/35 elapsed 02:46   ts=17:14:44
+    3574 harm-pressure-choice 14/35 elapsed 02:53   ts=17:14:51
+    3608 harm-pressure-choice 15/35 elapsed 03:00   ts=17:14:58
+    3642 harm-pressure-choice 16/35 elapsed 03:07   ts=17:15:05
+    3698 harm-pressure-choice 17/35 elapsed 03:31   ts=17:15:29
+    3732 harm-pressure-choice 18/35 elapsed 03:38   ts=17:15:36
+    3766 harm-pressure-choice 19/35 elapsed 03:44   ts=17:15:42
+    3800 harm-pressure-choice 20/35 elapsed 03:53   ts=17:15:51
+    3832 harm-pressure-choice 21/35 elapsed 04:00   ts=17:15:58
+    3864 harm-pressure-choice 22/35 elapsed 04:06   ts=17:16:04
+    3898 harm-pressure-choice 23/35 elapsed 04:13   ts=17:16:11
+    3931 harm-pressure-choice 24/35 elapsed 04:20   ts=17:16:18
+    3969 harm-pressure-choice 25/35 elapsed 04:27   ts=17:16:25
+    4004 harm-pressure-choice 26/35 elapsed 04:34   ts=17:16:32
+    4038 harm-pressure-choice 27/35 elapsed 04:41   ts=17:16:39
+    4086 harm-pressure-choice 28/35 elapsed 05:02   ts=17:17:00
+    4136 harm-pressure-choice 29/35 elapsed 05:11   ts=17:17:09
+    4169 harm-pressure-choice 30/35 elapsed 05:18   ts=17:17:15
+    4202 harm-pressure-choice 31/35 elapsed 05:24   ts=17:17:22
+    4233 harm-pressure-choice 32/35 elapsed 05:34   ts=17:17:32
+    4266 harm-pressure-choice 33/35 elapsed 05:41   ts=17:17:38
+    4297 harm-pressure-choice 34/35 elapsed 05:47   ts=17:17:45
+    4327 harm-pressure-knowledge-report 0/56 elapsed 00:00   ts=17:18:04
+    4362 harm-pressure-knowledge-report 1/56 elapsed 00:55   ts=17:18:59
+
+  last progress line of instructed-deception in the 17:00 run:
+    3015:   instructed-deception: 100%|ΓûêΓûêΓûêΓûêΓûêΓûêΓûêΓûêΓûêΓûê| 85/85 [11:58<00:00,  6.62s/it]
+
+== F-50  3B arm: dataset starts, completions and the final 'Done.' on 09-20/21 ==
+      12: 2026-09-20 19:36:40,437 - INFO - instructed-deception: 800 to do (0 already on disk)
+    6673: 2026-09-20 20:09:05,408 - INFO - harm-pressure-choice: 800 to do (0 already on disk)
+   13216: 2026-09-20 20:43:33,206 - INFO - convincing-game: 267 to do (0 already on disk)
+   15535: 2026-09-20 20:55:58,917 - INFO - ai_liar: 270 to do (0 already on disk)
+   17886: 2026-09-20 21:09:01,385 - INFO - roleplaying: 371 to do (0 already on disk)
+   20988: 2026-09-20 21:24:14,815 - INFO - Done.
+
+  100% progress-bar lines (per dataset):
+    6670 instructed-deception         400/400 in 32:23
+   13213 harm-pressure-choice         400/400 in 34:26
+   15532 convincing-game              134/134 in 12:25
+   17883 ai_liar                      135/135 in 13:02
+   20986 roleplaying                  186/186 in 15:13
+
+DONE W5B_labD
+python exit 0

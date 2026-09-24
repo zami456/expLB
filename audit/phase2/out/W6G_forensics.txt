@@ -1,0 +1,201 @@
+#### A. boot time and current time
+  NOW 2026-09-23 15:29:41  |  LastBootUpTime 2026-09-22 15:34:30
+
+#### B. every scheduled task with a boot trigger  (name | state | enabled | bootDelay | lastRun | lastResult)
+  AA-Supervisor              state=Disabled enabled=False delay=PT2M
+      lastRun=09/15/2026 12:51:33  lastResult=0  next=09/23/2026 15:36:32
+  Cap-Chain                  state=Disabled enabled=False delay=PT30M
+      lastRun=09/22/2026 16:05:00  lastResult=1  next=
+  Cap-Controls               state=Disabled enabled=False delay=PT30M
+      lastRun=09/22/2026 16:05:00  lastResult=0  next=
+  Cap-Ctrl-Layers            state=Disabled enabled=False delay=PT50M
+      lastRun=09/22/2026 16:25:01  lastResult=0  next=
+  Cap-Ctrl-XG                state=Disabled enabled=False delay=PT35M
+      lastRun=09/22/2026 16:10:01  lastResult=0  next=
+  Cap-Layers                 state=Disabled enabled=False delay=PT15M
+      lastRun=09/22/2026 15:50:00  lastResult=0  next=
+  Cap-Seeds                  state=Disabled enabled=False delay=PT25M
+      lastRun=09/22/2026 16:00:01  lastResult=0  next=
+  Coords-Supervisor          state=Disabled enabled=False delay=PT2M
+      lastRun=09/23/2026 00:28:46  lastResult=267014  next=09/23/2026 15:43:45
+  Crossgen-Chain             state=Disabled enabled=False delay=PT5M
+      lastRun=09/22/2026 15:40:01  lastResult=0  next=
+  Crossgen-Final-Report      state=Disabled enabled=False delay=PT15M
+      lastRun=09/22/2026 15:50:00  lastResult=0  next=
+  Falsify-MeanDir            state=Disabled enabled=False delay=PT30M
+      lastRun=09/22/2026 16:05:00  lastResult=0  next=
+  HPKR-Topup                 state=Disabled enabled=False delay=PT12M
+      lastRun=09/22/2026 15:47:01  lastResult=0  next=
+  KD-Bank-Crossgen           state=Disabled enabled=False delay=PT20M
+      lastRun=09/22/2026 15:55:01  lastResult=0  next=
+  KD-Chain                   state=Disabled enabled=False delay=PT6M
+      lastRun=09/22/2026 15:41:01  lastResult=0  next=
+  KD-Crossgen                state=Disabled enabled=False delay=PT15M
+      lastRun=09/22/2026 15:50:00  lastResult=0  next=
+  KD-Extract                 state=Disabled enabled=False delay=PT12M
+      lastRun=09/22/2026 15:47:01  lastResult=1  next=
+  KD-Knowledge               state=Disabled enabled=False delay=PT10M
+      lastRun=09/22/2026 15:45:01  lastResult=1  next=
+  KD-PassAC                  state=Disabled enabled=False delay=PT35M
+      lastRun=09/22/2026 16:10:01  lastResult=0  next=
+  KD-S23                     state=Disabled enabled=False delay=PT25M
+      lastRun=09/22/2026 16:00:01  lastResult=0  next=
+  KD-S23-AllLayers           state=Disabled enabled=False delay=PT40M
+      lastRun=09/22/2026 16:15:01  lastResult=0  next=
+  KD-Sync-Periodic           state=Ready enabled=True delay=PT8M
+      lastRun=09/23/2026 15:25:09  lastResult=0  next=09/23/2026 15:40:08
+  Night-Chain                state=Disabled enabled=False delay=PT3M
+      lastRun=09/23/2026 00:25:05  lastResult=0  next=09/23/2026 15:40:04
+  PassAC-11                  state=Disabled enabled=False delay=PT12M
+      lastRun=09/22/2026 15:47:01  lastResult=0  next=
+  PassC-PerToken             state=Disabled enabled=False delay=PT3M
+      lastRun=09/23/2026 00:20:44  lastResult=0  next=09/23/2026 15:35:43
+  Premise-Extras             state=Disabled enabled=False delay=PT20M
+      lastRun=09/22/2026 15:55:01  lastResult=0  next=
+  Premise-Layers             state=Disabled enabled=False delay=PT18M
+      lastRun=09/22/2026 15:53:01  lastResult=0  next=
+  Sarc-Pilot                 state=Disabled enabled=False delay=PT20M
+      lastRun=09/22/2026 15:55:01  lastResult=0  next=
+  Scale-3b                   state=Disabled enabled=False delay=PT30M
+      lastRun=09/22/2026 16:05:00  lastResult=0  next=
+  Scale-8b                   state=Disabled enabled=False delay=PT30M
+      lastRun=09/22/2026 16:05:00  lastResult=0  next=
+  Scale-Coords               state=Disabled enabled=False delay=PT45M
+      lastRun=09/22/2026 16:20:00  lastResult=0  next=
+  Thesis_Train               state=Ready enabled=True delay=
+      lastRun=08/04/2026 01:22:37  lastResult=0  next=
+  Norton 360 Patcher         state=Ready enabled=True delay=PT8M
+      lastRun=09/23/2026 13:11:34  lastResult=0  next=09/23/2026 17:11:33
+  Norton VPN Bug Report      state=Ready enabled=True delay=PT10M
+      lastRun=09/23/2026 09:11:34  lastResult=1  next=09/24/2026 09:11:33
+  Overseer                   state=Ready enabled=True delay=PT37M
+      lastRun=09/23/2026 09:11:34  lastResult=0  next=09/24/2026 09:11:33
+  Suite Emergency Update     state=Ready enabled=True delay=PT2M
+      lastRun=09/23/2026 12:35:30  lastResult=0  next=09/23/2026 16:35:30
+  non-Microsoft tasks: 120 ; with a boot trigger: 35
+
+#### C. tasks WITHOUT a boot trigger (name | state | enabled | triggers)
+  AIMemoryBoost              state=Ready enabled=True triggers=MSFT_TaskLogonTrigger
+  AmdX3DInstaller            state=Ready enabled=True triggers=MSFT_TaskLogonTrigger
+  Crossgen-Banks             state=Ready enabled=True triggers=
+  Crossgen-Dedupe            state=Ready enabled=True triggers=
+  Crossgen-Full-B            state=Ready enabled=True triggers=
+  Crossgen-PassC             state=Ready enabled=True triggers=
+  Crossgen-Retrain           state=Ready enabled=True triggers=
+  Crossgen-Smoke             state=Ready enabled=True triggers=
+  Crossgen-Sync-Now          state=Ready enabled=True triggers=
+  Crossgen-Sync-Periodic     state=Ready enabled=True triggers=MSFT_TaskTimeTrigger
+  Crossgen-Tail              state=Ready enabled=True triggers=
+  expLB-acts-venv-build      state=Ready enabled=True triggers=
+  expLB-drive-check          state=Ready enabled=True triggers=
+  expLB-drive-sync           state=Ready enabled=True triggers=
+  expLB-q3q4-bootstrap       state=Ready enabled=True triggers=
+  expLB-q8-trained           state=Ready enabled=True triggers=
+  expLB-significance         state=Ready enabled=True triggers=
+  expLB-zeroshot-nulls       state=Ready enabled=True triggers=
+  Extra-Extractions          state=Ready enabled=True triggers=
+  GCC                        state=Ready enabled=True triggers=MSFT_TaskLogonTrigger
+  GemmaRepairQueue           state=Ready enabled=True triggers=
+  MicrosoftEdgeUpdateTaskMachineCore state=Ready enabled=True triggers=MSFT_TaskLogonTrigger,MSFT_TaskDailyTrigger
+  MicrosoftEdgeUpdateTaskMachineUA state=Ready enabled=True triggers=MSFT_TaskDailyTrigger
+  ModifyLinkUpdate           state=Ready enabled=True triggers=MSFT_TaskSessionStateChangeTrigger,MSFT_TaskLogonTrigger
+  NVIDIA App SelfUpdate_{B2FE1952-0186-46C3-BAEC-A80AA35AC5B8} state=Ready enabled=True triggers=MSFT_TaskEventTrigger
+  OneDrive Reporting Task-S-1-5-21-3188363150-3582827065-3836529029-1001 state=Ready enabled=True triggers=MSFT_TaskTimeTrigger
+  OneDrive Reporting Task-S-1-5-21-3188363150-3582827065-3836529029-1002 state=Ready enabled=True triggers=MSFT_TaskTimeTrigger
+  OneDrive Reporting Task-S-1-5-21-3188363150-3582827065-3836529029-1003 state=Ready enabled=True triggers=MSFT_TaskTimeTrigger
+  OneDrive Reporting Task-S-1-5-21-3188363150-3582827065-3836529029-1004 state=Ready enabled=True triggers=MSFT_TaskTimeTrigger
+  OneDrive Reporting Task-S-1-5-21-3188363150-3582827065-3836529029-1005 state=Ready enabled=True triggers=MSFT_TaskTimeTrigger
+  OneDrive Reporting Task-S-1-5-21-3188363150-3582827065-3836529029-1009 state=Ready enabled=True triggers=MSFT_TaskTimeTrigger
+  OneDrive Reporting Task-S-1-5-21-3188363150-3582827065-3836529029-1010 state=Ready enabled=True triggers=MSFT_TaskTimeTrigger
+  OneDrive Reporting Task-S-1-5-21-3188363150-3582827065-3836529029-1011 state=Ready enabled=True triggers=MSFT_TaskTimeTrigger
+  OneDrive Reporting Task-S-1-5-21-3188363150-3582827065-3836529029-1012 state=Ready enabled=True triggers=MSFT_TaskTimeTrigger
+  OneDrive Reporting Task-S-1-5-21-3188363150-3582827065-3836529029-500 state=Ready enabled=True triggers=MSFT_TaskTimeTrigger
+  OneDrive Standalone Update Task-S-1-5-21-3188363150-3582827065-3836529029-1001 state=Ready enabled=True triggers=MSFT_TaskTimeTrigger
+  OneDrive Standalone Update Task-S-1-5-21-3188363150-3582827065-3836529029-1002 state=Ready enabled=True triggers=MSFT_TaskTimeTrigger
+  OneDrive Standalone Update Task-S-1-5-21-3188363150-3582827065-3836529029-1003 state=Ready enabled=True triggers=MSFT_TaskTimeTrigger
+  OneDrive Standalone Update Task-S-1-5-21-3188363150-3582827065-3836529029-1004 state=Ready enabled=True triggers=MSFT_TaskTimeTrigger
+  OneDrive Standalone Update Task-S-1-5-21-3188363150-3582827065-3836529029-1005 state=Ready enabled=True triggers=MSFT_TaskTimeTrigger
+  OneDrive Standalone Update Task-S-1-5-21-3188363150-3582827065-3836529029-1009 state=Ready enabled=True triggers=MSFT_TaskTimeTrigger
+  OneDrive Standalone Update Task-S-1-5-21-3188363150-3582827065-3836529029-1010 state=Ready enabled=True triggers=MSFT_TaskTimeTrigger
+  OneDrive Standalone Update Task-S-1-5-21-3188363150-3582827065-3836529029-1011 state=Ready enabled=True triggers=MSFT_TaskTimeTrigger
+  OneDrive Standalone Update Task-S-1-5-21-3188363150-3582827065-3836529029-1012 state=Ready enabled=True triggers=MSFT_TaskTimeTrigger
+  OneDrive Standalone Update Task-S-1-5-21-3188363150-3582827065-3836529029-500 state=Ready enabled=True triggers=MSFT_TaskTimeTrigger
+  OneDrive Startup Task-S-1-5-21-3188363150-3582827065-3836529029-1001 state=Ready enabled=True triggers=MSFT_TaskLogonTrigger
+  OneDrive Startup Task-S-1-5-21-3188363150-3582827065-3836529029-1002 state=Ready enabled=True triggers=MSFT_TaskLogonTrigger
+  OneDrive Startup Task-S-1-5-21-3188363150-3582827065-3836529029-1003 state=Ready enabled=True triggers=MSFT_TaskLogonTrigger
+  OneDrive Startup Task-S-1-5-21-3188363150-3582827065-3836529029-1004 state=Ready enabled=True triggers=MSFT_TaskLogonTrigger
+  OneDrive Startup Task-S-1-5-21-3188363150-3582827065-3836529029-1005 state=Ready enabled=True triggers=MSFT_TaskLogonTrigger
+  OneDrive Startup Task-S-1-5-21-3188363150-3582827065-3836529029-1009 state=Ready enabled=True triggers=MSFT_TaskLogonTrigger
+  OneDrive Startup Task-S-1-5-21-3188363150-3582827065-3836529029-1010 state=Ready enabled=True triggers=MSFT_TaskLogonTrigger
+  OneDrive Startup Task-S-1-5-21-3188363150-3582827065-3836529029-1011 state=Ready enabled=True triggers=MSFT_TaskLogonTrigger
+  OneDrive Startup Task-S-1-5-21-3188363150-3582827065-3836529029-1012 state=Ready enabled=True triggers=MSFT_TaskLogonTrigger
+  OneDrive Startup Task-S-1-5-21-3188363150-3582827065-3836529029-500 state=Ready enabled=True triggers=MSFT_TaskLogonTrigger
+  Paper16-Shared             state=Ready enabled=True triggers=
+  PassA-Sweep                state=Disabled enabled=False triggers=MSFT_TaskTimeTrigger
+  PostponeDeviceSetupToast_S-1-5-21-3188363150-3582827065-3836529029-1009_1 state=Ready enabled=True triggers=MSFT_TaskTimeTrigger
+  Rebuild-Banks              state=Disabled enabled=False triggers=MSFT_TaskTimeTrigger
+  GoogleUpdaterTaskSystem152.0.7933.0{700295FF-EE9E-47A6-BF4A-2680397855D6} state=Ready enabled=True triggers=MSFT_TaskLogonTrigger,MSFT_TaskDailyTrigger
+  RunPlatformExperienceHelper_FirstRun state=Ready enabled=True triggers=MSFT_TaskTimeTrigger
+  SoftLandingCreativeManagementTask state=Ready enabled=True triggers=MSFT_TaskTrigger,MSFT_TaskTimeTrigger,MSFT_TaskTimeTrigger
+  SoftLandingDeferralTask-{9e515a4a-7460-48d7-91b3-3f2a51a09b53} state=Ready enabled=True triggers=MSFT_TaskTimeTrigger
+  SoftLandingTriggerTask-128000000001615609-render-{addfc778-95cf-4930-8926-585f97f2ee6f} state=Disabled enabled=False triggers=MSFT_TaskTimeTrigger
+  SoftLandingCreativeManagementTask state=Ready enabled=True triggers=MSFT_TaskTrigger,MSFT_TaskTimeTrigger,MSFT_TaskTimeTrigger
+  SoftLandingDeferralTask-{d1fa8f7d-0f1a-4dc3-98ad-f6dc241968c9} state=Ready enabled=True triggers=MSFT_TaskTimeTrigger
+  SoftLandingTriggerTask-128000000001615609-render-{5a3e5c41-e139-4030-a101-01395b5d691a} state=Disabled enabled=False triggers=MSFT_TaskTimeTrigger
+  SoftLandingCreativeManagementTask state=Ready enabled=True triggers=MSFT_TaskTrigger,MSFT_TaskTimeTrigger,MSFT_TaskTimeTrigger
+  SoftLandingDeferralTask-{0ddeb0a3-bccc-462b-8f22-86c07d3ae302} state=Ready enabled=True triggers=MSFT_TaskTimeTrigger
+  SoftLandingTriggerTask-128000000001615609-render-{9b5d38d6-63ae-434d-ab1f-cea33c4aa24e} state=Disabled enabled=False triggers=MSFT_TaskTimeTrigger
+  SoftLandingCreativeManagementTask state=Ready enabled=True triggers=MSFT_TaskTrigger,MSFT_TaskTimeTrigger,MSFT_TaskTimeTrigger
+  SoftLandingDeferralTask-{89b30c5e-f353-4949-874c-4b2860684775} state=Ready enabled=True triggers=MSFT_TaskTimeTrigger
+  SoftLandingTriggerTask-128000000001615609-render-{5854b46a-8630-4915-9eb6-737b1a117a26} state=Disabled enabled=False triggers=MSFT_TaskTimeTrigger
+  SoftLandingCreativeManagementTask state=Ready enabled=True triggers=MSFT_TaskTrigger,MSFT_TaskTimeTrigger,MSFT_TaskTimeTrigger
+  SoftLandingDeferralTask-{98feb2d2-1c11-4239-81ba-d9b96ae0373c} state=Ready enabled=True triggers=MSFT_TaskTimeTrigger
+  SoftLandingTriggerTask-128000000001615609-render-{8d1a59d3-007f-4a01-a345-13dfdb0a809e} state=Disabled enabled=False triggers=MSFT_TaskTimeTrigger
+  SoftLandingCreativeManagementTask state=Ready enabled=True triggers=MSFT_TaskTrigger,MSFT_TaskTimeTrigger,MSFT_TaskTimeTrigger
+  SoftLandingDeferralTask-{5470e4ae-e78c-4151-b9c9-c20af3f0cccc} state=Ready enabled=True triggers=MSFT_TaskTimeTrigger
+  SoftLandingTriggerTask-128000000001615609-render-{f8b5bb0e-f925-4e57-88ca-2fce00b4856c} state=Disabled enabled=False triggers=MSFT_TaskTimeTrigger
+  SoftLandingCreativeManagementTask state=Ready enabled=True triggers=MSFT_TaskTrigger,MSFT_TaskTimeTrigger,MSFT_TaskTimeTrigger
+  SoftLandingDeferralTask-{06189004-c421-4a4c-ade1-1ff96451db0f} state=Ready enabled=True triggers=MSFT_TaskTimeTrigger
+  SoftLandingTriggerTask-128000000001615609-render-{9d9d44f7-1127-474d-a2c3-5e61faa94eeb} state=Disabled enabled=False triggers=MSFT_TaskTimeTrigger
+  SoftLandingCreativeManagementTask state=Ready enabled=True triggers=MSFT_TaskTrigger,MSFT_TaskTimeTrigger,MSFT_TaskTimeTrigger
+  SoftLandingDeferralTask-{148b5784-8c97-4e19-b0ed-d93add98e5c3} state=Ready enabled=True triggers=MSFT_TaskTimeTrigger
+  SoftLandingTriggerTask-128000000001615609-render-{c555e4cd-67c6-439f-be4c-2adde39e9655} state=Disabled enabled=False triggers=MSFT_TaskTimeTrigger
+
+#### D. rclone config + backup (S-20)
+  C:\Users\user4\AppData\Roaming\rclone\rclone.conf  690  2026-09-23 15:25:10
+  C:\Users\user4\AppData\Roaming\rclone\rclone.conf.bak-2026-09-22  690  2026-09-22 17:19:52
+  C:\Users\user4\AppData\Roaming\rclone\rclone.conf  690  2026-09-23 15:25:10
+  C:\Users\user4\AppData\Roaming\rclone\rclone.conf.bak-2026-09-22  690  2026-09-22 17:19:52
+
+#### E. Drive-sync logs around 2026-09-22 12:18-17:28 (S-19)
+  --- kd_rclone.log  7004728  mtime 2026-09-23 15:26:11
+  --- crossgen_rclone.log  1856  mtime 2026-09-17 21:19:04
+  --- coords_rclone.log  3205224  mtime 2026-09-23 00:34:05
+  --- sync_all.log  34560  mtime 2026-09-16 02:20:08
+  --- night_rclone.log  544662  mtime 2026-09-23 00:25:20
+  --- scale_rclone.log  162997  mtime 2026-09-22 16:20:15
+
+#### F. 70B layer sweep log, resume/failure lines (S-21)
+  --- crossgen_scale_70b.log  23728  mtime 2026-09-20 23:42:37
+      attempts
+      attempts
+  --- scale_coords.status  1594  mtime 2026-09-22 16:20:15
+  --- crossgen_chain.status  272  mtime 2026-09-22 15:45:47
+
+#### G. HuggingFace cache for Llama-3.3-70B (S-28)
+  blobs: 7 files, 0.02 GB
+     6b9e4e7fb171f92fd137b777  0.016 GB  2026-09-20 15:22
+     37b1afe63cadc4ddce30aaff  0 GB  2026-09-20 14:27
+     41cd8d1ca52c3fc5feaf8445  0 GB  2026-09-12 01:23
+     adf1f490f126443b5f6297e7  0 GB  2026-09-12 01:23
+     989c64a011e3b4545253fcaa  0 GB  2026-09-20 15:22
+  snapshots: 15 files, 0 GB
+     model-00009-of-00030.saf  0 GB  2026-09-20 14:33
+     model-00008-of-00030.saf  0 GB  2026-09-20 14:32
+     model-00007-of-00030.saf  0 GB  2026-09-20 14:31
+     model.safetensors.index.  0 GB  2026-09-20 14:27
+     tokenizer_config.json  0 GB  2026-09-12 01:23
+  refs: 1 files, 0 GB
+     main  0 GB  2026-09-12 01:23
+  free space on C:
+     used 913.49 GB  free 17.06 GB

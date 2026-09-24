@@ -1,0 +1,34 @@
+id,outcome,cause,ledger_fix
+F-01,AUDIT WAS WRONG,verdict cell contradicts the audit's own notes,HOLDS -> PARTLY HOLDS
+F-70,AUDIT WAS WRONG,"claim scoped down to half; ""1 of 384"" never checked and matches no surviving family",HOLDS -> PARTLY HOLDS
+O-022,AUDIT WAS WRONG,numbers recomputed but the sentence never graded; 0.676 (110 pairs) glossed as the abstract's 0.732 (30 pairs),HOLDS -> PARTLY HOLDS
+M-007,AUDIT WAS WRONG,verdict cell contradicts the audit's own notes (k=1 vs k=2/k=5 comparability),HOLDS -> PARTLY HOLDS
+M-054,AUDIT WAS WRONG,verdict cell contradicts the audit's own notes (two probe heads in one sentence),HOLDS -> PARTLY HOLDS
+S-25,AUDIT WAS WRONG,premise wrong: max|A-B|=1.347 between PCA bases is a sign flip (cos=-1.0000) not a difference,HOLDS -> PARTLY HOLDS
+D-028,AUDIT WAS WRONG,"verdict cell contradicts a note that literally opens ""AUDIT FLAG""; headline +0.220 collapses to +0.009 excl HP-KR",MATCHES -> PARTLY MATCHES
+F-58,BOTH PARTLY RIGHT,"audit's ""no surviving evidence"" too strong - append-mode logs preserve the 3B/8B rows",note amendment
+F-45,BOTH PARTLY RIGHT,numbers right (audit); evidence directory replaced same evening (agent),note amendment
+S-33,BOTH PARTLY RIGHT,"audit right that the diagnosis fails; agent supplied the true mechanism (script bug), resolving audit self-correction #6",note amendment + resolve SC#6
+D-237,BOTH PARTLY RIGHT,compound claim: two limbs hold and one is falsified; no agreed grading rule,methods note
+O-041,BOTH PARTLY RIGHT,claim is about an event not a measurement; no raw data exists by construction,methods note
+F-47,PHASE 4 WAS WRONG,agent's notes record an extra defect then grade clean,none
+F-56,PHASE 4 WAS WRONG,agent explicitly did not verify the number that is the defect,none
+F-78,PHASE 4 WAS WRONG,agent checked the numbers exist but not that the sentence names the opposite transfer direction,none
+F-91,PHASE 4 WAS WRONG,agent's notes record the seed-mixing and the L36 argmax then grade clean,none
+F-94,PHASE 4 WAS WRONG,agent's notes record a failing prose count then grade clean,none
+F-63,PHASE 4 WAS WRONG,agent's notes record that 'best persona' is best among k=3 only,none
+F-73,PHASE 4 WAS WRONG,agent's notes record both defects verbatim then grade clean,none
+F-86,PHASE 4 WAS WRONG,agent's notes record the comparator lives in a different file/run,none
+F-90,PHASE 4 WAS WRONG,agent read only stored outputs; missed the bank-identification and print-only gaps,none
+O-043,PHASE 4 WAS WRONG,agent's notes record both defects verbatim then grade clean,none
+O-044,PHASE 4 WAS WRONG,agent's notes record 'one control three values' then grade clean,none
+O-046,PHASE 4 WAS WRONG,agent missed the 0.374 mislabel that was a named trap in its own instructions,none
+F-102,PHASE 4 WAS WRONG,agent's notes record an overstatement (random floor 0.446 not 0.49),none
+F-26,PHASE 4 WAS WRONG,"agent's notes say ""Two wording problems"" then grade clean",none
+M-049,PHASE 4 WAS WRONG,agent's notes record the 0.1131 floor below the stated 0.13 then grade clean,none
+M-013,PHASE 4 WAS WRONG,"structural: REVISED -> X supersession is invisible to a blinded reader",none
+S-14,PHASE 4 WAS WRONG,agent's notes record the inferred bank and the two-sided null then grade clean,none
+D-004,PHASE 4 WAS WRONG,agent records a scope refinement; audit's PARTLY rests on the untested causal half,none
+D-166,PHASE 4 WAS WRONG,agent's notes list three caveats then grade clean,none
+H-001,PHASE 4 WAS WRONG,"agent's notes record that the 0.002 agreement nets per-dataset errors 20-25x larger",none
+H-012,PHASE 4 WAS WRONG,"agent's notes say the sentence ""omits"" two caveats then grade clean",none

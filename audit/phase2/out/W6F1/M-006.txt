@@ -1,0 +1,23 @@
+file run-crossgen/matrices/mean_L40_s42.json bank axes_vectors_s3_fp32.pt k 5 pooling mean layer 40 seed 42
+raw off-diag mean (paper, mean pool, 10 ds) = 0.6652  n_pairs=90
+  random@2       mean=0.4907  delta_vs_raw=-0.1744  pairs_won=19/90
+  datapca@2      mean=0.6342  delta_vs_raw=-0.0310  pairs_won=45/90
+  pc:unified@2   mean=0.6314  delta_vs_raw=-0.0338  pairs_won=42/90
+  random         mean=0.5808  delta_vs_raw=-0.0844  pairs_won=27/90
+  datapca        mean=0.6645  delta_vs_raw=-0.0006  pairs_won=51/90
+  pc:unified     mean=0.6592  delta_vs_raw=-0.0059  pairs_won=41/90
+  axes           mean=0.6308  delta_vs_raw=-0.0344  pairs_won=39/90
+  pc:deception   mean=0.6384  delta_vs_raw=-0.0268  pairs_won=35/90
+
+M-007: named cells, pc:unified@2 minus raw (paper, mean pool)
+  ID->IT: raw=0.2638 unified@2=0.9434 delta=+0.6796
+  SB->CG: raw=0.3133 unified@2=0.9931 delta=+0.6798
+  SB->IT: raw=0.3235 unified@2=0.9801 delta=+0.6566
+  HP-C->AIL: raw=0.3784 unified@2=0.9294 delta=+0.5510
+
+HP-KR row (as source) deltas unified@2 - raw:
+   ['ID:-0.69', 'HP-C:-0.51', 'CG:+0.39', 'IT:-0.81', 'AIL:-0.63', 'SB:-0.62', 'RP:-0.13', 'MASK:+0.03', 'SYC:-0.22']
+SYC row (as source):
+   ['ID:-0.25', 'HP-C:-0.23', 'HP-KR:-0.40', 'CG:-0.41', 'IT:-0.16', 'AIL:-0.57', 'SB:-0.56', 'RP:-0.14', 'MASK:-0.05']
+SYC column (as target):
+   ['ID:-0.43', 'HP-C:-0.20', 'HP-KR:-0.22', 'CG:-0.04', 'IT:-0.34', 'AIL:-0.38', 'SB:-0.38', 'RP:-0.02', 'MASK:-0.30']

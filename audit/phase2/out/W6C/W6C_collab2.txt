@@ -1,0 +1,42 @@
+
+---- his layer 20, trained single-source transfer matrix (6 sources x 6 targets)
+    target convince_me__plain                 n=5  mean 0.6632  median 0.7104  oriented 0.7522  best 0.9101
+    target harm_refusal_choice__plain         n=5  mean 0.5349  median 0.5104  oriented 0.5703  best 0.6262
+    target harm_refusal_knowledge_report__plain n=5  mean 0.3936  median 0.3334  oriented 0.7932  best 0.9670
+    target insider_trading_cadenza__plain     n=5  mean 0.7992  median 0.8351  oriented 0.7992  best 0.9132
+    target instruct_dishonesty__plain         n=5  mean 0.7777  median 0.8065  oriented 0.7777  best 0.9576
+    target repe_honesty__plain                n=5  mean 0.7181  median 0.7526  oriented 0.7762  best 0.9195
+  HIS four baselines, same estimators as our audit_L20_s42.json:
+    mean over sources        0.6478    (the briefing's '0.732' at L40)
+    median over sources      0.6581    (the briefing quotes 0.722 -- OUR number)
+    sign-oriented mean       0.7448    (the briefing quotes 0.735 -- OUR number)
+    best source per target   0.8823    (we quote 0.897)
+    (plain median of all 30 off-diagonal pairs: 0.6841; min 0.0501; below 0.5: 7; below 0.4: 6)
+
+---- his layer 40, trained single-source transfer matrix (6 sources x 6 targets)
+    target convince_me__plain                 n=5  mean 0.7875  median 0.7953  oriented 0.7980  best 0.9831
+    target harm_refusal_choice__plain         n=5  mean 0.5709  median 0.5949  oriented 0.5996  best 0.6573
+    target harm_refusal_knowledge_report__plain n=5  mean 0.5836  median 0.6581  oriented 0.7665  best 0.9281
+    target insider_trading_cadenza__plain     n=5  mean 0.7999  median 0.9226  oriented 0.8905  best 0.9654
+    target instruct_dishonesty__plain         n=5  mean 0.8267  median 0.7625  oriented 0.8267  best 0.9780
+    target repe_honesty__plain                n=5  mean 0.8236  median 0.8316  oriented 0.8285  best 0.9999
+  HIS four baselines, same estimators as our audit_L40_s42.json:
+    mean over sources        0.7320    (the briefing's '0.732' at L40)
+    median over sources      0.7608    (the briefing quotes 0.722 -- OUR number)
+    sign-oriented mean       0.7850    (the briefing quotes 0.735 -- OUR number)
+    best source per target   0.9186    (we quote 0.897)
+    (plain median of all 30 off-diagonal pairs: 0.7887; min 0.0598; below 0.5: 6; below 0.4: 2)
+
+---- his layer 44, trained single-source transfer matrix (6 sources x 6 targets)
+    target convince_me__plain                 n=5  mean 0.7571  median 0.8432  oriented 0.7773  best 0.9845
+    target harm_refusal_choice__plain         n=5  mean 0.5704  median 0.5549  oriented 0.6015  best 0.6826
+    target harm_refusal_knowledge_report__plain n=5  mean 0.6368  median 0.6525  oriented 0.7417  best 0.8803
+    target insider_trading_cadenza__plain     n=5  mean 0.7361  median 0.8529  oriented 0.8366  best 0.9185
+    target instruct_dishonesty__plain         n=5  mean 0.8081  median 0.7777  oriented 0.8081  best 0.9751
+    target repe_honesty__plain                n=5  mean 0.7853  median 0.7798  oriented 0.8299  best 0.9999
+  HIS four baselines, same estimators as our audit_L44_s42.json:
+    mean over sources        0.7157    (the briefing's '0.732' at L40)
+    median over sources      0.7435    (the briefing quotes 0.722 -- OUR number)
+    sign-oriented mean       0.7659    (the briefing quotes 0.735 -- OUR number)
+    best source per target   0.9068    (we quote 0.897)
+    (plain median of all 30 off-diagonal pairs: 0.7681; min 0.2379; below 0.5: 5; below 0.4: 3)

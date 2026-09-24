@@ -1,0 +1,105 @@
+##############################################################################
+# F-25 : passC root significance files
+##############################################################################
+== dir: C:\Users\user4\expLB\run-crossgen\kd11\passC exists = True
+   [dir] banks                                    1 entries
+   [dir] csv                                      792 entries
+   [dir] matrices                                 12 entries
+   significance.json                                551848  2026-09-20T13:46:25  tests=1152  keys=['design', 'boot_datasets', 'note', 'tests']  note='BH within each block over every pooling x layer x probe x comparison'
+   significance.json.stale-576                      275541  2026-09-20T13:41:19  tests=576  keys=['design', 'boot_datasets', 'note', 'tests']  note='BH within each block over every pooling x layer x probe x comparison'
+   splits.json                                       19967  2026-09-20T13:45:49
+   summary.json                                    1607819  2026-09-20T13:46:15
+== dir: C:\Users\user4\expLB\run-crossgen\passC exists = True
+   [dir] banks                                    7 entries
+   [dir] csv                                      792 entries
+   [dir] matrices                                 72 entries
+   significance.json                                551848  2026-09-18T16:02:53  tests=1152  keys=['design', 'boot_datasets', 'note', 'tests']  note='BH within each block over every pooling x layer x probe x comparison'
+   splits.json                                      117438  2026-09-18T16:00:47
+   summary.json                                    3450137  2026-09-18T16:02:43
+
+##############################################################################
+# F-25 : logs/kd_passAC.log around the C-root failure
+##############################################################################
+lines: 10454 encoding: utf-8-sig mtime: 2026-09-20T14:21:05
+-- lines 1330-1352 (1-based) --
+   1330| 2026-09-20 13:46:13,075 - INFO -     random@2      paper    diag 0.601  off-diag 0.480  (without sycophancy_mt 0.478)
+   1331| 2026-09-20 13:46:13,309 - INFO -     random@2      lr_reg10 diag 0.601  off-diag 0.479  (without sycophancy_mt 0.477)
+   1332| 2026-09-20 13:46:13,518 - INFO -     random@2      mms      diag 0.604  off-diag 0.480  (without sycophancy_mt 0.478)
+   1333| 2026-09-20 13:46:13,735 - INFO -     datapca@2     paper    diag 0.856  off-diag 0.623  (without sycophancy_mt 0.660)
+   1334| 2026-09-20 13:46:13,972 - INFO -     datapca@2     lr_reg10 diag 0.849  off-diag 0.625  (without sycophancy_mt 0.662)
+   1335| 2026-09-20 13:46:14,186 - INFO -     datapca@2     mms      diag 0.849  off-diag 0.625  (without sycophancy_mt 0.662)
+   1336| 2026-09-20 13:46:14,254 - INFO -   wrote matrices\last_L48_s42.json   9s   (total 2 min)
+   1337| Traceback (most recent call last):
+   1338|   File "C:\Users\user4\expLB\src\assistant_axis_ndif\27_crossgen.py", line 815, in <module>
+   1339|     main()
+   1340|   File "C:\Users\user4\expLB\src\assistant_axis_ndif\27_crossgen.py", line 811, in main
+   1341|     stage_summarize(args, out_root)
+   1342|   File "C:\Users\user4\expLB\src\assistant_axis_ndif\27_crossgen.py", line 736, in stage_summarize
+   1343|     write_json(out_root / "significance.json", {"design": DESIGN, "boot_datasets": args.boot_datasets,
+   1344|   File "C:\Users\user4\expLB\src\assistant_axis_ndif\27_crossgen.py", line 138, in write_json
+   1345|     tmp.replace(path)
+   1346|   File "C:\Program Files\Python312\Lib\pathlib.py", line 1376, in replace
+   1347|     os.replace(self, target)
+   1348| PermissionError: [WinError 5] Access is denied: 'C:\\Users\\user4\\expLB\\run-crossgen\\kd11\\passC\\significance.json.tmp' -> 'C:\\Users\\user4\\expLB\\run-crossgen\\kd11\\passC\\significance.json'
+   1349| 2026-09-20 13:46:27,645 - INFO - output root: C:\Users\user4\expLB\run-crossgen\kd11\passC\banks\kd_s23
+   1350| 2026-09-20 13:46:27,645 - INFO - design: train on 80% of the row dataset; diagonal = its own 20% test split; off-diagonal = 100% of the column dataset
+   1351| 2026-09-20 13:46:27,718 - INFO - loading pooling=mean
+   1352| 2026-09-20 13:46:28,066 - INFO -   instructed-deception             n=200    100D/100H
+
+-- every line mentioning PermissionError / WinError 5 / significance.json.tmp / stale --
+   1348| PermissionError: [WinError 5] Access is denied: 'C:\\Users\\user4\\expLB\\run-crossgen\\kd11\\passC\\significance.json.tmp' -> 'C:\\Users\\user4\\expLB\\run-crossgen\\kd11\\passC\\significance.json'
+
+-- C-root step markers --
+   1341|     stage_summarize(args, out_root)
+   1342|   File "C:\Users\user4\expLB\src\assistant_axis_ndif\27_crossgen.py", line 736, in stage_summarize
+   1343|     write_json(out_root / "significance.json", {"design": DESIGN, "boot_datasets": args.boot_datasets,
+   1344|   File "C:\Users\user4\expLB\src\assistant_axis_ndif\27_crossgen.py", line 138, in write_json
+
+##############################################################################
+# F-25 : does write_json now carry a retry loop?  (source, lab copy)
+##############################################################################
+== C:\Users\user4\expLB\src\assistant_axis_ndif\27_crossgen.py  mtime=2026-09-21T03:47:19
+def write_json(path: Path, obj) -> None:
+    """Atomic write, with a retry because Windows will not replace an OPEN file.
+
+    On 2026-09-20 a passC root run died at the last line with
+        PermissionError: [WinError 5] Access is denied: 'significance.json.tmp' -> '...json'
+    after computing every matrix. The rename loses to anything holding the target: the rclone
+    sync that runs every 15 minutes, or the two antivirus services on this machine. POSIX
+    rename is atomic and silent about readers; Windows is not, so the retry is platform
+    behaviour rather than a race in our own code.
+
+    Retry rather than fall back to a non-atomic write: a partially written results file that
+    looks complete is far worse than a slow one.
+    """
+    path.parent.mkdir(parents=True, exist_ok=True)
+    tmp = path.with_suffix(path.suffix + ".tmp")
+    tmp.write_text(json.dumps(clean(obj), indent=1), encoding="utf-8")
+    delay = 0.5
+    for attempt in range(6):
+        try:
+            tmp.replace(path)
+            return
+        except PermissionError:
+            if attempt == 5:
+                raise
+            logger.warning("  %s is locked (attempt %d/6); retrying in %.1fs",
+                           path.name, attempt + 1, delay)
+            time.sleep(delay)
+            delay = min(delay * 2, 8.0)
+
+
+# --------------------------------------------------------------------------- #
+# splitting
+# --------------------------------------------------------------------------- #
+== C:\Users\user4\expLB\src\assistant_axis_ndif\ndif_common.py  mtime=2026-09-15T22:36:23
+   no write_json in this file
+
+##############################################################################
+# cap question sets on the lab PC (framing/kind)
+##############################################################################
+  cap_questions.jsonl                n=20  kind={None: 20}  framing={None: 20}  with_answer=0
+  cap_questions_v2_draft.jsonl       n=20  kind={'recall': 10, 'misconception': 10}  framing={'third': 10, 'first': 10}  with_answer=20
+  cap_questions_v3.jsonl             n=20  kind={'recall': 10, 'misconception': 10}  framing={'third': 10, 'first': 10}  with_answer=20
+  sarcasm_pilot_v1.jsonl             n=20  kind={None: 20}  framing={None: 20}  with_answer=0
+python exit 0

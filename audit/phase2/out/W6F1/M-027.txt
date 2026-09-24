@@ -1,0 +1,19 @@
+audit/phase2/layer_sensitivity.csv: 627 rows with pooling=mean probe=paper seed=42 dataset_set=paper5 k=3
+
+scale_3b: 7 layers with both a persona feature and datapca
+   per layer best(axes,pc:deception) - datapca: {0: 0.0882, 4: 0.1282, 8: 0.1286, 12: 0.0136, 16: 0.2023, 20: 0.1499, 24: 0.127}
+   L16 = +0.2023   layer-mean = +0.1197   range [+0.0136, +0.2023]   rank of L16 = 1 of 7
+
+scale_8b: 8 layers with both a persona feature and datapca
+   per layer best(axes,pc:deception) - datapca: {0: 0.0398, 4: 0.0694, 8: 0.1346, 12: 0.0297, 16: 0.1147, 20: 0.1041, 24: 0.166, 28: 0.1631}
+   L16 = +0.1147   layer-mean = +0.1027   range [+0.0297, +0.1660]   rank of L16 = 4 of 8
+
+scale_70b: 21 layers with both a persona feature and datapca
+   per layer best(axes,pc:deception) - datapca: {0: -0.0114, 4: 0.0062, 8: 0.096, 12: 0.1386, 16: 0.1345, 20: 0.0668, 22: 0.0538, 24: 0.0874, 28: 0.0161, 32: 0.093, 36: 0.0992, 40: 0.0794, 44: 0.0672, 48: 0.0777, 52: 0.0796, 56: 0.0683, 60: 0.0823, 64: 0.0877, 68: 0.105, 72: 0.0943, 76: 0.1385}
+   L40 = +0.0794   layer-mean = +0.0791   range [-0.0114, +0.1386]   rank of L40 = 13 of 21
+
+--- the paper comparator "+0.22" (Mahadik & Skapars, Appendix Fig 9, 3B deception, layer 14, k=1)
+   Random Subspace Δ          5x5 read from the PDF, off-diagonal mean over 20 cells = -0.1430
+   Dataset PCA Δ              5x5 read from the PDF, off-diagonal mean over 20 cells = -0.1175
+   Axis PC Projection Δ       5x5 read from the PDF, off-diagonal mean over 20 cells = +0.1015
+   Axis PC Projection minus Dataset PCA = +0.2190  <- the "+0.22"

@@ -1,0 +1,78 @@
+==============================================================================
+commit: f386a72 -> f386a72583190756ebe05d51edb0bc97cd16a094
+  L20: summary.csv (trained off-diagonal means):
+       baseline       dim=8192  off_diag=0.6478  off_diag_excl_hpkr=0.7282  diag=0.9564
+       pc1            dim=1     off_diag=0.6669  off_diag_excl_hpkr=0.9161  diag=0.8873
+       axis1          dim=1     off_diag=0.6511  off_diag_excl_hpkr=0.9194  diag=0.9076
+       ext_pc1        dim=1     off_diag=0.6613  off_diag_excl_hpkr=0.6817  diag=0.6426
+       ext_axis1      dim=1     off_diag=0.9041  off_diag_excl_hpkr=0.9086  diag=0.9035
+       denial_axis1   dim=1     off_diag=0.8660  off_diag_excl_hpkr=0.8613  diag=0.8647
+  L20: zero_shot.csv, n datasets = 6 -> ['convince_me__plain', 'harm_refusal_choice__plain', 'harm_refusal_knowledge_report__plain', 'insider_trading_cadenza__plain', 'instruct_dishonesty__plain', 'repe_honesty__plain']
+       axis1      (8v7)  mean zero-shot AUROC = 0.7909
+       ext_axis1  (12v13) mean zero-shot AUROC = 0.9041
+       pc1               mean = 0.8056   ext_pc1 mean = 0.6613
+       margin vs trained baseline 0.6478:  axis1 +0.1431   ext_axis1 +0.2563   kd personas worth +0.1132  share 44.2%
+       minus repe_honesty (n=5): axis1=0.7503  ext_axis1=0.8868
+       per-dataset: convince_me: 0.940->0.969  harm_refusal_choice: 0.717->0.639  harm_refusal_knowledge_report: 0.148->0.882  insider_trading_cadenza: 0.988->0.990  instruct_dishonesty: 0.959->0.954  repe_honesty: 0.994->0.991
+       [drop repe] baseline(off_diag,all6)=0.6478 -> axis1 margin +0.1026  kd worth +0.1364
+  L40: summary.csv (trained off-diagonal means):
+       baseline       dim=8192  off_diag=0.7320  off_diag_excl_hpkr=0.7581  diag=0.9833
+       pc1            dim=1     off_diag=0.8593  off_diag_excl_hpkr=0.8926  diag=0.8584
+       axis1          dim=1     off_diag=0.8319  off_diag_excl_hpkr=0.8798  diag=0.8289
+       ext_pc1        dim=1     off_diag=0.7680  off_diag_excl_hpkr=0.7744  diag=0.7637
+       ext_axis1      dim=1     off_diag=0.9158  off_diag_excl_hpkr=0.9165  diag=0.9156
+       denial_axis1   dim=1     off_diag=0.9115  off_diag_excl_hpkr=0.9101  diag=0.9112
+  L40: zero_shot.csv, n datasets = 6 -> ['convince_me__plain', 'harm_refusal_choice__plain', 'harm_refusal_knowledge_report__plain', 'insider_trading_cadenza__plain', 'instruct_dishonesty__plain', 'repe_honesty__plain']
+       axis1      (8v7)  mean zero-shot AUROC = 0.8319
+       ext_axis1  (12v13) mean zero-shot AUROC = 0.9158
+       pc1               mean = 0.8593   ext_pc1 mean = 0.7680
+       margin vs trained baseline 0.7320:  axis1 +0.0999   ext_axis1 +0.1838   kd personas worth +0.0839  share 45.7%
+       minus repe_honesty (n=5): axis1=0.7983  ext_axis1=0.8990
+       per-dataset: convince_me: 0.865->0.912  harm_refusal_choice: 0.581->0.712  harm_refusal_knowledge_report: 0.593->0.912  insider_trading_cadenza: 0.979->0.980  instruct_dishonesty: 0.974->0.978  repe_honesty: 1.000->1.000
+       [drop repe] baseline(off_diag,all6)=0.7320 -> axis1 margin +0.0662  kd worth +0.1007
+==============================================================================
+commit: origin/feat/persona-pc-ood -> 45b16d906da0e3da13b1abb34898e69311d688cf
+  L20: summary.csv (trained off-diagonal means):
+       baseline       dim=8192  off_diag=0.6478  off_diag_excl_hpkr=0.7282  diag=0.9564
+       pc1            dim=1     off_diag=0.6669  off_diag_excl_hpkr=0.9161  diag=0.8873
+       axis1          dim=1     off_diag=0.6511  off_diag_excl_hpkr=0.9194  diag=0.9076
+       ext_pc1        dim=1     off_diag=0.6613  off_diag_excl_hpkr=0.6817  diag=0.6426
+       ext_axis1      dim=1     off_diag=0.9041  off_diag_excl_hpkr=0.9086  diag=0.9035
+       denial_axis1   dim=1     off_diag=0.8660  off_diag_excl_hpkr=0.8613  diag=0.8647
+  L20: zero_shot.csv, n datasets = 6 -> ['convince_me__plain', 'harm_refusal_choice__plain', 'harm_refusal_knowledge_report__plain', 'insider_trading_cadenza__plain', 'instruct_dishonesty__plain', 'repe_honesty__plain']
+       axis1      (8v7)  mean zero-shot AUROC = 0.7909
+       ext_axis1  (12v13) mean zero-shot AUROC = 0.9041
+       pc1               mean = 0.8056   ext_pc1 mean = 0.6613
+       margin vs trained baseline 0.6478:  axis1 +0.1431   ext_axis1 +0.2563   kd personas worth +0.1132  share 44.2%
+       minus repe_honesty (n=5): axis1=0.7503  ext_axis1=0.8868
+       per-dataset: convince_me: 0.940->0.969  harm_refusal_choice: 0.717->0.639  harm_refusal_knowledge_report: 0.148->0.882  insider_trading_cadenza: 0.988->0.990  instruct_dishonesty: 0.959->0.954  repe_honesty: 0.994->0.991
+       [drop repe] baseline(off_diag,all6)=0.6478 -> axis1 margin +0.1026  kd worth +0.1364
+  L40: summary.csv (trained off-diagonal means):
+       baseline       dim=8192  off_diag=0.7320  off_diag_excl_hpkr=0.7581  diag=0.9833
+       pc1            dim=1     off_diag=0.8593  off_diag_excl_hpkr=0.8926  diag=0.8584
+       axis1          dim=1     off_diag=0.8319  off_diag_excl_hpkr=0.8798  diag=0.8289
+       ext_pc1        dim=1     off_diag=0.7680  off_diag_excl_hpkr=0.7744  diag=0.7637
+       ext_axis1      dim=1     off_diag=0.9158  off_diag_excl_hpkr=0.9165  diag=0.9156
+       denial_axis1   dim=1     off_diag=0.9115  off_diag_excl_hpkr=0.9101  diag=0.9112
+  L40: zero_shot.csv, n datasets = 6 -> ['convince_me__plain', 'harm_refusal_choice__plain', 'harm_refusal_knowledge_report__plain', 'insider_trading_cadenza__plain', 'instruct_dishonesty__plain', 'repe_honesty__plain']
+       axis1      (8v7)  mean zero-shot AUROC = 0.8319
+       ext_axis1  (12v13) mean zero-shot AUROC = 0.9158
+       pc1               mean = 0.8593   ext_pc1 mean = 0.7680
+       margin vs trained baseline 0.7320:  axis1 +0.0999   ext_axis1 +0.1838   kd personas worth +0.0839  share 45.7%
+       minus repe_honesty (n=5): axis1=0.7983  ext_axis1=0.8990
+       per-dataset: convince_me: 0.865->0.912  harm_refusal_choice: 0.581->0.712  harm_refusal_knowledge_report: 0.593->0.912  insider_trading_cadenza: 0.979->0.980  instruct_dishonesty: 0.974->0.978  repe_honesty: 1.000->1.000
+       [drop repe] baseline(off_diag,all6)=0.7320 -> axis1 margin +0.0662  kd worth +0.1007
+
+==============================================================================
+EXTRA CHECKS (commit f386a72)
+==============================================================================
+  L20: matrix_baseline off-diag over 6 = 0.6478 (n=30); over 5 (no repe) = 0.6085 (n=20)
+       axis1 5-ds zero-shot 0.7503 -> margin vs 5-ds baseline +0.1418;  kd worth +0.1364
+       axis1         trained_offdiag=0.651080  zero_shot_mean=0.790880  |diff|=1.40e-01
+       ext_axis1     trained_offdiag=0.904117  zero_shot_mean=0.904117  |diff|=2.22e-16
+       denial_axis1  trained_offdiag=0.866039  zero_shot_mean=0.866039  |diff|=1.11e-16
+  L40: matrix_baseline off-diag over 6 = 0.7320 (n=30); over 5 (no repe) = 0.7064 (n=20)
+       axis1 5-ds zero-shot 0.7983 -> margin vs 5-ds baseline +0.0919;  kd worth +0.1007
+       axis1         trained_offdiag=0.831894  zero_shot_mean=0.831894  |diff|=0.00e+00
+       ext_axis1     trained_offdiag=0.915835  zero_shot_mean=0.915835  |diff|=0.00e+00
+       denial_axis1  trained_offdiag=0.911535  zero_shot_mean=0.911535  |diff|=0.00e+00

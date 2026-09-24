@@ -1,0 +1,13 @@
+### published axis: C:\Users\SURAIYA/.cache/huggingface/hub/datasets--lu-christina--assistant-axis-vectors/snapshots\3b3b788432ad33e3a28d9ff08e88a530c0740814\llama-3.3-70b\assistant_axis.pt
+    published axis shape (80, 8192) dtype torch.bfloat16
+
+### paper16 bank: run-paper16/axes_vectors_s3.pt  vectors_dir=C:\Users\SURAIYA\Documents\STUDY\thesis\expLB\run-paper16\vectors_s3
+    roles stored: 26; role_groups: {'deception': 3, 'honesty': 3, 'sycophancy': 3, 'anti_sycophancy': 3, 'assistant_anchor': 3}
+    CONCEAL 8 roles, DISCLOSE 14 roles
+    cached HF role vectors: 275
+
+ layer  cos(p16 asst, AA)   p16 dec vs AA  HF 22v22 vs AA  p16 dec vs own asst
+    20              0.366          -0.168          -0.613               -0.364   (HF groups 8v14)
+    22              0.306          -0.141          -0.579               -0.338   (HF groups 8v14)
+    40              0.372          -0.226          -0.524               -0.370   (HF groups 8v14)
+    60              0.300          -0.180          -0.416               -0.374   (HF groups 8v14)

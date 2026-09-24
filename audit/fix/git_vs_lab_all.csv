@@ -1,0 +1,27 @@
+file,kind,verdict,git,lab,common,git_only,diff_values,max_delta,max_field,fields
+kd/run/factor_probes/kd_knowledge/rows.jsonl,jsonl,VALUES DIFFER,1962,1962,1962,0,1962,0,,
+kd/run/factor_probes/kd_utterance/rows.jsonl,jsonl,VALUES DIFFER,900,900,900,0,900,0,,
+kd/run/knowledge/scores.jsonl,jsonl,SUBSET-IDENTICAL,1095,1459,1095,0,0,0,,
+run-crossgen/banks/hf100/significance.json,significance,VALUES DIFFER,96,4032,96,0,96,0.10985193258142179,dataset_q_bh,dataset_q_bh
+run-crossgen/banks/hf100/splits.json,splits,SUBSET-IDENTICAL,10,60,10,0,0,0,,
+run-crossgen/banks/hf100/summary.json,summary,SUBSET-IDENTICAL,66,3066,66,0,0,0.0,,
+run-crossgen/banks/own100/significance.json,significance,VALUES DIFFER,96,4032,96,0,96,0.14434192431362836,dataset_q_bh,dataset_q_bh
+run-crossgen/banks/own100/splits.json,splits,SUBSET-IDENTICAL,10,60,10,0,0,0,,
+run-crossgen/banks/own100/summary.json,summary,SUBSET-IDENTICAL,66,3066,66,0,0,0.0,,
+run-crossgen/banks/paper16_famcentred/significance.json,significance,VALUES DIFFER,96,4032,96,0,96,0.2284474226804123,dataset_q_bh,dataset_q_bh
+run-crossgen/banks/paper16_famcentred/splits.json,splits,SUBSET-IDENTICAL,10,60,10,0,0,0,,
+run-crossgen/banks/paper16_famcentred/summary.json,summary,SUBSET-IDENTICAL,66,3066,66,0,0,0.0,,
+run-crossgen/banks/paper16_shared/significance.json,significance,VALUES DIFFER,96,4032,96,0,96,0.33024578313253006,dataset_q_bh,dataset_q_bh
+run-crossgen/banks/paper16_shared/splits.json,splits,SUBSET-IDENTICAL,10,60,10,0,0,0,,
+run-crossgen/banks/paper16_shared/summary.json,summary,SUBSET-IDENTICAL,66,3066,66,0,0,0.0,,
+run-crossgen/kd11/banks/kd/significance.json,significance,VALUES DIFFER,4032,6300,4032,0,4045,0.18332600422832981,dataset_q_bh,"dataset_q_bh,significant_datasets"
+run-crossgen/kd11/banks/kd_s23/significance.json,significance,VALUES DIFFER,468,5544,468,0,476,0.11598965759801383,dataset_q_bh,"dataset_q_bh,significant_datasets"
+run-crossgen/kd11/banks/kd_s23/summary.json,summary,SUBSET-IDENTICAL,216,1512,216,0,0,0.0,,
+run-crossgen/kd11/passA/banks/kd_s23/significance.json,significance,VALUES DIFFER,468,12480,468,0,476,0.1696167235494881,dataset_q_bh,"dataset_q_bh,significant_datasets"
+run-crossgen/kd11/passA/banks/kd_s23/summary.json,summary,SUBSET-IDENTICAL,216,5760,216,0,0,0.0,,
+run-crossgen/kd11/passA/significance.json,significance,VALUES DIFFER,576,15360,576,0,576,0.1587373221117061,dataset_q_bh,dataset_q_bh
+run-crossgen/kd11/passA/summary.json,summary,SUBSET-IDENTICAL,198,5280,198,0,0,0.0,,
+run-crossgen/kd11/significance.json,significance,VALUES DIFFER,4032,4788,4032,0,4020,0.0441,dataset_q_bh,dataset_q_bh
+run-crossgen/significance.json,significance,VALUES DIFFER,192,4788,192,0,192,0.3914025974025973,dataset_q_bh,dataset_q_bh
+run-crossgen/splits.json,splits,SUBSET-IDENTICAL,60,60,60,0,0,0,,
+run-crossgen/summary.json,summary,SUBSET-IDENTICAL,66,2646,66,0,0,0.0,,

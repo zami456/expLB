@@ -1,0 +1,73 @@
+==============================================================================
+O-081  --  7.5 Q5 pooled within/across gap
+==============================================================================
+file : C:\Users\SURAIYA\Documents\STUDY\thesis\expLB\run-coords\q5_semantics_L44_last.json | 44835 B | md5 5b7c206abfadaac325a60d68f2d5a4f3 | mtime 2026-09-16 19:22:00
+source matrix: run-coords\p1_L44_last_withsyc.json
+semantics map: 11 datasets
+  by construct: {'instructed_intent': 8, 'judge_grade': 1, 'belief_inconsistency': 2}
+
+features       probe         within    n_w     across    n_a difference   perm p
+raw            mms         0.748208     44   0.584580     46   0.163628 0.043348 <== doc row
+raw            lr_reg10    0.645975     44   0.615788     46   0.030187 0.285836
+pc:deception   mms         0.790695     44   0.448874     46   0.341821 0.026949
+pc:deception   lr_reg10    0.741184     44   0.468892     46   0.272292 0.042048
+axes           mms         0.768403     44   0.564736     46   0.203667 0.103045
+axes           lr_reg10    0.759059     44   0.537195     46   0.221864 0.050997
+random         mms         0.546215     44   0.499307     46   0.046908 0.206590
+random         lr_reg10    0.542652     44   0.498356     46   0.044296 0.206140
+
+LEVEL 1  doc: 0.748 vs 0.585, p 0.043
+         file: 0.748208 vs 0.584580, p 0.043348  -> rounded 0.748 / 0.585 / 0.043
+         MATCH
+LEVEL 2  difference re-derived: 0.748208 - 0.584580 = 0.163628 (stored 0.163628)
+LEVEL 2  the same row's block means (the 7.5 table):
+           instructed_intent->instructed_intent n=42   mean 0.761032
+           instructed_intent->belief_inconsistency n=14   mean 0.494924
+           instructed_intent->judge_grade     n=7    mean 0.698696
+           belief_inconsistency->instructed_intent n=14   mean 0.591306
+           belief_inconsistency->judge_grade  n=2    mean 0.530400
+           belief_inconsistency->belief_inconsistency n=2    mean 0.478891
+           judge_grade->instructed_intent     n=7    mean 0.675265
+           judge_grade->belief_inconsistency  n=2    mean 0.502457
+LEVEL 2  companion sentence '42 of its 44 within-cells are instructed_intent pairs':
+           datasets per construct in the map: {'instructed_intent': 8, 'judge_grade': 1, 'belief_inconsistency': 2}
+           ordered off-diagonal pairs if ALL mapped datasets were in the matrix: {'instructed_intent': 56, 'judge_grade': 0, 'belief_inconsistency': 2}
+           stored n_within = 44, n_across = 46 (total 90 = 10x9, so the matrix has 10 of the 11 mapped datasets)
+           => within = intent(k) pairs + belief(2) pairs; k*(k-1)+2 = 44 requires k = 7 instructed_intent datasets present, i.e. 42 of 44 within-cells are intent->intent.
+
+==============================================================================
+O-095 / O-096  --  7.7 Q7 judge sensitivity, recomputed from the raw judge output
+==============================================================================
+70B  judge dir : C:\Users\SURAIYA\Documents\STUDY\thesis\expLB\run-paper16\scores  (25 files)
+405B judge dir : C:\Users\SURAIYA\Documents\STUDY\thesis\expLB\run-paper16\scores_405b  (25 files)
+personas only in 70B : []
+personas only in 405B: []
+
+scored items: 70B 1350, 405B 1350, common 1350
+  (paper16 = 25 personas x 54 items)
+
+EXACT SCORE AGREEMENT on the common items: 1231 / 1350 = 91.1852%
+   doc says 91.2%% (1,231 of 1,350)
+
+score distribution over the 1350 common items
+   70B : {0: 12, 2: 249, 3: 1089}
+   405B: {0: 19, 1: 2, 2: 250, 3: 1079}
+   doc : 70B 0:12, 2:249, 3:1089 | 405B 0:19, 1:2, 2:250, 3:1079
+
+SCORE-3 RATE   70B 0.80667 (80.7%)   405B 0.79926 (79.9%)   gap 0.74 pp
+   doc says 80.7%% vs 79.9%%, gap 0.8 percentage points
+
+per-persona exact agreement (lowest 6):
+   pc_handler                 37/50   = 0.7400
+   pc_plausible_denier        38/50   = 0.7600
+   pc_fact_checker            39/50   = 0.7800
+   pc_enabler                 50/60   = 0.8333
+   pc_people_pleaser          50/60   = 0.8333
+   pc_coverup_operator        42/50   = 0.8400
+   doc: handler 0.74, plausible_denier 0.76, fact_checker 0.78
+
+vector filter (keep score-3): 70B keeps 1089, 405B keeps 1079, intersection 1029, symmetric difference 110 (8.15% of items)
+
+O-096 second sentence: 'The earlier ~7-9%% own100-vs-hf275 gap confounded the judge with a different generation run.'
+   own100 rollouts/scores are LAB-ONLY (C:/Users/user4/expLB/run);
+   nothing in the repo working tree holds an own100 score-3 rate, so the 7-9%% figure cannot be checked from local data.

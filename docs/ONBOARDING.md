@@ -42,6 +42,13 @@ from Liars' Bench (~85%), Apollo's deception-detection rollouts, and MASK.
 
 ---
 
+> **UPDATE 2026-09-24 (P17).** This section is dated 2026-09-17. Since then `kd/` has run and a full
+> audit (Phases 0–6, then P17) has checked the ledger, now F-01…F-128. Three wording-matched tests
+> converge — where both classes deny knowledge, no persona direction reads the lie (F-115, F-116,
+> F-118; one finding). For current state read `CLAUDE.local.md`, then `audit/p17/P17_FACTS.md`.
+> **Source:** `kd/docs/FINDINGS.md` F-115, F-116, F-118, F-128; `audit/phase6/RESULTS.md`;
+> `audit/BRANCH_PINS.md`.
+
 ## 3. State as of 2026-09-17
 
 **All eleven questions are answered.** Full tables, caveats and superseded readings are in

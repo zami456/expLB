@@ -1,0 +1,26 @@
+current tests : 5544
+old family    : 13 comparisons -> ['axes - datapca', 'axes - random', 'axes - raw', 'datapca - raw', 'datapca@2 - raw', 'pc:deception - datapca', 'pc:deception - random', 'pc:deception - raw', 'pc:unified - datapca', 'pc:unified - random', 'pc:unified - raw', 'random - raw', 'random@2 - raw']
+reconstructed : 3276 tests  (F-34 says 3,276)
+
+=== q under the reconstructed 3,276-test family, block 9, mean, paper ===
+  L40  pc:unified - raw         diff=+0.1082 p=0.006 q_current=0.100 q_old_family=0.127
+  L44  pc:unified - raw         diff=+0.1156 p=0.007 q_current=0.107 q_old_family=0.135
+  L40  pc:unified - datapca     diff=+0.1199 p=0.014 q_current=0.146 q_old_family=0.169
+  L44  pc:unified - datapca     diff=+0.1291 p=0.007 q_current=0.103 q_old_family=0.130
+
+=== best (lowest) q in the reconstructed family over ALL tests ===
+  q=0.020 random - raw L22 last blk9 mms diff=-0.2455
+  best POSITIVE pc:unified vs raw/datapca: q=0.101 pc:unified - raw L44 last blk9 lr_reg10 diff=+0.1572
+
+=== tests clearing q<0.05 in the reconstructed 3,276-test family ===
+  count: 9 | negative: 5 | positive: 4
+  L36  mean  blk9 lr_reg10  pc:unified - random        diff=+0.2159 q_old=0.020 q_now=0.018
+  L44  mean  blk9 lr_reg10  pc:unified - random        diff=+0.2273 q_old=0.020 q_now=0.018
+  L44  mean  blk9 mms       pc:unified - random        diff=+0.2336 q_old=0.020 q_now=0.018
+  L44  mean  blk9 paper     pc:unified - random        diff=+0.2435 q_old=0.020 q_now=0.018
+  L22  last  blk9 mms       random - raw               diff=-0.2455 q_old=0.020 q_now=0.018
+  L28  last  blk9 mms       random - raw               diff=-0.2570 q_old=0.020 q_now=0.018
+  L28  last  blk9 mms       random@2 - raw             diff=-0.2417 q_old=0.020 q_now=0.018
+  L28  last  blk9 paper     random@2 - raw             diff=-0.1804 q_old=0.036 q_now=0.025
+  L44  last  blk9 mms       random@2 - raw             diff=-0.2287 q_old=0.020 q_now=0.018
+python exit 0

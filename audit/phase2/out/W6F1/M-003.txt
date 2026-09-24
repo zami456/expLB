@@ -1,0 +1,15 @@
+file: run-crossgen/smoke/last_L44_s42.json pooling last layer 44 seed 42 bank axes_vectors_s3_fp32.pt k 5
+seconds recorded: 36.95790100097656
+
+LEVEL 1 (stored smoke_checks):
+  raw            new_9block=0.723757 earlier_sweep=0.720037 absdiff=0.003720
+  pc:deception   new_9block=0.695789 earlier_sweep=0.699754 absdiff=0.003965
+  axes           new_9block=0.747779 earlier_sweep=0.765770 absdiff=0.017990
+
+LEVEL 2 (recomputed from the stored 10x10 matrices, paper probe, 9-block off-diagonal):
+  raw            9-block offdiag mean = 0.657866  (n=72)
+  raw            10-dataset offdiag mean = 0.626783 (n=90)
+  pc:deception   9-block offdiag mean = 0.697739  (n=72)
+  pc:deception   10-dataset offdiag mean = 0.624893 (n=90)
+  axes           9-block offdiag mean = 0.733500  (n=72)
+  axes           10-dataset offdiag mean = 0.647411 (n=90)

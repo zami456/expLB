@@ -1,0 +1,83 @@
+============================================================================================
+O-046   line 15   evidence reused from F-65/F-66/F-67
+     :14: |---|---|
+  >> :15: | **1. Capitulation personas (`cap/`)** | **DONE.** 0.745 zero-shot vs the register axis's 0.374 on `sycophancy_mt`; clears a dataset-level bootstrap against raw and both matched controls on that column (+0.112, CI [+0.050, +0.185]); the gain does **not** extend to the other ten columns. F-64, F-65, F-66, F-67. Design: `../../cap/docs/DESIGN.md`. |
+     :16: | **3. Extend `kd_s23` to all 21 layers on passB** | **DONE.** 21 mean-pooled matrices, was 3. |
+============================================================================================
+O-047   line 104   evidence reused from F-68
+     :103:   `27_crossgen.py` now scores every behaviour axis. A vs B is answered: contrasting against the
+  >> :104:   position-holding personas beats contrasting against bare `default` by **+0.045** zero-shot,
+     :105:   consistent at all three layers and both filters (F-68). Both halves of the A/B/C design now
+============================================================================================
+O-048   line 7   evidence reused from F-65/F-66
+     :6: **It is.** The capitulation axis reads **0.745 zero-shot** on `sycophancy_mt` where the paper16
+  >> :7: **deception** axis's PC1 reads **0.374** and the paper16 **sycophancy** axis reads **0.313**, and
+     :8: the trained version clears a dataset-level bootstrap against
+============================================================================================
+O-049   line 20   evidence reused from F-65 + q10
+     :19: 
+  >> :20: It reads **0.313** on `sycophancy_mt` (95% CI [0.283, 0.346]) — below chance, and *significantly*
+     :21: so: beyond a 1,000-random-direction null at p 0.001-0.008.
+============================================================================================
+O-050   line 171   evidence reused from F-65
+     :170: 
+  >> :171: The real A-vs-B number is `cos(contrast_A, contrast_B) = 0.931` — close to, but not, the 1.000
+     :172: that true inertness would imply.
+============================================================================================
+O-051   line 176   evidence reused from F-68
+     :175: zero-shot, where the contrast actually reaches a number. `27_crossgen.py` scores every behaviour
+  >> :176: axis since 2026-09-21. **A beats B by +0.045** (0.745 vs 0.702 at L40), consistent at all three
+     :177: layers and both filters (F-68).
+============================================================================================
+O-052   line 234   evidence reused from F-66
+     :233: | `datapca@2` / `random@2` / `length` | 0.559 / 0.497 / 0.582 |
+  >> :234: | vs raw, dataset bootstrap | **+0.112, 95% CI [+0.050, +0.185]**, 9/10 sources |
+     :235: | `pc:cap_only@2` vs raw | −0.008, p = 0.56 — **no advantage without the holding personas** |
+============================================================================================
+O-053   line 235   evidence reused from F-66
+     :234: | vs raw, dataset bootstrap | **+0.112, 95% CI [+0.050, +0.185]**, 9/10 sources |
+  >> :235: | `pc:cap_only@2` vs raw | −0.008, p = 0.56 — **no advantage without the holding personas** |
+     :236: 
+============================================================================================
+O-054   line 249   evidence reused from F-67
+     :248:    and that is the only place the advantage over raw holds. On the full 11×11 off-diagonal mean
+  >> :249:    the margin over raw is **+0.098, CI [−0.036, +0.208] — does not clear**; dropping
+     :250:    `sycophancy_mt` leaves +0.073, also not clearing. It beats `random@2` everywhere (+0.270,
+============================================================================================
+O-055   line 250   evidence reused from F-67
+     :249:    the margin over raw is **+0.098, CI [−0.036, +0.208] — does not clear**; dropping
+  >> :250:    `sycophancy_mt` leaves +0.073, also not clearing. It beats `random@2` everywhere (+0.270,
+     :251:    q = 0.013), but `random@2` is itself significantly *worse* than raw (−0.171), so that
+============================================================================================
+O-056   line 251   evidence reused from F-67
+     :250:    `sycophancy_mt` leaves +0.073, also not clearing. It beats `random@2` everywhere (+0.270,
+  >> :251:    q = 0.013), but `random@2` is itself significantly *worse* than raw (−0.171), so that
+     :252:    comparison mostly says the axis is not noise. This is a targeted fix for one construct, not a
+
+============================================================================================
+THE AUDIT-VERIFIED VALUES THESE SENTENCES ARE CHECKED AGAINST
+============================================================================================
+--------------------------------------------------------------------------------------------
+F-65  verdict=PARTLY HOLDS  confidence=HIGH - everything recomputed from the raw matrices and the stored axes; the one failure is a direct measurement, not an interpretation
+  evidence_file : C:/Users/user4/expLB/run-crossgen/kd11/banks/cap_{s23,all}/matrices/mean_L{20,40,44}_s42.json; baseline .../kd11/matrices/mean_L*_s42.json; axes C:/Users/user4/expLB/run-cap/axes_s23.pt
+  level1_value  : zero-shot s23: L20 0.7592/0.7399, L40 0.7449/0.7355, L44 0.7281/0.7166; register (paper16) L40 contrast 0.4089 PC1 0.3740. Trained L40 s23: pc:capitulation@2 0.7136 (+0.1123), pc:capitulation 0.6575 (+0.0562), pc:cap_only@2 0.5935 (-0.0078), raw 0.6013, length 0.5820, datapca 0.5776, datapca@2 0.5594, random 0.5413, random@2 0.4974, pc:unified 0.4451, pc:deception 0.3910, axes 0.3551. Layer profile @2 s23: 0.6438/0.7136/0.6904. cap_only cost L40 -0.1201, L20 0.6438->0.5869. Geometry L40: PC1 var 0.5676, cos(PC1,assistant) -0.8376, gate cosines 0.9871/0.9491/0.9358, cos(contrast_A,contrast_B) 0.9313.
+  level2_value  : Same values - every trained figure is a column mean I recomputed from the 11x11 per-cell matrix, and every geometry figure is a cosine I recomputed from the stored components/axes tensors. s23 vs all, all 12 trained features at L40: pc:cap_only@2 0.5935 vs 0.6077 = 0.0142; pc:cap_only 0.6355 vs 0.6289 = 0.0066; every other feature <= 0.0020.
+  notes         : THE FAILING SUB-CLAIM: 'The judge filter is immaterial ... Every feature agrees to <= 0.004.' The headline features do (capitulation@2 0.7136 vs 0.7132; zero-shot 0.7449 vs 0.7469), but pc:cap_only@2 is 0.5935 (s23) vs 0.6077 (all), a gap of 0.0142 - 3.5x the stated bound - and pc:cap_only is 0.6355 vs 0.6289, 0.0066. cap_only is exactly the feature caveat (c) rests on, so the filter is NOT immaterial for 'the one live comparison': the cap_only penalty at L40 is -0.120 under s23 but -0.105 under all, and at L20 -0.057 vs -0.047. The direction and the conclusion are unchanged, but the sentence as written is wrong and F-62's '<= 0.01' prediction is the honest bound. Everything else - including the A-equals-B tautology (pc:capitulation@2 and pc:cap_vs_default@2 identical to max|diff| = 0), the shared 13-role basis, PC1 var 0.5676 and the re-run gate cosines 0.987/0.949/0.936 - reproduces exactly.
+--------------------------------------------------------------------------------------------
+F-66  verdict=HOLDS  confidence=HIGH - 24 of 24 table cells reproduced by an independent reimplementation of the bootstrap, plus the per-source table and both win counts
+  evidence_file : C:/Users/user4/expLB/run-crossgen/kd11/banks/cap_{s23,all}/matrices/mean_L{20,40,44}_s42.json (mtime 2026-09-21, NOT regenerated in the 09-22 wave)
+  level1_value  : the entry's table is print-only output of cap/scripts/cap_significance.py, so there is no stored file to match against - Level 1 and Level 2 coincide here
+  level2_value  : ALL 24 CELLS EXACT. L20/L40/L44/L40-unfiltered: vs raw +0.0838 [+0.0096,+0.1496] / +0.1123 [+0.0502,+0.1847] / +0.1073 [+0.0390,+0.1849] / +0.1118 [+0.0489,+0.1861]; vs datapca@2 +0.0682 [-0.0398,+0.1592] / +0.1542 [+0.0913,+0.2113] / +0.1713 [+0.1130,+0.2163] / +0.1538 [+0.0907,+0.2118]; vs random@2 +0.1531 / +0.2162 / +0.1936 / +0.2157; vs length +0.0618 / +0.1316 / +0.1084 / +0.1312; vs pc:cap_only@2 +0.0570 [-0.0594,+0.1740] / +0.1201 [+0.0336,+0.2132] / +0.0947 [+0.0138,+0.1829] / +0.1054 [+0.0245,+0.2003]; pc:cap_only@2 - raw +0.0269 / -0.0078 [-0.1122,+0.0952] / +0.0126 / +0.0064. p(L20 datapca@2)=0.0978, p(L20 cap_only@2)=0.1692. Per-source table at L40 identical row for row; cap beats raw on 9 of 10 (8 of 10 at L20 and L44).
+  notes         : The session-recovered pointer is confirmed exactly: pc:cap_only@2 - raw = -0.0078 with P(<=0) = 0.5578 at L40 - dropping the six position-holding personas removes the advantage. Caveat (1) 'n = 10 datasets is a small unit' is the right framing: five of the 24 intervals have half-widths above 0.08. Caveat (3) is correct that the zero-shot 0.745 is NOT covered by this test.
+--------------------------------------------------------------------------------------------
+F-67  verdict=PARTLY HOLDS  confidence=HIGH - every number recomputed from the file by key and the old BH family rebuilt; the one mismatch is against the file's own significance flag
+  evidence_file : C:/Users/user4/expLB/run-crossgen/kd11/banks/cap_{s23,all}/significance.json (now 5,544 tests each, mtime 2026-09-22 16:01 / 15:52 - REGENERATED in the RF-13 wave)
+  level1_value  : row 1 +0.2696 95/110 [+0.138,+0.398] q_now 0.016 clears; row 2 +0.1273 80/110 [+0.013,+0.248] q_now 0.227; row 3 +0.0983 76/110 [-0.036,+0.208]; row 4 +0.0730 57/90 [-0.077,+0.204]; row 5 +0.1235 62/90 [-0.017,+0.262]; row 6 +0.2727 76/90 [+0.121,+0.416] q_now 0.075 significant_datasets=FALSE; row 7 -0.1712 25/110 [-0.275,-0.053] q_now 0.142 significant_datasets=FALSE. s23-vs-all agreement: max |diff| = 0.0001 over these rows, and the four quoted pairs match exactly.
+  level2_value  : The 792-test family was RECONSTRUCTED (keep layers 20/40/44 only -> exactly 792 tests = 3 x 2 x 3 x 22 x 2) and BH re-run per block. It reproduces the entry's q-values exactly: row 1 q792 = 0.013 (clears), row 2 q792 = 0.172 (does not). Row 6 comes out q792 = 0.068 - it does NOT clear in the family the entry used either. Row 7 q792 = 0.108.
+  notes         : THE FAILING ROW: `pc:capitulation@2 - random@2`, block 'minus sycophancy_mt', is marked 'clears? YES' with no q. Its 95% CI [+0.121,+0.416] does exclude zero, but its BH q is 0.068 in the 792-test family and 0.075 now, and the file records significant_datasets = false. The entry is inconsistent with itself: row 2 is written as 'CI clears, q = 0.172 - no after BH'. Row 6 should read the same way. Row 7 ('significantly negative') is defensible because the prose cites the CI, not q - but its q is 0.108 too. NOT VERIFIABLE: '144 tests before the fix' - the pre-fix file does not exist in any copy; 144 = 3 x 2 x 3 x 4 x 2 is arithmetically consistent with the four control-vs-raw pairs the entry describes.
+--------------------------------------------------------------------------------------------
+F-68  verdict=HOLDS  confidence=HIGH - every number reproduced to 4 dp and the directions verified from code and bank counts
+  evidence_file : lab run-crossgen/kd11/banks/cap_{s23,all}/matrices/mean_L{20,40,44}_s42.json; cap/personas/cap_role_groups.json; run-cap/axes_{s23,all}.pt; src/assistant_axis_ndif/27_crossgen.py:405-435 and 6_axes.py:200-260
+  level1_value  : s23: contrast 0.7592/0.7449/0.7281, cap_vs_default 0.7082/0.7021/0.6806, PC1 0.7399/0.7355/0.7166, PC1:cap_only 0.6970/0.7012/0.6756; all CIs round to the printed intervals
+  level2_value  : A-B recomputed = +0.0510/+0.0428/+0.0475 (s23) and +0.0535/+0.0443/+0.0490 (all); six readings span +0.0428 to +0.0535; max per-direction filter gap 0.0032 (<= 0.004); contrast:cap_vs_default == contrast:cap_only exactly; PC1 == PC1:cap_vs_default exactly
+  notes         : RF-9 SETTLED for this entry: git show bc701d9 shows the +0.051 -> +0.054 change was correcting the caveat's range ceiling once the two missing unfiltered matrices finished; the commit message says so and the data supports +0.054 (unfiltered L20 = +0.0535). Two understatements: '+0.034 on zero-shot PC1' is the L40 reading only (+0.043 at L20, +0.041 at L44); '~0.045' vs a six-reading mean of 0.0480.

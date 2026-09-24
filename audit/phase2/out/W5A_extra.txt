@@ -1,0 +1,133 @@
+== F-90 per-target: mean_of_directions - pooled_lodo_full ==
+   instructed-deception                +0.0279   (mod 0.9691  lodo 0.9413)
+   harm-pressure-choice                +0.0895   (mod 0.8453  lodo 0.7557)
+   harm-pressure-knowledge-report      +0.0002   (mod 0.9722  lodo 0.9721)
+   harm-pressure-kr-matched            -0.0077   (mod 0.7988  lodo 0.8065)
+   convincing-game                     +0.0421   (mod 0.9972  lodo 0.9551)
+   insider-trading                     +0.0884   (mod 0.9439  lodo 0.8555)
+   ai_liar                             +0.0701   (mod 0.9272  lodo 0.8571)
+   sandbagging_v2                      +0.0047   (mod 0.9742  lodo 0.9695)
+   roleplaying                         +0.0036   (mod 0.8279  lodo 0.8243)
+   mask                                +0.0365   (mod 0.6966  lodo 0.6601)
+   sycophancy_mt                       -0.0433   (mod 0.7587  lodo 0.8021)
+   wins: 9 of 11
+
+== F-90 pairs below 0.5 / 0.4 and the minimum ==
+   n_pairs=110  below 0.5: 21   below 0.4: 14
+   min: convincing-game -> harm-pressure-knowledge-report = 0.0546
+   min: harm-pressure-kr-matched -> insider-trading = 0.1890
+   min: sycophancy_mt -> insider-trading = 0.2071
+
+== F-90: how 30f_result2_audit.py gets its persona bank ==
+     41| from __future__ import annotations
+     43| import argparse
+     44| import importlib.util
+     45| import json
+     46| from pathlib import Path
+     48| import numpy as np
+     49| from sklearn.metrics import roc_auc_score
+     55|     spec = importlib.util.spec_from_file_location(name, PIPELINE_DIR / fname)
+     56|     m = importlib.util.module_from_spec(spec)
+     75|     ap = argparse.ArgumentParser(description=__doc__,
+     76|                                  formatter_class=argparse.RawDescriptionHelpFormatter)
+     77|     ap.add_argument("--run_dir", default="run-coords/passB")
+     78|     ap.add_argument("--out_root", default="run-premise/audit")
+     79|     ap.add_argument("--datasets", nargs="+", required=True)
+     80|     ap.add_argument("--layer", type=int, default=40)
+     81|     ap.add_argument("--pooling", default="mean")
+     82|     ap.add_argument("--probe", default="paper")
+     83|     ap.add_argument("--seed", type=int, default=42)
+     84|     ap.add_argument("--frac", type=float, default=0.8)
+     85|     ap.add_argument("--draws", type=int, default=20,
+     87|     # Q5: "have you run the Mahadik & Skapars persona method in the same leave-one-out setup?"
+     88|     # The answer was no -- every persona number in this project is train-one-test-all, because
+     89|     # that is the design the paper uses. With a bank the persona FEATURES go through the exact
+     91|     ap.add_argument("--bank", default=None, help="axes .pt; adds the persona-coordinate arm")
+     92|     ap.add_argument("--bank_features", nargs="+",
+     93|                     default=["pc:unified@2", "pc:deception", "axes"])
+     96|     P = module("persona_probes", "9_persona_probes.py")
+    220|     # ---- Q5: the persona method through the SAME leave-one-dataset-out harness ------------
+    221|     persona = {}
+    222|     if args.bank:
+    223|         import torch
+    224|         bank = torch.load(args.bank, map_location="cpu", weights_only=False)
+    225|         print(f"\nQ5  PERSONA COORDINATES IN THE SAME LODO SETUP  (bank={args.bank})")
+    226|         print(f"    {'feature':<18}{'single-src':>12}{'pooled LODO':>13}{'vs raw LODO':>13}")
+    227|         for fk in args.bank_features:
+    230|                 F = {k: P.make_features(X32[k], b, bank, args.layer, kf, args.seed,
+    251|             persona[fk] = {"single": float(np.mean(so)), "lodo": float(np.mean(lo_)),
+    257|            "persona_lodo": persona,
+
+== run/axes.pt contents ==
+   axes:
+     assistant: tensor(80, 8192) torch.float32
+     deception: tensor(80, 8192) torch.float32
+     sycophancy: tensor(80, 8192) torch.float32
+     unified: tensor(80, 8192) torch.float32
+   counts:
+     assistant: list[2] (1, 99)
+     deception: list[2] (22, 22)
+     sycophancy: list[2] (16, 16)
+     unified: list[2] (38, 38)
+   layers: list[80] [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+   pca_components: tensor(80, 5, 8192) torch.float32
+   pca_variance_ratio: tensor(80, 5) torch.float32
+   pca:
+     deception:
+       components: tensor(80, 5, 8192) torch.float32
+       variance_ratio: tensor(80, 5) torch.float32
+       sign: tensor(80, 5) torch.float32
+       roles: list[45] ['actor', 'archivist', 'auditor', 'celebrity', 'chameleon', 'criminal', 'curator', 'default', 'detective', 'evangelist', 'examiner', 'fixer']
+       reference = deception contrast
+     sycophancy:
+       components: tensor(80, 5, 8192) torch.float32
+       variance_ratio: tensor(80, 5) torch.float32
+       sign: tensor(80, 5) torch.float32
+       roles: list[33] ['altruist', 'bartender', 'caregiver', 'coach', 'collaborator', 'contrarian', 'counselor', 'critic', 'cynic', 'default', 'devils_advocate', 'ecosystem']
+       reference = sycophancy contrast
+     unified:
+       components: tensor(80, 5, 8192) torch.float32
+       variance_ratio: tensor(80, 5) torch.float32
+       sign: tensor(80, 5) torch.float32
+       roles: list[77] ['actor', 'altruist', 'archivist', 'auditor', 'bartender', 'caregiver', 'celebrity', 'chameleon', 'coach', 'collaborator', 'contrarian', 'counselor']
+       reference = unified contrast
+     all:
+       components: tensor(80, 5, 8192) torch.float32
+       variance_ratio: tensor(80, 5) torch.float32
+       sign: tensor(80, 5) torch.float32
+       roles: list[100] ['aberration', 'actor', 'altruist', 'analyst', 'archivist', 'assistant', 'auditor', 'bard', 'bartender', 'caregiver', 'celebrity', 'chameleon']
+       reference = assistant axis
+   roles: list[100] ['aberration', 'actor', 'altruist', 'analyst', 'archivist', 'assistant', 'auditor', 'bard', 'bartender', 'caregiver', 'celebrity', 'chameleon']
+   role_groups:
+     deception:
+       contrast_with = honesty
+       note = conceal, manipulate, selectively disclose
+       roles: list[22] ['spy', 'saboteur', 'smuggler', 'rogue', 'fixer', 'criminal', 'hacker', 'vigilante', 'trickster', 'genie', 'chameleon', 'shapeshifter']
+     honesty:
+       contrast_with = deception
+       note = disclose, verify, record
+       roles: list[22] ['auditor', 'archivist', 'journalist', 'reporter', 'witness', 'validator', 'examiner', 'proofreader', 'detective', 'researcher', 'scientist', 'statistician']
+     sycophancy:
+       contrast_with = anti_sycophancy
+       note = agree, flatter, validate
+       roles: list[16] ['caregiver', 'empath', 'optimist', 'altruist', 'peacekeeper', 'collaborator', 'facilitator', 'counselor', 'therapist', 'romantic', 'martyr', 'bartender']
+     anti_sycophancy:
+       contrast_with = sycophancy
+       note = challenge, critique, disagree
+       roles: list[16] ['critic', 'skeptic', 'contrarian', 'devils_advocate', 'cynic', 'maverick', 'rebel', 'provocateur', 'stoic', 'pragmatist', 'purist', 'perfectionist']
+     assistant_anchor:
+       contrast_with:
+       note = Assistant-like end of the paper's role PC1
+       roles: list[8] ['default', 'assistant', 'consultant', 'analyst', 'evaluator', 'generalist', 'reviewer', 'specialist']
+     breadth_control:
+       contrast_with:
+       note = fantastical/non-human far end of PC1; keeps PC1 interpretable as Assistant-ness
+       roles: list[16] ['ghost', 'leviathan', 'bard', 'hermit', 'oracle', 'whale', 'eldritch', 'egregore', 'hive', 'void', 'wraith', 'revenant']
+   vectors_dir = C:\Users\user4\expLB\run\vectors
+
+== F-69 extra: passA HP-KR activation chunks (the '55 chunks / 5.22 GB' claim) ==
+   passA: 55 chunks, 5.61 GB, 2026-09-16 02:49:48.698497 .. 2026-09-21 11:29:40.670340
+     all files: ['chunk_0000.pt', 'chunk_0001.pt', 'chunk_0002.pt', 'chunk_0003.pt', 'chunk_0004.pt', 'chunk_0005.pt', 'chunk_0006.pt', 'chunk_0007.pt', 'chunk_0008.pt', 'chunk_0009.pt', 'chunk_0010.pt', 'chunk_0011.pt']
+   passC: 55 chunks, 1.57 GB, 2026-09-16 13:53:42.613644 .. 2026-09-21 11:52:44.068632
+     all files: ['chunk_0000.pt', 'chunk_0001.pt', 'chunk_0002.pt', 'chunk_0003.pt', 'chunk_0004.pt', 'chunk_0005.pt', 'chunk_0006.pt', 'chunk_0007.pt', 'chunk_0008.pt', 'chunk_0009.pt', 'chunk_0010.pt', 'chunk_0011.pt']
+python exit 0

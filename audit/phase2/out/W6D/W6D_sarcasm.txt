@@ -1,0 +1,108 @@
+============================================================================================
+PROVENANCE
+============================================================================================
+  marker_report.json                            4938 B  md5=bcc633166d53e73a565d76318e977c75
+  marker_report_partial.json                     408 B  md5=8d94aceaecd4c2c8ee9defed47511def
+  responses/pc_ironic_critic.jsonl            142591 B  md5=bdb597f535d2f5e76cc362cce5ce12ca
+  responses/pc_sycophant.jsonl                121927 B  md5=2f7e6de7bf063d2b099a62d77c028805
+  responses/pc_sincere_critic.jsonl           166180 B  md5=7547d4a11b656ec2e755a9e1d1d8e2e9
+  scores/pc_ironic_critic.json                  1953 B  md5=aeaa2c78e5df04a1e9f25e91b8abd260
+  scores/pc_sycophant.json                      1953 B  md5=34e97b05478d0ea1045c2c7196cdd39f
+  scores/pc_sincere_critic.json                 1953 B  md5=9f5a1f10cd7d0c075a7c42c7d926bdc8
+
+  300 rollouts; per role: {'pc_ironic_critic': 100, 'pc_sincere_critic': 100, 'pc_sycophant': 100}
+  variants per role: [0, 1, 2, 3, 4]  questions: 20
+
+============================================================================================
+O-098/099/100/101  section 3.2 table -- bag-of-words AUROC, grouped by question id
+============================================================================================
+  id     subset                                    n    rawA    strA    rawB    strB  docRaw  docStr  docN
+  O-098  all v1-v5   ironic vs sycophantic       200  0.9527  0.9472  0.9527  0.9472   0.953   0.947   200
+  O-099  v1 only     ironic vs sycophantic        40  1.0000  1.0000  1.0000  1.0000   1.000   1.000    40
+  O-100  v4+v5       ironic vs sycophantic        80  0.9194  0.9213  0.9194  0.9213   0.919   0.921    80
+  O-101  v4+v5       ironic vs sincere            80  0.9969  0.9963  0.9969  0.9963   0.997   0.996    80
+
+  Level 1 against the only stored separability figure:
+   marker_report.json['lexical'] = {"auroc_raw": 0.9525, "auroc_stripped": 0.9472, "marker_effect": 0.005299999999999971, "n": 200}
+   marker_report_partial.json has 'lexical'?  False
+   -> the v1-only, v4+v5 and ironic-vs-sincere rows exist in NO file (doc limitation 6).
+
+============================================================================================
+O-097 / 3.1  marker rates, and the pre-registered thresholds
+============================================================================================
+  pc_ironic_critic       0.85   0.15   0.10   0.00   0.00    stored: [0.85, 0.15, 0.1, 0.0, 0.0]
+  pc_sincere_critic      0.60   0.15   0.15   0.25   0.05    stored: [0.6, 0.15, 0.15, 0.25, 0.05]
+  pc_sycophant           0.85   1.00   0.50   0.00   0.05    stored: [0.85, 1.0, 0.5, 0.0, 0.05]
+  sincere-arm marker counts (doc limitation 4): {'scare_quotes': 7, 'allcaps': 23, 'reveal_aside': 13}
+
+  Gate thresholds as written in the design document:
+   SARCASM_DESIGN.md:131: ## The abandon-checks, corrected
+
+============================================================================================
+O-102 / 3.3  judged role score 0-3 per arm per variant
+============================================================================================
+  arm                      v1     v2     v3     v4     v5    mean    n
+  pc_ironic_critic       2.85   2.85   2.60   2.55   2.10    2.59  100
+  (doc says)             2.85   2.85   2.60   2.55   2.10    2.59
+  (exact)              2.8500 2.8500 2.6000 2.5500 2.1000    2.5900
+  pc_sincere_critic      2.85   2.25   2.40   2.25   2.10    2.37  100
+  (doc says)             2.85   2.25   2.40   2.25   2.10    2.37
+  (exact)              2.8500 2.2500 2.4000 2.2500 2.1000    2.3700
+  pc_sycophant           2.45   2.25   2.55   2.15   2.80    2.44  100
+  (doc says)             2.45   2.25   2.55   2.15   2.80    2.44
+  (exact)              2.4500 2.2500 2.5500 2.1500 2.8000    2.4400
+
+  v1 -> v5 change: ironic 2.85 -> 2.10 ; sincere 2.85 -> 2.10
+
+============================================================================================
+O-103  the chain's own verdict block
+============================================================================================
+  source: C:/Users/SURAIYA/Documents/STUDY/thesis/expLB\audit/phase2/out/P7_status_files.txt (batch P7's read-only dump of the lab logs/ status files)  md5=e6f6a80ecaac9b9bdd66952fa2de3115
+   ########## sarc_pilot.status  (2026-09-22 15:55)
+   START 2026-09-22 15:55:01
+   2026-09-22 15:55:01  1 generate: 3 arms x 5 variants x 20 questions = 300 single-turn rollouts
+   2026-09-22 15:55:11  1 generate  measured=3 files / 300 rows  predicted=3 / 300  PASS
+   2026-09-22 15:55:11  2 judge (Llama-3.1-70B, the same judge as every other bank in the project)
+   2026-09-22 15:55:24  2 judge  measured=3 score files  predicted=3  PASS
+   2026-09-22 15:55:24  3 marker rate, lexical separability, polarity
+   2026-09-22 15:55:27  3a markers  measured=lowest ironic marker rate=0.00  predicted=<=0.20  PASS
+   2026-09-22 15:55:27  3b separability  measured=bag-of-words AUROC on unmarked(v4,v5), markers stripped=0.921  predicted=<=0.65  GATE FAILED
+   2026-09-22 15:55:27    raw=0.953 stripped=0.947 marker effect=0.005  (near 0.5 = arms textually alike,
+   2026-09-22 15:55:27     which is the premise the factorial needs; near 1.0 = a lexical detector)
+   2026-09-22 15:55:27  VERDICT TEACHER-FORCED -- markers are suppressed but the arms remain lexically separable (0.921); an extracted direction would be mostly lexical
+   2026-09-22 15:55:30  DONE
+   ########## sarc_pilot.status.2026-09-21-buggy-verdict  (2026-09-21 21:45)
+   START 2026-09-21 21:21:17
+   2026-09-21 21:21:18  1 generate: 3 arms x 5 variants x 20 questions = 300 single-turn rollouts
+   2026-09-21 21:40:53  1 generate  measured=3 files / 300 rows  predicted=3 / 300  PASS
+   2026-09-21 21:40:53  2 judge (Llama-3.1-70B, the same judge as every other bank in the project)
+   2026-09-21 21:44:19  2 judge  measured=3 score files  predicted=3  PASS
+   2026-09-21 21:44:19  3 marker rate, lexical separability, polarity
+   2026-09-21 21:44:27  3 markers  measured=lowest ironic marker rate=0.00  predicted=<=0.20 to proceed on-policy  PASS
+   2026-09-21 21:44:27  VERDICT PRODUCIBLE -- build the factorial on that variant
+   2026-09-21 21:44:27  lexical separability ironic vs sycophant: raw=0.953 stripped=0.947 marker effect=0.005
+   2026-09-21 21:44:27    near 0.5 stripped = the arms are textually alike, which is the premise the factorial needs
+   2026-09-21 21:45:59  DONE
+   ########## sarc_pilot.status.pre-e2e-2026-09-22  (2026-09-22 02:29)
+   START 2026-09-22 02:29:22
+   2026-09-22 02:29:22  1 generate: 3 arms x 5 variants x 20 questions = 300 single-turn rollouts
+   2026-09-22 02:29:28  1 generate  measured=3 files / 300 rows  predicted=3 / 300  PASS
+   2026-09-22 02:29:28  2 judge (Llama-3.1-70B, the same judge as every other bank in the project)
+   2026-09-22 02:29:33  2 judge  measured=3 score files  predicted=3  PASS
+   2026-09-22 02:29:33  3 marker rate, lexical separability, polarity
+   2026-09-22 02:29:34  3a markers  measured=lowest ironic marker rate=0.00  predicted=<=0.20  PASS
+   2026-09-22 02:29:34  3b separability  measured=bag-of-words AUROC, markers stripped=0.947  predicted=<=0.65  GATE FAILED
+   2026-09-22 02:29:34    raw=0.953 stripped=0.947 marker effect=0.005  (near 0.5 = arms textually alike,
+   2026-09-22 02:29:34     which is the premise the factorial needs; near 1.0 = a lexical detector)
+   2026-09-22 02:29:34  VERDICT TEACHER-FORCED -- markers are suppressed but the arms remain lexically separable (0.947); an extracted direction would be mostly lexical
+   2026-09-22 02:29:35  DONE
+
+  What the document quotes (lines 199-204):
+   :199: ```
+   :200: 3a markers       measured=lowest ironic marker rate=0.00      predicted=<=0.20   PASS
+   :201: 3b separability  measured=bag-of-words AUROC stripped=0.947   predicted=<=0.65   GATE FAILED
+   :202: VERDICT TEACHER-FORCED -- markers are suppressed but the arms remain lexically
+   :203:         separable (0.947); an extracted direction would be mostly lexical
+   :204: ```
+
+  and line 121: Against a threshold of 0.65, the measured value is **0.921**. Stripping every marker token moves

@@ -1,0 +1,20 @@
+== raw single-source baseline, our eleven, from the LOCAL kd11 matrices ==
+  mean  L20  raw off-diagonal mean = 0.6289  (n=110 pairs, 11 datasets)  md5 414a8f1adc1bd55534e9cc2145397249
+  mean  L40  raw off-diagonal mean = 0.6623  (n=110 pairs, 11 datasets)  md5 d7616aa50814267e38bd38931e25a6a0
+  last  L20  raw off-diagonal mean = 0.6289  (n=110 pairs, 11 datasets)  md5 9d6672d5d71ffa940c61c8b9d654417b
+  last  L40  raw off-diagonal mean = 0.6280  (n=110 pairs, 11 datasets)  md5 7329a0c0321c1d159bf0c21c28cc762a
+  briefing section 5a: 0.6289 (L20) and 0.6623 (L40), mean pooling
+
+== pooled leave-one-dataset-out, our eleven, from the CACHED run-premise files ==
+  L20  pooled_lodo = 0.8027   pooled_lodo_match = 0.8239   single = 0.6323   md5 d975eb33f26f328bede48aa7f9b6e03a
+  L40  pooled_lodo = 0.8545   pooled_lodo_match = 0.8500   single = 0.6763   md5 e5ddaaa13ea6aa5a4b97bbafa38592ba
+  briefing section 5a: 0.8027 (L20) and 0.8545 (L40)
+
+== the share, reconstructed ==
+  share = (ext_axis1 - axis1) / (ext_axis1 - raw)
+  L20  axis1 0.6572 (P12/lab)  ext 0.7386 (P12/lab)  raw 0.6289 (recomputed here)  -> share 74.2%
+        gap to pooled: axis1 +0.1455   ext_axis1 +0.0641
+  L40  axis1 0.7325 (P12/lab)  ext 0.7996 (P12/lab)  raw 0.6623 (recomputed here)  -> share 48.9%
+        gap to pooled: axis1 +0.1220   ext_axis1 +0.0549
+  briefing section 5a / section 7: 74%% (L20) and 49%% (L40); 'kd bank is 49-74%% of the margin'
+  briefing section 5a: 'the extended arm by 0.064 at L20 and 0.055 at L40, and axis1 by 0.146 and 0.122'

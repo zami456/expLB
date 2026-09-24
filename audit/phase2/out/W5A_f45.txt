@@ -1,0 +1,66 @@
+
+==============================================================================
+== F-45  OOM fix cost 8x throughput (logs/scale_coords_8b.log)
+==============================================================================
+ log: 2214527 B  mtime 2026-09-22 16:20:06.516483
+ -- lines mentioning chunk counts / rates / rows --
+       7| 2026-09-20 16:59:39,753 - INFO - NDIF download floor 300 KB/s after 12s: installed
+       9| 2026-09-20 16:59:39,754 - INFO - download floor 300 KB/s after 12s: installed
+      11| 2026-09-20 16:59:52,956 - INFO - instructed-deception: 5432 rows -> 5432 spans
+      36| downloading:   2%|ΓûÅ         | 131k/7.56M [00:00<00:49, 150kB/s][A
+      38| downloading:   3%|ΓûÄ         | 262k/7.56M [00:01<00:29, 247kB/s][A
+      40| downloading:   5%|Γûî         | 393k/7.56M [00:01<00:23, 311kB/s][A
+      42| downloading:  10%|Γûê         | 786k/7.56M [00:01<00:10, 635kB/s][A
+      69| downloading:   2%|ΓûÅ         | 131k/7.56M [00:00<00:29, 256kB/s][A
+      71| downloading:   3%|ΓûÄ         | 262k/7.56M [00:00<00:20, 362kB/s][A
+      73| downloading:   5%|Γûî         | 393k/7.56M [00:01<00:17, 419kB/s][A
+      75| downloading:  12%|ΓûêΓûÅ        | 918k/7.56M [00:01<00:06, 985kB/s][A
+     102| downloading:   2%|ΓûÅ         | 131k/7.56M [00:00<00:45, 162kB/s][A
+     104| downloading:   3%|ΓûÄ         | 262k/7.56M [00:01<00:27, 266kB/s][A
+     106| downloading:   5%|Γûî         | 393k/7.56M [00:01<00:20, 349kB/s][A
+     108| downloading:  10%|Γûê         | 786k/7.56M [00:01<00:09, 702kB/s][A
+     135| downloading:   2%|ΓûÅ         | 131k/7.56M [00:00<00:29, 254kB/s][A
+     137| downloading:   3%|ΓûÄ         | 262k/7.56M [00:00<00:20, 359kB/s][A
+     139| downloading:   5%|Γûî         | 393k/7.56M [00:01<00:17, 414kB/s][A
+     141| downloading:   9%|Γûè         | 655k/7.56M [00:01<00:11, 623kB/s][A
+     168| downloading:   2%|ΓûÅ         | 131k/7.56M [00:00<00:32, 226kB/s][A
+     170| downloading:   3%|ΓûÄ         | 262k/7.56M [00:00<00:22, 320kB/s][A
+     172| downloading:   7%|Γûï         | 524k/7.56M [00:01<00:13, 537kB/s][A
+     174| downloading:  12%|ΓûêΓûÅ        | 918k/7.56M [00:01<00:08, 822kB/s][A
+     201| downloading:   2%|ΓûÅ         | 131k/7.55M [00:00<00:33, 223kB/s][A
+     203| downloading:   3%|ΓûÄ         | 262k/7.55M [00:00<00:23, 316kB/s][A
+     205| downloading:   7%|Γûï         | 524k/7.55M [00:01<00:13, 530kB/s][A
+     207| downloading:  12%|ΓûêΓûÅ        | 918k/7.55M [00:01<00:08, 811kB/s][A
+     234| downloading:   2%|ΓûÅ         | 131k/7.56M [00:00<00:29, 253kB/s][A
+     236| downloading:   3%|ΓûÄ         | 262k/7.56M [00:00<00:20, 358kB/s][A
+     238| downloading:   7%|Γûï         | 524k/7.56M [00:01<00:11, 602kB/s][A
+  ... (truncated at 30 matches)
+ -- 8B coords store --
+  C:/Users/user4/expLB/run-scale/8b/coords 4096 B  mtime 2026-09-20 21:55:04.710249
+   ai_liar                             chunks=34     meanKB=1018.2   rows=270
+   alpaca                              chunks=50     meanKB=1025.7   rows=400
+   convincing-game                     chunks=34     meanKB=1007.0   rows=267
+   harm-pressure-choice                chunks=100    meanKB=1026.0   rows=800
+   harm-pressure-knowledge-report      chunks=0      meanKB=0.0      rows=None
+   harm-pressure-kr-matched            chunks=0      meanKB=0.0      rows=None
+   insider-trading                     chunks=0      meanKB=0.0      rows=None
+   instructed-deception                chunks=100    meanKB=1026.0   rows=800
+   mask                                chunks=78     meanKB=961.9    rows=585
+   roleplaying                         chunks=47     meanKB=1012.2   rows=371
+   sandbagging_v2                      chunks=0      meanKB=0.0      rows=None
+   sycophancy_mt                       chunks=0      meanKB=0.0      rows=None
+ -- passB per-dataset row counts (for the 14,718 / 6,551 arithmetic) --
+   ai_liar                                     270  -> capped  270
+   alpaca                                     2000  -> capped  800
+   convincing-game                             267  -> capped  267
+   harm-pressure-choice                       2134  -> capped  800
+   harm-pressure-knowledge-report             2139  -> capped  800
+   harm-pressure-kr-matched                    258  -> capped  258
+   insider-trading                            1080  -> capped  800
+   instructed-deception                       5432  -> capped  800
+   mask                                        585  -> capped  585
+   roleplaying                                 371  -> capped  371
+   sandbagging_v2                             1000  -> capped  800
+   sycophancy_mt                              1182  -> capped  800
+   TOTAL 16718 ; sum(min(800,n)) = 7351 ; ratio 0.4397
+python exit 0

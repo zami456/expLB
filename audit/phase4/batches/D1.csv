@@ -1,0 +1,12 @@
+id,source_ref,stated_numbers,claim_plain
+D-004,draft p.1 Abstract + p.7 sec 5.1; draft_claims_raw.csv D-004,(none - qualitative),"Every HP-KR lie is a denial of knowledge, and none of Mahadik & Skapars' 8 published deceptive personas lies by denying knowledge."
+D-016,draft p2 1 Introduction,,This exposes a failure the original study did not test.
+D-025,draft p2 1 Contributions,,We also identify why the published contrast inverts there: none of its deceptive personas lies by denying knowledge.
+D-028,draft p.2 Contributions + p.8 sec 5.3; draft_claims_raw.csv D-028,0.220; 0.023,"The 1-d extended contrast outscores a probe on the 3 leading extended-persona PCs at every depth, by 0.220 mean off-diagonal AUROC at layer 20 and 0.023 at layer 44."
+D-034,draft p3 1 (caveats),,"HP-KR's labels make a denial necessary for a lie, so its gains do not by themselves separate deception from the wording of a denial."
+D-040,draft p3 2 Related work,,Natarajan et al. (2026) find deception detection heterogeneous: probes matched to a specific type of deception outperform a universal one.
+D-049,draft p4 3.2 Persona bank,36; 30 = 20 + 10,All 36 personas answer the same 30 questions. Twenty are the ten deception and ten sycophancy questions of Mahadik and Skapars (2026). The other ten are new and concern the speaker's own knowledge.
+D-050,draft p5 3.2 Persona bank,,"Sharing one question set matters: if groups answer different questions, the leading direction of the persona space can track the questions instead of the roles."
+D-069,draft p6 4 Transfer matrix,0.940; 0.060,"that happens only for the published contrast trained on HP-KR at layer 20, where the inverted ranking on HP-KR carries into every test set (for instance CG falls from 0.940 to 0.060)."
+D-071,draft p7 Table 1 (Datasets),"2,134; 134","Harm-Pressure Choice (HP-C): object of belief world-knowledge; reason for lying inherent; examples 2,134; lies 134"
+D-078,draft p7 4 Metrics,"1%; 95%; 1,000 resamples","set the threshold of each detector so that it flags at most 1% of the Alpaca control ... 95% stratified bootstrap intervals over examples (1,000 resamples), drawn once and shared by every detector ..."

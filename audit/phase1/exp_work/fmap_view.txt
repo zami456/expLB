@@ -1,0 +1,436 @@
+## F-01 2026-09-19 (entered git 6432257, 2026-09-21) scientific LAB=GIT PARTIAL
+  P: C:/Users/user4/expLB/results/subsets/harm-pressure-knowledge-report.csv
+  S: NOT-FOUND for the AUROC itself. Feature code = src/assistant_axis_ndif/eval_datasets.py denies_knowledge() (first in git 3dfdb67 2026-09-21, i.e. after the F-date; lab copy = HEAD md5, lab mtime 2026-
+  D: HP-KR subset CSV (lab mtime 2026-09-15 12:44 = git); Llama-row filter; HP-KR label
+## F-02 2026-09-19 scientific LAB=GIT PARTIAL
+  P: C:/Users/user4/expLB/results/subsets/harm-pressure-knowledge-report.csv
+  S: NOT-FOUND (cross-tab print-only); label logic in src/harm-refusal/harm-refusal.ipynb
+  D: HP-KR CSV meta.model_belief; denial regex of F-01
+## F-03 2026-09-19 scientific LAB=GIT MAPPED
+  P: C:/Users/user4/expLB/run-crossgen/kd11/matrices/mean_L40_s42.json
+  S: src/assistant_axis_ndif/27_crossgen.py via kd/scripts/run_kd_crossgen.ps1 (lab = git). Lab 27_crossgen.py = HEAD but its lab mtime is 2026-09-21 03:47 (edited after this run; run-time version not pres
+  D: run-coords/passB activations (HP-KR rows.jsonl 2026-09-15); kr-matched VIEW (passB/harm-pressure-kr-matched/rows.jsonl, 2026-09-19 20:09, 258 rows, built by lab-only make_view.py); bank run-paper16/ax
+## F-04 2026-09-19 scientific LAB≠GIT PARTIAL
+  P: C:/Users/user4/expLB/run-crossgen/kd11/significance.json (CURRENT file; not the version F-04 read - see notes)
+  S: src/assistant_axis_ndif/27_crossgen.py stage_summarize (via kd/scripts/run_kd_crossgen.ps1)
+  D: same inputs as F-03 (passB, kr-matched view, paper16 axes_vectors_s3_fp32.pt)
+## F-05 2026-09-19 scientific LAB-ONLY MAPPED
+  P: C:/Users/user4/expLB/kd/results/phase2_gate.json
+  S: kd/scripts/phase2_gate.py (lab copy 2026-09-19 20:28:36 = git md5 5b025d33)
+  D: lab kd/run/factor_probes/kd_{knowledge,utterance} activations + rows.jsonl (lab rows 19:59/20:22 are extraction-output format; git rows are the laptop-built INPUT format: different md5, same labels 1,
+## F-06 2026-09-19 scientific LAB-ONLY PARTIAL
+  P: C:/Users/user4/expLB/kd/results/phase2_gate.json (cosines); orthogonalised AUROCs = stdout of C:/Users/user4/expLB/ortho.py (no file)
+  S: kd/scripts/phase2_gate.py (cos, = git); ortho.py (lab-only loose script, 2026-09-19 20:30:06, md5 69a77a86) for dU_perp
+  D: as F-05
+## F-07 2026-09-19 scientific LAB-ONLY MAPPED
+  P: C:/Users/user4/expLB/kd/results/phase2_gate.json
+  S: kd/scripts/phase2_gate.py (= git)
+  D: kd_knowledge factor probe (1,962 items; 121 not-know)
+## F-08 2026-09-19 scientific LAB≠GIT PARTIAL
+  P: C:/Users/user4/expLB/kd/run/knowledge/scores.jsonl (279,757 B, md5 4b7e503b)
+  S: kd/scripts/score_knowledge_ndif.py writes scores (lab = git md5 da3c3d03); summary numbers print-only (no script found)
+  D: kd/run/knowledge/items.jsonl (lab = git; kd/scripts/build_knowledge_eval.py); Llama-3.3-70B logits on NDIF
+## F-09 2026-09-19 scientific LAB≠GIT PARTIAL
+  P: C:/Users/user4/expLB/kd/run/knowledge/scores.jsonl
+  S: score_knowledge_ndif.py (scores); deciles print-only
+  D: as F-08
+## F-10 2026-09-20 scientific LAB-ONLY PARTIAL
+  P: C:/Users/user4/expLB/run-kd/scores/*.json (35 files, 2026-09-20 00:21-01:32)
+  S: kd/scripts/verify_s23.py (lab kd/scripts copy AND lab loose verify_s23.py 2026-09-20 02:04 both = git md5 81e718b4); per-role table also from lab-only keep.py (2026-09-20 01:48, md5 07bf6156)
+  D: run-kd/responses (2026-09-19 20:50 - 09-20 00:18); 3_judge_ndif.py scores; kd/personas/kd_role_groups.json (lab 2026-09-19 20:38 = git)
+## F-11 2026-09-20 scientific LAB-ONLY MAPPED
+  P: C:/Users/user4/expLB/logs/kd_axes.log
+  S: src/assistant_axis_ndif/6_axes.py - the print is line 265 in git c073928 (VERIFIED; HEAD line 265 is other code). Lab src copy = HEAD but lab mtime 2026-09-21 03:22 (edited after this run); lab loose 
+  D: run-kd/vectors_s3/*.pt (36 roles, 2026-09-20 02:28-03:04; = collaborator's 36-persona bank per RF-1)
+## F-12 2026-09-20 scientific LAB-ONLY PARTIAL
+  P: stdout of C:/Users/user4/expLB/perm.py (no file) over C:/Users/user4/expLB/run-kd/axes_vectors_s3.pt (role_groups, vectors_dir) + run-kd/vectors_s3/*.pt at L40
+  S: perm.py (lab-only loose, 2026-09-20 11:58:32, md5 25310941)
+  D: run-kd/axes_vectors_s3.pt (the 09-20 version; since regenerated) for role_groups only; run-kd/vectors_s3 (unchanged since 09-20)
+## F-13 2026-09-20 scientific LAB=GIT MAPPED
+  P: C:/Users/user4/expLB/run-crossgen/kd11/matrices/mean_L40_s42.json
+  S: src/assistant_axis_ndif/27_crossgen.py (as F-03)
+  D: as F-03 (passB, paper16 axes_vectors_s3_fp32.pt, sycophancy_mt from run-sycophancy-mt)
+## F-14 2026-09-19 engineering LAB≠GIT PARTIAL
+  P: laptop working copy kd/run/knowledge/scores.jsonl (204,800 B; git blob 203,705 B = 204,800 minus 1,095 CR) vs C:/Users/user4/expLB/kd/run/knowledge/scores.jsonl (279,757 B)
+  S: n/a (scp transfer)
+  D: -
+## F-15 2026-09-20 scientific LAB-ONLY PARTIAL
+  P: C:/Users/user4/expLB/run-sycophancy/rows.jsonl (620 labelled rows) + C:/Users/user4/expLB/logs/syco_label.log
+  S: src/assistant_axis_ndif/10_sycophancy_ndif.py --stage label (lab = git), launched by C:/Users/user4/night_chain.ps1:44
+  D: data_syco prompts; run-sycophancy/responses.jsonl (2026-09-16 05:38)
+## F-16 2026-09-19 provenance LAB=GIT MAPPED
+  P: C:/Users/user4/expLB/results/subsets/harm-pressure-knowledge-report.csv (+ derived: run-coords/passB/harm-pressure-kr-matched/rows.jsonl; kd/results/phase2_gate.json; kd/run/factor_probes/kd_knowledge/rows.jsonl)
+  S: eval_datasets.py hpkr_slice / load_csv_subset (first in git 3dfdb67 2026-09-21; lab = HEAD, lab mtime 2026-09-22 14:26); kd/scripts/build_factor_probes.py prints 1,962/1,841/121 (lab = git)
+  D: -
+## F-17 earlier sessions (entered git 6432257) scientific LAB≠GIT PARTIAL
+  P: C:/Users/user4/expLB/run-crossgen/significance.json
+  S: src/assistant_axis_ndif/27_crossgen.py
+  D: run-coords/passB 10-dataset corpus (no kr-matched); run-paper16/axes_vectors_s3_fp32.pt (per scripts_to_outputs)
+## F-18 2026-09-20 scientific LAB-ONLY PARTIAL
+  P: stdout of C:/Users/user4/expLB/cmp_banks.py (no file) over C:/Users/user4/expLB/run-paper16/axes_vectors_s3.pt + C:/Users/user4/expLB/run-paper16-shared/axes_vectors_s3.pt
+  S: cmp_banks.py (lab-only loose, 2026-09-20 12:30:25, md5 d4d49deb)
+  D: run-paper16/axes_vectors_s3.pt = the OLD laptop-built bank (internal vectors_dir 'C:\Users\SURAIYA\...\run-paper16\vectors_s3', mtime 2026-09-15 17:00) - NOT axes_vectors_s3_fp32.pt used by the kd11 c
+## F-19 2026-09-20 scientific LAB-ONLY MAPPED
+  P: C:/Users/user4/expLB/logs/kd_axes_s23.log (s23) + C:/Users/user4/expLB/logs/kd_axes.log (s3)
+  S: src/assistant_axis_ndif/6_axes.py (see F-11 on version)
+  D: run-kd/vectors_s23 (36, 2026-09-20 11:51-12:40); F-10 imbalance numbers
+## F-20 2026-09-20 provenance LAB-ONLY PARTIAL
+  P: C:/Users/user4/expLB/logs/kd_passAC.log (HP-KR n=200 100D/100H in passA and passC; 'harm-pressure-kr-matched: no rows', 2026-09-20 13:35) + stdout of C:/Users/user4/expLB/make_view_ac.py (98 / 89:9, not persisted); passB side: run-coords/passB/harm-pressure-kr-matched/rows.jsonl (258)
+  S: make_view_ac.py (lab-only loose, 2026-09-20 13:36:35, md5 d794789b; not in any branch - RF-8); kd/scripts/check_matched_slice.py (git, 09-21) recomputes composition; kd/scripts/run_hpkr_topup.ps1 + ru
+  D: passA/passC 2,000-row subsamples with HP-KR label-stratified 100/100
+## F-21 2026-09-20 engineering LAB-ONLY PARTIAL
+  P: C:/Users/user4/expLB/logs/scale_3b_generate.log
+  S: src/assistant_axis_ndif/1_generate_ndif.py (lab = HEAD md5 8b6c22e5) via scale/scripts/run_scale_chain.ps1
+  D: -
+## F-22 2026-09-20 engineering LAB=GIT MAPPED
+  P: git src/assistant_axis_ndif/1_generate_ndif.py @106d09f (pre-fix: session handler str(e)[:200] at line 146) vs HEAD (lines 145-150 fix; lab copy = HEAD md5, lab mtime 2026-09-20 13:02:27); log C:/Users/user4/expLB/logs/scale_8b_generate.log
+  S: n/a
+  D: -
+## F-23 2026-09-20 provenance GIT-ONLY PARTIAL
+  P: papers/Do Linear Probes Generalize Better in Persona Coordinates.pdf (git) - Table 1, Figure 7; notes docs/papers/persona-coordinates-notes.md lines 275-305 (4.3) and 552-559 (8.1)
+  S: make_view.py (lab-only loose, 2026-09-19 20:09:13, md5 e9aae215) built the slice view
+  D: -
+## F-24 2026-09-20 engineering LAB=GIT PARTIAL
+  P: C:/Users/user4/.cache/huggingface/hub/models--meta-llama--Llama-3.3-70B-Instruct/blobs (listing)
+  S: n/a
+  D: -
+## F-25 2026-09-20 engineering LAB-ONLY MAPPED
+  P: C:/Users/user4/expLB/run-crossgen/kd11/passC/significance.json
+  S: src/assistant_axis_ndif/27_crossgen.py stage_summarize / write_json (line 736 / 138 in the traceback; lab copy since modified, mtime 2026-09-21 03:47)
+  D: passC store (HP-KR 200 rows at the time); passC/splits.json 2026-09-20 13:45:49; run-kd/axes_vectors_s23.pt
+## F-26 2026-09-20 scientific LAB-ONLY MAPPED
+  P: C:/Users/user4/expLB/logs/cap_smoke.log (UTF-16)
+  S: cap/scripts/smoke_multiturn.py - the version that ran at 14:38 is NOT preserved (lab/git copy is the 18:40 version)
+  D: cap/questions/cap_questions.jsonl (lab 2026-09-20 14:26 = git; Q0/Q1); cap persona instructions pc_caver / pc_position_holder variant 0 - lab copies rewritten 2026-09-20 22:51-22:52 (the 'fix'), so th
+## F-27 2026-09-20 scientific LAB-ONLY PARTIAL
+  P: C:/Users/user4/expLB/run-scale/8b/scores/*.json (25 files, 14:18:12-14:54:18) + C:/Users/user4/expLB/run-scale/{3b,8b}/responses/*.jsonl (26 + 26)
+  S: scale/scripts/score_summary.py (lab 2026-09-20 14:48:14 = git md5 cfd14b5f; print-only); generation 1_generate_ndif.py; judge 3_judge_ndif.py with Llama-3.1-70B
+  D: paper16 bank personas (26 x 5 variants) x 20 shared questions; judge Llama-3.1-70B
+## F-28 2026-09-20 scientific NOT-FOUND PARTIAL
+  P: NOT-FOUND for the counted text: the v1 (pre-F-32) cap_instructions/*.json were overwritten (lab files mtime 2026-09-20 22:51 = later v4 bank; git first commit dc24e96 09-21 = v4). Surviving v1 evidence: C:/Users/user4/expLB/logs/cap_smoke.log (SYSTEM lines = variant 0 of the two smoked roles only)
+  S: counts: ad hoc regex (no script found, INFERRED print-only); smoke: cap/scripts/smoke_multiturn.py, but the 14:38 version is not preserved (lab cap/scripts/smoke_multiturn.py mtime 18:40 = git md5 515
+  D: cap bank v1 persona texts (pre-F-32); cap_questions.jsonl v1
+## F-29 2026-09-20 scientific LAB=GIT MAPPED
+  P: C:/Users/user4/expLB/run-crossgen/kd11/matrices/mean_L40_s42.json
+  S: matrix: src/assistant_axis_ndif/27_crossgen.py (lab=git HEAD, lab mtime 09-21 03:47; the matrix, mtime 09-19 20:12, was written by an earlier version: b9a497e 09-18 or an uncommitted lab version, not 
+  D: paper16 bank axes_vectors_s3_fp32.pt (matrix 'bank' field; RF-12 new fp32 vectors); run-coords/passB; 11th dataset harm-pressure-kr-matched (make_view.py, RF-8); cap_smoke.log v1 personas
+## F-30 2026-09-20 scientific LAB=GIT (70B) | LAB-ONLY+Drive (8B,3B) MAPPED
+  P: C:/Users/user4/expLB/run-paper16/scores/*.json; C:/Users/user4/expLB/run-scale/8b/scores/*.json; C:/Users/user4/expLB/run-scale/3b/scores/*.json (25 files each)
+  S: scale/scripts/score_summary.py (print-only; lab=git cfd14b5f); scores by src/assistant_axis_ndif/3_judge_ndif.py via scale/scripts/run_scale_chain.ps1 (both lab=git)
+  D: paper16 bank 26 personas; 70B = run-paper16 (paper question set, 50-60 per role), not run-paper16-shared
+## F-31 2026-09-20 scientific LAB≠GIT MAPPED
+  P: GIT asix HEAD run-crossgen/kd11/banks/kd/significance.json (blob md5 7cb6d995, 1,628,949 B, committed 3dfdb67 2026-09-21 11:07; 4,032 tests) - this version exists only in git
+  S: src/assistant_axis_ndif/27_crossgen.py writes significance.json (lab=git); readout kd/scripts/read_significance.py (print-only; lab=git ff1b14be)
+  D: kd bank run-kd axes_vectors_s3.pt as of 09-20 (lab run-kd axes regenerated 09-22 per lead); run-coords/passB (not passA); 11th dataset harm-pressure-kr-matched (make_view.py); kd bank matrices (lab=gi
+## F-32 2026-09-20 engineering GIT-ONLY PARTIAL
+  P: GIT cap/docs/REVIEW_PACKET.md (also _V2, _V3), which embed the F-32 bank text; the F-32 cap_instructions/*.json themselves are NOT-FOUND (overwritten 22:51 by the v4 bank)
+  S: cap/scripts/cap_personas.py (only the 22:51 v4 version preserved); counts via F-28 regexes, ad hoc (not found)
+  D: F-26/F-28 confound list
+## F-33 2026-09-20 engineering LAB-ONLY PARTIAL
+  P: C:/Users/user4/expLB/logs/scale_3b_vectors_all.log (failures); length table: print-only over C:/Users/user4/expLB/run-scale/{3b,8b}/responses/*.jsonl + an unnamed 70B responses dir
+  S: src/assistant_axis_ndif/2_activations_ndif.py (lab=git af86bc22; lab mtime 09-20 15:48:59 = post-fix); scale/scripts/response_lengths.py (print-only; lab=git); scale/scripts/run_scale_chain.ps1 (lab=g
+  D: run-scale/3b/responses (2,600 rollouts)
+## F-34 2026-09-20 scientific LAB≠GIT PARTIAL
+  P: C:/Users/user4/expLB/run-crossgen/kd11/banks/kd_s23/significance.json for diffs/CIs; the 3,276-test version F-34 read is NOT-FOUND (git has 468 tests / 3 layers; lab and Drive have 5,544 tests)
+  S: src/assistant_axis_ndif/27_crossgen.py via kd/scripts/run_kd_s23.ps1 (both lab=git; run_kd_s23 lab mtime 09-22 01:28); kd/scripts/layer_profile.py (print-only; lab=git 94179ff2)
+  D: kd_s23 bank (run-kd axes_vectors_s23.pt as of 09-20; regenerated 09-22 per lead); run-coords/passB 21 layers (not passA); 11th dataset harm-pressure-kr-matched
+## F-35 2026-09-20 engineering LAB-ONLY MAPPED
+  P: C:/Users/user4/expLB/logs/scale_8b.status; C:/Users/user4/expLB/logs/scale_3b.status; C:/Users/user4/expLB/logs/scale_3b_vectors_all.log
+  S: scale/scripts/run_scale_chain.ps1 (writes status; lab=git); 2_activations_ndif.py
+  D: 2,600 rollouts per rung
+## F-36 2026-09-20 scientific LAB-ONLY (questions) | LAB=GIT (v2 draft) PARTIAL
+  P: C:/Users/user4/expLB/run-sycophancy-mt/questions.jsonl; C:/Users/user4/expLB/cap/questions/cap_questions_v2_draft.jsonl
+  S: src/assistant_axis_ndif/13_sycophancy_multiturn.py (run-sycophancy-mt, 09-16); v2 draft hand-authored (INFERRED)
+  D: 
+## F-37 2026-09-20 scientific LAB-ONLY MAPPED
+  P: C:/Users/user4/expLB/logs/scale_3b_axes.log; C:/Users/user4/expLB/logs/scale_8b_axes.log; C:/Users/user4/expLB/logs/paper16_shared_axes.log - FIRST report block of each (vectors_all)
+  S: src/assistant_axis_ndif/6_axes.py (lab=git e5c96358, lab mtime 09-21 03:22 - later than these runs, so the printing version is older)
+  D: run-scale/{3b,8b}/vectors_all; run-paper16-shared vectors_all (shared-question bank)
+## F-38 2026-09-20 provenance LAB=GIT MAPPED
+  P: C:/Users/user4/expLB/results/subsets/gender-secret.csv; soft-trigger.csv; instructed-deception.csv
+  S: dataset generation pipeline (src/gender_secret, soft-trigger submodule); the check itself: no script named
+  D: 
+## F-39 2026-09-20 scientific LAB=GIT MAPPED
+  P: C:/Users/user4/expLB/run-crossgen/kd11/matrices/mean_L40_s42.json
+  S: kd/scripts/paper_comparison.py (print-only; lab=git 82f1ca93; lab mtime 09-20 23:31 = edited after F-39); matrix by 27_crossgen.py
+  D: paper16 bank axes_vectors_s3_fp32.pt (RF-12); run-coords/passB; 11th dataset; the paper PDF (Fig 9A, Table 1)
+## F-40 2026-09-20 engineering LAB-ONLY PARTIAL
+  P: C:/Users/user4/expLB/run-coords/passB/<dataset>/rows.jsonl (row counts); the 17:00-17:16 8B chunks are NOT-FOUND (8B coords dir deleted before the 18:04 restart, F-43) - log C:/Users/user4/expLB/logs/scale_coords_8b.log lines 12-4323
+  S: src/assistant_axis_ndif/8_coords_ndif.py (passB 09-15; lab=git); scale/scripts/run_scale_coords.ps1 (lab=git = 09-22 version; 09-20 version not preserved)
+  D: 
+## F-41 2026-09-20 engineering LAB-ONLY MAPPED
+  P: C:/Users/user4/expLB/logs/scale_coords_8b.log
+  S: 8_coords_ndif.py; scale/scripts/run_scale_coords.ps1 (09-20 version not preserved; the 09-22 lab=git version keeps comments on the 17:48 revision)
+  D: 
+## F-42 2026-09-20 engineering LAB-ONLY MAPPED
+  P: C:/Users/user4/expLB/logs/scale_coords_8b.log lines 4868-5644 (17:32:29 -> 17:48:37); src/assistant_axis_ndif/run_coords_chain.ps1
+  S: arithmetic heads x T^2 x 4 bytes (no script)
+  D: 
+## F-43 2026-09-20 engineering LAB-ONLY MAPPED
+  P: C:/Users/user4/expLB/logs/scale_coords_8b.log; C:/Users/user4/expLB/run-coords/passB/harm-pressure-knowledge-report/rows.jsonl
+  S: scale/scripts/run_scale_coords.ps1 (maxlen 1024 for 8b/3b rows; lab=git 09-22 version)
+  D: 70B passB at max_length 8192
+## F-44 2026-09-20 engineering NOT-FOUND NOT-FOUND
+  P: NOT-FOUND: the 18:18 probe was console-only (no lab log at that time); the 18:04-run items.pt were deleted at the 18:34 restart (current items.pt 18:34:24-18:37:08)
+  S: src/assistant_axis_ndif/8_coords_ndif.py --prepare_only (lab=git)
+  D: hpkr_slice() construction of harm-pressure-kr-matched (F-23)
+## F-45 2026-09-20 engineering NOT-FOUND PARTIAL
+  P: NOT-FOUND: the 18:04 full-corpus 8B instructed-deception chunks were deleted before the 18:34 --sample 800 restart; log C:/Users/user4/expLB/logs/scale_coords_8b.log lines 6700-12160 (18:04:18 -> 18:34)
+  S: run_scale_coords.ps1 + 8_coords_ndif.py
+  D: paper Table 1 splits (PDF, DOC-ONLY here)
+## F-46 2026-09-20 scientific LAB-ONLY MAPPED
+  P: C:/Users/user4/expLB/logs/cap_smoke_v2.log
+  S: cap/scripts/smoke_multiturn.py (lab mtime 18:40:10 = git 515aad29; INFERRED used by the 18:40:29 run) - a loose lab cap/smoke_multiturn.py (18:38:45, md5 76667b95) is not in git
+  D: F-32 bank; cap_questions_v2_draft.jsonl (18:39 version = git)
+## F-47 2026-09-20 engineering LAB-ONLY PARTIAL
+  P: stale HPC artifacts NOT-FOUND (deleted by the F-48 fix; HPC re-extracted 19:46:51 -> 20:00:18); log evidence C:/Users/user4/expLB/logs/scale_coords_8b.log line 14819 ('18:48:22 harm-pressure-choice: 2134 to do') and 14821 ('267 sessions')
+  S: scale/scripts/run_scale_coords.ps1 + 8_coords_ndif.py
+  D: 
+## F-48 2026-09-20 engineering LAB-ONLY MAPPED
+  P: C:/Users/user4/expLB/logs/scale_coords.status; C:/Users/user4/expLB/run-scale/8b/coords/<dataset>/chunk_* files
+  S: scale/scripts/run_scale_coords.ps1 (09-22 lab=git version; 09-20 version not preserved) + 8_coords_ndif.py
+  D: F-43 settings (max_length 1024)
+## F-49 2026-09-20 engineering LAB-ONLY MAPPED
+  P: C:/Users/user4/expLB/run-scale/3b/coords/instructed-deception/chunk_* mtimes (402 files 19:36:40 -> 20:09:03); C:/Users/user4/expLB/logs/scale_coords_3b.log
+  S: run_scale_coords.ps1 + 8_coords_ndif.py
+  D: 
+## F-50 2026-09-20 correction LAB-ONLY MAPPED
+  P: C:/Users/user4/expLB/run-scale/3b/coords/instructed-deception/rows.jsonl + chunk files
+  S: run_scale_coords.ps1 + 8_coords_ndif.py
+  D: 
+## F-51 2026-09-20 scientific LAB-ONLY MAPPED
+  P: C:/Users/user4/expLB/cap/run/smoke_tf/pc_caver.jsonl; C:/Users/user4/expLB/cap/run/smoke_tf/pc_position_holder.jsonl
+  S: cap/scripts/gen_multiturn_ndif.py (writes jsonl; lab=git dbdbfa3a but lab mtime 09-21 17:45, so the 09-20 20:49 version is not preserved); show_rollouts.py (print)
+  D: cap bank v3 wording (noun 'caver'); v2/v3 questions
+## F-52 2026-09-20 scientific LAB-ONLY MAPPED
+  P: C:/Users/user4/expLB/cap/run/smoke_cells/{pc_caver,pc_position_holder,pc_caver_control,pc_position_holder_control}.jsonl
+  S: cap/scripts/gen_multiturn_ndif.py (09-20 version not preserved)
+  D: 
+## F-53 2026-09-20 scientific LAB-ONLY MAPPED
+  P: C:/Users/user4/expLB/cap/run/smoke_v4/{pc_caver,pc_position_holder,pc_caver_control,pc_position_holder_control}.jsonl
+  S: cap/scripts/gen_multiturn_ndif.py (09-20 version not preserved)
+  D: v4 wording of pc_caver
+## F-54 2026-09-20 engineering LAB-ONLY MAPPED
+  P: C:/Users/user4/expLB/logs/scale_coords.status; C:/Users/user4/expLB/run-scale/{3b,8b}/coords/<5 datasets>/rows.jsonl
+  S: scale/scripts/run_scale_coords.ps1 (09-22 lab=git version; 09-20 version not preserved) + 8_coords_ndif.py
+  D: F-43 max_length 1024; --sample 800 --seed 42
+## F-55 2026-09-20 scientific LAB-ONLY MAPPED
+  P: C:/Users/user4/expLB/cap/run/probe/pc_position_holder_nopersona.jsonl ; C:/Users/user4/expLB/cap/run/probe/pc_consensus_follower.jsonl ; C:/Users/user4/expLB/cap/run/probe/pc_calibrated_holder.jsonl
+  S: cap/scripts/gen_multiturn_ndif.py --no_persona (and pair-5 run). Lab copy = git HEAD b548299 (md5_lf dbdbfa3a) but its lab mtime 2026-09-21 17:45 is AFTER the run (2026-09-20 21:32); first git version
+  D: cap bank persona instructions pc_position_holder / pc_calibrated_holder / pc_consensus_follower (lab cap/personas, no Drive copy per RF-10); the 8 cap questions
+## F-56 2026-09-20 engineering LAB-ONLY MAPPED
+  P: C:/Users/user4/expLB/logs/crossgen_scale_8b.log
+  S: src/assistant_axis_ndif/27_crossgen.py loader (+ eval_datasets.py filter) via scale/scripts/run_scale_crossgen.ps1. The 27_crossgen.py version of 09-20 21:54 is not in git (git versions b9a497e 09-18,
+  D: run-scale/8b store (label-stratified --sample 800); the '371 extracted' figure is from F-54
+## F-57 2026-09-20 engineering LAB=GIT PARTIAL
+  P: fig2: C:/Users/user4/expLB/kd/results/fig_data.json (= git kd/results/fig_data.json). fig1/fig3/fig4: numbers HARDCODED in kd/scripts/make_thesis_figures.py (lines 70-72, 152-153, 195)
+  S: kd/scripts/export_fig_data.py (lab = git; run on lab 2026-09-20 22:08) reduces run-crossgen/kd11/banks/kd_s23/significance.json -> fig_data.json; kd/scripts/make_thesis_figures.py plots on laptop (not
+  D: run-crossgen/kd11/banks/kd_s23/significance.json AS OF 2026-09-20 22:08 (21 layers, 3,276 tests). That file was REGENERATED on lab 2026-09-22 16:15:50 and git holds an older 468-test/3-layer version (
+## F-58 2026-09-20 scientific LAB=GIT PARTIAL
+  P: 3B/8B: the cited matrices were OVERWRITTEN 2026-09-20 23:38-23:40 by the mask rerun (F-63); F-58's values survive only in C:/Users/user4/expLB/logs/crossgen_scale_3b.log and C:/Users/user4/expLB/logs/crossgen_scale_8b.log (HPC runs 22:19-22:21). 70B: C:/Users/user4/expLB/run-crossgen/kd11/matrices/m
+  S: src/assistant_axis_ndif/27_crossgen.py via scale/scripts/run_scale_crossgen.ps1 (27_crossgen version of 09-20 not in git); 70B row likely read with kd/scripts/paper_comparison.py (INFERRED; lab mtime 
+  D: run-scale 3B/8B banks axes_3b.pt / axes_8b.pt; 70B paper16 bank axes_vectors_s3_fp32.pt (kd11 root)
+## F-59 2026-09-20 scientific LAB-ONLY MAPPED
+  P: C:/Users/user4/expLB/logs/hpkr_denial_smoke.log ; C:/Users/user4/expLB/logs/hpkr_denial_control.log ; C:/Users/user4/expLB/logs/hpkr_denial_margin.log ; rollouts C:/Users/user4/expLB/kd/run/denial/{rollouts,control,margin}.jsonl
+  S: kd/scripts/gen_hpkr_denial.py --select wrong|margin (lab = git e9969af, md5_lf 8c490a2d)
+  D: kd/run/knowledge/scores.jsonl + items.jsonl: the lab scores.jsonl is the full 279,757-B file; the git copy is TRUNCATED at 204,800 B (RF-5). The lab run read the full file
+## F-60 2026-09-20 correction GIT-ONLY MAPPED
+  P: papers/Do Linear Probes Generalize Better in Persona Coordinates.pdf (git)
+  S: none recorded (ad hoc text search)
+  D: F-58; mask extraction for 3B/8B = logs/mask_3b.log, mask_8b.log (lab, 2026-09-20 23:14-23:37)
+## F-61 2026-09-20 scientific LAB=GIT MAPPED
+  P: C:/Users/user4/expLB/run-crossgen/kd11/matrices/mean_L40_s42.json (paper16) ; C:/Users/user4/expLB/run-crossgen/kd11/banks/kd/matrices/mean_L40_s42.json (kd) ; counts: C:/Users/user4/expLB/run-paper16/responses/*.jsonl (26 files), C:/Users/user4/expLB/run-kd/responses/*.jsonl (37 files)
+  S: 27_crossgen.py (root matrix 2026-09-19 20:12; kd bank 2026-09-20 03:06); counts: no script recorded (print-only)
+  D: paper16 bank axes_vectors_s3_fp32.pt (RF-12 new version); kd bank run-kd/axes_vectors_s3.pt as of 09-20 (lab file REGENERATED 2026-09-22 15:41:57)
+## F-62 2026-09-20 scientific LAB=GIT MAPPED
+  P: C:/Users/user4/expLB/run-crossgen/kd11/banks/kd/matrices/mean_L40_s42.json ; C:/Users/user4/expLB/run-crossgen/kd11/banks/kd_s23/matrices/mean_L40_s42.json ; baseline C:/Users/user4/expLB/run-crossgen/kd11/matrices/mean_L40_s42.json
+  S: 27_crossgen.py (kd bank 2026-09-20 03:06; kd_s23 2026-09-20 12:48); reader kd/scripts/paper_comparison.py (print-only; lab = git e9969af)
+  D: run-kd vectors_s3 / vectors_s23 axes as of 2026-09-20 (lab axes_vectors_s3.pt and _s23.pt REGENERATED 2026-09-22)
+## F-63 2026-09-20 correction LAB-ONLY MAPPED
+  P: C:/Users/user4/expLB/run-crossgen/scale_3b/matrices/mean_L16_s42.json ; C:/Users/user4/expLB/run-crossgen/scale_8b/matrices/mean_L16_s42.json ; C:/Users/user4/expLB/run-crossgen/scale_70b/matrices/mean_L40_s42.json
+  S: 27_crossgen.py via scale/scripts/run_scale_crossgen.ps1 (lab = git 3dfdb67; the 27_crossgen version of 09-20 23:38 is not in git); reader probably kd/scripts/paper_comparison.py (INFERRED)
+  D: run-scale axes_3b.pt / axes_8b.pt; 70B bank file field bank='axes_vectors_s3.pt' (bank_name paper16_70b) -- NOT the _fp32 bank used by kd11 root: which paper16 vector version (RF-12) needs checking
+## F-64 2026-09-21 engineering LAB-ONLY PARTIAL
+  P: C:/Users/user4/expLB/logs/cap_chain.status (gates) ; C:/Users/user4/expLB/run-cap/scores/*.json (12 files) for keep rates and score distribution
+  S: cap/scripts/run_cap_chain.ps1 (repo copy = git 6432257; a different loose copy C:/Users/user4/expLB/run_cap_chain.ps1 exists, md5 differs); counts via scale/scripts/score_summary.py (print-only; lab =
+  D: cap/personas + cap/questions (lab copies, not on Drive); judge Llama-3.1-70B
+## F-65 2026-09-21 scientific LAB-ONLY MAPPED
+  P: C:/Users/user4/expLB/run-crossgen/kd11/banks/cap_s23/matrices/mean_L40_s42.json (+L20, L44; cap_all same names) ; register axis + baselines C:/Users/user4/expLB/run-crossgen/kd11/matrices/mean_L40_s42.json ; geometry C:/Users/user4/expLB/run-cap/axes_s23.pt
+  S: 27_crossgen.py via cap/scripts/run_cap_chain.ps1 step 2f; cap matrices REBUILT 2026-09-21 03:48-04:00 with --recompute (F-68), after F-65's commit 6432257 (03:26). Readers read_cap_result.py / cap_swe
+  D: run-cap/vectors_s23, vectors_all (lab-only); run-cap/axes_s23.pt (rewritten 03:22:49 after the 6_axes.py fix; axes_all.pt 03:02:40 not rewritten); root paper16 bank axes_vectors_s3_fp32.pt
+## F-66 2026-09-21 scientific LAB-ONLY PARTIAL
+  P: C:/Users/user4/expLB/run-crossgen/kd11/banks/cap_s23/matrices/mean_L{20,40,44}_s42.json (+ cap_all for the 'unfiltered' column)
+  S: matrices: 27_crossgen.py (rebuilt 03:48-04:00); statistics: cap/scripts/cap_significance.py (lab = git 6432257; print-only; seed 42)
+  D: as F-65; the '1 of 384 / 6 of 4,032' census comes from earlier significance files (F-31 family, other batch)
+## F-67 2026-09-21 scientific LAB-ONLY PARTIAL
+  P: C:/Users/user4/expLB/run-crossgen/kd11/banks/cap_s23/significance.json (and cap_all) -- but the 792-test version F-67 read no longer exists
+  S: 27_crossgen.py writes significance.json (lab = git 20550e3); readers read_significance.py, cap_vs_raw_full.py (print-only; lab = git)
+  D: cap matrices as F-65/F-66
+## F-68 2026-09-21 scientific LAB-ONLY MAPPED
+  P: C:/Users/user4/expLB/run-crossgen/kd11/banks/cap_s23/matrices/mean_L{20,40,44}_s42.json ; C:/Users/user4/expLB/run-crossgen/kd11/banks/cap_all/matrices/mean_L{20,40,44}_s42.json
+  S: 27_crossgen.py --recompute (lab = git 20550e3); reader cap/scripts/cap_zeroshot.py (print-only; lab = git)
+  D: run-cap/axes_s23.pt (03:22:49), axes_all.pt (03:02:40)
+## F-69 2026-09-21 engineering LAB-ONLY PARTIAL
+  P: C:/Users/user4/expLB/run-coords/passA/harm-pressure-knowledge-report/rows.jsonl (747,630 B, 2026-09-21 11:29:40) ; C:/Users/user4/expLB/run-coords/passB/harm-pressure-knowledge-report/rows.jsonl (2026-09-15) ; gate C:/Users/user4/expLB/logs/hpkr_topup.status
+  S: kd/scripts/run_hpkr_topup.ps1 -> src/assistant_axis_ndif/8_coords_ndif.py (extraction); checker kd/scripts/check_matched_slice.py (print-only; lab = git 6a0e016)
+  D: eval_datasets.hpkr_slice (lab eval_datasets.py mtime 2026-09-22 14:26 = git HEAD; the 09-21 version is not identified)
+## F-70 2026-09-21 provenance GIT-ONLY MAPPED
+  P: docs/NOVELTY_ASSESSMENT.md (git, 8d50caf)
+  S: none (external Claude.ai sessions)
+  D: external review transcripts (not in repo: NOT-FOUND); papers arXiv 2609.02893, 2605.27958, 2511.17408 are not in papers/
+## F-71 2026-09-21 engineering LAB-ONLY PARTIAL
+  P: C:/Users/user4/expLB/logs/hpkr_topup.status ; C:/Users/user4/expLB/run-coords/passC/harm-pressure-knowledge-report/rows.jsonl (2026-09-21 11:52:44)
+  S: run_hpkr_topup.ps1 -> 8_coords_ndif.py; checks check_matched_slice.py, inspect_store.py (print-only; lab = git)
+  D: as F-69
+## F-72 2026-09-21 scientific LAB-ONLY MAPPED
+  P: C:/Users/user4/expLB/run-crossgen/kd11/passC11/banks/kd_s23/matrices/mean_L{20,22,28,40,44,48}_s42.json (axes) ; C:/Users/user4/expLB/run-crossgen/kd11/passC11/matrices/mean_L*_s42.json (raw, random, length, datapca)
+  S: 27_crossgen.py via the PassAC-11 chain (driver not identified in this batch); reader kd/scripts/matched_profile.py (print-only; lab = git 6092415)
+  D: run-coords/passC HP-KR full rows (F-71); harm-pressure-kr-matched view built by lab-only make_view.py (RF-8), re-made 2026-09-22 15:47:01; kd_s23 bank vectors (run-kd, as of 09-20)
+## F-73 2026-09-21 correction LAB=GIT MAPPED
+  P: AUROCs C:/Users/user4/expLB/run-crossgen/kd11/matrices/mean_L40_s42.json ; token gaps C:/Users/user4/expLB/run-coords/passB/<dataset>/rows.jsonl (11 datasets)
+  S: kd/scripts/check_length_claim.py (print-only; lab = git b3a7db8)
+  D: passB rows.jsonl (lab mtimes 2026-09-15..09-19)
+## F-74 2026-09-21 correction LAB=GIT MAPPED
+  P: C:/Users/user4/expLB/run-crossgen/kd11/matrices/mean_L40_s42.json
+  S: kd/scripts/ceiling_null.py (print-only; lab = git 3f6c421)
+  D: paper16 root bank (axes_vectors_s3_fp32.pt)
+## F-75 2026-09-21 scientific LAB-ONLY MAPPED
+  P: C:/Users/user4/expLB/run-crossgen/kd11/passA11/banks/kd_s23/matrices/mean_L{0..79}_s42.json (axes) ; C:/Users/user4/expLB/run-crossgen/kd11/passA11/matrices/mean_L{0..79}_s42.json (raw, datapca)
+  S: 27_crossgen.py (PassAC-11 step A-kd-all); readers kd/scripts/matched_profile.py (lab = git) and C:/Users/user4/expLB/margin.py (LOOSE lab-only script, 2,041 B, not in git, not on Drive)
+  D: as F-72; docs/LAYER_PREREGISTRATION.md (f5d6904 13:00:22, amended 63aabb4 13:19:20)
+## F-76 2026-09-21 correction LAB-ONLY PARTIAL
+  P: same 160 matrices as F-75
+  S: kd/scripts/layer_significance.py (print-only; lab = git 439b8c6)
+  D: F-75 inputs
+## F-77 2026-09-21 scientific LAB-ONLY PARTIAL
+  P: C:/Users/user4/expLB/run-crossgen/kd11/banks/cap_s23/matrices/mean_L{0,4,8,12,16,20,22,24,28,32,36,40,44,48,52,56,60,64,68,72,76}_s42.json
+  S: matrices: 27_crossgen.py via cap/scripts/run_cap_layers.ps1 (lab = git); statistics: cap/scripts/cap_layer_profile.py (print-only; lab = git d109782)
+  D: run-cap/axes_s23.pt; 18 new layer matrices (13:21-13:44) + 3 rebuilt ones (03:48-03:51)
+## F-78 2026-09-21 provenance GIT-ONLY MAPPED
+  P: papers/The Truthfulness Spectrum Hypothesis.pdf (git); docs/papers/truthfulness-spectrum-notes.md (git, fcef82a)
+  S: none (paper reading)
+  D: -
+## F-79 2026-09-21 scientific LAB-ONLY MAPPED
+  P: C:/Users/user4/expLB/run-premise/premise_L40_mean_s42.json (24,283 B, 2026-09-21 14:26:55)
+  S: src/assistant_axis_ndif/30_premise.py. Lab copy = git HEAD 88caf47 (lab mtime 2026-09-21 15:57), but the L40 run (14:26:55) predates it and matches the ae3d840 version committed 14:27 (INFERRED from t
+  D: run-coords/passB pooled activations, 11 datasets incl. the harm-pressure-kr-matched view (lab-only make_view.py, RF-8); 80/20 splits seed 42
+## F-80 2026-09-21 scientific LAB-ONLY PARTIAL
+  P: C:/Users/user4/expLB/run-premise/premise_L40_mean_s42.json
+  S: src/assistant_axis_ndif/30b_premise_boot.py (lab = git 1d94838; print-only; seed 42)
+  D: F-79 file
+## F-81 2026-09-21 scientific LAB-ONLY PARTIAL
+  P: C:/Users/user4/expLB/run-premise/premise_L{0,4,8,12,16,20,22,24,28,32,36,40,44,48,52,56,60,64,68,72,76}_mean_s42.json (20 written 2026-09-21 14:33-14:42; L40 at 14:26)
+  S: run_premise_layers.ps1 (lab = git) -> 30_premise.py (ae3d840 version, INFERRED); per-layer bootstrap = 30b_premise_boot.py run ad hoc (print-only)
+  D: passB activations at 21 layers
+## F-82 2026-09-21 scientific LAB-ONLY PARTIAL
+  P: C:/Users/user4/expLB/run-crossgen/kd11/banks/cap_all/matrices/mean_L{0..76}_s42.json (21 files) [F-77 column: C:/Users/user4/expLB/run-crossgen/kd11/banks/cap_s23/matrices/mean_L*_s42.json]
+  S: table: cap/scripts/cap_layer_profile.py (lab md5_lf = git HEAD); matrices: src/assistant_axis_ndif/27_crossgen.py via cap/scripts/run_cap_layers.ps1 (task Cap-Layers), both lab = HEAD
+  D: run-cap/axes_all.pt (lab 2026-09-21 03:02); run-coords/passB; 11-dataset kd11 view (make_view.py, lab-only loose script)
+## F-83 2026-09-21 scientific LAB-ONLY MAPPED
+  P: C:/Users/user4/expLB/run-premise/premise_L40_mean_s{1,7,13,99}.json + run-premise/premise_L40_mean_s42.json (seed 42) ; C:/Users/user4/expLB/run-premise/mahal/premise_L40_mean_s42{,_total}.json
+  S: src/assistant_axis_ndif/30_premise.py (lab = HEAD 88caf47) via run_premise_extras.ps1 (task Premise-Extras, lab = HEAD); s42 original by the ae3d840 version (total covariance)
+  D: run-coords/passB (11 datasets, L40 mean); covariance choice (within vs total)
+## F-84 2026-09-21 scientific LAB-ONLY MAPPED
+  P: C:/Users/user4/expLB/run-premise/cluster_perm_kd_matched.json
+  S: src/assistant_axis_ndif/30c_cluster_perm.py (lab = HEAD) via run_premise_extras.ps1
+  D: run-coords/passA (20 layers, mean); bank run-kd/axes_vectors_s23.pt (lab mtime 09-22 16:00 but md5 = Drive copy dated 2026-09-20T06:48Z, so content unchanged); matched random control; the 3-test table
+## F-85 2026-09-21 scientific LAB-ONLY MAPPED
+  P: C:/Users/user4/expLB/run-premise/six/premise_L{20,40}_mean_s42.json ; 0.811: C:/Users/user4/expLB/run-crossgen/kd11/banks/kd_s23/matrices/mean_L40_s42.json
+  S: 30_premise.py (lab = HEAD 88caf47) run by hand with the six datasets; 0.811 by loose lab script C:/Users/user4/expLB/zs6v11.py (not in git, 1,372 B, 09-21 16:43, print-only)
+  D: run-coords/passB; six = ID, HP-C, HP-KR, CG, IT, ai_liar (ai_liar replaces his repe_honesty, per F-97); abstract numbers 0.904/0.916/0.648/0.732 from the collaborator (see F-97 files)
+## F-86 2026-09-21 scientific LAB-ONLY MAPPED
+  P: C:/Users/user4/expLB/run-premise/why/why_L40_s42.json ; 0.8545 from C:/Users/user4/expLB/run-premise/premise_L40_mean_s42.json
+  S: src/assistant_axis_ndif/30d_why_pooling.py (lab = HEAD)
+  D: run-coords/passB L40 mean; same splits as 30_premise.py (per F-90)
+## F-87 2026-09-21 scientific LAB-ONLY MAPPED
+  P: C:/Users/user4/expLB/run-crossgen/kd11/banks/cap_s23/matrices/mean_L40_s{1,7,13,42}.json
+  S: matrices: 27_crossgen.py via cap/scripts/run_cap_seeds.ps1 (lab = HEAD); table: loose lab script C:/Users/user4/expLB/capseedread.py (1,309 B, 09-21 17:30, not in git, print-only); dbg.py (feature che
+  D: run-cap/axes_s23.pt (lab 09-21 03:22); run-coords/passB; --extra_features/--extra_probes trap described in text
+## F-88 2026-09-21 provenance GIT-ONLY MAPPED
+  P: git: papers/Pressure-Testing Deception Probes in LLMs Scaling, Robustness, and the.pdf ; papers/The Impact of Off-Policy Training Data.pdf ; papers/Probe Generalization as Subspace Selection for OOD Deception Detectio.pdf
+  S: n/a (reading)
+  D: F-86 numbers
+## F-89 2026-09-21 scientific LAB-ONLY MAPPED
+  P: C:/Users/user4/expLB/run-crossgen/kd11/banks/cap_ctrl/matrices/mean_L{20,40,44}_s42.json + C:/Users/user4/expLB/run-crossgen/kd11/banks/cap_s23/matrices/mean_L{20,40,44}_s42.json
+  S: matrices: 27_crossgen.py via cap/scripts/run_cap_controls.ps1 / run_cap_ctrl_crossgen.ps1 (lab = HEAD); tables: loose lab scripts ctrlread.py, ctrlboot.py, ctrlboot2.py (bootstrap), ident.py (bit-iden
+  D: run-cap-ctrl/axes_s23.pt (bank of cap_ctrl matrices; lab file REWRITTEN 2026-09-22 16:05, no other copy); run-cap/vectors_s23 (7 reused vectors); cap/personas/cap_instructions_controls
+## F-90 2026-09-21 scientific LAB-ONLY MAPPED
+  P: C:/Users/user4/expLB/run-premise/audit/audit_L40_s42.json
+  S: src/assistant_axis_ndif/30f_result2_audit.py (lab = HEAD); loose lab print-only helpers q1.py, q4.py (pairs <0.5/<0.4/min from premise_L40_mean_s42.json), b2.py, q3.py/q3b.py (label semantics, 458/461
+  D: run-coords/passB L40; Q5 bank run/axes.pt = Drive own100/axes.pt (md5 SAME) i.e. the own100 bank (INFERRED from Drive folder name), 2026-09-15
+## F-91 2026-09-21 scientific LAB-ONLY MAPPED
+  P: C:/Users/user4/expLB/run-crossgen/kd11/banks/cap_s23/matrices/mean_L*_s42.json (21) + C:/Users/user4/expLB/run-crossgen/kd11/banks/kd_s23/matrices/mean_L*_s42.json (21); mean-of-directions: C:/Users/user4/expLB/run-premise/falsify/falsify_L{32,36,40}_s*.json
+  S: loose lab scripts C:/Users/user4/expLB/peak.py (peak table) and cov.py (coverage), 09-21 21:19-21:22, not in git, print-only
+  D: cap_s23 (run-cap/axes_s23.pt), kd_s23 (run-kd/axes_vectors_s23.pt); falsify sweep then in flight
+## F-92 2026-09-21 scientific LAB-ONLY MAPPED
+  P: C:/Users/user4/expLB/cap/run-sarc-pilot/marker_report_partial.json
+  S: cap/scripts/score_sarcasm_markers.py (lab = HEAD, but HEAD is the 09-22 02:59 version; the 09-21 21:31 run used an earlier version, INFERRED 080a979 = last commit before it)
+  D: responses pc_ironic_critic.jsonl (lab 09-21 21:26, original); personas cap/personas/sarcasm_pilot/*.json (lab = git)
+## F-93 2026-09-21 scientific LAB-ONLY MAPPED
+  P: C:/Users/user4/expLB/cap/run-sarc-pilot/marker_report.json (REGENERATED 2026-09-22 15:55); inputs C:/Users/user4/expLB/cap/run-sarc-pilot/responses/*.jsonl + scores/*.json (original, 09-21)
+  S: cap/scripts/score_sarcasm_markers.py (current HEAD version persists subsets; at F-93 time it did not); subset rows + feature lists originally by loose lab script C:/Users/user4/expLB/sep.py (09-21 21:
+  D: responses (lab 09-21 21:26-21:40) and judge scores (21:42-21:44), both original; judge 3_judge_ndif.py
+## F-94 2026-09-21 correction LAB-ONLY MAPPED
+  P: C:/Users/user4/expLB/run-crossgen/kd11/banks/cap_ctrl/matrices/{mean,last}_L*_s42.json (21+21) + C:/Users/user4/expLB/run-crossgen/kd11/banks/cap_s23/matrices/{mean,last}_L*_s42.json
+  S: matrices: 27_crossgen.py via src/assistant_axis_ndif/run_cap_ctrl_layers.ps1 (lab = HEAD; RF-6 backspace byte in its gate path); tables: loose lab scripts ctrl_layers.py (mean, 22:01) and ctrl_last.py
+  D: run-cap-ctrl/axes_s23.pt (rewritten 09-22 16:05, see F-89); run-cap/axes_s23.pt
+## F-95 2026-09-21 scientific LAB-ONLY MAPPED
+  P: C:/Users/user4/expLB/run-premise/falsify/falsify_L{0..76}_s{42,7,13}.json (63 files)
+  S: src/assistant_axis_ndif/30e_falsify_meandir.py via run_falsify.ps1 (task Falsify-MeanDir; lab = HEAD a11cdba with fixed gate); aggregation by loose lab script C:/Users/user4/expLB/grid.py (22:31, not 
+  D: run-coords/passB; 30_premise splits
+## F-96 2026-09-21 correction LAB-ONLY PARTIAL
+  P: C:/Users/user4/expLB/run-crossgen/scale_3b/matrices/mean_L{0,4,8,12,16,20,24}_s42.json; C:/Users/user4/expLB/run-crossgen/scale_8b/matrices/mean_L{0..28}_s42.json; C:/Users/user4/expLB/run-crossgen/scale_70b/matrices/mean_L40_s42.json
+  S: matrices: 27_crossgen.py via scale/scripts/run_scale_crossgen.ps1 (2026-09-20 run, older 27_crossgen version); layer-mean analysis inline on the lab (no script saved; no loose .py after 09-21 23:01)
+  D: run-scale/{3b,8b} stores (3B/8B mask rows.jsonl not on Drive); banks axes_3b.pt / axes_8b.pt (matrix headers; bank_name paper16_3b / paper16_8b, k=3); 70B bank run-kd/axes_vectors_s3.pt (md5 = Drive c
+## F-97 2026-09-22 correction GIT-ONLY MAPPED
+  P: git f386a72:src/probes/deception-detection/results/persona_ood_ext_L{20,40}/zero_shot.csv and summary.csv
+  S: collaborator's deception_detection/scripts/persona_ood.py (his branch; persona_ood.py changed after f386a72, +129/-20 lines, results files unchanged)
+  D: his bank paper16_L20_sharedquestions/paper16_L20.pt (= lab share_L20_shared, RF-1) + kd personas (= lab run-kd/vectors_s3, RF-1); his pooled activations (not in git, RF-2)
+## F-98 2026-09-22 scientific LAB-ONLY PARTIAL
+  P: C:/Users/user4/expLB/run-crossgen/kd11/banks/collab/matrices/mean_L{20,40}_s42.json ; C:/Users/user4/expLB/run-crossgen/kd11/matrices/mean_L{20,40}_s42.json ; C:/Users/user4/expLB/run-premise/premise_L{20,40}_mean_s42.json
+  S: bank: src/assistant_axis_ndif/6_axes.py (lab = HEAD) with kd/personas/kd_role_groups_collab.json (lab = git); matrices: 27_crossgen.py run inline (no driver .ps1 found); table: inline (no script saved
+  D: run-kd/vectors_s23; run-kd/axes_collab_s23.pt (lab 09-22 00:32, Drive SAME); kd11 11-dataset view (make_view.py); kd11/matrices = paper16 bank axes_vectors_s3_fp32.pt (RF-12 vector version)
+## F-99 2026-09-22 scientific LAB-ONLY PARTIAL
+  P: C:/Users/user4/expLB/run-crossgen/kd11/banks/collab/matrices/mean_L{0..76}_s42.json ; C:/Users/user4/expLB/run-crossgen/kd11/matrices/mean_L{0..76}_s42.json
+  S: 27_crossgen.py inline with a resume loop (no driver found); analysis inline, no script saved
+  D: as F-98
+## F-100 2026-09-22 scientific LAB-ONLY PARTIAL
+  P: C:/Users/user4/expLB/run-crossgen/scale_70b/matrices/mean_L{0..76}_s42.json (21 files)
+  S: 27_crossgen.py run inline against run-coords/passB (no driver .ps1 found); analysis inline
+  D: run-coords/passB; run-kd/axes_vectors_s3.pt (lab mtime 09-22 15:41 but md5 = Drive copy dated 2026-09-19T21:04Z: content unchanged)
+## F-101 2026-09-22 correction LAB-ONLY PARTIAL
+  P: C:/Users/user4/expLB/run-crossgen/scale_70b/matrices/{mean,last}_L{0..76}_s42.json (42 files)
+  S: 27_crossgen.py inline; analysis inline
+  D: as F-100
+## F-102 2026-09-22 scientific LAB-ONLY PARTIAL
+  P: C:/Users/user4/expLB/run-crossgen/scale_{3b,8b,70b}/matrices/{mean,last}_L*_s42.json ; truncation: C:/Users/user4/expLB/run-scale/{3b,8b}/coords/<5 datasets>/rows.jsonl and C:/Users/user4/expLB/run-coords/passB/<5 datasets>/rows.jsonl
+  S: analysis inline (no script saved)
+  D: 3B/8B last matrices from the 09-20 crossgen (older 27_crossgen.py); F-43 max_length asymmetry
+## F-103 2026-09-22 scientific LAB-ONLY PARTIAL
+  P: C:/Users/user4/expLB/run-crossgen/kd11/banks/collab/matrices/{mean,last}_L{0..76}_s42.json ; C:/Users/user4/expLB/run-crossgen/kd11/matrices/{mean,last}_L{0..76}_s42.json
+  S: 27_crossgen.py inline; analysis inline
+  D: as F-98
+## F-104 2026-09-22 engineering LAB-ONLY PARTIAL
+  P: C:/Users/user4/expLB/logs/sarc_pilot.status.pre-e2e-2026-09-22 (the 'after deployment' output F-104 quotes) + C:/Users/user4/expLB/logs/sarc_pilot.status.2026-09-21-buggy-verdict
+  S: audit itself inline (no script/output saved)
+  D: n/a
+## F-105 2026-09-22 correction LAB-ONLY MAPPED
+  P: C:/Users/user4/expLB/cap/run-sarc-pilot/marker_report.json (now persists lexical_subsets + lexical_features + polarity; REGENERATED 2026-09-22 15:55) ; inputs responses/*.jsonl, scores/*.json (original 09-21)
+  S: cap/scripts/score_sarcasm_markers.py (HEAD 6c9a5cf version, lab md5_lf = HEAD, mtime 09-22 02:59) - re-derivation itself was run inline
+  D: original responses and judge scores of 09-21
+## F-106 2026-09-22 scientific GIT-ONLY PARTIAL
+  P: git cap/run-sarcasm-natural/baselines.json (Reddit arm only) ; git cap/run-sarcasm-natural/rows.jsonl (600 rows) ; git cap/run-sarcasm-natural/figlang2020_reddit.jsonl
+  S: cap/scripts/build_sarcasm_natural.py (git cf11749; lab copy = git) - writes baselines.json + rows.jsonl for the Reddit arm; Twitter numbers are print-only / docstring only
+  D: HF dataset tasksource/figlang2020-sarcasm
+## F-107 2026-09-22 scientific LAB-ONLY PARTIAL
+  P: NOT-FOUND for the result numbers (no persisted output). Inputs: C:/Users/user4/expLB/run-coords/sarcasm/sarcasm_natural/{items.pt,chunk_0000.pt,chunk_0001.pt,chunk_0002.pt,rows.jsonl}; banks C:/Users/user4/expLB/run-kd/axes_vectors_s23.pt and C:/Users/user4/expLB/run-kd/axes_collab_s23.pt
+  S: extraction: src/assistant_axis_ndif/8_coords_ndif.py (INFERRED from log strings 'cached spans' / 'widest attention'); projection analysis: NOT-FOUND (inline)
+  D: cap/run-sarcasm-natural/rows.jsonl (git = lab); run-kd/axes_vectors_s23.pt (lab mtime 09-22 16:00, AFTER the 14:30 run, but md5 = Drive copy dated 2026-09-20T06:48Z: unchanged); axes_collab_s23.pt (09
+## F-108 2026-09-22 scientific LAB-ONLY MAPPED
+  P: C:/Users/user4/expLB/run-premise/clustered/clustered_L{20,32,40}_mean_s42.json
+  S: src/assistant_axis_ndif/30g_clustered_holdout.py (lab = HEAD 43ee6d3, lab mtime 09-22 16:58); row-overlap count inline (print-only)
+  D: run-coords/passB (kr-matched rows.jsonl 09-19 20:09 = a view over HP-KR); cluster assignment is a judgment (CLUSTERS in 30g)
+## F-109 2026-09-22 scientific LAB-ONLY MAPPED
+  P: C:/Users/user4/expLB/run-premise/six/premise_L32_mean_s42.json
+  S: src/assistant_axis_ndif/30_premise.py (lab = HEAD) run by hand
+  D: run-coords/passB; the six (ai_liar instead of repe_honesty, per F-97)

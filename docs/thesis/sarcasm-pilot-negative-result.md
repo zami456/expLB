@@ -67,6 +67,32 @@ intent-blind mismatch detectors they align about equally with `(ironic − since
 
 ### 2.1 The abandon-conditions
 
+> **UPDATE 2026-09-24 (DF-104, P17).** The pointer `SARCASM_DESIGN.md:142` in the block below is the
+> HEAD line; in the working tree, after that file's own correction block, the phrase is at `:156`.
+> This pointer is the only item in the block the P17 check found stale.
+> **Source:** `audit/p17/correction_blocks_check.csv` lines 88–94.
+>
+> **CORRECTION 2026-09-24 (DF-66, Phase 6).** The sentence below is false for G2. **The 0.65
+> threshold was not pre-registered — it entered the repository in the commit that reported the
+> failure.** `0.65` appears in **no version** of `cap/docs/SARCASM_DESIGN.md` (count 0 at all four
+> of its commits: `3d80071` v1, `5ced550` v2, `080a979`, `b34ff2e`). It first enters the repo in
+> `cap/scripts/run_sarc_pilot.ps1` at **`b34ff2e`, 2026-09-21 21:48:54 +0600**, whose own commit
+> message is *"F-93: the sarcasm pilot fails its decisive check"*.
+> What the design **did** pre-register is v1's *"separates … above ~0.75 → the bank is dead"*
+> (`3d80071`), which v2 deliberately removed in favour of *"selectivity … rather than a bare number
+> against an arbitrary 0.75"* (`5ced550`; the phrase survives at `SARCASM_DESIGN.md:142`). **The
+> design's final state pre-registers no numeric gate at all.**
+> **Source:** git, verified — `git log`/`git show` over the four `SARCASM_DESIGN.md` commits and
+> `b34ff2e:cap/scripts/run_sarc_pilot.ps1`.
+> **How the claim is updated:** read it as — *"v1 of the design set a numeric kill threshold
+> (~0.75); v2 replaced it with a selectivity criterion and no number. The 0.65 gate used in the
+> chain was fixed during the run. The result does not depend on which is used: the measured 0.921
+> (unmarked v4+v5) and 0.947 (all variants) fail 0.65 and 0.75 alike."*
+> **Why this one matters most:** the reframed thesis argues that the control discipline is the
+> contribution. A pre-registration claim the repository's own history contradicts is the first
+> thing a referee auditing that argument will find.
+> _The text below is superseded on this point and is kept for the record._
+
 Two gates were registered in the design document, with thresholds, before generation:
 
 | gate | question | threshold | rationale |

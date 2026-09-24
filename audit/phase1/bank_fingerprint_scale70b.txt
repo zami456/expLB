@@ -1,0 +1,54 @@
+TARGET C:/Users/user4/expLB/run-crossgen/scale_70b/matrices/mean_L40_s42.json axes_vectors_s3.pt paper16_70b
+    ('PC1', 'ai_liar') 0.937119
+    ('PC1', 'convincing-game') 0.875749
+    ('PC1', 'instructed-deception') 0.97237
+    ('PC1', 'mask') 0.471765
+    ('PC1', 'roleplaying') 0.81662
+    ('contrast', 'ai_liar') 0.936955
+    ('contrast', 'convincing-game') 0.788443
+    ('contrast', 'instructed-deception') 0.970953
+    ('contrast', 'mask') 0.467045
+    ('contrast', 'roleplaying') 0.784248
+
+candidates: 40
+banks\hf100\matrices\mean_L40_s42.json                       bank=axes_hf100.pt name=hf100 common=10 identical=0 max|d|=0.1469
+banks\hf275_loose\matrices\mean_L40_s42.json                 bank=axes_hf275_loose.pt name=hf275_loose common=10 identical=0 max|d|=0.1688
+banks\hf275_strict\matrices\mean_L40_s42.json                bank=axes_hf275_strict.pt name=hf275_strict common=10 identical=0 max|d|=0.1385
+banks\own100\matrices\mean_L40_s42.json                      bank=axes.pt name=own100 common=10 identical=0 max|d|=0.1474
+banks\own100_strict\matrices\mean_L40_s42.json               bank=axes_strict.pt name=own100_strict common=10 identical=0 max|d|=0.1393
+banks\paper16_famcentred\matrices\mean_L40_s42.json          bank=axes_vectors_s3_fp32_famcentred.pt name=paper16_famcentred common=10 identical=1 max|d|=0.0003
+banks\paper16_shared\matrices\mean_L40_s42.json              bank=axes_vectors_s3.pt name=paper16_shared common=10 identical=0 max|d|=0.1186
+kd11\banks\cap_all\matrices\mean_L40_s42.json                bank=axes_all.pt name=cap_all common=10 identical=0 max|d|=0.1945
+kd11\banks\cap_ctrl\matrices\mean_L40_s42.json               bank=axes_s23.pt name=cap_ctrl common=10 identical=0 max|d|=0.1816
+kd11\banks\cap_s23\matrices\mean_L40_s42.json                bank=axes_s23.pt name=cap_s23 common=10 identical=0 max|d|=0.1925
+kd11\banks\collab\matrices\mean_L40_s42.json                 bank=axes_collab_s23.pt name=collab common=10 identical=0 max|d|=0.0799
+kd11\banks\kd\matrices\mean_L40_s42.json                     bank=axes_vectors_s3.pt name=kd common=10 identical=0 max|d|=0.0767
+kd11\banks\kd_s23\matrices\mean_L40_s42.json                 bank=axes_vectors_s23.pt name=kd_s23 common=10 identical=0 max|d|=0.0799
+kd11\matrices\mean_L40_s42.json                              bank=axes_vectors_s3_fp32.pt name=paper16 common=10 identical=1 max|d|=0.0003
+kd11\passA11\banks\kd_s23\matrices\mean_L40_s42.json         bank=axes_vectors_s23.pt name=kd_s23 common=10 identical=0 max|d|=0.0667
+kd11\passA11\matrices\mean_L40_s42.json                      bank=axes_vectors_s3_fp32.pt name=paper16 common=10 identical=0 max|d|=0.0162
+kd11\passA\banks\kd_s23\matrices\mean_L40_s42.json           bank=axes_vectors_s23.pt name=kd_s23 common=10 identical=0 max|d|=0.0667
+kd11\passA\matrices\mean_L40_s42.json                        bank=axes_vectors_s3_fp32.pt name=paper16 common=10 identical=0 max|d|=0.0162
+kd11\passC11\banks\kd_s23\matrices\mean_L40_s42.json         bank=axes_vectors_s23.pt name=kd_s23 common=10 identical=0 max|d|=0.0671
+kd11\passC11\matrices\mean_L40_s42.json                      bank=axes_vectors_s3_fp32.pt name=paper16 common=10 identical=0 max|d|=0.0162
+kd11\passC\banks\kd_s23\matrices\mean_L40_s42.json           bank=axes_vectors_s23.pt name=kd_s23 common=10 identical=0 max|d|=0.0671
+kd11\passC\matrices\mean_L40_s42.json                        bank=axes_vectors_s3_fp32.pt name=paper16 common=10 identical=0 max|d|=0.0162
+matrices\mean_L40_s42.json                                   bank=axes_vectors_s3_fp32.pt name=None common=10 identical=1 max|d|=0.0003
+passA\banks\hf100\matrices\mean_L40_s42.json                 bank=axes_hf100.pt name=hf100 common=10 identical=0 max|d|=0.1526
+passA\banks\hf275_loose\matrices\mean_L40_s42.json           bank=axes_hf275_loose.pt name=hf275_loose common=10 identical=0 max|d|=0.1610
+passA\banks\hf275_strict\matrices\mean_L40_s42.json          bank=axes_hf275_strict.pt name=hf275_strict common=10 identical=0 max|d|=0.1404
+passA\banks\own100\matrices\mean_L40_s42.json                bank=axes.pt name=own100 common=10 identical=0 max|d|=0.1526
+passA\banks\own100_strict\matrices\mean_L40_s42.json         bank=axes_strict.pt name=own100_strict common=10 identical=0 max|d|=0.1436
+passA\banks\paper16_famcentred\matrices\mean_L40_s42.json    bank=axes_vectors_s3_fp32_famcentred.pt name=paper16_famcentred common=10 identical=0 max|d|=0.0162
+passA\banks\paper16_shared\matrices\mean_L40_s42.json        bank=axes_vectors_s3.pt name=paper16_shared common=10 identical=0 max|d|=0.1056
+passA\matrices\mean_L40_s42.json                             bank=axes_vectors_s3_fp32.pt name=paper16 common=10 identical=0 max|d|=0.0162
+passC\banks\hf100\matrices\mean_L40_s42.json                 bank=axes_hf100.pt name=hf100 common=10 identical=0 max|d|=0.1526
+passC\banks\hf275_loose\matrices\mean_L40_s42.json           bank=axes_hf275_loose.pt name=hf275_loose common=10 identical=0 max|d|=0.1608
+passC\banks\hf275_strict\matrices\mean_L40_s42.json          bank=axes_hf275_strict.pt name=hf275_strict common=10 identical=0 max|d|=0.1404
+passC\banks\own100\matrices\mean_L40_s42.json                bank=axes.pt name=own100 common=10 identical=0 max|d|=0.1526
+passC\banks\own100_strict\matrices\mean_L40_s42.json         bank=axes_strict.pt name=own100_strict common=10 identical=0 max|d|=0.1435
+passC\banks\paper16_famcentred\matrices\mean_L40_s42.json    bank=axes_vectors_s3_fp32_famcentred.pt name=paper16_famcentred common=10 identical=0 max|d|=0.0162
+passC\banks\paper16_shared\matrices\mean_L40_s42.json        bank=axes_vectors_s3.pt name=paper16_shared common=10 identical=0 max|d|=0.1053
+passC\matrices\mean_L40_s42.json                             bank=axes_vectors_s3_fp32.pt name=paper16 common=10 identical=0 max|d|=0.0162
+passP\matrices\mean_L40_s42.json                             bank=axes_vectors_s3_fp32.pt name=paper16 common=10 identical=0 max|d|=0.2480
+python exit 0

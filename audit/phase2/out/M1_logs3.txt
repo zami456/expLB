@@ -1,0 +1,168 @@
+== find the window that gives exactly 57 OOM / 14 permanent (F-42's claim) ==
+   start 17:32:00 end 17:46:30: OOM 57  perm 14   span 14 min
+   start 17:32:29 end 17:46:30: OOM 56  perm 14   span 14 min
+   start 17:32:29 end 17:47:34: OOM 60  perm 15   span 15 min
+   start 17:32:30 end 17:46:30: OOM 56  perm 14   span 14 min
+   start 17:32:30 end 17:47:34: OOM 60  perm 15   span 15 min
+
+== allocation sequence, 17:32:29 -> 18:04:20 (MiB, in time order) ==
+   17:32:41   748.0  17:32:46   748.0  17:32:55   748.0  17:33:09   748.0  17:34:29   764.0  17:34:35   764.0  17:34:44   764.0  17:34:59   764.0
+   17:35:25   654.0  17:35:31   654.0  17:35:40   654.0  17:35:55   640.0  17:36:22   608.0  17:36:28   608.0  17:36:37   530.0  17:36:52   608.0
+   17:37:18   754.0  17:37:25   754.0  17:37:33   754.0  17:37:48   754.0  17:38:15   654.0  17:38:20   654.0  17:38:29   654.0  17:38:44   654.0
+   17:39:11   618.0  17:39:16   618.0  17:39:25   618.0  17:39:40   618.0  17:40:07   368.0  17:40:13   734.0  17:40:21   734.0  17:40:36   734.0
+   17:41:02   744.0  17:41:08   744.0  17:41:16   744.0  17:41:31   744.0  17:41:57   704.0  17:42:03   704.0  17:42:11   352.0  17:42:26   352.0
+   17:42:52   720.0  17:42:58   720.0  17:43:06   720.0  17:43:20   360.0  17:43:47   360.0  17:43:52   720.0  17:44:00   720.0  17:44:15   720.0
+   17:44:41   322.0  17:44:47   322.0  17:44:56   644.0  17:45:10   644.0  17:45:37   572.0  17:45:43   286.0  17:45:51   286.0  17:46:06   572.0
+   17:46:39   458.0  17:46:45   484.0  17:46:55   458.0  17:47:10   484.0  17:47:36   444.0  17:47:42   444.0  17:47:50   444.0  17:48:05   444.0
+   17:48:47   562.0  17:48:53   562.0  17:49:01   562.0  17:49:16   562.0  17:50:20   458.0  17:50:25   498.0  17:50:34   468.0  17:50:49   498.0
+   17:51:16   436.0  17:51:22   424.0  17:51:31   428.0  17:52:37   514.0  17:52:43   552.0  17:52:52   514.0  17:53:07   552.0  17:53:34   448.0
+   17:53:40   562.0  17:53:49   448.0  17:54:04   562.0  17:54:30   452.0  17:54:36   452.0  17:54:45   544.0  17:55:00   452.0  17:55:27   536.0
+   17:55:32   484.0  17:55:42   484.0  17:55:57   536.0  17:56:23   498.0  17:56:29   498.0  17:56:37   498.0  17:56:52   250.0  17:57:19   538.0
+   17:57:25   538.0  17:57:33   538.0  17:57:48   538.0  17:58:15   272.0  17:58:20   272.0  17:58:29   544.0  17:58:44   544.0  17:59:10   458.0
+   17:59:16   230.0  17:59:24   230.0  17:59:38   458.0  18:00:05   438.0  18:00:11   438.0  18:00:19   438.0  18:00:34   438.0  18:01:01   354.0
+   18:01:07   354.0  18:01:16   404.0  18:01:31   404.0  18:01:58   302.0  18:02:17   562.0  18:02:23   562.0  18:02:31   562.0  18:02:46   562.0
+   18:03:50   498.0
+
+== distinct allocation sizes per phase ==
+   <=17:32:28 (pre-F41-restart)         n= 67 max   1955.8  min    656.0  first    748.0  last    738.0
+      distinct: [1955.8, 1679.4, 1433.6, 1310.7, 1126.4, 1024.0, 982.0, 980.0, 964.0, 962.0, 932.0, 928.0, 902.0, 860.0]
+   F41 17:32:29-17:48:37 (attn .75)     n= 64 max    764.0  min    286.0  first    748.0  last    444.0
+      distinct: [764.0, 754.0, 748.0, 744.0, 734.0, 720.0, 704.0, 654.0, 644.0, 640.0, 618.0, 608.0, 572.0, 530.0]
+   F42 17:48:38-18:02:05 (attn .55)     n= 52 max    562.0  min    230.0  first    562.0  last    302.0
+      distinct: [562.0, 552.0, 544.0, 538.0, 536.0, 514.0, 498.0, 484.0, 468.0, 458.0, 452.0, 448.0, 438.0, 436.0]
+   F43a 18:02:06-18:04:19 (sess 1)      n=  5 max    562.0  min    498.0  first    562.0  last    498.0
+      distinct: [562.0, 498.0]
+
+== '5250 padded tokens' / '1 batches' lines ==
+   [4368] 2026-09-20 17:19:00 2026-09-20 17:19:00,171 - WARNING -   session attempt 1/4 (1 batches, 7428 padded tokens) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 1.64 GiB. GPU 0 has a total capacity o
+   [4376] 2026-09-20 17:19:05 2026-09-20 17:19:05,538 - WARNING -   session attempt 2/4 (1 batches, 7428 padded tokens) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 842.00 MiB. GPU 0 has a total capacity
+   [4384] 2026-09-20 17:19:13 2026-09-20 17:19:13,883 - WARNING -   session attempt 3/4 (1 batches, 7428 padded tokens) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 842.00 MiB. GPU 0 has a total capacity
+   [4392] 2026-09-20 17:19:28 2026-09-20 17:19:28,223 - WARNING -   session attempt 4/4 (1 batches, 7428 padded tokens) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 842.00 MiB. GPU 0 has a total capacity
+   [4403] 2026-09-20 17:19:54 2026-09-20 17:19:54,819 - WARNING -   session attempt 1/4 (1 batches, 9155 padded tokens) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 1024.00 MiB. GPU 0 has a total capacit
+   [4411] 2026-09-20 17:20:00 2026-09-20 17:20:00,208 - WARNING -   session attempt 2/4 (1 batches, 9155 padded tokens) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 1024.00 MiB. GPU 0 has a total capacit
+   [4419] 2026-09-20 17:20:08 2026-09-20 17:20:08,624 - WARNING -   session attempt 3/4 (1 batches, 9155 padded tokens) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 1024.00 MiB. GPU 0 has a total capacit
+   [4427] 2026-09-20 17:20:23 2026-09-20 17:20:23,011 - WARNING -   session attempt 4/4 (1 batches, 9155 padded tokens) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 1024.00 MiB. GPU 0 has a total capacit
+   [4437] 2026-09-20 17:20:49 2026-09-20 17:20:49,412 - WARNING -   session attempt 1/4 (1 batches, 8880 padded tokens) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 964.00 MiB. GPU 0 has a total capacity
+   [4446] 2026-09-20 17:20:55 2026-09-20 17:20:55,057 - WARNING -   session attempt 2/4 (1 batches, 8880 padded tokens) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 964.00 MiB. GPU 0 has a total capacity
+   [4454] 2026-09-20 17:21:03 2026-09-20 17:21:03,417 - WARNING -   session attempt 3/4 (1 batches, 8880 padded tokens) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 964.00 MiB. GPU 0 has a total capacity
+   [4462] 2026-09-20 17:21:17 2026-09-20 17:21:17,792 - WARNING -   session attempt 4/4 (1 batches, 8880 padded tokens) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 964.00 MiB. GPU 0 has a total capacity
+   [4472] 2026-09-20 17:21:44 2026-09-20 17:21:44,141 - WARNING -   session attempt 1/4 (1 batches, 9816 padded tokens) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 982.00 MiB. GPU 0 has a total capacity
+   [4481] 2026-09-20 17:21:49 2026-09-20 17:21:49,700 - WARNING -   session attempt 2/4 (1 batches, 9816 padded tokens) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 982.00 MiB. GPU 0 has a total capacity
+   [4489] 2026-09-20 17:21:58 2026-09-20 17:21:58,105 - WARNING -   session attempt 3/4 (1 batches, 9816 padded tokens) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 982.00 MiB. GPU 0 has a total capacity
+   [4497] 2026-09-20 17:22:12 2026-09-20 17:22:12,530 - WARNING -   session attempt 4/4 (1 batches, 9816 padded tokens) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 982.00 MiB. GPU 0 has a total capacity
+   [4507] 2026-09-20 17:22:38 2026-09-20 17:22:38,930 - WARNING -   session attempt 1/4 (1 batches, 9570 padded tokens) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 932.00 MiB. GPU 0 has a total capacity
+   [4515] 2026-09-20 17:22:44 2026-09-20 17:22:44,295 - WARNING -   session attempt 2/4 (1 batches, 9570 padded tokens) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 932.00 MiB. GPU 0 has a total capacity
+   [4523] 2026-09-20 17:22:52 2026-09-20 17:22:52,617 - WARNING -   session attempt 3/4 (1 batches, 9570 padded tokens) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 932.00 MiB. GPU 0 has a total capacity
+   [4531] 2026-09-20 17:23:07 2026-09-20 17:23:07,069 - WARNING -   session attempt 4/4 (1 batches, 9570 padded tokens) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 932.00 MiB. GPU 0 has a total capacity
+   [4541] 2026-09-20 17:23:33 2026-09-20 17:23:33,376 - WARNING -   session attempt 1/4 (1 batches, 10311 padded tokens) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 928.00 MiB. GPU 0 has a total capacit
+   [4549] 2026-09-20 17:23:38 2026-09-20 17:23:38,723 - WARNING -   session attempt 2/4 (1 batches, 10311 padded tokens) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 928.00 MiB. GPU 0 has a total capacit
+   [4557] 2026-09-20 17:23:47 2026-09-20 17:23:47,064 - WARNING -   session attempt 3/4 (1 batches, 10311 padded tokens) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 928.00 MiB. GPU 0 has a total capacit
+   [4565] 2026-09-20 17:24:01 2026-09-20 17:24:01,424 - WARNING -   session attempt 4/4 (1 batches, 10311 padded tokens) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 928.00 MiB. GPU 0 has a total capacit
+   [4575] 2026-09-20 17:24:28 2026-09-20 17:24:28,089 - WARNING -   session attempt 1/4 (1 batches, 11224 padded tokens) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 962.00 MiB. GPU 0 has a total capacit
+   [4583] 2026-09-20 17:24:33 2026-09-20 17:24:33,658 - WARNING -   session attempt 2/4 (1 batches, 11224 padded tokens) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 962.00 MiB. GPU 0 has a total capacit
+   [4591] 2026-09-20 17:24:42 2026-09-20 17:24:42,238 - WARNING -   session attempt 3/4 (1 batches, 11224 padded tokens) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 962.00 MiB. GPU 0 has a total capacit
+   [4599] 2026-09-20 17:24:56 2026-09-20 17:24:56,799 - WARNING -   session attempt 4/4 (1 batches, 11224 padded tokens) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 962.00 MiB. GPU 0 has a total capacit
+   [4609] 2026-09-20 17:25:23 2026-09-20 17:25:23,390 - WARNING -   session attempt 1/4 (1 batches, 10608 padded tokens) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 860.00 MiB. GPU 0 has a total capacit
+   [4617] 2026-09-20 17:25:29 2026-09-20 17:25:29,167 - WARNING -   session attempt 2/4 (1 batches, 10608 padded tokens) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 860.00 MiB. GPU 0 has a total capacit
+   [4625] 2026-09-20 17:25:37 2026-09-20 17:25:37,783 - WARNING -   session attempt 3/4 (1 batches, 10608 padded tokens) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 860.00 MiB. GPU 0 has a total capacit
+   [4633] 2026-09-20 17:25:52 2026-09-20 17:25:52,339 - WARNING -   session attempt 4/4 (1 batches, 10608 padded tokens) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 860.00 MiB. GPU 0 has a total capacit
+   [4643] 2026-09-20 17:26:18 2026-09-20 17:26:18,679 - WARNING -   session attempt 1/4 (1 batches, 10408 padded tokens) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 828.00 MiB. GPU 0 has a total capacit
+   [4652] 2026-09-20 17:26:24 2026-09-20 17:26:24,125 - WARNING -   session attempt 2/4 (1 batches, 10408 padded tokens) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 828.00 MiB. GPU 0 has a total capacit
+   [4660] 2026-09-20 17:26:32 2026-09-20 17:26:32,637 - WARNING -   session attempt 3/4 (1 batches, 10408 padded tokens) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 828.00 MiB. GPU 0 has a total capacit
+   [4668] 2026-09-20 17:26:47 2026-09-20 17:26:47,034 - WARNING -   session attempt 4/4 (1 batches, 10408 padded tokens) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 828.00 MiB. GPU 0 has a total capacit
+   [4678] 2026-09-20 17:27:13 2026-09-20 17:27:13,592 - WARNING -   session attempt 1/4 (1 batches, 10296 padded tokens) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 810.00 MiB. GPU 0 has a total capacit
+   [4686] 2026-09-20 17:27:19 2026-09-20 17:27:19,143 - WARNING -   session attempt 2/4 (1 batches, 10296 padded tokens) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 810.00 MiB. GPU 0 has a total capacit
+   [4694] 2026-09-20 17:27:27 2026-09-20 17:27:27,749 - WARNING -   session attempt 3/4 (1 batches, 10296 padded tokens) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 810.00 MiB. GPU 0 has a total capacit
+   [4702] 2026-09-20 17:27:42 2026-09-20 17:27:42,425 - WARNING -   session attempt 4/4 (1 batches, 10296 padded tokens) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 810.00 MiB. GPU 0 has a total capacit
+   [4712] 2026-09-20 17:28:08 2026-09-20 17:28:08,967 - WARNING -   session attempt 1/4 (1 batches, 9688 padded tokens) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 718.00 MiB. GPU 0 has a total capacity
+   [4720] 2026-09-20 17:28:14 2026-09-20 17:28:14,538 - WARNING -   session attempt 2/4 (1 batches, 9688 padded tokens) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 1.40 GiB. GPU 0 has a total capacity o
+   [4728] 2026-09-20 17:28:23 2026-09-20 17:28:23,113 - WARNING -   session attempt 3/4 (1 batches, 9688 padded tokens) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 1.40 GiB. GPU 0 has a total capacity o
+   [4736] 2026-09-20 17:28:37 2026-09-20 17:28:37,659 - WARNING -   session attempt 4/4 (1 batches, 9688 padded tokens) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 1.40 GiB. GPU 0 has a total capacity o
+   [4746] 2026-09-20 17:29:04 2026-09-20 17:29:04,067 - WARNING -   session attempt 1/4 (1 batches, 9264 padded tokens) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 1.28 GiB. GPU 0 has a total capacity o
+   [4755] 2026-09-20 17:29:09 2026-09-20 17:29:09,483 - WARNING -   session attempt 2/4 (1 batches, 9264 padded tokens) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 1.28 GiB. GPU 0 has a total capacity o
+   [4763] 2026-09-20 17:29:17 2026-09-20 17:29:17,879 - WARNING -   session attempt 3/4 (1 batches, 9264 padded tokens) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 656.00 MiB. GPU 0 has a total capacity
+   [4771] 2026-09-20 17:29:32 2026-09-20 17:29:32,251 - WARNING -   session attempt 4/4 (1 batches, 9264 padded tokens) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 656.00 MiB. GPU 0 has a total capacity
+   [4781] 2026-09-20 17:29:58 2026-09-20 17:29:58,615 - WARNING -   session attempt 1/4 (1 batches, 8576 padded tokens) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 1.10 GiB. GPU 0 has a total capacity o
+   [4789] 2026-09-20 17:30:04 2026-09-20 17:30:04,006 - WARNING -   session attempt 2/4 (1 batches, 8576 padded tokens) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 1.10 GiB. GPU 0 has a total capacity o
+   [4797] 2026-09-20 17:30:12 2026-09-20 17:30:12,394 - WARNING -   session attempt 3/4 (1 batches, 8576 padded tokens) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 1.10 GiB. GPU 0 has a total capacity o
+   [4805] 2026-09-20 17:30:26 2026-09-20 17:30:26,748 - WARNING -   session attempt 4/4 (1 batches, 8576 padded tokens) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 1.10 GiB. GPU 0 has a total capacity o
+   [6489] 2026-09-20 18:02:14 2026-09-20 18:02:14,576 - INFO -   4 sessions, widest 5250 padded tokens (session budget 6000)
+   [6501] 2026-09-20 18:02:17 2026-09-20 18:02:17,612 - WARNING -   session attempt 1/4 (1 batches, 5250 padded tokens) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 562.00 MiB. GPU 0 has a total capacity
+   [6511] 2026-09-20 18:02:23 2026-09-20 18:02:23,255 - WARNING -   session attempt 2/4 (1 batches, 5250 padded tokens) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 562.00 MiB. GPU 0 has a total capacity
+   [6521] 2026-09-20 18:02:31 2026-09-20 18:02:31,793 - WARNING -   session attempt 3/4 (1 batches, 5250 padded tokens) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 562.00 MiB. GPU 0 has a total capacity
+   [6529] 2026-09-20 18:02:46 2026-09-20 18:02:46,173 - WARNING -   session attempt 4/4 (1 batches, 5250 padded tokens) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 562.00 MiB. GPU 0 has a total capacity
+   [6635] 2026-09-20 18:03:50 2026-09-20 18:03:50,453 - WARNING -   session attempt 1/4 (1 batches, 2856 padded tokens) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 498.00 MiB. GPU 0 has a total capacity
+   [14820] 2026-09-20 18:48:22 2026-09-20 18:48:22,927 - INFO -   267 sessions, widest 5250 padded tokens (session budget 6000)
+
+== the 18:02:46 capacity line, full text ==
+   [6522] 18:02:45 2026-09-20 18:02:45,874 - INFO - HTTP Request: POST https://api.ndif.us/request "HTTP/1.1 200 OK"
+   [6529] 18:02:46 2026-09-20 18:02:46,173 - WARNING -   session attempt 4/4 (1 batches, 5250 padded tokens) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 562.00 MiB. GPU 0 has a total capacity of 139.80 GiB of which 55.13 GiB is free. Process 3623751 has 18.14 GiB memory in use. Process 3605328 has 3.36 GiB memory in use. Process 3654827 has 7.72 GiB memory in use. Process 366716
+
+== lines 17:33:00-17:35:00 (chunk writes F-42 claims) ==
+   [4917] 17:33:09 2026-09-20 17:33:09,943 - WARNING -   session attempt 4/4 (4 batches, 14584 padded tokens) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 748.00 MiB. GPU 0
+   [4918] 17:33:33 2026-09-20 17:33:33,944 - ERROR -   harm-pressure-choice: a session failed permanently; leaving its rows for resume
+   [4922] 17:33:35 2026-09-20 17:33:35,848 - INFO - harm-pressure-knowledge-report: 2139 cached spans
+   [4923] 17:33:35 2026-09-20 17:33:35,849 - INFO - harm-pressure-knowledge-report: 2139 to do (0 already on disk)
+   [4924] 17:33:35 2026-09-20 17:33:35,851 - INFO -   301 batches, widest attention 0.75 GiB (budget 0.75 GiB)
+   [4925] 17:33:35 2026-09-20 17:33:35,852 - INFO -   82 sessions, widest 15831 padded tokens (session budget 16000)
+   [5058] 17:34:29 2026-09-20 17:34:29,799 - WARNING -   session attempt 1/4 (4 batches, 10509 padded tokens) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 764.00 MiB. GPU 0
+   [5068] 17:34:35 2026-09-20 17:34:35,601 - WARNING -   session attempt 2/4 (4 batches, 10509 padded tokens) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 764.00 MiB. GPU 0
+   [5078] 17:34:44 2026-09-20 17:34:44,390 - WARNING -   session attempt 3/4 (4 batches, 10509 padded tokens) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 764.00 MiB. GPU 0
+   [5088] 17:34:59 2026-09-20 17:34:59,168 - WARNING -   session attempt 4/4 (4 batches, 10509 padded tokens) failed: NNsightException: OutOfMemoryError: CUDA out of memory. Tried to allocate 764.00 MiB. GPU 0
+
+== chunk_*.pt mtimes in run-scale/8b/coords/harm-pressure-knowledge-report ==
+   ai_liar                            chunks   34  rows.jsonl 270  items.pt 214808 (2026-09-20 18:36:55.102424)
+   alpaca                             chunks   50  rows.jsonl 400  items.pt 382168 (2026-09-20 21:55:05.770390)
+   convincing-game                    chunks   34  rows.jsonl 267  items.pt 274776 (2026-09-20 18:35:10.408275)
+   harm-pressure-choice               chunks  100  rows.jsonl 800  items.pt 525208 (2026-09-20 19:46:51.666411)
+   harm-pressure-knowledge-report     chunks    0  rows.jsonl None  items.pt 1911448 (2026-09-20 18:35:09.280649)
+   harm-pressure-kr-matched           chunks    0  rows.jsonl None  items.pt - (-)
+   insider-trading                    chunks    0  rows.jsonl None  items.pt 3363672 (2026-09-20 18:36:54.948922)
+   instructed-deception               chunks  100  rows.jsonl 800  items.pt 359384 (2026-09-20 18:34:24.668216)
+   mask                               chunks   78  rows.jsonl 585  items.pt 773784 (2026-09-20 18:37:01.628270)
+   roleplaying                        chunks   47  rows.jsonl 371  items.pt 221848 (2026-09-20 18:36:57.531515)
+   sandbagging_v2                     chunks    0  rows.jsonl None  items.pt 2919960 (2026-09-20 18:36:57.350014)
+   sycophancy_mt                      chunks    0  rows.jsonl None  items.pt 1272344 (2026-09-20 18:37:08.518194)
+
+== '# batches, widest attention' + 'sessions, widest' config lines, 17:00-18:10 ==
+   [3017] 17:11:55 2026-09-20 17:11:55,722 - INFO - harm-pressure-choice: 2134 to do (0 already on disk)
+   [3018] 17:11:55 2026-09-20 17:11:55,723 - INFO -   267 batches, widest attention 0.73 GiB (budget 2.00 GiB)
+   [3019] 17:11:55 2026-09-20 17:11:55,724 - INFO -   35 sessions, widest 15800 padded tokens (session budget 16000)
+   [4322] 17:18:02 2026-09-20 17:18:02,147 - INFO - harm-pressure-knowledge-report: 2139 to do (0 already on disk)
+   [4323] 17:18:02 2026-09-20 17:18:02,148 - INFO -   271 batches, widest attention 2.00 GiB (budget 2.00 GiB)
+   [4324] 17:18:02 2026-09-20 17:18:02,149 - INFO -   56 sessions, widest 15928 padded tokens (session budget 16000)
+   [4877] 17:32:32 2026-09-20 17:32:32,085 - INFO - layers: 8 of 32  pooling: mean,last  datasets: instructed-deception, harm-pressure-choice, harm-pressure-knowledge-report, harm-pressure-kr-matched, convinci
+   [4878] 17:32:35 2026-09-20 17:32:35,583 - INFO - instructed-deception: 5432 cached spans
+   [4880] 17:32:37 2026-09-20 17:32:37,623 - INFO - harm-pressure-choice: 2134 cached spans
+   [4881] 17:32:37 2026-09-20 17:32:37,918 - INFO - harm-pressure-choice: 32 to do (2102 already on disk)
+   [4882] 17:32:37 2026-09-20 17:32:37,918 - INFO -   4 batches, widest attention 0.73 GiB (budget 0.75 GiB)
+   [4883] 17:32:37 2026-09-20 17:32:37,918 - INFO -   1 sessions, widest 14584 padded tokens (session budget 16000)
+   [4922] 17:33:35 2026-09-20 17:33:35,848 - INFO - harm-pressure-knowledge-report: 2139 cached spans
+   [4923] 17:33:35 2026-09-20 17:33:35,849 - INFO - harm-pressure-knowledge-report: 2139 to do (0 already on disk)
+   [4924] 17:33:35 2026-09-20 17:33:35,851 - INFO -   301 batches, widest attention 0.75 GiB (budget 0.75 GiB)
+   [4925] 17:33:35 2026-09-20 17:33:35,852 - INFO -   82 sessions, widest 15831 padded tokens (session budget 16000)
+   [5652] 17:48:39 2026-09-20 17:48:39,426 - INFO - layers: 8 of 32  pooling: mean,last  datasets: instructed-deception, harm-pressure-choice, harm-pressure-knowledge-report, harm-pressure-kr-matched, convinci
+   [5653] 17:48:42 2026-09-20 17:48:42,681 - INFO - instructed-deception: 5432 cached spans
+   [5655] 17:48:44 2026-09-20 17:48:44,675 - INFO - harm-pressure-choice: 2134 cached spans
+   [5656] 17:48:44 2026-09-20 17:48:44,971 - INFO - harm-pressure-choice: 32 to do (2102 already on disk)
+   [5657] 17:48:44 2026-09-20 17:48:44,971 - INFO -   5 batches, widest attention 0.55 GiB (budget 0.55 GiB)
+   [5658] 17:48:44 2026-09-20 17:48:44,971 - INFO -   2 sessions, widest 12922 padded tokens (session budget 16000)
+   [5717] 17:49:46 2026-09-20 17:49:46,582 - INFO - harm-pressure-knowledge-report: 2139 cached spans
+   [5718] 17:49:46 2026-09-20 17:49:46,611 - INFO - harm-pressure-knowledge-report: 2107 to do (32 already on disk)
+   [5719] 17:49:46 2026-09-20 17:49:46,613 - INFO -   301 batches, widest attention 0.55 GiB (budget 0.55 GiB)
+   [5720] 17:49:46 2026-09-20 17:49:46,613 - INFO -   79 sessions, widest 15904 padded tokens (session budget 16000)
+   [6483] 18:02:09 2026-09-20 18:02:09,109 - INFO - layers: 8 of 32  pooling: mean,last  datasets: instructed-deception, harm-pressure-choice, harm-pressure-knowledge-report, harm-pressure-kr-matched, convinci
+   [6484] 18:02:12 2026-09-20 18:02:12,382 - INFO - instructed-deception: 5432 cached spans
+   [6486] 18:02:14 2026-09-20 18:02:14,298 - INFO - harm-pressure-choice: 2134 cached spans
+   [6487] 18:02:14 2026-09-20 18:02:14,575 - INFO - harm-pressure-choice: 30 to do (2104 already on disk)
+   [6488] 18:02:14 2026-09-20 18:02:14,576 - INFO -   4 batches, widest attention 0.55 GiB (budget 0.55 GiB)
+   [6489] 18:02:14 2026-09-20 18:02:14,576 - INFO -   4 sessions, widest 5250 padded tokens (session budget 6000)
+   [6619] 18:03:47 2026-09-20 18:03:47,590 - INFO - harm-pressure-knowledge-report: 2139 cached spans
+   [6620] 18:03:47 2026-09-20 18:03:47,660 - INFO - harm-pressure-knowledge-report: 2060 to do (79 already on disk)
+   [6621] 18:03:47 2026-09-20 18:03:47,661 - INFO -   269 batches, widest attention 0.55 GiB (budget 0.55 GiB)
+   [6622] 18:03:47 2026-09-20 18:03:47,662 - INFO -   269 sessions, widest 5968 padded tokens (session budget 6000)
+   [6708] 18:04:20 2026-09-20 18:04:20,925 - INFO - layers: 8 of 32  pooling: mean,last  datasets: instructed-deception, harm-pressure-choice, harm-pressure-knowledge-report, harm-pressure-kr-matched, convinci
+   [6710] 18:04:34 2026-09-20 18:04:34,210 - INFO - instructed-deception: 5432 to do (0 already on disk)
+   [6711] 18:04:34 2026-09-20 18:04:34,213 - INFO -   679 batches, widest attention 0.03 GiB (budget 0.55 GiB)
+   [6712] 18:04:34 2026-09-20 18:04:34,214 - INFO -   679 sessions, widest 1528 padded tokens (session budget 6000)
+python exit 0

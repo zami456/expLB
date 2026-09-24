@@ -1,0 +1,463 @@
+{
+ "main": {
+  "merge_base": "608b2a7878c1c8568c48c23718b0756a76730087",
+  "merge_base_date": "2026-09-09T20:45:27+06:00",
+  "commits_only_on_branch": 0,
+  "commits_only_on_head": 136,
+  "authors_only_on_branch": {},
+  "diff_vs_mergebase_by_folder": {},
+  "files_only_on_branch_tree": {
+   ".devcontainer": 2
+  },
+  "files_only_on_head_tree": {
+   "run-crossgen": 7150,
+   "src": 134,
+   "cap": 94,
+   "kd": 93,
+   "docs": 123,
+   "figures": 287,
+   "run-coords": 41,
+   "run-paper16": 76,
+   "images": 3,
+   "(root files)": 4,
+   "core": 7,
+   "chapters": 7,
+   "papers": 5,
+   ".claude": 2,
+   "appendix": 2,
+   "scale": 8,
+   "bibliography": 1,
+   "scripts": 1,
+   "run-cap": 1,
+   "full paper draft for this experiments": 1
+  },
+  "n_files_branch_tree": 1516,
+  "n_files_head_tree": 9554
+ },
+ "origin/Saving": {
+  "merge_base": "2e2a785676208c6cdd29f7948da5719a27b0fedd",
+  "merge_base_date": "2026-07-12T01:47:12+06:00",
+  "commits_only_on_branch": 2,
+  "commits_only_on_head": 139,
+  "authors_only_on_branch": {
+   "Suraiya Shanaz <suraiya.shanaz@g.bracu.ac.bd>": 2
+  },
+  "diff_vs_mergebase_by_folder": {
+   "src": {
+    "modified_on_branch": 2
+   }
+  },
+  "files_only_on_branch_tree": {},
+  "files_only_on_head_tree": {
+   "run-crossgen": 7150,
+   "src": 134,
+   "cap": 94,
+   "kd": 93,
+   "docs": 130,
+   "figures": 287,
+   "run-coords": 41,
+   "run-paper16": 76,
+   "papers": 11,
+   "images": 3,
+   "(root files)": 6,
+   "core": 7,
+   "chapters": 7,
+   ".claude": 10,
+   "appendix": 2,
+   "scale": 8,
+   "bibliography": 1,
+   "scripts": 1,
+   "run-cap": 1,
+   "full paper draft for this experiments": 1
+  },
+  "n_files_branch_tree": 1491,
+  "n_files_head_tree": 9554
+ },
+ "origin/asix": {
+  "merge_base": "e917ecd3f95f8ec16c0ce3816e9878c0bacd4c7e",
+  "merge_base_date": "2026-09-24T05:16:36+06:00",
+  "commits_only_on_branch": 0,
+  "commits_only_on_head": 0,
+  "authors_only_on_branch": {},
+  "diff_vs_mergebase_by_folder": {},
+  "files_only_on_branch_tree": {},
+  "files_only_on_head_tree": {},
+  "n_files_branch_tree": 9554,
+  "n_files_head_tree": 9554
+ },
+ "origin/claude/assistant-axis-submodule-p285ym": {
+  "merge_base": "2e2a785676208c6cdd29f7948da5719a27b0fedd",
+  "merge_base_date": "2026-07-12T01:47:12+06:00",
+  "commits_only_on_branch": 1,
+  "commits_only_on_head": 139,
+  "authors_only_on_branch": {
+   "Claude <noreply@anthropic.com>": 1
+  },
+  "diff_vs_mergebase_by_folder": {
+   "(root files)": {
+    "modified_on_branch": 1,
+    "changed_on_both": 1,
+    "added_on_branch": 1
+   }
+  },
+  "files_only_on_branch_tree": {
+   "(root files)": 1
+  },
+  "files_only_on_head_tree": {
+   "run-crossgen": 7150,
+   "src": 134,
+   "cap": 94,
+   "kd": 93,
+   "docs": 130,
+   "figures": 287,
+   "run-coords": 41,
+   "run-paper16": 76,
+   "papers": 11,
+   "images": 3,
+   "(root files)": 6,
+   "core": 7,
+   "chapters": 7,
+   ".claude": 10,
+   "appendix": 2,
+   "scale": 8,
+   "bibliography": 1,
+   "scripts": 1,
+   "run-cap": 1,
+   "full paper draft for this experiments": 1
+  },
+  "n_files_branch_tree": 1492,
+  "n_files_head_tree": 9554
+ },
+ "origin/claude/colab-activation-download-drive": {
+  "merge_base": "2e2a785676208c6cdd29f7948da5719a27b0fedd",
+  "merge_base_date": "2026-07-12T01:47:12+06:00",
+  "commits_only_on_branch": 18,
+  "commits_only_on_head": 139,
+  "authors_only_on_branch": {
+   "Suraiya Shanaz <125440836+SuraiyaShanaz@users.noreply.github.com>": 1,
+   "Claude <noreply@anthropic.com>": 15,
+   "Suraiya Shanaz <suraiya.shanaz@g.bracu.ac.bd>": 2
+  },
+  "diff_vs_mergebase_by_folder": {
+   "(root files)": {
+    "modified_on_branch": 2
+   },
+   "notebooks": {
+    "added_on_branch": 1
+   },
+   "src": {
+    "modified_on_branch": 3
+   }
+  },
+  "files_only_on_branch_tree": {
+   "notebooks": 1
+  },
+  "files_only_on_head_tree": {
+   "run-crossgen": 7150,
+   "src": 134,
+   "cap": 94,
+   "kd": 93,
+   "docs": 130,
+   "figures": 287,
+   "run-coords": 41,
+   "run-paper16": 76,
+   "papers": 11,
+   "images": 3,
+   "(root files)": 6,
+   "core": 7,
+   "chapters": 7,
+   ".claude": 10,
+   "appendix": 2,
+   "scale": 8,
+   "bibliography": 1,
+   "scripts": 1,
+   "run-cap": 1,
+   "full paper draft for this experiments": 1
+  },
+  "n_files_branch_tree": 1492,
+  "n_files_head_tree": 9554
+ },
+ "origin/claude/nnsight-colab-activation-download-f95pop": {
+  "merge_base": "2e2a785676208c6cdd29f7948da5719a27b0fedd",
+  "merge_base_date": "2026-07-12T01:47:12+06:00",
+  "commits_only_on_branch": 4,
+  "commits_only_on_head": 139,
+  "authors_only_on_branch": {
+   "Claude <noreply@anthropic.com>": 2,
+   "Suraiya Shanaz <suraiya.shanaz@g.bracu.ac.bd>": 2
+  },
+  "diff_vs_mergebase_by_folder": {
+   "(root files)": {
+    "modified_on_branch": 2
+   },
+   "notebooks": {
+    "added_on_branch": 1
+   },
+   "src": {
+    "modified_on_branch": 2
+   }
+  },
+  "files_only_on_branch_tree": {
+   "notebooks": 1
+  },
+  "files_only_on_head_tree": {
+   "run-crossgen": 7150,
+   "src": 134,
+   "cap": 94,
+   "kd": 93,
+   "docs": 130,
+   "figures": 287,
+   "run-coords": 41,
+   "run-paper16": 76,
+   "papers": 11,
+   "images": 3,
+   "(root files)": 6,
+   "core": 7,
+   "chapters": 7,
+   ".claude": 10,
+   "appendix": 2,
+   "scale": 8,
+   "bibliography": 1,
+   "scripts": 1,
+   "run-cap": 1,
+   "full paper draft for this experiments": 1
+  },
+  "n_files_branch_tree": 1492,
+  "n_files_head_tree": 9554
+ },
+ "origin/copilot/zami456explb": {
+  "merge_base": "2e2a785676208c6cdd29f7948da5719a27b0fedd",
+  "merge_base_date": "2026-07-12T01:47:12+06:00",
+  "commits_only_on_branch": 0,
+  "commits_only_on_head": 139,
+  "authors_only_on_branch": {},
+  "diff_vs_mergebase_by_folder": {},
+  "files_only_on_branch_tree": {},
+  "files_only_on_head_tree": {
+   "run-crossgen": 7150,
+   "src": 134,
+   "cap": 94,
+   "kd": 93,
+   "docs": 130,
+   "figures": 287,
+   "run-coords": 41,
+   "run-paper16": 76,
+   "papers": 11,
+   "images": 3,
+   "(root files)": 6,
+   "core": 7,
+   "chapters": 7,
+   ".claude": 10,
+   "appendix": 2,
+   "scale": 8,
+   "bibliography": 1,
+   "scripts": 1,
+   "run-cap": 1,
+   "full paper draft for this experiments": 1
+  },
+  "n_files_branch_tree": 1491,
+  "n_files_head_tree": 9554
+ },
+ "origin/feat/llama-layer30": {
+  "merge_base": "2e2a785676208c6cdd29f7948da5719a27b0fedd",
+  "merge_base_date": "2026-07-12T01:47:12+06:00",
+  "commits_only_on_branch": 9,
+  "commits_only_on_head": 139,
+  "authors_only_on_branch": {
+   "Mahdi <mahdi.ndc21@gmail.com>": 1,
+   "zami456 <abdullah.al.zami@g.bracu.ac.bd>": 8
+  },
+  "diff_vs_mergebase_by_folder": {
+   "src": {
+    "modified_on_branch": 5,
+    "added_on_branch": 8
+   }
+  },
+  "files_only_on_branch_tree": {
+   "src": 8
+  },
+  "files_only_on_head_tree": {
+   "run-crossgen": 7150,
+   "src": 134,
+   "cap": 94,
+   "kd": 93,
+   "docs": 130,
+   "figures": 287,
+   "run-coords": 41,
+   "run-paper16": 76,
+   "papers": 11,
+   "images": 3,
+   "(root files)": 6,
+   "core": 7,
+   "chapters": 7,
+   ".claude": 10,
+   "appendix": 2,
+   "scale": 8,
+   "bibliography": 1,
+   "scripts": 1,
+   "run-cap": 1,
+   "full paper draft for this experiments": 1
+  },
+  "n_files_branch_tree": 1499,
+  "n_files_head_tree": 9554
+ },
+ "origin/feat/persona-pc-ood": {
+  "merge_base": "2e2a785676208c6cdd29f7948da5719a27b0fedd",
+  "merge_base_date": "2026-07-12T01:47:12+06:00",
+  "commits_only_on_branch": 34,
+  "commits_only_on_head": 139,
+  "authors_only_on_branch": {
+   "zami456 <abdullah.al.zami@g.bracu.ac.bd>": 34
+  },
+  "diff_vs_mergebase_by_folder": {
+   "src": {
+    "modified_on_branch": 7,
+    "added_on_branch": 483
+   }
+  },
+  "files_only_on_branch_tree": {
+   "src": 483
+  },
+  "files_only_on_head_tree": {
+   "run-crossgen": 7150,
+   "src": 134,
+   "cap": 94,
+   "kd": 93,
+   "docs": 130,
+   "figures": 287,
+   "run-coords": 41,
+   "run-paper16": 76,
+   "papers": 11,
+   "images": 3,
+   "(root files)": 6,
+   "core": 7,
+   "chapters": 7,
+   ".claude": 10,
+   "appendix": 2,
+   "scale": 8,
+   "bibliography": 1,
+   "scripts": 1,
+   "run-cap": 1,
+   "full paper draft for this experiments": 1
+  },
+  "n_files_branch_tree": 1974,
+  "n_files_head_tree": 9554
+ },
+ "origin/feat/resumable-acts-cache": {
+  "merge_base": "2e2a785676208c6cdd29f7948da5719a27b0fedd",
+  "merge_base_date": "2026-07-12T01:47:12+06:00",
+  "commits_only_on_branch": 8,
+  "commits_only_on_head": 139,
+  "authors_only_on_branch": {
+   "zami456 <abdullah.al.zami@g.bracu.ac.bd>": 8
+  },
+  "diff_vs_mergebase_by_folder": {
+   "src": {
+    "modified_on_branch": 5,
+    "added_on_branch": 7
+   }
+  },
+  "files_only_on_branch_tree": {
+   "src": 7
+  },
+  "files_only_on_head_tree": {
+   "run-crossgen": 7150,
+   "src": 134,
+   "cap": 94,
+   "kd": 93,
+   "docs": 130,
+   "figures": 287,
+   "run-coords": 41,
+   "run-paper16": 76,
+   "papers": 11,
+   "images": 3,
+   "(root files)": 6,
+   "core": 7,
+   "chapters": 7,
+   ".claude": 10,
+   "appendix": 2,
+   "scale": 8,
+   "bibliography": 1,
+   "scripts": 1,
+   "run-cap": 1,
+   "full paper draft for this experiments": 1
+  },
+  "n_files_branch_tree": 1498,
+  "n_files_head_tree": 9554
+ },
+ "origin/main": {
+  "merge_base": "59cdaba43c8d1030e1cad36301261f37b3c78e9d",
+  "merge_base_date": "2026-09-08T05:55:01+00:00",
+  "commits_only_on_branch": 0,
+  "commits_only_on_head": 137,
+  "authors_only_on_branch": {},
+  "diff_vs_mergebase_by_folder": {},
+  "files_only_on_branch_tree": {},
+  "files_only_on_head_tree": {
+   "run-crossgen": 7150,
+   "src": 134,
+   "cap": 94,
+   "kd": 93,
+   "docs": 130,
+   "figures": 287,
+   "run-coords": 41,
+   "run-paper16": 76,
+   "papers": 11,
+   "images": 3,
+   "(root files)": 5,
+   "core": 7,
+   "chapters": 7,
+   ".claude": 10,
+   "appendix": 2,
+   "scale": 8,
+   "bibliography": 1,
+   "scripts": 1,
+   "run-cap": 1,
+   "full paper draft for this experiments": 1
+  },
+  "n_files_branch_tree": 1492,
+  "n_files_head_tree": 9554
+ },
+ "origin/paper": {
+  "merge_base": "2e2a785676208c6cdd29f7948da5719a27b0fedd",
+  "merge_base_date": "2026-07-12T01:47:12+06:00",
+  "commits_only_on_branch": 40,
+  "commits_only_on_head": 139,
+  "authors_only_on_branch": {
+   "zami456 <abdullah.al.zami@g.bracu.ac.bd>": 40
+  },
+  "diff_vs_mergebase_by_folder": {
+   "src": {
+    "modified_on_branch": 7,
+    "added_on_branch": 1176
+   }
+  },
+  "files_only_on_branch_tree": {
+   "src": 1176
+  },
+  "files_only_on_head_tree": {
+   "run-crossgen": 7150,
+   "src": 134,
+   "cap": 94,
+   "kd": 93,
+   "docs": 130,
+   "figures": 287,
+   "run-coords": 41,
+   "run-paper16": 76,
+   "papers": 11,
+   "images": 3,
+   "(root files)": 6,
+   "core": 7,
+   "chapters": 7,
+   ".claude": 10,
+   "appendix": 2,
+   "scale": 8,
+   "bibliography": 1,
+   "scripts": 1,
+   "run-cap": 1,
+   "full paper draft for this experiments": 1
+  },
+  "n_files_branch_tree": 2667,
+  "n_files_head_tree": 9554
+ }
+}

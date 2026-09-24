@@ -1,0 +1,92 @@
+file : C:\Users\SURAIYA\Documents\STUDY\thesis\expLB\run-crossgen\kd11\matrices\mean_L40_s42.json
+bank : axes_vectors_s3_fp32.pt | name: paper16 | k: 5 | pooling: mean | layer: 40 | seed: 42
+n datasets: 11
+
+=== F-13 table: 'as target' (column mean) / 'as source' (row mean), probe=paper ===
+  axes           harm-pressure-knowledge-report   as_target=0.4273 (n=10)  as_source=0.3004 (n=10)
+  axes           sycophancy_mt                    as_target=0.3551 (n=10)  as_source=0.3787 (n=10)
+  pc:deception   harm-pressure-knowledge-report   as_target=0.6211 (n=10)  as_source=0.6909 (n=10)
+  pc:deception   sycophancy_mt                    as_target=0.3910 (n=10)  as_source=0.2713 (n=10)
+  pc:unified     harm-pressure-knowledge-report   as_target=0.5382 (n=10)  as_source=0.5383 (n=10)
+  pc:unified     sycophancy_mt                    as_target=0.4451 (n=10)  as_source=0.4902 (n=10)
+  random         harm-pressure-knowledge-report   as_target=0.6984 (n=10)  as_source=0.6590 (n=10)
+  random         sycophancy_mt                    as_target=0.5413 (n=10)  as_source=0.6327 (n=10)
+  random@2       harm-pressure-knowledge-report   as_target=0.5515 (n=10)  as_source=0.5338 (n=10)
+  random@2       sycophancy_mt                    as_target=0.4974 (n=10)  as_source=0.5187 (n=10)
+  raw            harm-pressure-knowledge-report   as_target=0.6990 (n=10)  as_source=0.6943 (n=10)
+  raw            sycophancy_mt                    as_target=0.6013 (n=10)  as_source=0.5010 (n=10)
+  datapca        harm-pressure-knowledge-report   as_target=0.6627 (n=10)  as_source=0.5738 (n=10)
+  datapca        sycophancy_mt                    as_target=0.5776 (n=10)  as_source=0.6609 (n=10)
+
+=== zero-shot on sycophancy_mt (paper16 bank) ===
+  contrast                 0.4089
+  PC1                      0.374
+
+=== off-diagonal mean over all 11 vs the 10 without sycophancy_mt (probe=paper) ===
+  raw            all11=0.6623 (n=110)  minus_syc=0.6870 (n=90)  lift=+0.0247
+  axes           all11=0.6408 (n=110)  minus_syc=0.7016 (n=90)  lift=+0.0609
+  pc:deception   all11=0.6432 (n=110)  minus_syc=0.7125 (n=90)  lift=+0.0693
+  pc:unified     all11=0.6715 (n=110)  minus_syc=0.7168 (n=90)  lift=+0.0453
+  pc:unified@2   all11=0.6396 (n=110)  minus_syc=0.7175 (n=90)  lift=+0.0780
+  datapca        all11=0.6651 (n=110)  minus_syc=0.6753 (n=90)  lift=+0.0102
+  random         all11=0.5849 (n=110)  minus_syc=0.5845 (n=90)  lift=-0.0005
+
+=== stored block-9/10 summary fields, for cross-reference ===
+  axes|lr_reg10|10: [0.6272814359872768, 0.6434570468728291]
+  axes|mms|10: [0.6346207156952443, 0.6512569768617046]
+  axes|paper|10: [0.6321205241433552, 0.6494828274621781]
+  pc:deception|lr_reg10|10: [0.5950738302244788, 0.6089334138510457]
+  pc:deception|mms|10: [0.5822237857863236, 0.595705273311383]
+  pc:deception|paper|10: [0.6344492030769433, 0.65209941360484]
+  pc:unified|lr_reg10|10: [0.6385780413757278, 0.6521515229019679]
+  pc:unified|mms|10: [0.5901872401117709, 0.6022177409523057]
+  pc:unified|paper|10: [0.6634745301551584, 0.679194302070275]
+  raw|lr_reg10|10: [0.6432805797538057, 0.6532101849784071]
+  raw|mms|10: [0.6604443400441069, 0.6729859055732288]
+  raw|paper|10: [0.6570138941371615, 0.6672859228717035]
+
+=== ROBUSTNESS: 'axes' as target / as source at every stored layer (probe=paper) ===
+  -- pooling=mean
+    L0   HPKR axes tgt=0.604 src=0.571 | SYC axes tgt=0.450 src=0.362 | SYC rnd tgt=0.510 raw tgt=0.510 | zs contrast=0.363 PC1=0.371
+    L4   HPKR axes tgt=0.450 src=0.417 | SYC axes tgt=0.476 src=0.430 | SYC rnd tgt=0.511 raw tgt=0.529 | zs contrast=0.391 PC1=0.396
+    L8   HPKR axes tgt=0.435 src=0.407 | SYC axes tgt=0.479 src=0.444 | SYC rnd tgt=0.533 raw tgt=0.547 | zs contrast=0.460 PC1=0.446
+    L12  HPKR axes tgt=0.449 src=0.416 | SYC axes tgt=0.473 src=0.457 | SYC rnd tgt=0.523 raw tgt=0.554 | zs contrast=0.440 PC1=0.412
+    L16  HPKR axes tgt=0.395 src=0.386 | SYC axes tgt=0.460 src=0.454 | SYC rnd tgt=0.497 raw tgt=0.591 | zs contrast=0.487 PC1=0.439
+    L20  HPKR axes tgt=0.358 src=0.319 | SYC axes tgt=0.462 src=0.487 | SYC rnd tgt=0.519 raw tgt=0.560 | zs contrast=0.453 PC1=0.405
+    L22  HPKR axes tgt=0.305 src=0.303 | SYC axes tgt=0.450 src=0.464 | SYC rnd tgt=0.507 raw tgt=0.556 | zs contrast=0.427 PC1=0.385
+    L24  HPKR axes tgt=0.337 src=0.324 | SYC axes tgt=0.450 src=0.464 | SYC rnd tgt=0.513 raw tgt=0.562 | zs contrast=0.422 PC1=0.383
+    L28  HPKR axes tgt=0.280 src=0.249 | SYC axes tgt=0.459 src=0.494 | SYC rnd tgt=0.507 raw tgt=0.584 | zs contrast=0.453 PC1=0.408
+    L32  HPKR axes tgt=0.359 src=0.261 | SYC axes tgt=0.432 src=0.504 | SYC rnd tgt=0.508 raw tgt=0.613 | zs contrast=0.470 PC1=0.432
+    L36  HPKR axes tgt=0.336 src=0.221 | SYC axes tgt=0.400 src=0.465 | SYC rnd tgt=0.534 raw tgt=0.602 | zs contrast=0.464 PC1=0.422
+    L40  HPKR axes tgt=0.427 src=0.300 | SYC axes tgt=0.355 src=0.379 | SYC rnd tgt=0.541 raw tgt=0.601 | zs contrast=0.409 PC1=0.374
+    L44  HPKR axes tgt=0.535 src=0.489 | SYC axes tgt=0.334 src=0.349 | SYC rnd tgt=0.534 raw tgt=0.583 | zs contrast=0.389 PC1=0.356
+    L48  HPKR axes tgt=0.503 src=0.408 | SYC axes tgt=0.347 src=0.389 | SYC rnd tgt=0.529 raw tgt=0.574 | zs contrast=0.373 PC1=0.343
+    L52  HPKR axes tgt=0.425 src=0.284 | SYC axes tgt=0.398 src=0.406 | SYC rnd tgt=0.536 raw tgt=0.570 | zs contrast=0.377 PC1=0.352
+    L56  HPKR axes tgt=0.408 src=0.310 | SYC axes tgt=0.427 src=0.436 | SYC rnd tgt=0.539 raw tgt=0.570 | zs contrast=0.367 PC1=0.348
+    L60  HPKR axes tgt=0.406 src=0.315 | SYC axes tgt=0.422 src=0.434 | SYC rnd tgt=0.535 raw tgt=0.572 | zs contrast=0.362 PC1=0.348
+    L64  HPKR axes tgt=0.432 src=0.352 | SYC axes tgt=0.440 src=0.448 | SYC rnd tgt=0.536 raw tgt=0.566 | zs contrast=0.364 PC1=0.351
+    L68  HPKR axes tgt=0.480 src=0.430 | SYC axes tgt=0.493 src=0.500 | SYC rnd tgt=0.539 raw tgt=0.572 | zs contrast=0.369 PC1=0.354
+    L72  HPKR axes tgt=0.507 src=0.487 | SYC axes tgt=0.477 src=0.504 | SYC rnd tgt=0.545 raw tgt=0.574 | zs contrast=0.379 PC1=0.366
+    L76  HPKR axes tgt=0.648 src=0.558 | SYC axes tgt=0.375 src=0.393 | SYC rnd tgt=0.541 raw tgt=0.557 | zs contrast=0.398 PC1=0.387
+  -- pooling=last
+    L0   HPKR axes tgt=0.543 src=0.539 | SYC axes tgt=0.438 src=0.463 | SYC rnd tgt=0.529 raw tgt=0.492 | zs contrast=0.382 PC1=0.379
+    L4   HPKR axes tgt=0.328 src=0.459 | SYC axes tgt=0.433 src=0.483 | SYC rnd tgt=0.502 raw tgt=0.495 | zs contrast=0.381 PC1=0.400
+    L8   HPKR axes tgt=0.184 src=0.424 | SYC axes tgt=0.450 src=0.451 | SYC rnd tgt=0.486 raw tgt=0.508 | zs contrast=0.433 PC1=0.436
+    L12  HPKR axes tgt=0.281 src=0.407 | SYC axes tgt=0.420 src=0.415 | SYC rnd tgt=0.514 raw tgt=0.513 | zs contrast=0.420 PC1=0.404
+    L16  HPKR axes tgt=0.372 src=0.400 | SYC axes tgt=0.434 src=0.418 | SYC rnd tgt=0.498 raw tgt=0.538 | zs contrast=0.455 PC1=0.410
+    L20  HPKR axes tgt=0.232 src=0.282 | SYC axes tgt=0.402 src=0.346 | SYC rnd tgt=0.520 raw tgt=0.523 | zs contrast=0.397 PC1=0.353
+    L22  HPKR axes tgt=0.235 src=0.271 | SYC axes tgt=0.402 src=0.347 | SYC rnd tgt=0.510 raw tgt=0.504 | zs contrast=0.398 PC1=0.363
+    L24  HPKR axes tgt=0.240 src=0.282 | SYC axes tgt=0.406 src=0.359 | SYC rnd tgt=0.494 raw tgt=0.485 | zs contrast=0.399 PC1=0.365
+    L28  HPKR axes tgt=0.165 src=0.215 | SYC axes tgt=0.370 src=0.266 | SYC rnd tgt=0.506 raw tgt=0.514 | zs contrast=0.363 PC1=0.339
+    L32  HPKR axes tgt=0.158 src=0.242 | SYC axes tgt=0.370 src=0.318 | SYC rnd tgt=0.496 raw tgt=0.527 | zs contrast=0.367 PC1=0.355
+    L36  HPKR axes tgt=0.427 src=0.292 | SYC axes tgt=0.337 src=0.318 | SYC rnd tgt=0.487 raw tgt=0.532 | zs contrast=0.383 PC1=0.350
+    L40  HPKR axes tgt=0.504 src=0.469 | SYC axes tgt=0.320 src=0.264 | SYC rnd tgt=0.478 raw tgt=0.499 | zs contrast=0.343 PC1=0.315
+    L44  HPKR axes tgt=0.629 src=0.680 | SYC axes tgt=0.328 src=0.295 | SYC rnd tgt=0.507 raw tgt=0.496 | zs contrast=0.366 PC1=0.333
+    L48  HPKR axes tgt=0.592 src=0.648 | SYC axes tgt=0.349 src=0.282 | SYC rnd tgt=0.523 raw tgt=0.484 | zs contrast=0.388 PC1=0.356
+    L52  HPKR axes tgt=0.573 src=0.635 | SYC axes tgt=0.374 src=0.298 | SYC rnd tgt=0.481 raw tgt=0.472 | zs contrast=0.413 PC1=0.394
+    L56  HPKR axes tgt=0.566 src=0.553 | SYC axes tgt=0.414 src=0.329 | SYC rnd tgt=0.488 raw tgt=0.482 | zs contrast=0.452 PC1=0.435
+    L60  HPKR axes tgt=0.523 src=0.514 | SYC axes tgt=0.436 src=0.340 | SYC rnd tgt=0.479 raw tgt=0.499 | zs contrast=0.491 PC1=0.482
+    L64  HPKR axes tgt=0.517 src=0.480 | SYC axes tgt=0.451 src=0.370 | SYC rnd tgt=0.482 raw tgt=0.495 | zs contrast=0.485 PC1=0.475
+    L68  HPKR axes tgt=0.488 src=0.426 | SYC axes tgt=0.478 src=0.461 | SYC rnd tgt=0.479 raw tgt=0.495 | zs contrast=0.421 PC1=0.410
+    L72  HPKR axes tgt=0.504 src=0.410 | SYC axes tgt=0.471 src=0.443 | SYC rnd tgt=0.516 raw tgt=0.499 | zs contrast=0.406 PC1=0.392
+    L76  HPKR axes tgt=0.645 src=0.489 | SYC axes tgt=0.330 src=0.317 | SYC rnd tgt=0.512 raw tgt=0.505 | zs contrast=0.361 PC1=0.348

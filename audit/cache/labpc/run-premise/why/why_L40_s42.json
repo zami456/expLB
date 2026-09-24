@@ -1,0 +1,34 @@
+{
+ "layer": 40,
+ "datasets": [
+  "instructed-deception",
+  "harm-pressure-choice",
+  "harm-pressure-knowledge-report",
+  "harm-pressure-kr-matched",
+  "convincing-game",
+  "insider-trading",
+  "ai_liar",
+  "sandbagging_v2",
+  "roleplaying",
+  "mask",
+  "sycophancy_mt"
+ ],
+ "budget": 666,
+ "curve_vs_n_sources": {
+  "1": 0.6728719375792963,
+  "2": 0.7403626182942677,
+  "3": 0.7814838869694675,
+  "4": 0.7178063021138821,
+  "5": 0.8147944204973271,
+  "6": 0.8161227471212993,
+  "7": 0.8196016784262954,
+  "8": 0.8280786856491777,
+  "9": 0.8643628757217268,
+  "10": 0.8090779488623031
+ },
+ "mean_of_directions": 0.8828295183154872,
+ "pooled_lodo_matched": 0.8062109757254146,
+ "single_offdiag": 0.6763163062289969,
+ "cos_single_to_single_mean": 0.050599172767902434,
+ "cos_pooled_to_single_mean": 0.22717310884863162
+}

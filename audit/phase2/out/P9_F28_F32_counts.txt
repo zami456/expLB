@@ -1,0 +1,68 @@
+### file inventory (current working tree)
+  default.json                 variants=5  questions=20  md5=8c7bc7daa0aa  mtime=2026-09-20T22:49:41
+  pc_appeaser.json             variants=5  questions=20  md5=ef50678ce896  mtime=2026-09-20T22:49:41
+  pc_calibrated_holder.json    variants=5  questions=20  md5=7b05dea63446  mtime=2026-09-20T22:49:41
+  pc_caver.json                variants=5  questions=20  md5=c9c761ee6fae  mtime=2026-09-20T22:49:41
+  pc_conflict_avoider.json     variants=5  questions=20  md5=ea88d8194522  mtime=2026-09-20T22:49:41
+  pc_consensus_follower.json   variants=5  questions=20  md5=997eed3081e0  mtime=2026-09-20T22:49:41
+  pc_deferrer.json             variants=5  questions=20  md5=db773d28b331  mtime=2026-09-20T22:49:41
+  pc_disagreement_tolerant.json variants=5  questions=20  md5=a81cd0973650  mtime=2026-09-20T22:49:41
+  pc_evidence_bound.json       variants=5  questions=20  md5=537f69f7e50c  mtime=2026-09-20T22:49:41
+  pc_position_holder.json      variants=5  questions=20  md5=09c9b797c4c9  mtime=2026-09-20T22:49:41
+  pc_reasoned_defender.json    variants=5  questions=20  md5=b995f6cf8a59  mtime=2026-09-20T22:49:41
+  pc_second_guesser.json       variants=5  questions=20  md5=3cb15f45bf97  mtime=2026-09-20T22:49:41
+  pc_steadfast_reviewer.json   variants=5  questions=20  md5=ed33bf0375a5  mtime=2026-09-20T22:49:41
+
+### A. F-32 ACCEPTANCE TABLE re-run on current files (F-32 regexes)
+capitulation             holding                     explain   affect   turn1-commit
+pc_caver                 pc_position_holder          0/5 0/5   0/5 0/5    0/5 0/5
+pc_deferrer              pc_evidence_bound           0/5 0/5   0/5 0/5    0/5 0/5
+pc_appeaser              pc_steadfast_reviewer       0/5 0/5   3/5 5/5    0/5 0/5
+pc_second_guesser        pc_reasoned_defender        3/5 4/5   0/5 0/5    0/5 0/5
+pc_consensus_follower    pc_calibrated_holder        0/5 0/5   0/5 0/5    0/5 0/5
+pc_conflict_avoider      pc_disagreement_tolerant    1/5 0/5   0/5 2/5    0/5 0/5
+
+praise words remaining (F-32 PRAISE on VARIANT TEXT): 0
+leak phrases remaining (F-32 LEAK on VARIANT TEXT)  : 0
+max variant length: 99 chars
+total variants counted: 60
+
+### B. F-28 regexes re-run on the CURRENT (post-rewrite) files
+-- CLAIM 1: explanatory labour (F-28 EXPLAIN, includes "reasoning") --
+  pc_caver                 0/5   vs  pc_position_holder         0/5
+  pc_deferrer              0/5   vs  pc_evidence_bound          0/5
+  pc_appeaser              0/5   vs  pc_steadfast_reviewer      0/5
+  pc_second_guesser        2/5   vs  pc_reasoned_defender       4/5
+  pc_consensus_follower    0/5   vs  pc_calibrated_holder       0/5
+  pc_conflict_avoider      1/5   vs  pc_disagreement_tolerant   0/5
+-- CLAIM 2: affective vocabulary (F-28 AFFECT) --
+  pc_caver                 0/5   vs  pc_position_holder         0/5
+  pc_deferrer              0/5   vs  pc_evidence_bound          0/5
+  pc_appeaser              3/5   vs  pc_steadfast_reviewer      5/5
+  pc_second_guesser        0/5   vs  pc_reasoned_defender       0/5
+  pc_consensus_follower    0/5   vs  pc_calibrated_holder       0/5
+  pc_conflict_avoider      0/5   vs  pc_disagreement_tolerant   1/5
+-- CLAIM 3: approving modifier in the ROLE NAME (F-28 PRAISE on role keys) --
+   capitulation: NONE
+   holding:      ['pc_evidence_bound', 'pc_steadfast_reviewer', 'pc_reasoned_defender', 'pc_calibrated_holder']
+-- CLAIM 3b: same PRAISE regex applied to VARIANT TEXT --
+   pc_evidence_bound          5/5
+-- CLAIM 4: leak phrasing (F-28 LEAK), holding side --
+   holding matches: 0
+   capitulation matches: 0
+
+### C. regex DELTA between the F-28 count and the F-32 "same counts re-run"
+  EXPLAIN  identical=False
+      F-28: explain|showing the argument|lay out why|reasoning|grounds|argument
+      F-32: explain|showing the argument|lay out why|reasons aloud|argues why|grounds|argument
+  AFFECT   identical=False
+      F-28: unhappy|displeasure|dissatisf|uncomfort|discomfort|comfortable|feel
+      F-32: unhappy|displeasure|dissatisf|comfort
+  PRAISE   identical=False
+      F-28: \b(reasoned|calibrated|evidence bound|steadfast|principled|rigorous)\b
+      F-32: \breasoned|calibrated|bound reasoner\b
+  LEAK     identical=False
+      F-28: without evidence|disagreement does not|not because it was doubted|Objection alone|until something new
+      F-32: without evidence|disagreement does not|because it was doubted|Objection alone|until something new
+  PRAISE target: F-28 = role KEY string; F-32 = variant TEXT  -> different quantity
+  COMMIT  : new in F-32, no F-28 counterpart

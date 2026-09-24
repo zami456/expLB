@@ -1,0 +1,117 @@
+ref=HEAD path=kd/docs/FINDINGS.md lines=5234
+headings=109 distinct_ids=109 min=F-01 max=F-109
+missing numbers: []
+duplicated ids: {}
+ids with letter suffix: []
+out-of-order positions: []
+headings per date: {'2026-09-19': 11, '2026-09-20': 51, '2026-09-21': 33, '2026-09-22': 13, 'no-date': 1}
+title keywords: {'wrong': 4, 'correct': 8}
+   21 F-01   · 2026-09-19 · HP-KR is largely a lexical task
+   35 F-02   · 2026-09-19 · HP-KR cannot attribute its own results
+   58 F-03   · 2026-09-19 · The matched slice reverses the HP-KR result
+   77 F-04   · 2026-09-19 · Almost nothing clears a dataset-level bootstrap
+   87 F-05   · 2026-09-19 · Factor probes work; my gate criterion was wrong
+  101 F-06   · 2026-09-19 · Knowledge and wording are entangled at L40, not at L20
+  114 F-07   · 2026-09-19 · A 121-item class was enough; my concern was wrong
+  126 F-08   · 2026-09-19 · Scoring WMDP ourselves gives a cleaner knowledge label
+  142 F-09   · 2026-09-19 · Both continuous knowledge signals saturate
+  155 F-10   · 2026-09-20 · Score-3 filtering imposes an asymmetric sample imbalance
+  179 F-11   · 2026-09-20 · The kd contrast carries a large Assistant-Axis drift component
+  198 F-12   · 2026-09-20 · Permutation test on PC1 alignment
+  217 F-13   · 2026-09-20 · Persona axes encode register — two datasets, one failure mode
+  239 F-14   · 2026-09-19 · `scp` from the lab PC truncates at 200 KiB, silently
+  249 F-15   · 2026-09-20 · Multi-turn behaviour is invisible to single-turn elicitation
+  261 F-16   · 2026-09-19 · HP-KR row counts actually probed
+  272 F-17   · earlier sessions · Matched controls erase the persona-coordinate advantage
+  281 F-18   · 2026-09-20 · paper16 vs paper16-shared differ ONLY in the unified basis
+  311 F-19   · 2026-09-20 · Balancing the sample counts does NOT remove the drift confound
+  342 F-20   · 2026-09-20 · The matched slice is reportable on passB ONLY
+  365 F-21   · 2026-09-20 · NDIF small-model deployments cap memory PER PROCESS, not per GPU
+  392 F-22   · 2026-09-20 · `1_generate_ndif.py` never got the exc_tail fix
+  408 F-23   · 2026-09-20 · PROVENANCE: the matched slice is ours, and HP-KR is not the paper's
+  428 F-24   · 2026-09-20 · A missing `remote=True` downloads the 70B and is SILENT
+  451 F-25   · 2026-09-20 · passC root lost only its `significance.json`, and it was recoverable
+  469 F-26   · 2026-09-20 · `pc_caver` folds — but it also caves BEFORE it is challenged
+  538 F-27   · 2026-09-20 · Both scale rungs generated clean; the 8B breaks character 2.7x more
+  588 F-28   · 2026-09-20 · External review of the cap bank: four structural confounds, verified by count
+  619 F-29   · 2026-09-20 · The 0.374 inversion: the reviewer's challenge is half right
+  652 F-30   · 2026-09-20 · In-character rate across three model sizes, same bank, same judge
+  699 F-31   · 2026-09-20 · The kd bank's +0.076 does NOT clear a dataset-level bootstrap
+  740 F-32   · 2026-09-20 · The cap variants rewritten; all five confounds closed by count
+  777 F-33   · 2026-09-20 · The 3B extraction failed on every role; cause was batch, not length
+  816 F-34   · 2026-09-20 · The kd_s23 gain is depth-dependent, not an L40 artifact
+  860 F-35   · 2026-09-20 · Extraction throughput: the batch-2 constraint costs the 3B a factor of 10
+  894 F-36   · 2026-09-20 · The cap questions do not match the test set they will be scored on
+  941 F-37   · 2026-09-20 · Persona geometry across three model sizes — size-dependent, NOT monotone
+  985 F-38   · 2026-09-20 · gender-secret and soft-trigger are fine-tune datasets — structurally excluded
+ 1012 F-39   · 2026-09-20 · Read the paper itself: our pipeline is bigger, stricter, and gets a SMALLER effect
+ 1077 F-40   · 2026-09-20 · Eval-corpus extraction runs ~1.75x slower than F-35 projected
+ 1112 F-41   · 2026-09-20 · The 8B coords arm OOMed on HP-KR; the exc_tail fix paid for itself
+ 1151 F-42   · 2026-09-20 · attn=0.75 was still too high; budget sized from heads x T^2 instead
+ 1186 F-43   · 2026-09-20 · The coords OOM was a per-process cap all along; truncation was the only lever
+ 1230 F-44   · 2026-09-20 · Truncation to 1024 is nearly free; but the matched slice cannot be extracted at all
+ 1266 F-45   · 2026-09-20 · The OOM fix cost 8x throughput; the full-corpus run is no longer affordable
+ 1299 F-46   · 2026-09-20 · v2 smoke: the capitulation persona is WRONG in turn 1, which invalidates the measure
+ 1368 F-47   · 2026-09-20 · A stale items.pt survived the restart and silently un-sampled one dataset
+ 1406 F-48   · 2026-09-20 · The 8B evaluation arm is complete — first AUROC-capable data outside the 70B
+ 1443 F-49   · 2026-09-20 · The 3B is only 1.8x slower than the 8B, not 10x — the earlier ratio did not transfer
+ 1477 F-50   · 2026-09-20 · Correction to F-49: the 3B is 2.4x slower, not 1.8x
+ 1502 F-51   · 2026-09-20 · Teacher-forced turn 1 works: 4/4 fold vs 4/4 hold, clean separation
+ 1542 F-52   · 2026-09-20 · The contrast holds on true answers and COLLAPSES on false ones
+ 1599 F-53   · 2026-09-20 · Verb form kills the spelunking AND improves the folds
+ 1639 F-54   · 2026-09-20 · Scale-Coords COMPLETE — matched evaluation activations at 3B and 8B
+ 1681 F-55   · 2026-09-20 · The holding half is behaviourally INERT — a bare model holds too
+ 1729 F-56   · 2026-09-20 · `--sample` is proportional, not balancing — one column is 5:1 imbalanced
+ 1760 F-57   · 2026-09-20 · Four thesis figures built from the day's findings
+ 1788 F-58   · 2026-09-20 · The paper REPLICATES at 3B and 8B — and the gain dies at 70B as predicted
+ 1829 F-59   · 2026-09-20 · HP-KR growth GATE FAILED — stated knowledge tracks confidence, not correctness
+ 1868 F-60   · 2026-09-20 · CORRECTION to F-58: the paper evaluates MASK, not HarmPressureChoice
+ 1905 F-61   · 2026-09-20 · The 36-vs-26 bank comparison is confounded THREE ways
+ 1948 F-62   · 2026-09-20 · s3 vs s23 makes NO measurable difference downstream
+ 1992 F-63   · 2026-09-20 · CORRECTED three-rung comparison — F-58 compared different datasets AND different k
+ 2037 F-64   · 2026-09-21 · Cap run: generation and judging complete; the grader filter is SYMMETRIC
+ 2095 F-65   · 2026-09-21 · **A capitulation axis beats the register axis on `sycophancy_mt`: 0.745 zero-shot vs 0.374**
+ 2206 F-66   · 2026-09-21 · The cap result **clears the dataset-level bootstrap** — the first positive result in this project to do so
+ 2285 F-67   · 2026-09-21 · **The cap advantage is LOCAL — it does not generalise past the column it was aimed at**
+ 2350 F-68   · 2026-09-21 · **A vs B, finally answered: the holding personas improve the CONTRAST too, by ~0.045**
+ 2421 F-69   · 2026-09-21 · passA's matched slice is repaired — 9 honest deniers become 134, matching passB exactly
+ 2474 F-70   · 2026-09-21 · Novelty audit: two independent reviews agree on 2 of 10 claims being new, and one of our attributions was wrong
+ 2529 F-71   · 2026-09-21 · Top-up complete: all three stores now carry the matched slice identically
+ 2567 F-72   · 2026-09-21 · **F-03's reversal is layer-localised: 0.739 at L40, 0.374 at L20 — the layer choice moves it by ten times the claimed effect**
+ 2629 F-73   · 2026-09-21 · **Self-correction: the length claim's AUROC survives, its per-dataset framing does not**
+ 2706 F-74   · 2026-09-21 · **Self-correction: the −0.76 "ceiling artifact" is mathematical coupling, and the clean test refutes the claim it was supporting**
+ 2772 F-75   · 2026-09-21 · **The 80-layer profile: a 16-layer plateau containing L40 — the pre-registered "strengthens" outcome**
+ 2846 F-76   · 2026-09-21 · **CORRECTION to F-75: the plateau does not survive the dataset-level bootstrap. F-03's margin at L40 is not significant.**
+ 2923 F-77   · 2026-09-21 · **The cap result survives the test that killed F-03: positive at 21/21 layers, and it clears at the pre-specified layer**
+ 2985 F-78   · 2026-09-21 · Two papers added: our sycophancy finding is independently corroborated, and the persona-coordinate premise now has a cheaper rival we h
+ 3045 F-79   · 2026-09-21 · **The premise fails: pooled training beats every persona result in this project, at equal data volume, without personas**
+ 3121 F-80   · 2026-09-21 · **F-79 clears the dataset-level bootstrap by a wide margin — and the gain is diversity, not data volume**
+ 3193 F-81   · 2026-09-21 · **The pooled-training result is layer-robust: positive at 21/21 layers, and all 21 clear the dataset-level bootstrap**
+ 3256 F-82   · 2026-09-21 · The cap layer profile is unchanged by the judge filter
+ 3290 F-83   · 2026-09-21 · Pooled training is seed-stable; Ying et al.'s Mahalanobis predictor does **not** reproduce on our grid, with either covariance
+ 3357 F-84   · 2026-09-21 · The cluster-permutation test completes the pre-registration, and it agrees: p = 0.38
+ 3403 F-85   · 2026-09-21 · **Tier 0.1 — on the collaborator's six datasets, pooled training reaches 0.868–0.893, and the abstract's advantage shrinks from +0.184 
+ 3467 F-86   · 2026-09-21 · **Why pooling works: single-source directions are nearly orthogonal, and averaging them cancels the noise. Joint training is not needed
+ 3532 F-87   · 2026-09-21 · Tier 0.2 — the cap result is seed-stable
+ 3568 F-88   · 2026-09-21 · Tier 0.3 — the three papers read directly. One pre-empts our method, one contradicts the draft title, one is convergent with F-86.
+ 3637 F-89   · 2026-09-21 · **Tier 0.4 — the format-matched control deflates F-66's interpretation: swapping the six holding personas for six topically unrelated o
+ 3761 F-90   · 2026-09-21 · **External review audit: Result 1's headline baseline was the weakest available, Result 2 survives but barely, and the persona method l
+ 3873 F-91   · 2026-09-21 · **Layer 40 is not the peak. L32 is, for both raw and persona features, by ~0.02 — and the data to show it was already on disk**
+ 3934 F-92   · 2026-09-21 · **Deadpan elicitation pilot, ironic arm: unmarked sarcasm IS producible on-policy — and the instruction strength needed is measured, no
+ 3992 F-93   · 2026-09-21 · **The sarcasm pilot's decisive check FAILS: unmarked ironic and sycophantic responses are still separable at 0.92 by bag-of-words alone
+ 4107 F-94   · 2026-09-21 · **F-89 across 16 layers: the conclusion holds, the "78% / three-to-one" figure does not. Presence beats content about 2:1 on average, a
+ 4225 F-95   · 2026-09-21 · **F-86 survives falsification at 51 of 51 cells where it is claimed to work. All three nulls sit exactly on chance. The eight failures 
+ 4317 F-96   · 2026-09-21 · **F-63's three-rung margin is a single-layer reading, and layer 16 is the best of 3B's seven. Layer-averaged, the monotone decline near
+ 4384 F-97   · 2026-09-22 · **CORRECTION to F-85: the abstract's 0.904 / 0.916 is not the persona-coordinates contrast — it is a contrast built on OUR knowledge-de
+ 4469 F-98   · 2026-09-22 · **F-97 replicates on our eleven datasets: the kd bank is worth 49–77% of the abstract's margin, and BOTH of the collaborator's arms los
+ 4544 F-99   · 2026-09-22 · **F-98 across all 21 layers: the kd bank contributes at 21 of 21, median 63% of the margin. The two-layer figure was not misleading, bu
+ 4601 F-100  · 2026-09-22 · **F-96's open gap closed: the 70B rung swept at k=3. The monotone decline SURVIVES layer-averaging — +0.120 / +0.103 / +0.075 — but its
+ 4674 F-101  · 2026-09-22 · **The 70B rung under `last` pooling: F-100's "persona buys nothing over raw" is POOLING-DEPENDENT — +0.007 (mean) vs +0.033 (last), pos
+ 4728 F-102  · 2026-09-22 · **F-63's monotone decline with scale is a MEAN-POOLING result. Under `last` pooling the three-rung trend is non-monotone on the matched
+ 4818 F-103  · 2026-09-22 · **The kd-bank share is POOLING-ROBUST, unlike the scale trend: +0.055 (mean) vs +0.059 (last), positive at 21/21 and 20/21. F-102's war
+ 4870 F-104  · 2026-09-22 · **"Fixed" did not mean "fixed where it runs": four script fixes existed only in the repo and never reached the lab PC, including two on
+ 4934 F-105  · 2026-09-22 · **F-93 re-verified from raw responses: all four separability rows and both feature lists reproduce exactly — but none of them is persis
+ 4997 F-106  · 2026-09-22 · **Gate 3 prepared, and the preparation found the gate is under-specified: natural sarcasm corpora are 0.63–0.78 separable by bag-of-wor
+ 5063 F-107  · 2026-09-22 · **GATE 3 RUN AND FAILED: the deception axis does not fire on natural sarcasm — it is indistinguishable from a random direction. The axi
+ 5140 F-108  · 2026-09-22 · **The open methodological risk is closed: a row-level LEAK exists between HP-KR and kr-matched, and Claim 3 survives leave-one-CLUSTER-
+ 5210 F-109  · 2026-09-22 · L32 on the collaborator's six: pooled training is HIGHER there than at L40, confirming §5e's "every L40 figure is an understatement"

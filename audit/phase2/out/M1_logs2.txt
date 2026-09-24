@@ -1,0 +1,191 @@
+==============================================================================
+F41 17:32:29-17:48:37   lines=159   first idx 4867  last 5645
+      64  session attempt #/# (# batches, # padded tokens) failed: NNsightException: OutOfMemoryError: CUDA out of memor
+      49  HTTP Request: POST https://api.ndif.us/request "HTTP/#.# # OK"
+      15  harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+       2  nnsight #.#.#  NDIF host=https://api.ndif.us  model=meta-llama/Llama-#.#-#B-Instruct
+       2  HTTP Request: HEAD https://huggingface.co/meta-llama/Llama-#.#-#B-Instruct/resolve/main/config.json "HTTP/#.# 
+       2  HTTP Request: HEAD https://huggingface.co/meta-llama/Llama-#.#-#B-Instruct/resolve/main/tokenizer_config.json 
+       2  # batches, widest attention #.# GiB (budget #.# GiB)
+       2  # sessions, widest # padded tokens (session budget #)
+       2  HTTP Request: GET https://prod-ndif-results.s#.amazonaws.com/results/#e#cda#-#ff-#-ada#-#ab#.pt?AWSAccessKeyId
+       1  HTTP Request: GET https://huggingface.co/api/agent-harnesses "HTTP/#.# # OK"
+       1  HTTP Request: GET https://huggingface.co/api/models/meta-llama/Llama-#.#-#B-Instruct/tree/main/additional_chat
+       1  HTTP Request: GET https://huggingface.co/api/models/meta-llama/Llama-#.#-#B-Instruct/tree/main?recursive=true&
+       1  HTTP Request: GET https://huggingface.co/api/models/meta-llama/Llama-#.#-#B-Instruct "HTTP/#.# # OK"
+       1  NDIF download floor # KB/s after #s: installed
+       1  model config: # layers, hidden=#
+       1  download floor # KB/s after #s: installed
+       1  layers: # of #  pooling: mean,last  datasets: instructed-deception, harm-pressure-choice, harm-pressure-knowle
+       1  instructed-deception: # cached spans
+   session-attempt counts: {'session attempt 1/4': 16, 'session attempt 2/4': 16, 'session attempt 3/4': 16, 'session attempt 4/4': 16}
+   lines containing OutOfMemoryError: 64
+   'permanent'-ish lines: 16
+       2026-09-20 17:33:33,944 - ERROR -   harm-pressure-choice: a session failed permanently; leaving its rows for resume
+       2026-09-20 17:35:23,169 - ERROR -   harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+       2026-09-20 17:36:19,870 - ERROR -   harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+       2026-09-20 17:37:16,222 - ERROR -   harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+       2026-09-20 17:38:12,515 - ERROR -   harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+       2026-09-20 17:39:08,419 - ERROR -   harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+
+==============================================================================
+F42 17:48:38-18:02:06   lines=133   first idx 5646  last 6474
+      52  session attempt #/# (# batches, # padded tokens) failed: NNsightException: OutOfMemoryError: CUDA out of memor
+      40  HTTP Request: POST https://api.ndif.us/request "HTTP/#.# # OK"
+      11  harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+       3  HTTP Request: GET https://prod-ndif-results.s#.amazonaws.com/results/#f#dd#-c#-#aa#-b#b#-#d#d#e#.pt?AWSAccessK
+       2  # batches, widest attention #.# GiB (budget #.# GiB)
+       2  # sessions, widest # padded tokens (session budget #)
+       1  HTTP Request: GET https://huggingface.co/api/models/meta-llama/Llama-#.#-#B-Instruct/tree/main/additional_chat
+       1  HTTP Request: GET https://huggingface.co/api/models/meta-llama/Llama-#.#-#B-Instruct/tree/main?recursive=true&
+       1  HTTP Request: GET https://huggingface.co/api/models/meta-llama/Llama-#.#-#B-Instruct "HTTP/#.# # OK"
+       1  NDIF download floor # KB/s after #s: installed
+       1  model config: # layers, hidden=#
+       1  download floor # KB/s after #s: installed
+       1  layers: # of #  pooling: mean,last  datasets: instructed-deception, harm-pressure-choice, harm-pressure-knowle
+       1  instructed-deception: # cached spans
+       1  instructed-deception: already complete (# rows)
+       1  harm-pressure-choice: # cached spans
+       1  harm-pressure-choice: # to do (# already on disk)
+       1  harm-pressure-choice: a session failed permanently; leaving its rows for resume
+   session-attempt counts: {'session attempt 1/4': 14, 'session attempt 2/4': 13, 'session attempt 3/4': 13, 'session attempt 4/4': 12}
+   lines containing OutOfMemoryError: 52
+   'permanent'-ish lines: 12
+       2026-09-20 17:49:40,231 - ERROR -   harm-pressure-choice: a session failed permanently; leaving its rows for resume
+       2026-09-20 17:51:13,639 - ERROR -   harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+       2026-09-20 17:53:31,535 - ERROR -   harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+       2026-09-20 17:54:28,370 - ERROR -   harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+       2026-09-20 17:55:24,034 - ERROR -   harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+       2026-09-20 17:56:21,392 - ERROR -   harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+
+==============================================================================
+F43 18:02:06-18:04:20   lines=48   first idx 6474  last 6708
+       5  HTTP Request: POST https://api.ndif.us/request "HTTP/#.# # OK"
+       5  session attempt #/# (# batches, # padded tokens) failed: NNsightException: OutOfMemoryError: CUDA out of memor
+       2  nnsight #.#.#  NDIF host=https://api.ndif.us  model=meta-llama/Llama-#.#-#B-Instruct
+       2  HTTP Request: HEAD https://huggingface.co/meta-llama/Llama-#.#-#B-Instruct/resolve/main/config.json "HTTP/#.# 
+       2  HTTP Request: HEAD https://huggingface.co/meta-llama/Llama-#.#-#B-Instruct/resolve/main/tokenizer_config.json 
+       2  HTTP Request: GET https://huggingface.co/api/models/meta-llama/Llama-#.#-#B-Instruct/tree/main/additional_chat
+       2  HTTP Request: GET https://huggingface.co/api/models/meta-llama/Llama-#.#-#B-Instruct/tree/main?recursive=true&
+       2  HTTP Request: GET https://huggingface.co/api/models/meta-llama/Llama-#.#-#B-Instruct "HTTP/#.# # OK"
+       2  NDIF download floor # KB/s after #s: installed
+       2  model config: # layers, hidden=#
+       2  download floor # KB/s after #s: installed
+       2  layers: # of #  pooling: mean,last  datasets: instructed-deception, harm-pressure-choice, harm-pressure-knowle
+       2  # batches, widest attention #.# GiB (budget #.# GiB)
+       2  # sessions, widest # padded tokens (session budget #)
+       2  HTTP Request: GET https://prod-ndif-results.s#.amazonaws.com/results/f#e#-de#d-#ed-b#f-#c#ffb#ef#c.pt?AWSAcces
+       1  instructed-deception: # cached spans
+       1  instructed-deception: already complete (# rows)
+       1  harm-pressure-choice: # cached spans
+   session-attempt counts: {'session attempt 1/4': 2, 'session attempt 2/4': 1, 'session attempt 3/4': 1, 'session attempt 4/4': 1}
+   lines containing OutOfMemoryError: 5
+   'permanent'-ish lines: 1
+       2026-09-20 18:03:10,173 - ERROR -   harm-pressure-choice: a session failed permanently; leaving its rows for resume
+
+==============================================================================
+post-1024 18:04:20-20:00   lines=845   first idx 6704  last 24254
+       6  # batches, widest attention #.# GiB (budget #.# GiB)
+       6  # sessions, widest # padded tokens (session budget #)
+       3  HTTP Request: GET https://prod-ndif-results.s#.amazonaws.com/results/#aa#c-dbee-#ff#-#-f#ee#b#fe#f.pt?AWSAcces
+       3  HTTP Request: GET https://prod-ndif-results.s#.amazonaws.com/results/#c#acedf-cb#-#b#-aab#-#e#df#af#.pt?AWSAcc
+       3  HTTP Request: GET https://prod-ndif-results.s#.amazonaws.com/results/#f#-#b#-#c#-b#a#-#c#.pt?AWSAccessKeyId=AK
+       3  HTTP Request: GET https://prod-ndif-results.s#.amazonaws.com/results/#d#e#-a#b-#be#-#-#ff#a#.pt?AWSAccessKeyId
+       3  HTTP Request: GET https://prod-ndif-results.s#.amazonaws.com/results/#a#dc#-#f#-#df#-#f#-bcd#bca#ffd#.pt?AWSAc
+       3  HTTP Request: GET https://prod-ndif-results.s#.amazonaws.com/results/#a#-ccf#-#ea-#b-#c#e#e#c.pt?AWSAccessKeyI
+       3  HTTP Request: GET https://prod-ndif-results.s#.amazonaws.com/results/#a#b#e#-#-#-ad#c-#b#cf#e#ec#.pt?AWSAccess
+       3  HTTP Request: GET https://prod-ndif-results.s#.amazonaws.com/results/#ec#fa#-#c#-#a#-b#be-b#f#a#.pt?AWSAccessK
+       3  HTTP Request: GET https://prod-ndif-results.s#.amazonaws.com/results/#d#f-ffb#-#c-#f-b#a#.pt?AWSAccessKeyId=AK
+       3  HTTP Request: GET https://prod-ndif-results.s#.amazonaws.com/results/a#db#-#ea#-#a-#d-ded#a#.pt?AWSAccessKeyId
+       3  HTTP Request: GET https://prod-ndif-results.s#.amazonaws.com/results/#c#f#-db#-#-a#e-#cd#b#bb#a.pt?AWSAccessKe
+       3  HTTP Request: GET https://prod-ndif-results.s#.amazonaws.com/results/fe#d-#c#-#-b#-#dcded.pt?AWSAccessKeyId=AK
+       3  HTTP Request: GET https://prod-ndif-results.s#.amazonaws.com/results/#e#adf#-dc#c-#d#-#fb#-edd#b#f#c#e.pt?AWSA
+       2  HTTP Request: GET https://huggingface.co/api/models/meta-llama/Llama-#.#-#B-Instruct "HTTP/#.# # OK"
+       2  NDIF download floor # KB/s after #s: installed
+       2  model config: # layers, hidden=#
+   session-attempt counts: {}
+   lines containing OutOfMemoryError: 0
+   'permanent'-ish lines: 0
+
+==============================================================================
+ALL lines anywhere in the log mentioning 'permanent'
+  [3057] 2026-09-20 17:12:51 2026-09-20 17:12:51,921 - ERROR -   harm-pressure-choice: a session failed permanently; leaving its rows for resume
+  [4359] 2026-09-20 17:18:57 2026-09-20 17:18:57,733 - ERROR -   harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+  [4393] 2026-09-20 17:19:52 2026-09-20 17:19:52,224 - ERROR -   harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+  [4428] 2026-09-20 17:20:47 2026-09-20 17:20:47,011 - ERROR -   harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+  [4463] 2026-09-20 17:21:41 2026-09-20 17:21:41,793 - ERROR -   harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+  [4498] 2026-09-20 17:22:36 2026-09-20 17:22:36,531 - ERROR -   harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+  [4532] 2026-09-20 17:23:31 2026-09-20 17:23:31,069 - ERROR -   harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+  [4566] 2026-09-20 17:24:25 2026-09-20 17:24:25,426 - ERROR -   harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+  [4600] 2026-09-20 17:25:20 2026-09-20 17:25:20,800 - ERROR -   harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+  [4634] 2026-09-20 17:26:16 2026-09-20 17:26:16,340 - ERROR -   harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+  [4669] 2026-09-20 17:27:11 2026-09-20 17:27:11,035 - ERROR -   harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+  [4703] 2026-09-20 17:28:06 2026-09-20 17:28:06,426 - ERROR -   harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+  [4737] 2026-09-20 17:29:01 2026-09-20 17:29:01,660 - ERROR -   harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+  [4772] 2026-09-20 17:29:56 2026-09-20 17:29:56,251 - ERROR -   harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+  [4806] 2026-09-20 17:30:50 2026-09-20 17:30:50,749 - ERROR -   harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+  [4841] 2026-09-20 17:31:50 2026-09-20 17:31:50,405 - ERROR -   harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+  [4918] 2026-09-20 17:33:33 2026-09-20 17:33:33,944 - ERROR -   harm-pressure-choice: a session failed permanently; leaving its rows for resume
+  [5089] 2026-09-20 17:35:23 2026-09-20 17:35:23,169 - ERROR -   harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+  [5134] 2026-09-20 17:36:19 2026-09-20 17:36:19,870 - ERROR -   harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+  [5174] 2026-09-20 17:37:16 2026-09-20 17:37:16,222 - ERROR -   harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+  [5214] 2026-09-20 17:38:12 2026-09-20 17:38:12,515 - ERROR -   harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+  [5250] 2026-09-20 17:39:08 2026-09-20 17:39:08,419 - ERROR -   harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+  [5290] 2026-09-20 17:40:04 2026-09-20 17:40:04,672 - ERROR -   harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+  [5324] 2026-09-20 17:41:00 2026-09-20 17:41:00,512 - ERROR -   harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+  [5358] 2026-09-20 17:41:55 2026-09-20 17:41:55,146 - ERROR -   harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+  [5392] 2026-09-20 17:42:50 2026-09-20 17:42:50,472 - ERROR -   harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+  [5426] 2026-09-20 17:43:44 2026-09-20 17:43:44,819 - ERROR -   harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+  [5460] 2026-09-20 17:44:39 2026-09-20 17:44:39,150 - ERROR -   harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+  [5495] 2026-09-20 17:45:34 2026-09-20 17:45:34,942 - ERROR -   harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+  [5529] 2026-09-20 17:46:30 2026-09-20 17:46:30,393 - ERROR -   harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+  [5605] 2026-09-20 17:47:34 2026-09-20 17:47:34,188 - ERROR -   harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+  [5641] 2026-09-20 17:48:29 2026-09-20 17:48:29,074 - ERROR -   harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+  [5694] 2026-09-20 17:49:40 2026-09-20 17:49:40,231 - ERROR -   harm-pressure-choice: a session failed permanently; leaving its rows for resume
+  [5899] 2026-09-20 17:51:13 2026-09-20 17:51:13,639 - ERROR -   harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+  [6104] 2026-09-20 17:53:31 2026-09-20 17:53:31,535 - ERROR -   harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+  [6152] 2026-09-20 17:54:28 2026-09-20 17:54:28,370 - ERROR -   harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+  [6189] 2026-09-20 17:55:24 2026-09-20 17:55:24,034 - ERROR -   harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+  [6235] 2026-09-20 17:56:21 2026-09-20 17:56:21,392 - ERROR -   harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+  [6272] 2026-09-20 17:57:16 2026-09-20 17:57:16,340 - ERROR -   harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+  [6312] 2026-09-20 17:58:12 2026-09-20 17:58:12,521 - ERROR -   harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+  [6346] 2026-09-20 17:59:08 2026-09-20 17:59:08,241 - ERROR -   harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+  [6380] 2026-09-20 18:00:02 2026-09-20 18:00:02,852 - ERROR -   harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+  [6417] 2026-09-20 18:00:58 2026-09-20 18:00:58,560 - ERROR -   harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+  [6460] 2026-09-20 18:01:55 2026-09-20 18:01:55,136 - ERROR -   harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+  [6530] 2026-09-20 18:03:10 2026-09-20 18:03:10,173 - ERROR -   harm-pressure-choice: a session failed permanently; leaving its rows for resume
+
+==============================================================================
+Lines with 'skipped' / 'failed' summary per dataset, 17:30-18:10
+  [4806] 17:30:50 2026-09-20 17:30:50,749 - ERROR -   harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+  [4841] 17:31:50 2026-09-20 17:31:50,405 - ERROR -   harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+  [4918] 17:33:33 2026-09-20 17:33:33,944 - ERROR -   harm-pressure-choice: a session failed permanently; leaving its rows for resume
+  [5089] 17:35:23 2026-09-20 17:35:23,169 - ERROR -   harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+  [5134] 17:36:19 2026-09-20 17:36:19,870 - ERROR -   harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+  [5174] 17:37:16 2026-09-20 17:37:16,222 - ERROR -   harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+  [5214] 17:38:12 2026-09-20 17:38:12,515 - ERROR -   harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+  [5250] 17:39:08 2026-09-20 17:39:08,419 - ERROR -   harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+  [5290] 17:40:04 2026-09-20 17:40:04,672 - ERROR -   harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+  [5324] 17:41:00 2026-09-20 17:41:00,512 - ERROR -   harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+  [5358] 17:41:55 2026-09-20 17:41:55,146 - ERROR -   harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+  [5392] 17:42:50 2026-09-20 17:42:50,472 - ERROR -   harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+  [5426] 17:43:44 2026-09-20 17:43:44,819 - ERROR -   harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+  [5460] 17:44:39 2026-09-20 17:44:39,150 - ERROR -   harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+  [5495] 17:45:34 2026-09-20 17:45:34,942 - ERROR -   harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+  [5529] 17:46:30 2026-09-20 17:46:30,393 - ERROR -   harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+  [5605] 17:47:34 2026-09-20 17:47:34,188 - ERROR -   harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+  [5641] 17:48:29 2026-09-20 17:48:29,074 - ERROR -   harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+  [5694] 17:49:40 2026-09-20 17:49:40,231 - ERROR -   harm-pressure-choice: a session failed permanently; leaving its rows for resume
+  [5899] 17:51:13 2026-09-20 17:51:13,639 - ERROR -   harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+  [6104] 17:53:31 2026-09-20 17:53:31,535 - ERROR -   harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+  [6152] 17:54:28 2026-09-20 17:54:28,370 - ERROR -   harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+  [6189] 17:55:24 2026-09-20 17:55:24,034 - ERROR -   harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+  [6235] 17:56:21 2026-09-20 17:56:21,392 - ERROR -   harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+  [6272] 17:57:16 2026-09-20 17:57:16,340 - ERROR -   harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+  [6312] 17:58:12 2026-09-20 17:58:12,521 - ERROR -   harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+  [6346] 17:59:08 2026-09-20 17:59:08,241 - ERROR -   harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+  [6380] 18:00:02 2026-09-20 18:00:02,852 - ERROR -   harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+  [6417] 18:00:58 2026-09-20 18:00:58,560 - ERROR -   harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+  [6460] 18:01:55 2026-09-20 18:01:55,136 - ERROR -   harm-pressure-knowledge-report: a session failed permanently; leaving its rows for resume
+  [6530] 18:03:10 2026-09-20 18:03:10,173 - ERROR -   harm-pressure-choice: a session failed permanently; leaving its rows for resume
+python exit 0

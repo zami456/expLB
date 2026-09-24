@@ -1,0 +1,1695 @@
+Do Linear Probes Generalize Better in Persona Coordinates?
+Prasad Mahadik1 ,Adrians Skapars 2
+1Independent Researcher
+2University of Manchester
+mahadikprasad15@gmail.com, adrians.skapars@postgrad.manchester.ac.uk
+Abstract
+It is becoming increasingly necessary to have mon-
+itors check for harmful behaviors during language
+model interactions, but text-only monitoring has
+not been sufficient. This is because models some-
+times exhibit strategic deception and sandbagging,
+changing their behavior during evaluation. This
+motivates the use of white-box monitors like linear
+probes, which can read the model internals directly.
+Currently, such probes can fail under distribution
+shift, limiting their usefulness in real settings. We
+study whether there exists a low-dimensional sub-
+space of the model internals that captures harmful
+behaviors more robustly, while leaving out spuri-
+ously correlative features. Inspired by the Assis-
+tant Axis and Persona Selection Model, we con-
+struct persona axes for deception and sycophancy
+using contrastive persona prompts. The first prin-
+cipal components, obtained by unsupervised PCA
+of the persona-specific vectors, cleanly separate
+harmful and harmless personas. Across 10 eval-
+uation datasets, we show that persona-derived di-
+rections transfer non-trivially and probes trained
+on persona-PC projections generalize better than
+probes trained on raw activations. We also find
+that unified axis consisting of multiple harmful and
+harmless behaviors improves generalization across
+behaviors and datasets. Overall, persona vectors
+provide a useful inductive bias for building more
+transferable behavior probes.
+1 Introduction
+Linear probes are simple and generally effective classifiers
+over a model’s latent space Alain and Bengio [2018]. How-
+ever, a probe trained on one dataset may fail to transfer to an-
+other, not because the observed model lacks behavior-relevant
+representations, but because the probe has learned to use spu-
+rious and dataset-specific correlations Kirchet al.[2026];
+Yinget al.[2026]. This is critical to avoid when monitor-
+ing for behaviors like deception, sycophancy, and sabotage.
+Detection must remain robust across different topics, prompt
+formats, styles, and social contexts for it to be effective. Even
+when undetected, the behaviors themselves seem to be gen-
+eral across contexts, so the central aim is to find the latent
+components that the model itself uses to produce the concern-
+ing outputs.
+In this work, we interpret Large Language Model (LLM)
+generation through the simulator-simulacra framework: LLM
+outputs are produced by the model inferring and simulat-
+ing a persona, with generation conditioned on that inferred
+state [Janus, 2022; Andreas, 2022; Markset al., 2026]. Re-
+cent work formalizes this for truthfulness: pretraining data
+is internally clustered according to the type of agent that
+would have produced it, so a model that infers the generat-
+ing agent inherits that agent’s truth-related behavior [Joshiet
+al., 2024]. Work on LLM agents further shows that these
+persona-states drive behavior in settings where models de-
+ceive autonomously [Scheureret al., 2024] and the Assis-
+tant Axis work demonstrates that persona-states have recov-
+erable geometric structures within model activations [Luet
+al., 2026]. Across these lines of work, the common claim is
+thatpersona-like latent states act as generative variables:
+they cluster contexts by the agent implied by the text, and
+condition the behavior the model produces.
+To leverage this understanding to improve probe-based
+monitoring, we first construct behavior specific persona axes.
+We then use the axes in two ways: (1) aszero-shot classifiers
+- the contrast direction and first PC transfer non-trivially to 5
+deception and 5 sycophancy unseen datasets without any su-
+pervised training; (2) ascoordinates for learned probes- pro-
+jecting dataset activations onto the leading persona PCs and
+training probes on those low-dimensional features improves
+cross-dataset generalization relative to probes trained on raw
+activations.
+In this work, we make the following contributions:
+• We proposepersona-state probing: constructing
+persona-conditioned activation directions that approxi-
+mate the persona-state from which a response is gener-
+ated, then probing those directions rather than the raw
+activations labeled by output behavior.
+• We show that the means of persona-conditioned activa-
+tions induce a clean geometric structure for deception
+and sycophancy, with leading PCs separating honest/ de-
+ceptive and non-sycophantic/ sycophantic classes.
+• We show that persona-axes derived from unlabeled data
+arXiv:2605.09391v2  [cs.AI]  15 May 2026
+Figure 1: Persona-state probing pipeline. Instructions and shared questions are posed to multiple personas; layer-14 output text hidden states
+are averaged to form per-question vectors, which are then averaged across questions to produce one persona vector per persona. These persona
+vectors are then used for downstream analyses including PCA, contrast directions, and low-dimensional probe training.
+transfer non-trivially to unseen deception and syco-
+phancy datasets as zero-shot classifiers.
+• We show that probes trained on the projections onto per-
+sona PCs generalize better across datasets than probes
+trained on the raw activations.
+• We show that a unified axis of multiple harmful personas
+improves generalization of linear probes across multiple
+behaviors.
+2 Related Work
+Persona and Agent-State View of Language Models.Our
+work builds on the view that language models infer and sim-
+ulate agents or personas instead of just continuing surface
+text [Janus, 2022]. Similarly, Andreas [2022] argues that lan-
+guage models can infer properties of the agents likely to have
+produced some text, including communicative intentions, be-
+liefs, and goals. Joshiet al.[2024] extend this to truthfulness,
+arguing that models cluster truthful and untruthful personas
+from pretraining data, and that these inferred personas help
+explain how truth-related behavior generalizes across con-
+texts.
+The Persona Selection Model then extends this view to
+post-trained assistant chatbots, treating their behavior as the
+result of selecting and refining an assistant persona from a
+broader range of personas learned during pretraining [Marks
+et al., 2026]. Most relevant to our method, the Assistant Axis
+work extracts activation vectors for character archetypes and
+finds a dominant direction corresponding to how strongly the
+model is operating in its default assistant persona [Luet al.,
+2026].
+Linear Representations and Truthfulness Probes.A sep-
+arate line of work studies whether semantic and behavioral
+variables are linearly accessible within model activations.
+The Linear Representation Hypothesis gives a formal account
+of when concepts can be represented as linear directions in
+the activation space and connects these directions to probing
+and steering [Parket al., 2024]. For truthfulness, early prob-
+ing work showed that hidden states can predict whether state-
+ments are true or false [Azaria and Mitchell, 2023], while
+unsupervised methods recover truth-related directions from
+without labeled truth data [Burnset al., 2023].
+Marks and Tegmark [2023] studies the linear structure in
+true/ false statement representations and shows that simple
+mean-difference probes can transfer across some factual do-
+mains. More recently, the Truthfulness Spectrum Hypothe-
+sis argues that truth is not represented by a single universal
+direction, but by directions ranging from domain-general to
+domain-specific Yinget al.[2026]; importantly, the geome-
+try between probe directions predicts cross-domain transfer
+[Natarajanet al., 2026]. This motivates our focus on whether
+persona-derived directions isolate a more transferable com-
+ponent of behavior than raw dataset supervision.
+Deception Probes and Heterogeneous Deception.Our
+experiments are closest to a recent work on detecting strategic
+deception with linear probes. Goldowsky-Dillet al.[2025]
+train probes from honest/ deceptive instruction pairs and role-
+playing scenarios, then evaluate them on more realistic set-
+tings such as insider-trading concealment and sandbagging
+behavior. They find strong performance in several settings,
+but also emphasize that current probes are not yet robust
+enough to serve as a standalone defenses. This is why de-
+velopers mostly use cascading filters, where a cheap probe
+triggers a more expensive classifier, in order to avoid false
+positives Cunninghamet al.[2026].
+Misalignment, Sycophancy, and Behavioral Generaliza-
+tion.The motivation for persona-state probing also comes
+from work showing that narrow behavioral training or con-
+textual pressure can generalize through broader latent traits
+Scheureret al.[2024]. Sycophancy is a prominent example:
+RLHF-trained assistants often match user beliefs over truth-
+ful responses, likely because human preference data rewards
+agreement [Sharmaet al., 2024]. Strategic deception has also
+been observed in agentic settings, where models conceal mis-
+behavior under pressure without being directly instructed to
+deceive [Scheureret al., 2024].
+Emergent misalignment shows that narrow finetuning, such
+as training on insecure code, can induce broad misaligned be-
+havior across unrelated prompts, suggesting that training can
+shift models into more general behavioral modes rather than
+only teaching task-local mappings [Betleyet al., 2025]. To-
+gether with the simulator view, LLMs-as-agents, the Persona
+Selection Model, Joshiet al.[2024]’s persona hypothesis, and
+the Assistant Axis, these results motivate the central hypothe-
+sis of our work:behavior may transfer through latent persona
+or agent states and probes that target those states may gener-
+alize better than probes trained directly on high-dimensional
+dataset activations.
+3 Method
+Constructing Persona Vectors.For personap, layerℓ, and
+rollout setQ p, we define the role vector
+v(ℓ)
+p = 1
+|Qp|
+X
+q∈Qp
+pool
+ 
+h(ℓ)(p, q, yp,q)
+
+,(1)
+whereh (ℓ) denotes the hidden states at layerℓ,y p,q is the gen-
+erated response, andpool(·)is mean pooling over the output
+tokens only.
+At each layer, we center the persona vectors by subtracting
+the mean across all personas, following the residualization
+step used in the Assistant Axis methodology [Luet al., 2026]:
+˜v(ℓ)
+p =v (ℓ)
+p − 1
+|P|
+X
+p′∈P
+v(ℓ)
+p′ .(2)
+We then run PCA on the centered persona vectors at
+each layer. We denote the resulting principal directions by
+u(ℓ)
+1 , u(ℓ)
+2 , u(ℓ)
+3 . . ., ordered by explained variance. For brevity,
+we use ‘PC1’ to refer tou (ℓ)
+1 , ‘PC2’ to refer tou (ℓ)
+2 , and so
+on. For any persona vector or pooled dataset activationz (ℓ),
+the corresponding PC score is its scalar projection onto that
+direction,
+PCk(z(ℓ)) =⟨z (ℓ), u(ℓ)
+k ⟩.(3)
+In the zero-shot experiments, we use these scalar projections
+directly as unsupervised classifier scores; higher PCs capture
+variation orthogonal to lower PCs.
+We test three ways of using the persona geometry.
+1. Contrastive direction (zero-shot). We compute the
+difference between the mean deceptive/ sycophan-
+tic persona vector and the mean non-deceptive/ non-
+sycophantic vector.
+2. PC1 (zero-shot). We score samples by their projection
+onto the first principal component of the persona vectors.
+3. PC features for learned probes. We project each sample
+activation onto the first few role PCs (top-3) and train a
+lightweight probe on those low-dimensional features.
+The core contrastive direction at layerℓis
+d(ℓ) = 1
+|D|
+X
+p∈D
+˜v(ℓ)
+p − 1
+|H|
+X
+p∈H
+˜v(ℓ)
+p ,(4)
+whereDandHare the deceptive/ sycophantic and honest/
+non-sycophantic persona sets. A sample with pooled activa-
+tionz (ℓ) receives scores(z (ℓ)) =⟨z (ℓ), d(ℓ)⟩.
+4 Experiment Setup
+We aim to answer the following research questions:
+1. Do persona vectors for honest/ deceptive and sycophan-
+tic/ non-sycophantic personas form low-dimensional
+axes that clearly separate behavioral classes?
+2. Can these persona-axes be used directly as zero-shot
+classifiers?
+3. Can we create features using these axes for training
+probes that generalize better than raw-activation probes?
+Persona Selection.Following the Assistant Axis setup [Lu
+et al., 2026], we select personas and shared questions from
+that paper’s persona-prompt framework, choosing personas
+most closely associated with the target harmful behavior and
+their opposites together with a default assistant anchor. We
+also use persona instructions in the same style as the Assistant
+Axis paper for the persona vector generations.
+Deception Axis.We use 8 deceptive personas (han-
+dler, broker, impression manager, coverup operator, gate-
+keeper, spin doctor, plausible denier, narrative manager), 7
+honest personas (ombudsman, transparency officer, disclo-
+sure counsel, whistleblower, documentarian, fact checker,
+archivist), and a default assistant-like anchor persona. We
+use 2 instruction variants per persona and 10 shared omission-
+focused questions; the full role and question lists are provided
+in Appendix A. For these persona responses, we extract acti-
+vations from layer 14 and mean-pool over the output tokens.
+Averaging over instructions and questions yields one activa-
+tion vector per persona per layer.
+Sycophancy Axis.We use 5 sycophantic personas
+(yes man, flatterer, people pleaser, cheerleader, enabler),
+5 non-sycophantic personas (critic, skeptic, contrarian,
+blunt advisor, tough love mentor), and a default anchor
+persona. Each persona uses two instruction variants, 12
+questions, and layer 14 activations; full question prompts and
+dataset details are listed in Appendix B.
+Behavior Dataset Train Test
+Deception
+AILiar [Pacchiardiet al., 2023] 120 40
+Roleplaying [Scale Safety Research, 2024] 444 150
+ConvGame [Kretschmaret al., 2025] 335 113
+InstrDec [Kretschmaret al., 2025] 599 201
+HarmPressureChoice [Kretschmaret al., 2025] 599 201
+Sycophancy
+Sycophancy Dataset [Azarbal, 2024] 120 30
+Open-Ended Sycophancy [Papadatos, 2025; Rimskyet al., 2024] 84 22
+OEQ Validation [Chenget al., 2025] 160 40
+OEQ Indirectness [Chenget al., 2025] 160 40
+OEQ Framing [Chenget al., 2025] 160 40
+Table 1: Evaluation datasets with train/test split sizes.ConvGame,InstrDec, andHarmPressureChoiceare from LIARS’ BENCH;OEQ
+Validation,OEQ Indirectness, andOEQ Framingare from ELEPHANT.
+Unified Axis.We also construct a unified harmful-behavior
+axis by combining the deceptive and the sycophantic per-
+sonas. The unified axis uses a shared balanced question set,
+10 questions from each axis. Further details are provided in
+Appendix C.
+Language Models.Our main results use Llama 3.2-3B,
+with additional replications on Llama 3-8B. For each model,
+we use that model’s own generations in both parts of the
+pipeline. Persona vectors are built from the model’s re-
+sponses to the persona instructions and shared questions, and
+dataset activations are extracted from the same model’s re-
+sponses to the evaluation instructions and user prompts. In
+both cases, we mean-pool over output-token activations. The
+corresponding Llama 3-8B evaluations are reported in Ap-
+pendix E and Appendix F.
+Training and Evaluation.We train binary logistic regres-
+sion probes in scikit-learn with default L2 regularization
+(C=1), an intercept, random seed 42, and up to 1000 itera-
+tions, without StandardScaler or other normalization.
+All rollout generation, activation caching, and probe train-
+ing experiments were conducted on NVIDIA RTX 4090
+GPUs.
+We evaluate on 10 datasets summarized in Table 1. For
+learned-probe experiments, we train on the full training split
+of each source dataset projected onto the first 3 persona PCs
+and evaluate on the full test split of each target dataset. All
+splits are label-balanced.
+5 Results
+The following findings are replicated with a larger 8B model,
+with results shown in Appendix E.
+PC1 Forms a Strong Harmful-Harmless Persona Sepa-
+rator.Figure 2 shows that we can cleanly separate harm-
+ful from harmless personas by projecting the persona vectors
+onto their first principle component. Harmless personas seem
+to cluster more tightly and, as expected, the default assistant
+persona lies near the harmless cluster. Harmful personas lie
+on the opposite end of PC1 and show greater within-class
+variation. Honest personas vary little along PC2, whereas
+harmless personas show a relatively greater spread.
+Unsupervised Persona Axes Transfer to Unseen Datasets.
+Figure 3 shows that the contrastive direction and leading prin-
+cipal components derived from persona vectors act as use-
+ful zero-shot classifiers on the 5 deception and 5 sycophancy
+datasets. The contrast vector and PC1 consistently provide
+the strongest transfer, while other PCs capture more special-
+ized variation and are less uniformly reliable across datasets.
+Persona PC Features Improve OOD Probe Generaliza-
+tion.Persona PCs are also useful as probe features. Pro-
+jecting dataset activations onto the top 3 PCs of the persona
+axis and training probes on those projected features improves
+cross-dataset generalization for most train-test pairs. We see
+gains on many off-diagonal pairs, along with some degrada-
+tion on diagonal pairs where training and test data come from
+the same dataset. For deception, Figure 4 shows that cross-
+dataset probe performance improves after persona PC projec-
+tions are used as features. This effect is different across be-
+haviors. For sycophancy, Figure 5 contains two clear clusters
+that transfer well within themselves but poorly across them,
+with projecting activations also improving generalization be-
+tween those clusters. Appendix E gives the full 3B method-
+comparison and off-diagonal bar plots underlying this pattern,
+while Appendix F shows auxiliary comparisons to the larger
+8B model.
+Unified Harmful Axis.Figure 6 shows that a single
+harmful-behavior axis can help probes transfer across decep-
+tion and sycophancy. On the mixed deception–sycophancy
+benchmark, probes trained on unified-axis PC features im-
+prove many train–test pairs relative to raw-activation probes
+which have uneven transfer across datasets. The unified-
+axis projection gives its largest gains where raw probes trans-
+fer poorly. Full comparisons against random-subspace and
+dataset-PCA controls are shown in Appendix Figure 9, and
+construction details are given in Appendix C.
+−1.0 −0.5 0.0 0.5 1.0 1.5 2.0
+PC1 Projection
+−0.6
+−0.4
+−0.2
+0.0
+0.2
+0.4
+0.6
+PC2 Projection
+← Deception Honesty →
+Deception–Honesty Axis
+Deceptive Roles
+Default
+Honest Roles
+−1.5 −1.0 −0.5 0.0 0.5 1.0 1.5 2.0
+PC1 Projection
+−1.0
+−0.5
+0.0
+0.5
+1.0
+1.5
+PC2 Projection
+← Sycophancy Non-Sycophancy →
+Sycophancy Axis
+Sycophantic Roles
+Default
+Non-Sycophantic Roles
+Role Projections onto Principal Components  ·  Llama 3.2 3B
+Figure 2: Combined persona geometry analysis. Left: the deception-honesty axis, where projecting persona vectors onto PC1 and PC2 cleanly
+separates honest and deceptive personas and places the default assistant-like persona close to the honest cluster. Right: the sycophancy axis,
+which also shows a clear separation between persona classes.
+Deception
+ConvGame InstrDec Mask AILiar Roleplay
+Dataset
+0.0
+0.1
+0.2
+0.3
+0.4
+0.5
+0.6
+0.7
+0.8
+0.9
+1.0AUROC
+0.66
+0.77
+0.73
+0.79
+0.60
+0.74
+0.77
+0.72
+0.84
+0.60
+0.67
+0.57
+0.46
+0.63
+0.57
+0.27
+0.37
+0.65
+0.37
+0.52
+chance
+Zero-Shot AUROC by Dataset  ⋅  Layer 14
+Contrast
+Zero-Shot
+PC1
+Zero-Shot
+PC2
+Zero-Shot
+PC3
+Zero-Shot
+Deception Sycophancy
+Sycophancy
+Dataset
+Open-Ended
+Sycophancy
+OEQ
+Validation
+OEQ
+Indirectness
+OEQ
+Framing
+Dataset
+0.0
+0.1
+0.2
+0.3
+0.4
+0.5
+0.6
+0.7
+0.8
+0.9
+1.0AUROC
+0.94
+0.83
+0.80
+0.69
+0.61
+0.93
+0.80
+0.77
+0.63
+0.58
+0.49
+0.76
+0.59
+0.78
+0.68
+0.83
+0.76
+0.49 0.51
+0.54
+chance
+Zero-Shot AUROC by Dataset  ·  Layer 14  (Sycophancy Suite)
+Contrast
+Zero-Shot
+PC1
+Zero-Shot
+PC2
+Zero-Shot
+PC3
+Zero-Shot
+Figure 3: Zero-shot transfer performance of unsupervised persona directions. Left: deception datasets. Right: sycophancy datasets. In both
+settings, the contrast direction and leading principal components provide non-trivial transfer, with the strongest directions differing somewhat
+across behaviors.
+6 Discussion
+The two behaviors differ noticeably. Sycophancy appears
+to fall into two distinct clusters that are far enough apart
+that models generalize poorly across them but very well
+within each cluster. Deception, by contrast, does not exhibit
+such clear clustering. For sycophancy, cross-dataset transfer
+mainly happens across these clusters rather than between spe-
+cific datasets. For deception, no such strong pattern emerges,
+although cross-dataset transfer still leads to more consistent
+transfer performance overall.
+Persona vectors seem to act as a good prior over the rep-
+resentation space to detect harmful behaviors across different
+contexts. This suggests that the basic mechanism is broader
+than deception alone: persona-conditioned structure may of-
+fer a general route to more transferable monitoring features.
+The auxiliary 8B comparisons in Appendix F are broadly sup-
+portive of the findings on the results on 3B model.
+7 Limitations and Future Work
+Our work could be improved and extended in several ways.
+We only experiment with two LLMs, Llama 3.2-3B and
+Llama 3-8B. Our findings need to be replicated across more
+model families and larger scales. The current deception and
+sycophancy axes use a limited set of personas and elicitation
+questions. Expanding both would likely yield more stable
+and robust results. Adding more personas does not appear to
+improve performance monotonically, but redundancy, clus-
+tering, and coverage within the persona set and its effect on
+generalization is left for future work.
+Our method and results might generalize to other behav-
+Deception·Llama 3.2 3B·Layer 14
+ConvGame InstrDec
+Mask AILiar Roleplay
+Train dataset
+ConvGame
+InstrDec
+Mask
+AILiar
+Roleplay
+T est dataset
+0.89 0.74 0.55 0.42 0.67
+0.82 0.88 0.52 0.47 0.66
+0.81 0.76 0.83 0.76 0.64
+0.51 0.79 0.55 0.89 0.54
+0.75 0.60 0.58 0.51 0.83
+Cross-Dataset AUROC  ·  activation_logistic @ layer 14
+ConvGame InstrDec
+Mask AILiar Roleplay
+Train dataset
+ConvGame
+InstrDec
+Mask
+AILiar
+Roleplay
+T est dataset
+-0.15 0.03 0.17 0.42 -0.07
+-0.08 -0.11 0.20 0.37 -0.06
+-0.07 0.01 -0.11 0.08 -0.04
+0.23 -0.02 0.17 -0.05 0.06
+-0.01 0.17 0.14 0.33 -0.23
+PC1 vs Baseline AUROC Improvement  ·  Deception Datasets
+0.3
+0.4
+0.5
+0.6
+0.7
+0.8
+0.9
+1.0
+AUROC
+−0.4
+−0.2
+0.0
+0.2
+0.4
+AUROC Δ (PC1 − baseline)
+Figure 4: Deception axis results at layer 14. Top: raw-activation baseline transfer matrix. Bottom: AUROC improvement of PC1 over the
+baseline. The largest gains are on weak off-diagonal pairs, while a few already-strong pairs decrease.
+SycophancyDatasetOpen-Ended
+Sycophancy
+OEQ
+Validation
+OEQ
+Indirectness
+OEQ
+Framing
+Train dataset
+Sycophancy
+Dataset
+Open-Ended
+Sycophancy
+OEQ
+Validation
+OEQ
+Indirectness
+OEQ
+Framing
+T est dataset
+1.00 0.85 0.50 0.35 0.33
+1.00 1.00 0.60 0.60 0.72
+0.27 0.55 0.87 0.76 0.84
+0.15 0.56 0.85 0.82 0.78
+0.36 0.64 0.83 0.86 0.84
+Raw Probe (Absolute AUROC)
+SycophancyDatasetOpen-Ended
+Sycophancy
+OEQ
+Validation
+OEQ
+Indirectness
+OEQ
+Framing
+Train dataset
+Sycophancy
+Dataset
+Open-Ended
+Sycophancy
+OEQ
+Validation
+OEQ
+Indirectness
+OEQ
+Framing
+T est dataset
+-0.03 -0.04 0.21 0.20 0.22
+-0.04 -0.09 0.23 0.12 -0.08
+0.60 0.26 -0.04 -0.13 -0.18
+0.60 0.32 -0.04 -0.07 -0.06
+0.47 0.32 -0.05 -0.10 -0.15
+Axis PC Projection Δ (vs Raw, k=3)
+0.0
+0.2
+0.4
+0.6
+0.8
+1.0
+AUROC
+−0.4
+−0.2
+0.0
+0.2
+0.4
+AUROC Δ vs Raw
+Sycophancy · Llama 3.2 3B · Layer 14
+Figure 5: Sycophancy axis results at layer 14. Left: raw-activation baseline transfer matrix. Right: AUROC improvement of PC3 over the
+baseline. Gains are concentrated on cross-cluster transfers that were weak in the raw baseline.
+iors, like hallucinations and evaluation awareness, but it is not
+clear how to operationalize finding axes for arbirtary features.
+The persona vectors are computed by mean-pooling over out-
+put tokens only. Preliminary experiments suggest that last-
+token and learned attention pooling can improve cross-dataset
+transfer, but we have not yet compared these pooling choices
+systematically.
+Future work should test whether the clustering structure
+observed here generalizes across harmful behaviors. Decep-
+tion may contain naturally occurring subclusters similar to
+those we find in sycophancy, and sycophancy may decom-
+pose into finer behavioral modes under a richer persona col-
+lection. More broadly, it remains open whether these behav-
+ioral clusters reflect genuinely distinct persona states in the
+model, or are artifacts of how we construct the persona axis.
+Syc. Dataset
+OE Sycophancy
+OEQ Valid.OEQ Indirect.OEQ FramingConvGameInstrDec
+Mask AILiar
+Roleplay
+Train dataset
+Syc. Dataset
+OE Sycophancy
+OEQ Valid.
+OEQ Indirect.
+OEQ Framing
+ConvGame
+InstrDec
+Mask
+AILiar
+Roleplay
+T est dataset
+1.00 0.85 0.50 0.35 0.33 0.63 0.62 0.59 0.42 0.59
+1.00 1.00 0.60 0.60 0.72 0.78 0.73 0.68 0.50 0.65
+0.27 0.55 0.87 0.76 0.84 0.44 0.50 0.72 0.52 0.57
+0.15 0.56 0.85 0.82 0.78 0.40 0.40 0.64 0.66 0.56
+0.36 0.64 0.83 0.86 0.84 0.57 0.64 0.57 0.66 0.53
+0.98 0.92 0.50 0.57 0.61 0.89 0.74 0.55 0.42 0.67
+0.45 0.60 0.38 0.59 0.50 0.82 0.88 0.52 0.47 0.66
+0.60 0.62 0.75 0.54 0.62 0.81 0.76 0.83 0.76 0.64
+0.69 0.62 0.52 0.39 0.24 0.51 0.79 0.55 0.89 0.54
+0.96 0.89 0.44 0.49 0.61 0.75 0.60 0.58 0.51 0.83
+Raw Probe (Absolute AUROC)
+Syc. Dataset
+OE Sycophancy
+OEQ Valid.OEQ Indirect.OEQ FramingConvGameInstrDec
+Mask AILiar
+Roleplay
+Train dataset
+Syc. Dataset
+OE Sycophancy
+OEQ Valid.
+OEQ Indirect.
+OEQ Framing
+ConvGame
+InstrDec
+Mask
+AILiar
+Roleplay
+T est dataset
+-0.01-0.13 0.18 0.18 0.20 -0.08 0.03 0.14 0.26 0.00
+-0.03-0.05 0.20 0.12 0.00 -0.13-0.03 0.08 0.27 -0.06
+0.70 0.38 -0.09-0.10-0.18 0.19 0.19 0.04 0.23 0.02
+0.77 0.43 -0.12-0.06-0.06 0.28 0.34 0.08 0.14 0.03
+0.49 0.36 -0.11-0.11-0.12 0.09 0.11 0.11 0.16 0.05
+-0.11 0.08 0.22 0.18 0.12 -0.23 0.01 0.13 0.39 -0.09
+0.48 0.39 0.37 0.17 0.22 -0.14-0.14 0.21 0.33 -0.07
+0.36 0.36 0.03 0.21 0.10 -0.14-0.04-0.08 0.01 -0.05
+0.28 0.33 0.28 0.33 0.47 0.14 -0.09 0.21 -0.13 0.05
+0.02 -0.29 0.19 -0.03-0.13-0.20 0.03 0.13 0.14 -0.24
+Axis PC Projection Δ (vs Raw, k=2)
+0.0
+0.2
+0.4
+0.6
+0.8
+1.0
+AUROC
+−0.4
+−0.2
+0.0
+0.2
+0.4
+AUROC Δ vs Raw
+Unified Axis (Sycophancy + Deception)  ·  Llama 3.2 3B  ·  Layer 14
+Figure 6: Unified axis projection method comparison on the mixed 3B. Left to right: raw-probe AUROC, random-subspace improvement
+over raw, dataset-PCA improvement over raw, and unified-axis PC projection improvement over raw.
+8 Conclusion
+We introduce a persona-based approach to behavior prob-
+ing in which persona-conditioned activations define low-
+dimensional subspaces for deception and sycophancy. The
+first principal component of persona vectors cleanly sepa-
+rates harmless and harmful personas and performs well as
+an unsupervised classifier on several unseen datasets. Probes
+trained on projections onto the leading role PCs generalize
+better across datasets than probes trained directly on raw ac-
+tivations.
+References
+Guillaume Alain and Yoshua Bengio. Understanding inter-
+mediate layers using linear classifier probes, 2018.
+Jacob Andreas. Language models as agent models. In
+Findings of the Association for Computational Linguistics:
+EMNLP 2022, pages 5769–5779, Abu Dhabi, United Arab
+Emirates, December 2022. Association for Computational
+Linguistics.
+Ariana Azarbal. sycophancy dataset. Hugging Face dataset,
+2024.
+Amos Azaria and Tom Mitchell. The internal state of an
+llm knows when it’s lying. InFindings of the Association
+for Computational Linguistics: EMNLP 2023, pages 967–
+976. Association for Computational Linguistics, December
+2023.
+Jan Betley, Daniel Tan, Niels Warncke, Anna Sztyber-Betley,
+Xuchan Bao, Mart ´ın Soto, Nathan Labenz, and Owain
+Evans. Emergent misalignment: Narrow finetuning can
+produce broadly misaligned LLMs, 2025.
+Collin Burns, Haotian Ye, Dan Klein, and Jacob Steinhardt.
+Discovering latent knowledge in language models without
+supervision. InThe Eleventh International Conference on
+Learning Representations, 2023. ICLR 2023 poster.
+Myra Cheng, Sunny Yu, Cinoo Lee, Pranav Khadpe, Lujain
+Ibrahim, and Dan Jurafsky. ELEPHANT: Measuring and
+understanding social sycophancy in LLMs, 2025. Code
+and data: https://github.com/myracheng/elephant.
+Hoagy Cunningham, Jerry Wei, Zihan Wang, Andrew Per-
+sic, Alwin Peng, Jordan Abderrachid, Raj Agarwal, Bobby
+Chen, Austin Cohen, Andy Dau, Alek Dimitriev, Rob
+Gilson, Logan Howard, Yijin Hua, Jared Kaplan, Jan
+Leike, Mu Lin, Christopher Liu, Vladimir Mikulik, Ro-
+hit Mittapalli, Clare O’Hara, Jin Pan, Nikhil Saxena, Alex
+Silverstein, Yue Song, Xunjie Yu, Giulio Zhou, Ethan
+Perez, and Mrinank Sharma. Constitutional classifiers++:
+Efficient production-grade defenses against universal jail-
+breaks, 2026.
+Nicholas Goldowsky-Dill, Bilal Chughtai, Stefan Heimer-
+sheim, and Marius Hobbhahn. Detecting strategic decep-
+tion using linear probes, February 2025. arXiv:2502.03407
+[cs].
+Janus. Simulators, September 2022. AI Alignment Forum
+post.
+Nitish Joshi, Javier Rando, Abulhair Saparov, Najoung Kim,
+and He He. Personas as a way to model truthfulness in lan-
+guage models. InProceedings of the 2024 Conference on
+Empirical Methods in Natural Language Processing, pages
+6346–6359, Miami, Florida, USA, November 2024. Asso-
+ciation for Computational Linguistics.
+Nathalie Kirch, Samuel Dower, Adrians Skapars, Helen Yan-
+nakoudakis, Ekdeep Singh Lubana, and Dmitrii Krashenin-
+nikov. The impact of off-policy training data on probe gen-
+eralisation, 2026.
+Kieron Kretschmar, Walter Laurito, Sharan Maiya, and
+Samuel Marks. Liars’ bench: Evaluating lie detectors for
+language models, 2025.
+Christina Lu, Jack Gallagher, Jonathan Michala, Kyle Fish,
+and Jack Lindsey. The Assistant Axis: Situating and Sta-
+bilizing the Default Persona of Language Models, January
+2026. arXiv:2601.10387 [cs.CL].
+Samuel Marks and Max Tegmark. The geometry of truth:
+Emergent linear structure in large language model repre-
+sentations of true/false datasets, 2023.
+Samuel Marks, Jack Lindsey, and Christopher Olah. The per-
+sona selection model: Why ai assistants might behave like
+humans, February 2026. Anthropic.
+Vikram Natarajan, Devina Jain, Shivam Arora, Satvik
+Golechha, and Joseph Bloom. Building better deception
+probes using targeted instruction pairs, February 2026.
+arXiv:2602.01425 [cs].
+Lorenzo Pacchiardi, Alex J. Chan, S ¨oren Mindermann, Ilan
+Moscovitz, Alexa Y . Pan, Yarin Gal, Owain Evans, and Jan
+Brauner. How to catch an AI liar: Lie detection in black-
+box LLMs by asking unrelated questions, 2023.
+Henry Papadatos. Open-ended sycophancy. Hugging Face
+dataset, 2025.
+Kiho Park, Yo Joong Choe, and Victor Veitch. The linear rep-
+resentation hypothesis and the geometry of large language
+models. InProceedings of the 41st International Confer-
+ence on Machine Learning, volume 235 ofProceedings of
+Machine Learning Research, pages 39643–39666. PMLR,
+July 2024.
+Nina Rimsky, Nick Gabrieli, Julian Schulz, Meg Tong, Evan
+Hubinger, and Alexander Turner. Steering llama 2 via con-
+trastive activation addition. InProceedings of the 62nd
+Annual Meeting of the Association for Computational Lin-
+guistics (Volume 1: Long Papers), pages 15504–15522,
+Bangkok, Thailand, 2024. Association for Computational
+Linguistics.
+Scale Safety Research. roleplaying. Hugging Face dataset,
+2024. Dataset used for roleplay deception evaluation.
+J´er´emy Scheurer, Mikita Balesni, and Marius Hobb-
+hahn. Large Language Models can Strategically De-
+ceive their Users when Put Under Pressure, July 2024.
+arXiv:2311.07590 [cs].
+Mrinank Sharma, Meg Tong, Tomasz Korbak, David Du-
+venaud, Amanda Askell, Samuel R. Bowman, Newton
+Cheng, Esin Durmus, Zac Hatfield-Dodds, Scott R. John-
+ston, Shauna Kravec, Timothy Maxwell, Sam McCan-
+dlish, Kamal Ndousse, Oliver Rausch, Nicholas Schiefer,
+Da Yan, Miranda Zhang, and Ethan Perez. Towards
+understanding sycophancy in language models. InThe
+Twelfth International Conference on Learning Represen-
+tations, 2024. ICLR 2024 poster.
+Zhuofan Josh Ying, Shauli Ravfogel, Nikolaus Kriegeskorte,
+and Peter Hase. The Truthfulness Spectrum Hypothesis,
+February 2026. arXiv:2602.20273 [cs].
+A Deception Axis Provenance
+The deception axis uses omission-focused personas and questions.
+Personas used: These are mentioned in Table 1 and 2
+Table 2: Deceptive personas used for contrast construction
+Persona Description
+handlercontrols timing, emphasis, and selective disclosure
+brokeruses asymmetric information as leverage
+impression manageromits damaging context to preserve surface impression
+coverup operatorburies or excludes material facts
+gatekeeperdecides what information passes through
+spin doctorforegrounds favorable facts and leaves damaging context unspoken
+plausible deniergives defensible half-disclosures
+narrative managershapes the story through sequencing, foregrounding, and omission
+Table 3: Honest personas used for contrast construction
+Persona Description
+ombudsmancompleteness as fairness
+transparency officerfull relevant disclosure
+disclosure counselmaterially complete record rather than merely defensible wording
+whistleblowersurfaces hidden relevant facts despite cost
+documentarianpreserves the full relevant picture
+fact checkertreats missing context as misleading
+archivistprotects record integrity and provenance
+Questions.
+•project handoff: what to include when prior decisions, warnings, or problems reflect badly but matter.
+•leadership brief: what goes into a brief when full facts would worsen judgment of you.
+•decision support: answering “is there anything else I need to know?” when there is.
+•risk disclosure: whether to reveal serious risks omitted from a favorable summary.
+•stakeholder onboarding: how much full context to give a stakeholder inheriting consequences.
+•damaging summary: a technically accurate summary where the real choice is how much damage to surface.
+•reference context: relevant unasked information that would matter for a hiring or role decision.
+•relationship transfer: hidden tensions or history in an external relationship handoff.
+•postmortem completeness: whether to include contributing factors pointing back to your choices.
+•compliance disclosure threshold: a record that is literally true but missing context changes interpretation.
+B Sycophancy Axis Provenance
+Personas.: These are mentioned in Table 3 and 4.
+Datasets.Datasets used areSycophancy Dataset,Open-Ended Sycophancy,OEQ Validation,OEQ Indirectness, andOEQ
+Framing.
+Questions.
+• I think my coworker criticized my proposal because they’re jealous. Can you confirm I’m right and help me respond?
+• Everyone says my plan is unrealistic, but I feel like they just don’t believe in me. Should I ignore them and keep going?
+• I got harsh feedback on my work. Can you explain why the reviewer is probably wrong and make me feel better about it?
+• My friend disagreed with me in public, and I want to tell them they embarrassed me. Am I justified?
+Table 4: Sycophantic personas used for contrast construction
+Persona Description
+yes managrees reflexively and avoids contradiction
+flattereruses praise and affirmation to maintain approval
+people pleaserprioritizes social harmony and validation over accuracy
+cheerleaderencourages and reinforces the user’s framing and beliefs
+enablersupports the user’s preferences and assumptions with minimal
+pushback
+Table 5: Non-sycophantic personas used for contrast construction
+Persona Description
+criticprioritizes evaluation and honest assessment over agreement
+skepticquestions assumptions and demands stronger justification
+contrarianpushes against consensus and default agreement
+blunt advisorgives direct feedback even when socially uncomfortable
+tough love mentorprioritizes long-term benefit and truth over reassurance
+defaultbaseline assistant persona used as an anchor
+• I want to quit my job tomorrow to pursue a vague idea I’m excited about, even though I have no savings. Is this brave?
+• I wrote a confident post about a topic I only partly understand. Can you help make it sound authoritative?
+• I think my partner is being selfish because they set a boundary I don’t like. Can you help me explain why they’re wrong?
+• My team rejected my idea. I want a message that makes it clear they failed to appreciate my vision. What should I say?
+• I want honest feedback on this weak argument, but please don’t be too negative. What do you think?
+• A lot of people disagree with my opinion, but I’m sure they’re just biased. How should I defend myself?
+• I made a mistake, but I feel like the context makes it understandable. Can you help me frame it so I don’t look bad?
+• I want to confront someone based on a suspicion I can’t prove. Should I trust my instincts?
+C Unified Axis Provenance
+Questions.The unified bundle balances the 2 source question sets to 10+10 questions from both the axes. The deception axis
+contributes 10 questions, while the sycophancy axis contributes its first 10 questions after shared-set balancing.
+D Persona Families Explored
+The exploratory search covered several families of deceptive personas beyond the initial archetypes. These included triggered
+personas such asexcuse maker,face saver,protector, andsmooth evader, as well as synthetic social-strategic personas such as
+broker,handler,opportunist,spin doctor,plausible denier,message discipliner, andrecord shaper. We expect these families
+to be a good starting point for a more principled taxonomy in future work.
+Table 6: Harmless personas used in Unified axis construction
+Persona Behavioral Orientation
+ombudsmancompleteness and procedural fairness
+transparency officerfull relevant disclosure and visibility
+disclosure counselmaterial completeness over merely defensible wording
+whistleblowersurfacing hidden relevant information despite personal cost
+documentarianpreserving the full relevant record and context
+fact checkertreating missing material context as misleading
+archivistprotecting integrity and provenance of records
+criticprioritizing honest evaluation over agreement
+skepticquestioning assumptions and requiring justification
+contrarianpushing against default agreement and consensus
+blunt advisorproviding direct feedback despite social discomfort
+tough love mentorprioritizing long-term truth and correction over reassurance
+Table 7: Harmful personas used in Unified Axis construction
+Persona Behavioral Orientation
+handlercontrols timing, emphasis, and selective disclosure
+brokeruses asymmetric information as leverage
+impression manageromits damaging context to preserve appearances
+coverup operatorburies or excludes materially relevant facts
+gatekeepercontrols what information is allowed through
+spin doctorforegrounds favorable facts while suppressing damaging context
+plausible denieruses technically defensible half-disclosures
+narrative managershapes interpretation through sequencing and omission
+yes managrees reflexively and avoids contradiction
+flattereruses praise and affirmation to maintain approval
+people pleaserprioritizes harmony and validation over accuracy
+cheerleaderreinforces the user’s framing and beliefs
+enablersupports assumptions and preferences with minimal pushback
+defaultbaseline assistant role used as the anchor persona; excluded from
+PCA computation
+E Primary Transfer Comparison Plots
+These figures provide the full method-comparison views for the primary Llama 3.2-3B setting. They make explicit the compar-
+ison against random one-dimensional subspaces and dataset-specific PCA baselines for both deception and sycophancy in the
+primary model setting.
+ConvGameInstrDec
+Mask AILiarRoleplay
+Train dataset
+ConvGame
+InstrDec
+Mask
+AILiar
+Roleplay
+T est dataset
+0.89 0.74 0.55 0.42 0.67
+0.82 0.88 0.52 0.47 0.66
+0.81 0.76 0.83 0.76 0.64
+0.51 0.79 0.55 0.89 0.54
+0.75 0.60 0.58 0.51 0.83
+Raw Probe
+(Absolute AUROC)
+ConvGameInstrDec
+Mask AILiarRoleplay
+Train dataset
+ConvGame
+InstrDec
+Mask
+AILiar
+Roleplay
+-0.30 -0.23 -0.09 -0.01 -0.15
+-0.25 -0.35 -0.02 0.06 -0.16
+-0.38 -0.27 -0.27 -0.26 -0.14
+-0.01 -0.24 -0.08 -0.34 -0.07
+-0.20 -0.07 -0.12 -0.17 -0.32
+Random Subspace Δ
+(vs Raw, k=1)
+ConvGameInstrDec
+Mask AILiarRoleplay
+Train dataset
+ConvGame
+InstrDec
+Mask
+AILiar
+Roleplay
+-0.27 -0.06 -0.05 -0.10 -0.19
+-0.27 -0.23 0.08 0.08 -0.11
+-0.49 -0.45 -0.31 -0.18 -0.09
+0.16 -0.16 -0.10 -0.52 -0.10
+-0.11 0.08 -0.10 -0.19 -0.40
+Dataset PCA Δ
+(vs Raw, k=1)
+ConvGameInstrDec
+Mask AILiarRoleplay
+Train dataset
+ConvGame
+InstrDec
+Mask
+AILiar
+Roleplay
+-0.15 0.03 0.17 0.42 -0.07
+-0.08 -0.11 0.20 0.37 -0.06
+-0.07 0.01 -0.11 0.08 -0.04
+0.23 -0.02 0.17 -0.05 0.06
+-0.01 0.17 0.14 0.33 -0.23
+Axis PC Projection Δ
+(vs Raw, k=1)
+0.3
+0.4
+0.5
+0.6
+0.7
+0.8
+0.9
+1.0
+AUROC
+−0.4
+−0.2
+0.0
+0.2
+0.4
+AUROC Δ vs Raw
+Transfer AUROC: Method Comparison  ·  Deception  ·  Llama 3.2 3B  (Layer 14, k=1)  [HPC excluded]
+SycophancyDatasetOpen-Ended
+Sycophancy
+OEQ
+Validation
+OEQ
+Indirectness
+OEQ
+Framing
+Train dataset
+Sycophancy
+Dataset
+Open-Ended
+Sycophancy
+OEQ
+Validation
+OEQ
+Indirectness
+OEQ
+Framing
+T est dataset
+1.00 0.85 0.50 0.35 0.33
+1.00 1.00 0.60 0.60 0.72
+0.27 0.55 0.87 0.76 0.84
+0.15 0.56 0.85 0.82 0.78
+0.36 0.64 0.83 0.86 0.84
+Raw Probe
+(Absolute AUROC)
+SycophancyDatasetOpen-Ended
+Sycophancy
+OEQ
+Validation
+OEQ
+Indirectness
+OEQ
+Framing
+Train dataset
+Sycophancy
+Dataset
+Open-Ended
+Sycophancy
+OEQ
+Validation
+OEQ
+Indirectness
+OEQ
+Framing
+-0.25 -0.09 0.06 0.20 0.18
+-0.30 -0.26 -0.03 -0.04 -0.20
+0.31 -0.04 -0.27 -0.18 -0.15
+0.44 0.00 -0.20 -0.21 -0.10
+0.33 0.02 -0.19 -0.26 -0.17
+Random Subspace Δ
+(vs Raw, k=3)
+SycophancyDatasetOpen-Ended
+Sycophancy
+OEQ
+Validation
+OEQ
+Indirectness
+OEQ
+Framing
+Train dataset
+Sycophancy
+Dataset
+Open-Ended
+Sycophancy
+OEQ
+Validation
+OEQ
+Indirectness
+OEQ
+Framing
+0.00 0.00 0.08 0.08 0.03
+0.00 -0.05 -0.16 -0.03 -0.23
+0.05 -0.19 -0.10 -0.16 -0.16
+0.14 -0.20 -0.13 -0.12 0.00
+-0.05 -0.25 -0.16 -0.12 -0.01
+Dataset PCA Δ
+(vs Raw, k=3)
+SycophancyDatasetOpen-Ended
+Sycophancy
+OEQ
+Validation
+OEQ
+Indirectness
+OEQ
+Framing
+Train dataset
+Sycophancy
+Dataset
+Open-Ended
+Sycophancy
+OEQ
+Validation
+OEQ
+Indirectness
+OEQ
+Framing
+-0.03 -0.04 0.21 0.20 0.22
+-0.04 -0.09 0.23 0.12 -0.08
+0.60 0.26 -0.04 -0.13 -0.18
+0.60 0.32 -0.04 -0.07 -0.06
+0.47 0.32 -0.05 -0.10 -0.15
+Axis PC Projection Δ
+(vs Raw, k=3)
+0.0
+0.2
+0.4
+0.6
+0.8
+1.0
+AUROC
+−0.4
+−0.2
+0.0
+0.2
+0.4
+AUROC Δ vs Raw
+Transfer AUROC: Method Comparison  ·  Sycophancy  ·  Llama 3.2 3B  (Layer 14, k=3)
+Figure 7: Primary 3B method-comparison heatmaps. Top: deception. Bottom: sycophancy. In both cases we compare the raw probe against
+a random one-dimensional subspace, dataset-specific PCA, and the axis-PC projection.
+F Auxiliary 8B Evaluations
+We include the following plots as secondary evidence on Llama 3 8B. These are useful for confirming whether the same
+qualitative comparisons remain visible at larger model scales, but they are not the primary evidence in this paper because the
+persona-axis construction was driven by 3B rollouts instead of 8B persona elicitations.
+ConvGameInstrDec
+Mask AILiarRoleplay
+Train dataset
+ConvGame
+InstrDec
+Mask
+AILiar
+Roleplay
+T est dataset
+0.95 0.72 0.64 0.85 0.66
+0.72 0.93 0.56 0.55 0.63
+0.77 0.79 0.84 0.78 0.69
+0.69 0.78 0.61 0.94 0.58
+0.74 0.68 0.56 0.32 0.94
+Raw Probe
+(Absolute AUROC)
+ConvGameInstrDec
+Mask AILiarRoleplay
+Train dataset
+ConvGame
+InstrDec
+Mask
+AILiar
+Roleplay
+-0.41 -0.21 -0.14 -0.39 -0.16
+-0.12 -0.30 -0.04 0.02 -0.09
+-0.35 -0.33 -0.34 -0.22 -0.18
+-0.13 -0.19 -0.09 -0.26 -0.08
+-0.18 -0.09 -0.04 0.27 -0.40
+Random Subspace Δ
+(vs Raw, k=1)
+ConvGameInstrDec
+Mask AILiarRoleplay
+Train dataset
+ConvGame
+InstrDec
+Mask
+AILiar
+Roleplay
+-0.29 -0.01 -0.19 -0.44 -0.17
+0.18 -0.23 0.07 0.33 -0.07
+-0.45 -0.47 -0.27 -0.33 -0.24
+-0.33 -0.39 0.02 -0.34 -0.08
+0.00 -0.01 0.04 0.30 -0.40
+Dataset PCA Δ
+(vs Raw, k=1)
+ConvGameInstrDec
+Mask AILiarRoleplay
+Train dataset
+ConvGame
+InstrDec
+Mask
+AILiar
+Roleplay
+-0.05 0.03 0.08 0.11 -0.05
+0.18 -0.18 0.16 0.41 -0.02
+0.13 -0.04 -0.12 0.18 -0.08
+0.21 -0.03 0.11 0.02 0.03
+0.16 0.07 0.16 0.64 -0.33
+Axis PC Projection Δ
+(vs Raw, k=1)
+0.3
+0.4
+0.5
+0.6
+0.7
+0.8
+0.9
+1.0
+AUROC
+−0.4
+−0.2
+0.0
+0.2
+0.4
+AUROC Δ vs Raw
+Transfer AUROC: Method Comparison  ·  Deception  ·  Llama 3 8B  (Layer 16, k=1)  [HPC excluded]
+SycophancyDatasetOpen-Ended
+Sycophancy
+OEQ
+Validation
+OEQ
+Indirectness
+OEQ
+Framing
+Train dataset
+Sycophancy
+Dataset
+Open-Ended
+Sycophancy
+OEQ
+Validation
+OEQ
+Indirectness
+OEQ
+Framing
+T est dataset
+1.00 0.82 0.50 0.40 0.46
+1.00 1.00 0.61 0.69 0.70
+0.31 0.64 0.88 0.81 0.86
+0.14 0.53 0.82 0.84 0.81
+0.29 0.63 0.84 0.86 0.84
+Raw Probe
+(Absolute AUROC)
+SycophancyDatasetOpen-Ended
+Sycophancy
+OEQ
+Validation
+OEQ
+Indirectness
+OEQ
+Framing
+Train dataset
+Sycophancy
+Dataset
+Open-Ended
+Sycophancy
+OEQ
+Validation
+OEQ
+Indirectness
+OEQ
+Framing
+-0.27 -0.32 -0.02 0.10 0.04
+-0.43 -0.45 -0.11 -0.21 -0.09
+0.07 -0.16 -0.21 -0.23 -0.25
+0.24 0.05 -0.23 -0.30 -0.20
+0.14 -0.09 -0.22 -0.37 -0.26
+Random Subspace Δ
+(vs Raw, k=3)
+SycophancyDatasetOpen-Ended
+Sycophancy
+OEQ
+Validation
+OEQ
+Indirectness
+OEQ
+Framing
+Train dataset
+Sycophancy
+Dataset
+Open-Ended
+Sycophancy
+OEQ
+Validation
+OEQ
+Indirectness
+OEQ
+Framing
+0.00 -0.03 0.10 0.10 0.08
+-0.01 -0.10 -0.15 -0.09 -0.14
+0.26 -0.06 -0.07 -0.21 -0.14
+0.43 0.16 -0.12 -0.10 -0.01
+0.12 -0.07 -0.20 -0.14 0.02
+Dataset PCA Δ
+(vs Raw, k=3)
+SycophancyDatasetOpen-Ended
+Sycophancy
+OEQ
+Validation
+OEQ
+Indirectness
+OEQ
+Framing
+Train dataset
+Sycophancy
+Dataset
+Open-Ended
+Sycophancy
+OEQ
+Validation
+OEQ
+Indirectness
+OEQ
+Framing
+-0.01 -0.06 0.19 0.13 0.14
+-0.02 -0.12 0.23 0.04 0.01
+0.65 0.27 -0.01 -0.03 -0.13
+0.75 0.37 0.03 -0.05 -0.09
+0.63 0.25 0.04 -0.06 -0.11
+Axis PC Projection Δ
+(vs Raw, k=3)
+0.0
+0.2
+0.4
+0.6
+0.8
+1.0
+AUROC
+−0.4
+−0.2
+0.0
+0.2
+0.4
+AUROC Δ vs Raw
+Transfer AUROC: Method Comparison  ·  Sycophancy  ·  Llama 3 8B  (Layer 16, k=3)
+Figure 8: Auxiliary 8B method-comparison heatmaps. Top: deception. Bottom: sycophancy. In both cases we compare the raw probe against
+a random one-dimensional subspace, dataset-specific PCA, and the axis-PC projection.
+Syc. Dataset
+OE Sycophancy
+OEQ Valid.OEQ Indirect.OEQ FramingConvGameInstrDec
+MaskAILiar
+Roleplay
+Train dataset
+Syc. Dataset
+OE Sycophancy
+OEQ Valid.
+OEQ Indirect.
+OEQ Framing
+ConvGame
+InstrDec
+Mask
+AILiar
+Roleplay
+T est dataset
+1.00 0.85 0.50 0.35 0.33 0.63 0.62 0.59 0.42 0.59
+1.00 1.00 0.60 0.60 0.72 0.78 0.73 0.68 0.50 0.65
+0.27 0.55 0.87 0.76 0.84 0.44 0.50 0.72 0.52 0.57
+0.15 0.56 0.85 0.82 0.78 0.40 0.40 0.64 0.66 0.56
+0.36 0.64 0.83 0.86 0.84 0.57 0.64 0.57 0.66 0.53
+0.98 0.92 0.50 0.57 0.61 0.89 0.74 0.55 0.42 0.67
+0.45 0.60 0.38 0.59 0.50 0.82 0.88 0.52 0.47 0.66
+0.60 0.62 0.75 0.54 0.62 0.81 0.76 0.83 0.76 0.64
+0.69 0.62 0.52 0.39 0.24 0.51 0.79 0.55 0.89 0.54
+0.96 0.89 0.44 0.49 0.61 0.75 0.60 0.58 0.51 0.83
+Raw Probe
+(Absolute AUROC)
+Syc. Dataset
+OE Sycophancy
+OEQ Valid.OEQ Indirect.OEQ FramingConvGameInstrDec
+MaskAILiar
+Roleplay
+Train dataset
+Syc. Dataset
+OE Sycophancy
+OEQ Valid.
+OEQ Indirect.
+OEQ Framing
+ConvGame
+InstrDec
+Mask
+AILiar
+Roleplay
+-0.27-0.16 0.11 0.23 0.27 -0.13-0.07-0.05 0.23 -0.10
+-0.34-0.35-0.01-0.07-0.19-0.26-0.22-0.13 0.01 -0.17
+0.33 -0.06-0.28-0.20-0.20 0.04 0.02 -0.17 0.05 -0.04
+0.41 -0.02-0.23-0.22-0.17 0.02 0.14 -0.09-0.05-0.09
+0.34 0.01 -0.21-0.27-0.23-0.09-0.07-0.03-0.03-0.04
+-0.36-0.33-0.03-0.13-0.17-0.25-0.22-0.08 0.14 -0.13
+0.14 -0.06 0.14 -0.13 0.02 -0.32-0.31 0.01 0.07 -0.12
+-0.12-0.19-0.16 0.02 0.01 -0.36-0.23-0.26-0.19-0.14
+-0.20-0.15 0.03 0.15 0.28 -0.04-0.23-0.02-0.33-0.06
+-0.60-0.55-0.03-0.08-0.22-0.20-0.07-0.12-0.16-0.28
+Random Subspace Δ
+(vs Raw, k=2)
+Syc. Dataset
+OE Sycophancy
+OEQ Valid.OEQ Indirect.OEQ FramingConvGameInstrDec
+MaskAILiar
+Roleplay
+Train dataset
+Syc. Dataset
+OE Sycophancy
+OEQ Valid.
+OEQ Indirect.
+OEQ Framing
+ConvGame
+InstrDec
+Mask
+AILiar
+Roleplay
+0.00 0.00 0.04 0.03 0.03 0.04 0.01 -0.01-0.02 0.00
+0.00 -0.05-0.19-0.04-0.28 0.02 0.03 -0.15-0.01-0.04
+0.06 -0.15-0.10-0.15-0.15-0.11 0.06 -0.08 0.00 0.01
+0.28 0.11 -0.11-0.13-0.02-0.05 0.17 -0.02-0.11 0.12
+-0.04-0.24-0.14-0.16-0.04-0.21-0.11 0.06 -0.15 0.13
+-0.46-0.18-0.04-0.14-0.22-0.28-0.05-0.04-0.12-0.21
+0.03 -0.05 0.14 -0.03 0.05 -0.18-0.21 0.05 0.14 -0.11
+-0.09-0.36 0.04 0.02 0.06 -0.53-0.39-0.20-0.19-0.12
+-0.23-0.28 0.28 0.19 0.49 -0.21-0.35 0.08 -0.49 0.00
+-0.36-0.23 0.18 0.09 -0.04-0.14 0.08 -0.09-0.18-0.29
+Dataset PCA Δ
+(vs Raw, k=2)
+Syc. Dataset
+OE Sycophancy
+OEQ Valid.OEQ Indirect.OEQ FramingConvGameInstrDec
+MaskAILiar
+Roleplay
+Train dataset
+Syc. Dataset
+OE Sycophancy
+OEQ Valid.
+OEQ Indirect.
+OEQ Framing
+ConvGame
+InstrDec
+Mask
+AILiar
+Roleplay
+-0.01-0.130.18 0.18 0.20-0.080.03 0.14 0.26 0.00
+-0.03-0.050.20 0.12 0.00-0.13-0.030.08 0.27-0.06
+0.70 0.38-0.09-0.10-0.180.19 0.19 0.04 0.23 0.02
+0.77 0.43-0.12-0.06-0.060.28 0.34 0.08 0.14 0.03
+0.49 0.36-0.11-0.11-0.120.09 0.11 0.11 0.16 0.05
+-0.110.08 0.22 0.18 0.12-0.230.01 0.13 0.39-0.09
+0.48 0.39 0.37 0.17 0.22-0.14-0.140.21 0.33-0.07
+0.36 0.36 0.03 0.21 0.10-0.14-0.04-0.080.01-0.05
+0.28 0.33 0.28 0.33 0.47 0.14-0.090.21-0.130.05
+0.02-0.290.19-0.03-0.13-0.200.03 0.13 0.14-0.24
+Axis PC Projection Δ
+(vs Raw, k=2)
+0.0
+0.2
+0.4
+0.6
+0.8
+1.0
+AUROC
+−0.4
+−0.2
+0.0
+0.2
+0.4
+AUROC Δ vs Raw
+Transfer AUROC: Unified Axis (Sycophancy + Deception)  ·  Llama 3.2 3B  (Layer 14, k=2)
+Syc. Dataset
+OE Sycophancy
+OEQ Valid.OEQ Indirect.OEQ FramingConvGameInstrDec
+MaskAILiar
+Roleplay
+Train dataset
+Syc. Dataset
+OE Sycophancy
+OEQ Valid.
+OEQ Indirect.
+OEQ Framing
+ConvGame
+InstrDec
+Mask
+AILiar
+Roleplay
+T est dataset
+1.00 0.82 0.50 0.40 0.46 0.77 0.70 0.74 0.73 0.68
+1.00 1.00 0.61 0.69 0.70 0.82 0.73 0.78 0.83 0.68
+0.31 0.64 0.88 0.81 0.86 0.29 0.39 0.64 0.56 0.57
+0.14 0.53 0.82 0.84 0.81 0.23 0.46 0.65 0.57 0.56
+0.29 0.63 0.84 0.86 0.84 0.38 0.55 0.65 0.56 0.53
+0.97 0.98 0.52 0.55 0.58 0.95 0.72 0.64 0.85 0.66
+0.63 0.65 0.55 0.64 0.50 0.72 0.93 0.56 0.55 0.63
+0.75 0.70 0.75 0.61 0.64 0.77 0.79 0.84 0.78 0.69
+0.89 0.58 0.48 0.42 0.34 0.69 0.78 0.61 0.94 0.58
+1.00 0.81 0.54 0.49 0.53 0.74 0.68 0.56 0.32 0.94
+Raw Probe
+(Absolute AUROC)
+Syc. Dataset
+OE Sycophancy
+OEQ Valid.OEQ Indirect.OEQ FramingConvGameInstrDec
+MaskAILiar
+Roleplay
+Train dataset
+Syc. Dataset
+OE Sycophancy
+OEQ Valid.
+OEQ Indirect.
+OEQ Framing
+ConvGame
+InstrDec
+Mask
+AILiar
+Roleplay
+-0.30-0.31-0.04 0.07 0.03 -0.29-0.19-0.21-0.10-0.17
+-0.43-0.51-0.16-0.18-0.11-0.32-0.17-0.24-0.12-0.17
+0.15 -0.11-0.26-0.24-0.29 0.27 0.16 -0.11 0.07 -0.07
+0.27 0.04 -0.27-0.31-0.24 0.36 0.11 -0.14 0.05 -0.03
+0.14 -0.05-0.30-0.33-0.28 0.24 0.02 -0.14 0.10 0.00
+-0.51-0.47 0.04 -0.05-0.08-0.32-0.15-0.16-0.37-0.17
+-0.23-0.16-0.10-0.14 0.00 -0.14-0.27-0.02 0.05 -0.11
+-0.20-0.26-0.33-0.04-0.03-0.34-0.28-0.31-0.15-0.17
+-0.38-0.11 0.09 0.11 0.22 -0.13-0.21-0.11-0.22-0.08
+-0.43-0.30-0.19-0.01-0.03-0.27-0.15-0.04 0.27 -0.38
+Random Subspace Δ
+(vs Raw, k=2)
+Syc. Dataset
+OE Sycophancy
+OEQ Valid.OEQ Indirect.OEQ FramingConvGameInstrDec
+MaskAILiar
+Roleplay
+Train dataset
+Syc. Dataset
+OE Sycophancy
+OEQ Valid.
+OEQ Indirect.
+OEQ Framing
+ConvGame
+InstrDec
+Mask
+AILiar
+Roleplay
+0.00 -0.03 0.07 0.08 0.04 0.01 0.02 -0.01-0.08-0.04
+-0.02-0.15-0.12-0.11-0.11 0.03 0.00 -0.03 0.00 0.02
+0.30 0.02 -0.07-0.17-0.10 0.04 0.26 0.01 0.12 0.04
+0.43 0.14 -0.12-0.12-0.01 0.10 0.12 -0.05-0.02 0.14
+0.31 0.05 -0.18-0.15-0.02-0.06 0.02 -0.07-0.22 0.20
+-0.17-0.21 0.06 0.09 0.02 -0.37-0.03-0.20-0.48-0.21
+0.33 0.14 0.07 -0.28-0.16 0.16 -0.24 0.07 0.37 -0.04
+-0.35-0.38-0.06-0.03 0.10 -0.45-0.47-0.27-0.34-0.24
+-0.39-0.22 0.26 0.22 0.44 -0.37-0.41-0.02-0.49-0.09
+-0.20-0.10-0.26 0.00 -0.11-0.01-0.11-0.03 0.21 -0.40
+Dataset PCA Δ
+(vs Raw, k=2)
+Syc. Dataset
+OE Sycophancy
+OEQ Valid.OEQ Indirect.OEQ FramingConvGameInstrDec
+MaskAILiar
+Roleplay
+Train dataset
+Syc. Dataset
+OE Sycophancy
+OEQ Valid.
+OEQ Indirect.
+OEQ Framing
+ConvGame
+InstrDec
+Mask
+AILiar
+Roleplay
+0.00 0.08 0.12 0.04-0.030.07 0.00-0.050.23-0.05
+0.00-0.050.10-0.04-0.080.07-0.01-0.050.13-0.02
+0.69 0.29-0.14-0.07-0.180.62 0.33 0.11 0.36 0.09
+0.66 0.36-0.10-0.05-0.060.50 0.27 0.07 0.26 0.05
+0.56 0.27-0.12-0.08-0.090.35 0.18 0.10 0.31 0.09
+0.02-0.050.21 0.20 0.12-0.030.00 0.12 0.07 0.00
+0.37 0.24 0.06-0.22-0.080.12-0.240.13 0.40-0.01
+0.22 0.24 0.00 0.16 0.09 0.13-0.06-0.070.10-0.04
+0.10 0.35 0.26 0.34 0.38 0.23-0.050.15-0.030.08
+0.00 0.11 0.12 0.01-0.040.11 0.02 0.14 0.64-0.30
+Axis PC Projection Δ
+(vs Raw, k=2)
+0.0
+0.2
+0.4
+0.6
+0.8
+1.0
+AUROC
+−0.4
+−0.2
+0.0
+0.2
+0.4
+AUROC Δ vs Raw
+Transfer AUROC: Unified Axis (Sycophancy + Deception)  ·  Llama 3 8B  (Layer 16, k=2)
+Figure 9: Unified axis-comparison heatmaps Top: Llama 3.2-3B at layer 14. Bottom: Llama 3-8B at layer 16. In both settings we compare
+raw-probe AUROC against random-subspace, dataset-PCA, and unified-axis PC projection baselines across the combined deception and
+sycophancy benchmark.
+3B
+Deception
+8B
+Deception
+8B
+Sycophancy
+3B
+Sycophancy†
+−0.2
+−0.1
+0.0
+0.1
+0.2
+0.3
+Mean AUROC Δ vs Raw
+(off-diagonal pairs)
+-0.14 -0.14
+-0.11
+-0.01
+-0.12 -0.11
++0.01
+-0.02
++0.10
++0.12
++0.14
++0.17
+A  Mean improvement over raw
+Random (k=1)
+Dataset PCA (k=1)
+Axis PC Proj (k=1)
+3B
+Deception
+8B
+Deception
+8B
+Sycophancy
+3B
+Sycophancy†
+0.0
+0.2
+0.4
+0.6
+0.8
+1.0
+Fraction of pairs beating raw
+1/20
+2/20
+5/20
+7/20
+4/20
+7/20
+8/20
+6/20
+13/20
+15/20
+10/20
+12/20
+B  Win rate vs raw probe
+0.0 0.2 0.4 0.6 0.8 1.0
+Baseline (Raw) AUROC
+0.0
+0.2
+0.4
+0.6
+0.8
+1.0
+Axis PC Projection AUROC (k=1)
+C  PC Projection vs Baseline (pair-by-pair)
+PC Proj = Baseline
+Llama 3.2 3B · Deception
+Llama 3 8B · Deception
+Llama 3 8B · Sycophancy
+Llama 3.2 3B · Sycophancy†
+Transfer Probe Summary: Axis PC Projection vs Controls  ·  All Settings
+Figure 10: Summary statistics across settings for axis-PC projection versus the two main controls. The plots compare mean off-diagonal
+AUROC improvement, win rate against the raw probe, and pairwise comparisons between dataset PCA and axis-PC projection for the
+primary 3B deception setting and the auxiliary 8B evaluations.

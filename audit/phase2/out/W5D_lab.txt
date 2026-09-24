@@ -1,0 +1,60 @@
+==============================================================================
+A. VERSION CHECK  (size / mtime / md5 on the lab PC)
+==============================================================================
+  run-crossgen/matrices/mean_L40_s42.json                    349229 B  2026-09-17 21:28  747f0353972bb6420da282f0918ed37f
+  run-crossgen/matrices/last_L40_s42.json                    349259 B  2026-09-17 21:28  ecb41439187d75dab185baa12df9124c
+  run-crossgen/kd11/matrices/mean_L40_s42.json               422104 B  2026-09-19 20:12  d7616aa50814267e38bd38931e25a6a0
+  run-coords/q6_layers.json                                   11720 B  2026-09-17 00:09  01e35cf0b472cb13e05ec871d7ab27c6
+  run-coords/q8_trained_pertoken.json                        188408 B  2026-09-16 21:21  907b05ce36f8accf1a21bae09e305ce2
+  run-coords/significance.json                                19244 B  2026-09-17 01:03  b52ff6166e2849258cf0e34a8715eecf
+  run-coords/q10_sycophancy_axis.json                         37494 B  2026-09-17 01:02  6bc5190b714c8fe75ca3fa384dbe726d
+  run-coords/confounds_L44_last.json                          10004 B  2026-09-16 19:36  11bc6e6567a3ce77f398b63572ec5cbc
+  run-paper16/axes_vectors_s3.pt                           62935395 B  2026-09-15 17:00  5d05a42542ae13fc7ac5d893a4ae4f8c
+  run-paper16/axes_vectors_s3_fp32.pt                      62935505 B  2026-09-16 02:03  76fee3969b41dcabb5a667b00107fd25
+  run-paper16/scores/pc_archivist.json                          953 B  2026-09-15 21:44  c74bd3a374de2499bf6070c49b03e81a
+  run-paper16/scores_405b/pc_archivist.json            ERR [WinError 3] The system cannot find the path specified: 'C:\\Users\\user4\\expLB\\run-paper16\\scores_405b\\pc_archivist.json'
+
+==============================================================================
+B. M-004 / M-018 / M-095  on the LAB run-crossgen/matrices
+==============================================================================
+
+-- mean_L40_s42.json  bank=axes_vectors_s3_fp32.pt k=5 datasets=10
+   ID-row mms      raw           mean/9 = 0.8167   w/o syc mean/8 = 0.8456
+   ID-row mms      pc:deception  mean/9 = 0.6492   w/o syc mean/8 = 0.6932
+   ID-row mms      axes          mean/9 = 0.7271   w/o syc mean/8 = 0.7764
+   ID-row lr_reg10 raw           mean/9 = 0.7271   w/o syc mean/8 = 0.7227
+   ID-row lr_reg10 pc:deception  mean/9 = 0.7022   w/o syc mean/8 = 0.7469
+   ID-row lr_reg10 axes          mean/9 = 0.7252   w/o syc mean/8 = 0.7685
+   ID->HP-KR  random   (mms) = 0.7675
+   ID->HP-KR  length   (mms) = 0.7756
+   raw(paper) off-diag mean=0.6652  cells<0.5: 23  <0.6: 32  >=0.85: 25
+   random@2      mean delta=-0.1744 won=19/90  raw<0.6: +0.0555  raw>=0.85: -0.4378  corr=-0.757
+   pc:unified@2  mean delta=-0.0338 won=42/90  raw<0.6: +0.1825  raw>=0.85: -0.2079  corr=-0.478
+   datapca@2     mean delta=-0.0310 won=45/90  raw<0.6: +0.1175  raw>=0.85: -0.1643  corr=-0.581
+
+-- last_L40_s42.json  bank=axes_vectors_s3_fp32.pt k=5 datasets=10
+   ID-row mms      raw           mean/9 = 0.7776   w/o syc mean/8 = 0.8290
+   ID-row mms      pc:deception  mean/9 = 0.6536   w/o syc mean/8 = 0.6899
+   ID-row mms      axes          mean/9 = 0.7240   w/o syc mean/8 = 0.7798
+   ID-row lr_reg10 raw           mean/9 = 0.6395   w/o syc mean/8 = 0.6290
+   ID-row lr_reg10 pc:deception  mean/9 = 0.5772   w/o syc mean/8 = 0.5979
+   ID-row lr_reg10 axes          mean/9 = 0.6614   w/o syc mean/8 = 0.6981
+   ID->HP-KR  random   (mms) = 0.4664
+   ID->HP-KR  length   (mms) = 0.7756
+
+==============================================================================
+C. M-032 / M-036  on the LAB run-crossgen/kd11/matrices/mean_L40_s42.json
+==============================================================================
+   bank=axes_vectors_s3_fp32.pt bank_name=paper16 k=5 datasets=11
+   axes    harm-pressure-knowledge-report   target(col)=0.4273 source(row)=0.3004
+   axes    sycophancy_mt                    target(col)=0.3551 source(row)=0.3787
+   random  harm-pressure-knowledge-report   target(col)=0.6984 source(row)=0.6590
+   random  sycophancy_mt                    target(col)=0.5413 source(row)=0.6327
+   zeroshot contrast   sycophancy_mt = 0.4089
+   zeroshot PC1        sycophancy_mt = 0.3740
+
+==============================================================================
+D. M-014 / M-015  judge agreement on the LAB run-paper16 scores
+==============================================================================
+   70B items 1350  405B items 0  comparable 0
+python exit 1
