@@ -1,29 +1,24 @@
 \begin{abstract}
-Linear probes for lie detection often fail to transfer across datasets.
-\citet{mahadik2026persona} derive detectors from \emph{persona coordinates} instead: directions
-built from a model's activations while it role-plays deceptive and honest personas, never from an
-evaluation set, with better cross-dataset generalization at 3B and 8B. Taking the method to
-Llama-3.3-70B-Instruct and Liars' Bench, we find that such a direction inherits the blind spots of
-the roles that define it. Every deceptive persona in the published bank lies by controlling what is
-disclosed --- a handler, a spin doctor, a plausible denier --- so the direction encodes confident
-assertion as deceptive. On the benchmark's hardest dataset, harm-pressure knowledge report
-(\hpkr), which the original study did not evaluate, the lie is the opposite act: refusing to admit
-knowledge the model has. There the published contrast points the wrong way, scoring
-\V{zs-dec-hpkr-L20} AUROC, ranking lies as more honest than honest answers. The remedy is a change
-to the bank rather than to the probe. We add ten roles in three groups: four that hold knowledge
-and deny it, three that deny it truthfully, and three that plainly assert what they know. The
-honest side is split in two because feigned and sincere ignorance are worded almost alike:
-separating the lie from its phrasing needs a contrast in which both sides deny. The directions we
-evaluate pool the two honest groups, so that test remains open. All \V{bank-personas}
-personas answer one shared question set, extended with ten questions about the speaker's own
-knowledge, so the leading direction tracks the roles rather than the prompts. The difference of the
-two group means is a single direction that uses no benchmark labels. It reaches
-\V{op-den-balacc-hpkr-L40} balanced accuracy on \hpkr{} at the benchmark's own threshold, where
-every other detector we tried flags nothing, and \V{off-ext-L40} mean off-diagonal AUROC across the
-six-dataset train--test matrix, against \V{off-base-L40} for 8192-dimensional probes each trained
-on one dataset. Fitted on no dataset, it has no in-distribution advantage to lose: what it scores
-in distribution is what it transfers, and persona principal components add nothing beyond it. Two
-limits remain. The \hpkr{} gain is at the decision threshold rather than in ranking, and a
-threshold calibrated on benign chat does not transfer to every dataset, which leaves calibration
-the open problem.
+% TODO: the black-box accuracy claim below needs a citation. This paper measures no black-box
+% baseline, and Liars' Bench's own black-box methods are near chance on the harm-pressure
+% datasets (see sections/related.tex), so the support should not come from there.
+Large language models (LLMs) often lie, that is, they generate statements they know or believe to
+be false. Detecting these lies is a critical alignment and safety challenge. Prior work
+demonstrates a trade-off: computationally expensive black-box approaches (e.g., evaluating full
+chat transcripts) achieve higher accuracy, whereas cheaper white-box methods (such as linear
+probes) frequently fail to generalize across datasets by relying on dataset-specific spurious
+correlations. To bridge this gap, we build on the persona coordinate framework of
+\citet{mahadik2026persona}, constructing detectors from activation directions during honest versus
+deceptive role-plays without using evaluation labels, and take it to Llama-3.3-70B-Instruct and
+Liars' Bench \citep{kretschmar2025liars}. On the benchmark's hardest dataset,
+harm-pressure knowledge report (\hpkr), which the original study did not evaluate, the lie is the
+opposite act: refusing to admit knowledge the model has. There the published contrast points the
+wrong way, scoring \V{zs-dec-hpkr-L20} AUROC, ranking lies as more honest than honest answers. We
+extend the persona bank with ten roles that feign ignorance, are sincerely ignorant, or plainly
+assert what they know. The difference of the two group means is a single direction that uses no
+benchmark labels. It reaches \V{op-den-balacc-hpkr-L40} balanced accuracy on \hpkr{} at the
+benchmark's own threshold, where every other detector we tried flags nothing, and \V{off-ext-L40}
+mean off-diagonal AUROC across the six-dataset train--test matrix, against \V{off-base-L40} for
+8192-dimensional probes each trained on one dataset. Fitted on no dataset, it has no
+in-distribution advantage to lose: what it scores in distribution is what it transfers.
 \end{abstract}
