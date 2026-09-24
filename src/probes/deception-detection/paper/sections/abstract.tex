@@ -1,31 +1,29 @@
 \begin{abstract}
-Linear probes for lie detection often fail to transfer across datasets. \citet{mahadik2026persona}
-derive detectors from \emph{persona coordinates} instead: directions built from a model's
-activations while it role-plays deceptive and honest personas, which never see an evaluation set.
-They report better cross-dataset generalization at 3B and 8B. We project the lies of Liars' Bench
-onto persona coordinates of Llama-3.3-70B-Instruct. On the benchmark's hardest dataset,
-harm-pressure knowledge report (\hpkr), which the original study did not evaluate, the published
-persona contrast inverts, scoring \V{zs-dec-hpkr-L20} AUROC at layer~20. \hpkr's lies are denials
-of knowledge, and none of the published deceptive personas lies that way. We extend the persona
-bank with ten roles that feign ignorance, are sincerely ignorant, or plainly assert what they know.
-In these knowledge-denier persona coordinates, with no benchmark labels, a single contrast
-direction reaches \V{zs-den-hpkr-L40} AUROC and \V{op-den-balacc-hpkr-L40} balanced accuracy at a
-1\% false-positive rate on \hpkr{} at layer~40. The benchmark's own probes score
-\V{lb-mean-balacc-hpkr} and \V{lb-followup-balacc-hpkr} there, and its upper bound, trained on
-privileged labels, \V{lb-upper-balacc-hpkr}. Across the full train--test matrix of six datasets
-at layer~40, the extended persona contrast reaches \V{off-ext-L40} mean off-diagonal AUROC, against
-\V{off-base-L40} for 8192-dimensional probes each trained on one dataset, and beats their average
-on every held-out dataset; the persona principal components add nothing beyond it. The supervised
-probes score higher than the contrast ever does on the dataset they were fitted to and give up
-\V{depth-base-drop-min} to \V{depth-base-drop-max} AUROC on leaving it, while the contrast, fitted
-on no dataset, transfers at its in-distribution score to within \V{depth-ext-drop-max} and never
-ranks any dataset below chance. Repeating the
-evaluation at \V{depth-n} layers turns both results into curves: ranking peaks at
-layer~\V{depth-off-ext-peak-layer} rather than the layer~40 we report, and on \hpkr{} the
-RepE-trained probe out-ranks every persona contrast at \V{depth-hpkr-base-ahead-n} of the
-\V{depth-hpkr-base-deep-n} layers from \V{depth-hpkr-base-auroc-peak-layer} on, while still
-flagging none of its lies, so the \hpkr{} result is a claim about the operating
-point and not about ranking. A
-threshold calibrated on benign chat still does not transfer to every dataset, which leaves
-calibration as the open problem.
+Linear probes for lie detection often fail to transfer across datasets.
+\citet{mahadik2026persona} derive detectors from \emph{persona coordinates} instead: directions
+built from a model's activations while it role-plays deceptive and honest personas, never from an
+evaluation set, with better cross-dataset generalization at 3B and 8B. Taking the method to
+Llama-3.3-70B-Instruct and Liars' Bench, we find that such a direction inherits the blind spots of
+the roles that define it. Every deceptive persona in the published bank lies by controlling what is
+disclosed --- a handler, a spin doctor, a plausible denier --- so the direction encodes confident
+assertion as deceptive. On the benchmark's hardest dataset, harm-pressure knowledge report
+(\hpkr), which the original study did not evaluate, the lie is the opposite act: refusing to admit
+knowledge the model has. There the published contrast points the wrong way, scoring
+\V{zs-dec-hpkr-L20} AUROC, ranking lies as more honest than honest answers. The remedy is a change
+to the bank rather than to the probe. We add ten roles in three groups: four that hold knowledge
+and deny it, three that deny it truthfully, and three that plainly assert what they know. The
+honest side is split in two because feigned and sincere ignorance are worded almost alike:
+separating the lie from its phrasing needs a contrast in which both sides deny. The directions we
+evaluate pool the two honest groups, so that test remains open. All \V{bank-personas}
+personas answer one shared question set, extended with ten questions about the speaker's own
+knowledge, so the leading direction tracks the roles rather than the prompts. The difference of the
+two group means is a single direction that uses no benchmark labels. It reaches
+\V{op-den-balacc-hpkr-L40} balanced accuracy on \hpkr{} at the benchmark's own threshold, where
+every other detector we tried flags nothing, and \V{off-ext-L40} mean off-diagonal AUROC across the
+six-dataset train--test matrix, against \V{off-base-L40} for 8192-dimensional probes each trained
+on one dataset. Fitted on no dataset, it has no in-distribution advantage to lose: what it scores
+in distribution is what it transfers, and persona principal components add nothing beyond it. Two
+limits remain. The \hpkr{} gain is at the decision threshold rather than in ranking, and a
+threshold calibrated on benign chat does not transfer to every dataset, which leaves calibration
+the open problem.
 \end{abstract}
