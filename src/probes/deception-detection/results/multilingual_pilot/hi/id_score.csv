@@ -1,0 +1,25 @@
+detector,language,comparison,n_pos,n_neg,auroc,lo,hi
+D8 knowledge-denial (4v6),en,lie v honest,20,20,1.0,1.0,1.0
+D8 knowledge-denial (4v6),hi,lie v honest,6,20,1.0,1.0,1.0
+D8 knowledge-denial (4v6),hi,lie v declined,6,29,1.0,1.0,1.0
+D8 knowledge-denial (4v6),hi,declined v honest,29,20,0.872,0.738,0.983
+D9 extended (12v13),en,lie v honest,20,20,1.0,1.0,1.0
+D9 extended (12v13),hi,lie v honest,6,20,1.0,1.0,1.0
+D9 extended (12v13),hi,lie v declined,6,29,1.0,1.0,1.0
+D9 extended (12v13),hi,declined v honest,29,20,0.886,0.767,0.988
+D5 published deception (8v7),en,lie v honest,20,20,1.0,1.0,1.0
+D5 published deception (8v7),hi,lie v honest,6,20,1.0,1.0,1.0
+D5 published deception (8v7),hi,lie v declined,6,29,0.994,0.966,1.0
+D5 published deception (8v7),hi,declined v honest,29,20,0.871,0.75,0.964
+D2 base probe (RepE),en,lie v honest,20,20,1.0,1.0,1.0
+D2 base probe (RepE),hi,lie v honest,6,20,1.0,1.0,1.0
+D2 base probe (RepE),hi,lie v declined,6,29,0.971,0.897,1.0
+D2 base probe (RepE),hi,declined v honest,29,20,1.0,1.0,1.0
+K knowledge direction,en,lie v honest,20,20,0.995,0.978,1.0
+K knowledge direction,hi,lie v honest,6,20,1.0,1.0,1.0
+K knowledge direction,hi,lie v declined,6,29,0.966,0.891,1.0
+K knowledge direction,hi,declined v honest,29,20,0.726,0.572,0.86
+D9 + K (standardised),en,lie v honest,20,20,1.0,1.0,1.0
+D9 + K (standardised),hi,lie v honest,6,20,1.0,1.0,1.0
+D9 + K (standardised),hi,lie v declined,6,29,0.994,0.966,1.0
+D9 + K (standardised),hi,declined v honest,29,20,0.821,0.69,0.929

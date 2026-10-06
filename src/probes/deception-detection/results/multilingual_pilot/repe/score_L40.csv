@@ -1,0 +1,217 @@
+layer,arm,test,metric,value,lo,hi,minus_en,minus_en_lo,minus_en_hi
+40,en,ID,auroc,0.9782,0.9771,0.9796,0.0,0.0,0.0
+40,en,ID,balacc,0.9315,0.9248,0.9347,0.0,0.0,0.0
+40,en,ID,recall,0.9984,0.9974,0.9997,0.0,0.0,0.0
+40,en,CG,auroc,0.9317,0.879,0.9685,0.0,0.0,0.0
+40,en,CG,balacc,0.7784,0.7275,0.7934,0.0,0.0,0.0
+40,en,CG,recall,0.5569,0.4549,0.5868,0.0,0.0,0.0
+40,en,HP-C,auroc,0.6435,0.5474,0.7084,0.0,0.0,0.0
+40,en,HP-C,balacc,0.5,0.5,0.5,0.0,0.0,0.0
+40,en,HP-C,recall,0.0,0.0,0.0,0.0,0.0,0.0
+40,en,HP-KR,auroc,0.9124,0.8892,0.9235,0.0,0.0,0.0
+40,en,HP-KR,balacc,0.5,0.5,0.5,0.0,0.0,0.0
+40,en,HP-KR,recall,0.0,0.0,0.0,0.0,0.0,0.0
+40,en,IT,auroc,0.3643,0.2988,0.5005,0.0,0.0,0.0
+40,en,IT,balacc,0.5,0.5,0.5,0.0,0.0,0.0
+40,en,IT,recall,0.0,0.0,0.0,0.0,0.0,0.0
+40,en,RepE val (en),auroc,1.0,1.0,1.0,0.0,0.0,0.0
+40,en,RepE val (en),balacc,1.0,1.0,1.0,0.0,0.0,0.0
+40,en,RepE val (en),recall,1.0,1.0,1.0,0.0,0.0,0.0
+40,en,pilot de: lie v honest,auroc,1.0,1.0,1.0,0.0,0.0,0.0
+40,en,pilot de: lie v honest,balacc,1.0,1.0,1.0,0.0,0.0,0.0
+40,en,pilot de: lie v honest,recall,1.0,1.0,1.0,0.0,0.0,0.0
+40,en,pilot en: lie v honest,auroc,1.0,1.0,1.0,0.0,0.0,0.0
+40,en,pilot en: lie v honest,balacc,1.0,1.0,1.0,0.0,0.0,0.0
+40,en,pilot en: lie v honest,recall,1.0,1.0,1.0,0.0,0.0,0.0
+40,en,pilot hi: lie v honest,auroc,1.0,1.0,1.0,0.0,0.0,0.0
+40,en,pilot hi: lie v honest,balacc,0.8333,0.75,0.9167,0.0,0.0,0.0
+40,en,pilot hi: lie v honest,recall,0.6667,0.5,0.8333,0.0,0.0,0.0
+40,en,pilot hi: lie v declined,auroc,0.9368,0.8964,0.9542,0.0,0.0,0.0
+40,en,pilot hi: lie v declined,balacc,0.8333,0.75,0.9167,0.0,0.0,0.0
+40,en,pilot hi: lie v declined,recall,0.6667,0.5,0.8333,0.0,0.0,0.0
+40,en,pilot hi: declined v honest,auroc,0.9931,0.9758,0.9983,0.0,0.0,0.0
+40,en,pilot hi: declined v honest,balacc,0.5,0.5,0.5,0.0,0.0,0.0
+40,en,pilot hi: declined v honest,recall,0.0,0.0,0.0,0.0,0.0,0.0
+40,en,mean of five,auroc,0.766,0.734,0.7983,0.0,0.0,0.0
+40,en,mean of five,balacc,0.642,0.6312,0.645,0.0,0.0,0.0
+40,en,mean of five,recall,0.311,0.2907,0.3172,0.0,0.0,0.0
+40,hi,ID,auroc,0.9693,0.9664,0.9729,-0.0089,-0.0117,-0.0058
+40,hi,ID,balacc,0.8896,0.8865,0.8946,-0.0419,-0.0445,-0.0336
+40,hi,ID,recall,1.0,1.0,1.0,0.0016,0.0003,0.0026
+40,hi,CG,auroc,0.7079,0.7023,0.7458,-0.2238,-0.262,-0.1534
+40,hi,CG,balacc,0.8303,0.6752,0.8503,0.0519,-0.0953,0.1038
+40,hi,CG,recall,0.7006,0.7006,0.7006,0.1437,0.1138,0.2457
+40,hi,HP-C,auroc,0.777,0.7334,0.8125,0.1335,0.0588,0.2429
+40,hi,HP-C,balacc,0.5174,0.5075,0.5993,0.0174,0.0075,0.0993
+40,hi,HP-C,recall,0.0373,0.0149,0.2394,0.0373,0.0149,0.2394
+40,hi,HP-KR,auroc,0.8929,0.8665,0.916,-0.0195,-0.0451,0.0148
+40,hi,HP-KR,balacc,0.5319,0.5,0.7012,0.0319,0.0,0.2012
+40,hi,HP-KR,recall,0.0647,0.0,0.4899,0.0647,0.0,0.4899
+40,hi,IT,auroc,0.6547,0.5353,0.8117,0.2904,0.096,0.4823
+40,hi,IT,balacc,0.5147,0.5,0.5584,0.0147,0.0,0.0584
+40,hi,IT,recall,0.0355,0.0,0.1537,0.0355,0.0,0.1537
+40,hi,RepE val (en),auroc,1.0,1.0,1.0,0.0,0.0,0.0
+40,hi,RepE val (en),balacc,1.0,0.9706,1.0,0.0,-0.0294,0.0
+40,hi,RepE val (en),recall,1.0,1.0,1.0,0.0,0.0,0.0
+40,hi,pilot de: lie v honest,auroc,1.0,1.0,1.0,0.0,0.0,0.0
+40,hi,pilot de: lie v honest,balacc,1.0,0.9167,1.0,0.0,-0.0833,0.0
+40,hi,pilot de: lie v honest,recall,1.0,1.0,1.0,0.0,0.0,0.0
+40,hi,pilot en: lie v honest,auroc,1.0,1.0,1.0,0.0,0.0,0.0
+40,hi,pilot en: lie v honest,balacc,1.0,1.0,1.0,0.0,0.0,0.0
+40,hi,pilot en: lie v honest,recall,1.0,1.0,1.0,0.0,0.0,0.0
+40,hi,pilot hi: lie v honest,auroc,1.0,1.0,1.0,0.0,0.0,0.0
+40,hi,pilot hi: lie v honest,balacc,0.75,0.6,0.825,-0.0833,-0.2667,0.0506
+40,hi,pilot hi: lie v honest,recall,1.0,1.0,1.0,0.3333,0.1667,0.5
+40,hi,pilot hi: lie v declined,auroc,0.977,0.9655,0.9943,0.0402,0.023,0.092
+40,hi,pilot hi: lie v declined,balacc,0.5,0.5,0.5,-0.3333,-0.4167,-0.25
+40,hi,pilot hi: lie v declined,recall,1.0,1.0,1.0,0.3333,0.1667,0.5
+40,hi,pilot hi: declined v honest,auroc,0.9845,0.9724,0.9931,-0.0086,-0.0207,0.0087
+40,hi,pilot hi: declined v honest,balacc,0.75,0.6,0.825,0.25,0.1,0.325
+40,hi,pilot hi: declined v honest,recall,1.0,1.0,1.0,1.0,1.0,1.0
+40,hi,mean of five,auroc,0.8003,0.7748,0.8389,0.0343,-0.0035,0.0934
+40,hi,mean of five,balacc,0.6568,0.6301,0.7065,0.0148,-0.0076,0.0673
+40,hi,mean of five,recall,0.3676,0.3431,0.5041,0.0566,0.0309,0.2064
+40,mixed,ID,auroc,0.9689,0.9635,0.9722,-0.0094,-0.0147,-0.0063
+40,mixed,ID,balacc,0.8932,0.8886,0.9043,-0.0383,-0.042,-0.0262
+40,mixed,ID,recall,1.0,1.0,1.0,0.0016,0.0003,0.0026
+40,mixed,CG,auroc,0.7402,0.7031,0.7741,-0.1915,-0.2568,-0.1383
+40,mixed,CG,balacc,0.8503,0.8052,0.8503,0.0719,0.0338,0.1168
+40,mixed,CG,recall,0.7006,0.6946,0.7006,0.1437,0.1138,0.2455
+40,mixed,HP-C,auroc,0.7711,0.7257,0.808,0.1276,0.0448,0.2266
+40,mixed,HP-C,balacc,0.5187,0.5112,0.6404,0.0187,0.0112,0.1404
+40,mixed,HP-C,recall,0.0373,0.0224,0.3582,0.0373,0.0224,0.3582
+40,mixed,HP-KR,auroc,0.9196,0.8932,0.9398,0.0072,-0.0187,0.0353
+40,mixed,HP-KR,balacc,0.5139,0.5,0.7805,0.0139,0.0,0.2805
+40,mixed,HP-KR,recall,0.0288,0.0,0.6477,0.0288,0.0,0.6477
+40,mixed,IT,auroc,0.5056,0.4313,0.7524,0.1413,0.0083,0.4102
+40,mixed,IT,balacc,0.5035,0.5,0.5557,0.0035,0.0,0.0557
+40,mixed,IT,recall,0.0071,0.0,0.1797,0.0071,0.0,0.1797
+40,mixed,RepE val (en),auroc,1.0,1.0,1.0,0.0,0.0,0.0
+40,mixed,RepE val (en),balacc,1.0,1.0,1.0,0.0,0.0,0.0
+40,mixed,RepE val (en),recall,1.0,1.0,1.0,0.0,0.0,0.0
+40,mixed,pilot de: lie v honest,auroc,1.0,1.0,1.0,0.0,0.0,0.0
+40,mixed,pilot de: lie v honest,balacc,1.0,0.9167,1.0,0.0,-0.0833,0.0
+40,mixed,pilot de: lie v honest,recall,1.0,1.0,1.0,0.0,0.0,0.0
+40,mixed,pilot en: lie v honest,auroc,1.0,1.0,1.0,0.0,0.0,0.0
+40,mixed,pilot en: lie v honest,balacc,1.0,1.0,1.0,0.0,0.0,0.0
+40,mixed,pilot en: lie v honest,recall,1.0,1.0,1.0,0.0,0.0,0.0
+40,mixed,pilot hi: lie v honest,auroc,1.0,1.0,1.0,0.0,0.0,0.0
+40,mixed,pilot hi: lie v honest,balacc,0.6,0.5,0.6256,-0.2333,-0.4167,-0.1665
+40,mixed,pilot hi: lie v honest,recall,1.0,1.0,1.0,0.3333,0.1667,0.5
+40,mixed,pilot hi: lie v declined,auroc,0.9943,0.9655,0.9943,0.0575,0.0286,0.0977
+40,mixed,pilot hi: lie v declined,balacc,0.5,0.5,0.5,-0.3333,-0.4167,-0.25
+40,mixed,pilot hi: lie v declined,recall,1.0,1.0,1.0,0.3333,0.1667,0.5
+40,mixed,pilot hi: declined v honest,auroc,0.9931,0.9689,0.9931,0.0,-0.0241,0.0121
+40,mixed,pilot hi: declined v honest,balacc,0.6,0.5,0.6256,0.1,0.0,0.1256
+40,mixed,pilot hi: declined v honest,recall,1.0,1.0,1.0,1.0,1.0,1.0
+40,mixed,mean of five,auroc,0.7811,0.7564,0.8314,0.0151,-0.0192,0.0764
+40,mixed,mean of five,balacc,0.6559,0.6499,0.73,0.0139,0.0084,0.0915
+40,mixed,mean of five,recall,0.3548,0.3449,0.5508,0.0437,0.0324,0.2466
+40,both,ID,auroc,0.967,0.9642,0.9709,-0.0112,-0.0135,-0.0077
+40,both,ID,balacc,0.8923,0.889,0.9001,-0.0392,-0.0416,-0.0288
+40,both,ID,recall,1.0,1.0,1.0,0.0016,0.0003,0.0026
+40,both,CG,auroc,0.7132,0.7047,0.751,-0.2186,-0.2587,-0.1478
+40,both,CG,balacc,0.8403,0.7703,0.8503,0.0619,0.0066,0.1138
+40,both,CG,recall,0.7006,0.7004,0.7006,0.1437,0.1138,0.2457
+40,both,HP-C,auroc,0.7522,0.7215,0.7941,0.1087,0.0416,0.2164
+40,both,HP-C,balacc,0.5172,0.5112,0.5717,0.0172,0.0112,0.0717
+40,both,HP-C,recall,0.0373,0.0224,0.1718,0.0373,0.0224,0.1718
+40,both,HP-KR,auroc,0.917,0.8966,0.9343,0.0046,-0.0152,0.031
+40,both,HP-KR,balacc,0.5386,0.5036,0.6969,0.0386,0.0036,0.1969
+40,both,HP-KR,recall,0.0791,0.0072,0.4534,0.0791,0.0072,0.4534
+40,both,IT,auroc,0.5735,0.4645,0.7406,0.2092,0.0473,0.3993
+40,both,IT,balacc,0.5418,0.5,0.5645,0.0418,0.0,0.0645
+40,both,IT,recall,0.1064,0.0,0.1797,0.1064,0.0,0.1797
+40,both,RepE val (en),auroc,1.0,1.0,1.0,0.0,0.0,0.0
+40,both,RepE val (en),balacc,1.0,1.0,1.0,0.0,0.0,0.0
+40,both,RepE val (en),recall,1.0,1.0,1.0,0.0,0.0,0.0
+40,both,pilot de: lie v honest,auroc,1.0,1.0,1.0,0.0,0.0,0.0
+40,both,pilot de: lie v honest,balacc,0.9722,0.9167,1.0,-0.0278,-0.0833,0.0
+40,both,pilot de: lie v honest,recall,1.0,1.0,1.0,0.0,0.0,0.0
+40,both,pilot en: lie v honest,auroc,1.0,1.0,1.0,0.0,0.0,0.0
+40,both,pilot en: lie v honest,balacc,1.0,1.0,1.0,0.0,0.0,0.0
+40,both,pilot en: lie v honest,recall,1.0,1.0,1.0,0.0,0.0,0.0
+40,both,pilot hi: lie v honest,auroc,1.0,1.0,1.0,0.0,0.0,0.0
+40,both,pilot hi: lie v honest,balacc,0.525,0.5,0.625,-0.3083,-0.4167,-0.1581
+40,both,pilot hi: lie v honest,recall,1.0,1.0,1.0,0.3333,0.1667,0.5
+40,both,pilot hi: lie v declined,auroc,0.9885,0.9769,0.9943,0.0517,0.0343,0.0921
+40,both,pilot hi: lie v declined,balacc,0.5,0.5,0.5,-0.3333,-0.4167,-0.25
+40,both,pilot hi: lie v declined,recall,1.0,1.0,1.0,0.3333,0.1667,0.5
+40,both,pilot hi: declined v honest,auroc,0.9845,0.9724,0.9931,-0.0086,-0.019,0.0104
+40,both,pilot hi: declined v honest,balacc,0.525,0.5,0.625,0.025,0.0,0.125
+40,both,pilot hi: declined v honest,recall,1.0,1.0,1.0,1.0,1.0,1.0
+40,both,mean of five,auroc,0.7846,0.7616,0.8258,0.0186,-0.0188,0.0769
+40,both,mean of five,balacc,0.666,0.651,0.7106,0.024,0.0081,0.0732
+40,both,mean of five,recall,0.3847,0.346,0.4955,0.0736,0.0333,0.1846
+40,"en, all 224 facts",ID,auroc,0.9793,,,,,
+40,"en, all 224 facts",ID,balacc,0.9367,,,,,
+40,"en, all 224 facts",ID,recall,0.9974,,,,,
+40,"en, all 224 facts",CG,auroc,0.868,,,,,
+40,"en, all 224 facts",CG,balacc,0.7455,,,,,
+40,"en, all 224 facts",CG,recall,0.491,,,,,
+40,"en, all 224 facts",HP-C,auroc,0.5728,,,,,
+40,"en, all 224 facts",HP-C,balacc,0.5,,,,,
+40,"en, all 224 facts",HP-C,recall,0.0,,,,,
+40,"en, all 224 facts",HP-KR,auroc,0.9247,,,,,
+40,"en, all 224 facts",HP-KR,balacc,0.5,,,,,
+40,"en, all 224 facts",HP-KR,recall,0.0,,,,,
+40,"en, all 224 facts",IT,auroc,0.3184,,,,,
+40,"en, all 224 facts",IT,balacc,0.5,,,,,
+40,"en, all 224 facts",IT,recall,0.0,,,,,
+40,"en, all 224 facts",RepE val (en),auroc,1.0,,,,,
+40,"en, all 224 facts",RepE val (en),balacc,1.0,,,,,
+40,"en, all 224 facts",RepE val (en),recall,1.0,,,,,
+40,"en, all 224 facts",pilot de: lie v honest,auroc,1.0,,,,,
+40,"en, all 224 facts",pilot de: lie v honest,balacc,1.0,,,,,
+40,"en, all 224 facts",pilot de: lie v honest,recall,1.0,,,,,
+40,"en, all 224 facts",pilot en: lie v honest,auroc,1.0,,,,,
+40,"en, all 224 facts",pilot en: lie v honest,balacc,1.0,,,,,
+40,"en, all 224 facts",pilot en: lie v honest,recall,1.0,,,,,
+40,"en, all 224 facts",pilot hi: lie v honest,auroc,1.0,,,,,
+40,"en, all 224 facts",pilot hi: lie v honest,balacc,0.8333,,,,,
+40,"en, all 224 facts",pilot hi: lie v honest,recall,0.6667,,,,,
+40,"en, all 224 facts",pilot hi: lie v declined,auroc,0.9195,,,,,
+40,"en, all 224 facts",pilot hi: lie v declined,balacc,0.8333,,,,,
+40,"en, all 224 facts",pilot hi: lie v declined,recall,0.6667,,,,,
+40,"en, all 224 facts",pilot hi: declined v honest,auroc,1.0,,,,,
+40,"en, all 224 facts",pilot hi: declined v honest,balacc,0.5,,,,,
+40,"en, all 224 facts",pilot hi: declined v honest,recall,0.0,,,,,
+40,"en, all 224 facts",mean of five,auroc,0.7326,,,,,
+40,"en, all 224 facts",mean of five,balacc,0.6364,,,,,
+40,"en, all 224 facts",mean of five,recall,0.2977,,,,,
+40,deployed base probe,ID,auroc,0.971,,,,,
+40,deployed base probe,ID,balacc,0.924,,,,,
+40,deployed base probe,ID,recall,1.0,,,,,
+40,deployed base probe,CG,auroc,0.9723,,,,,
+40,deployed base probe,CG,balacc,0.7036,,,,,
+40,deployed base probe,CG,recall,0.4072,,,,,
+40,deployed base probe,HP-C,auroc,0.675,,,,,
+40,deployed base probe,HP-C,balacc,0.5,,,,,
+40,deployed base probe,HP-C,recall,0.0,,,,,
+40,deployed base probe,HP-KR,auroc,0.9358,,,,,
+40,deployed base probe,HP-KR,balacc,0.5,,,,,
+40,deployed base probe,HP-KR,recall,0.0,,,,,
+40,deployed base probe,IT,auroc,0.3378,,,,,
+40,deployed base probe,IT,balacc,0.5,,,,,
+40,deployed base probe,IT,recall,0.0,,,,,
+40,deployed base probe,RepE val (en),auroc,1.0,,,,,
+40,deployed base probe,RepE val (en),balacc,1.0,,,,,
+40,deployed base probe,RepE val (en),recall,1.0,,,,,
+40,deployed base probe,pilot de: lie v honest,auroc,1.0,,,,,
+40,deployed base probe,pilot de: lie v honest,balacc,1.0,,,,,
+40,deployed base probe,pilot de: lie v honest,recall,1.0,,,,,
+40,deployed base probe,pilot en: lie v honest,auroc,1.0,,,,,
+40,deployed base probe,pilot en: lie v honest,balacc,1.0,,,,,
+40,deployed base probe,pilot en: lie v honest,recall,1.0,,,,,
+40,deployed base probe,pilot hi: lie v honest,auroc,1.0,,,,,
+40,deployed base probe,pilot hi: lie v honest,balacc,0.9167,,,,,
+40,deployed base probe,pilot hi: lie v honest,recall,0.8333,,,,,
+40,deployed base probe,pilot hi: lie v declined,auroc,0.9713,,,,,
+40,deployed base probe,pilot hi: lie v declined,balacc,0.8477,,,,,
+40,deployed base probe,pilot hi: lie v declined,recall,0.8333,,,,,
+40,deployed base probe,pilot hi: declined v honest,auroc,1.0,,,,,
+40,deployed base probe,pilot hi: declined v honest,balacc,0.569,,,,,
+40,deployed base probe,pilot hi: declined v honest,recall,0.1379,,,,,
+40,deployed base probe,mean of five,auroc,0.7784,,,,,
+40,deployed base probe,mean of five,balacc,0.6255,,,,,
+40,deployed base probe,mean of five,recall,0.2814,,,,,

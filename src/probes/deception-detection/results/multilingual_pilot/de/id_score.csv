@@ -1,0 +1,13 @@
+detector,language,n_lies,n_honest,auroc,lo,hi
+D8 knowledge-denial (4v6),en,20,20,1.0,1.0,1.0
+D8 knowledge-denial (4v6),de,17,18,1.0,1.0,1.0
+D9 extended (12v13),en,20,20,1.0,1.0,1.0
+D9 extended (12v13),de,17,18,1.0,1.0,1.0
+D5 published deception (8v7),en,20,20,1.0,1.0,1.0
+D5 published deception (8v7),de,17,18,1.0,1.0,1.0
+D2 base probe (RepE),en,20,20,1.0,1.0,1.0
+D2 base probe (RepE),de,17,18,1.0,1.0,1.0
+K knowledge direction,en,20,20,0.995,0.977,1.0
+K knowledge direction,de,17,18,1.0,1.0,1.0
+D9 + K (standardised),en,20,20,1.0,1.0,1.0
+D9 + K (standardised),de,17,18,1.0,1.0,1.0
