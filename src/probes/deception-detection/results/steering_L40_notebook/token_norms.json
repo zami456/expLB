@@ -1,0 +1,392 @@
+{
+ "layer": 40,
+ "median_first_token_norm": 788.7897338867188,
+ "median_token_norm": 13.497274398803711,
+ "prompts": [
+  {
+   "prompt_id": "notebook-supplement",
+   "first_token": 788.7897338867188,
+   "median_rest": 13.07648754119873,
+   "max_rest": 32.873260498046875,
+   "n_tokens": 55
+  },
+  {
+   "prompt_id": "ai-liar-01-normal",
+   "first_token": 788.7897338867188,
+   "median_rest": 13.023476600646973,
+   "max_rest": 32.873260498046875,
+   "n_tokens": 55
+  },
+  {
+   "prompt_id": "ai-liar-13-normal",
+   "first_token": 788.7897338867188,
+   "median_rest": 13.073628425598145,
+   "max_rest": 32.84714889526367,
+   "n_tokens": 57
+  },
+  {
+   "prompt_id": "ai-liar-05-normal",
+   "first_token": 788.7897338867188,
+   "median_rest": 13.067351341247559,
+   "max_rest": 32.872615814208984,
+   "n_tokens": 58
+  },
+  {
+   "prompt_id": "ai-liar-06-normal",
+   "first_token": 788.7897338867188,
+   "median_rest": 13.067351341247559,
+   "max_rest": 32.872615814208984,
+   "n_tokens": 58
+  },
+  {
+   "prompt_id": "ai-liar-03-normal",
+   "first_token": 788.7897338867188,
+   "median_rest": 13.089674949645996,
+   "max_rest": 32.8531494140625,
+   "n_tokens": 59
+  },
+  {
+   "prompt_id": "ai-liar-20-normal",
+   "first_token": 788.7897338867188,
+   "median_rest": 13.25737476348877,
+   "max_rest": 32.8531494140625,
+   "n_tokens": 59
+  },
+  {
+   "prompt_id": "ai-liar-02-normal",
+   "first_token": 788.7897338867188,
+   "median_rest": 12.972274780273438,
+   "max_rest": 32.604087829589844,
+   "n_tokens": 60
+  },
+  {
+   "prompt_id": "ai-liar-07-normal",
+   "first_token": 788.7897338867188,
+   "median_rest": 13.25758171081543,
+   "max_rest": 32.604087829589844,
+   "n_tokens": 60
+  },
+  {
+   "prompt_id": "ai-liar-04-normal",
+   "first_token": 788.7897338867188,
+   "median_rest": 13.2682466506958,
+   "max_rest": 32.799644470214844,
+   "n_tokens": 65
+  },
+  {
+   "prompt_id": "ai-liar-08-normal",
+   "first_token": 788.7897338867188,
+   "median_rest": 13.094029426574707,
+   "max_rest": 32.799644470214844,
+   "n_tokens": 65
+  },
+  {
+   "prompt_id": "ai-liar-12-normal",
+   "first_token": 788.7897338867188,
+   "median_rest": 13.094029426574707,
+   "max_rest": 32.799644470214844,
+   "n_tokens": 65
+  },
+  {
+   "prompt_id": "ai-liar-10-normal",
+   "first_token": 788.7897338867188,
+   "median_rest": 13.107613563537598,
+   "max_rest": 32.769718170166016,
+   "n_tokens": 67
+  },
+  {
+   "prompt_id": "ai-liar-15-normal",
+   "first_token": 788.7897338867188,
+   "median_rest": 13.567707061767578,
+   "max_rest": 32.769718170166016,
+   "n_tokens": 67
+  },
+  {
+   "prompt_id": "ai-liar-00-normal",
+   "first_token": 788.7897338867188,
+   "median_rest": 13.16126537322998,
+   "max_rest": 32.8803825378418,
+   "n_tokens": 68
+  },
+  {
+   "prompt_id": "ai-liar-18-normal",
+   "first_token": 788.7897338867188,
+   "median_rest": 13.228264808654785,
+   "max_rest": 32.8803825378418,
+   "n_tokens": 68
+  },
+  {
+   "prompt_id": "ai-liar-14-normal",
+   "first_token": 788.7897338867188,
+   "median_rest": 13.343375205993652,
+   "max_rest": 32.89334487915039,
+   "n_tokens": 70
+  },
+  {
+   "prompt_id": "ai-liar-16-normal",
+   "first_token": 788.7897338867188,
+   "median_rest": 13.265317916870117,
+   "max_rest": 32.89334487915039,
+   "n_tokens": 70
+  },
+  {
+   "prompt_id": "ai-liar-09-normal",
+   "first_token": 788.7897338867188,
+   "median_rest": 13.455183029174805,
+   "max_rest": 32.90196228027344,
+   "n_tokens": 71
+  },
+  {
+   "prompt_id": "ai-liar-17-normal",
+   "first_token": 788.7897338867188,
+   "median_rest": 13.497274398803711,
+   "max_rest": 32.90196228027344,
+   "n_tokens": 71
+  },
+  {
+   "prompt_id": "ai-liar-19-normal",
+   "first_token": 788.7897338867188,
+   "median_rest": 13.59813404083252,
+   "max_rest": 32.617469787597656,
+   "n_tokens": 74
+  },
+  {
+   "prompt_id": "ai-liar-01-deceive",
+   "first_token": 788.7897338867188,
+   "median_rest": 13.067704200744629,
+   "max_rest": 32.8676643371582,
+   "n_tokens": 77
+  },
+  {
+   "prompt_id": "ai-liar-15-deceive",
+   "first_token": 788.7897338867188,
+   "median_rest": 13.714909553527832,
+   "max_rest": 32.78597640991211,
+   "n_tokens": 78
+  },
+  {
+   "prompt_id": "ai-liar-12-deceive",
+   "first_token": 788.7897338867188,
+   "median_rest": 13.610058784484863,
+   "max_rest": 32.86627197265625,
+   "n_tokens": 81
+  },
+  {
+   "prompt_id": "ai-liar-05-deceive",
+   "first_token": 788.7897338867188,
+   "median_rest": 13.126551628112793,
+   "max_rest": 32.84208679199219,
+   "n_tokens": 82
+  },
+  {
+   "prompt_id": "ai-liar-02-deceive",
+   "first_token": 788.7897338867188,
+   "median_rest": 13.053411483764648,
+   "max_rest": 32.762786865234375,
+   "n_tokens": 85
+  },
+  {
+   "prompt_id": "ai-liar-07-deceive",
+   "first_token": 788.7897338867188,
+   "median_rest": 13.373310089111328,
+   "max_rest": 32.762786865234375,
+   "n_tokens": 85
+  },
+  {
+   "prompt_id": "ai-liar-20-deceive",
+   "first_token": 788.7897338867188,
+   "median_rest": 13.864018440246582,
+   "max_rest": 32.762786865234375,
+   "n_tokens": 85
+  },
+  {
+   "prompt_id": "ai-liar-03-deceive",
+   "first_token": 788.7897338867188,
+   "median_rest": 13.275334358215332,
+   "max_rest": 32.86439895629883,
+   "n_tokens": 87
+  },
+  {
+   "prompt_id": "ai-liar-06-deceive",
+   "first_token": 788.7897338867188,
+   "median_rest": 13.456859588623047,
+   "max_rest": 32.86439895629883,
+   "n_tokens": 87
+  },
+  {
+   "prompt_id": "ai-liar-13-deceive",
+   "first_token": 788.7897338867188,
+   "median_rest": 13.639724731445312,
+   "max_rest": 32.86439895629883,
+   "n_tokens": 87
+  },
+  {
+   "prompt_id": "ai-liar-04-deceive",
+   "first_token": 788.7897338867188,
+   "median_rest": 13.512886047363281,
+   "max_rest": 32.829010009765625,
+   "n_tokens": 88
+  },
+  {
+   "prompt_id": "ai-liar-08-deceive",
+   "first_token": 788.7897338867188,
+   "median_rest": 13.396258354187012,
+   "max_rest": 32.92275619506836,
+   "n_tokens": 90
+  },
+  {
+   "prompt_id": "ai-liar-14-deceive",
+   "first_token": 788.7897338867188,
+   "median_rest": 13.624410629272461,
+   "max_rest": 32.92275619506836,
+   "n_tokens": 90
+  },
+  {
+   "prompt_id": "ai-liar-17-deceive",
+   "first_token": 788.7897338867188,
+   "median_rest": 14.042813301086426,
+   "max_rest": 32.92275619506836,
+   "n_tokens": 90
+  },
+  {
+   "prompt_id": "ai-liar-22-normal",
+   "first_token": 788.7897338867188,
+   "median_rest": 13.774557113647461,
+   "max_rest": 32.92275619506836,
+   "n_tokens": 90
+  },
+  {
+   "prompt_id": "ai-liar-09-deceive",
+   "first_token": 788.7897338867188,
+   "median_rest": 13.093841552734375,
+   "max_rest": 32.718196868896484,
+   "n_tokens": 93
+  },
+  {
+   "prompt_id": "ai-liar-16-deceive",
+   "first_token": 788.7897338867188,
+   "median_rest": 13.940118789672852,
+   "max_rest": 32.718196868896484,
+   "n_tokens": 93
+  },
+  {
+   "prompt_id": "ai-liar-00-deceive",
+   "first_token": 788.7897338867188,
+   "median_rest": 13.349167823791504,
+   "max_rest": 32.798892974853516,
+   "n_tokens": 94
+  },
+  {
+   "prompt_id": "ai-liar-10-deceive",
+   "first_token": 788.7897338867188,
+   "median_rest": 13.62236499786377,
+   "max_rest": 32.798892974853516,
+   "n_tokens": 94
+  },
+  {
+   "prompt_id": "ai-liar-18-deceive",
+   "first_token": 788.7897338867188,
+   "median_rest": 14.543049812316895,
+   "max_rest": 32.87450408935547,
+   "n_tokens": 96
+  },
+  {
+   "prompt_id": "ai-liar-23-normal",
+   "first_token": 788.7897338867188,
+   "median_rest": 13.573491096496582,
+   "max_rest": 32.863037109375,
+   "n_tokens": 98
+  },
+  {
+   "prompt_id": "ai-liar-19-deceive",
+   "first_token": 788.7897338867188,
+   "median_rest": 14.678605079650879,
+   "max_rest": 32.92638397216797,
+   "n_tokens": 100
+  },
+  {
+   "prompt_id": "ai-liar-21-normal",
+   "first_token": 788.7897338867188,
+   "median_rest": 14.311210632324219,
+   "max_rest": 32.85436248779297,
+   "n_tokens": 110
+  },
+  {
+   "prompt_id": "ai-liar-21-deceive",
+   "first_token": 788.7897338867188,
+   "median_rest": 14.359369277954102,
+   "max_rest": 32.70399856567383,
+   "n_tokens": 117
+  },
+  {
+   "prompt_id": "ai-liar-22-deceive",
+   "first_token": 788.7897338867188,
+   "median_rest": 14.206022262573242,
+   "max_rest": 32.82025909423828,
+   "n_tokens": 118
+  },
+  {
+   "prompt_id": "ai-liar-24-normal",
+   "first_token": 788.7897338867188,
+   "median_rest": 14.078022956848145,
+   "max_rest": 32.821720123291016,
+   "n_tokens": 121
+  },
+  {
+   "prompt_id": "ai-liar-26-normal",
+   "first_token": 788.7897338867188,
+   "median_rest": 13.930807113647461,
+   "max_rest": 32.821720123291016,
+   "n_tokens": 121
+  },
+  {
+   "prompt_id": "ai-liar-23-deceive",
+   "first_token": 788.7897338867188,
+   "median_rest": 14.126466751098633,
+   "max_rest": 32.883033752441406,
+   "n_tokens": 126
+  },
+  {
+   "prompt_id": "ai-liar-25-normal",
+   "first_token": 788.7897338867188,
+   "median_rest": 14.244162559509277,
+   "max_rest": 32.893577575683594,
+   "n_tokens": 128
+  },
+  {
+   "prompt_id": "ai-liar-11-normal",
+   "first_token": 788.7897338867188,
+   "median_rest": 13.608306884765625,
+   "max_rest": 32.905479431152344,
+   "n_tokens": 147
+  },
+  {
+   "prompt_id": "ai-liar-11-deceive",
+   "first_token": 788.7897338867188,
+   "median_rest": 13.614036560058594,
+   "max_rest": 32.80112838745117,
+   "n_tokens": 152
+  },
+  {
+   "prompt_id": "ai-liar-24-deceive",
+   "first_token": 788.7882690429688,
+   "median_rest": 14.401020050048828,
+   "max_rest": 32.8843994140625,
+   "n_tokens": 155
+  },
+  {
+   "prompt_id": "ai-liar-25-deceive",
+   "first_token": 788.7882690429688,
+   "median_rest": 14.524195671081543,
+   "max_rest": 32.90706253051758,
+   "n_tokens": 160
+  },
+  {
+   "prompt_id": "ai-liar-26-deceive",
+   "first_token": 788.7882690429688,
+   "median_rest": 14.22265338897705,
+   "max_rest": 32.8636474609375,
+   "n_tokens": 192
+  }
+ ]
+}
