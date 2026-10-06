@@ -1,0 +1,217 @@
+layer,dataset,direction,auroc,p_null,band97.5,balacc_1pct_fpr
+36,CG,D9 extended alone,0.9561,0.011,0.9145,0.7216
+36,CG,D8 knowledge-denial alone,0.9405,0.015,0.9145,0.7645
+36,CG,knowledge general alone,0.7371,0.18,0.9145,0.6018
+36,CG,knowledge recall-general alone,0.8586,0.059,0.9145,0.5719
+36,CG,D9 extended + general (vector),0.9177,0.025,0.9145,0.7036
+36,CG,D9 extended + general (standardised),0.9165,0.025,0.9145,0.7006
+36,CG,D9 extended + recall-general (vector),0.9466,0.014,0.9145,0.6587
+36,CG,D9 extended + recall-general (standardised),0.9402,0.018,0.9145,0.6407
+36,CG,D8 knowledge-denial + general (vector),0.9054,0.035,0.9145,0.7265
+36,CG,D8 knowledge-denial + general (standardised),0.9076,0.033,0.9145,0.7265
+36,CG,D8 knowledge-denial + recall-general (vector),0.9405,0.016,0.9145,0.7186
+36,CG,D8 knowledge-denial + recall-general (standardised),0.9356,0.021,0.9145,0.6976
+36,HP-C,D9 extended alone,0.7843,0.011,0.7474,0.5075
+36,HP-C,D8 knowledge-denial alone,0.7262,0.051,0.7474,0.5276
+36,HP-C,knowledge general alone,0.8972,0.0,0.7474,0.54
+36,HP-C,knowledge recall-general alone,0.9076,0.0,0.7474,0.6412
+36,HP-C,D9 extended + general (vector),0.8972,0.0,0.7474,0.5331
+36,HP-C,D9 extended + general (standardised),0.8975,0.0,0.7474,0.5294
+36,HP-C,D9 extended + recall-general (vector),0.9072,0.0,0.7474,0.6005
+36,HP-C,D9 extended + recall-general (standardised),0.9082,0.0,0.7474,0.6293
+36,HP-C,D8 knowledge-denial + general (vector),0.8912,0.0,0.7474,0.5438
+36,HP-C,D8 knowledge-denial + general (standardised),0.8907,0.0,0.7474,0.544
+36,HP-C,D8 knowledge-denial + recall-general (vector),0.9051,0.0,0.7474,0.6335
+36,HP-C,D8 knowledge-denial + recall-general (standardised),0.9073,0.0,0.7474,0.6323
+36,HP-KR,D9 extended alone,0.8635,0.082,0.9331,0.5
+36,HP-KR,D8 knowledge-denial alone,0.9046,0.045,0.9331,0.7449
+36,HP-KR,knowledge general alone,0.87,0.077,0.9331,0.6067
+36,HP-KR,knowledge recall-general alone,0.7199,0.209,0.9331,0.6433
+36,HP-KR,D9 extended + general (vector),0.889,0.059,0.9331,0.5776
+36,HP-KR,D9 extended + general (standardised),0.8886,0.06,0.9331,0.5776
+36,HP-KR,D9 extended + recall-general (vector),0.7706,0.162,0.9331,0.6176
+36,HP-KR,D9 extended + recall-general (standardised),0.7556,0.176,0.9331,0.6501
+36,HP-KR,D8 knowledge-denial + general (vector),0.9139,0.036,0.9331,0.7241
+36,HP-KR,D8 knowledge-denial + general (standardised),0.9149,0.036,0.9331,0.73
+36,HP-KR,D8 knowledge-denial + recall-general (vector),0.8161,0.118,0.9331,0.6893
+36,HP-KR,D8 knowledge-denial + recall-general (standardised),0.7924,0.139,0.9331,0.6582
+36,IT,D9 extended alone,0.9829,0.002,0.9534,0.9079
+36,IT,D8 knowledge-denial alone,0.9225,0.057,0.9534,0.5071
+36,IT,knowledge general alone,0.841,0.138,0.9534,0.5015
+36,IT,knowledge recall-general alone,0.6472,0.365,0.9534,0.5178
+36,IT,D9 extended + general (vector),0.9796,0.004,0.9534,0.8615
+36,IT,D9 extended + general (standardised),0.9794,0.004,0.9534,0.8607
+36,IT,D9 extended + recall-general (vector),0.972,0.008,0.9534,0.9103
+36,IT,D9 extended + recall-general (standardised),0.9583,0.021,0.9534,0.905
+36,IT,D8 knowledge-denial + general (vector),0.9221,0.057,0.9534,0.8477
+36,IT,D8 knowledge-denial + general (standardised),0.9224,0.057,0.9534,0.8576
+36,IT,D8 knowledge-denial + recall-general (vector),0.8844,0.1,0.9534,0.69
+36,IT,D8 knowledge-denial + recall-general (standardised),0.8623,0.119,0.9534,0.7468
+36,ID,D9 extended alone,0.9779,0.0,0.8572,0.9207
+36,ID,D8 knowledge-denial alone,0.9809,0.0,0.8572,0.9299
+36,ID,knowledge general alone,0.9259,0.003,0.8572,0.7407
+36,ID,knowledge recall-general alone,0.9462,0.001,0.8572,0.8913
+36,ID,D9 extended + general (vector),0.9656,0.0,0.8572,0.9173
+36,ID,D9 extended + general (standardised),0.9652,0.0,0.8572,0.9166
+36,ID,D9 extended + recall-general (vector),0.9768,0.0,0.8572,0.9238
+36,ID,D9 extended + recall-general (standardised),0.9737,0.0,0.8572,0.924
+36,ID,D8 knowledge-denial + general (vector),0.9662,0.0,0.8572,0.9173
+36,ID,D8 knowledge-denial + general (standardised),0.9667,0.0,0.8572,0.9176
+36,ID,D8 knowledge-denial + recall-general (vector),0.9764,0.0,0.8572,0.9299
+36,ID,D8 knowledge-denial + recall-general (standardised),0.9726,0.0,0.8572,0.929
+36,RepE,D9 extended alone,1.0,0.0,0.8734,0.9982
+36,RepE,D8 knowledge-denial alone,0.9998,0.0,0.8734,0.9545
+36,RepE,knowledge general alone,0.8505,0.04,0.8734,0.7545
+36,RepE,knowledge recall-general alone,0.9382,0.004,0.8734,0.8545
+36,RepE,D9 extended + general (vector),0.9988,0.0,0.8734,0.9473
+36,RepE,D9 extended + general (standardised),0.9986,0.0,0.8734,0.9473
+36,RepE,D9 extended + recall-general (vector),1.0,0.0,0.8734,1.0
+36,RepE,D9 extended + recall-general (standardised),0.9999,0.0,0.8734,0.9891
+36,RepE,D8 knowledge-denial + general (vector),0.9951,0.0,0.8734,0.7891
+36,RepE,D8 knowledge-denial + general (standardised),0.9957,0.0,0.8734,0.7909
+36,RepE,D8 knowledge-denial + recall-general (vector),0.9998,0.0,0.8734,0.9309
+36,RepE,D8 knowledge-denial + recall-general (standardised),0.9993,0.0,0.8734,0.9091
+40,CG,D9 extended alone,0.9123,0.046,0.9472,0.6796
+40,CG,D8 knowledge-denial alone,0.9019,0.055,0.9472,0.7784
+40,CG,knowledge general alone,0.6406,0.293,0.9472,0.5977
+40,CG,knowledge recall-general alone,0.743,0.175,0.9472,0.5629
+40,CG,D9 extended + general (vector),0.8617,0.078,0.9472,0.7046
+40,CG,D9 extended + general (standardised),0.8646,0.077,0.9472,0.7076
+40,CG,D9 extended + recall-general (vector),0.8799,0.067,0.9472,0.6467
+40,CG,D9 extended + recall-general (standardised),0.8678,0.077,0.9472,0.6287
+40,CG,D8 knowledge-denial + general (vector),0.8525,0.084,0.9472,0.7874
+40,CG,D8 knowledge-denial + general (standardised),0.8579,0.079,0.9472,0.8084
+40,CG,D8 knowledge-denial + recall-general (vector),0.8729,0.076,0.9472,0.7216
+40,CG,D8 knowledge-denial + recall-general (standardised),0.8659,0.077,0.9472,0.6976
+40,HP-C,D9 extended alone,0.7116,0.095,0.7741,0.5
+40,HP-C,D8 knowledge-denial alone,0.7552,0.042,0.7741,0.5075
+40,HP-C,knowledge general alone,0.8296,0.004,0.7741,0.5037
+40,HP-C,knowledge recall-general alone,0.8999,0.0,0.7741,0.5291
+40,HP-C,D9 extended + general (vector),0.8215,0.004,0.7741,0.5037
+40,HP-C,D9 extended + general (standardised),0.8203,0.004,0.7741,0.5037
+40,HP-C,D9 extended + recall-general (vector),0.8932,0.0,0.7741,0.5147
+40,HP-C,D9 extended + recall-general (standardised),0.8966,0.0,0.7741,0.5184
+40,HP-C,D8 knowledge-denial + general (vector),0.832,0.004,0.7741,0.5075
+40,HP-C,D8 knowledge-denial + general (standardised),0.8315,0.004,0.7741,0.5075
+40,HP-C,D8 knowledge-denial + recall-general (vector),0.8956,0.0,0.7741,0.5219
+40,HP-C,D8 knowledge-denial + recall-general (standardised),0.8978,0.0,0.7741,0.5256
+40,HP-KR,D9 extended alone,0.9124,0.044,0.9297,0.5
+40,HP-KR,D8 knowledge-denial alone,0.9185,0.039,0.9297,0.9102
+40,HP-KR,knowledge general alone,0.8654,0.099,0.9297,0.5
+40,HP-KR,knowledge recall-general alone,0.7146,0.261,0.9297,0.564
+40,HP-KR,D9 extended + general (vector),0.9064,0.047,0.9297,0.5036
+40,HP-KR,D9 extended + general (standardised),0.9087,0.044,0.9297,0.5036
+40,HP-KR,D9 extended + recall-general (vector),0.8044,0.164,0.9297,0.5427
+40,HP-KR,D9 extended + recall-general (standardised),0.7854,0.188,0.9297,0.5424
+40,HP-KR,D8 knowledge-denial + general (vector),0.9348,0.023,0.9297,0.5144
+40,HP-KR,D8 knowledge-denial + general (standardised),0.9406,0.017,0.9297,0.5144
+40,HP-KR,D8 knowledge-denial + recall-general (vector),0.8433,0.12,0.9297,0.6554
+40,HP-KR,D8 knowledge-denial + recall-general (standardised),0.8203,0.149,0.9297,0.6391
+40,IT,D9 extended alone,0.9803,0.001,0.9558,0.8686
+40,IT,D8 knowledge-denial alone,0.9134,0.066,0.9558,0.5
+40,IT,knowledge general alone,0.8813,0.104,0.9558,0.5008
+40,IT,knowledge recall-general alone,0.7945,0.205,0.9558,0.7351
+40,IT,D9 extended + general (vector),0.9748,0.004,0.9558,0.8766
+40,IT,D9 extended + general (standardised),0.9754,0.004,0.9558,0.8815
+40,IT,D9 extended + recall-general (vector),0.9732,0.004,0.9558,0.9059
+40,IT,D9 extended + recall-general (standardised),0.9682,0.01,0.9558,0.8978
+40,IT,D8 knowledge-denial + general (vector),0.9412,0.035,0.9558,0.8809
+40,IT,D8 knowledge-denial + general (standardised),0.9405,0.035,0.9558,0.8727
+40,IT,D8 knowledge-denial + recall-general (vector),0.9132,0.066,0.9558,0.6385
+40,IT,D8 knowledge-denial + recall-general (standardised),0.9093,0.078,0.9558,0.7058
+40,ID,D9 extended alone,0.9784,0.0,0.8318,0.9214
+40,ID,D8 knowledge-denial alone,0.9801,0.0,0.8318,0.9294
+40,ID,knowledge general alone,0.9056,0.0,0.8318,0.6625
+40,ID,knowledge recall-general alone,0.9239,0.0,0.8318,0.8154
+40,ID,D9 extended + general (vector),0.9611,0.0,0.8318,0.9118
+40,ID,D9 extended + general (standardised),0.9624,0.0,0.8318,0.9108
+40,ID,D9 extended + recall-general (vector),0.9712,0.0,0.8318,0.9097
+40,ID,D9 extended + recall-general (standardised),0.9667,0.0,0.8318,0.9097
+40,ID,D8 knowledge-denial + general (vector),0.9637,0.0,0.8318,0.9121
+40,ID,D8 knowledge-denial + general (standardised),0.9659,0.0,0.8318,0.9137
+40,ID,D8 knowledge-denial + recall-general (vector),0.9714,0.0,0.8318,0.9147
+40,ID,D8 knowledge-denial + recall-general (standardised),0.9673,0.0,0.8318,0.9109
+40,RepE,D9 extended alone,1.0,0.0,0.8641,0.9982
+40,RepE,D8 knowledge-denial alone,1.0,0.0,0.8641,1.0
+40,RepE,knowledge general alone,0.8168,0.054,0.8641,0.5218
+40,RepE,knowledge recall-general alone,0.9103,0.009,0.8641,0.8218
+40,RepE,D9 extended + general (vector),0.9993,0.0,0.8641,0.86
+40,RepE,D9 extended + general (standardised),0.9995,0.0,0.8641,0.8655
+40,RepE,D9 extended + recall-general (vector),1.0,0.0,0.8641,0.9982
+40,RepE,D9 extended + recall-general (standardised),0.9999,0.0,0.8641,0.9855
+40,RepE,D8 knowledge-denial + general (vector),0.9954,0.0,0.8641,0.62
+40,RepE,D8 knowledge-denial + general (standardised),0.9975,0.0,0.8641,0.6273
+40,RepE,D8 knowledge-denial + recall-general (vector),0.9999,0.0,0.8641,0.9418
+40,RepE,D8 knowledge-denial + recall-general (standardised),0.9995,0.0,0.8641,0.9036
+44,CG,D9 extended alone,0.8586,0.062,0.9103,0.6347
+44,CG,D8 knowledge-denial alone,0.858,0.062,0.9103,0.7305
+44,CG,knowledge general alone,0.6543,0.264,0.9103,0.6704
+44,CG,knowledge recall-general alone,0.7875,0.125,0.9103,0.5749
+44,CG,D9 extended + general (vector),0.8346,0.084,0.9103,0.7345
+44,CG,D9 extended + general (standardised),0.837,0.079,0.9103,0.7285
+44,CG,D9 extended + recall-general (vector),0.8517,0.066,0.9103,0.6437
+44,CG,D9 extended + recall-general (standardised),0.8494,0.066,0.9103,0.6377
+44,CG,D8 knowledge-denial + general (vector),0.8255,0.094,0.9103,0.8333
+44,CG,D8 knowledge-denial + general (standardised),0.8307,0.085,0.9103,0.8333
+44,CG,D8 knowledge-denial + recall-general (vector),0.8514,0.066,0.9103,0.7216
+44,CG,D8 knowledge-denial + recall-general (standardised),0.8498,0.066,0.9103,0.7066
+44,HP-C,D9 extended alone,0.7119,0.084,0.7718,0.5
+44,HP-C,D8 knowledge-denial alone,0.7245,0.065,0.7718,0.5
+44,HP-C,knowledge general alone,0.834,0.002,0.7718,0.5
+44,HP-C,knowledge recall-general alone,0.8948,0.0,0.7718,0.5147
+44,HP-C,D9 extended + general (vector),0.8241,0.002,0.7718,0.5
+44,HP-C,D9 extended + general (standardised),0.8232,0.002,0.7718,0.5
+44,HP-C,D9 extended + recall-general (vector),0.8855,0.0,0.7718,0.5149
+44,HP-C,D9 extended + recall-general (standardised),0.8887,0.0,0.7718,0.5149
+44,HP-C,D8 knowledge-denial + general (vector),0.8268,0.002,0.7718,0.5037
+44,HP-C,D8 knowledge-denial + general (standardised),0.8254,0.002,0.7718,0.5037
+44,HP-C,D8 knowledge-denial + recall-general (vector),0.885,0.0,0.7718,0.5149
+44,HP-C,D8 knowledge-denial + recall-general (standardised),0.8882,0.0,0.7718,0.5149
+44,HP-KR,D9 extended alone,0.8936,0.052,0.9271,0.5
+44,HP-KR,D8 knowledge-denial alone,0.9077,0.043,0.9271,0.7571
+44,HP-KR,knowledge general alone,0.8501,0.084,0.9271,0.5
+44,HP-KR,knowledge recall-general alone,0.694,0.241,0.9271,0.5144
+44,HP-KR,D9 extended + general (vector),0.9,0.047,0.9271,0.5
+44,HP-KR,D9 extended + general (standardised),0.9019,0.047,0.9271,0.5
+44,HP-KR,D9 extended + recall-general (vector),0.8103,0.125,0.9271,0.518
+44,HP-KR,D9 extended + recall-general (standardised),0.7936,0.14,0.9271,0.518
+44,HP-KR,D8 knowledge-denial + general (vector),0.9267,0.027,0.9271,0.5036
+44,HP-KR,D8 knowledge-denial + general (standardised),0.9299,0.023,0.9271,0.5108
+44,HP-KR,D8 knowledge-denial + recall-general (vector),0.8522,0.082,0.9271,0.5987
+44,HP-KR,D8 knowledge-denial + recall-general (standardised),0.8368,0.098,0.9271,0.5812
+44,IT,D9 extended alone,0.9822,0.0,0.9549,0.7813
+44,IT,D8 knowledge-denial alone,0.9325,0.046,0.9549,0.5
+44,IT,knowledge general alone,0.9043,0.076,0.9549,0.5582
+44,IT,knowledge recall-general alone,0.9062,0.075,0.9549,0.7565
+44,IT,D9 extended + general (vector),0.9759,0.007,0.9549,0.8944
+44,IT,D9 extended + general (standardised),0.9765,0.006,0.9549,0.8903
+44,IT,D9 extended + recall-general (vector),0.9783,0.001,0.9549,0.8568
+44,IT,D9 extended + recall-general (standardised),0.9763,0.007,0.9549,0.8596
+44,IT,D8 knowledge-denial + general (vector),0.9657,0.014,0.9549,0.7219
+44,IT,D8 knowledge-denial + general (standardised),0.9651,0.015,0.9549,0.682
+44,IT,D8 knowledge-denial + recall-general (vector),0.9581,0.023,0.9549,0.5331
+44,IT,D8 knowledge-denial + recall-general (standardised),0.959,0.023,0.9549,0.5544
+44,ID,D9 extended alone,0.974,0.0,0.8039,0.9156
+44,ID,D8 knowledge-denial alone,0.978,0.0,0.8039,0.9268
+44,ID,knowledge general alone,0.89,0.0,0.8039,0.648
+44,ID,knowledge recall-general alone,0.9135,0.0,0.8039,0.8075
+44,ID,D9 extended + general (vector),0.9507,0.0,0.8039,0.8916
+44,ID,D9 extended + general (standardised),0.9525,0.0,0.8039,0.8929
+44,ID,D9 extended + recall-general (vector),0.9635,0.0,0.8039,0.9008
+44,ID,D9 extended + recall-general (standardised),0.9594,0.0,0.8039,0.8985
+44,ID,D8 knowledge-denial + general (vector),0.9568,0.0,0.8039,0.8962
+44,ID,D8 knowledge-denial + general (standardised),0.9596,0.0,0.8039,0.9043
+44,ID,D8 knowledge-denial + recall-general (vector),0.9663,0.0,0.8039,0.9044
+44,ID,D8 knowledge-denial + recall-general (standardised),0.9625,0.0,0.8039,0.9015
+44,RepE,D9 extended alone,1.0,0.0,0.8568,0.9982
+44,RepE,D8 knowledge-denial alone,1.0,0.0,0.8568,0.9909
+44,RepE,knowledge general alone,0.8602,0.025,0.8568,0.5145
+44,RepE,knowledge recall-general alone,0.9555,0.0,0.8568,0.6927
+44,RepE,D9 extended + general (vector),0.9977,0.0,0.8568,0.7909
+44,RepE,D9 extended + general (standardised),0.9985,0.0,0.8568,0.8236
+44,RepE,D9 extended + recall-general (vector),1.0,0.0,0.8568,0.9655
+44,RepE,D9 extended + recall-general (standardised),0.9998,0.0,0.8568,0.9327
+44,RepE,D8 knowledge-denial + general (vector),0.9929,0.0,0.8568,0.7109
+44,RepE,D8 knowledge-denial + general (standardised),0.9951,0.0,0.8568,0.7327
+44,RepE,D8 knowledge-denial + recall-general (vector),0.9996,0.0,0.8568,0.9036
+44,RepE,D8 knowledge-denial + recall-general (standardised),0.9991,0.0,0.8568,0.8691

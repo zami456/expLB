@@ -1,0 +1,19 @@
+layer,read,direction,n,auroc,p_null,band2.5,band97.5
+36,adapted,D9 bank,800,0.9287,0.0,0.1512,0.8593
+36,adapted,k base,800,0.9368,0.0,0.1512,0.8593
+36,adapted,D9 bank + k base (standardised),800,0.9436,0.0,0.1512,0.8593
+36,base,D9 bank,800,0.9184,0.019,0.0932,0.9099
+36,base,k base,800,0.9343,0.008,0.0932,0.9099
+36,base,D9 bank + k base (standardised),800,0.9381,0.003,0.0932,0.9099
+36,added by the adapter,D9 bank,800,0.6703,0.2,0.1906,0.8162
+36,added by the adapter,k base,800,0.2367,0.945,0.1906,0.8162
+36,added by the adapter,D9 bank + k base (standardised),800,0.2842,0.9,0.1906,0.8162
+40,adapted,D9 bank,800,0.6797,0.183,0.1586,0.8538
+40,adapted,k base,800,0.8707,0.016,0.1586,0.8538
+40,adapted,D9 bank + k base (standardised),800,0.8223,0.043,0.1586,0.8538
+40,base,D9 bank,800,0.9182,0.027,0.085,0.9209
+40,base,k base,800,0.9383,0.003,0.085,0.9209
+40,base,D9 bank + k base (standardised),800,0.9397,0.003,0.085,0.9209
+40,added by the adapter,D9 bank,800,0.4295,0.62,0.1573,0.8532
+40,added by the adapter,k base,800,0.2325,0.904,0.1573,0.8532
+40,added by the adapter,D9 bank + k base (standardised),800,0.2664,0.872,0.1573,0.8532

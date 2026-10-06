@@ -1,0 +1,25 @@
+layer,null,metric,k,median |cos with k|,null p97.5,share >= k
+36,shuffled,k: HP-KR identical,0.7906,0.9026,0.7945,0.148
+36,shuffled,k: HP-KR denials,0.6897,0.9026,0.7489,0.216
+36,shuffled,k: Gender-Secret,0.8103,0.9026,0.8798,0.206
+36,shuffled,k: HP-C,0.8972,0.9026,0.9083,0.178
+36,balanced,k: HP-KR identical,0.7906,0.1062,0.7319,0.0
+36,balanced,k: HP-KR denials,0.6897,0.1062,0.717,0.078
+36,balanced,k: Gender-Secret,0.8103,0.1062,0.844,0.04
+36,balanced,k: HP-C,0.8972,0.1062,0.8498,0.0
+40,shuffled,k: HP-KR identical,0.793,0.9197,0.7975,0.222
+40,shuffled,k: HP-KR denials,0.7282,0.9197,0.7843,0.256
+40,shuffled,k: Gender-Secret,0.8645,0.9197,0.9056,0.222
+40,shuffled,k: HP-C,0.8296,0.9197,0.873,0.25
+40,balanced,k: HP-KR identical,0.793,0.1205,0.743,0.0
+40,balanced,k: HP-KR denials,0.7282,0.1205,0.7348,0.05
+40,balanced,k: Gender-Secret,0.8645,0.1205,0.8614,0.026
+40,balanced,k: HP-C,0.8296,0.1205,0.8286,0.022
+44,shuffled,k: HP-KR identical,0.7937,0.9007,0.8,0.218
+44,shuffled,k: HP-KR denials,0.7179,0.9007,0.7775,0.21
+44,shuffled,k: Gender-Secret,0.8688,0.9007,0.8925,0.146
+44,shuffled,k: HP-C,0.834,0.9007,0.8662,0.214
+44,balanced,k: HP-KR identical,0.7937,0.1127,0.744,0.0
+44,balanced,k: HP-KR denials,0.7179,0.1127,0.739,0.06
+44,balanced,k: Gender-Secret,0.8688,0.1127,0.8487,0.01
+44,balanced,k: HP-C,0.834,0.1127,0.8121,0.01
