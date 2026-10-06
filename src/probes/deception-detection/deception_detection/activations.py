@@ -39,6 +39,7 @@ def trace_layer_outputs(
     tail: int | None = None,
     lora: LoraAdapter | None = None,
     remote: bool = True,
+    span_mask: Tensor | None = None,
 ) -> Tensor:
     """One forward pass: the outputs of the given decoder blocks, ``[batch, seq, layer, emb]``.
 
@@ -47,6 +48,13 @@ def trace_layer_outputs(
     to the deepest one read, so the pass reads the fine-tuned model rather than the base one.
     The loop is inline rather than a helper call because nnsight runs this block's code on
     the NDIF server, where this package does not exist.
+
+    With ``span_mask`` ``[batch, seq]``, each row is instead reduced on the server to its mean
+    over the marked positions and ``[batch, layer, emb]`` comes back: kilobytes per row rather
+    than every position. The reduction is the persona bank's own (the Assistant Axis NDIF
+    pipeline's ``_span_mean_sum``): the product with the 0/1 mask stays in the model's dtype,
+    where it is exact, and the sum is taken in float32, since summing in bfloat16 miscounts long
+    spans.
     """
     plan = call_plan(lora) if lora is not None else {}
     scale = lora.scale if lora is not None else 1.0
@@ -61,9 +69,49 @@ def trace_layer_outputs(
                 module.output = module.output + update * scale
             if block in order:
                 output = model.model.layers[block].output
-                outputs.append(output[:, -tail:, :] if tail else output)
+                if span_mask is not None:
+                    m = span_mask.to(output.device, torch.float32)
+                    total = (output * m[:, :, None].to(output.dtype)).sum(dim=1, dtype=torch.float32)
+                    outputs.append(total / m.sum(dim=1, keepdim=True))
+                else:
+                    outputs.append(output[:, -tail:, :] if tail else output)
+    index = [order.index(layer) for layer in layers]
+    if span_mask is not None:
+        return torch.stack(list(outputs), dim=1)[:, index]
     stacked = torch.stack(list(outputs), dim=2)
-    return stacked[:, :, [order.index(layer) for layer in layers]]
+    return stacked[:, :, index]
+
+
+def trace_span_tokens(
+    model,
+    tokens: Tensor,
+    attention_mask: Tensor,
+    layer: int,
+    batch_index: Tensor,
+    position_index: Tensor,
+    remote: bool = True,
+    span_mask: Tensor | None = None,
+) -> Tensor | tuple[Tensor, Tensor]:
+    """One forward pass: the residual stream at ``layer`` at the listed ``(row, position)`` pairs.
+
+    Returns ``[len(batch_index), emb]`` in the model's dtype, gathered on the server so only the
+    listed positions are sent back (a response span costs its tokens, not the padded row). With
+    ``span_mask`` ``[batch, seq]`` the same pass also returns each row's fp32 mean over the marked
+    positions, ``trace_layer_outputs``' reduction, so a caller can check that the gathered tokens
+    average to the read the persona bank was built from.
+    """
+    b = torch.as_tensor(batch_index, dtype=torch.long)
+    p = torch.as_tensor(position_index, dtype=torch.long)
+    with model.trace(tokens, attention_mask=attention_mask, remote=remote):
+        output = model.model.layers[layer].output
+        gathered = output[b.to(output.device), p.to(output.device)].save()
+        if span_mask is not None:
+            m = span_mask.to(output.device, torch.float32)
+            total = (output * m[:, :, None].to(output.dtype)).sum(dim=1, dtype=torch.float32)
+            means = (total / m.sum(dim=1, keepdim=True)).save()
+    if span_mask is not None:
+        return gathered, means
+    return gathered
 
 
 def detected_tail_lengths(tokenized_dataset: TokenizedDataset) -> list[int]:

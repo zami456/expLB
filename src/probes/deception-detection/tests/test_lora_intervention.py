@@ -104,6 +104,21 @@ def test_layer_order_and_tail_follow_the_request(models):
     torch.testing.assert_close(picked, full[:, -4:, [2, 0]])
 
 
+def test_span_means_equal_pooling_the_full_outputs(models):
+    """The server-side reduction must be the plain mean over the marked positions."""
+    base, _, adapter_dir = models
+    adapter = load_adapter(adapter_dir, max_block=N_LAYERS - 1, dtype=torch.float32)
+    input_ids, attention_mask = inputs()
+    span = torch.zeros_like(input_ids, dtype=torch.float32)
+    span[0, 4:8] = 1.0
+    span[1, 6:9] = 1.0
+    full = trace_layer_outputs(NNsight(base), input_ids, attention_mask, [2, 0], lora=adapter, remote=False)
+    pooled = trace_layer_outputs(NNsight(base), input_ids, attention_mask, [2, 0], lora=adapter,
+                                 remote=False, span_mask=span)
+    expected = torch.stack([full[0, 4:8].mean(0), full[1, 6:9].mean(0)])
+    torch.testing.assert_close(pooled, expected, atol=1e-5, rtol=1e-5)
+
+
 def test_blocks_past_the_deepest_read_are_not_loaded(models):
     _, _, adapter_dir = models
     adapter = load_adapter(adapter_dir, max_block=1, dtype=torch.float32)
@@ -129,3 +144,18 @@ def test_adapted_reads_never_share_cache_keys_with_the_base(models):
     adapter = load_adapter(adapter_dir, max_block=1)
     assert model_key("meta-llama/Llama-3.3-70B-Instruct", None) == "meta-llama/Llama-3.3-70B-Instruct"
     assert model_key("meta-llama/Llama-3.3-70B-Instruct", adapter) != "meta-llama/Llama-3.3-70B-Instruct"
+
+
+def test_a_pickled_state_dict_loads_the_same_factors_as_safetensors(models, tmp_path):
+    """PEFT's older format, a pickled state dict (Liars' Bench's Soft-Trigger adapters)."""
+    from safetensors.torch import load_file
+
+    _, _, adapter_dir = models
+    (tmp_path / "adapter_config.json").write_text((adapter_dir / "adapter_config.json").read_text())
+    torch.save(load_file(str(adapter_dir / "adapter_model.safetensors")), tmp_path / "adapter_model.bin")
+    old = load_adapter(tmp_path, max_block=1, dtype=torch.float32)
+    new = load_adapter(adapter_dir, max_block=1, dtype=torch.float32)
+    assert old.scale == new.scale and old.blocks == new.blocks
+    for block in new.blocks:
+        for target, (a, b) in new.weights[block].items():
+            assert torch.equal(old.weights[block][target][0], a) and torch.equal(old.weights[block][target][1], b)

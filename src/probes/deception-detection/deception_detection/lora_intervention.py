@@ -74,6 +74,17 @@ def _parse_key(key: str) -> tuple[int, tuple[str, str], str] | None:
     return block, (submodule, projection), factor
 
 
+# PEFT writes safetensors; older versions wrote a pickled state dict (Liars' Bench's Soft-Trigger
+# adapters are of that kind)
+WEIGHT_FILES = ("adapter_model.safetensors", "adapter_model.bin")
+
+
+def _load_weights(path: Path) -> dict[str, Tensor]:
+    if path.suffix == ".safetensors":
+        return load_file(str(path))
+    return torch.load(str(path), map_location="cpu", weights_only=True)  # tensors only, no code
+
+
 def load_adapter(
     source: str | Path,
     max_block: int,
@@ -87,14 +98,19 @@ def load_adapter(
     """
     path = Path(source)
     if path.is_dir():
-        config_path, weights_path = path / "adapter_config.json", path / "adapter_model.safetensors"
+        config_path = path / "adapter_config.json"
+        weights_path = next((path / f for f in WEIGHT_FILES if (path / f).exists()), path / WEIGHT_FILES[0])
         name = str(source)
     else:
         from huggingface_hub import HfApi, hf_hub_download
 
-        sha = HfApi().model_info(str(source), revision=revision).sha
+        info = HfApi().model_info(str(source), revision=revision)
+        sha, present = info.sha, {s.rfilename for s in info.siblings or []}
+        weights_file = next((f for f in WEIGHT_FILES if f in present), None)
+        if weights_file is None:
+            raise FileNotFoundError(f"{source} has none of {WEIGHT_FILES}")
         config_path = Path(hf_hub_download(str(source), "adapter_config.json", revision=sha))
-        weights_path = Path(hf_hub_download(str(source), "adapter_model.safetensors", revision=sha))
+        weights_path = Path(hf_hub_download(str(source), weights_file, revision=sha))
         name = f"{source}@{sha}"
 
     config = json.loads(config_path.read_text())
@@ -109,7 +125,7 @@ def load_adapter(
 
     factors: dict[int, dict[tuple[str, str], dict[str, Tensor]]] = {}
     unused = []
-    for key, tensor in load_file(str(weights_path)).items():
+    for key, tensor in _load_weights(weights_path).items():
         parsed = _parse_key(key)
         if parsed is None:
             unused.append(key)

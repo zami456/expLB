@@ -195,9 +195,15 @@ def load_bank_at_layer(layer: int, path: Path | str = VECTORS_DIR) -> PersonaBan
     for name in names:
         payload = torch.load(files[name], weights_only=False)
         stored = payload["vector"]
-        if not 0 <= layer < stored.shape[0]:
-            raise IndexError(f"{name}: layer {layer} outside 0..{stored.shape[0] - 1}")
-        vectors[name] = stored[layer].double().numpy()
+        # a file may hold only the layers it was read at, listed in `layers`; the full
+        # extractions hold all 80 in order, with or without the list
+        layers = [int(x) for x in payload.get("layers", range(stored.shape[0]))]
+        if len(layers) != stored.shape[0]:
+            raise ValueError(f"{name}: {len(layers)} layers listed for {stored.shape[0]} rows")
+        if layer not in layers:
+            raise IndexError(f"{name}: layer {layer} outside the {len(layers)} layers it holds "
+                             f"({layers[0]}..{layers[-1]})")
+        vectors[name] = stored[layers.index(layer)].double().numpy()
         n_rollouts.append(int(payload["n"]))
 
     return PersonaBank(
