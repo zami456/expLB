@@ -1,0 +1,337 @@
+arm,contrast,read,test,auroc
+mean,published (8v7),mean,convince_me__plain,0.7846
+mean,published (8v7),max,convince_me__plain,0.9473
+mean,knowledge-denial (4v6),mean,convince_me__plain,0.8721
+mean,knowledge-denial (4v6),max,convince_me__plain,0.8865
+mean,extended (12v13),mean,convince_me__plain,0.8698
+mean,extended (12v13),max,convince_me__plain,0.9693
+mean,sycophancy (5v5),mean,convince_me__plain,0.9919
+mean,sycophancy (5v5),max,convince_me__plain,0.9919
+mean masked,published (8v7),mean,convince_me__plain,0.7847
+mean masked,published (8v7),max,convince_me__plain,0.9486
+mean masked,knowledge-denial (4v6),mean,convince_me__plain,0.8717
+mean masked,knowledge-denial (4v6),max,convince_me__plain,0.8732
+mean masked,extended (12v13),mean,convince_me__plain,0.8701
+mean masked,extended (12v13),max,convince_me__plain,0.9672
+mean masked,sycophancy (5v5),mean,convince_me__plain,0.9919
+mean masked,sycophancy (5v5),max,convince_me__plain,0.9923
+last token,published (8v7),mean,convince_me__plain,0.924
+last token,published (8v7),max,convince_me__plain,0.9747
+last token,knowledge-denial (4v6),mean,convince_me__plain,0.8623
+last token,knowledge-denial (4v6),max,convince_me__plain,0.8963
+last token,extended (12v13),mean,convince_me__plain,0.9515
+last token,extended (12v13),max,convince_me__plain,0.9883
+last token,sycophancy (5v5),mean,convince_me__plain,0.9784
+last token,sycophancy (5v5),max,convince_me__plain,0.9965
+self-weighted,published (8v7),mean,convince_me__plain,0.8555
+self-weighted,published (8v7),max,convince_me__plain,0.9709
+self-weighted,knowledge-denial (4v6),mean,convince_me__plain,0.9222
+self-weighted,knowledge-denial (4v6),max,convince_me__plain,0.9334
+self-weighted,extended (12v13),mean,convince_me__plain,0.9423
+self-weighted,extended (12v13),max,convince_me__plain,0.9859
+self-weighted,sycophancy (5v5),mean,convince_me__plain,0.9972
+self-weighted,sycophancy (5v5),max,convince_me__plain,0.9743
+learned,published (8v7),mean,convince_me__plain,0.8384
+learned,published (8v7),max,convince_me__plain,0.9292
+learned,knowledge-denial (4v6),mean,convince_me__plain,0.9092
+learned,knowledge-denial (4v6),max,convince_me__plain,0.8971
+learned,extended (12v13),mean,convince_me__plain,0.9182
+learned,extended (12v13),max,convince_me__plain,0.9556
+learned,sycophancy (5v5),mean,convince_me__plain,0.9992
+learned,sycophancy (5v5),max,convince_me__plain,0.9721
+"bank (all rollouts, mean)",published (8v7),mean,convince_me__plain,0.865
+"bank (all rollouts, mean)",published (8v7),max,convince_me__plain,0.9772
+"bank (all rollouts, mean)",knowledge-denial (4v6),mean,convince_me__plain,0.9019
+"bank (all rollouts, mean)",knowledge-denial (4v6),max,convince_me__plain,0.9596
+"bank (all rollouts, mean)",extended (12v13),mean,convince_me__plain,0.9123
+"bank (all rollouts, mean)",extended (12v13),max,convince_me__plain,0.9927
+"bank (all rollouts, mean)",sycophancy (5v5),mean,convince_me__plain,0.9981
+"bank (all rollouts, mean)",sycophancy (5v5),max,convince_me__plain,0.9995
+mean,published (8v7),mean,harm_refusal_choice__plain,0.5479
+mean,published (8v7),max,harm_refusal_choice__plain,0.5476
+mean,knowledge-denial (4v6),mean,harm_refusal_choice__plain,0.7061
+mean,knowledge-denial (4v6),max,harm_refusal_choice__plain,0.7059
+mean,extended (12v13),mean,harm_refusal_choice__plain,0.6578
+mean,extended (12v13),max,harm_refusal_choice__plain,0.6574
+mean,sycophancy (5v5),mean,harm_refusal_choice__plain,0.7559
+mean,sycophancy (5v5),max,harm_refusal_choice__plain,0.7555
+mean masked,published (8v7),mean,harm_refusal_choice__plain,0.5518
+mean masked,published (8v7),max,harm_refusal_choice__plain,0.5514
+mean masked,knowledge-denial (4v6),mean,harm_refusal_choice__plain,0.7062
+mean masked,knowledge-denial (4v6),max,harm_refusal_choice__plain,0.706
+mean masked,extended (12v13),mean,harm_refusal_choice__plain,0.6616
+mean masked,extended (12v13),max,harm_refusal_choice__plain,0.6611
+mean masked,sycophancy (5v5),mean,harm_refusal_choice__plain,0.7591
+mean masked,sycophancy (5v5),max,harm_refusal_choice__plain,0.7587
+last token,published (8v7),mean,harm_refusal_choice__plain,0.3381
+last token,published (8v7),max,harm_refusal_choice__plain,0.339
+last token,knowledge-denial (4v6),mean,harm_refusal_choice__plain,0.5971
+last token,knowledge-denial (4v6),max,harm_refusal_choice__plain,0.597
+last token,extended (12v13),mean,harm_refusal_choice__plain,0.4462
+last token,extended (12v13),max,harm_refusal_choice__plain,0.4463
+last token,sycophancy (5v5),mean,harm_refusal_choice__plain,0.7579
+last token,sycophancy (5v5),max,harm_refusal_choice__plain,0.7574
+self-weighted,published (8v7),mean,harm_refusal_choice__plain,0.4802
+self-weighted,published (8v7),max,harm_refusal_choice__plain,0.4804
+self-weighted,knowledge-denial (4v6),mean,harm_refusal_choice__plain,0.6583
+self-weighted,knowledge-denial (4v6),max,harm_refusal_choice__plain,0.6582
+self-weighted,extended (12v13),mean,harm_refusal_choice__plain,0.5898
+self-weighted,extended (12v13),max,harm_refusal_choice__plain,0.5894
+self-weighted,sycophancy (5v5),mean,harm_refusal_choice__plain,0.6992
+self-weighted,sycophancy (5v5),max,harm_refusal_choice__plain,0.6998
+learned,published (8v7),mean,harm_refusal_choice__plain,0.4695
+learned,published (8v7),max,harm_refusal_choice__plain,0.4703
+learned,knowledge-denial (4v6),mean,harm_refusal_choice__plain,0.5888
+learned,knowledge-denial (4v6),max,harm_refusal_choice__plain,0.5887
+learned,extended (12v13),mean,harm_refusal_choice__plain,0.5341
+learned,extended (12v13),max,harm_refusal_choice__plain,0.534
+learned,sycophancy (5v5),mean,harm_refusal_choice__plain,0.459
+learned,sycophancy (5v5),max,harm_refusal_choice__plain,0.462
+"bank (all rollouts, mean)",published (8v7),mean,harm_refusal_choice__plain,0.5807
+"bank (all rollouts, mean)",published (8v7),max,harm_refusal_choice__plain,0.5802
+"bank (all rollouts, mean)",knowledge-denial (4v6),mean,harm_refusal_choice__plain,0.7552
+"bank (all rollouts, mean)",knowledge-denial (4v6),max,harm_refusal_choice__plain,0.7547
+"bank (all rollouts, mean)",extended (12v13),mean,harm_refusal_choice__plain,0.7116
+"bank (all rollouts, mean)",extended (12v13),max,harm_refusal_choice__plain,0.7111
+"bank (all rollouts, mean)",sycophancy (5v5),mean,harm_refusal_choice__plain,0.7507
+"bank (all rollouts, mean)",sycophancy (5v5),max,harm_refusal_choice__plain,0.75
+mean,published (8v7),mean,harm_refusal_knowledge_report__plain,0.6711
+mean,published (8v7),max,harm_refusal_knowledge_report__plain,0.5734
+mean,knowledge-denial (4v6),mean,harm_refusal_knowledge_report__plain,0.8924
+mean,knowledge-denial (4v6),max,harm_refusal_knowledge_report__plain,0.964
+mean,extended (12v13),mean,harm_refusal_knowledge_report__plain,0.8951
+mean,extended (12v13),max,harm_refusal_knowledge_report__plain,0.9117
+mean,sycophancy (5v5),mean,harm_refusal_knowledge_report__plain,0.1399
+mean,sycophancy (5v5),max,harm_refusal_knowledge_report__plain,0.4011
+mean masked,published (8v7),mean,harm_refusal_knowledge_report__plain,0.6796
+mean masked,published (8v7),max,harm_refusal_knowledge_report__plain,0.5828
+mean masked,knowledge-denial (4v6),mean,harm_refusal_knowledge_report__plain,0.895
+mean masked,knowledge-denial (4v6),max,harm_refusal_knowledge_report__plain,0.9634
+mean masked,extended (12v13),mean,harm_refusal_knowledge_report__plain,0.8957
+mean masked,extended (12v13),max,harm_refusal_knowledge_report__plain,0.9104
+mean masked,sycophancy (5v5),mean,harm_refusal_knowledge_report__plain,0.1678
+mean masked,sycophancy (5v5),max,harm_refusal_knowledge_report__plain,0.4115
+last token,published (8v7),mean,harm_refusal_knowledge_report__plain,0.3016
+last token,published (8v7),max,harm_refusal_knowledge_report__plain,0.4074
+last token,knowledge-denial (4v6),mean,harm_refusal_knowledge_report__plain,0.8646
+last token,knowledge-denial (4v6),max,harm_refusal_knowledge_report__plain,0.8936
+last token,extended (12v13),mean,harm_refusal_knowledge_report__plain,0.6863
+last token,extended (12v13),max,harm_refusal_knowledge_report__plain,0.8831
+last token,sycophancy (5v5),mean,harm_refusal_knowledge_report__plain,0.1377
+last token,sycophancy (5v5),max,harm_refusal_knowledge_report__plain,0.2983
+self-weighted,published (8v7),mean,harm_refusal_knowledge_report__plain,0.4331
+self-weighted,published (8v7),max,harm_refusal_knowledge_report__plain,0.6652
+self-weighted,knowledge-denial (4v6),mean,harm_refusal_knowledge_report__plain,0.8829
+self-weighted,knowledge-denial (4v6),max,harm_refusal_knowledge_report__plain,0.9621
+self-weighted,extended (12v13),mean,harm_refusal_knowledge_report__plain,0.8112
+self-weighted,extended (12v13),max,harm_refusal_knowledge_report__plain,0.9069
+self-weighted,sycophancy (5v5),mean,harm_refusal_knowledge_report__plain,0.0867
+self-weighted,sycophancy (5v5),max,harm_refusal_knowledge_report__plain,0.1977
+learned,published (8v7),mean,harm_refusal_knowledge_report__plain,0.3849
+learned,published (8v7),max,harm_refusal_knowledge_report__plain,0.6965
+learned,knowledge-denial (4v6),mean,harm_refusal_knowledge_report__plain,0.8344
+learned,knowledge-denial (4v6),max,harm_refusal_knowledge_report__plain,0.9664
+learned,extended (12v13),mean,harm_refusal_knowledge_report__plain,0.587
+learned,extended (12v13),max,harm_refusal_knowledge_report__plain,0.9042
+learned,sycophancy (5v5),mean,harm_refusal_knowledge_report__plain,0.1506
+learned,sycophancy (5v5),max,harm_refusal_knowledge_report__plain,0.4136
+"bank (all rollouts, mean)",published (8v7),mean,harm_refusal_knowledge_report__plain,0.5926
+"bank (all rollouts, mean)",published (8v7),max,harm_refusal_knowledge_report__plain,0.6414
+"bank (all rollouts, mean)",knowledge-denial (4v6),mean,harm_refusal_knowledge_report__plain,0.9185
+"bank (all rollouts, mean)",knowledge-denial (4v6),max,harm_refusal_knowledge_report__plain,0.9536
+"bank (all rollouts, mean)",extended (12v13),mean,harm_refusal_knowledge_report__plain,0.9124
+"bank (all rollouts, mean)",extended (12v13),max,harm_refusal_knowledge_report__plain,0.8995
+"bank (all rollouts, mean)",sycophancy (5v5),mean,harm_refusal_knowledge_report__plain,0.1671
+"bank (all rollouts, mean)",sycophancy (5v5),max,harm_refusal_knowledge_report__plain,0.5475
+mean,published (8v7),mean,insider_trading_cadenza__plain,0.9776
+mean,published (8v7),max,insider_trading_cadenza__plain,0.9777
+mean,knowledge-denial (4v6),mean,insider_trading_cadenza__plain,0.8408
+mean,knowledge-denial (4v6),max,insider_trading_cadenza__plain,0.968
+mean,extended (12v13),mean,insider_trading_cadenza__plain,0.9791
+mean,extended (12v13),max,insider_trading_cadenza__plain,0.9818
+mean,sycophancy (5v5),mean,insider_trading_cadenza__plain,0.9858
+mean,sycophancy (5v5),max,insider_trading_cadenza__plain,0.9868
+mean masked,published (8v7),mean,insider_trading_cadenza__plain,0.9778
+mean masked,published (8v7),max,insider_trading_cadenza__plain,0.9782
+mean masked,knowledge-denial (4v6),mean,insider_trading_cadenza__plain,0.8642
+mean masked,knowledge-denial (4v6),max,insider_trading_cadenza__plain,0.9783
+mean masked,extended (12v13),mean,insider_trading_cadenza__plain,0.9795
+mean masked,extended (12v13),max,insider_trading_cadenza__plain,0.982
+mean masked,sycophancy (5v5),mean,insider_trading_cadenza__plain,0.9858
+mean masked,sycophancy (5v5),max,insider_trading_cadenza__plain,0.9866
+last token,published (8v7),mean,insider_trading_cadenza__plain,0.9766
+last token,published (8v7),max,insider_trading_cadenza__plain,0.9739
+last token,knowledge-denial (4v6),mean,insider_trading_cadenza__plain,0.9323
+last token,knowledge-denial (4v6),max,insider_trading_cadenza__plain,0.8794
+last token,extended (12v13),mean,insider_trading_cadenza__plain,0.98
+last token,extended (12v13),max,insider_trading_cadenza__plain,0.9659
+last token,sycophancy (5v5),mean,insider_trading_cadenza__plain,0.9849
+last token,sycophancy (5v5),max,insider_trading_cadenza__plain,0.9251
+self-weighted,published (8v7),mean,insider_trading_cadenza__plain,0.9782
+self-weighted,published (8v7),max,insider_trading_cadenza__plain,0.9738
+self-weighted,knowledge-denial (4v6),mean,insider_trading_cadenza__plain,0.9401
+self-weighted,knowledge-denial (4v6),max,insider_trading_cadenza__plain,0.9829
+self-weighted,extended (12v13),mean,insider_trading_cadenza__plain,0.9815
+self-weighted,extended (12v13),max,insider_trading_cadenza__plain,0.9785
+self-weighted,sycophancy (5v5),mean,insider_trading_cadenza__plain,0.986
+self-weighted,sycophancy (5v5),max,insider_trading_cadenza__plain,0.9853
+learned,published (8v7),mean,insider_trading_cadenza__plain,0.9763
+learned,published (8v7),max,insider_trading_cadenza__plain,0.9749
+learned,knowledge-denial (4v6),mean,insider_trading_cadenza__plain,0.9157
+learned,knowledge-denial (4v6),max,insider_trading_cadenza__plain,0.9789
+learned,extended (12v13),mean,insider_trading_cadenza__plain,0.979
+learned,extended (12v13),max,insider_trading_cadenza__plain,0.9793
+learned,sycophancy (5v5),mean,insider_trading_cadenza__plain,0.9843
+learned,sycophancy (5v5),max,insider_trading_cadenza__plain,0.9654
+"bank (all rollouts, mean)",published (8v7),mean,insider_trading_cadenza__plain,0.9787
+"bank (all rollouts, mean)",published (8v7),max,insider_trading_cadenza__plain,0.9826
+"bank (all rollouts, mean)",knowledge-denial (4v6),mean,insider_trading_cadenza__plain,0.9134
+"bank (all rollouts, mean)",knowledge-denial (4v6),max,insider_trading_cadenza__plain,0.9714
+"bank (all rollouts, mean)",extended (12v13),mean,insider_trading_cadenza__plain,0.9803
+"bank (all rollouts, mean)",extended (12v13),max,insider_trading_cadenza__plain,0.9751
+"bank (all rollouts, mean)",sycophancy (5v5),mean,insider_trading_cadenza__plain,0.9852
+"bank (all rollouts, mean)",sycophancy (5v5),max,insider_trading_cadenza__plain,0.9881
+mean,published (8v7),mean,instruct_dishonesty__plain,0.9721
+mean,published (8v7),max,instruct_dishonesty__plain,0.9632
+mean,knowledge-denial (4v6),mean,instruct_dishonesty__plain,0.9759
+mean,knowledge-denial (4v6),max,instruct_dishonesty__plain,0.9661
+mean,extended (12v13),mean,instruct_dishonesty__plain,0.9783
+mean,extended (12v13),max,instruct_dishonesty__plain,0.9667
+mean,sycophancy (5v5),mean,instruct_dishonesty__plain,0.9434
+mean,sycophancy (5v5),max,instruct_dishonesty__plain,0.9184
+mean masked,published (8v7),mean,instruct_dishonesty__plain,0.9725
+mean masked,published (8v7),max,instruct_dishonesty__plain,0.9625
+mean masked,knowledge-denial (4v6),mean,instruct_dishonesty__plain,0.9755
+mean masked,knowledge-denial (4v6),max,instruct_dishonesty__plain,0.9662
+mean masked,extended (12v13),mean,instruct_dishonesty__plain,0.9778
+mean masked,extended (12v13),max,instruct_dishonesty__plain,0.9658
+mean masked,sycophancy (5v5),mean,instruct_dishonesty__plain,0.9434
+mean masked,sycophancy (5v5),max,instruct_dishonesty__plain,0.918
+last token,published (8v7),mean,instruct_dishonesty__plain,0.971
+last token,published (8v7),max,instruct_dishonesty__plain,0.9421
+last token,knowledge-denial (4v6),mean,instruct_dishonesty__plain,0.9815
+last token,knowledge-denial (4v6),max,instruct_dishonesty__plain,0.9703
+last token,extended (12v13),mean,instruct_dishonesty__plain,0.9806
+last token,extended (12v13),max,instruct_dishonesty__plain,0.9576
+last token,sycophancy (5v5),mean,instruct_dishonesty__plain,0.9086
+last token,sycophancy (5v5),max,instruct_dishonesty__plain,0.9128
+self-weighted,published (8v7),mean,instruct_dishonesty__plain,0.9677
+self-weighted,published (8v7),max,instruct_dishonesty__plain,0.9404
+self-weighted,knowledge-denial (4v6),mean,instruct_dishonesty__plain,0.9754
+self-weighted,knowledge-denial (4v6),max,instruct_dishonesty__plain,0.9652
+self-weighted,extended (12v13),mean,instruct_dishonesty__plain,0.9746
+self-weighted,extended (12v13),max,instruct_dishonesty__plain,0.9544
+self-weighted,sycophancy (5v5),mean,instruct_dishonesty__plain,0.936
+self-weighted,sycophancy (5v5),max,instruct_dishonesty__plain,0.915
+learned,published (8v7),mean,instruct_dishonesty__plain,0.9585
+learned,published (8v7),max,instruct_dishonesty__plain,0.9293
+learned,knowledge-denial (4v6),mean,instruct_dishonesty__plain,0.9717
+learned,knowledge-denial (4v6),max,instruct_dishonesty__plain,0.9606
+learned,extended (12v13),mean,instruct_dishonesty__plain,0.9683
+learned,extended (12v13),max,instruct_dishonesty__plain,0.9462
+learned,sycophancy (5v5),mean,instruct_dishonesty__plain,0.933
+learned,sycophancy (5v5),max,instruct_dishonesty__plain,0.9135
+"bank (all rollouts, mean)",published (8v7),mean,instruct_dishonesty__plain,0.9744
+"bank (all rollouts, mean)",published (8v7),max,instruct_dishonesty__plain,0.9653
+"bank (all rollouts, mean)",knowledge-denial (4v6),mean,instruct_dishonesty__plain,0.9801
+"bank (all rollouts, mean)",knowledge-denial (4v6),max,instruct_dishonesty__plain,0.9688
+"bank (all rollouts, mean)",extended (12v13),mean,instruct_dishonesty__plain,0.9784
+"bank (all rollouts, mean)",extended (12v13),max,instruct_dishonesty__plain,0.9692
+"bank (all rollouts, mean)",sycophancy (5v5),mean,instruct_dishonesty__plain,0.948
+"bank (all rollouts, mean)",sycophancy (5v5),max,instruct_dishonesty__plain,0.9234
+mean,published (8v7),mean,repe_honesty__plain,1.0
+mean,published (8v7),max,repe_honesty__plain,0.9978
+mean,knowledge-denial (4v6),mean,repe_honesty__plain,0.9994
+mean,knowledge-denial (4v6),max,repe_honesty__plain,0.9951
+mean,extended (12v13),mean,repe_honesty__plain,1.0
+mean,extended (12v13),max,repe_honesty__plain,0.9993
+mean,sycophancy (5v5),mean,repe_honesty__plain,0.9951
+mean,sycophancy (5v5),max,repe_honesty__plain,0.9911
+mean masked,published (8v7),mean,repe_honesty__plain,1.0
+mean masked,published (8v7),max,repe_honesty__plain,0.9978
+mean masked,knowledge-denial (4v6),mean,repe_honesty__plain,0.9993
+mean masked,knowledge-denial (4v6),max,repe_honesty__plain,0.9953
+mean masked,extended (12v13),mean,repe_honesty__plain,1.0
+mean masked,extended (12v13),max,repe_honesty__plain,0.9994
+mean masked,sycophancy (5v5),mean,repe_honesty__plain,0.9951
+mean masked,sycophancy (5v5),max,repe_honesty__plain,0.9909
+last token,published (8v7),mean,repe_honesty__plain,0.9994
+last token,published (8v7),max,repe_honesty__plain,0.9968
+last token,knowledge-denial (4v6),mean,repe_honesty__plain,0.997
+last token,knowledge-denial (4v6),max,repe_honesty__plain,0.9936
+last token,extended (12v13),mean,repe_honesty__plain,0.9992
+last token,extended (12v13),max,repe_honesty__plain,0.9972
+last token,sycophancy (5v5),mean,repe_honesty__plain,0.9772
+last token,sycophancy (5v5),max,repe_honesty__plain,0.9344
+self-weighted,published (8v7),mean,repe_honesty__plain,0.9999
+self-weighted,published (8v7),max,repe_honesty__plain,0.998
+self-weighted,knowledge-denial (4v6),mean,repe_honesty__plain,0.9955
+self-weighted,knowledge-denial (4v6),max,repe_honesty__plain,0.9894
+self-weighted,extended (12v13),mean,repe_honesty__plain,0.9999
+self-weighted,extended (12v13),max,repe_honesty__plain,0.9982
+self-weighted,sycophancy (5v5),mean,repe_honesty__plain,0.9757
+self-weighted,sycophancy (5v5),max,repe_honesty__plain,0.9743
+learned,published (8v7),mean,repe_honesty__plain,0.9707
+learned,published (8v7),max,repe_honesty__plain,0.9836
+learned,knowledge-denial (4v6),mean,repe_honesty__plain,0.9709
+learned,knowledge-denial (4v6),max,repe_honesty__plain,0.9795
+learned,extended (12v13),mean,repe_honesty__plain,0.9708
+learned,extended (12v13),max,repe_honesty__plain,0.9671
+learned,sycophancy (5v5),mean,repe_honesty__plain,0.9092
+learned,sycophancy (5v5),max,repe_honesty__plain,0.9597
+"bank (all rollouts, mean)",published (8v7),mean,repe_honesty__plain,1.0
+"bank (all rollouts, mean)",published (8v7),max,repe_honesty__plain,0.9992
+"bank (all rollouts, mean)",knowledge-denial (4v6),mean,repe_honesty__plain,1.0
+"bank (all rollouts, mean)",knowledge-denial (4v6),max,repe_honesty__plain,0.9987
+"bank (all rollouts, mean)",extended (12v13),mean,repe_honesty__plain,1.0
+"bank (all rollouts, mean)",extended (12v13),max,repe_honesty__plain,1.0
+"bank (all rollouts, mean)",sycophancy (5v5),mean,repe_honesty__plain,0.9992
+"bank (all rollouts, mean)",sycophancy (5v5),max,repe_honesty__plain,0.9979
+mean,published (8v7),mean,XXXX-20__plain,
+mean,published (8v7),max,XXXX-20__plain,
+mean,knowledge-denial (4v6),mean,XXXX-20__plain,
+mean,knowledge-denial (4v6),max,XXXX-20__plain,
+mean,extended (12v13),mean,XXXX-20__plain,
+mean,extended (12v13),max,XXXX-20__plain,
+mean,sycophancy (5v5),mean,XXXX-20__plain,
+mean,sycophancy (5v5),max,XXXX-20__plain,
+mean masked,published (8v7),mean,XXXX-20__plain,
+mean masked,published (8v7),max,XXXX-20__plain,
+mean masked,knowledge-denial (4v6),mean,XXXX-20__plain,
+mean masked,knowledge-denial (4v6),max,XXXX-20__plain,
+mean masked,extended (12v13),mean,XXXX-20__plain,
+mean masked,extended (12v13),max,XXXX-20__plain,
+mean masked,sycophancy (5v5),mean,XXXX-20__plain,
+mean masked,sycophancy (5v5),max,XXXX-20__plain,
+last token,published (8v7),mean,XXXX-20__plain,
+last token,published (8v7),max,XXXX-20__plain,
+last token,knowledge-denial (4v6),mean,XXXX-20__plain,
+last token,knowledge-denial (4v6),max,XXXX-20__plain,
+last token,extended (12v13),mean,XXXX-20__plain,
+last token,extended (12v13),max,XXXX-20__plain,
+last token,sycophancy (5v5),mean,XXXX-20__plain,
+last token,sycophancy (5v5),max,XXXX-20__plain,
+self-weighted,published (8v7),mean,XXXX-20__plain,
+self-weighted,published (8v7),max,XXXX-20__plain,
+self-weighted,knowledge-denial (4v6),mean,XXXX-20__plain,
+self-weighted,knowledge-denial (4v6),max,XXXX-20__plain,
+self-weighted,extended (12v13),mean,XXXX-20__plain,
+self-weighted,extended (12v13),max,XXXX-20__plain,
+self-weighted,sycophancy (5v5),mean,XXXX-20__plain,
+self-weighted,sycophancy (5v5),max,XXXX-20__plain,
+learned,published (8v7),mean,XXXX-20__plain,
+learned,published (8v7),max,XXXX-20__plain,
+learned,knowledge-denial (4v6),mean,XXXX-20__plain,
+learned,knowledge-denial (4v6),max,XXXX-20__plain,
+learned,extended (12v13),mean,XXXX-20__plain,
+learned,extended (12v13),max,XXXX-20__plain,
+learned,sycophancy (5v5),mean,XXXX-20__plain,
+learned,sycophancy (5v5),max,XXXX-20__plain,
+"bank (all rollouts, mean)",published (8v7),mean,XXXX-20__plain,
+"bank (all rollouts, mean)",published (8v7),max,XXXX-20__plain,
+"bank (all rollouts, mean)",knowledge-denial (4v6),mean,XXXX-20__plain,
+"bank (all rollouts, mean)",knowledge-denial (4v6),max,XXXX-20__plain,
+"bank (all rollouts, mean)",extended (12v13),mean,XXXX-20__plain,
+"bank (all rollouts, mean)",extended (12v13),max,XXXX-20__plain,
+"bank (all rollouts, mean)",sycophancy (5v5),mean,XXXX-20__plain,
+"bank (all rollouts, mean)",sycophancy (5v5),max,XXXX-20__plain,

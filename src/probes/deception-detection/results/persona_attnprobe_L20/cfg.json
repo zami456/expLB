@@ -1,0 +1,146 @@
+{
+ "layer": 20,
+ "arms": {
+  "P36 attention, 1 head": [
+   "P36",
+   1,
+   "attention"
+  ],
+  "P36 attention, 8 heads": [
+   "P36",
+   8,
+   "attention"
+  ],
+  "A4 attention, 1 head": [
+   "A4",
+   1,
+   "attention"
+  ],
+  "A4 attention, 8 heads": [
+   "A4",
+   8,
+   "attention"
+  ],
+  "R36 attention, 8 heads": [
+   "R36",
+   8,
+   "attention"
+  ],
+  "P36 mean-pooled": [
+   "P36",
+   1,
+   "mean"
+  ],
+  "P36 last token": [
+   "P36",
+   1,
+   "last"
+  ],
+  "P36 attention, 1 head, no position": [
+   "P36",
+   1,
+   "attention-nopos"
+  ]
+ },
+ "weight_decays": [
+  0.0,
+  0.001,
+  0.01,
+  0.1
+ ],
+ "seeds": [
+  0,
+  1,
+  2
+ ],
+ "max_iter": 2000,
+ "train_sets": [
+  "convince_me__plain",
+  "harm_refusal_knowledge_report__plain",
+  "insider_trading_cadenza__plain",
+  "instruct_dishonesty__plain",
+  "repe_honesty__plain"
+ ],
+ "control": "XXXX-20__plain",
+ "fpr": 0.01,
+ "columns": [
+  "persona:default",
+  "persona:pc_amnesiac_witness",
+  "persona:pc_archivist",
+  "persona:pc_blunt_advisor",
+  "persona:pc_broker",
+  "persona:pc_calibrated_reporter",
+  "persona:pc_candid_witness",
+  "persona:pc_cheerleader",
+  "persona:pc_contrarian",
+  "persona:pc_coverup_operator",
+  "persona:pc_critic",
+  "persona:pc_deniable_expert",
+  "persona:pc_disclosure_counsel",
+  "persona:pc_documentarian",
+  "persona:pc_enabler",
+  "persona:pc_fact_checker",
+  "persona:pc_feigned_novice",
+  "persona:pc_flatterer",
+  "persona:pc_forthright_expert",
+  "persona:pc_gatekeeper",
+  "persona:pc_handler",
+  "persona:pc_honest_novice",
+  "persona:pc_impression_manager",
+  "persona:pc_narrative_manager",
+  "persona:pc_ombudsman",
+  "persona:pc_people_pleaser",
+  "persona:pc_plain_dealer",
+  "persona:pc_plausible_denier",
+  "persona:pc_scrupulous_witness",
+  "persona:pc_skeptic",
+  "persona:pc_spin_doctor",
+  "persona:pc_stonewaller",
+  "persona:pc_tough_love_mentor",
+  "persona:pc_transparency_officer",
+  "persona:pc_whistleblower",
+  "persona:pc_yes_man",
+  "axis:extended",
+  "axis:denial",
+  "axis:deception",
+  "axis:sycophancy",
+  "random:0",
+  "random:1",
+  "random:2",
+  "random:3",
+  "random:4",
+  "random:5",
+  "random:6",
+  "random:7",
+  "random:8",
+  "random:9",
+  "random:10",
+  "random:11",
+  "random:12",
+  "random:13",
+  "random:14",
+  "random:15",
+  "random:16",
+  "random:17",
+  "random:18",
+  "random:19",
+  "random:20",
+  "random:21",
+  "random:22",
+  "random:23",
+  "random:24",
+  "random:25",
+  "random:26",
+  "random:27",
+  "random:28",
+  "random:29",
+  "random:30",
+  "random:31",
+  "random:32",
+  "random:33",
+  "random:34",
+  "random:35"
+ ],
+ "standardisation": "per column, Alpaca token mean and SD",
+ "reference": "github.com/EleutherAI/attention-probes@889b8dea"
+}

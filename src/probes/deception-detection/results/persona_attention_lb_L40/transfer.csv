@@ -1,0 +1,26 @@
+direction,shape,read,transfer (25 pairs),in-sample,CG,HP-C,HP-KR,IT,ID,RepE,null min,null max
+LB-trained H=1,extended (12v13),mean,0.8932,0.985,0.8879,0.6604,0.9156,0.976,0.9774,1.0,,
+LB-trained H=1,extended (12v13),max,0.8963,0.9791,0.9453,0.66,0.9072,0.9591,0.9671,0.9979,,
+LB-trained H=1,knowledge-denial (4v6),mean,0.8972,0.9808,0.8997,0.7033,0.9163,0.9349,0.9779,0.9997,,
+LB-trained H=1,knowledge-denial (4v6),max,0.9047,0.9703,0.8979,0.7031,0.9482,0.965,0.9676,0.9966,,
+LB-trained H=3,extended (12v13),mean,0.8927,0.9859,0.8869,0.6583,0.9164,0.9759,0.9775,1.0,,
+LB-trained H=3,extended (12v13),max,0.8952,0.9797,0.9438,0.6578,0.9072,0.957,0.9672,0.9978,,
+LB-trained H=3 (shuffled labels),extended (12v13),mean,0.888,0.9442,0.8703,0.6614,0.8957,0.9795,0.9778,1.0,0.8878,0.8881
+LB-trained H=3 (shuffled labels),extended (12v13),max,0.9041,0.965,0.9669,0.6609,0.9105,0.9821,0.9658,0.9993,0.9038,0.9044
+LB-trained H=3,knowledge-denial (4v6),mean,0.8988,0.9822,0.9025,0.7038,0.9209,0.9365,0.978,0.9997,,
+LB-trained H=3,knowledge-denial (4v6),max,0.9048,0.9728,0.8985,0.7036,0.9475,0.9647,0.9678,0.9969,,
+LB-trained H=3 (shuffled labels),knowledge-denial (4v6),mean,0.878,0.9208,0.8717,0.7059,0.895,0.8637,0.9754,0.9992,0.8778,0.8781
+LB-trained H=3 (shuffled labels),knowledge-denial (4v6),max,0.9053,0.9555,0.8729,0.7057,0.9635,0.978,0.9662,0.9953,0.905,0.9055
+mean extraction (same rollouts),extended (12v13),mean,0.8871,,0.8698,0.6578,0.8951,0.9791,0.9783,1.0,,
+mean extraction (same rollouts),extended (12v13),max,0.9041,,0.9693,0.6574,0.9117,0.9818,0.9667,0.9993,,
+mean extraction (same rollouts),knowledge-denial (4v6),mean,0.8741,,0.8721,0.7061,0.8924,0.8408,0.9759,0.9994,,
+mean extraction (same rollouts),knowledge-denial (4v6),max,0.9059,,0.8865,0.7059,0.964,0.968,0.9661,0.9951,,
+bank-trained query (same rollouts),extended (12v13),mean,0.8145,,0.9182,0.5341,0.587,0.979,0.9683,0.9708,,
+bank-trained query (same rollouts),extended (12v13),max,0.8672,,0.9556,0.534,0.9042,0.9793,0.9462,0.9671,,
+bank-trained query (same rollouts),knowledge-denial (4v6),mean,0.854,,0.9092,0.5888,0.8344,0.9157,0.9717,0.9709,,
+bank-trained query (same rollouts),knowledge-denial (4v6),max,0.8829,,0.8971,0.5887,0.9664,0.9789,0.9606,0.9795,,
+full bank (mean),extended (12v13),mean,0.9077,,0.9123,0.7116,0.9124,0.9803,0.9784,1.0,,
+full bank (mean),extended (12v13),max,0.9161,,0.9927,0.7111,0.8995,0.9751,0.9692,1.0,,
+full bank (mean),knowledge-denial (4v6),mean,0.9053,,0.9019,0.7552,0.9185,0.9134,0.9801,1.0,,
+full bank (mean),knowledge-denial (4v6),max,0.9273,,0.9596,0.7547,0.9536,0.9714,0.9688,0.9987,,
+raw 8192-d probe,-,mean,0.7271,0.9878,0.7876,0.5708,0.6088,0.7616,0.8428,0.8299,,

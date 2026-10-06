@@ -1,0 +1,61 @@
+model,vs,test,delta,lo,hi,significant
+"P36 attention, 1 head","max read, knowledge-denial",CG,-0.0732,-0.098,-0.0494,loss
+"P36 attention, 1 head","top10 read, extended",CG,-0.1046,-0.1287,-0.0805,loss
+"P36 attention, 1 head","max read, knowledge-denial",HP-C,-0.0501,-0.0826,-0.0162,loss
+"P36 attention, 1 head","top10 read, extended",HP-C,-0.0066,-0.0411,0.0286,
+"P36 attention, 1 head","max read, knowledge-denial",HP-KR,-0.3068,-0.3308,-0.283,loss
+"P36 attention, 1 head","top10 read, extended",HP-KR,-0.2494,-0.2757,-0.2213,loss
+"P36 attention, 1 head","max read, knowledge-denial",IT,-0.0139,-0.0204,-0.0073,loss
+"P36 attention, 1 head","top10 read, extended",IT,-0.0053,-0.011,0.0006,
+"P36 attention, 1 head","max read, knowledge-denial",ID,-0.0286,-0.0325,-0.0244,loss
+"P36 attention, 1 head","top10 read, extended",ID,-0.0362,-0.0398,-0.0324,loss
+"P36 attention, 1 head","max read, knowledge-denial",RepE,-0.0065,-0.0095,-0.0036,loss
+"P36 attention, 1 head","top10 read, extended",RepE,-0.0078,-0.0109,-0.0049,loss
+"P36 attention, 8 heads","max read, knowledge-denial",CG,-0.0937,-0.1211,-0.0678,loss
+"P36 attention, 8 heads","top10 read, extended",CG,-0.1251,-0.1547,-0.0974,loss
+"P36 attention, 8 heads","max read, knowledge-denial",HP-C,-0.0462,-0.0811,-0.0115,loss
+"P36 attention, 8 heads","top10 read, extended",HP-C,-0.0026,-0.0394,0.0358,
+"P36 attention, 8 heads","max read, knowledge-denial",HP-KR,-0.2678,-0.2858,-0.25,loss
+"P36 attention, 8 heads","top10 read, extended",HP-KR,-0.2104,-0.2327,-0.1858,loss
+"P36 attention, 8 heads","max read, knowledge-denial",IT,-0.1053,-0.1174,-0.0942,loss
+"P36 attention, 8 heads","top10 read, extended",IT,-0.0968,-0.1073,-0.0876,loss
+"P36 attention, 8 heads","max read, knowledge-denial",ID,-0.0138,-0.0173,-0.0104,loss
+"P36 attention, 8 heads","top10 read, extended",ID,-0.0214,-0.0244,-0.0186,loss
+"P36 attention, 8 heads","max read, knowledge-denial",RepE,0.001,0.0001,0.0024,gain
+"P36 attention, 8 heads","top10 read, extended",RepE,-0.0003,-0.0007,-0.0001,loss
+"A4 attention, 1 head","max read, knowledge-denial",CG,-0.0643,-0.086,-0.0439,loss
+"A4 attention, 1 head","top10 read, extended",CG,-0.0957,-0.116,-0.076,loss
+"A4 attention, 1 head","max read, knowledge-denial",HP-C,-0.0573,-0.0852,-0.0303,loss
+"A4 attention, 1 head","top10 read, extended",HP-C,-0.0137,-0.0427,0.0157,
+"A4 attention, 1 head","max read, knowledge-denial",HP-KR,-0.4225,-0.4523,-0.3879,loss
+"A4 attention, 1 head","top10 read, extended",HP-KR,-0.3651,-0.3974,-0.3256,loss
+"A4 attention, 1 head","max read, knowledge-denial",IT,-0.1289,-0.1413,-0.1167,loss
+"A4 attention, 1 head","top10 read, extended",IT,-0.1203,-0.1322,-0.1086,loss
+"A4 attention, 1 head","max read, knowledge-denial",ID,-0.0538,-0.0585,-0.0487,loss
+"A4 attention, 1 head","top10 read, extended",ID,-0.0614,-0.0662,-0.0565,loss
+"A4 attention, 1 head","max read, knowledge-denial",RepE,-0.0311,-0.0391,-0.0238,loss
+"A4 attention, 1 head","top10 read, extended",RepE,-0.0324,-0.0403,-0.0251,loss
+"A4 attention, 8 heads","max read, knowledge-denial",CG,-0.0354,-0.0528,-0.0163,loss
+"A4 attention, 8 heads","top10 read, extended",CG,-0.0668,-0.0841,-0.0504,loss
+"A4 attention, 8 heads","max read, knowledge-denial",HP-C,-0.0354,-0.0616,-0.0101,loss
+"A4 attention, 8 heads","top10 read, extended",HP-C,0.0082,-0.0233,0.0389,
+"A4 attention, 8 heads","max read, knowledge-denial",HP-KR,-0.2802,-0.2989,-0.2613,loss
+"A4 attention, 8 heads","top10 read, extended",HP-KR,-0.2228,-0.24,-0.2018,loss
+"A4 attention, 8 heads","max read, knowledge-denial",IT,-0.1515,-0.1608,-0.1421,loss
+"A4 attention, 8 heads","top10 read, extended",IT,-0.143,-0.152,-0.1335,loss
+"A4 attention, 8 heads","max read, knowledge-denial",ID,-0.035,-0.0395,-0.0302,loss
+"A4 attention, 8 heads","top10 read, extended",ID,-0.0426,-0.0471,-0.038,loss
+"A4 attention, 8 heads","max read, knowledge-denial",RepE,-0.0089,-0.0128,-0.0054,loss
+"A4 attention, 8 heads","top10 read, extended",RepE,-0.0102,-0.0146,-0.0068,loss
+"P36 attention, 1 head, no position","max read, knowledge-denial",CG,-0.0962,-0.1257,-0.0697,loss
+"P36 attention, 1 head, no position","top10 read, extended",CG,-0.1276,-0.1575,-0.0992,loss
+"P36 attention, 1 head, no position","max read, knowledge-denial",HP-C,-0.0643,-0.0971,-0.0295,loss
+"P36 attention, 1 head, no position","top10 read, extended",HP-C,-0.0207,-0.0576,0.0177,
+"P36 attention, 1 head, no position","max read, knowledge-denial",HP-KR,-0.3144,-0.3363,-0.2928,loss
+"P36 attention, 1 head, no position","top10 read, extended",HP-KR,-0.257,-0.2835,-0.2286,loss
+"P36 attention, 1 head, no position","max read, knowledge-denial",IT,-0.1683,-0.1781,-0.1587,loss
+"P36 attention, 1 head, no position","top10 read, extended",IT,-0.1598,-0.1696,-0.1504,loss
+"P36 attention, 1 head, no position","max read, knowledge-denial",ID,-0.0152,-0.0187,-0.0118,loss
+"P36 attention, 1 head, no position","top10 read, extended",ID,-0.0228,-0.0259,-0.0198,loss
+"P36 attention, 1 head, no position","max read, knowledge-denial",RepE,-0.0044,-0.0067,-0.0021,loss
+"P36 attention, 1 head, no position","top10 read, extended",RepE,-0.0057,-0.0082,-0.0036,loss

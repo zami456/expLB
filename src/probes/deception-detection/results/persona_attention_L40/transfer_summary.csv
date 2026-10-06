@@ -1,0 +1,20 @@
+axis,model,off-diagonal mean
+D9 extended (12v13),mean,0.9077
+D9 extended (12v13),identity start,0.9078
+D9 extended (12v13),max,0.9161
+D9 extended (12v13),learned query (penalty chosen on held-out train),0.9075
+D9 extended (12v13),"learned query, penalty 1",0.9073
+D9 extended (12v13),"learned query, penalty 0.1",0.9052
+D9 extended (12v13),"learned query, penalty 0.01",0.9059
+D9 extended (12v13),"learned query, penalty 0.001",0.898
+D9 extended (12v13),"learned query, penalty 0.0001",0.8962
+D8 knowledge-denial (4v6),mean,0.9053
+D8 knowledge-denial (4v6),identity start,0.9055
+D8 knowledge-denial (4v6),max,0.9273
+D8 knowledge-denial (4v6),learned query (penalty chosen on held-out train),0.9096
+D8 knowledge-denial (4v6),"learned query, penalty 1",0.9068
+D8 knowledge-denial (4v6),"learned query, penalty 0.1",0.9035
+D8 knowledge-denial (4v6),"learned query, penalty 0.01",0.8905
+D8 knowledge-denial (4v6),"learned query, penalty 0.001",0.8918
+D8 knowledge-denial (4v6),"learned query, penalty 0.0001",0.8823
+-,raw 8192-d LR probe (same train/test pairs),0.7271

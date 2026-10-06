@@ -1,0 +1,16 @@
+model,transfer AUROC,seed SD,transfer balanced accuracy,transfer recall
+"mean read, extended",0.8935,,0.6446,0.3022
+"top10 read, extended",0.8832,,0.7088,0.4342
+"max read, extended",0.8715,,0.6837,0.3812
+"mean read, knowledge-denial",0.8548,,0.5903,0.3897
+"top10 read, knowledge-denial",0.8769,,0.6464,0.3068
+"max read, knowledge-denial",0.8425,,0.5346,0.0711
+"P36 attention, 1 head",0.5917,0.0078,0.557,0.1198
+"P36 attention, 8 heads",0.7188,0.0149,0.5577,0.1272
+"A4 attention, 1 head",0.7633,0.0004,0.5817,0.1714
+"A4 attention, 8 heads",0.6887,0.0268,0.5867,0.2113
+"R36 attention, 8 heads",0.59,0.0108,0.5201,0.1122
+P36 mean-pooled,0.6405,0.0069,0.5368,0.1579
+P36 last token,0.7084,0.004,0.5866,0.1794
+"P36 attention, 1 head, no position",0.6444,0.0001,0.5179,0.0583
+raw 8192-d LR probe (persona_ood baseline),0.6475,,0.5651,

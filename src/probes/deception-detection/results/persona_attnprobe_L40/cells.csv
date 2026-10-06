@@ -1,0 +1,277 @@
+model,train,test,auroc,auroc_seed_sd,recall,specificity,balacc
+"mean read, extended",-,CG,0.9123,,0.3593,1.0,0.6796
+"mean read, extended",-,HP-C,0.7116,,0.0,1.0,0.5
+"mean read, extended",-,HP-KR,0.9124,,0.0,1.0,0.5
+"mean read, extended",-,IT,0.9803,,0.7494,0.9878,0.8686
+"mean read, extended",-,ID,0.9784,,0.956,0.8869,0.9214
+"mean read, extended",-,RepE,1.0,,0.9964,1.0,0.9982
+"top10 read, extended",-,CG,0.991,,0.6886,1.0,0.8443
+"top10 read, extended",-,HP-C,0.7111,,0.0,1.0,0.5
+"top10 read, extended",-,HP-KR,0.8962,,0.0,1.0,0.5
+"top10 read, extended",-,IT,0.9628,,0.9716,0.8615,0.9166
+"top10 read, extended",-,ID,0.9764,,0.9928,0.8571,0.925
+"top10 read, extended",-,RepE,1.0,,0.9164,1.0,0.9582
+"max read, extended",-,CG,0.9927,,0.8144,1.0,0.9072
+"max read, extended",-,HP-C,0.7111,,0.0,1.0,0.5
+"max read, extended",-,HP-KR,0.8995,,0.0,1.0,0.5
+"max read, extended",-,IT,0.9751,,0.9882,0.86,0.9241
+"max read, extended",-,ID,0.9692,,0.9376,0.8965,0.9171
+"max read, extended",-,RepE,1.0,,0.2764,1.0,0.6382
+"mean read, knowledge-denial",-,CG,0.9019,,0.5569,1.0,0.7784
+"mean read, knowledge-denial",-,HP-C,0.7552,,0.0149,1.0,0.5075
+"mean read, knowledge-denial",-,HP-KR,0.9185,,0.8849,0.9355,0.9102
+"mean read, knowledge-denial",-,IT,0.9134,,0.0,1.0,0.5
+"mean read, knowledge-denial",-,ID,0.9801,,0.9773,0.8814,0.9294
+"mean read, knowledge-denial",-,RepE,1.0,,1.0,1.0,1.0
+"top10 read, knowledge-denial",-,CG,0.9684,,0.7006,1.0,0.8503
+"top10 read, knowledge-denial",-,HP-C,0.7547,,0.0,1.0,0.5
+"top10 read, knowledge-denial",-,HP-KR,0.9468,,0.0216,0.9995,0.5105
+"top10 read, knowledge-denial",-,IT,0.9634,,0.0284,1.0,0.5142
+"top10 read, knowledge-denial",-,ID,0.9769,,0.9833,0.8672,0.9252
+"top10 read, knowledge-denial",-,RepE,0.9989,,0.8509,1.0,0.9255
+"max read, knowledge-denial",-,CG,0.9596,,0.7006,1.0,0.8503
+"max read, knowledge-denial",-,HP-C,0.7547,,0.0,1.0,0.5
+"max read, knowledge-denial",-,HP-KR,0.9536,,0.0,1.0,0.5
+"max read, knowledge-denial",-,IT,0.9714,,0.0426,1.0,0.5213
+"max read, knowledge-denial",-,ID,0.9688,,0.8742,0.9342,0.9042
+"max read, knowledge-denial",-,RepE,0.9987,,0.0545,1.0,0.5273
+"P36 attention, 1 head",CG,CG,1.0,0.0,0.3713,1.0,0.6856
+"P36 attention, 1 head",CG,HP-C,0.6632,0.0257,0.0,1.0,0.5
+"P36 attention, 1 head",CG,HP-KR,0.2703,0.1931,0.0,1.0,0.5
+"P36 attention, 1 head",CG,IT,0.9841,0.0017,0.0071,1.0,0.5035
+"P36 attention, 1 head",CG,ID,0.9436,0.0024,0.4749,0.9535,0.7142
+"P36 attention, 1 head",CG,RepE,1.0,0.0,0.5309,1.0,0.7655
+"P36 attention, 1 head",HP-KR,CG,0.757,0.0001,0.0599,1.0,0.5299
+"P36 attention, 1 head",HP-KR,HP-C,0.7781,0.0,0.0,1.0,0.5
+"P36 attention, 1 head",HP-KR,HP-KR,0.9824,0.0,0.0,1.0,0.5
+"P36 attention, 1 head",HP-KR,IT,0.9482,0.0,0.0,1.0,0.5
+"P36 attention, 1 head",HP-KR,ID,0.9364,0.0,0.0,1.0,0.5
+"P36 attention, 1 head",HP-KR,RepE,0.9711,0.0,0.0,1.0,0.5
+"P36 attention, 1 head",IT,CG,0.9765,0.0001,0.3473,1.0,0.6737
+"P36 attention, 1 head",IT,HP-C,0.7426,0.0001,0.0,1.0,0.5
+"P36 attention, 1 head",IT,HP-KR,0.6282,0.0012,0.0,1.0,0.5
+"P36 attention, 1 head",IT,IT,0.9932,0.0,0.5957,1.0,0.7979
+"P36 attention, 1 head",IT,ID,0.9461,0.0001,0.0998,0.9979,0.5489
+"P36 attention, 1 head",IT,RepE,0.9976,0.0001,0.0,1.0,0.5
+"P36 attention, 1 head",ID,CG,0.8127,0.0096,0.1976,1.0,0.5988
+"P36 attention, 1 head",ID,HP-C,0.6393,0.0278,0.0,1.0,0.5
+"P36 attention, 1 head",ID,HP-KR,0.8903,0.0208,0.0,1.0,0.5
+"P36 attention, 1 head",ID,IT,0.9191,0.0383,0.1253,0.9863,0.5558
+"P36 attention, 1 head",ID,ID,0.9962,0.0003,0.6709,0.9975,0.8342
+"P36 attention, 1 head",ID,RepE,1.0,0.0,0.8255,1.0,0.9127
+"P36 attention, 1 head",RepE,CG,0.9995,0.0,0.1198,1.0,0.5599
+"P36 attention, 1 head",RepE,HP-C,0.6995,0.0,0.0,1.0,0.5
+"P36 attention, 1 head",RepE,HP-KR,0.7984,0.0,0.0,1.0,0.5
+"P36 attention, 1 head",RepE,IT,0.9786,0.0,0.0,1.0,0.5
+"P36 attention, 1 head",RepE,ID,0.9348,0.0,0.2864,0.9744,0.6304
+"P36 attention, 1 head",RepE,RepE,1.0,0.0,0.8727,1.0,0.9364
+"P36 attention, 8 heads",CG,CG,1.0,0.0,0.2455,1.0,0.6228
+"P36 attention, 8 heads",CG,HP-C,0.6316,0.0,0.0,1.0,0.5
+"P36 attention, 8 heads",CG,HP-KR,0.1562,0.0,0.0,1.0,0.5
+"P36 attention, 8 heads",CG,IT,0.9814,0.0,0.0,1.0,0.5
+"P36 attention, 8 heads",CG,ID,0.9441,0.0,0.3337,0.9765,0.6551
+"P36 attention, 8 heads",CG,RepE,1.0,0.0,0.3964,1.0,0.6982
+"P36 attention, 8 heads",HP-KR,CG,0.759,0.0007,0.3713,1.0,0.6856
+"P36 attention, 8 heads",HP-KR,HP-C,0.7887,0.0008,0.0,1.0,0.5
+"P36 attention, 8 heads",HP-KR,HP-KR,0.9835,0.0,0.0,1.0,0.5
+"P36 attention, 8 heads",HP-KR,IT,0.6662,0.0013,0.0,1.0,0.5
+"P36 attention, 8 heads",HP-KR,ID,0.9577,0.0002,0.0289,0.9996,0.5142
+"P36 attention, 8 heads",HP-KR,RepE,0.9987,0.0002,0.0073,1.0,0.5036
+"P36 attention, 8 heads",IT,CG,0.9268,0.0001,0.7545,0.93,0.8422
+"P36 attention, 8 heads",IT,HP-C,0.7828,0.0,0.0,1.0,0.5
+"P36 attention, 8 heads",IT,HP-KR,0.9697,0.0002,0.0,1.0,0.5
+"P36 attention, 8 heads",IT,IT,0.9975,0.0,0.0047,1.0,0.5024
+"P36 attention, 8 heads",IT,ID,0.9603,0.0001,0.8522,0.925,0.8886
+"P36 attention, 8 heads",IT,RepE,1.0,0.0,0.16,1.0,0.58
+"P36 attention, 8 heads",ID,CG,0.778,0.0412,0.2036,1.0,0.6018
+"P36 attention, 8 heads",ID,HP-C,0.6407,0.006,0.0,1.0,0.5
+"P36 attention, 8 heads",ID,HP-KR,0.8429,0.0444,0.0,1.0,0.5
+"P36 attention, 8 heads",ID,IT,0.8366,0.0665,0.5106,0.8737,0.6922
+"P36 attention, 8 heads",ID,ID,0.9997,0.0001,0.8046,0.9996,0.9021
+"P36 attention, 8 heads",ID,RepE,1.0,0.0002,0.9018,1.0,0.9509
+"P36 attention, 8 heads",RepE,CG,1.0,0.0,0.2455,1.0,0.6228
+"P36 attention, 8 heads",RepE,HP-C,0.6988,0.0,0.0,1.0,0.5
+"P36 attention, 8 heads",RepE,HP-KR,0.7744,0.0001,0.0,1.0,0.5
+"P36 attention, 8 heads",RepE,IT,0.9798,0.0,0.0,1.0,0.5
+"P36 attention, 8 heads",RepE,ID,0.9577,0.0,0.4342,0.9824,0.7083
+"P36 attention, 8 heads",RepE,RepE,1.0,0.0,0.7673,1.0,0.8836
+"A4 attention, 1 head",CG,CG,0.9999,0.0,0.024,1.0,0.512
+"A4 attention, 1 head",CG,HP-C,0.7363,0.0002,0.0,1.0,0.5
+"A4 attention, 1 head",CG,HP-KR,0.2123,0.0008,0.0,1.0,0.5
+"A4 attention, 1 head",CG,IT,0.9839,0.0,0.0071,1.0,0.5035
+"A4 attention, 1 head",CG,ID,0.9114,0.0,0.3856,0.9497,0.6676
+"A4 attention, 1 head",CG,RepE,0.9888,0.0,0.0364,1.0,0.5182
+"A4 attention, 1 head",HP-KR,CG,0.7841,0.0129,0.0898,1.0,0.5449
+"A4 attention, 1 head",HP-KR,HP-C,0.6999,0.0102,0.0,1.0,0.5
+"A4 attention, 1 head",HP-KR,HP-KR,0.983,0.0006,0.0,1.0,0.5
+"A4 attention, 1 head",HP-KR,IT,0.5351,0.1335,0.0047,1.0,0.5024
+"A4 attention, 1 head",HP-KR,ID,0.884,0.0141,0.0003,1.0,0.5002
+"A4 attention, 1 head",HP-KR,RepE,0.8831,0.0082,0.0,1.0,0.5
+"A4 attention, 1 head",IT,CG,0.9784,0.0198,0.7365,0.99,0.8633
+"A4 attention, 1 head",IT,HP-C,0.7576,0.07,0.0,1.0,0.5
+"A4 attention, 1 head",IT,HP-KR,0.1307,0.1826,0.0,1.0,0.5
+"A4 attention, 1 head",IT,IT,0.99,0.0014,0.2222,1.0,0.6111
+"A4 attention, 1 head",IT,ID,0.9253,0.0086,0.9448,0.8433,0.8941
+"A4 attention, 1 head",IT,RepE,0.9984,0.0002,0.2727,1.0,0.6364
+"A4 attention, 1 head",ID,CG,0.8328,0.0,0.3114,1.0,0.6557
+"A4 attention, 1 head",ID,HP-C,0.6334,0.0,0.0224,0.999,0.5107
+"A4 attention, 1 head",ID,HP-KR,0.9607,0.0,0.8777,0.94,0.9088
+"A4 attention, 1 head",ID,IT,0.8901,0.0,0.5059,0.8919,0.6989
+"A4 attention, 1 head",ID,ID,0.9874,0.0,0.9993,0.8643,0.9318
+"A4 attention, 1 head",ID,RepE,1.0,0.0,0.9964,1.0,0.9982
+"A4 attention, 1 head",RepE,CG,0.986,0.0,0.1856,1.0,0.5928
+"A4 attention, 1 head",RepE,HP-C,0.6598,0.0,0.0,1.0,0.5
+"A4 attention, 1 head",RepE,HP-KR,0.8207,0.0001,0.0,1.0,0.5
+"A4 attention, 1 head",RepE,IT,0.9609,0.0,0.0,1.0,0.5
+"A4 attention, 1 head",RepE,ID,0.9393,0.0,0.6394,0.9254,0.7824
+"A4 attention, 1 head",RepE,RepE,1.0,0.0,0.9564,1.0,0.9782
+"A4 attention, 8 heads",CG,CG,1.0,0.0,0.0719,1.0,0.5359
+"A4 attention, 8 heads",CG,HP-C,0.6823,0.0083,0.0,1.0,0.5
+"A4 attention, 8 heads",CG,HP-KR,0.0988,0.0012,0.0,1.0,0.5
+"A4 attention, 8 heads",CG,IT,0.9808,0.0014,0.0118,1.0,0.5059
+"A4 attention, 8 heads",CG,ID,0.9231,0.0051,0.5498,0.9099,0.7298
+"A4 attention, 8 heads",CG,RepE,0.9975,0.0015,0.0509,1.0,0.5255
+"A4 attention, 8 heads",HP-KR,CG,0.8517,0.0385,0.1198,1.0,0.5599
+"A4 attention, 8 heads",HP-KR,HP-C,0.7353,0.0045,0.0,1.0,0.5
+"A4 attention, 8 heads",HP-KR,HP-KR,0.9796,0.0003,0.0,1.0,0.5
+"A4 attention, 8 heads",HP-KR,IT,0.4568,0.0198,0.0,1.0,0.5
+"A4 attention, 8 heads",HP-KR,ID,0.9196,0.0013,0.0,1.0,0.5
+"A4 attention, 8 heads",HP-KR,RepE,0.9753,0.003,0.0,1.0,0.5
+"A4 attention, 8 heads",IT,CG,0.9571,0.0007,0.8743,0.93,0.9021
+"A4 attention, 8 heads",IT,HP-C,0.797,0.0001,0.0,1.0,0.5
+"A4 attention, 8 heads",IT,HP-KR,0.8784,0.0017,0.0,1.0,0.5
+"A4 attention, 8 heads",IT,IT,0.9947,0.0,0.0355,1.0,0.5177
+"A4 attention, 8 heads",IT,ID,0.9411,0.0001,0.9796,0.8542,0.9169
+"A4 attention, 8 heads",IT,RepE,0.9866,0.0002,0.4727,1.0,0.7364
+"A4 attention, 8 heads",ID,CG,0.8925,0.0001,0.3293,1.0,0.6647
+"A4 attention, 8 heads",ID,HP-C,0.7021,0.0,0.0,1.0,0.5
+"A4 attention, 8 heads",ID,HP-KR,0.9084,0.0,0.0791,0.9975,0.5383
+"A4 attention, 8 heads",ID,IT,0.8633,0.0002,0.4846,0.8752,0.6799
+"A4 attention, 8 heads",ID,ID,0.9929,0.0,0.9895,0.946,0.9677
+"A4 attention, 8 heads",ID,RepE,0.9998,0.0,0.9709,1.0,0.9855
+"A4 attention, 8 heads",RepE,CG,0.9956,0.0,0.2994,1.0,0.6497
+"A4 attention, 8 heads",RepE,HP-C,0.6799,0.0,0.0,1.0,0.5
+"A4 attention, 8 heads",RepE,HP-KR,0.808,0.0,0.0,1.0,0.5
+"A4 attention, 8 heads",RepE,IT,0.9784,0.0,0.0,1.0,0.5
+"A4 attention, 8 heads",RepE,ID,0.9514,0.0,0.7438,0.9183,0.8311
+"A4 attention, 8 heads",RepE,RepE,1.0,0.0,0.9745,1.0,0.9873
+"R36 attention, 8 heads",CG,CG,1.0,0.0,0.3174,1.0,0.6587
+"R36 attention, 8 heads",CG,HP-C,0.5743,0.0024,0.0149,1.0,0.5075
+"R36 attention, 8 heads",CG,HP-KR,0.1874,0.0132,0.0,1.0,0.5
+"R36 attention, 8 heads",CG,IT,0.5444,0.0356,0.0,1.0,0.5
+"R36 attention, 8 heads",CG,ID,0.8996,0.001,0.2548,0.9824,0.6186
+"R36 attention, 8 heads",CG,RepE,0.9142,0.0062,0.5855,0.96,0.7727
+"R36 attention, 8 heads",HP-KR,CG,0.7353,0.0607,0.006,1.0,0.503
+"R36 attention, 8 heads",HP-KR,HP-C,0.7403,0.0076,0.0,1.0,0.5
+"R36 attention, 8 heads",HP-KR,HP-KR,0.9967,0.0008,0.0647,1.0,0.5324
+"R36 attention, 8 heads",HP-KR,IT,0.7518,0.0258,0.0496,0.997,0.5233
+"R36 attention, 8 heads",HP-KR,ID,0.8411,0.0267,0.0076,0.9983,0.5029
+"R36 attention, 8 heads",HP-KR,RepE,0.6719,0.0181,0.2145,0.8945,0.5545
+"R36 attention, 8 heads",IT,CG,0.2872,0.0127,0.0,1.0,0.5
+"R36 attention, 8 heads",IT,HP-C,0.3374,0.0152,0.0,1.0,0.5
+"R36 attention, 8 heads",IT,HP-KR,0.2256,0.0292,0.0,1.0,0.5
+"R36 attention, 8 heads",IT,IT,0.999,0.0001,0.3452,1.0,0.6726
+"R36 attention, 8 heads",IT,ID,0.6354,0.023,0.0016,0.9992,0.5004
+"R36 attention, 8 heads",IT,RepE,0.5841,0.0216,0.1418,0.9636,0.5527
+"R36 attention, 8 heads",ID,CG,0.7519,0.0357,0.1018,1.0,0.5509
+"R36 attention, 8 heads",ID,HP-C,0.5815,0.0049,0.0,1.0,0.5
+"R36 attention, 8 heads",ID,HP-KR,0.8983,0.0128,0.0,1.0,0.5
+"R36 attention, 8 heads",ID,IT,0.1414,0.1086,0.0,1.0,0.5
+"R36 attention, 8 heads",ID,ID,1.0,0.0,0.7179,1.0,0.8589
+"R36 attention, 8 heads",ID,RepE,0.9248,0.0113,0.6945,0.9673,0.8309
+"R36 attention, 8 heads",RepE,CG,0.8273,0.0245,0.0,1.0,0.5
+"R36 attention, 8 heads",RepE,HP-C,0.4725,0.0017,0.0,1.0,0.5
+"R36 attention, 8 heads",RepE,HP-KR,0.9301,0.0024,0.0,1.0,0.5
+"R36 attention, 8 heads",RepE,IT,0.754,0.0054,0.0,1.0,0.5
+"R36 attention, 8 heads",RepE,ID,0.8942,0.0019,0.1432,0.9912,0.5672
+"R36 attention, 8 heads",RepE,RepE,1.0,0.0,0.6436,1.0,0.8218
+P36 mean-pooled,CG,CG,1.0,0.0,0.3533,1.0,0.6766
+P36 mean-pooled,CG,HP-C,0.6372,0.0,0.0,1.0,0.5
+P36 mean-pooled,CG,HP-KR,0.1864,0.0,0.0,1.0,0.5
+P36 mean-pooled,CG,IT,0.9814,0.0,0.0,1.0,0.5
+P36 mean-pooled,CG,ID,0.9506,0.0,0.4874,0.9602,0.7238
+P36 mean-pooled,CG,RepE,1.0,0.0,0.6509,1.0,0.8255
+P36 mean-pooled,HP-KR,CG,0.5711,0.0012,0.3353,0.83,0.5827
+P36 mean-pooled,HP-KR,HP-C,0.7667,0.0002,0.0,1.0,0.5
+P36 mean-pooled,HP-KR,HP-KR,0.9793,0.0,0.0,1.0,0.5
+P36 mean-pooled,HP-KR,IT,0.6532,0.0005,0.0,1.0,0.5
+P36 mean-pooled,HP-KR,ID,0.9319,0.0003,0.0,1.0,0.5
+P36 mean-pooled,HP-KR,RepE,0.9437,0.0004,0.0036,1.0,0.5018
+P36 mean-pooled,IT,CG,0.767,0.0002,0.7066,0.72,0.7133
+P36 mean-pooled,IT,HP-C,0.7602,0.0,0.0,1.0,0.5
+P36 mean-pooled,IT,HP-KR,0.2781,0.0013,0.0,1.0,0.5
+P36 mean-pooled,IT,IT,0.9964,0.0,0.0,1.0,0.5
+P36 mean-pooled,IT,ID,0.836,0.0011,0.001,1.0,0.5005
+P36 mean-pooled,IT,RepE,0.8712,0.0003,0.0691,1.0,0.5345
+P36 mean-pooled,ID,CG,0.8216,0.0003,0.0299,1.0,0.515
+P36 mean-pooled,ID,HP-C,0.5755,0.0004,0.0,1.0,0.5
+P36 mean-pooled,ID,HP-KR,0.953,0.0001,0.0,1.0,0.5
+P36 mean-pooled,ID,IT,0.4723,0.0054,0.0,1.0,0.5
+P36 mean-pooled,ID,ID,0.9958,0.0,0.0854,1.0,0.5427
+P36 mean-pooled,ID,RepE,0.9996,0.0,0.2109,1.0,0.6055
+P36 mean-pooled,RepE,CG,0.9996,0.0,0.3772,1.0,0.6886
+P36 mean-pooled,RepE,HP-C,0.7057,0.0,0.0,1.0,0.5
+P36 mean-pooled,RepE,HP-KR,0.7344,0.0,0.0,1.0,0.5
+P36 mean-pooled,RepE,IT,0.9792,0.0,0.0662,1.0,0.5331
+P36 mean-pooled,RepE,ID,0.9637,0.0,0.3586,0.9883,0.6734
+P36 mean-pooled,RepE,RepE,1.0,0.0,0.3855,1.0,0.6927
+P36 last token,CG,CG,1.0,0.0,0.5569,1.0,0.7784
+P36 last token,CG,HP-C,0.6464,0.0,0.0,1.0,0.5
+P36 last token,CG,HP-KR,0.1015,0.0001,0.0,1.0,0.5
+P36 last token,CG,IT,0.8828,0.0,0.0,1.0,0.5
+P36 last token,CG,ID,0.9173,0.0,0.0338,0.9971,0.5154
+P36 last token,CG,RepE,0.9778,0.0,0.52,1.0,0.76
+P36 last token,HP-KR,CG,0.7083,0.0001,0.2335,1.0,0.6168
+P36 last token,HP-KR,HP-C,0.8016,0.0,0.0,1.0,0.5
+P36 last token,HP-KR,HP-KR,0.9813,0.0,0.0,1.0,0.5
+P36 last token,HP-KR,IT,0.4274,0.0004,0.0,1.0,0.5
+P36 last token,HP-KR,ID,0.7947,0.0,0.0016,1.0,0.5008
+P36 last token,HP-KR,RepE,0.6989,0.0004,0.0036,1.0,0.5018
+P36 last token,IT,CG,0.9404,0.0002,0.9341,0.7,0.8171
+P36 last token,IT,HP-C,0.6159,0.0004,0.0,1.0,0.5
+P36 last token,IT,HP-KR,0.1989,0.0005,0.0,1.0,0.5
+P36 last token,IT,IT,0.9971,0.0,0.0,1.0,0.5
+P36 last token,IT,ID,0.8899,0.0003,0.6292,0.871,0.7501
+P36 last token,IT,RepE,0.9072,0.0001,0.0509,1.0,0.5255
+P36 last token,ID,CG,0.8219,0.0018,0.0,1.0,0.5
+P36 last token,ID,HP-C,0.5054,0.0006,0.0,1.0,0.5
+P36 last token,ID,HP-KR,0.6895,0.0044,0.0,1.0,0.5
+P36 last token,ID,IT,0.2736,0.0061,0.0,1.0,0.5
+P36 last token,ID,ID,0.9956,0.0,0.0,1.0,0.5
+P36 last token,ID,RepE,0.8441,0.0008,0.0,1.0,0.5
+P36 last token,RepE,CG,0.9634,0.0,0.976,0.63,0.803
+P36 last token,RepE,HP-C,0.6821,0.0,0.0,1.0,0.5
+P36 last token,RepE,HP-KR,0.701,0.0001,0.0,1.0,0.5
+P36 last token,RepE,IT,0.9827,0.0,0.0,1.0,0.5
+P36 last token,RepE,ID,0.9183,0.0,0.4782,0.9393,0.7087
+P36 last token,RepE,RepE,0.9967,0.0,0.7782,1.0,0.8891
+"P36 attention, 1 head, no position",CG,CG,1.0,0.0,0.3653,1.0,0.6826
+"P36 attention, 1 head, no position",CG,HP-C,0.647,0.0,0.0,1.0,0.5
+"P36 attention, 1 head, no position",CG,HP-KR,0.2002,0.0,0.0,1.0,0.5
+"P36 attention, 1 head, no position",CG,IT,0.9822,0.0,0.0,1.0,0.5
+"P36 attention, 1 head, no position",CG,ID,0.944,0.0,0.4755,0.9518,0.7137
+"P36 attention, 1 head, no position",CG,RepE,1.0,0.0,0.4764,1.0,0.7382
+"P36 attention, 1 head, no position",HP-KR,CG,0.7678,0.0,0.3473,1.0,0.6737
+"P36 attention, 1 head, no position",HP-KR,HP-C,0.7782,0.0,0.0,1.0,0.5
+"P36 attention, 1 head, no position",HP-KR,HP-KR,0.9822,0.0,0.0,1.0,0.5
+"P36 attention, 1 head, no position",HP-KR,IT,0.9726,0.0,0.0,1.0,0.5
+"P36 attention, 1 head, no position",HP-KR,ID,0.9468,0.0,0.0026,1.0,0.5013
+"P36 attention, 1 head, no position",HP-KR,RepE,0.9827,0.0,0.0036,1.0,0.5018
+"P36 attention, 1 head, no position",IT,CG,0.9071,0.0047,0.5629,0.96,0.7614
+"P36 attention, 1 head, no position",IT,HP-C,0.776,0.0085,0.0,1.0,0.5
+"P36 attention, 1 head, no position",IT,HP-KR,0.9694,0.0151,0.0,1.0,0.5
+"P36 attention, 1 head, no position",IT,IT,0.9978,0.0007,0.0544,1.0,0.5272
+"P36 attention, 1 head, no position",IT,ID,0.9666,0.0171,0.4818,0.9736,0.7277
+"P36 attention, 1 head, no position",IT,RepE,0.9954,0.0009,0.0218,1.0,0.5109
+"P36 attention, 1 head, no position",ID,CG,0.7786,0.0664,0.0419,1.0,0.521
+"P36 attention, 1 head, no position",ID,HP-C,0.55,0.05,0.0,1.0,0.5
+"P36 attention, 1 head, no position",ID,HP-KR,0.6838,0.085,0.0,1.0,0.5
+"P36 attention, 1 head, no position",ID,IT,0.2763,0.0784,0.0213,0.9985,0.5099
+"P36 attention, 1 head, no position",ID,ID,0.9996,0.0002,0.5419,0.9996,0.7707
+"P36 attention, 1 head, no position",ID,RepE,0.9989,0.0043,0.4036,1.0,0.7018
+"P36 attention, 1 head, no position",RepE,CG,1.0,0.0,0.4072,1.0,0.7036
+"P36 attention, 1 head, no position",RepE,HP-C,0.7009,0.0,0.0,1.0,0.5
+"P36 attention, 1 head, no position",RepE,HP-KR,0.7034,0.0,0.0,1.0,0.5
+"P36 attention, 1 head, no position",RepE,IT,0.9812,0.0,0.0922,1.0,0.5461
+"P36 attention, 1 head, no position",RepE,ID,0.957,0.0,0.6282,0.951,0.7896
+"P36 attention, 1 head, no position",RepE,RepE,1.0,0.0,0.8509,1.0,0.9255

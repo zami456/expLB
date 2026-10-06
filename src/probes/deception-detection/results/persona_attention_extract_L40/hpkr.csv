@@ -1,0 +1,13 @@
+arm,contrast,full,full p,denials,denials p,identical text,identical text p,lies flagged,honest denials flagged,honest claims flagged
+mean,extended (12v13),0.8951,0.0545,0.6284,0.1895,0.735,0.0295,0.741,0.6667,0.0075
+mean,knowledge-denial (4v6),0.8924,0.0585,0.5454,0.366,0.7167,0.0515,0.9353,1.0,0.8418
+mean masked,extended (12v13),0.8957,0.053,0.6367,0.17,0.7355,0.029,0.8129,0.6815,0.0091
+mean masked,knowledge-denial (4v6),0.895,0.0545,0.5637,0.318,0.7196,0.049,0.9353,1.0,0.8869
+last token,extended (12v13),0.6863,0.2645,0.5401,0.382,0.7234,0.043,0.5108,0.5407,0.2445
+last token,knowledge-denial (4v6),0.8646,0.085,0.4879,0.5345,0.6565,0.155,0.2878,0.2593,0.0
+self-weighted,extended (12v13),0.8112,0.1355,0.6213,0.204,0.7205,0.048,0.9137,0.9926,0.5914
+self-weighted,knowledge-denial (4v6),0.8829,0.0675,0.515,0.455,0.6878,0.1015,0.9353,1.0,0.9818
+learned,extended (12v13),0.587,0.3915,0.6374,0.169,0.7413,0.028,0.9568,1.0,0.9861
+learned,knowledge-denial (4v6),0.8344,0.1115,0.5335,0.3995,0.7157,0.0515,0.9496,1.0,0.993
+"bank (all rollouts, mean)",extended (12v13),0.9124,0.035,0.6704,0.112,0.7212,0.0465,0.0,0.0,0.0
+"bank (all rollouts, mean)",knowledge-denial (4v6),0.9185,0.0295,0.5703,0.306,0.7121,0.0575,0.8849,0.9481,0.0005
