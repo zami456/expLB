@@ -1,0 +1,11 @@
+{
+  "fit": "deception_detection.streaming_lr (sklearn's lbfgs problem, streamed)",
+  "rows_per_class": 785,
+  "response_tokens": 64769,
+  "deceptive_tokens": 49086,
+  "C": 0.1,
+  "n_iter": 255,
+  "converged": true,
+  "message": "CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL",
+  "seconds": 219.6
+}

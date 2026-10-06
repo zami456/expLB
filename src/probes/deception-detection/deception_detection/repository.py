@@ -56,7 +56,8 @@ ALL_DATASETS: list[type[DialogueDataset]] = [
     data.SecretGender,
     data.SleeperAgents,
     data.ConvinceMe,
-    data.AlpacaCadenza
+    data.AlpacaCadenza,
+    data.AISILlamaRollouts,
 ]
 
 

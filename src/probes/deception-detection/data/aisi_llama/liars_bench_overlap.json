@@ -1,0 +1,21 @@
+{
+  "source": "ai-safety-institute/lie-detection-rollouts@177a81666ab378ce9d055507bc30f480ab63e74b (meta-llama-llama-3.3-70b-instruct)",
+  "checked_against": [
+    "convince_me__plain",
+    "harm_refusal_choice__plain",
+    "harm_refusal_knowledge_report__plain",
+    "insider_trading_cadenza__plain",
+    "instruct_dishonesty__plain",
+    "gender_secret__plain"
+  ],
+  "method": "normalised question (multiple-choice stem only) found inside any message, or >= 0.8 of its 6-word shingles found there",
+  "min_words": 3,
+  "unchecked_short_questions": {
+    "multiple_choice_sandbagging": 1
+  },
+  "kept_with_shingle_overlap_>=_0.5": {
+    "multiple_choice_sandbagging": 2
+  },
+  "matches": {},
+  "excluded": {}
+}
