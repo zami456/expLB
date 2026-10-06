@@ -1,0 +1,195 @@
+layer,slice,direction,auroc,lo,hi,n_lies,n_honest
+-,full HP-KR,response length,0.7888,0.7581,0.8186,139,2000
+-,denials only,response length,0.6035,0.5504,0.6574,125,135
+20,full HP-KR,knowledge-denial (4v6),0.8899,0.8479,0.9249,139,2000
+20,denials only,knowledge-denial (4v6),0.4159,0.3442,0.4846,125,135
+20,full HP-KR,extended (12v13),0.8816,0.835,0.9229,139,2000
+20,denials only,extended (12v13),0.5652,0.4958,0.6361,125,135
+20,full HP-KR,published (8v7),0.1483,0.1235,0.1734,139,2000
+20,denials only,published (8v7),0.4501,0.3779,0.5218,125,135
+20,full HP-KR,feigned vs sincere ignorance (4v3),0.5927,0.5526,0.6304,139,2000
+20,denials only,feigned vs sincere ignorance (4v3),0.4018,0.3301,0.4741,125,135
+20,full HP-KR,feigned vs plain assertion (4v3),0.9599,0.9447,0.9718,139,2000
+20,denials only,feigned vs plain assertion (4v3),0.6183,0.5506,0.6884,125,135
+20,full HP-KR,base probe (RepE),0.109,0.088,0.132,139,2000
+20,denials only,base probe (RepE),0.6572,0.5898,0.7229,125,135
+24,full HP-KR,knowledge-denial (4v6),0.8811,0.8368,0.9202,139,2000
+24,denials only,knowledge-denial (4v6),0.3887,0.3196,0.4573,125,135
+24,full HP-KR,extended (12v13),0.7986,0.7523,0.8397,139,2000
+24,denials only,extended (12v13),0.5611,0.4909,0.634,125,135
+24,full HP-KR,published (8v7),0.0987,0.0821,0.1166,139,2000
+24,denials only,published (8v7),0.5092,0.4383,0.5825,125,135
+24,full HP-KR,feigned vs sincere ignorance (4v3),0.4768,0.4418,0.5125,139,2000
+24,denials only,feigned vs sincere ignorance (4v3),0.3863,0.3229,0.456,125,135
+24,full HP-KR,feigned vs plain assertion (4v3),0.9383,0.9179,0.9568,139,2000
+24,denials only,feigned vs plain assertion (4v3),0.5143,0.445,0.5793,125,135
+24,full HP-KR,base probe (RepE),0.0657,0.0433,0.0922,139,2000
+24,denials only,base probe (RepE),0.4917,0.4233,0.5642,125,135
+28,full HP-KR,knowledge-denial (4v6),0.9021,0.8598,0.9389,139,2000
+28,denials only,knowledge-denial (4v6),0.6075,0.5411,0.6747,125,135
+28,full HP-KR,extended (12v13),0.8019,0.7519,0.8446,139,2000
+28,denials only,extended (12v13),0.6532,0.5853,0.7179,125,135
+28,full HP-KR,published (8v7),0.3276,0.2936,0.3617,139,2000
+28,denials only,published (8v7),0.5593,0.4877,0.631,125,135
+28,full HP-KR,feigned vs sincere ignorance (4v3),0.5128,0.4779,0.5448,139,2000
+28,denials only,feigned vs sincere ignorance (4v3),0.4508,0.379,0.5226,125,135
+28,full HP-KR,feigned vs plain assertion (4v3),0.9667,0.9573,0.9751,139,2000
+28,denials only,feigned vs plain assertion (4v3),0.661,0.5897,0.7267,125,135
+28,full HP-KR,base probe (RepE),0.491,0.4371,0.5463,139,2000
+28,denials only,base probe (RepE),0.6688,0.5998,0.7322,125,135
+32,full HP-KR,knowledge-denial (4v6),0.8953,0.8533,0.933,139,2000
+32,denials only,knowledge-denial (4v6),0.5668,0.4964,0.6381,125,135
+32,full HP-KR,extended (12v13),0.862,0.8179,0.9048,139,2000
+32,denials only,extended (12v13),0.6613,0.5954,0.7233,125,135
+32,full HP-KR,published (8v7),0.3854,0.347,0.4262,139,2000
+32,denials only,published (8v7),0.546,0.4793,0.6174,125,135
+32,full HP-KR,feigned vs sincere ignorance (4v3),0.4687,0.4327,0.5058,139,2000
+32,denials only,feigned vs sincere ignorance (4v3),0.516,0.4404,0.5869,125,135
+32,full HP-KR,feigned vs plain assertion (4v3),0.9675,0.9566,0.977,139,2000
+32,denials only,feigned vs plain assertion (4v3),0.6561,0.5881,0.7235,125,135
+32,full HP-KR,base probe (RepE),0.8222,0.7865,0.8555,139,2000
+32,denials only,base probe (RepE),0.7163,0.6548,0.7764,125,135
+36,full HP-KR,knowledge-denial (4v6),0.9046,0.8702,0.9371,139,2000
+36,denials only,knowledge-denial (4v6),0.522,0.4483,0.595,125,135
+36,full HP-KR,extended (12v13),0.8635,0.8224,0.8997,139,2000
+36,denials only,extended (12v13),0.6591,0.5922,0.7249,125,135
+36,full HP-KR,published (8v7),0.35,0.311,0.39,139,2000
+36,denials only,published (8v7),0.6412,0.5723,0.704,125,135
+36,full HP-KR,feigned vs sincere ignorance (4v3),0.5039,0.4628,0.5432,139,2000
+36,denials only,feigned vs sincere ignorance (4v3),0.4855,0.4111,0.5602,125,135
+36,full HP-KR,feigned vs plain assertion (4v3),0.9643,0.9525,0.9739,139,2000
+36,denials only,feigned vs plain assertion (4v3),0.6299,0.5604,0.6979,125,135
+36,full HP-KR,base probe (RepE),0.9671,0.9566,0.9757,139,2000
+36,denials only,base probe (RepE),0.7627,0.7024,0.821,125,135
+40,full HP-KR,knowledge-denial (4v6),0.9185,0.8882,0.945,139,2000
+40,denials only,knowledge-denial (4v6),0.5703,0.5008,0.6429,125,135
+40,full HP-KR,extended (12v13),0.9124,0.8792,0.9412,139,2000
+40,denials only,extended (12v13),0.6704,0.6043,0.7303,125,135
+40,full HP-KR,published (8v7),0.5926,0.5382,0.6476,139,2000
+40,denials only,published (8v7),0.6488,0.5839,0.7125,125,135
+40,full HP-KR,feigned vs sincere ignorance (4v3),0.7012,0.6479,0.7566,139,2000
+40,denials only,feigned vs sincere ignorance (4v3),0.5068,0.4345,0.5808,125,135
+40,full HP-KR,feigned vs plain assertion (4v3),0.9716,0.962,0.9798,139,2000
+40,denials only,feigned vs plain assertion (4v3),0.7107,0.6475,0.7731,125,135
+40,full HP-KR,base probe (RepE),0.9358,0.9129,0.955,139,2000
+40,denials only,base probe (RepE),0.5928,0.5234,0.6623,125,135
+44,full HP-KR,knowledge-denial (4v6),0.9077,0.8735,0.9383,139,2000
+44,denials only,knowledge-denial (4v6),0.5214,0.4474,0.5942,125,135
+44,full HP-KR,extended (12v13),0.8936,0.8547,0.9269,139,2000
+44,denials only,extended (12v13),0.5597,0.4843,0.6284,125,135
+44,full HP-KR,published (8v7),0.5895,0.5322,0.6447,139,2000
+44,denials only,published (8v7),0.5598,0.4871,0.6307,125,135
+44,full HP-KR,feigned vs sincere ignorance (4v3),0.6801,0.6169,0.7396,139,2000
+44,denials only,feigned vs sincere ignorance (4v3),0.4908,0.4202,0.5598,125,135
+44,full HP-KR,feigned vs plain assertion (4v3),0.9624,0.9527,0.9711,139,2000
+44,denials only,feigned vs plain assertion (4v3),0.5899,0.5211,0.6592,125,135
+44,full HP-KR,base probe (RepE),0.8283,0.7855,0.8674,139,2000
+44,denials only,base probe (RepE),0.5665,0.495,0.6393,125,135
+48,full HP-KR,knowledge-denial (4v6),0.8903,0.8514,0.927,139,2000
+48,denials only,knowledge-denial (4v6),0.5196,0.4464,0.5922,125,135
+48,full HP-KR,extended (12v13),0.8497,0.8051,0.8896,139,2000
+48,denials only,extended (12v13),0.5361,0.4611,0.6086,125,135
+48,full HP-KR,published (8v7),0.5125,0.4564,0.5702,139,2000
+48,denials only,published (8v7),0.5337,0.4624,0.6037,125,135
+48,full HP-KR,feigned vs sincere ignorance (4v3),0.655,0.5931,0.7166,139,2000
+48,denials only,feigned vs sincere ignorance (4v3),0.4948,0.4206,0.5701,125,135
+48,full HP-KR,feigned vs plain assertion (4v3),0.9545,0.9423,0.9657,139,2000
+48,denials only,feigned vs plain assertion (4v3),0.5465,0.4739,0.6157,125,135
+48,full HP-KR,base probe (RepE),0.8373,0.7966,0.8777,139,2000
+48,denials only,base probe (RepE),0.5625,0.4888,0.6323,125,135
+52,full HP-KR,knowledge-denial (4v6),0.8834,0.8386,0.9192,139,2000
+52,denials only,knowledge-denial (4v6),0.5201,0.446,0.5971,125,135
+52,full HP-KR,extended (12v13),0.8585,0.8165,0.8981,139,2000
+52,denials only,extended (12v13),0.5586,0.4859,0.6291,125,135
+52,full HP-KR,published (8v7),0.4469,0.4043,0.4909,139,2000
+52,denials only,published (8v7),0.5924,0.5186,0.6573,125,135
+52,full HP-KR,feigned vs sincere ignorance (4v3),0.5591,0.5016,0.609,139,2000
+52,denials only,feigned vs sincere ignorance (4v3),0.4848,0.4141,0.5569,125,135
+52,full HP-KR,feigned vs plain assertion (4v3),0.9529,0.9397,0.9645,139,2000
+52,denials only,feigned vs plain assertion (4v3),0.5496,0.479,0.6225,125,135
+52,full HP-KR,base probe (RepE),0.8773,0.8413,0.909,139,2000
+52,denials only,base probe (RepE),0.5707,0.4986,0.6435,125,135
+56,full HP-KR,knowledge-denial (4v6),0.8685,0.8247,0.9098,139,2000
+56,denials only,knowledge-denial (4v6),0.5205,0.4488,0.5949,125,135
+56,full HP-KR,extended (12v13),0.8203,0.77,0.8669,139,2000
+56,denials only,extended (12v13),0.5683,0.4979,0.6355,125,135
+56,full HP-KR,published (8v7),0.4336,0.3946,0.4686,139,2000
+56,denials only,published (8v7),0.61,0.542,0.6764,125,135
+56,full HP-KR,feigned vs sincere ignorance (4v3),0.4733,0.4325,0.5138,139,2000
+56,denials only,feigned vs sincere ignorance (4v3),0.4884,0.4135,0.5653,125,135
+56,full HP-KR,feigned vs plain assertion (4v3),0.9501,0.9361,0.963,139,2000
+56,denials only,feigned vs plain assertion (4v3),0.5565,0.487,0.6272,125,135
+56,full HP-KR,base probe (RepE),0.9165,0.8859,0.9432,139,2000
+56,denials only,base probe (RepE),0.5923,0.5183,0.6651,125,135
+60,full HP-KR,knowledge-denial (4v6),0.834,0.7871,0.8768,139,2000
+60,denials only,knowledge-denial (4v6),0.5105,0.4354,0.5841,125,135
+60,full HP-KR,extended (12v13),0.8016,0.7568,0.845,139,2000
+60,denials only,extended (12v13),0.5504,0.4783,0.6191,125,135
+60,full HP-KR,published (8v7),0.3814,0.3473,0.4169,139,2000
+60,denials only,published (8v7),0.6015,0.5366,0.6669,125,135
+60,full HP-KR,feigned vs sincere ignorance (4v3),0.4336,0.3921,0.4735,139,2000
+60,denials only,feigned vs sincere ignorance (4v3),0.4806,0.4098,0.5503,125,135
+60,full HP-KR,feigned vs plain assertion (4v3),0.9505,0.937,0.9623,139,2000
+60,denials only,feigned vs plain assertion (4v3),0.5403,0.4676,0.6147,125,135
+60,full HP-KR,base probe (RepE),0.9066,0.8768,0.9339,139,2000
+60,denials only,base probe (RepE),0.5576,0.485,0.6288,125,135
+64,full HP-KR,knowledge-denial (4v6),0.8439,0.7966,0.8878,139,2000
+64,denials only,knowledge-denial (4v6),0.5113,0.4393,0.5807,125,135
+64,full HP-KR,extended (12v13),0.8294,0.783,0.8713,139,2000
+64,denials only,extended (12v13),0.5422,0.469,0.612,125,135
+64,full HP-KR,published (8v7),0.4163,0.3812,0.4515,139,2000
+64,denials only,published (8v7),0.5864,0.5154,0.6539,125,135
+64,full HP-KR,feigned vs sincere ignorance (4v3),0.4398,0.4009,0.4781,139,2000
+64,denials only,feigned vs sincere ignorance (4v3),0.4779,0.4042,0.5469,125,135
+64,full HP-KR,feigned vs plain assertion (4v3),0.9509,0.9368,0.9636,139,2000
+64,denials only,feigned vs plain assertion (4v3),0.5396,0.4663,0.6076,125,135
+64,full HP-KR,base probe (RepE),0.9244,0.8989,0.9488,139,2000
+64,denials only,base probe (RepE),0.5973,0.525,0.6656,125,135
+68,full HP-KR,knowledge-denial (4v6),0.8192,0.7723,0.8629,139,2000
+68,denials only,knowledge-denial (4v6),0.4954,0.4249,0.5673,125,135
+68,full HP-KR,extended (12v13),0.8188,0.7737,0.86,139,2000
+68,denials only,extended (12v13),0.5153,0.4451,0.5885,125,135
+68,full HP-KR,published (8v7),0.3826,0.3439,0.4195,139,2000
+68,denials only,published (8v7),0.5232,0.4506,0.5931,125,135
+68,full HP-KR,feigned vs sincere ignorance (4v3),0.4481,0.4063,0.4928,139,2000
+68,denials only,feigned vs sincere ignorance (4v3),0.4569,0.3855,0.5281,125,135
+68,full HP-KR,feigned vs plain assertion (4v3),0.9517,0.9378,0.9642,139,2000
+68,denials only,feigned vs plain assertion (4v3),0.5432,0.474,0.6184,125,135
+68,full HP-KR,base probe (RepE),0.9165,0.8879,0.9417,139,2000
+68,denials only,base probe (RepE),0.5384,0.4664,0.6096,125,135
+72,full HP-KR,knowledge-denial (4v6),0.7993,0.7512,0.8444,139,2000
+72,denials only,knowledge-denial (4v6),0.5035,0.4255,0.5771,125,135
+72,full HP-KR,extended (12v13),0.8217,0.776,0.8634,139,2000
+72,denials only,extended (12v13),0.5162,0.4468,0.5896,125,135
+72,full HP-KR,published (8v7),0.4344,0.3963,0.4699,139,2000
+72,denials only,published (8v7),0.5524,0.4806,0.6209,125,135
+72,full HP-KR,feigned vs sincere ignorance (4v3),0.4418,0.3973,0.4891,139,2000
+72,denials only,feigned vs sincere ignorance (4v3),0.4852,0.4151,0.5565,125,135
+72,full HP-KR,feigned vs plain assertion (4v3),0.943,0.9262,0.9572,139,2000
+72,denials only,feigned vs plain assertion (4v3),0.5086,0.4409,0.5798,125,135
+72,full HP-KR,base probe (RepE),0.9397,0.9156,0.9608,139,2000
+72,denials only,base probe (RepE),0.6959,0.6269,0.7577,125,135
+76,full HP-KR,knowledge-denial (4v6),0.8494,0.813,0.883,139,2000
+76,denials only,knowledge-denial (4v6),0.531,0.4594,0.6076,125,135
+76,full HP-KR,extended (12v13),0.9249,0.8994,0.9478,139,2000
+76,denials only,extended (12v13),0.6503,0.5812,0.7167,125,135
+76,full HP-KR,published (8v7),0.7301,0.6874,0.7728,139,2000
+76,denials only,published (8v7),0.7024,0.6381,0.7646,125,135
+76,full HP-KR,feigned vs sincere ignorance (4v3),0.6171,0.5523,0.6838,139,2000
+76,denials only,feigned vs sincere ignorance (4v3),0.5434,0.4677,0.6199,125,135
+76,full HP-KR,feigned vs plain assertion (4v3),0.9524,0.9384,0.9643,139,2000
+76,denials only,feigned vs plain assertion (4v3),0.5302,0.4594,0.5998,125,135
+76,full HP-KR,base probe (RepE),0.8382,0.794,0.8764,139,2000
+76,denials only,base probe (RepE),0.5506,0.4751,0.6261,125,135
+79,full HP-KR,knowledge-denial (4v6),0.8744,0.8513,0.8962,139,2000
+79,denials only,knowledge-denial (4v6),0.7703,0.7111,0.8221,125,135
+79,full HP-KR,extended (12v13),0.8284,0.807,0.8496,139,2000
+79,denials only,extended (12v13),0.7905,0.7352,0.8414,125,135
+79,full HP-KR,published (8v7),0.7709,0.7324,0.8063,139,2000
+79,denials only,published (8v7),0.7657,0.7047,0.8207,125,135
+79,full HP-KR,feigned vs sincere ignorance (4v3),0.4663,0.4194,0.5132,139,2000
+79,denials only,feigned vs sincere ignorance (4v3),0.5809,0.5125,0.6522,125,135
+79,full HP-KR,feigned vs plain assertion (4v3),0.84,0.819,0.8604,139,2000
+79,denials only,feigned vs plain assertion (4v3),0.749,0.6884,0.8085,125,135
+79,full HP-KR,base probe (RepE),0.8999,0.8697,0.9273,139,2000
+79,denials only,base probe (RepE),0.3404,0.2736,0.4082,125,135

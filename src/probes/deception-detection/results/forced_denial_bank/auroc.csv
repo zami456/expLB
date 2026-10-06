@@ -1,0 +1,794 @@
+layer,position,slice,direction,family,auroc,lo,hi
+-,-,full,prompt length,baseline,0.61,0.5567,0.6574
+-,-,full,subject is cyber,baseline,0.3628,0.3227,0.4049
+-,-,denials,prompt length,baseline,0.6181,0.5494,0.6858
+-,-,denials,subject is cyber,baseline,0.5988,0.5479,0.6517
+-,-,"denials, bio",prompt length,baseline,0.5283,0.4441,0.6083
+-,-,"denials, cyber",prompt length,baseline,0.5832,0.4233,0.7446
+-,-,knows,prompt length,baseline,0.6085,0.559,0.6593
+-,-,knows,subject is cyber,baseline,0.3436,0.2982,0.3884
+20,answer,full,new: D_feign,new,0.1892,0.1509,0.2293
+20,answer,full,new: D_know,new,0.3507,0.3049,0.393
+20,answer,full,new: D_know_norole,new,0.2835,0.2422,0.328
+20,answer,full,new: D_role,new,0.1914,0.15,0.2366
+20,answer,full,new: interaction,new,0.2195,0.1873,0.2527
+20,answer,full,new: d_utterance,new,0.9645,0.9569,0.9717
+20,answer,full,new: d_utterance_orth,new,0.965,0.9573,0.9721
+20,answer,full,new: d_false,new,0.3104,0.2707,0.3497
+20,answer,full,new: d_wording,new,0.9643,0.9562,0.9715
+20,answer,full,new: d_know_pure,new,0.3242,0.2842,0.364
+20,answer,full,existing: knowledge-denial (4v6),existing,0.8899,0.8465,0.9256
+20,answer,full,existing: extended (12v13),existing,0.8816,0.8364,0.9204
+20,answer,full,existing: published (8v7),existing,0.1483,0.1239,0.1752
+20,answer,full,existing: feigned vs sincere ignorance (4v3),existing,0.5927,0.5526,0.6347
+20,answer,full,existing: feigned vs plain assertion (4v3),existing,0.9599,0.9462,0.972
+20,answer,full,existing: base probe (RepE),existing,0.109,0.0881,0.1336
+20,answer,full,new: D_feign minus wording,new,0.2916,0.2467,0.3353
+20,answer,full,new: D_know minus wording,new,0.4065,0.3623,0.4494
+20,answer,full,new: D_know_norole minus wording,new,0.3535,0.3116,0.395
+20,answer,full,new: D_role minus wording,new,0.2828,0.236,0.3331
+20,answer,full,new: interaction minus wording,new,0.3257,0.2967,0.3543
+20,answer,full,new: d_false minus d_wording,new,0.2852,0.2482,0.3276
+20,answer,full,new: d_know_pure minus d_wording,new,0.3956,0.3545,0.4368
+20,answer,full,new: D_feign minus d_wording,new,0.2959,0.2542,0.3427
+20,answer,full,new: D_know_norole minus d_wording,new,0.3528,0.3103,0.3944
+20,answer,denials,new: D_feign,new,0.6185,0.5487,0.6852
+20,answer,denials,new: D_know,new,0.5855,0.5149,0.6555
+20,answer,denials,new: D_know_norole,new,0.5777,0.5094,0.6417
+20,answer,denials,new: D_role,new,0.5896,0.5157,0.6596
+20,answer,denials,new: interaction,new,0.5425,0.4721,0.6146
+20,answer,denials,new: d_utterance,new,0.5413,0.4698,0.6133
+20,answer,denials,new: d_utterance_orth,new,0.55,0.4788,0.622
+20,answer,denials,new: d_false,new,0.6027,0.5325,0.6679
+20,answer,denials,new: d_wording,new,0.5391,0.4682,0.6098
+20,answer,denials,new: d_know_pure,new,0.563,0.4935,0.6333
+20,answer,denials,existing: knowledge-denial (4v6),existing,0.4159,0.3432,0.4828
+20,answer,denials,existing: extended (12v13),existing,0.5652,0.4954,0.6361
+20,answer,denials,existing: published (8v7),existing,0.4501,0.3778,0.5215
+20,answer,denials,existing: feigned vs sincere ignorance (4v3),existing,0.4018,0.333,0.4686
+20,answer,denials,existing: feigned vs plain assertion (4v3),existing,0.6183,0.5478,0.6886
+20,answer,denials,existing: base probe (RepE),existing,0.6572,0.5894,0.7251
+20,answer,denials,new: D_feign minus wording,new,0.6179,0.5481,0.6854
+20,answer,denials,new: D_know minus wording,new,0.5856,0.5168,0.6533
+20,answer,denials,new: D_know_norole minus wording,new,0.5777,0.5082,0.6455
+20,answer,denials,new: D_role minus wording,new,0.5892,0.5193,0.6607
+20,answer,denials,new: interaction minus wording,new,0.5416,0.4666,0.6159
+20,answer,denials,new: d_false minus d_wording,new,0.6025,0.5346,0.6715
+20,answer,denials,new: d_know_pure minus d_wording,new,0.5633,0.4964,0.6322
+20,answer,denials,new: D_feign minus d_wording,new,0.6178,0.5472,0.6899
+20,answer,denials,new: D_know_norole minus d_wording,new,0.5775,0.5049,0.6482
+20,answer,"denials, bio",new: D_feign,new,0.539,0.4477,0.6189
+20,answer,"denials, bio",new: D_know,new,0.5966,0.5083,0.6819
+20,answer,"denials, bio",new: D_know_norole,new,0.5993,0.5174,0.6761
+20,answer,"denials, bio",new: D_role,new,0.4843,0.3914,0.5757
+20,answer,"denials, bio",new: interaction,new,0.3934,0.3142,0.4769
+20,answer,"denials, bio",new: d_utterance,new,0.3888,0.3055,0.4737
+20,answer,"denials, bio",new: d_utterance_orth,new,0.4066,0.3217,0.4897
+20,answer,"denials, bio",new: d_false,new,0.5313,0.4489,0.6116
+20,answer,"denials, bio",new: d_wording,new,0.3839,0.3009,0.4663
+20,answer,"denials, bio",new: d_know_pure,new,0.5949,0.5117,0.674
+20,answer,"denials, bio",existing: knowledge-denial (4v6),existing,0.5514,0.4693,0.6309
+20,answer,"denials, bio",existing: extended (12v13),existing,0.5242,0.4386,0.6093
+20,answer,"denials, bio",existing: published (8v7),existing,0.4976,0.4121,0.5894
+20,answer,"denials, bio",existing: feigned vs sincere ignorance (4v3),existing,0.5086,0.4293,0.5915
+20,answer,"denials, bio",existing: feigned vs plain assertion (4v3),existing,0.5562,0.4706,0.6386
+20,answer,"denials, bio",existing: base probe (RepE),existing,0.6162,0.5353,0.6997
+20,answer,"denials, bio",new: D_feign minus wording,new,0.538,0.452,0.6229
+20,answer,"denials, bio",new: D_know minus wording,new,0.5962,0.5093,0.677
+20,answer,"denials, bio",new: D_know_norole minus wording,new,0.5981,0.5147,0.6773
+20,answer,"denials, bio",new: D_role minus wording,new,0.4838,0.3982,0.5717
+20,answer,"denials, bio",new: interaction minus wording,new,0.392,0.3099,0.4809
+20,answer,"denials, bio",new: d_false minus d_wording,new,0.5311,0.4467,0.6111
+20,answer,"denials, bio",new: d_know_pure minus d_wording,new,0.5946,0.5092,0.6789
+20,answer,"denials, bio",new: D_feign minus d_wording,new,0.5379,0.4491,0.6281
+20,answer,"denials, bio",new: D_know_norole minus d_wording,new,0.598,0.5178,0.6804
+20,answer,"denials, cyber",new: D_feign,new,0.4849,0.3336,0.6364
+20,answer,"denials, cyber",new: D_know,new,0.4556,0.2977,0.6118
+20,answer,"denials, cyber",new: D_know_norole,new,0.4698,0.3078,0.6388
+20,answer,"denials, cyber",new: D_role,new,0.4849,0.3336,0.6371
+20,answer,"denials, cyber",new: interaction,new,0.4887,0.3222,0.6518
+20,answer,"denials, cyber",new: d_utterance,new,0.5123,0.342,0.6776
+20,answer,"denials, cyber",new: d_utterance_orth,new,0.5142,0.3522,0.6755
+20,answer,"denials, cyber",new: d_false,new,0.3507,0.2063,0.4915
+20,answer,"denials, cyber",new: d_wording,new,0.5217,0.3564,0.6818
+20,answer,"denials, cyber",new: d_know_pure,new,0.4849,0.3175,0.6491
+20,answer,"denials, cyber",existing: knowledge-denial (4v6),existing,0.4178,0.2567,0.5823
+20,answer,"denials, cyber",existing: extended (12v13),existing,0.4036,0.2543,0.5596
+20,answer,"denials, cyber",existing: published (8v7),existing,0.3459,0.2174,0.497
+20,answer,"denials, cyber",existing: feigned vs sincere ignorance (4v3),existing,0.4093,0.2622,0.56
+20,answer,"denials, cyber",existing: feigned vs plain assertion (4v3),existing,0.3932,0.2388,0.5496
+20,answer,"denials, cyber",existing: base probe (RepE),existing,0.4168,0.2624,0.57
+20,answer,"denials, cyber",new: D_feign minus wording,new,0.4858,0.3344,0.6389
+20,answer,"denials, cyber",new: D_know minus wording,new,0.4556,0.3014,0.627
+20,answer,"denials, cyber",new: D_know_norole minus wording,new,0.4698,0.3073,0.6264
+20,answer,"denials, cyber",new: D_role minus wording,new,0.482,0.3353,0.6362
+20,answer,"denials, cyber",new: interaction minus wording,new,0.4868,0.3267,0.6578
+20,answer,"denials, cyber",new: d_false minus d_wording,new,0.3507,0.2132,0.4946
+20,answer,"denials, cyber",new: d_know_pure minus d_wording,new,0.483,0.3183,0.6568
+20,answer,"denials, cyber",new: D_feign minus d_wording,new,0.4849,0.3283,0.6482
+20,answer,"denials, cyber",new: D_know_norole minus d_wording,new,0.4698,0.3153,0.6296
+20,answer,knows,new: D_feign,new,0.1555,0.1166,0.1969
+20,answer,knows,new: D_know,new,0.3315,0.2895,0.3751
+20,answer,knows,new: D_know_norole,new,0.2602,0.2185,0.3028
+20,answer,knows,new: D_role,new,0.1597,0.1179,0.2047
+20,answer,knows,new: interaction,new,0.1931,0.1633,0.2235
+20,answer,knows,new: d_utterance,new,0.9991,0.9979,0.9999
+20,answer,knows,new: d_utterance_orth,new,0.9991,0.9978,0.9999
+20,answer,knows,new: d_false,new,0.2871,0.2497,0.3254
+20,answer,knows,new: d_wording,new,0.9991,0.9978,0.9999
+20,answer,knows,new: d_know_pure,new,0.3056,0.2669,0.3477
+20,answer,knows,existing: knowledge-denial (4v6),existing,0.9273,0.8863,0.9657
+20,answer,knows,existing: extended (12v13),existing,0.9078,0.8633,0.9497
+20,answer,knows,existing: published (8v7),existing,0.1278,0.1041,0.152
+20,answer,knows,existing: feigned vs sincere ignorance (4v3),existing,0.6089,0.5687,0.647
+20,answer,knows,existing: feigned vs plain assertion (4v3),existing,0.9887,0.9757,0.9983
+20,answer,knows,existing: base probe (RepE),existing,0.0695,0.0505,0.0921
+20,answer,knows,new: D_feign minus wording,new,0.2655,0.2215,0.3116
+20,answer,knows,new: D_know minus wording,new,0.3914,0.3491,0.4349
+20,answer,knows,new: D_know_norole minus wording,new,0.3357,0.2927,0.379
+20,answer,knows,new: D_role minus wording,new,0.258,0.2082,0.307
+20,answer,knows,new: interaction minus wording,new,0.3072,0.2787,0.3368
+20,answer,knows,new: d_false minus d_wording,new,0.26,0.2236,0.3003
+20,answer,knows,new: d_know_pure minus d_wording,new,0.3827,0.3412,0.4256
+20,answer,knows,new: D_feign minus d_wording,new,0.2702,0.2245,0.3163
+20,answer,knows,new: D_know_norole minus d_wording,new,0.335,0.2922,0.3772
+20,answer,full,existing: knowledge-denial (4v6) minus wording,existing,0.7539,0.7121,0.7957
+20,answer,denials,existing: knowledge-denial (4v6) minus wording,existing,0.4183,0.3487,0.488
+20,answer,"denials, bio",existing: knowledge-denial (4v6) minus wording,existing,0.5641,0.4837,0.6432
+20,answer,"denials, cyber",existing: knowledge-denial (4v6) minus wording,existing,0.4225,0.2675,0.5841
+20,answer,knows,existing: knowledge-denial (4v6) minus wording,existing,0.7809,0.7366,0.8224
+20,answer,full,existing: knowledge-denial (4v6) minus d_wording,existing,0.7646,0.7191,0.8071
+20,answer,denials,existing: knowledge-denial (4v6) minus d_wording,existing,0.4185,0.3485,0.4876
+20,answer,"denials, bio",existing: knowledge-denial (4v6) minus d_wording,existing,0.5642,0.4806,0.6486
+20,answer,"denials, cyber",existing: knowledge-denial (4v6) minus d_wording,existing,0.4225,0.2664,0.5863
+20,answer,knows,existing: knowledge-denial (4v6) minus d_wording,existing,0.7924,0.7474,0.8331
+20,answer,full,existing: extended (12v13) minus wording,existing,0.5817,0.5424,0.6204
+20,answer,denials,existing: extended (12v13) minus wording,existing,0.5599,0.4906,0.6282
+20,answer,"denials, bio",existing: extended (12v13) minus wording,existing,0.527,0.4439,0.612
+20,answer,"denials, cyber",existing: extended (12v13) minus wording,existing,0.3998,0.2524,0.5566
+20,answer,knows,existing: extended (12v13) minus wording,existing,0.5858,0.5461,0.6245
+20,answer,full,existing: extended (12v13) minus d_wording,existing,0.5888,0.5497,0.6289
+20,answer,denials,existing: extended (12v13) minus d_wording,existing,0.5602,0.4889,0.6273
+20,answer,"denials, bio",existing: extended (12v13) minus d_wording,existing,0.5266,0.4424,0.6119
+20,answer,"denials, cyber",existing: extended (12v13) minus d_wording,existing,0.3989,0.2486,0.5522
+20,answer,knows,existing: extended (12v13) minus d_wording,existing,0.5934,0.5514,0.6325
+20,answer,full,existing: published (8v7) minus wording,existing,0.1862,0.159,0.2156
+20,answer,denials,existing: published (8v7) minus wording,existing,0.4504,0.3815,0.522
+20,answer,"denials, bio",existing: published (8v7) minus wording,existing,0.4971,0.4113,0.5826
+20,answer,"denials, cyber",existing: published (8v7) minus wording,existing,0.3469,0.2164,0.4875
+20,answer,knows,existing: published (8v7) minus wording,existing,0.1685,0.1422,0.1981
+20,answer,full,existing: published (8v7) minus d_wording,existing,0.1885,0.1602,0.2169
+20,answer,denials,existing: published (8v7) minus d_wording,existing,0.4504,0.3802,0.5194
+20,answer,"denials, bio",existing: published (8v7) minus d_wording,existing,0.4972,0.4091,0.5922
+20,answer,"denials, cyber",existing: published (8v7) minus d_wording,existing,0.3469,0.2241,0.4908
+20,answer,knows,existing: published (8v7) minus d_wording,existing,0.1711,0.145,0.1998
+20,pre,full,new: D_feign,new,0.36,0.3175,0.4052
+20,pre,full,new: D_know,new,0.2942,0.2492,0.3443
+20,pre,full,new: D_know_norole,new,0.2951,0.2505,0.3377
+20,pre,full,new: D_role,new,0.4255,0.3825,0.4681
+20,pre,full,new: interaction,new,0.4092,0.3586,0.4612
+20,pre,full,existing: knowledge-denial (4v6),existing,0.5056,0.4604,0.5496
+20,pre,full,existing: extended (12v13),existing,0.3855,0.3404,0.4317
+20,pre,full,existing: published (8v7),existing,0.3269,0.2827,0.3734
+20,pre,full,existing: feigned vs sincere ignorance (4v3),existing,0.5251,0.4796,0.5702
+20,pre,full,existing: feigned vs plain assertion (4v3),existing,0.4434,0.3991,0.4894
+20,pre,full,existing: base probe (RepE),existing,0.4,0.3481,0.4499
+20,pre,denials,new: D_feign,new,0.5026,0.4337,0.5745
+20,pre,denials,new: D_know,new,0.413,0.3446,0.4831
+20,pre,denials,new: D_know_norole,new,0.4235,0.3592,0.4971
+20,pre,denials,new: D_role,new,0.5415,0.475,0.6125
+20,pre,denials,new: interaction,new,0.5591,0.4875,0.6235
+20,pre,denials,existing: knowledge-denial (4v6),existing,0.4526,0.3831,0.5238
+20,pre,denials,existing: extended (12v13),existing,0.4723,0.4018,0.5397
+20,pre,denials,existing: published (8v7),existing,0.4942,0.423,0.5654
+20,pre,denials,existing: feigned vs sincere ignorance (4v3),existing,0.5591,0.4863,0.6272
+20,pre,denials,existing: feigned vs plain assertion (4v3),existing,0.3632,0.2919,0.4329
+20,pre,denials,existing: base probe (RepE),existing,0.6198,0.5511,0.6914
+20,pre,"denials, bio",new: D_feign,new,0.5168,0.432,0.6024
+20,pre,"denials, bio",new: D_know,new,0.5358,0.4546,0.624
+20,pre,"denials, bio",new: D_know_norole,new,0.5515,0.4603,0.6377
+20,pre,"denials, bio",new: D_role,new,0.4975,0.4107,0.5826
+20,pre,"denials, bio",new: interaction,new,0.4346,0.3512,0.5152
+20,pre,"denials, bio",existing: knowledge-denial (4v6),existing,0.4969,0.4136,0.5771
+20,pre,"denials, bio",existing: extended (12v13),existing,0.5513,0.4692,0.6364
+20,pre,"denials, bio",existing: published (8v7),existing,0.5573,0.4728,0.6411
+20,pre,"denials, bio",existing: feigned vs sincere ignorance (4v3),existing,0.5471,0.4662,0.6295
+20,pre,"denials, bio",existing: feigned vs plain assertion (4v3),existing,0.4415,0.3626,0.529
+20,pre,"denials, bio",existing: base probe (RepE),existing,0.5535,0.4734,0.6345
+20,pre,"denials, cyber",new: D_feign,new,0.3866,0.2388,0.5492
+20,pre,"denials, cyber",new: D_know,new,0.3658,0.2182,0.5155
+20,pre,"denials, cyber",new: D_know_norole,new,0.4055,0.2565,0.5627
+20,pre,"denials, cyber",new: D_role,new,0.3998,0.2621,0.5566
+20,pre,"denials, cyber",new: interaction,new,0.4669,0.3224,0.6133
+20,pre,"denials, cyber",existing: knowledge-denial (4v6),existing,0.5605,0.401,0.7074
+20,pre,"denials, cyber",existing: extended (12v13),existing,0.4726,0.3213,0.6364
+20,pre,"denials, cyber",existing: published (8v7),existing,0.4348,0.2844,0.5908
+20,pre,"denials, cyber",existing: feigned vs sincere ignorance (4v3),existing,0.5756,0.4309,0.7185
+20,pre,"denials, cyber",existing: feigned vs plain assertion (4v3),existing,0.5038,0.3442,0.6598
+20,pre,"denials, cyber",existing: base probe (RepE),existing,0.413,0.2472,0.5733
+20,pre,knows,new: D_feign,new,0.3478,0.3057,0.3935
+20,pre,knows,new: D_know,new,0.2837,0.2398,0.3337
+20,pre,knows,new: D_know_norole,new,0.2845,0.2395,0.3293
+20,pre,knows,new: D_role,new,0.4152,0.3695,0.4619
+20,pre,knows,new: interaction,new,0.3958,0.3484,0.4471
+20,pre,knows,existing: knowledge-denial (4v6),existing,0.5093,0.4653,0.5511
+20,pre,knows,existing: extended (12v13),existing,0.3789,0.3361,0.4232
+20,pre,knows,existing: published (8v7),existing,0.315,0.2702,0.3603
+20,pre,knows,existing: feigned vs sincere ignorance (4v3),existing,0.5229,0.4784,0.569
+20,pre,knows,existing: feigned vs plain assertion (4v3),existing,0.448,0.4027,0.4901
+20,pre,knows,existing: base probe (RepE),existing,0.3817,0.3304,0.4323
+36,answer,full,new: D_feign,new,0.2097,0.1648,0.2563
+36,answer,full,new: D_know,new,0.7189,0.6682,0.7679
+36,answer,full,new: D_know_norole,new,0.6982,0.6391,0.7532
+36,answer,full,new: D_role,new,0.1528,0.1163,0.1965
+36,answer,full,new: interaction,new,0.0796,0.0612,0.0999
+36,answer,full,new: d_utterance,new,0.9779,0.9719,0.9834
+36,answer,full,new: d_utterance_orth,new,0.969,0.9622,0.9753
+36,answer,full,new: d_false,new,0.9523,0.9419,0.9619
+36,answer,full,new: d_wording,new,0.9763,0.9701,0.9823
+36,answer,full,new: d_know_pure,new,0.1712,0.1344,0.2098
+36,answer,full,existing: knowledge-denial (4v6),existing,0.9046,0.8684,0.9365
+36,answer,full,existing: extended (12v13),existing,0.8635,0.8226,0.9001
+36,answer,full,existing: published (8v7),existing,0.35,0.3108,0.3875
+36,answer,full,existing: feigned vs sincere ignorance (4v3),existing,0.5039,0.4638,0.545
+36,answer,full,existing: feigned vs plain assertion (4v3),existing,0.9643,0.9528,0.9736
+36,answer,full,existing: base probe (RepE),existing,0.9671,0.9564,0.9764
+36,answer,full,new: D_feign minus wording,new,0.3458,0.2956,0.3983
+36,answer,full,new: D_know minus wording,new,0.2105,0.17,0.2559
+36,answer,full,new: D_know_norole minus wording,new,0.1457,0.1125,0.1813
+36,answer,full,new: D_role minus wording,new,0.4626,0.4172,0.5129
+36,answer,full,new: interaction minus wording,new,0.7137,0.667,0.7567
+36,answer,full,new: d_false minus d_wording,new,0.5862,0.5461,0.6291
+36,answer,full,new: d_know_pure minus d_wording,new,0.1315,0.1044,0.1629
+36,answer,full,new: D_feign minus d_wording,new,0.4542,0.4012,0.5071
+36,answer,full,new: D_know_norole minus d_wording,new,0.2926,0.2345,0.351
+36,answer,denials,new: D_feign,new,0.7748,0.7173,0.8314
+36,answer,denials,new: D_know,new,0.7007,0.6386,0.7609
+36,answer,denials,new: D_know_norole,new,0.7067,0.6404,0.7633
+36,answer,denials,new: D_role,new,0.738,0.6739,0.7927
+36,answer,denials,new: interaction,new,0.3117,0.2479,0.3765
+36,answer,denials,new: d_utterance,new,0.7579,0.6991,0.8143
+36,answer,denials,new: d_utterance_orth,new,0.6137,0.5442,0.6811
+36,answer,denials,new: d_false,new,0.6965,0.6321,0.7575
+36,answer,denials,new: d_wording,new,0.7324,0.6717,0.7909
+36,answer,denials,new: d_know_pure,new,0.7071,0.6423,0.7676
+36,answer,denials,existing: knowledge-denial (4v6),existing,0.522,0.4521,0.5929
+36,answer,denials,existing: extended (12v13),existing,0.6591,0.5932,0.7236
+36,answer,denials,existing: published (8v7),existing,0.6412,0.5713,0.7063
+36,answer,denials,existing: feigned vs sincere ignorance (4v3),existing,0.4855,0.4172,0.5578
+36,answer,denials,existing: feigned vs plain assertion (4v3),existing,0.6299,0.5566,0.6972
+36,answer,denials,existing: base probe (RepE),existing,0.7627,0.704,0.8188
+36,answer,denials,new: D_feign minus wording,new,0.7778,0.717,0.8335
+36,answer,denials,new: D_know minus wording,new,0.6554,0.5877,0.718
+36,answer,denials,new: D_know_norole minus wording,new,0.6555,0.5892,0.7169
+36,answer,denials,new: D_role minus wording,new,0.7543,0.6961,0.8125
+36,answer,denials,new: interaction minus wording,new,0.3732,0.3074,0.4391
+36,answer,denials,new: d_false minus d_wording,new,0.638,0.5701,0.7029
+36,answer,denials,new: d_know_pure minus d_wording,new,0.7009,0.6354,0.7609
+36,answer,denials,new: D_feign minus d_wording,new,0.7796,0.7216,0.8347
+36,answer,denials,new: D_know_norole minus d_wording,new,0.674,0.6102,0.7387
+36,answer,"denials, bio",new: D_feign,new,0.776,0.7069,0.837
+36,answer,"denials, bio",new: D_know,new,0.796,0.7285,0.855
+36,answer,"denials, bio",new: D_know_norole,new,0.7985,0.7333,0.856
+36,answer,"denials, bio",new: D_role,new,0.7208,0.6448,0.793
+36,answer,"denials, bio",new: interaction,new,0.2051,0.1458,0.2699
+36,answer,"denials, bio",new: d_utterance,new,0.7599,0.6918,0.8239
+36,answer,"denials, bio",new: d_utterance_orth,new,0.5281,0.4512,0.607
+36,answer,"denials, bio",new: d_false,new,0.7784,0.7144,0.8397
+36,answer,"denials, bio",new: d_wording,new,0.7368,0.6618,0.8018
+36,answer,"denials, bio",new: d_know_pure,new,0.805,0.7395,0.8652
+36,answer,"denials, bio",existing: knowledge-denial (4v6),existing,0.6648,0.5837,0.7378
+36,answer,"denials, bio",existing: extended (12v13),existing,0.6876,0.6077,0.7627
+36,answer,"denials, bio",existing: published (8v7),existing,0.6802,0.6038,0.7553
+36,answer,"denials, bio",existing: feigned vs sincere ignorance (4v3),existing,0.6488,0.5705,0.7267
+36,answer,"denials, bio",existing: feigned vs plain assertion (4v3),existing,0.6642,0.5871,0.7376
+36,answer,"denials, bio",existing: base probe (RepE),existing,0.7814,0.7164,0.8413
+36,answer,"denials, bio",new: D_feign minus wording,new,0.7777,0.7068,0.8403
+36,answer,"denials, bio",new: D_know minus wording,new,0.7958,0.7329,0.8565
+36,answer,"denials, bio",new: D_know_norole minus wording,new,0.7998,0.7362,0.8561
+36,answer,"denials, bio",new: D_role minus wording,new,0.7412,0.6697,0.8093
+36,answer,"denials, bio",new: interaction minus wording,new,0.2025,0.1426,0.262
+36,answer,"denials, bio",new: d_false minus d_wording,new,0.7806,0.714,0.842
+36,answer,"denials, bio",new: d_know_pure minus d_wording,new,0.8047,0.738,0.865
+36,answer,"denials, bio",new: D_feign minus d_wording,new,0.7781,0.7124,0.8401
+36,answer,"denials, bio",new: D_know_norole minus d_wording,new,0.7998,0.7336,0.8583
+36,answer,"denials, cyber",new: D_feign,new,0.7372,0.5907,0.8661
+36,answer,"denials, cyber",new: D_know,new,0.7146,0.5654,0.8502
+36,answer,"denials, cyber",new: D_know_norole,new,0.7108,0.5654,0.8442
+36,answer,"denials, cyber",new: D_role,new,0.6862,0.5352,0.8241
+36,answer,"denials, cyber",new: interaction,new,0.3091,0.1716,0.4634
+36,answer,"denials, cyber",new: d_utterance,new,0.6578,0.5082,0.7968
+36,answer,"denials, cyber",new: d_utterance_orth,new,0.5123,0.3424,0.6716
+36,answer,"denials, cyber",new: d_false,new,0.7231,0.5832,0.8521
+36,answer,"denials, cyber",new: d_wording,new,0.6106,0.4537,0.7612
+36,answer,"denials, cyber",new: d_know_pure,new,0.689,0.537,0.8254
+36,answer,"denials, cyber",existing: knowledge-denial (4v6),existing,0.5813,0.4226,0.743
+36,answer,"denials, cyber",existing: extended (12v13),existing,0.62,0.4518,0.7716
+36,answer,"denials, cyber",existing: published (8v7),existing,0.5784,0.4093,0.7305
+36,answer,"denials, cyber",existing: feigned vs sincere ignorance (4v3),existing,0.5586,0.3962,0.7128
+36,answer,"denials, cyber",existing: feigned vs plain assertion (4v3),existing,0.5444,0.3695,0.7098
+36,answer,"denials, cyber",existing: base probe (RepE),existing,0.7108,0.5652,0.8591
+36,answer,"denials, cyber",new: D_feign minus wording,new,0.7391,0.5986,0.8639
+36,answer,"denials, cyber",new: D_know minus wording,new,0.6994,0.5469,0.8377
+36,answer,"denials, cyber",new: D_know_norole minus wording,new,0.7098,0.5581,0.8481
+36,answer,"denials, cyber",new: D_role minus wording,new,0.7051,0.5617,0.8384
+36,answer,"denials, cyber",new: interaction minus wording,new,0.3072,0.1673,0.4559
+36,answer,"denials, cyber",new: d_false minus d_wording,new,0.7287,0.5803,0.852
+36,answer,"denials, cyber",new: d_know_pure minus d_wording,new,0.6871,0.5282,0.8241
+36,answer,"denials, cyber",new: D_feign minus d_wording,new,0.742,0.5964,0.8674
+36,answer,"denials, cyber",new: D_know_norole minus d_wording,new,0.7089,0.5582,0.8404
+36,answer,knows,new: D_feign,new,0.1674,0.1213,0.2152
+36,answer,knows,new: D_know,new,0.7221,0.6707,0.7729
+36,answer,knows,new: D_know_norole,new,0.6989,0.6383,0.7554
+36,answer,knows,new: D_role,new,0.1086,0.0715,0.1475
+36,answer,knows,new: interaction,new,0.0594,0.0433,0.0782
+36,answer,knows,new: d_utterance,new,0.9995,0.999,0.9998
+36,answer,knows,new: d_utterance_orth,new,0.9993,0.9987,0.9998
+36,answer,knows,new: d_false,new,0.9735,0.9659,0.9802
+36,answer,knows,new: d_wording,new,0.9994,0.9989,0.9998
+36,answer,knows,new: d_know_pure,new,0.1323,0.0974,0.1714
+36,answer,knows,existing: knowledge-denial (4v6),existing,0.9356,0.8983,0.9677
+36,answer,knows,existing: extended (12v13),existing,0.882,0.8413,0.9161
+36,answer,knows,existing: published (8v7),existing,0.3316,0.2933,0.3693
+36,answer,knows,existing: feigned vs sincere ignorance (4v3),existing,0.5081,0.4675,0.5485
+36,answer,knows,existing: feigned vs plain assertion (4v3),existing,0.9918,0.9828,0.9975
+36,answer,knows,existing: base probe (RepE),existing,0.9834,0.975,0.9904
+36,answer,knows,new: D_feign minus wording,new,0.3134,0.261,0.368
+36,answer,knows,new: D_know minus wording,new,0.1775,0.1364,0.2247
+36,answer,knows,new: D_know_norole minus wording,new,0.1072,0.0748,0.1443
+36,answer,knows,new: D_role minus wording,new,0.4403,0.3901,0.4886
+36,answer,knows,new: interaction minus wording,new,0.7391,0.6948,0.7816
+36,answer,knows,new: d_false minus d_wording,new,0.5817,0.5407,0.6219
+36,answer,knows,new: d_know_pure minus d_wording,new,0.0898,0.0638,0.1205
+36,answer,knows,new: D_feign minus d_wording,new,0.4297,0.3797,0.4813
+36,answer,knows,new: D_know_norole minus d_wording,new,0.2642,0.2104,0.3244
+36,answer,full,existing: knowledge-denial (4v6) minus wording,existing,0.6409,0.5968,0.687
+36,answer,denials,existing: knowledge-denial (4v6) minus wording,existing,0.4608,0.3904,0.5287
+36,answer,"denials, bio",existing: knowledge-denial (4v6) minus wording,existing,0.6113,0.5317,0.6938
+36,answer,"denials, cyber",existing: knowledge-denial (4v6) minus wording,existing,0.5425,0.3676,0.7052
+36,answer,knows,existing: knowledge-denial (4v6) minus wording,existing,0.6558,0.6148,0.6949
+36,answer,full,existing: knowledge-denial (4v6) minus d_wording,existing,0.6702,0.6253,0.7125
+36,answer,denials,existing: knowledge-denial (4v6) minus d_wording,existing,0.4741,0.4025,0.5431
+36,answer,"denials, bio",existing: knowledge-denial (4v6) minus d_wording,existing,0.6309,0.547,0.7094
+36,answer,"denials, cyber",existing: knowledge-denial (4v6) minus d_wording,existing,0.5548,0.3946,0.7048
+36,answer,knows,existing: knowledge-denial (4v6) minus d_wording,existing,0.6864,0.6403,0.7295
+36,answer,full,existing: extended (12v13) minus wording,existing,0.4484,0.4066,0.4928
+36,answer,denials,existing: extended (12v13) minus wording,existing,0.6017,0.5327,0.6747
+36,answer,"denials, bio",existing: extended (12v13) minus wording,existing,0.6684,0.5884,0.7445
+36,answer,"denials, cyber",existing: extended (12v13) minus wording,existing,0.5728,0.4057,0.7452
+36,answer,knows,existing: extended (12v13) minus wording,existing,0.4395,0.3946,0.482
+36,answer,full,existing: extended (12v13) minus d_wording,existing,0.5464,0.5029,0.5917
+36,answer,denials,existing: extended (12v13) minus d_wording,existing,0.6151,0.5511,0.6852
+36,answer,"denials, bio",existing: extended (12v13) minus d_wording,existing,0.6788,0.5977,0.7529
+36,answer,"denials, cyber",existing: extended (12v13) minus d_wording,existing,0.586,0.4184,0.7423
+36,answer,knows,existing: extended (12v13) minus d_wording,existing,0.5438,0.4993,0.5872
+36,answer,full,existing: published (8v7) minus wording,existing,0.1533,0.1257,0.1822
+36,answer,denials,existing: published (8v7) minus wording,existing,0.6188,0.5512,0.6831
+36,answer,"denials, bio",existing: published (8v7) minus wording,existing,0.6703,0.593,0.7443
+36,answer,"denials, cyber",existing: published (8v7) minus wording,existing,0.5548,0.3968,0.7111
+36,answer,knows,existing: published (8v7) minus wording,existing,0.1217,0.0946,0.15
+36,answer,full,existing: published (8v7) minus d_wording,existing,0.2179,0.1859,0.2534
+36,answer,denials,existing: published (8v7) minus d_wording,existing,0.6293,0.5637,0.6958
+36,answer,"denials, bio",existing: published (8v7) minus d_wording,existing,0.6764,0.597,0.7543
+36,answer,"denials, cyber",existing: published (8v7) minus d_wording,existing,0.5699,0.4033,0.731
+36,answer,knows,existing: published (8v7) minus d_wording,existing,0.1905,0.1584,0.2257
+40,answer,full,new: D_feign,new,0.2639,0.2145,0.3164
+40,answer,full,new: D_know,new,0.7816,0.7477,0.8154
+40,answer,full,new: D_know_norole,new,0.834,0.8002,0.866
+40,answer,full,new: D_role,new,0.1792,0.1448,0.2166
+40,answer,full,new: interaction,new,0.0684,0.0534,0.0849
+40,answer,full,new: d_utterance,new,0.9791,0.9731,0.9843
+40,answer,full,new: d_utterance_orth,new,0.965,0.9539,0.9743
+40,answer,full,new: d_false,new,0.9498,0.9391,0.9591
+40,answer,full,new: d_wording,new,0.9777,0.9714,0.9829
+40,answer,full,new: d_know_pure,new,0.2282,0.1832,0.2751
+40,answer,full,existing: knowledge-denial (4v6),existing,0.9185,0.8873,0.9465
+40,answer,full,existing: extended (12v13),existing,0.9124,0.879,0.9427
+40,answer,full,existing: published (8v7),existing,0.5926,0.5386,0.6475
+40,answer,full,existing: feigned vs sincere ignorance (4v3),existing,0.7012,0.6414,0.7512
+40,answer,full,existing: feigned vs plain assertion (4v3),existing,0.9716,0.9618,0.9796
+40,answer,full,existing: base probe (RepE),existing,0.9358,0.914,0.9542
+40,answer,full,new: D_feign minus wording,new,0.3022,0.25,0.3583
+40,answer,full,new: D_know minus wording,new,0.2358,0.1941,0.2782
+40,answer,full,new: D_know_norole minus wording,new,0.1808,0.1391,0.2233
+40,answer,full,new: D_role minus wording,new,0.4158,0.3695,0.464
+40,answer,full,new: interaction minus wording,new,0.7345,0.694,0.7731
+40,answer,full,new: d_false minus d_wording,new,0.5889,0.5514,0.6247
+40,answer,full,new: d_know_pure minus d_wording,new,0.121,0.0922,0.1521
+40,answer,full,new: D_feign minus d_wording,new,0.419,0.3651,0.4757
+40,answer,full,new: D_know_norole minus d_wording,new,0.3189,0.2669,0.3729
+40,answer,denials,new: D_feign,new,0.7685,0.7098,0.8216
+40,answer,denials,new: D_know,new,0.7276,0.6658,0.7865
+40,answer,denials,new: D_know_norole,new,0.7493,0.6909,0.8055
+40,answer,denials,new: D_role,new,0.734,0.6685,0.7947
+40,answer,denials,new: interaction,new,0.2713,0.2128,0.3334
+40,answer,denials,new: d_utterance,new,0.7771,0.7183,0.8323
+40,answer,denials,new: d_utterance_orth,new,0.6233,0.5557,0.6923
+40,answer,denials,new: d_false,new,0.7282,0.6682,0.7848
+40,answer,denials,new: d_wording,new,0.7547,0.6973,0.8112
+40,answer,denials,new: d_know_pure,new,0.764,0.7042,0.8188
+40,answer,denials,existing: knowledge-denial (4v6),existing,0.5703,0.4976,0.6415
+40,answer,denials,existing: extended (12v13),existing,0.6704,0.6061,0.7354
+40,answer,denials,existing: published (8v7),existing,0.6488,0.5828,0.7121
+40,answer,denials,existing: feigned vs sincere ignorance (4v3),existing,0.5068,0.4335,0.5829
+40,answer,denials,existing: feigned vs plain assertion (4v3),existing,0.7107,0.6474,0.7729
+40,answer,denials,existing: base probe (RepE),existing,0.5928,0.5257,0.6624
+40,answer,denials,new: D_feign minus wording,new,0.7701,0.7122,0.8272
+40,answer,denials,new: D_know minus wording,new,0.6868,0.6228,0.747
+40,answer,denials,new: D_know_norole minus wording,new,0.7065,0.6429,0.7672
+40,answer,denials,new: D_role minus wording,new,0.749,0.6868,0.8053
+40,answer,denials,new: interaction minus wording,new,0.3303,0.27,0.3975
+40,answer,denials,new: d_false minus d_wording,new,0.6791,0.6154,0.7426
+40,answer,denials,new: d_know_pure minus d_wording,new,0.7544,0.6988,0.8096
+40,answer,denials,new: D_feign minus d_wording,new,0.7733,0.715,0.8281
+40,answer,denials,new: D_know_norole minus d_wording,new,0.7223,0.6605,0.7804
+40,answer,"denials, bio",new: D_feign,new,0.7712,0.7021,0.835
+40,answer,"denials, bio",new: D_know,new,0.7952,0.7261,0.8541
+40,answer,"denials, bio",new: D_know_norole,new,0.7995,0.7335,0.8566
+40,answer,"denials, bio",new: D_role,new,0.7212,0.6519,0.7892
+40,answer,"denials, bio",new: interaction,new,0.204,0.1455,0.2684
+40,answer,"denials, bio",new: d_utterance,new,0.7752,0.7047,0.8368
+40,answer,"denials, bio",new: d_utterance_orth,new,0.5475,0.4674,0.6318
+40,answer,"denials, bio",new: d_false,new,0.7829,0.7204,0.8431
+40,answer,"denials, bio",new: d_wording,new,0.7675,0.6945,0.8313
+40,answer,"denials, bio",new: d_know_pure,new,0.8081,0.7464,0.8664
+40,answer,"denials, bio",existing: knowledge-denial (4v6),existing,0.7158,0.6423,0.7848
+40,answer,"denials, bio",existing: extended (12v13),existing,0.7247,0.6524,0.8003
+40,answer,"denials, bio",existing: published (8v7),existing,0.7184,0.6462,0.7924
+40,answer,"denials, bio",existing: feigned vs sincere ignorance (4v3),existing,0.6841,0.6022,0.76
+40,answer,"denials, bio",existing: feigned vs plain assertion (4v3),existing,0.7263,0.6522,0.7942
+40,answer,"denials, bio",existing: base probe (RepE),existing,0.7821,0.7137,0.8412
+40,answer,"denials, bio",new: D_feign minus wording,new,0.7719,0.7033,0.8311
+40,answer,"denials, bio",new: D_know minus wording,new,0.7962,0.732,0.8549
+40,answer,"denials, bio",new: D_know_norole minus wording,new,0.7995,0.7321,0.8562
+40,answer,"denials, bio",new: D_role minus wording,new,0.7378,0.6666,0.8057
+40,answer,"denials, bio",new: interaction minus wording,new,0.2033,0.1458,0.2705
+40,answer,"denials, bio",new: d_false minus d_wording,new,0.782,0.7154,0.8404
+40,answer,"denials, bio",new: d_know_pure minus d_wording,new,0.808,0.7443,0.8638
+40,answer,"denials, bio",new: D_feign minus d_wording,new,0.774,0.7078,0.8362
+40,answer,"denials, bio",new: D_know_norole minus d_wording,new,0.7993,0.7313,0.8592
+40,answer,"denials, cyber",new: D_feign,new,0.7476,0.6073,0.8704
+40,answer,"denials, cyber",new: D_know,new,0.724,0.5843,0.8521
+40,answer,"denials, cyber",new: D_know_norole,new,0.7325,0.5883,0.8633
+40,answer,"denials, cyber",new: D_role,new,0.7032,0.5519,0.8435
+40,answer,"denials, cyber",new: interaction,new,0.3289,0.1795,0.4874
+40,answer,"denials, cyber",new: d_utterance,new,0.6711,0.5077,0.8267
+40,answer,"denials, cyber",new: d_utterance_orth,new,0.5236,0.3631,0.6925
+40,answer,"denials, cyber",new: d_false,new,0.7316,0.5861,0.8651
+40,answer,"denials, cyber",new: d_wording,new,0.6371,0.4776,0.7875
+40,answer,"denials, cyber",new: d_know_pure,new,0.7391,0.588,0.8643
+40,answer,"denials, cyber",existing: knowledge-denial (4v6),existing,0.6323,0.4755,0.7837
+40,answer,"denials, cyber",existing: extended (12v13),existing,0.6805,0.509,0.828
+40,answer,"denials, cyber",existing: published (8v7),existing,0.6418,0.47,0.801
+40,answer,"denials, cyber",existing: feigned vs sincere ignorance (4v3),existing,0.5917,0.4196,0.7537
+40,answer,"denials, cyber",existing: feigned vs plain assertion (4v3),existing,0.6219,0.4583,0.7863
+40,answer,"denials, cyber",existing: base probe (RepE),existing,0.6078,0.448,0.7631
+40,answer,"denials, cyber",new: D_feign minus wording,new,0.7533,0.6106,0.8762
+40,answer,"denials, cyber",new: D_know minus wording,new,0.7051,0.5561,0.8345
+40,answer,"denials, cyber",new: D_know_norole minus wording,new,0.7193,0.5683,0.8512
+40,answer,"denials, cyber",new: D_role minus wording,new,0.724,0.5916,0.854
+40,answer,"denials, cyber",new: interaction minus wording,new,0.3261,0.1731,0.4887
+40,answer,"denials, cyber",new: d_false minus d_wording,new,0.7363,0.587,0.8722
+40,answer,"denials, cyber",new: d_know_pure minus d_wording,new,0.7287,0.586,0.8602
+40,answer,"denials, cyber",new: D_feign minus d_wording,new,0.7533,0.6,0.8682
+40,answer,"denials, cyber",new: D_know_norole minus d_wording,new,0.7221,0.5791,0.8596
+40,answer,knows,new: D_feign,new,0.2259,0.1772,0.2792
+40,answer,knows,new: D_know,new,0.7856,0.7513,0.8186
+40,answer,knows,new: D_know_norole,new,0.8399,0.8066,0.8719
+40,answer,knows,new: D_role,new,0.1372,0.0993,0.1771
+40,answer,knows,new: interaction,new,0.053,0.0405,0.0665
+40,answer,knows,new: d_utterance,new,0.9994,0.9989,0.9998
+40,answer,knows,new: d_utterance_orth,new,0.9944,0.986,0.9997
+40,answer,knows,new: d_false,new,0.9661,0.9579,0.9739
+40,answer,knows,new: d_wording,new,0.9994,0.9988,0.9998
+40,answer,knows,new: d_know_pure,new,0.188,0.1393,0.2348
+40,answer,knows,existing: knowledge-denial (4v6),existing,0.9479,0.9187,0.975
+40,answer,knows,existing: extended (12v13),existing,0.934,0.9021,0.9636
+40,answer,knows,existing: published (8v7),existing,0.5917,0.5359,0.6457
+40,answer,knows,existing: feigned vs sincere ignorance (4v3),existing,0.7186,0.6622,0.7713
+40,answer,knows,existing: feigned vs plain assertion (4v3),existing,0.9946,0.9872,0.9988
+40,answer,knows,existing: base probe (RepE),existing,0.9639,0.9441,0.9814
+40,answer,knows,new: D_feign minus wording,new,0.267,0.2168,0.3241
+40,answer,knows,new: D_know minus wording,new,0.2013,0.1624,0.2451
+40,answer,knows,new: D_know_norole minus wording,new,0.1408,0.1005,0.1813
+40,answer,knows,new: D_role minus wording,new,0.3904,0.3433,0.4406
+40,answer,knows,new: interaction minus wording,new,0.7658,0.727,0.8043
+40,answer,knows,new: d_false minus d_wording,new,0.5809,0.5421,0.6166
+40,answer,knows,new: d_know_pure minus d_wording,new,0.0734,0.0473,0.1053
+40,answer,knows,new: D_feign minus d_wording,new,0.3923,0.3405,0.4512
+40,answer,knows,new: D_know_norole minus d_wording,new,0.288,0.2333,0.3402
+40,answer,full,existing: knowledge-denial (4v6) minus wording,existing,0.6484,0.605,0.6906
+40,answer,denials,existing: knowledge-denial (4v6) minus wording,existing,0.4965,0.4234,0.571
+40,answer,"denials, bio",existing: knowledge-denial (4v6) minus wording,existing,0.6695,0.5892,0.7468
+40,answer,"denials, cyber",existing: knowledge-denial (4v6) minus wording,existing,0.5822,0.4198,0.7388
+40,answer,knows,existing: knowledge-denial (4v6) minus wording,existing,0.6621,0.6206,0.7034
+40,answer,full,existing: knowledge-denial (4v6) minus d_wording,existing,0.6786,0.6349,0.7209
+40,answer,denials,existing: knowledge-denial (4v6) minus d_wording,existing,0.5107,0.4397,0.5828
+40,answer,"denials, bio",existing: knowledge-denial (4v6) minus d_wording,existing,0.688,0.6108,0.7611
+40,answer,"denials, cyber",existing: knowledge-denial (4v6) minus d_wording,existing,0.6011,0.4333,0.7609
+40,answer,knows,existing: knowledge-denial (4v6) minus d_wording,existing,0.6936,0.6529,0.7315
+40,answer,full,existing: extended (12v13) minus wording,existing,0.5509,0.5133,0.5876
+40,answer,denials,existing: extended (12v13) minus wording,existing,0.5985,0.53,0.6646
+40,answer,"denials, bio",existing: extended (12v13) minus wording,existing,0.7034,0.627,0.7779
+40,answer,"denials, cyber",existing: extended (12v13) minus wording,existing,0.6531,0.4858,0.809
+40,answer,knows,existing: extended (12v13) minus wording,existing,0.55,0.5136,0.5882
+40,answer,full,existing: extended (12v13) minus d_wording,existing,0.6254,0.5872,0.6664
+40,answer,denials,existing: extended (12v13) minus d_wording,existing,0.6201,0.5536,0.6871
+40,answer,"denials, bio",existing: extended (12v13) minus d_wording,existing,0.7137,0.6371,0.7824
+40,answer,"denials, cyber",existing: extended (12v13) minus d_wording,existing,0.6824,0.5277,0.8352
+40,answer,knows,existing: extended (12v13) minus d_wording,existing,0.6287,0.5883,0.6687
+40,answer,full,existing: published (8v7) minus wording,existing,0.2245,0.1827,0.2691
+40,answer,denials,existing: published (8v7) minus wording,existing,0.6065,0.5398,0.6739
+40,answer,"denials, bio",existing: published (8v7) minus wording,existing,0.7057,0.6302,0.779
+40,answer,"denials, cyber",existing: published (8v7) minus wording,existing,0.62,0.4586,0.7844
+40,answer,knows,existing: published (8v7) minus wording,existing,0.1988,0.1592,0.2439
+40,answer,full,existing: published (8v7) minus d_wording,existing,0.3458,0.2919,0.4004
+40,answer,denials,existing: published (8v7) minus d_wording,existing,0.6261,0.5581,0.6911
+40,answer,"denials, bio",existing: published (8v7) minus d_wording,existing,0.7125,0.6355,0.7866
+40,answer,"denials, cyber",existing: published (8v7) minus d_wording,existing,0.6333,0.4741,0.7959
+40,answer,knows,existing: published (8v7) minus d_wording,existing,0.3279,0.2741,0.3787
+40,pre,full,new: D_feign,new,0.3504,0.3068,0.3966
+40,pre,full,new: D_know,new,0.1069,0.082,0.1389
+40,pre,full,new: D_know_norole,new,0.0939,0.0748,0.1164
+40,pre,full,new: D_role,new,0.4868,0.4305,0.5407
+40,pre,full,new: interaction,new,0.9181,0.9003,0.9349
+40,pre,full,existing: knowledge-denial (4v6),existing,0.8343,0.8046,0.8617
+40,pre,full,existing: extended (12v13),existing,0.5735,0.5214,0.6268
+40,pre,full,existing: published (8v7),existing,0.3064,0.2665,0.3493
+40,pre,full,existing: feigned vs sincere ignorance (4v3),existing,0.5848,0.5289,0.6367
+40,pre,full,existing: feigned vs plain assertion (4v3),existing,0.8877,0.8651,0.9092
+40,pre,full,existing: base probe (RepE),existing,0.8259,0.7989,0.8503
+40,pre,denials,new: D_feign,new,0.77,0.7151,0.8249
+40,pre,denials,new: D_know,new,0.5964,0.5291,0.6635
+40,pre,denials,new: D_know_norole,new,0.6871,0.6238,0.7499
+40,pre,denials,new: D_role,new,0.7183,0.656,0.7773
+40,pre,denials,new: interaction,new,0.4198,0.352,0.4911
+40,pre,denials,existing: knowledge-denial (4v6),existing,0.5438,0.4739,0.6178
+40,pre,denials,existing: extended (12v13),existing,0.5891,0.5218,0.6606
+40,pre,denials,existing: published (8v7),existing,0.6165,0.5461,0.6846
+40,pre,denials,existing: feigned vs sincere ignorance (4v3),existing,0.5802,0.5084,0.6493
+40,pre,denials,existing: feigned vs plain assertion (4v3),existing,0.5209,0.4509,0.5934
+40,pre,denials,existing: base probe (RepE),existing,0.6807,0.6167,0.7437
+40,pre,"denials, bio",new: D_feign,new,0.7533,0.6859,0.8194
+40,pre,"denials, bio",new: D_know,new,0.7606,0.6943,0.8244
+40,pre,"denials, bio",new: D_know_norole,new,0.7654,0.6924,0.8315
+40,pre,"denials, bio",new: D_role,new,0.6748,0.5979,0.7473
+40,pre,"denials, bio",new: interaction,new,0.276,0.2029,0.3501
+40,pre,"denials, bio",existing: knowledge-denial (4v6),existing,0.387,0.3031,0.4738
+40,pre,"denials, bio",existing: extended (12v13),existing,0.4603,0.3775,0.5409
+40,pre,"denials, bio",existing: published (8v7),existing,0.5305,0.4473,0.6149
+40,pre,"denials, bio",existing: feigned vs sincere ignorance (4v3),existing,0.4374,0.3554,0.5181
+40,pre,"denials, bio",existing: feigned vs plain assertion (4v3),existing,0.3643,0.2867,0.4481
+40,pre,"denials, bio",existing: base probe (RepE),existing,0.6325,0.5505,0.7103
+40,pre,"denials, cyber",new: D_feign,new,0.793,0.6686,0.9009
+40,pre,"denials, cyber",new: D_know,new,0.482,0.3165,0.6431
+40,pre,"denials, cyber",new: D_know_norole,new,0.4934,0.3273,0.655
+40,pre,"denials, cyber",new: D_role,new,0.7703,0.6403,0.8802
+40,pre,"denials, cyber",new: interaction,new,0.552,0.3845,0.7137
+40,pre,"denials, cyber",existing: knowledge-denial (4v6),existing,0.6068,0.4472,0.7574
+40,pre,"denials, cyber",existing: extended (12v13),existing,0.6824,0.5463,0.8116
+40,pre,"denials, cyber",existing: published (8v7),existing,0.534,0.378,0.6816
+40,pre,"denials, cyber",existing: feigned vs sincere ignorance (4v3),existing,0.7316,0.6019,0.8441
+40,pre,"denials, cyber",existing: feigned vs plain assertion (4v3),existing,0.5321,0.3646,0.6896
+40,pre,"denials, cyber",existing: base probe (RepE),existing,0.7391,0.6109,0.8592
+40,pre,knows,new: D_feign,new,0.3186,0.2728,0.3628
+40,pre,knows,new: D_know,new,0.0685,0.0438,0.0985
+40,pre,knows,new: D_know_norole,new,0.0486,0.0309,0.0681
+40,pre,knows,new: D_role,new,0.4687,0.4107,0.5247
+40,pre,knows,new: interaction,new,0.9572,0.9422,0.9703
+40,pre,knows,existing: knowledge-denial (4v6),existing,0.8565,0.8273,0.8835
+40,pre,knows,existing: extended (12v13),existing,0.5702,0.516,0.6223
+40,pre,knows,existing: published (8v7),existing,0.2814,0.2418,0.3231
+40,pre,knows,existing: feigned vs sincere ignorance (4v3),existing,0.5843,0.5295,0.6391
+40,pre,knows,existing: feigned vs plain assertion (4v3),existing,0.916,0.8946,0.9367
+40,pre,knows,existing: base probe (RepE),existing,0.8376,0.8132,0.8617
+44,answer,full,new: D_feign,new,0.2454,0.1978,0.2949
+44,answer,full,new: D_know,new,0.8069,0.7715,0.8413
+44,answer,full,new: D_know_norole,new,0.8696,0.8389,0.899
+44,answer,full,new: D_role,new,0.1646,0.1304,0.2013
+44,answer,full,new: interaction,new,0.0452,0.0351,0.0565
+44,answer,full,new: d_utterance,new,0.979,0.9732,0.9843
+44,answer,full,new: d_utterance_orth,new,0.9627,0.9504,0.9727
+44,answer,full,new: d_false,new,0.9539,0.9452,0.9624
+44,answer,full,new: d_wording,new,0.9774,0.9716,0.9831
+44,answer,full,new: d_know_pure,new,0.2497,0.2058,0.2994
+44,answer,full,existing: knowledge-denial (4v6),existing,0.9077,0.8743,0.9402
+44,answer,full,existing: extended (12v13),existing,0.8936,0.8545,0.9287
+44,answer,full,existing: published (8v7),existing,0.5895,0.5326,0.6477
+44,answer,full,existing: feigned vs sincere ignorance (4v3),existing,0.6801,0.6223,0.7387
+44,answer,full,existing: feigned vs plain assertion (4v3),existing,0.9624,0.9523,0.9708
+44,answer,full,existing: base probe (RepE),existing,0.8283,0.7897,0.8689
+44,answer,full,new: D_feign minus wording,new,0.3087,0.2602,0.3604
+44,answer,full,new: D_know minus wording,new,0.2227,0.1838,0.2652
+44,answer,full,new: D_know_norole minus wording,new,0.1534,0.1167,0.1898
+44,answer,full,new: D_role minus wording,new,0.4351,0.3888,0.4805
+44,answer,full,new: interaction minus wording,new,0.7434,0.7044,0.7801
+44,answer,full,new: d_false minus d_wording,new,0.5586,0.5115,0.6024
+44,answer,full,new: d_know_pure minus d_wording,new,0.1039,0.0789,0.1327
+44,answer,full,new: D_feign minus d_wording,new,0.4182,0.3661,0.4673
+44,answer,full,new: D_know_norole minus d_wording,new,0.2815,0.2303,0.3327
+44,answer,denials,new: D_feign,new,0.7508,0.6892,0.807
+44,answer,denials,new: D_know,new,0.7134,0.6486,0.7715
+44,answer,denials,new: D_know_norole,new,0.7529,0.6938,0.8067
+44,answer,denials,new: D_role,new,0.7122,0.6461,0.7759
+44,answer,denials,new: interaction,new,0.2696,0.2127,0.3309
+44,answer,denials,new: d_utterance,new,0.775,0.7145,0.8266
+44,answer,denials,new: d_utterance_orth,new,0.6014,0.5346,0.67
+44,answer,denials,new: d_false,new,0.7374,0.676,0.7944
+44,answer,denials,new: d_wording,new,0.7523,0.6901,0.8069
+44,answer,denials,new: d_know_pure,new,0.7636,0.7038,0.8218
+44,answer,denials,existing: knowledge-denial (4v6),existing,0.5214,0.4504,0.5914
+44,answer,denials,existing: extended (12v13),existing,0.5597,0.4875,0.6251
+44,answer,denials,existing: published (8v7),existing,0.5598,0.4894,0.6307
+44,answer,denials,existing: feigned vs sincere ignorance (4v3),existing,0.4908,0.4149,0.5558
+44,answer,denials,existing: feigned vs plain assertion (4v3),existing,0.5899,0.5158,0.6573
+44,answer,denials,existing: base probe (RepE),existing,0.5665,0.492,0.6389
+44,answer,denials,new: D_feign minus wording,new,0.7551,0.696,0.8127
+44,answer,denials,new: D_know minus wording,new,0.6601,0.5931,0.7242
+44,answer,denials,new: D_know_norole minus wording,new,0.7029,0.6414,0.7656
+44,answer,denials,new: D_role minus wording,new,0.7368,0.6764,0.795
+44,answer,denials,new: interaction minus wording,new,0.3415,0.2743,0.4053
+44,answer,denials,new: d_false minus d_wording,new,0.6847,0.6163,0.748
+44,answer,denials,new: d_know_pure minus d_wording,new,0.7476,0.6892,0.8037
+44,answer,denials,new: D_feign minus d_wording,new,0.7598,0.702,0.8158
+44,answer,denials,new: D_know_norole minus d_wording,new,0.7209,0.6565,0.7798
+44,answer,"denials, bio",new: D_feign,new,0.7602,0.6889,0.8247
+44,answer,"denials, bio",new: D_know,new,0.7963,0.7309,0.8543
+44,answer,"denials, bio",new: D_know_norole,new,0.8019,0.738,0.8607
+44,answer,"denials, bio",new: D_role,new,0.7043,0.6305,0.7764
+44,answer,"denials, bio",new: interaction,new,0.2043,0.1463,0.2687
+44,answer,"denials, bio",new: d_utterance,new,0.7801,0.7112,0.8414
+44,answer,"denials, bio",new: d_utterance_orth,new,0.5079,0.4251,0.5957
+44,answer,"denials, bio",new: d_false,new,0.7871,0.7177,0.8505
+44,answer,"denials, bio",new: d_wording,new,0.7697,0.7001,0.8315
+44,answer,"denials, bio",new: d_know_pure,new,0.8091,0.75,0.8669
+44,answer,"denials, bio",existing: knowledge-denial (4v6),existing,0.7102,0.6363,0.781
+44,answer,"denials, bio",existing: extended (12v13),existing,0.7232,0.6492,0.7903
+44,answer,"denials, bio",existing: published (8v7),existing,0.7135,0.6363,0.7849
+44,answer,"denials, bio",existing: feigned vs sincere ignorance (4v3),existing,0.6555,0.5726,0.7336
+44,answer,"denials, bio",existing: feigned vs plain assertion (4v3),existing,0.7289,0.651,0.7975
+44,answer,"denials, bio",existing: base probe (RepE),existing,0.7946,0.7306,0.8523
+44,answer,"denials, bio",new: D_feign minus wording,new,0.7634,0.6934,0.8245
+44,answer,"denials, bio",new: D_know minus wording,new,0.7945,0.7295,0.8557
+44,answer,"denials, bio",new: D_know_norole minus wording,new,0.8006,0.7356,0.855
+44,answer,"denials, bio",new: D_role minus wording,new,0.7259,0.6572,0.7922
+44,answer,"denials, bio",new: interaction minus wording,new,0.2056,0.145,0.272
+44,answer,"denials, bio",new: d_false minus d_wording,new,0.7846,0.7199,0.8457
+44,answer,"denials, bio",new: d_know_pure minus d_wording,new,0.8072,0.7414,0.8665
+44,answer,"denials, bio",new: D_feign minus d_wording,new,0.7658,0.7002,0.8316
+44,answer,"denials, bio",new: D_know_norole minus d_wording,new,0.8009,0.7383,0.8604
+44,answer,"denials, cyber",new: D_feign,new,0.7382,0.5979,0.8718
+44,answer,"denials, cyber",new: D_know,new,0.7193,0.5648,0.8464
+44,answer,"denials, cyber",new: D_know_norole,new,0.7212,0.5803,0.8548
+44,answer,"denials, cyber",new: D_role,new,0.689,0.5403,0.8301
+44,answer,"denials, cyber",new: interaction,new,0.3403,0.1898,0.5102
+44,answer,"denials, cyber",new: d_utterance,new,0.6597,0.4989,0.8115
+44,answer,"denials, cyber",new: d_utterance_orth,new,0.5028,0.3442,0.6667
+44,answer,"denials, cyber",new: d_false,new,0.7268,0.5764,0.8633
+44,answer,"denials, cyber",new: d_wording,new,0.621,0.449,0.7755
+44,answer,"denials, cyber",new: d_know_pure,new,0.7287,0.5768,0.8569
+44,answer,"denials, cyber",existing: knowledge-denial (4v6),existing,0.6597,0.5018,0.8119
+44,answer,"denials, cyber",existing: extended (12v13),existing,0.6739,0.5079,0.8281
+44,answer,"denials, cyber",existing: published (8v7),existing,0.6616,0.4963,0.8185
+44,answer,"denials, cyber",existing: feigned vs sincere ignorance (4v3),existing,0.5936,0.4216,0.754
+44,answer,"denials, cyber",existing: feigned vs plain assertion (4v3),existing,0.6219,0.452,0.7769
+44,answer,"denials, cyber",existing: base probe (RepE),existing,0.6087,0.4354,0.7735
+44,answer,"denials, cyber",new: D_feign minus wording,new,0.7429,0.5948,0.8687
+44,answer,"denials, cyber",new: D_know minus wording,new,0.7127,0.5627,0.8472
+44,answer,"denials, cyber",new: D_know_norole minus wording,new,0.7183,0.5701,0.8556
+44,answer,"denials, cyber",new: D_role minus wording,new,0.7164,0.5766,0.8519
+44,answer,"denials, cyber",new: interaction minus wording,new,0.3469,0.1916,0.5153
+44,answer,"denials, cyber",new: d_false minus d_wording,new,0.7372,0.5871,0.8686
+44,answer,"denials, cyber",new: d_know_pure minus d_wording,new,0.7146,0.5642,0.8411
+44,answer,"denials, cyber",new: D_feign minus d_wording,new,0.7457,0.6061,0.8685
+44,answer,"denials, cyber",new: D_know_norole minus d_wording,new,0.7212,0.5744,0.8528
+44,answer,knows,new: D_feign,new,0.2074,0.1602,0.2606
+44,answer,knows,new: D_know,new,0.8146,0.7792,0.8468
+44,answer,knows,new: D_know_norole,new,0.8781,0.8491,0.9066
+44,answer,knows,new: D_role,new,0.1231,0.0886,0.1587
+44,answer,knows,new: interaction,new,0.0278,0.0201,0.0368
+44,answer,knows,new: d_utterance,new,0.9995,0.9991,0.9998
+44,answer,knows,new: d_utterance_orth,new,0.9933,0.9836,0.9998
+44,answer,knows,new: d_false,new,0.9699,0.9623,0.9767
+44,answer,knows,new: d_wording,new,0.9993,0.9987,0.9998
+44,answer,knows,new: d_know_pure,new,0.2115,0.165,0.2579
+44,answer,knows,existing: knowledge-denial (4v6),existing,0.9394,0.9045,0.9697
+44,answer,knows,existing: extended (12v13),existing,0.9214,0.883,0.9558
+44,answer,knows,existing: published (8v7),existing,0.5943,0.5355,0.648
+44,answer,knows,existing: feigned vs sincere ignorance (4v3),existing,0.697,0.6353,0.7552
+44,answer,knows,existing: feigned vs plain assertion (4v3),existing,0.9932,0.9867,0.9978
+44,answer,knows,existing: base probe (RepE),existing,0.8512,0.8088,0.888
+44,answer,knows,new: D_feign minus wording,new,0.2751,0.224,0.3304
+44,answer,knows,new: D_know minus wording,new,0.1893,0.1477,0.2319
+44,answer,knows,new: D_know_norole minus wording,new,0.1115,0.0749,0.1492
+44,answer,knows,new: D_role minus wording,new,0.412,0.3691,0.4582
+44,answer,knows,new: interaction minus wording,new,0.7746,0.735,0.8127
+44,answer,knows,new: d_false minus d_wording,new,0.548,0.5053,0.5924
+44,answer,knows,new: d_know_pure minus d_wording,new,0.0556,0.0319,0.0835
+44,answer,knows,new: D_feign minus d_wording,new,0.3924,0.3417,0.4472
+44,answer,knows,new: D_know_norole minus d_wording,new,0.248,0.196,0.3008
+44,answer,full,existing: knowledge-denial (4v6) minus wording,existing,0.6777,0.6316,0.7228
+44,answer,denials,existing: knowledge-denial (4v6) minus wording,existing,0.4838,0.4088,0.5533
+44,answer,"denials, bio",existing: knowledge-denial (4v6) minus wording,existing,0.6468,0.5659,0.727
+44,answer,"denials, cyber",existing: knowledge-denial (4v6) minus wording,existing,0.5907,0.4284,0.7463
+44,answer,knows,existing: knowledge-denial (4v6) minus wording,existing,0.6946,0.6497,0.7362
+44,answer,full,existing: knowledge-denial (4v6) minus d_wording,existing,0.7077,0.6619,0.752
+44,answer,denials,existing: knowledge-denial (4v6) minus d_wording,existing,0.4962,0.4275,0.5673
+44,answer,"denials, bio",existing: knowledge-denial (4v6) minus d_wording,existing,0.6685,0.5884,0.7432
+44,answer,"denials, cyber",existing: knowledge-denial (4v6) minus d_wording,existing,0.6068,0.4422,0.7637
+44,answer,knows,existing: knowledge-denial (4v6) minus d_wording,existing,0.7259,0.6825,0.7688
+44,answer,full,existing: extended (12v13) minus wording,existing,0.5869,0.5398,0.6316
+44,answer,denials,existing: extended (12v13) minus wording,existing,0.5182,0.4457,0.5901
+44,answer,"denials, bio",existing: extended (12v13) minus wording,existing,0.6961,0.6214,0.7675
+44,answer,"denials, cyber",existing: extended (12v13) minus wording,existing,0.6248,0.4608,0.7898
+44,answer,knows,existing: extended (12v13) minus wording,existing,0.594,0.5472,0.6378
+44,answer,full,existing: extended (12v13) minus d_wording,existing,0.6651,0.62,0.7103
+44,answer,denials,existing: extended (12v13) minus d_wording,existing,0.5286,0.4582,0.6019
+44,answer,"denials, bio",existing: extended (12v13) minus d_wording,existing,0.709,0.6336,0.7795
+44,answer,"denials, cyber",existing: extended (12v13) minus d_wording,existing,0.6295,0.4582,0.7832
+44,answer,knows,existing: extended (12v13) minus d_wording,existing,0.6774,0.6312,0.721
+44,answer,full,existing: published (8v7) minus wording,existing,0.2974,0.2481,0.3503
+44,answer,denials,existing: published (8v7) minus wording,existing,0.5324,0.4599,0.606
+44,answer,"denials, bio",existing: published (8v7) minus wording,existing,0.7017,0.6212,0.7732
+44,answer,"denials, cyber",existing: published (8v7) minus wording,existing,0.6512,0.493,0.8055
+44,answer,knows,existing: published (8v7) minus wording,existing,0.2821,0.2318,0.334
+44,answer,full,existing: published (8v7) minus d_wording,existing,0.4078,0.3511,0.4663
+44,answer,denials,existing: published (8v7) minus d_wording,existing,0.5446,0.4705,0.6147
+44,answer,"denials, bio",existing: published (8v7) minus d_wording,existing,0.7087,0.6282,0.7803
+44,answer,"denials, cyber",existing: published (8v7) minus d_wording,existing,0.6616,0.509,0.8143
+44,answer,knows,existing: published (8v7) minus d_wording,existing,0.3999,0.3434,0.4582
+44,pre,full,new: D_feign,new,0.2977,0.2567,0.3376
+44,pre,full,new: D_know,new,0.0978,0.0749,0.1235
+44,pre,full,new: D_know_norole,new,0.0884,0.0689,0.1094
+44,pre,full,new: D_role,new,0.4468,0.3898,0.5032
+44,pre,full,new: interaction,new,0.9187,0.902,0.9346
+44,pre,full,existing: knowledge-denial (4v6),existing,0.8604,0.8326,0.8879
+44,pre,full,existing: extended (12v13),existing,0.6164,0.5629,0.6711
+44,pre,full,existing: published (8v7),existing,0.2643,0.2227,0.3016
+44,pre,full,existing: feigned vs sincere ignorance (4v3),existing,0.6663,0.6188,0.7161
+44,pre,full,existing: feigned vs plain assertion (4v3),existing,0.8913,0.8683,0.9123
+44,pre,full,existing: base probe (RepE),existing,0.7925,0.7579,0.8244
+44,pre,denials,new: D_feign,new,0.7743,0.7193,0.825
+44,pre,denials,new: D_know,new,0.5932,0.5234,0.6622
+44,pre,denials,new: D_know_norole,new,0.6353,0.568,0.7039
+44,pre,denials,new: D_role,new,0.7193,0.6552,0.7804
+44,pre,denials,new: interaction,new,0.4299,0.3633,0.4995
+44,pre,denials,existing: knowledge-denial (4v6),existing,0.5391,0.4692,0.6091
+44,pre,denials,existing: extended (12v13),existing,0.5848,0.5161,0.6573
+44,pre,denials,existing: published (8v7),existing,0.628,0.5582,0.6958
+44,pre,denials,existing: feigned vs sincere ignorance (4v3),existing,0.5688,0.4967,0.6397
+44,pre,denials,existing: feigned vs plain assertion (4v3),existing,0.5163,0.4469,0.5882
+44,pre,denials,existing: base probe (RepE),existing,0.7286,0.6687,0.7902
+44,pre,"denials, bio",new: D_feign,new,0.7604,0.6901,0.8282
+44,pre,"denials, bio",new: D_know,new,0.7641,0.6939,0.8336
+44,pre,"denials, bio",new: D_know_norole,new,0.7705,0.7029,0.8325
+44,pre,"denials, bio",new: D_role,new,0.6788,0.6017,0.7596
+44,pre,"denials, bio",new: interaction,new,0.2732,0.202,0.3482
+44,pre,"denials, bio",existing: knowledge-denial (4v6),existing,0.3653,0.2856,0.4439
+44,pre,"denials, bio",existing: extended (12v13),existing,0.4487,0.37,0.5263
+44,pre,"denials, bio",existing: published (8v7),existing,0.5495,0.4651,0.6272
+44,pre,"denials, bio",existing: feigned vs sincere ignorance (4v3),existing,0.4181,0.3397,0.5025
+44,pre,"denials, bio",existing: feigned vs plain assertion (4v3),existing,0.3467,0.2674,0.4301
+44,pre,"denials, bio",existing: base probe (RepE),existing,0.6774,0.6,0.7542
+44,pre,"denials, cyber",new: D_feign,new,0.7949,0.6693,0.9028
+44,pre,"denials, cyber",new: D_know,new,0.4764,0.3193,0.6393
+44,pre,"denials, cyber",new: D_know_norole,new,0.5,0.3342,0.6643
+44,pre,"denials, cyber",new: D_role,new,0.7836,0.6641,0.8861
+44,pre,"denials, cyber",new: interaction,new,0.569,0.4012,0.7215
+44,pre,"denials, cyber",existing: knowledge-denial (4v6),existing,0.6739,0.5268,0.8115
+44,pre,"denials, cyber",existing: extended (12v13),existing,0.7552,0.6234,0.8646
+44,pre,"denials, cyber",existing: published (8v7),existing,0.5794,0.4275,0.7212
+44,pre,"denials, cyber",existing: feigned vs sincere ignorance (4v3),existing,0.7854,0.657,0.8891
+44,pre,"denials, cyber",existing: feigned vs plain assertion (4v3),existing,0.6106,0.4462,0.7599
+44,pre,"denials, cyber",existing: base probe (RepE),existing,0.7665,0.6333,0.8734
+44,pre,knows,new: D_feign,new,0.2615,0.2198,0.3045
+44,pre,knows,new: D_know,new,0.0589,0.0371,0.0848
+44,pre,knows,new: D_know_norole,new,0.0459,0.0296,0.0651
+44,pre,knows,new: D_role,new,0.4256,0.3686,0.4824
+44,pre,knows,new: interaction,new,0.9572,0.9426,0.9704
+44,pre,knows,existing: knowledge-denial (4v6),existing,0.8854,0.8597,0.9095
+44,pre,knows,existing: extended (12v13),existing,0.6168,0.5662,0.6706
+44,pre,knows,existing: published (8v7),existing,0.2354,0.1956,0.2765
+44,pre,knows,existing: feigned vs sincere ignorance (4v3),existing,0.6735,0.6227,0.7212
+44,pre,knows,existing: feigned vs plain assertion (4v3),existing,0.9207,0.8991,0.9405
+44,pre,knows,existing: base probe (RepE),existing,0.7968,0.763,0.8278
