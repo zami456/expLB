@@ -1103,3 +1103,58 @@ Line pointers, old → new:
 ### DF-109 · P2 · **"our pipeline has never trained `pc:sycophancy`" is stale after F-126**
 - **Where:** `RESULTS_BY_AXIS.md:119`, `COLLABORATOR_FINDINGS.md` §A8, DF-89 "real gap".
 - **Correct:** trained in 6D-1. It loses to raw at all six cells on 11 datasets (F-126 §1, HOLDS 41/41).
+
+
+---
+
+## Proposals from the Chapter 5 writing pass (2026-09-25, thesis session; next free number was DF-110)
+
+Found by the eleven writers and their independent verifiers while re-reading every raw source for `thesis/chapters/chapter_6.tex` (workflow `wf_040cbc40-2cf`; per-check record in `thesis_tools/planning/CH5_VERIFY_TABLE.md`). Proposals only; the owner decides. The ledger is append-only, so ledger items need a new F-entry.
+
+### DF-110 · P1 · **F-124 §4 / PITFALLS §C: "23 of 90 cells exceed 1% FPR" is 24 of 90 under the stated rule**
+- **Where:** `kd/docs/FINDINGS.md` F-124 §4 (:6343-6363); `thesis_guide/PITFALLS.md` §C; `audit/RESULTS_CHAPTER.md:87`; `thesis_tools/planning/CH5_RESULTS_PLAN.md` rows 4.3 and 9.8.
+- **Raw:** `git show 16def2de:src/probes/deception-detection/results/persona_ood_ext_L{20,40,44}/zero_shot_operating.csv`, `threshold_source=control`, 6 arms × 5 Liars' Bench datasets × 3 layers = 90 cells; `1 − specificity > 0.01` in **24**; 26 of 108 with RepE. 23 appears only if the 4v6 / L20 / ID cell (specificity 0.9891, 1.09%) is rounded to 1%, or if one arm is dropped and RepE kept.
+- **Fix:** 24 of 90, and name the family (six arms, five datasets, three layers).
+
+### DF-111 · P1 · **F-124 §1: the HP-KR training-row sign inversion spans 9 (arm, layer) cells at the pin, not 7**
+- **Where:** F-124 §1 (:6288-6306); `audit/RESULTS_CHAPTER.md` §2.3; DF-46.
+- **Raw:** at 16def2de there are 8 one-feature arms (uni_axis1 was added in 2ad758fb). The HP-KR training row inverts in F-124's 7 cells plus `uni_axis1` at L20 (row mean 0.0929) and L40 (0.0807). In `persona_depth/depth.csv` the 8v7 transfer row is sign-depressed at 12 of 16 layers and the 13v12 row at 13 of 16.
+- **Fix:** "9 of 24 cells at the pin (7 of 21 at ea1ce52b)".
+
+### DF-112 · P1 · **"the pooled probe wins CG, IT, ID and RepE" is wrong; it wins CG only**
+- **Where:** `thesis_tools/planning/THESIS_BRIEF.md:168`; `CH5_RESULTS_PLAN.md` row 3.6 (both corrected 2026-09-25); check `audit/REPORT_TECHNICAL.md:285-296` for the same reading.
+- **Raw:** `loo_L40/loo_bootstrap.csv` @16def2de, `delta = pooled − ext_axis1`. Naive: the pooled probe wins only CG (+0.0744 [0.0445, 0.1029]); D9 wins HP-KR (−0.3894), IT (−0.0429), ID (−0.0045) and RepE (−0.0029) with CIs excluding 0; HP-C is a tie. Balanced: pooled wins only CG (+0.0854); D9 wins HP-C, HP-KR and IT; ID and RepE are ties. The co-author's `loo_L20/summary.md` agrees.
+
+### DF-113 · P2 · **PITFALLS §C "the Upper Bound runs at 8%" is the Llama-70B HP-KR cell only**
+- **Raw:** Liars' Bench Table 8 p.56, FPR row, Llama-3.3-70B: HP-C 0.50, HP-KR 0.08, CG 0.00, ID 0.18, IT 0.12; the five-dataset mean is 0.18. Also: 0.682 / 0.634 / 0.93 are five-dataset means computed from the Llama rows, not printed averages (the printed Llama AVERAGE rows are 0.64 and 0.57 over seven datasets, 0.93 over five); and Table 7's "Average 0.42" for HP-KR BA is a mean over three models (Gemma has no HP-KR cell), not four.
+- **Fix:** scope each sentence.
+
+### DF-114 · P2 · **F-120's artifact reading holds on the 5-dataset view only, not on the store's full 10 datasets (beyond F-128)**
+- **Raw:** `audit/p17/labcache/expLB/run-crossgen/passA/matrices/mean_L{72,79}_s42.json`, paper probe: five paper datasets, random 0.5133 → 0.6405 (+0.1271, not +0.1272); all ten datasets, random **falls** 0.5718 → 0.5498 while `axes` **rises** 0.4846 → 0.6656. F-128 corrected only the raw level (0.8195 → 0.6760).
+- **Fix:** a new ledger entry; Chapter 5 §5.3.4 reports both readings and leaves the late rise unexplained.
+
+### DF-115 · P2 · **D8's HP-KR balanced accuracy is above 0.5 at 15 of 16 layers, not 16; and 8v7 reaches 0.5026 at L56**
+- **Raw:** `persona_depth/depth.csv` @16def2de: 4v6 BA 0.4801 at L28 (0.5043 at L32, 0.5013 at L79); 8v7 BA 0.5026 at L56 (min 0.4861 at L64).
+- **Where:** `CH5_RESULTS_PLAN.md` row 4.2; `thesis_tools/planning/THESIS_BRIEF.md` Batch 3 ("only arm above 0.5000 at all 16 layers") and C3.
+
+### DF-116 · P2 · **DF-70's clear counts for the cap margin depend on the control; recomputed 2026-09-25**
+- **Raw:** `audit/cache/labpc/run-crossgen/kd11/banks/cap_s23/matrices/{mean,last}_L*_s42.json` (48 files, md5-verified against the lab PC), `sycophancy_mt` column, paired dataset bootstrap B = 10,000, `default_rng(42)`: mean pooling clears at **15/21 vs datapca@2** and **13/21 vs raw** (positive 21/21 on both); last pooling clears at **6/21 vs datapca@2** and **3/21 vs raw** (positive 16/21 and 12/21). DF-70's "14/21 under mean" and "3/21 under last" match neither pair exactly; state the control with the count.
+- Also: F-94's 21-layer means reproduce exactly (content +0.0356, clears 3/21; presence +0.0730, clears 15/21; last +0.0346 / +0.0373, 11 and 10 of 21).
+
+### DF-117 · P2 · **F-39 "the paper's own five deception datasets" are not the paper's five**
+- **Raw:** the k=2 vs k=5 subset is ID, CG, ai_liar, roleplaying and mask; Mahadik & Skapars' Table 1 (p.4) has HarmPressureChoice, not mask. On that subset +0.1382 / +0.0041 reproduce; on the paper's actual five +0.1455 / +0.0582; on all 11 both vanish (+0.0063 [−0.2017, +0.2114] at k=2, +0.0064 [−0.1235, +0.1270] at k=5).
+
+### DF-118 · P3 · **F-101's 70B pooling numbers (+0.007 mean / +0.033 last) come from the mixed-bank store `run-crossgen/scale_70b`**
+- **Raw:** its zero-shot contrast AUROCs at L20 and L44 equal `run-crossgen/kd11/banks/kd` exactly and L40 matches the paper16 root within 0.0003 (F-110). On `scale_70b_paper16fp32` with the ladder's best definition: mean −0.0116 (ahead at 9/21), last +0.0100 (14/21); vs datapca@3 +0.0605 / +0.0712.
+
+### DF-119 · P3 · **DF-63 "significance.json stores no margin field" is wrong; DF-105's "method set not recorded" is resolved**
+- **Raw:** `run-coords/significance.json` has `"margin": 0.02` at top level; the 17 methods of the L20-vs-L22 median are the `q6_layers.json` rows with a non-null `gap_20_22`.
+
+### DF-120 · P3 · **Small value corrections found while writing Chapter 5**
+- D1 in-distribution at L20 is 0.9564 (`persona_ood_ext_L20/summary.csv` baseline diagonal_mean), not 0.979 (`CH5_RESULTS_PLAN.md` row 1.1).
+- "Raw-probe diagonal 0.9663" (DF-55) is a median over 113 matrices; the L40 kd11 file gives 0.9741 (paper), 0.9678 (lr_reg10), 0.9623 (mms).
+- Length alone on HP-KR is 0.7756 (`confounds_L44_last.json`), quoted as 0.776.
+- Keeping L40 costs 0.0116 transfer AUROC against L36 (0.9274688514 − 0.9158352735), not 0.0117.
+- F-118's Gender-Secret "every direction at chance": two adapted readings sit above 0.5 with intervals excluding it (5v5 L20 0.5927 [0.5303, 0.6555]; 8v7 L44 0.6231 [0.5647, 0.6757]) and D8 below it at L40 (0.4359 [0.3728, 0.4962]).
+- `kd/scripts/16_regroup_hf.py` anchors on the released `assistant` role vector, not `default_vector.pt` (cos 0.94–0.95 with the published axis); `regroup_hf.json` does not reproduce exactly from today's 275-role cache (L40 disclosure −0.5659 recomputed vs −0.5764 stored).
+- The unified-PC1 "−0.98 vs −0.945" conflict is two statistics, both reproduced: cos(PC1, question-set direction) −0.9800 and Pearson r over the 26 roles −0.9446.

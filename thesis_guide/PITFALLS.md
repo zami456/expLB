@@ -233,3 +233,21 @@ are to `abstract.tex` and `main.pdf` only, and they are **not audited**. See `au
 - **"We extend the persona bank with ten roles that feign ignorance…"** is an attribution risk. `audit/methods/ATTRIBUTION.md:83` says his 36 `.pt` files are byte-identical to the owner's, and F-97 and `kd/docs/DESIGN.md` say the owner built the ten knowledge-denial roles. His own contribution is the 4v6/12v13 regrouping. In the thesis, credit the roles to the owner and the regrouping to him.
 - **"the baseline probe … flags nothing, as does every other detector we tried"** is unverified: no `claims.csv` row exists. Do not repeat it without re-deriving it from `persona_ood_ext_L40/zero_shot_operating.csv` @ 16def2de.
 - Earlier abstract text (D2-002, the "8 of 12" wording) no longer appears in his abstract. The underlying numbers are unchanged.
+
+
+---
+
+## Addendum 2026-09-25 (Chapter 5 writing pass): corrections to this guide, kept as an addendum
+
+Found by the Chapter 5 writers and verifiers (`thesis_tools/planning/CH5_VERIFY_TABLE.md`; proposals DF-110…DF-120 in `audit/DOC_FIXES.md`). The lines above are unchanged; read them with these corrections.
+
+- **§C "23 of 90 cells exceed 1% realised FPR"** → **24 of 90** under the stated rule (6 arms × 5 LB datasets × 3 layers); 26 of 108 with RepE. DF-110.
+- **§C "The Upper Bound runs at 8%"** → the 8% is the Llama-70B **HP-KR** cell of LB Table 8; over the five datasets the Llama-70B upper bound's FPR averages 0.18 (HP-C 0.50). DF-113.
+- **§B "inversion appears in 7 (arm, layer) cells"** → **9 of 24** at the pin 16def2de (uni_axis1 was added in 2ad758fb and inverts at L20 and L40). DF-111.
+- **§A row "Cap bank … clears at 14/21 layers under mean pooling and only 3/21 under `last`"** → state the control: vs `datapca@2` 15/21 (mean) and 6/21 (last); vs raw 13/21 and 3/21. DF-116.
+- **"The pooled probe wins CG, IT, ID and RepE"** (THESIS_BRIEF :168, plan row 3.6) is false: it wins CG only. DF-112.
+- **"D8 is the only arm above 0.5 BA on HP-KR at all 16 layers"** → 15 of 16 (L28 0.4801); the 8v7 arm reaches 0.5026 at L56. DF-115.
+- **F-120's late-layer artifact reading** holds on the 5-dataset view only; on all 10 datasets random directions fall (0.5718 → 0.5498) while `axes` rises. DF-114.
+- **Zero-shot values against the random null:** the null in `run-coords/zeroshot_nulls.json` is stored only for `corpus_L40_mean` and `corpus_L44_*`; neither pipeline stored a layer-20 null, so L20 zero-shot inversions are judged against 0.5 alone (say so).
+- **Gender-Secret (F-118) "every direction at chance"**: two adapted readings exclude 0.5 upward (5v5 L20 0.5927 [0.5303, 0.6555]; 8v7 L44 0.6231 [0.5647, 0.6757]) and D8 excludes it downward at L40 (0.4359 [0.3728, 0.4962]); the convergence finding stands, worded with the intervals.
+- **§E lab-only list:** `run-sycophancy-mt/rows.jsonl`, the 42 collab-bank matrices, the 48 cap_s23 and 42 cap_ctrl matrices, `kd/results/phase2_gate.json` and seven logs are now byte-exact in `audit/cache/labpc/` (md5-checked, `audit/cache/MANIFEST.csv`, 2026-09-25). `run-paper16-shared/axes_vectors_s3.pt` (63 MB) was read on the lab PC, not cached: cos(unified PC1, unified contrast) at L40 = 0.8956713.

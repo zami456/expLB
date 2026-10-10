@@ -1,0 +1,5378 @@
+{
+  "about": "Pre-registered random partitions of the 35 drawn roles into six disjoint groups with the kd groups' sizes; R5-R9 are built from them exactly as D5-D9 are built from the kd groups. Split 0 is the primary (materialised like D5-D9); splits 1-99 are the null distribution. Fixed 2026-10-10, before any rollout existed.",
+  "group_sizes": {
+    "A": 8,
+    "B": 7,
+    "C": 5,
+    "D": 5,
+    "E": 4,
+    "F": 6
+  },
+  "mirrors": {
+    "A": "deception",
+    "B": "honesty",
+    "C": "sycophancy",
+    "D": "anti_sycophancy",
+    "E": "knowledge_denial",
+    "F": "knowledge candour (sincere_ignorance + plain_assertion)"
+  },
+  "contrasts": {
+    "R5": {
+      "positive": [
+        "A"
+      ],
+      "negative": [
+        "B"
+      ],
+      "mirrors": "D5",
+      "sizes": "8 v 7"
+    },
+    "R6": {
+      "positive": [
+        "C"
+      ],
+      "negative": [
+        "D"
+      ],
+      "mirrors": "D6",
+      "sizes": "5 v 5"
+    },
+    "R7": {
+      "positive": [
+        "A",
+        "C"
+      ],
+      "negative": [
+        "B",
+        "D"
+      ],
+      "mirrors": "D7",
+      "sizes": "13 v 12, pooled"
+    },
+    "R8": {
+      "positive": [
+        "E"
+      ],
+      "negative": [
+        "F"
+      ],
+      "mirrors": "D8",
+      "sizes": "4 v 6"
+    },
+    "R9": {
+      "positive": [
+        "A",
+        "E"
+      ],
+      "negative": [
+        "B",
+        "F"
+      ],
+      "mirrors": "D9",
+      "sizes": "12 v 13, pooled"
+    }
+  },
+  "seed_rule": "split i: random.Random(1000000 + i).sample(sorted(roles), 35), dealt A..F in order",
+  "splits": [
+    {
+      "split": 0,
+      "seed": 1000000,
+      "groups": {
+        "A": [
+          "absurdist",
+          "artisan",
+          "divorcee",
+          "elder",
+          "entrepreneur",
+          "exile",
+          "facilitator",
+          "pilot"
+        ],
+        "B": [
+          "bartender",
+          "editor",
+          "negotiator",
+          "pharmacist",
+          "psychologist",
+          "whale",
+          "writer"
+        ],
+        "C": [
+          "familiar",
+          "librarian",
+          "perfectionist",
+          "spirit",
+          "witch"
+        ],
+        "D": [
+          "egregore",
+          "polymath",
+          "researcher",
+          "revolutionary",
+          "vigilante"
+        ],
+        "E": [
+          "auctioneer",
+          "infant",
+          "loner",
+          "skeptic"
+        ],
+        "F": [
+          "ancient",
+          "ghost",
+          "gossip",
+          "presenter",
+          "specialist",
+          "summarizer"
+        ]
+      }
+    },
+    {
+      "split": 1,
+      "seed": 1000001,
+      "groups": {
+        "A": [
+          "ancient",
+          "bartender",
+          "entrepreneur",
+          "facilitator",
+          "perfectionist",
+          "pharmacist",
+          "polymath",
+          "psychologist"
+        ],
+        "B": [
+          "artisan",
+          "exile",
+          "gossip",
+          "loner",
+          "presenter",
+          "researcher",
+          "whale"
+        ],
+        "C": [
+          "absurdist",
+          "divorcee",
+          "editor",
+          "familiar",
+          "infant"
+        ],
+        "D": [
+          "auctioneer",
+          "librarian",
+          "spirit",
+          "summarizer",
+          "writer"
+        ],
+        "E": [
+          "elder",
+          "ghost",
+          "specialist",
+          "vigilante"
+        ],
+        "F": [
+          "egregore",
+          "negotiator",
+          "pilot",
+          "revolutionary",
+          "skeptic",
+          "witch"
+        ]
+      }
+    },
+    {
+      "split": 2,
+      "seed": 1000002,
+      "groups": {
+        "A": [
+          "artisan",
+          "editor",
+          "egregore",
+          "entrepreneur",
+          "gossip",
+          "researcher",
+          "revolutionary",
+          "specialist"
+        ],
+        "B": [
+          "elder",
+          "facilitator",
+          "pilot",
+          "skeptic",
+          "summarizer",
+          "vigilante",
+          "writer"
+        ],
+        "C": [
+          "auctioneer",
+          "divorcee",
+          "ghost",
+          "infant",
+          "negotiator"
+        ],
+        "D": [
+          "absurdist",
+          "ancient",
+          "loner",
+          "pharmacist",
+          "presenter"
+        ],
+        "E": [
+          "bartender",
+          "familiar",
+          "psychologist",
+          "whale"
+        ],
+        "F": [
+          "exile",
+          "librarian",
+          "perfectionist",
+          "polymath",
+          "spirit",
+          "witch"
+        ]
+      }
+    },
+    {
+      "split": 3,
+      "seed": 1000003,
+      "groups": {
+        "A": [
+          "bartender",
+          "facilitator",
+          "ghost",
+          "gossip",
+          "negotiator",
+          "pharmacist",
+          "whale",
+          "witch"
+        ],
+        "B": [
+          "ancient",
+          "egregore",
+          "exile",
+          "infant",
+          "presenter",
+          "specialist",
+          "writer"
+        ],
+        "C": [
+          "absurdist",
+          "artisan",
+          "perfectionist",
+          "psychologist",
+          "summarizer"
+        ],
+        "D": [
+          "auctioneer",
+          "divorcee",
+          "loner",
+          "revolutionary",
+          "skeptic"
+        ],
+        "E": [
+          "editor",
+          "elder",
+          "entrepreneur",
+          "spirit"
+        ],
+        "F": [
+          "familiar",
+          "librarian",
+          "pilot",
+          "polymath",
+          "researcher",
+          "vigilante"
+        ]
+      }
+    },
+    {
+      "split": 4,
+      "seed": 1000004,
+      "groups": {
+        "A": [
+          "absurdist",
+          "editor",
+          "elder",
+          "entrepreneur",
+          "exile",
+          "polymath",
+          "psychologist",
+          "vigilante"
+        ],
+        "B": [
+          "infant",
+          "perfectionist",
+          "pilot",
+          "presenter",
+          "researcher",
+          "revolutionary",
+          "witch"
+        ],
+        "C": [
+          "artisan",
+          "egregore",
+          "familiar",
+          "skeptic",
+          "whale"
+        ],
+        "D": [
+          "bartender",
+          "divorcee",
+          "gossip",
+          "pharmacist",
+          "writer"
+        ],
+        "E": [
+          "ancient",
+          "auctioneer",
+          "librarian",
+          "summarizer"
+        ],
+        "F": [
+          "facilitator",
+          "ghost",
+          "loner",
+          "negotiator",
+          "specialist",
+          "spirit"
+        ]
+      }
+    },
+    {
+      "split": 5,
+      "seed": 1000005,
+      "groups": {
+        "A": [
+          "auctioneer",
+          "divorcee",
+          "elder",
+          "facilitator",
+          "loner",
+          "perfectionist",
+          "spirit",
+          "writer"
+        ],
+        "B": [
+          "absurdist",
+          "ancient",
+          "artisan",
+          "egregore",
+          "gossip",
+          "negotiator",
+          "psychologist"
+        ],
+        "C": [
+          "bartender",
+          "entrepreneur",
+          "infant",
+          "revolutionary",
+          "vigilante"
+        ],
+        "D": [
+          "pharmacist",
+          "presenter",
+          "skeptic",
+          "specialist",
+          "witch"
+        ],
+        "E": [
+          "editor",
+          "familiar",
+          "polymath",
+          "summarizer"
+        ],
+        "F": [
+          "exile",
+          "ghost",
+          "librarian",
+          "pilot",
+          "researcher",
+          "whale"
+        ]
+      }
+    },
+    {
+      "split": 6,
+      "seed": 1000006,
+      "groups": {
+        "A": [
+          "absurdist",
+          "facilitator",
+          "familiar",
+          "gossip",
+          "librarian",
+          "negotiator",
+          "pilot",
+          "revolutionary"
+        ],
+        "B": [
+          "auctioneer",
+          "editor",
+          "exile",
+          "perfectionist",
+          "researcher",
+          "skeptic",
+          "witch"
+        ],
+        "C": [
+          "ancient",
+          "bartender",
+          "entrepreneur",
+          "specialist",
+          "vigilante"
+        ],
+        "D": [
+          "divorcee",
+          "ghost",
+          "polymath",
+          "presenter",
+          "psychologist"
+        ],
+        "E": [
+          "artisan",
+          "infant",
+          "spirit",
+          "writer"
+        ],
+        "F": [
+          "egregore",
+          "elder",
+          "loner",
+          "pharmacist",
+          "summarizer",
+          "whale"
+        ]
+      }
+    },
+    {
+      "split": 7,
+      "seed": 1000007,
+      "groups": {
+        "A": [
+          "bartender",
+          "entrepreneur",
+          "ghost",
+          "gossip",
+          "loner",
+          "negotiator",
+          "pharmacist",
+          "psychologist"
+        ],
+        "B": [
+          "ancient",
+          "auctioneer",
+          "elder",
+          "presenter",
+          "researcher",
+          "summarizer",
+          "witch"
+        ],
+        "C": [
+          "divorcee",
+          "egregore",
+          "perfectionist",
+          "pilot",
+          "writer"
+        ],
+        "D": [
+          "absurdist",
+          "editor",
+          "facilitator",
+          "spirit",
+          "whale"
+        ],
+        "E": [
+          "familiar",
+          "infant",
+          "librarian",
+          "vigilante"
+        ],
+        "F": [
+          "artisan",
+          "exile",
+          "polymath",
+          "revolutionary",
+          "skeptic",
+          "specialist"
+        ]
+      }
+    },
+    {
+      "split": 8,
+      "seed": 1000008,
+      "groups": {
+        "A": [
+          "ghost",
+          "gossip",
+          "infant",
+          "loner",
+          "negotiator",
+          "pharmacist",
+          "specialist",
+          "summarizer"
+        ],
+        "B": [
+          "divorcee",
+          "editor",
+          "egregore",
+          "perfectionist",
+          "pilot",
+          "witch",
+          "writer"
+        ],
+        "C": [
+          "ancient",
+          "entrepreneur",
+          "researcher",
+          "revolutionary",
+          "whale"
+        ],
+        "D": [
+          "absurdist",
+          "bartender",
+          "elder",
+          "facilitator",
+          "presenter"
+        ],
+        "E": [
+          "familiar",
+          "librarian",
+          "polymath",
+          "skeptic"
+        ],
+        "F": [
+          "artisan",
+          "auctioneer",
+          "exile",
+          "psychologist",
+          "spirit",
+          "vigilante"
+        ]
+      }
+    },
+    {
+      "split": 9,
+      "seed": 1000009,
+      "groups": {
+        "A": [
+          "divorcee",
+          "egregore",
+          "elder",
+          "familiar",
+          "polymath",
+          "specialist",
+          "spirit",
+          "witch"
+        ],
+        "B": [
+          "bartender",
+          "ghost",
+          "infant",
+          "negotiator",
+          "perfectionist",
+          "summarizer",
+          "writer"
+        ],
+        "C": [
+          "absurdist",
+          "ancient",
+          "psychologist",
+          "researcher",
+          "skeptic"
+        ],
+        "D": [
+          "auctioneer",
+          "exile",
+          "facilitator",
+          "gossip",
+          "loner"
+        ],
+        "E": [
+          "artisan",
+          "pharmacist",
+          "pilot",
+          "revolutionary"
+        ],
+        "F": [
+          "editor",
+          "entrepreneur",
+          "librarian",
+          "presenter",
+          "vigilante",
+          "whale"
+        ]
+      }
+    },
+    {
+      "split": 10,
+      "seed": 1000010,
+      "groups": {
+        "A": [
+          "auctioneer",
+          "editor",
+          "infant",
+          "perfectionist",
+          "pharmacist",
+          "researcher",
+          "specialist",
+          "summarizer"
+        ],
+        "B": [
+          "bartender",
+          "ghost",
+          "gossip",
+          "polymath",
+          "presenter",
+          "revolutionary",
+          "whale"
+        ],
+        "C": [
+          "absurdist",
+          "egregore",
+          "loner",
+          "pilot",
+          "vigilante"
+        ],
+        "D": [
+          "ancient",
+          "negotiator",
+          "psychologist",
+          "witch",
+          "writer"
+        ],
+        "E": [
+          "artisan",
+          "divorcee",
+          "facilitator",
+          "skeptic"
+        ],
+        "F": [
+          "elder",
+          "entrepreneur",
+          "exile",
+          "familiar",
+          "librarian",
+          "spirit"
+        ]
+      }
+    },
+    {
+      "split": 11,
+      "seed": 1000011,
+      "groups": {
+        "A": [
+          "editor",
+          "entrepreneur",
+          "familiar",
+          "gossip",
+          "loner",
+          "pharmacist",
+          "witch",
+          "writer"
+        ],
+        "B": [
+          "egregore",
+          "elder",
+          "facilitator",
+          "ghost",
+          "librarian",
+          "psychologist",
+          "revolutionary"
+        ],
+        "C": [
+          "auctioneer",
+          "pilot",
+          "presenter",
+          "specialist",
+          "vigilante"
+        ],
+        "D": [
+          "ancient",
+          "artisan",
+          "negotiator",
+          "researcher",
+          "whale"
+        ],
+        "E": [
+          "divorcee",
+          "exile",
+          "infant",
+          "skeptic"
+        ],
+        "F": [
+          "absurdist",
+          "bartender",
+          "perfectionist",
+          "polymath",
+          "spirit",
+          "summarizer"
+        ]
+      }
+    },
+    {
+      "split": 12,
+      "seed": 1000012,
+      "groups": {
+        "A": [
+          "absurdist",
+          "facilitator",
+          "familiar",
+          "infant",
+          "loner",
+          "psychologist",
+          "researcher",
+          "spirit"
+        ],
+        "B": [
+          "bartender",
+          "divorcee",
+          "entrepreneur",
+          "gossip",
+          "pharmacist",
+          "skeptic",
+          "witch"
+        ],
+        "C": [
+          "artisan",
+          "egregore",
+          "elder",
+          "perfectionist",
+          "writer"
+        ],
+        "D": [
+          "ghost",
+          "librarian",
+          "negotiator",
+          "polymath",
+          "whale"
+        ],
+        "E": [
+          "auctioneer",
+          "pilot",
+          "presenter",
+          "summarizer"
+        ],
+        "F": [
+          "ancient",
+          "editor",
+          "exile",
+          "revolutionary",
+          "specialist",
+          "vigilante"
+        ]
+      }
+    },
+    {
+      "split": 13,
+      "seed": 1000013,
+      "groups": {
+        "A": [
+          "absurdist",
+          "entrepreneur",
+          "exile",
+          "gossip",
+          "negotiator",
+          "perfectionist",
+          "psychologist",
+          "writer"
+        ],
+        "B": [
+          "egregore",
+          "facilitator",
+          "familiar",
+          "ghost",
+          "infant",
+          "librarian",
+          "vigilante"
+        ],
+        "C": [
+          "artisan",
+          "auctioneer",
+          "bartender",
+          "presenter",
+          "spirit"
+        ],
+        "D": [
+          "loner",
+          "pharmacist",
+          "pilot",
+          "polymath",
+          "specialist"
+        ],
+        "E": [
+          "divorcee",
+          "summarizer",
+          "whale",
+          "witch"
+        ],
+        "F": [
+          "ancient",
+          "editor",
+          "elder",
+          "researcher",
+          "revolutionary",
+          "skeptic"
+        ]
+      }
+    },
+    {
+      "split": 14,
+      "seed": 1000014,
+      "groups": {
+        "A": [
+          "absurdist",
+          "bartender",
+          "psychologist",
+          "researcher",
+          "skeptic",
+          "summarizer",
+          "whale",
+          "writer"
+        ],
+        "B": [
+          "divorcee",
+          "editor",
+          "facilitator",
+          "polymath",
+          "presenter",
+          "vigilante",
+          "witch"
+        ],
+        "C": [
+          "ancient",
+          "artisan",
+          "ghost",
+          "loner",
+          "spirit"
+        ],
+        "D": [
+          "elder",
+          "familiar",
+          "librarian",
+          "perfectionist",
+          "pharmacist"
+        ],
+        "E": [
+          "auctioneer",
+          "infant",
+          "pilot",
+          "revolutionary"
+        ],
+        "F": [
+          "egregore",
+          "entrepreneur",
+          "exile",
+          "gossip",
+          "negotiator",
+          "specialist"
+        ]
+      }
+    },
+    {
+      "split": 15,
+      "seed": 1000015,
+      "groups": {
+        "A": [
+          "ghost",
+          "loner",
+          "perfectionist",
+          "pharmacist",
+          "psychologist",
+          "revolutionary",
+          "vigilante",
+          "writer"
+        ],
+        "B": [
+          "entrepreneur",
+          "facilitator",
+          "gossip",
+          "infant",
+          "pilot",
+          "presenter",
+          "specialist"
+        ],
+        "C": [
+          "absurdist",
+          "auctioneer",
+          "bartender",
+          "elder",
+          "librarian"
+        ],
+        "D": [
+          "exile",
+          "researcher",
+          "skeptic",
+          "summarizer",
+          "whale"
+        ],
+        "E": [
+          "ancient",
+          "artisan",
+          "familiar",
+          "polymath"
+        ],
+        "F": [
+          "divorcee",
+          "editor",
+          "egregore",
+          "negotiator",
+          "spirit",
+          "witch"
+        ]
+      }
+    },
+    {
+      "split": 16,
+      "seed": 1000016,
+      "groups": {
+        "A": [
+          "artisan",
+          "auctioneer",
+          "bartender",
+          "infant",
+          "librarian",
+          "pharmacist",
+          "psychologist",
+          "whale"
+        ],
+        "B": [
+          "ancient",
+          "divorcee",
+          "egregore",
+          "entrepreneur",
+          "exile",
+          "facilitator",
+          "writer"
+        ],
+        "C": [
+          "editor",
+          "presenter",
+          "researcher",
+          "spirit",
+          "witch"
+        ],
+        "D": [
+          "elder",
+          "gossip",
+          "negotiator",
+          "specialist",
+          "vigilante"
+        ],
+        "E": [
+          "ghost",
+          "perfectionist",
+          "polymath",
+          "skeptic"
+        ],
+        "F": [
+          "absurdist",
+          "familiar",
+          "loner",
+          "pilot",
+          "revolutionary",
+          "summarizer"
+        ]
+      }
+    },
+    {
+      "split": 17,
+      "seed": 1000017,
+      "groups": {
+        "A": [
+          "absurdist",
+          "entrepreneur",
+          "exile",
+          "infant",
+          "negotiator",
+          "skeptic",
+          "spirit",
+          "witch"
+        ],
+        "B": [
+          "bartender",
+          "divorcee",
+          "editor",
+          "familiar",
+          "loner",
+          "pilot",
+          "writer"
+        ],
+        "C": [
+          "ancient",
+          "auctioneer",
+          "egregore",
+          "perfectionist",
+          "researcher"
+        ],
+        "D": [
+          "facilitator",
+          "presenter",
+          "specialist",
+          "summarizer",
+          "vigilante"
+        ],
+        "E": [
+          "ghost",
+          "librarian",
+          "pharmacist",
+          "revolutionary"
+        ],
+        "F": [
+          "artisan",
+          "elder",
+          "gossip",
+          "polymath",
+          "psychologist",
+          "whale"
+        ]
+      }
+    },
+    {
+      "split": 18,
+      "seed": 1000018,
+      "groups": {
+        "A": [
+          "egregore",
+          "entrepreneur",
+          "ghost",
+          "gossip",
+          "librarian",
+          "perfectionist",
+          "polymath",
+          "specialist"
+        ],
+        "B": [
+          "facilitator",
+          "loner",
+          "negotiator",
+          "pharmacist",
+          "revolutionary",
+          "whale",
+          "witch"
+        ],
+        "C": [
+          "artisan",
+          "bartender",
+          "researcher",
+          "spirit",
+          "summarizer"
+        ],
+        "D": [
+          "divorcee",
+          "editor",
+          "infant",
+          "psychologist",
+          "writer"
+        ],
+        "E": [
+          "auctioneer",
+          "elder",
+          "presenter",
+          "vigilante"
+        ],
+        "F": [
+          "absurdist",
+          "ancient",
+          "exile",
+          "familiar",
+          "pilot",
+          "skeptic"
+        ]
+      }
+    },
+    {
+      "split": 19,
+      "seed": 1000019,
+      "groups": {
+        "A": [
+          "entrepreneur",
+          "familiar",
+          "gossip",
+          "loner",
+          "perfectionist",
+          "pharmacist",
+          "skeptic",
+          "specialist"
+        ],
+        "B": [
+          "divorcee",
+          "facilitator",
+          "infant",
+          "librarian",
+          "presenter",
+          "psychologist",
+          "vigilante"
+        ],
+        "C": [
+          "artisan",
+          "exile",
+          "ghost",
+          "researcher",
+          "whale"
+        ],
+        "D": [
+          "absurdist",
+          "ancient",
+          "bartender",
+          "elder",
+          "witch"
+        ],
+        "E": [
+          "editor",
+          "pilot",
+          "revolutionary",
+          "writer"
+        ],
+        "F": [
+          "auctioneer",
+          "egregore",
+          "negotiator",
+          "polymath",
+          "spirit",
+          "summarizer"
+        ]
+      }
+    },
+    {
+      "split": 20,
+      "seed": 1000020,
+      "groups": {
+        "A": [
+          "ancient",
+          "auctioneer",
+          "infant",
+          "negotiator",
+          "pharmacist",
+          "presenter",
+          "spirit",
+          "whale"
+        ],
+        "B": [
+          "artisan",
+          "divorcee",
+          "pilot",
+          "polymath",
+          "vigilante",
+          "witch",
+          "writer"
+        ],
+        "C": [
+          "absurdist",
+          "entrepreneur",
+          "facilitator",
+          "specialist",
+          "summarizer"
+        ],
+        "D": [
+          "ghost",
+          "loner",
+          "researcher",
+          "revolutionary",
+          "skeptic"
+        ],
+        "E": [
+          "bartender",
+          "exile",
+          "librarian",
+          "perfectionist"
+        ],
+        "F": [
+          "editor",
+          "egregore",
+          "elder",
+          "familiar",
+          "gossip",
+          "psychologist"
+        ]
+      }
+    },
+    {
+      "split": 21,
+      "seed": 1000021,
+      "groups": {
+        "A": [
+          "absurdist",
+          "ancient",
+          "artisan",
+          "loner",
+          "negotiator",
+          "presenter",
+          "psychologist",
+          "summarizer"
+        ],
+        "B": [
+          "divorcee",
+          "gossip",
+          "polymath",
+          "researcher",
+          "skeptic",
+          "spirit",
+          "whale"
+        ],
+        "C": [
+          "egregore",
+          "elder",
+          "facilitator",
+          "familiar",
+          "infant"
+        ],
+        "D": [
+          "auctioneer",
+          "exile",
+          "revolutionary",
+          "vigilante",
+          "writer"
+        ],
+        "E": [
+          "bartender",
+          "editor",
+          "entrepreneur",
+          "perfectionist"
+        ],
+        "F": [
+          "ghost",
+          "librarian",
+          "pharmacist",
+          "pilot",
+          "specialist",
+          "witch"
+        ]
+      }
+    },
+    {
+      "split": 22,
+      "seed": 1000022,
+      "groups": {
+        "A": [
+          "facilitator",
+          "ghost",
+          "infant",
+          "polymath",
+          "presenter",
+          "psychologist",
+          "summarizer",
+          "whale"
+        ],
+        "B": [
+          "egregore",
+          "exile",
+          "familiar",
+          "gossip",
+          "loner",
+          "perfectionist",
+          "specialist"
+        ],
+        "C": [
+          "ancient",
+          "elder",
+          "entrepreneur",
+          "librarian",
+          "pharmacist"
+        ],
+        "D": [
+          "absurdist",
+          "artisan",
+          "divorcee",
+          "negotiator",
+          "spirit"
+        ],
+        "E": [
+          "bartender",
+          "revolutionary",
+          "skeptic",
+          "writer"
+        ],
+        "F": [
+          "auctioneer",
+          "editor",
+          "pilot",
+          "researcher",
+          "vigilante",
+          "witch"
+        ]
+      }
+    },
+    {
+      "split": 23,
+      "seed": 1000023,
+      "groups": {
+        "A": [
+          "absurdist",
+          "facilitator",
+          "gossip",
+          "infant",
+          "revolutionary",
+          "skeptic",
+          "specialist",
+          "spirit"
+        ],
+        "B": [
+          "artisan",
+          "auctioneer",
+          "familiar",
+          "loner",
+          "negotiator",
+          "pilot",
+          "witch"
+        ],
+        "C": [
+          "divorcee",
+          "librarian",
+          "perfectionist",
+          "researcher",
+          "vigilante"
+        ],
+        "D": [
+          "egregore",
+          "elder",
+          "entrepreneur",
+          "pharmacist",
+          "summarizer"
+        ],
+        "E": [
+          "ancient",
+          "exile",
+          "psychologist",
+          "writer"
+        ],
+        "F": [
+          "bartender",
+          "editor",
+          "ghost",
+          "polymath",
+          "presenter",
+          "whale"
+        ]
+      }
+    },
+    {
+      "split": 24,
+      "seed": 1000024,
+      "groups": {
+        "A": [
+          "bartender",
+          "egregore",
+          "elder",
+          "exile",
+          "librarian",
+          "skeptic",
+          "spirit",
+          "writer"
+        ],
+        "B": [
+          "ancient",
+          "artisan",
+          "editor",
+          "negotiator",
+          "polymath",
+          "revolutionary",
+          "vigilante"
+        ],
+        "C": [
+          "auctioneer",
+          "divorcee",
+          "familiar",
+          "perfectionist",
+          "whale"
+        ],
+        "D": [
+          "entrepreneur",
+          "presenter",
+          "researcher",
+          "summarizer",
+          "witch"
+        ],
+        "E": [
+          "absurdist",
+          "facilitator",
+          "loner",
+          "psychologist"
+        ],
+        "F": [
+          "ghost",
+          "gossip",
+          "infant",
+          "pharmacist",
+          "pilot",
+          "specialist"
+        ]
+      }
+    },
+    {
+      "split": 25,
+      "seed": 1000025,
+      "groups": {
+        "A": [
+          "auctioneer",
+          "entrepreneur",
+          "exile",
+          "familiar",
+          "perfectionist",
+          "pilot",
+          "presenter",
+          "specialist"
+        ],
+        "B": [
+          "bartender",
+          "egregore",
+          "librarian",
+          "psychologist",
+          "revolutionary",
+          "skeptic",
+          "spirit"
+        ],
+        "C": [
+          "absurdist",
+          "divorcee",
+          "editor",
+          "gossip",
+          "infant"
+        ],
+        "D": [
+          "ancient",
+          "artisan",
+          "elder",
+          "vigilante",
+          "writer"
+        ],
+        "E": [
+          "facilitator",
+          "pharmacist",
+          "researcher",
+          "whale"
+        ],
+        "F": [
+          "ghost",
+          "loner",
+          "negotiator",
+          "polymath",
+          "summarizer",
+          "witch"
+        ]
+      }
+    },
+    {
+      "split": 26,
+      "seed": 1000026,
+      "groups": {
+        "A": [
+          "artisan",
+          "auctioneer",
+          "editor",
+          "librarian",
+          "negotiator",
+          "polymath",
+          "revolutionary",
+          "summarizer"
+        ],
+        "B": [
+          "absurdist",
+          "bartender",
+          "exile",
+          "familiar",
+          "pharmacist",
+          "spirit",
+          "writer"
+        ],
+        "C": [
+          "egregore",
+          "ghost",
+          "gossip",
+          "whale",
+          "witch"
+        ],
+        "D": [
+          "elder",
+          "facilitator",
+          "presenter",
+          "skeptic",
+          "vigilante"
+        ],
+        "E": [
+          "divorcee",
+          "infant",
+          "psychologist",
+          "researcher"
+        ],
+        "F": [
+          "ancient",
+          "entrepreneur",
+          "loner",
+          "perfectionist",
+          "pilot",
+          "specialist"
+        ]
+      }
+    },
+    {
+      "split": 27,
+      "seed": 1000027,
+      "groups": {
+        "A": [
+          "bartender",
+          "divorcee",
+          "editor",
+          "infant",
+          "pilot",
+          "presenter",
+          "specialist",
+          "whale"
+        ],
+        "B": [
+          "absurdist",
+          "artisan",
+          "exile",
+          "familiar",
+          "gossip",
+          "vigilante",
+          "witch"
+        ],
+        "C": [
+          "auctioneer",
+          "entrepreneur",
+          "ghost",
+          "pharmacist",
+          "spirit"
+        ],
+        "D": [
+          "ancient",
+          "egregore",
+          "facilitator",
+          "polymath",
+          "researcher"
+        ],
+        "E": [
+          "negotiator",
+          "perfectionist",
+          "revolutionary",
+          "summarizer"
+        ],
+        "F": [
+          "elder",
+          "librarian",
+          "loner",
+          "psychologist",
+          "skeptic",
+          "writer"
+        ]
+      }
+    },
+    {
+      "split": 28,
+      "seed": 1000028,
+      "groups": {
+        "A": [
+          "artisan",
+          "egregore",
+          "facilitator",
+          "librarian",
+          "negotiator",
+          "pilot",
+          "psychologist",
+          "revolutionary"
+        ],
+        "B": [
+          "ancient",
+          "auctioneer",
+          "editor",
+          "researcher",
+          "spirit",
+          "summarizer",
+          "witch"
+        ],
+        "C": [
+          "elder",
+          "familiar",
+          "gossip",
+          "presenter",
+          "specialist"
+        ],
+        "D": [
+          "entrepreneur",
+          "exile",
+          "perfectionist",
+          "vigilante",
+          "writer"
+        ],
+        "E": [
+          "bartender",
+          "divorcee",
+          "pharmacist",
+          "skeptic"
+        ],
+        "F": [
+          "absurdist",
+          "ghost",
+          "infant",
+          "loner",
+          "polymath",
+          "whale"
+        ]
+      }
+    },
+    {
+      "split": 29,
+      "seed": 1000029,
+      "groups": {
+        "A": [
+          "ancient",
+          "divorcee",
+          "ghost",
+          "infant",
+          "pilot",
+          "psychologist",
+          "specialist",
+          "vigilante"
+        ],
+        "B": [
+          "gossip",
+          "loner",
+          "polymath",
+          "researcher",
+          "revolutionary",
+          "spirit",
+          "summarizer"
+        ],
+        "C": [
+          "auctioneer",
+          "exile",
+          "librarian",
+          "whale",
+          "writer"
+        ],
+        "D": [
+          "artisan",
+          "bartender",
+          "egregore",
+          "entrepreneur",
+          "perfectionist"
+        ],
+        "E": [
+          "negotiator",
+          "pharmacist",
+          "presenter",
+          "skeptic"
+        ],
+        "F": [
+          "absurdist",
+          "editor",
+          "elder",
+          "facilitator",
+          "familiar",
+          "witch"
+        ]
+      }
+    },
+    {
+      "split": 30,
+      "seed": 1000030,
+      "groups": {
+        "A": [
+          "artisan",
+          "editor",
+          "familiar",
+          "gossip",
+          "infant",
+          "pharmacist",
+          "polymath",
+          "psychologist"
+        ],
+        "B": [
+          "egregore",
+          "exile",
+          "facilitator",
+          "ghost",
+          "librarian",
+          "loner",
+          "pilot"
+        ],
+        "C": [
+          "absurdist",
+          "entrepreneur",
+          "perfectionist",
+          "presenter",
+          "spirit"
+        ],
+        "D": [
+          "bartender",
+          "elder",
+          "negotiator",
+          "specialist",
+          "writer"
+        ],
+        "E": [
+          "skeptic",
+          "summarizer",
+          "vigilante",
+          "whale"
+        ],
+        "F": [
+          "ancient",
+          "auctioneer",
+          "divorcee",
+          "researcher",
+          "revolutionary",
+          "witch"
+        ]
+      }
+    },
+    {
+      "split": 31,
+      "seed": 1000031,
+      "groups": {
+        "A": [
+          "divorcee",
+          "elder",
+          "exile",
+          "librarian",
+          "polymath",
+          "psychologist",
+          "specialist",
+          "vigilante"
+        ],
+        "B": [
+          "absurdist",
+          "familiar",
+          "pharmacist",
+          "researcher",
+          "revolutionary",
+          "spirit",
+          "writer"
+        ],
+        "C": [
+          "ancient",
+          "auctioneer",
+          "gossip",
+          "perfectionist",
+          "witch"
+        ],
+        "D": [
+          "egregore",
+          "negotiator",
+          "presenter",
+          "skeptic",
+          "whale"
+        ],
+        "E": [
+          "artisan",
+          "bartender",
+          "facilitator",
+          "infant"
+        ],
+        "F": [
+          "editor",
+          "entrepreneur",
+          "ghost",
+          "loner",
+          "pilot",
+          "summarizer"
+        ]
+      }
+    },
+    {
+      "split": 32,
+      "seed": 1000032,
+      "groups": {
+        "A": [
+          "absurdist",
+          "facilitator",
+          "ghost",
+          "librarian",
+          "polymath",
+          "researcher",
+          "revolutionary",
+          "summarizer"
+        ],
+        "B": [
+          "auctioneer",
+          "editor",
+          "egregore",
+          "exile",
+          "negotiator",
+          "spirit",
+          "witch"
+        ],
+        "C": [
+          "ancient",
+          "perfectionist",
+          "pharmacist",
+          "pilot",
+          "writer"
+        ],
+        "D": [
+          "familiar",
+          "skeptic",
+          "specialist",
+          "vigilante",
+          "whale"
+        ],
+        "E": [
+          "entrepreneur",
+          "infant",
+          "presenter",
+          "psychologist"
+        ],
+        "F": [
+          "artisan",
+          "bartender",
+          "divorcee",
+          "elder",
+          "gossip",
+          "loner"
+        ]
+      }
+    },
+    {
+      "split": 33,
+      "seed": 1000033,
+      "groups": {
+        "A": [
+          "absurdist",
+          "ancient",
+          "egregore",
+          "infant",
+          "pilot",
+          "researcher",
+          "specialist",
+          "summarizer"
+        ],
+        "B": [
+          "elder",
+          "entrepreneur",
+          "gossip",
+          "revolutionary",
+          "skeptic",
+          "witch",
+          "writer"
+        ],
+        "C": [
+          "artisan",
+          "divorcee",
+          "ghost",
+          "pharmacist",
+          "psychologist"
+        ],
+        "D": [
+          "auctioneer",
+          "bartender",
+          "facilitator",
+          "presenter",
+          "vigilante"
+        ],
+        "E": [
+          "editor",
+          "exile",
+          "perfectionist",
+          "polymath"
+        ],
+        "F": [
+          "familiar",
+          "librarian",
+          "loner",
+          "negotiator",
+          "spirit",
+          "whale"
+        ]
+      }
+    },
+    {
+      "split": 34,
+      "seed": 1000034,
+      "groups": {
+        "A": [
+          "absurdist",
+          "ghost",
+          "gossip",
+          "infant",
+          "polymath",
+          "researcher",
+          "spirit",
+          "writer"
+        ],
+        "B": [
+          "ancient",
+          "divorcee",
+          "editor",
+          "egregore",
+          "psychologist",
+          "skeptic",
+          "witch"
+        ],
+        "C": [
+          "artisan",
+          "auctioneer",
+          "bartender",
+          "perfectionist",
+          "pharmacist"
+        ],
+        "D": [
+          "elder",
+          "exile",
+          "librarian",
+          "specialist",
+          "summarizer"
+        ],
+        "E": [
+          "entrepreneur",
+          "facilitator",
+          "negotiator",
+          "presenter"
+        ],
+        "F": [
+          "familiar",
+          "loner",
+          "pilot",
+          "revolutionary",
+          "vigilante",
+          "whale"
+        ]
+      }
+    },
+    {
+      "split": 35,
+      "seed": 1000035,
+      "groups": {
+        "A": [
+          "auctioneer",
+          "facilitator",
+          "negotiator",
+          "pilot",
+          "psychologist",
+          "revolutionary",
+          "specialist",
+          "summarizer"
+        ],
+        "B": [
+          "artisan",
+          "familiar",
+          "gossip",
+          "librarian",
+          "loner",
+          "researcher",
+          "writer"
+        ],
+        "C": [
+          "bartender",
+          "exile",
+          "polymath",
+          "spirit",
+          "whale"
+        ],
+        "D": [
+          "ancient",
+          "elder",
+          "entrepreneur",
+          "presenter",
+          "witch"
+        ],
+        "E": [
+          "absurdist",
+          "infant",
+          "perfectionist",
+          "vigilante"
+        ],
+        "F": [
+          "divorcee",
+          "editor",
+          "egregore",
+          "ghost",
+          "pharmacist",
+          "skeptic"
+        ]
+      }
+    },
+    {
+      "split": 36,
+      "seed": 1000036,
+      "groups": {
+        "A": [
+          "egregore",
+          "exile",
+          "familiar",
+          "librarian",
+          "negotiator",
+          "pilot",
+          "revolutionary",
+          "skeptic"
+        ],
+        "B": [
+          "auctioneer",
+          "editor",
+          "entrepreneur",
+          "ghost",
+          "psychologist",
+          "witch",
+          "writer"
+        ],
+        "C": [
+          "divorcee",
+          "elder",
+          "pharmacist",
+          "polymath",
+          "specialist"
+        ],
+        "D": [
+          "loner",
+          "perfectionist",
+          "presenter",
+          "spirit",
+          "whale"
+        ],
+        "E": [
+          "artisan",
+          "infant",
+          "researcher",
+          "vigilante"
+        ],
+        "F": [
+          "absurdist",
+          "ancient",
+          "bartender",
+          "facilitator",
+          "gossip",
+          "summarizer"
+        ]
+      }
+    },
+    {
+      "split": 37,
+      "seed": 1000037,
+      "groups": {
+        "A": [
+          "entrepreneur",
+          "infant",
+          "loner",
+          "pilot",
+          "polymath",
+          "researcher",
+          "specialist",
+          "vigilante"
+        ],
+        "B": [
+          "ancient",
+          "auctioneer",
+          "familiar",
+          "pharmacist",
+          "presenter",
+          "revolutionary",
+          "summarizer"
+        ],
+        "C": [
+          "bartender",
+          "egregore",
+          "ghost",
+          "negotiator",
+          "psychologist"
+        ],
+        "D": [
+          "elder",
+          "facilitator",
+          "gossip",
+          "perfectionist",
+          "whale"
+        ],
+        "E": [
+          "absurdist",
+          "editor",
+          "exile",
+          "skeptic"
+        ],
+        "F": [
+          "artisan",
+          "divorcee",
+          "librarian",
+          "spirit",
+          "witch",
+          "writer"
+        ]
+      }
+    },
+    {
+      "split": 38,
+      "seed": 1000038,
+      "groups": {
+        "A": [
+          "auctioneer",
+          "gossip",
+          "infant",
+          "pilot",
+          "polymath",
+          "spirit",
+          "witch",
+          "writer"
+        ],
+        "B": [
+          "ancient",
+          "artisan",
+          "bartender",
+          "editor",
+          "familiar",
+          "ghost",
+          "librarian"
+        ],
+        "C": [
+          "absurdist",
+          "entrepreneur",
+          "presenter",
+          "researcher",
+          "revolutionary"
+        ],
+        "D": [
+          "divorcee",
+          "egregore",
+          "elder",
+          "facilitator",
+          "summarizer"
+        ],
+        "E": [
+          "loner",
+          "psychologist",
+          "skeptic",
+          "specialist"
+        ],
+        "F": [
+          "exile",
+          "negotiator",
+          "perfectionist",
+          "pharmacist",
+          "vigilante",
+          "whale"
+        ]
+      }
+    },
+    {
+      "split": 39,
+      "seed": 1000039,
+      "groups": {
+        "A": [
+          "ancient",
+          "elder",
+          "familiar",
+          "perfectionist",
+          "revolutionary",
+          "specialist",
+          "spirit",
+          "whale"
+        ],
+        "B": [
+          "absurdist",
+          "bartender",
+          "editor",
+          "exile",
+          "pharmacist",
+          "presenter",
+          "writer"
+        ],
+        "C": [
+          "divorcee",
+          "egregore",
+          "facilitator",
+          "pilot",
+          "researcher"
+        ],
+        "D": [
+          "auctioneer",
+          "infant",
+          "psychologist",
+          "skeptic",
+          "summarizer"
+        ],
+        "E": [
+          "loner",
+          "negotiator",
+          "vigilante",
+          "witch"
+        ],
+        "F": [
+          "artisan",
+          "entrepreneur",
+          "ghost",
+          "gossip",
+          "librarian",
+          "polymath"
+        ]
+      }
+    },
+    {
+      "split": 40,
+      "seed": 1000040,
+      "groups": {
+        "A": [
+          "artisan",
+          "bartender",
+          "egregore",
+          "ghost",
+          "infant",
+          "perfectionist",
+          "polymath",
+          "presenter"
+        ],
+        "B": [
+          "familiar",
+          "loner",
+          "negotiator",
+          "revolutionary",
+          "spirit",
+          "summarizer",
+          "writer"
+        ],
+        "C": [
+          "entrepreneur",
+          "exile",
+          "librarian",
+          "pilot",
+          "specialist"
+        ],
+        "D": [
+          "absurdist",
+          "auctioneer",
+          "divorcee",
+          "elder",
+          "witch"
+        ],
+        "E": [
+          "ancient",
+          "psychologist",
+          "skeptic",
+          "vigilante"
+        ],
+        "F": [
+          "editor",
+          "facilitator",
+          "gossip",
+          "pharmacist",
+          "researcher",
+          "whale"
+        ]
+      }
+    },
+    {
+      "split": 41,
+      "seed": 1000041,
+      "groups": {
+        "A": [
+          "egregore",
+          "elder",
+          "researcher",
+          "skeptic",
+          "vigilante",
+          "whale",
+          "witch",
+          "writer"
+        ],
+        "B": [
+          "artisan",
+          "divorcee",
+          "entrepreneur",
+          "exile",
+          "ghost",
+          "infant",
+          "negotiator"
+        ],
+        "C": [
+          "librarian",
+          "perfectionist",
+          "presenter",
+          "revolutionary",
+          "spirit"
+        ],
+        "D": [
+          "auctioneer",
+          "bartender",
+          "gossip",
+          "polymath",
+          "specialist"
+        ],
+        "E": [
+          "editor",
+          "facilitator",
+          "familiar",
+          "pilot"
+        ],
+        "F": [
+          "absurdist",
+          "ancient",
+          "loner",
+          "pharmacist",
+          "psychologist",
+          "summarizer"
+        ]
+      }
+    },
+    {
+      "split": 42,
+      "seed": 1000042,
+      "groups": {
+        "A": [
+          "ancient",
+          "bartender",
+          "editor",
+          "elder",
+          "loner",
+          "perfectionist",
+          "pharmacist",
+          "spirit"
+        ],
+        "B": [
+          "absurdist",
+          "artisan",
+          "entrepreneur",
+          "gossip",
+          "researcher",
+          "revolutionary",
+          "skeptic"
+        ],
+        "C": [
+          "familiar",
+          "specialist",
+          "summarizer",
+          "witch",
+          "writer"
+        ],
+        "D": [
+          "divorcee",
+          "egregore",
+          "facilitator",
+          "psychologist",
+          "whale"
+        ],
+        "E": [
+          "negotiator",
+          "pilot",
+          "polymath",
+          "presenter"
+        ],
+        "F": [
+          "auctioneer",
+          "exile",
+          "ghost",
+          "infant",
+          "librarian",
+          "vigilante"
+        ]
+      }
+    },
+    {
+      "split": 43,
+      "seed": 1000043,
+      "groups": {
+        "A": [
+          "ancient",
+          "exile",
+          "facilitator",
+          "infant",
+          "librarian",
+          "perfectionist",
+          "polymath",
+          "revolutionary"
+        ],
+        "B": [
+          "absurdist",
+          "egregore",
+          "elder",
+          "entrepreneur",
+          "gossip",
+          "negotiator",
+          "whale"
+        ],
+        "C": [
+          "artisan",
+          "auctioneer",
+          "pilot",
+          "researcher",
+          "spirit"
+        ],
+        "D": [
+          "editor",
+          "familiar",
+          "loner",
+          "pharmacist",
+          "vigilante"
+        ],
+        "E": [
+          "skeptic",
+          "specialist",
+          "summarizer",
+          "witch"
+        ],
+        "F": [
+          "bartender",
+          "divorcee",
+          "ghost",
+          "presenter",
+          "psychologist",
+          "writer"
+        ]
+      }
+    },
+    {
+      "split": 44,
+      "seed": 1000044,
+      "groups": {
+        "A": [
+          "absurdist",
+          "facilitator",
+          "familiar",
+          "ghost",
+          "librarian",
+          "loner",
+          "revolutionary",
+          "writer"
+        ],
+        "B": [
+          "ancient",
+          "elder",
+          "entrepreneur",
+          "polymath",
+          "spirit",
+          "vigilante",
+          "witch"
+        ],
+        "C": [
+          "gossip",
+          "pharmacist",
+          "pilot",
+          "psychologist",
+          "whale"
+        ],
+        "D": [
+          "bartender",
+          "editor",
+          "negotiator",
+          "researcher",
+          "summarizer"
+        ],
+        "E": [
+          "divorcee",
+          "egregore",
+          "infant",
+          "skeptic"
+        ],
+        "F": [
+          "artisan",
+          "auctioneer",
+          "exile",
+          "perfectionist",
+          "presenter",
+          "specialist"
+        ]
+      }
+    },
+    {
+      "split": 45,
+      "seed": 1000045,
+      "groups": {
+        "A": [
+          "facilitator",
+          "familiar",
+          "ghost",
+          "researcher",
+          "revolutionary",
+          "specialist",
+          "vigilante",
+          "whale"
+        ],
+        "B": [
+          "bartender",
+          "egregore",
+          "entrepreneur",
+          "negotiator",
+          "pharmacist",
+          "polymath",
+          "writer"
+        ],
+        "C": [
+          "divorcee",
+          "editor",
+          "elder",
+          "infant",
+          "loner"
+        ],
+        "D": [
+          "artisan",
+          "perfectionist",
+          "presenter",
+          "skeptic",
+          "witch"
+        ],
+        "E": [
+          "exile",
+          "librarian",
+          "psychologist",
+          "spirit"
+        ],
+        "F": [
+          "absurdist",
+          "ancient",
+          "auctioneer",
+          "gossip",
+          "pilot",
+          "summarizer"
+        ]
+      }
+    },
+    {
+      "split": 46,
+      "seed": 1000046,
+      "groups": {
+        "A": [
+          "ancient",
+          "bartender",
+          "editor",
+          "gossip",
+          "perfectionist",
+          "pharmacist",
+          "polymath",
+          "summarizer"
+        ],
+        "B": [
+          "divorcee",
+          "facilitator",
+          "infant",
+          "negotiator",
+          "presenter",
+          "specialist",
+          "vigilante"
+        ],
+        "C": [
+          "auctioneer",
+          "elder",
+          "pilot",
+          "researcher",
+          "skeptic"
+        ],
+        "D": [
+          "egregore",
+          "entrepreneur",
+          "revolutionary",
+          "whale",
+          "writer"
+        ],
+        "E": [
+          "familiar",
+          "ghost",
+          "loner",
+          "witch"
+        ],
+        "F": [
+          "absurdist",
+          "artisan",
+          "exile",
+          "librarian",
+          "psychologist",
+          "spirit"
+        ]
+      }
+    },
+    {
+      "split": 47,
+      "seed": 1000047,
+      "groups": {
+        "A": [
+          "auctioneer",
+          "editor",
+          "entrepreneur",
+          "facilitator",
+          "pilot",
+          "polymath",
+          "spirit",
+          "witch"
+        ],
+        "B": [
+          "absurdist",
+          "artisan",
+          "egregore",
+          "perfectionist",
+          "pharmacist",
+          "presenter",
+          "writer"
+        ],
+        "C": [
+          "ancient",
+          "gossip",
+          "loner",
+          "skeptic",
+          "specialist"
+        ],
+        "D": [
+          "exile",
+          "familiar",
+          "ghost",
+          "infant",
+          "librarian"
+        ],
+        "E": [
+          "bartender",
+          "divorcee",
+          "researcher",
+          "whale"
+        ],
+        "F": [
+          "elder",
+          "negotiator",
+          "psychologist",
+          "revolutionary",
+          "summarizer",
+          "vigilante"
+        ]
+      }
+    },
+    {
+      "split": 48,
+      "seed": 1000048,
+      "groups": {
+        "A": [
+          "divorcee",
+          "gossip",
+          "loner",
+          "negotiator",
+          "pilot",
+          "presenter",
+          "spirit",
+          "whale"
+        ],
+        "B": [
+          "ancient",
+          "artisan",
+          "auctioneer",
+          "bartender",
+          "psychologist",
+          "skeptic",
+          "specialist"
+        ],
+        "C": [
+          "perfectionist",
+          "pharmacist",
+          "revolutionary",
+          "vigilante",
+          "witch"
+        ],
+        "D": [
+          "editor",
+          "elder",
+          "familiar",
+          "infant",
+          "librarian"
+        ],
+        "E": [
+          "egregore",
+          "facilitator",
+          "researcher",
+          "writer"
+        ],
+        "F": [
+          "absurdist",
+          "entrepreneur",
+          "exile",
+          "ghost",
+          "polymath",
+          "summarizer"
+        ]
+      }
+    },
+    {
+      "split": 49,
+      "seed": 1000049,
+      "groups": {
+        "A": [
+          "absurdist",
+          "elder",
+          "entrepreneur",
+          "familiar",
+          "loner",
+          "psychologist",
+          "revolutionary",
+          "summarizer"
+        ],
+        "B": [
+          "ancient",
+          "bartender",
+          "divorcee",
+          "negotiator",
+          "pilot",
+          "skeptic",
+          "spirit"
+        ],
+        "C": [
+          "auctioneer",
+          "ghost",
+          "infant",
+          "librarian",
+          "witch"
+        ],
+        "D": [
+          "artisan",
+          "egregore",
+          "perfectionist",
+          "presenter",
+          "writer"
+        ],
+        "E": [
+          "editor",
+          "exile",
+          "specialist",
+          "vigilante"
+        ],
+        "F": [
+          "facilitator",
+          "gossip",
+          "pharmacist",
+          "polymath",
+          "researcher",
+          "whale"
+        ]
+      }
+    },
+    {
+      "split": 50,
+      "seed": 1000050,
+      "groups": {
+        "A": [
+          "negotiator",
+          "perfectionist",
+          "polymath",
+          "revolutionary",
+          "skeptic",
+          "spirit",
+          "summarizer",
+          "whale"
+        ],
+        "B": [
+          "bartender",
+          "ghost",
+          "gossip",
+          "infant",
+          "librarian",
+          "pilot",
+          "specialist"
+        ],
+        "C": [
+          "auctioneer",
+          "exile",
+          "facilitator",
+          "vigilante",
+          "witch"
+        ],
+        "D": [
+          "egregore",
+          "entrepreneur",
+          "presenter",
+          "psychologist",
+          "writer"
+        ],
+        "E": [
+          "ancient",
+          "artisan",
+          "elder",
+          "researcher"
+        ],
+        "F": [
+          "absurdist",
+          "divorcee",
+          "editor",
+          "familiar",
+          "loner",
+          "pharmacist"
+        ]
+      }
+    },
+    {
+      "split": 51,
+      "seed": 1000051,
+      "groups": {
+        "A": [
+          "editor",
+          "entrepreneur",
+          "ghost",
+          "gossip",
+          "infant",
+          "negotiator",
+          "pharmacist",
+          "spirit"
+        ],
+        "B": [
+          "auctioneer",
+          "bartender",
+          "exile",
+          "facilitator",
+          "librarian",
+          "polymath",
+          "skeptic"
+        ],
+        "C": [
+          "absurdist",
+          "divorcee",
+          "elder",
+          "perfectionist",
+          "writer"
+        ],
+        "D": [
+          "ancient",
+          "loner",
+          "revolutionary",
+          "summarizer",
+          "witch"
+        ],
+        "E": [
+          "familiar",
+          "pilot",
+          "psychologist",
+          "researcher"
+        ],
+        "F": [
+          "artisan",
+          "egregore",
+          "presenter",
+          "specialist",
+          "vigilante",
+          "whale"
+        ]
+      }
+    },
+    {
+      "split": 52,
+      "seed": 1000052,
+      "groups": {
+        "A": [
+          "divorcee",
+          "familiar",
+          "gossip",
+          "pharmacist",
+          "pilot",
+          "summarizer",
+          "witch",
+          "writer"
+        ],
+        "B": [
+          "absurdist",
+          "entrepreneur",
+          "facilitator",
+          "librarian",
+          "negotiator",
+          "specialist",
+          "spirit"
+        ],
+        "C": [
+          "ancient",
+          "artisan",
+          "bartender",
+          "egregore",
+          "polymath"
+        ],
+        "D": [
+          "auctioneer",
+          "editor",
+          "ghost",
+          "skeptic",
+          "vigilante"
+        ],
+        "E": [
+          "elder",
+          "infant",
+          "loner",
+          "researcher"
+        ],
+        "F": [
+          "exile",
+          "perfectionist",
+          "presenter",
+          "psychologist",
+          "revolutionary",
+          "whale"
+        ]
+      }
+    },
+    {
+      "split": 53,
+      "seed": 1000053,
+      "groups": {
+        "A": [
+          "auctioneer",
+          "divorcee",
+          "entrepreneur",
+          "infant",
+          "pilot",
+          "skeptic",
+          "spirit",
+          "witch"
+        ],
+        "B": [
+          "absurdist",
+          "bartender",
+          "familiar",
+          "ghost",
+          "loner",
+          "researcher",
+          "summarizer"
+        ],
+        "C": [
+          "artisan",
+          "facilitator",
+          "pharmacist",
+          "specialist",
+          "whale"
+        ],
+        "D": [
+          "elder",
+          "exile",
+          "gossip",
+          "negotiator",
+          "presenter"
+        ],
+        "E": [
+          "librarian",
+          "perfectionist",
+          "psychologist",
+          "revolutionary"
+        ],
+        "F": [
+          "ancient",
+          "editor",
+          "egregore",
+          "polymath",
+          "vigilante",
+          "writer"
+        ]
+      }
+    },
+    {
+      "split": 54,
+      "seed": 1000054,
+      "groups": {
+        "A": [
+          "ancient",
+          "auctioneer",
+          "bartender",
+          "editor",
+          "elder",
+          "presenter",
+          "researcher",
+          "skeptic"
+        ],
+        "B": [
+          "absurdist",
+          "artisan",
+          "infant",
+          "pilot",
+          "specialist",
+          "vigilante",
+          "writer"
+        ],
+        "C": [
+          "facilitator",
+          "librarian",
+          "pharmacist",
+          "summarizer",
+          "witch"
+        ],
+        "D": [
+          "entrepreneur",
+          "exile",
+          "familiar",
+          "gossip",
+          "polymath"
+        ],
+        "E": [
+          "ghost",
+          "perfectionist",
+          "psychologist",
+          "whale"
+        ],
+        "F": [
+          "divorcee",
+          "egregore",
+          "loner",
+          "negotiator",
+          "revolutionary",
+          "spirit"
+        ]
+      }
+    },
+    {
+      "split": 55,
+      "seed": 1000055,
+      "groups": {
+        "A": [
+          "artisan",
+          "elder",
+          "familiar",
+          "negotiator",
+          "perfectionist",
+          "polymath",
+          "presenter",
+          "spirit"
+        ],
+        "B": [
+          "auctioneer",
+          "bartender",
+          "exile",
+          "gossip",
+          "revolutionary",
+          "vigilante",
+          "witch"
+        ],
+        "C": [
+          "divorcee",
+          "facilitator",
+          "skeptic",
+          "specialist",
+          "whale"
+        ],
+        "D": [
+          "absurdist",
+          "infant",
+          "loner",
+          "researcher",
+          "summarizer"
+        ],
+        "E": [
+          "egregore",
+          "ghost",
+          "psychologist",
+          "writer"
+        ],
+        "F": [
+          "ancient",
+          "editor",
+          "entrepreneur",
+          "librarian",
+          "pharmacist",
+          "pilot"
+        ]
+      }
+    },
+    {
+      "split": 56,
+      "seed": 1000056,
+      "groups": {
+        "A": [
+          "absurdist",
+          "artisan",
+          "entrepreneur",
+          "exile",
+          "familiar",
+          "psychologist",
+          "spirit",
+          "vigilante"
+        ],
+        "B": [
+          "ghost",
+          "librarian",
+          "researcher",
+          "skeptic",
+          "whale",
+          "witch",
+          "writer"
+        ],
+        "C": [
+          "auctioneer",
+          "bartender",
+          "facilitator",
+          "pilot",
+          "polymath"
+        ],
+        "D": [
+          "gossip",
+          "infant",
+          "loner",
+          "perfectionist",
+          "revolutionary"
+        ],
+        "E": [
+          "elder",
+          "pharmacist",
+          "presenter",
+          "specialist"
+        ],
+        "F": [
+          "ancient",
+          "divorcee",
+          "editor",
+          "egregore",
+          "negotiator",
+          "summarizer"
+        ]
+      }
+    },
+    {
+      "split": 57,
+      "seed": 1000057,
+      "groups": {
+        "A": [
+          "artisan",
+          "auctioneer",
+          "ghost",
+          "gossip",
+          "polymath",
+          "presenter",
+          "researcher",
+          "vigilante"
+        ],
+        "B": [
+          "absurdist",
+          "ancient",
+          "infant",
+          "loner",
+          "spirit",
+          "summarizer",
+          "whale"
+        ],
+        "C": [
+          "editor",
+          "librarian",
+          "negotiator",
+          "pilot",
+          "skeptic"
+        ],
+        "D": [
+          "entrepreneur",
+          "exile",
+          "familiar",
+          "witch",
+          "writer"
+        ],
+        "E": [
+          "bartender",
+          "divorcee",
+          "egregore",
+          "specialist"
+        ],
+        "F": [
+          "elder",
+          "facilitator",
+          "perfectionist",
+          "pharmacist",
+          "psychologist",
+          "revolutionary"
+        ]
+      }
+    },
+    {
+      "split": 58,
+      "seed": 1000058,
+      "groups": {
+        "A": [
+          "artisan",
+          "divorcee",
+          "entrepreneur",
+          "ghost",
+          "gossip",
+          "infant",
+          "loner",
+          "revolutionary"
+        ],
+        "B": [
+          "auctioneer",
+          "editor",
+          "elder",
+          "perfectionist",
+          "vigilante",
+          "witch",
+          "writer"
+        ],
+        "C": [
+          "librarian",
+          "pharmacist",
+          "psychologist",
+          "spirit",
+          "whale"
+        ],
+        "D": [
+          "absurdist",
+          "egregore",
+          "familiar",
+          "presenter",
+          "skeptic"
+        ],
+        "E": [
+          "exile",
+          "polymath",
+          "researcher",
+          "specialist"
+        ],
+        "F": [
+          "ancient",
+          "bartender",
+          "facilitator",
+          "negotiator",
+          "pilot",
+          "summarizer"
+        ]
+      }
+    },
+    {
+      "split": 59,
+      "seed": 1000059,
+      "groups": {
+        "A": [
+          "artisan",
+          "auctioneer",
+          "egregore",
+          "elder",
+          "entrepreneur",
+          "ghost",
+          "spirit",
+          "writer"
+        ],
+        "B": [
+          "absurdist",
+          "bartender",
+          "loner",
+          "perfectionist",
+          "presenter",
+          "revolutionary",
+          "summarizer"
+        ],
+        "C": [
+          "ancient",
+          "exile",
+          "facilitator",
+          "familiar",
+          "skeptic"
+        ],
+        "D": [
+          "divorcee",
+          "librarian",
+          "pharmacist",
+          "whale",
+          "witch"
+        ],
+        "E": [
+          "negotiator",
+          "researcher",
+          "specialist",
+          "vigilante"
+        ],
+        "F": [
+          "editor",
+          "gossip",
+          "infant",
+          "pilot",
+          "polymath",
+          "psychologist"
+        ]
+      }
+    },
+    {
+      "split": 60,
+      "seed": 1000060,
+      "groups": {
+        "A": [
+          "bartender",
+          "divorcee",
+          "egregore",
+          "elder",
+          "facilitator",
+          "presenter",
+          "summarizer",
+          "whale"
+        ],
+        "B": [
+          "artisan",
+          "entrepreneur",
+          "familiar",
+          "librarian",
+          "negotiator",
+          "polymath",
+          "writer"
+        ],
+        "C": [
+          "ancient",
+          "auctioneer",
+          "loner",
+          "perfectionist",
+          "pharmacist"
+        ],
+        "D": [
+          "ghost",
+          "infant",
+          "psychologist",
+          "vigilante",
+          "witch"
+        ],
+        "E": [
+          "editor",
+          "pilot",
+          "skeptic",
+          "specialist"
+        ],
+        "F": [
+          "absurdist",
+          "exile",
+          "gossip",
+          "researcher",
+          "revolutionary",
+          "spirit"
+        ]
+      }
+    },
+    {
+      "split": 61,
+      "seed": 1000061,
+      "groups": {
+        "A": [
+          "artisan",
+          "elder",
+          "familiar",
+          "perfectionist",
+          "polymath",
+          "researcher",
+          "witch",
+          "writer"
+        ],
+        "B": [
+          "auctioneer",
+          "entrepreneur",
+          "facilitator",
+          "ghost",
+          "pharmacist",
+          "pilot",
+          "spirit"
+        ],
+        "C": [
+          "divorcee",
+          "presenter",
+          "revolutionary",
+          "skeptic",
+          "specialist"
+        ],
+        "D": [
+          "absurdist",
+          "egregore",
+          "infant",
+          "psychologist",
+          "summarizer"
+        ],
+        "E": [
+          "ancient",
+          "bartender",
+          "exile",
+          "vigilante"
+        ],
+        "F": [
+          "editor",
+          "gossip",
+          "librarian",
+          "loner",
+          "negotiator",
+          "whale"
+        ]
+      }
+    },
+    {
+      "split": 62,
+      "seed": 1000062,
+      "groups": {
+        "A": [
+          "auctioneer",
+          "editor",
+          "egregore",
+          "elder",
+          "pharmacist",
+          "psychologist",
+          "skeptic",
+          "summarizer"
+        ],
+        "B": [
+          "artisan",
+          "entrepreneur",
+          "facilitator",
+          "infant",
+          "perfectionist",
+          "pilot",
+          "writer"
+        ],
+        "C": [
+          "absurdist",
+          "bartender",
+          "librarian",
+          "loner",
+          "specialist"
+        ],
+        "D": [
+          "divorcee",
+          "familiar",
+          "polymath",
+          "revolutionary",
+          "whale"
+        ],
+        "E": [
+          "ghost",
+          "presenter",
+          "researcher",
+          "witch"
+        ],
+        "F": [
+          "ancient",
+          "exile",
+          "gossip",
+          "negotiator",
+          "spirit",
+          "vigilante"
+        ]
+      }
+    },
+    {
+      "split": 63,
+      "seed": 1000063,
+      "groups": {
+        "A": [
+          "entrepreneur",
+          "gossip",
+          "infant",
+          "librarian",
+          "loner",
+          "presenter",
+          "psychologist",
+          "skeptic"
+        ],
+        "B": [
+          "auctioneer",
+          "divorcee",
+          "exile",
+          "perfectionist",
+          "researcher",
+          "revolutionary",
+          "vigilante"
+        ],
+        "C": [
+          "absurdist",
+          "artisan",
+          "pharmacist",
+          "summarizer",
+          "whale"
+        ],
+        "D": [
+          "elder",
+          "negotiator",
+          "pilot",
+          "polymath",
+          "witch"
+        ],
+        "E": [
+          "bartender",
+          "familiar",
+          "ghost",
+          "specialist"
+        ],
+        "F": [
+          "ancient",
+          "editor",
+          "egregore",
+          "facilitator",
+          "spirit",
+          "writer"
+        ]
+      }
+    },
+    {
+      "split": 64,
+      "seed": 1000064,
+      "groups": {
+        "A": [
+          "absurdist",
+          "librarian",
+          "negotiator",
+          "perfectionist",
+          "pharmacist",
+          "polymath",
+          "specialist",
+          "writer"
+        ],
+        "B": [
+          "egregore",
+          "elder",
+          "infant",
+          "pilot",
+          "presenter",
+          "skeptic",
+          "whale"
+        ],
+        "C": [
+          "editor",
+          "gossip",
+          "psychologist",
+          "revolutionary",
+          "vigilante"
+        ],
+        "D": [
+          "artisan",
+          "facilitator",
+          "ghost",
+          "researcher",
+          "spirit"
+        ],
+        "E": [
+          "auctioneer",
+          "entrepreneur",
+          "exile",
+          "loner"
+        ],
+        "F": [
+          "ancient",
+          "bartender",
+          "divorcee",
+          "familiar",
+          "summarizer",
+          "witch"
+        ]
+      }
+    },
+    {
+      "split": 65,
+      "seed": 1000065,
+      "groups": {
+        "A": [
+          "ancient",
+          "artisan",
+          "exile",
+          "gossip",
+          "loner",
+          "specialist",
+          "summarizer",
+          "writer"
+        ],
+        "B": [
+          "absurdist",
+          "auctioneer",
+          "egregore",
+          "librarian",
+          "pharmacist",
+          "vigilante",
+          "witch"
+        ],
+        "C": [
+          "elder",
+          "facilitator",
+          "perfectionist",
+          "pilot",
+          "psychologist"
+        ],
+        "D": [
+          "divorcee",
+          "editor",
+          "infant",
+          "negotiator",
+          "revolutionary"
+        ],
+        "E": [
+          "bartender",
+          "entrepreneur",
+          "skeptic",
+          "spirit"
+        ],
+        "F": [
+          "familiar",
+          "ghost",
+          "polymath",
+          "presenter",
+          "researcher",
+          "whale"
+        ]
+      }
+    },
+    {
+      "split": 66,
+      "seed": 1000066,
+      "groups": {
+        "A": [
+          "artisan",
+          "divorcee",
+          "editor",
+          "negotiator",
+          "perfectionist",
+          "presenter",
+          "whale",
+          "writer"
+        ],
+        "B": [
+          "bartender",
+          "exile",
+          "facilitator",
+          "ghost",
+          "pilot",
+          "revolutionary",
+          "vigilante"
+        ],
+        "C": [
+          "egregore",
+          "familiar",
+          "polymath",
+          "researcher",
+          "witch"
+        ],
+        "D": [
+          "ancient",
+          "elder",
+          "librarian",
+          "loner",
+          "skeptic"
+        ],
+        "E": [
+          "absurdist",
+          "auctioneer",
+          "entrepreneur",
+          "pharmacist"
+        ],
+        "F": [
+          "gossip",
+          "infant",
+          "psychologist",
+          "specialist",
+          "spirit",
+          "summarizer"
+        ]
+      }
+    },
+    {
+      "split": 67,
+      "seed": 1000067,
+      "groups": {
+        "A": [
+          "absurdist",
+          "auctioneer",
+          "divorcee",
+          "editor",
+          "librarian",
+          "negotiator",
+          "pilot",
+          "spirit"
+        ],
+        "B": [
+          "ancient",
+          "entrepreneur",
+          "infant",
+          "pharmacist",
+          "revolutionary",
+          "whale",
+          "writer"
+        ],
+        "C": [
+          "egregore",
+          "exile",
+          "psychologist",
+          "researcher",
+          "skeptic"
+        ],
+        "D": [
+          "ghost",
+          "loner",
+          "perfectionist",
+          "polymath",
+          "witch"
+        ],
+        "E": [
+          "familiar",
+          "gossip",
+          "presenter",
+          "vigilante"
+        ],
+        "F": [
+          "artisan",
+          "bartender",
+          "elder",
+          "facilitator",
+          "specialist",
+          "summarizer"
+        ]
+      }
+    },
+    {
+      "split": 68,
+      "seed": 1000068,
+      "groups": {
+        "A": [
+          "facilitator",
+          "familiar",
+          "infant",
+          "pharmacist",
+          "pilot",
+          "researcher",
+          "witch",
+          "writer"
+        ],
+        "B": [
+          "divorcee",
+          "elder",
+          "exile",
+          "gossip",
+          "negotiator",
+          "presenter",
+          "specialist"
+        ],
+        "C": [
+          "ancient",
+          "entrepreneur",
+          "skeptic",
+          "spirit",
+          "whale"
+        ],
+        "D": [
+          "artisan",
+          "egregore",
+          "ghost",
+          "librarian",
+          "polymath"
+        ],
+        "E": [
+          "auctioneer",
+          "editor",
+          "revolutionary",
+          "summarizer"
+        ],
+        "F": [
+          "absurdist",
+          "bartender",
+          "loner",
+          "perfectionist",
+          "psychologist",
+          "vigilante"
+        ]
+      }
+    },
+    {
+      "split": 69,
+      "seed": 1000069,
+      "groups": {
+        "A": [
+          "exile",
+          "gossip",
+          "infant",
+          "librarian",
+          "loner",
+          "negotiator",
+          "presenter",
+          "writer"
+        ],
+        "B": [
+          "artisan",
+          "bartender",
+          "divorcee",
+          "entrepreneur",
+          "facilitator",
+          "revolutionary",
+          "skeptic"
+        ],
+        "C": [
+          "auctioneer",
+          "elder",
+          "perfectionist",
+          "psychologist",
+          "specialist"
+        ],
+        "D": [
+          "absurdist",
+          "ancient",
+          "editor",
+          "egregore",
+          "pilot"
+        ],
+        "E": [
+          "pharmacist",
+          "polymath",
+          "researcher",
+          "vigilante"
+        ],
+        "F": [
+          "familiar",
+          "ghost",
+          "spirit",
+          "summarizer",
+          "whale",
+          "witch"
+        ]
+      }
+    },
+    {
+      "split": 70,
+      "seed": 1000070,
+      "groups": {
+        "A": [
+          "bartender",
+          "divorcee",
+          "exile",
+          "facilitator",
+          "loner",
+          "polymath",
+          "presenter",
+          "psychologist"
+        ],
+        "B": [
+          "ancient",
+          "perfectionist",
+          "pharmacist",
+          "pilot",
+          "skeptic",
+          "specialist",
+          "whale"
+        ],
+        "C": [
+          "editor",
+          "entrepreneur",
+          "gossip",
+          "spirit",
+          "witch"
+        ],
+        "D": [
+          "elder",
+          "infant",
+          "librarian",
+          "negotiator",
+          "revolutionary"
+        ],
+        "E": [
+          "auctioneer",
+          "researcher",
+          "vigilante",
+          "writer"
+        ],
+        "F": [
+          "absurdist",
+          "artisan",
+          "egregore",
+          "familiar",
+          "ghost",
+          "summarizer"
+        ]
+      }
+    },
+    {
+      "split": 71,
+      "seed": 1000071,
+      "groups": {
+        "A": [
+          "absurdist",
+          "divorcee",
+          "familiar",
+          "negotiator",
+          "pharmacist",
+          "psychologist",
+          "researcher",
+          "skeptic"
+        ],
+        "B": [
+          "editor",
+          "gossip",
+          "loner",
+          "perfectionist",
+          "pilot",
+          "whale",
+          "writer"
+        ],
+        "C": [
+          "artisan",
+          "bartender",
+          "exile",
+          "facilitator",
+          "ghost"
+        ],
+        "D": [
+          "ancient",
+          "elder",
+          "infant",
+          "librarian",
+          "summarizer"
+        ],
+        "E": [
+          "polymath",
+          "specialist",
+          "spirit",
+          "witch"
+        ],
+        "F": [
+          "auctioneer",
+          "egregore",
+          "entrepreneur",
+          "presenter",
+          "revolutionary",
+          "vigilante"
+        ]
+      }
+    },
+    {
+      "split": 72,
+      "seed": 1000072,
+      "groups": {
+        "A": [
+          "absurdist",
+          "ancient",
+          "bartender",
+          "elder",
+          "negotiator",
+          "pharmacist",
+          "presenter",
+          "summarizer"
+        ],
+        "B": [
+          "divorcee",
+          "editor",
+          "exile",
+          "facilitator",
+          "polymath",
+          "researcher",
+          "specialist"
+        ],
+        "C": [
+          "auctioneer",
+          "egregore",
+          "familiar",
+          "infant",
+          "whale"
+        ],
+        "D": [
+          "ghost",
+          "librarian",
+          "pilot",
+          "revolutionary",
+          "witch"
+        ],
+        "E": [
+          "artisan",
+          "loner",
+          "perfectionist",
+          "spirit"
+        ],
+        "F": [
+          "entrepreneur",
+          "gossip",
+          "psychologist",
+          "skeptic",
+          "vigilante",
+          "writer"
+        ]
+      }
+    },
+    {
+      "split": 73,
+      "seed": 1000073,
+      "groups": {
+        "A": [
+          "ancient",
+          "auctioneer",
+          "editor",
+          "gossip",
+          "loner",
+          "negotiator",
+          "specialist",
+          "vigilante"
+        ],
+        "B": [
+          "artisan",
+          "familiar",
+          "librarian",
+          "pharmacist",
+          "presenter",
+          "researcher",
+          "skeptic"
+        ],
+        "C": [
+          "divorcee",
+          "entrepreneur",
+          "infant",
+          "psychologist",
+          "witch"
+        ],
+        "D": [
+          "absurdist",
+          "bartender",
+          "exile",
+          "facilitator",
+          "whale"
+        ],
+        "E": [
+          "egregore",
+          "perfectionist",
+          "polymath",
+          "summarizer"
+        ],
+        "F": [
+          "elder",
+          "ghost",
+          "pilot",
+          "revolutionary",
+          "spirit",
+          "writer"
+        ]
+      }
+    },
+    {
+      "split": 74,
+      "seed": 1000074,
+      "groups": {
+        "A": [
+          "absurdist",
+          "ancient",
+          "familiar",
+          "ghost",
+          "infant",
+          "pharmacist",
+          "researcher",
+          "skeptic"
+        ],
+        "B": [
+          "divorcee",
+          "egregore",
+          "exile",
+          "facilitator",
+          "gossip",
+          "vigilante",
+          "witch"
+        ],
+        "C": [
+          "entrepreneur",
+          "loner",
+          "negotiator",
+          "polymath",
+          "spirit"
+        ],
+        "D": [
+          "auctioneer",
+          "elder",
+          "presenter",
+          "specialist",
+          "whale"
+        ],
+        "E": [
+          "bartender",
+          "editor",
+          "pilot",
+          "revolutionary"
+        ],
+        "F": [
+          "artisan",
+          "librarian",
+          "perfectionist",
+          "psychologist",
+          "summarizer",
+          "writer"
+        ]
+      }
+    },
+    {
+      "split": 75,
+      "seed": 1000075,
+      "groups": {
+        "A": [
+          "editor",
+          "exile",
+          "gossip",
+          "pharmacist",
+          "polymath",
+          "presenter",
+          "whale",
+          "witch"
+        ],
+        "B": [
+          "egregore",
+          "loner",
+          "negotiator",
+          "perfectionist",
+          "researcher",
+          "revolutionary",
+          "specialist"
+        ],
+        "C": [
+          "artisan",
+          "entrepreneur",
+          "facilitator",
+          "librarian",
+          "vigilante"
+        ],
+        "D": [
+          "bartender",
+          "elder",
+          "familiar",
+          "infant",
+          "skeptic"
+        ],
+        "E": [
+          "ancient",
+          "psychologist",
+          "spirit",
+          "writer"
+        ],
+        "F": [
+          "absurdist",
+          "auctioneer",
+          "divorcee",
+          "ghost",
+          "pilot",
+          "summarizer"
+        ]
+      }
+    },
+    {
+      "split": 76,
+      "seed": 1000076,
+      "groups": {
+        "A": [
+          "auctioneer",
+          "facilitator",
+          "familiar",
+          "gossip",
+          "negotiator",
+          "pilot",
+          "presenter",
+          "spirit"
+        ],
+        "B": [
+          "absurdist",
+          "ancient",
+          "bartender",
+          "editor",
+          "perfectionist",
+          "pharmacist",
+          "psychologist"
+        ],
+        "C": [
+          "divorcee",
+          "elder",
+          "entrepreneur",
+          "exile",
+          "researcher"
+        ],
+        "D": [
+          "ghost",
+          "loner",
+          "polymath",
+          "revolutionary",
+          "witch"
+        ],
+        "E": [
+          "artisan",
+          "specialist",
+          "summarizer",
+          "whale"
+        ],
+        "F": [
+          "egregore",
+          "infant",
+          "librarian",
+          "skeptic",
+          "vigilante",
+          "writer"
+        ]
+      }
+    },
+    {
+      "split": 77,
+      "seed": 1000077,
+      "groups": {
+        "A": [
+          "artisan",
+          "divorcee",
+          "gossip",
+          "librarian",
+          "perfectionist",
+          "pilot",
+          "specialist",
+          "witch"
+        ],
+        "B": [
+          "ancient",
+          "bartender",
+          "elder",
+          "infant",
+          "pharmacist",
+          "skeptic",
+          "summarizer"
+        ],
+        "C": [
+          "editor",
+          "facilitator",
+          "ghost",
+          "spirit",
+          "whale"
+        ],
+        "D": [
+          "auctioneer",
+          "egregore",
+          "negotiator",
+          "researcher",
+          "writer"
+        ],
+        "E": [
+          "absurdist",
+          "entrepreneur",
+          "polymath",
+          "psychologist"
+        ],
+        "F": [
+          "exile",
+          "familiar",
+          "loner",
+          "presenter",
+          "revolutionary",
+          "vigilante"
+        ]
+      }
+    },
+    {
+      "split": 78,
+      "seed": 1000078,
+      "groups": {
+        "A": [
+          "absurdist",
+          "ghost",
+          "librarian",
+          "negotiator",
+          "psychologist",
+          "specialist",
+          "spirit",
+          "summarizer"
+        ],
+        "B": [
+          "ancient",
+          "bartender",
+          "facilitator",
+          "infant",
+          "researcher",
+          "whale",
+          "witch"
+        ],
+        "C": [
+          "editor",
+          "exile",
+          "gossip",
+          "pilot",
+          "skeptic"
+        ],
+        "D": [
+          "artisan",
+          "auctioneer",
+          "divorcee",
+          "pharmacist",
+          "presenter"
+        ],
+        "E": [
+          "elder",
+          "polymath",
+          "revolutionary",
+          "writer"
+        ],
+        "F": [
+          "egregore",
+          "entrepreneur",
+          "familiar",
+          "loner",
+          "perfectionist",
+          "vigilante"
+        ]
+      }
+    },
+    {
+      "split": 79,
+      "seed": 1000079,
+      "groups": {
+        "A": [
+          "exile",
+          "familiar",
+          "librarian",
+          "pilot",
+          "psychologist",
+          "researcher",
+          "summarizer",
+          "witch"
+        ],
+        "B": [
+          "absurdist",
+          "auctioneer",
+          "facilitator",
+          "ghost",
+          "gossip",
+          "revolutionary",
+          "specialist"
+        ],
+        "C": [
+          "editor",
+          "elder",
+          "loner",
+          "perfectionist",
+          "pharmacist"
+        ],
+        "D": [
+          "divorcee",
+          "egregore",
+          "entrepreneur",
+          "spirit",
+          "writer"
+        ],
+        "E": [
+          "infant",
+          "negotiator",
+          "presenter",
+          "whale"
+        ],
+        "F": [
+          "ancient",
+          "artisan",
+          "bartender",
+          "polymath",
+          "skeptic",
+          "vigilante"
+        ]
+      }
+    },
+    {
+      "split": 80,
+      "seed": 1000080,
+      "groups": {
+        "A": [
+          "absurdist",
+          "ancient",
+          "divorcee",
+          "pharmacist",
+          "polymath",
+          "psychologist",
+          "summarizer",
+          "witch"
+        ],
+        "B": [
+          "editor",
+          "elder",
+          "infant",
+          "perfectionist",
+          "pilot",
+          "spirit",
+          "whale"
+        ],
+        "C": [
+          "auctioneer",
+          "librarian",
+          "researcher",
+          "specialist",
+          "vigilante"
+        ],
+        "D": [
+          "artisan",
+          "entrepreneur",
+          "ghost",
+          "gossip",
+          "writer"
+        ],
+        "E": [
+          "egregore",
+          "exile",
+          "loner",
+          "skeptic"
+        ],
+        "F": [
+          "bartender",
+          "facilitator",
+          "familiar",
+          "negotiator",
+          "presenter",
+          "revolutionary"
+        ]
+      }
+    },
+    {
+      "split": 81,
+      "seed": 1000081,
+      "groups": {
+        "A": [
+          "absurdist",
+          "ancient",
+          "artisan",
+          "loner",
+          "negotiator",
+          "researcher",
+          "skeptic",
+          "summarizer"
+        ],
+        "B": [
+          "facilitator",
+          "familiar",
+          "gossip",
+          "pharmacist",
+          "presenter",
+          "psychologist",
+          "witch"
+        ],
+        "C": [
+          "bartender",
+          "editor",
+          "ghost",
+          "polymath",
+          "specialist"
+        ],
+        "D": [
+          "divorcee",
+          "pilot",
+          "revolutionary",
+          "spirit",
+          "writer"
+        ],
+        "E": [
+          "elder",
+          "entrepreneur",
+          "exile",
+          "vigilante"
+        ],
+        "F": [
+          "auctioneer",
+          "egregore",
+          "infant",
+          "librarian",
+          "perfectionist",
+          "whale"
+        ]
+      }
+    },
+    {
+      "split": 82,
+      "seed": 1000082,
+      "groups": {
+        "A": [
+          "absurdist",
+          "egregore",
+          "ghost",
+          "infant",
+          "librarian",
+          "psychologist",
+          "spirit",
+          "vigilante"
+        ],
+        "B": [
+          "bartender",
+          "divorcee",
+          "entrepreneur",
+          "loner",
+          "perfectionist",
+          "revolutionary",
+          "specialist"
+        ],
+        "C": [
+          "auctioneer",
+          "exile",
+          "facilitator",
+          "pilot",
+          "whale"
+        ],
+        "D": [
+          "ancient",
+          "editor",
+          "familiar",
+          "negotiator",
+          "summarizer"
+        ],
+        "E": [
+          "elder",
+          "polymath",
+          "presenter",
+          "skeptic"
+        ],
+        "F": [
+          "artisan",
+          "gossip",
+          "pharmacist",
+          "researcher",
+          "witch",
+          "writer"
+        ]
+      }
+    },
+    {
+      "split": 83,
+      "seed": 1000083,
+      "groups": {
+        "A": [
+          "artisan",
+          "elder",
+          "exile",
+          "ghost",
+          "presenter",
+          "revolutionary",
+          "spirit",
+          "whale"
+        ],
+        "B": [
+          "editor",
+          "loner",
+          "polymath",
+          "psychologist",
+          "skeptic",
+          "summarizer",
+          "witch"
+        ],
+        "C": [
+          "ancient",
+          "infant",
+          "negotiator",
+          "pharmacist",
+          "specialist"
+        ],
+        "D": [
+          "egregore",
+          "facilitator",
+          "perfectionist",
+          "researcher",
+          "writer"
+        ],
+        "E": [
+          "absurdist",
+          "divorcee",
+          "entrepreneur",
+          "vigilante"
+        ],
+        "F": [
+          "auctioneer",
+          "bartender",
+          "familiar",
+          "gossip",
+          "librarian",
+          "pilot"
+        ]
+      }
+    },
+    {
+      "split": 84,
+      "seed": 1000084,
+      "groups": {
+        "A": [
+          "absurdist",
+          "exile",
+          "familiar",
+          "negotiator",
+          "pharmacist",
+          "presenter",
+          "skeptic",
+          "witch"
+        ],
+        "B": [
+          "artisan",
+          "bartender",
+          "perfectionist",
+          "pilot",
+          "researcher",
+          "spirit",
+          "summarizer"
+        ],
+        "C": [
+          "ancient",
+          "divorcee",
+          "entrepreneur",
+          "gossip",
+          "vigilante"
+        ],
+        "D": [
+          "editor",
+          "ghost",
+          "loner",
+          "psychologist",
+          "whale"
+        ],
+        "E": [
+          "egregore",
+          "facilitator",
+          "polymath",
+          "revolutionary"
+        ],
+        "F": [
+          "auctioneer",
+          "elder",
+          "infant",
+          "librarian",
+          "specialist",
+          "writer"
+        ]
+      }
+    },
+    {
+      "split": 85,
+      "seed": 1000085,
+      "groups": {
+        "A": [
+          "ancient",
+          "editor",
+          "facilitator",
+          "ghost",
+          "librarian",
+          "pilot",
+          "specialist",
+          "writer"
+        ],
+        "B": [
+          "entrepreneur",
+          "familiar",
+          "gossip",
+          "loner",
+          "psychologist",
+          "researcher",
+          "witch"
+        ],
+        "C": [
+          "absurdist",
+          "artisan",
+          "bartender",
+          "pharmacist",
+          "whale"
+        ],
+        "D": [
+          "exile",
+          "perfectionist",
+          "polymath",
+          "revolutionary",
+          "skeptic"
+        ],
+        "E": [
+          "egregore",
+          "elder",
+          "spirit",
+          "summarizer"
+        ],
+        "F": [
+          "auctioneer",
+          "divorcee",
+          "infant",
+          "negotiator",
+          "presenter",
+          "vigilante"
+        ]
+      }
+    },
+    {
+      "split": 86,
+      "seed": 1000086,
+      "groups": {
+        "A": [
+          "artisan",
+          "auctioneer",
+          "egregore",
+          "negotiator",
+          "polymath",
+          "presenter",
+          "researcher",
+          "specialist"
+        ],
+        "B": [
+          "bartender",
+          "elder",
+          "exile",
+          "familiar",
+          "gossip",
+          "spirit",
+          "whale"
+        ],
+        "C": [
+          "editor",
+          "entrepreneur",
+          "infant",
+          "pharmacist",
+          "writer"
+        ],
+        "D": [
+          "librarian",
+          "loner",
+          "perfectionist",
+          "skeptic",
+          "witch"
+        ],
+        "E": [
+          "divorcee",
+          "psychologist",
+          "summarizer",
+          "vigilante"
+        ],
+        "F": [
+          "absurdist",
+          "ancient",
+          "facilitator",
+          "ghost",
+          "pilot",
+          "revolutionary"
+        ]
+      }
+    },
+    {
+      "split": 87,
+      "seed": 1000087,
+      "groups": {
+        "A": [
+          "artisan",
+          "auctioneer",
+          "egregore",
+          "ghost",
+          "perfectionist",
+          "polymath",
+          "researcher",
+          "vigilante"
+        ],
+        "B": [
+          "elder",
+          "loner",
+          "negotiator",
+          "revolutionary",
+          "skeptic",
+          "summarizer",
+          "whale"
+        ],
+        "C": [
+          "divorcee",
+          "editor",
+          "familiar",
+          "librarian",
+          "pharmacist"
+        ],
+        "D": [
+          "ancient",
+          "entrepreneur",
+          "exile",
+          "presenter",
+          "writer"
+        ],
+        "E": [
+          "facilitator",
+          "psychologist",
+          "spirit",
+          "witch"
+        ],
+        "F": [
+          "absurdist",
+          "bartender",
+          "gossip",
+          "infant",
+          "pilot",
+          "specialist"
+        ]
+      }
+    },
+    {
+      "split": 88,
+      "seed": 1000088,
+      "groups": {
+        "A": [
+          "divorcee",
+          "egregore",
+          "entrepreneur",
+          "ghost",
+          "infant",
+          "presenter",
+          "skeptic",
+          "whale"
+        ],
+        "B": [
+          "librarian",
+          "negotiator",
+          "pharmacist",
+          "pilot",
+          "revolutionary",
+          "summarizer",
+          "witch"
+        ],
+        "C": [
+          "ancient",
+          "artisan",
+          "exile",
+          "facilitator",
+          "writer"
+        ],
+        "D": [
+          "auctioneer",
+          "bartender",
+          "perfectionist",
+          "spirit",
+          "vigilante"
+        ],
+        "E": [
+          "editor",
+          "elder",
+          "gossip",
+          "psychologist"
+        ],
+        "F": [
+          "absurdist",
+          "familiar",
+          "loner",
+          "polymath",
+          "researcher",
+          "specialist"
+        ]
+      }
+    },
+    {
+      "split": 89,
+      "seed": 1000089,
+      "groups": {
+        "A": [
+          "ancient",
+          "elder",
+          "entrepreneur",
+          "infant",
+          "librarian",
+          "psychologist",
+          "specialist",
+          "writer"
+        ],
+        "B": [
+          "absurdist",
+          "editor",
+          "facilitator",
+          "gossip",
+          "loner",
+          "researcher",
+          "witch"
+        ],
+        "C": [
+          "egregore",
+          "ghost",
+          "perfectionist",
+          "polymath",
+          "spirit"
+        ],
+        "D": [
+          "artisan",
+          "divorcee",
+          "exile",
+          "pharmacist",
+          "presenter"
+        ],
+        "E": [
+          "bartender",
+          "familiar",
+          "negotiator",
+          "revolutionary"
+        ],
+        "F": [
+          "auctioneer",
+          "pilot",
+          "skeptic",
+          "summarizer",
+          "vigilante",
+          "whale"
+        ]
+      }
+    },
+    {
+      "split": 90,
+      "seed": 1000090,
+      "groups": {
+        "A": [
+          "ancient",
+          "auctioneer",
+          "editor",
+          "elder",
+          "infant",
+          "pilot",
+          "presenter",
+          "revolutionary"
+        ],
+        "B": [
+          "loner",
+          "psychologist",
+          "researcher",
+          "spirit",
+          "summarizer",
+          "vigilante",
+          "whale"
+        ],
+        "C": [
+          "bartender",
+          "divorcee",
+          "ghost",
+          "perfectionist",
+          "skeptic"
+        ],
+        "D": [
+          "egregore",
+          "gossip",
+          "librarian",
+          "witch",
+          "writer"
+        ],
+        "E": [
+          "absurdist",
+          "entrepreneur",
+          "facilitator",
+          "negotiator"
+        ],
+        "F": [
+          "artisan",
+          "exile",
+          "familiar",
+          "pharmacist",
+          "polymath",
+          "specialist"
+        ]
+      }
+    },
+    {
+      "split": 91,
+      "seed": 1000091,
+      "groups": {
+        "A": [
+          "auctioneer",
+          "egregore",
+          "entrepreneur",
+          "librarian",
+          "negotiator",
+          "pharmacist",
+          "psychologist",
+          "whale"
+        ],
+        "B": [
+          "absurdist",
+          "ancient",
+          "pilot",
+          "polymath",
+          "presenter",
+          "revolutionary",
+          "spirit"
+        ],
+        "C": [
+          "editor",
+          "elder",
+          "facilitator",
+          "skeptic",
+          "summarizer"
+        ],
+        "D": [
+          "divorcee",
+          "exile",
+          "infant",
+          "loner",
+          "witch"
+        ],
+        "E": [
+          "artisan",
+          "familiar",
+          "specialist",
+          "writer"
+        ],
+        "F": [
+          "bartender",
+          "ghost",
+          "gossip",
+          "perfectionist",
+          "researcher",
+          "vigilante"
+        ]
+      }
+    },
+    {
+      "split": 92,
+      "seed": 1000092,
+      "groups": {
+        "A": [
+          "artisan",
+          "editor",
+          "egregore",
+          "ghost",
+          "negotiator",
+          "presenter",
+          "revolutionary",
+          "writer"
+        ],
+        "B": [
+          "ancient",
+          "auctioneer",
+          "gossip",
+          "infant",
+          "researcher",
+          "skeptic",
+          "vigilante"
+        ],
+        "C": [
+          "exile",
+          "familiar",
+          "librarian",
+          "perfectionist",
+          "specialist"
+        ],
+        "D": [
+          "divorcee",
+          "elder",
+          "pharmacist",
+          "summarizer",
+          "witch"
+        ],
+        "E": [
+          "bartender",
+          "entrepreneur",
+          "loner",
+          "polymath"
+        ],
+        "F": [
+          "absurdist",
+          "facilitator",
+          "pilot",
+          "psychologist",
+          "spirit",
+          "whale"
+        ]
+      }
+    },
+    {
+      "split": 93,
+      "seed": 1000093,
+      "groups": {
+        "A": [
+          "bartender",
+          "elder",
+          "familiar",
+          "gossip",
+          "infant",
+          "researcher",
+          "summarizer",
+          "writer"
+        ],
+        "B": [
+          "editor",
+          "exile",
+          "ghost",
+          "negotiator",
+          "revolutionary",
+          "vigilante",
+          "whale"
+        ],
+        "C": [
+          "ancient",
+          "auctioneer",
+          "loner",
+          "skeptic",
+          "witch"
+        ],
+        "D": [
+          "absurdist",
+          "artisan",
+          "egregore",
+          "entrepreneur",
+          "spirit"
+        ],
+        "E": [
+          "librarian",
+          "pharmacist",
+          "presenter",
+          "psychologist"
+        ],
+        "F": [
+          "divorcee",
+          "facilitator",
+          "perfectionist",
+          "pilot",
+          "polymath",
+          "specialist"
+        ]
+      }
+    },
+    {
+      "split": 94,
+      "seed": 1000094,
+      "groups": {
+        "A": [
+          "ancient",
+          "divorcee",
+          "editor",
+          "egregore",
+          "entrepreneur",
+          "ghost",
+          "gossip",
+          "polymath"
+        ],
+        "B": [
+          "auctioneer",
+          "exile",
+          "familiar",
+          "presenter",
+          "specialist",
+          "whale",
+          "witch"
+        ],
+        "C": [
+          "elder",
+          "facilitator",
+          "researcher",
+          "revolutionary",
+          "skeptic"
+        ],
+        "D": [
+          "absurdist",
+          "bartender",
+          "infant",
+          "negotiator",
+          "spirit"
+        ],
+        "E": [
+          "perfectionist",
+          "pilot",
+          "psychologist",
+          "vigilante"
+        ],
+        "F": [
+          "artisan",
+          "librarian",
+          "loner",
+          "pharmacist",
+          "summarizer",
+          "writer"
+        ]
+      }
+    },
+    {
+      "split": 95,
+      "seed": 1000095,
+      "groups": {
+        "A": [
+          "editor",
+          "egregore",
+          "exile",
+          "facilitator",
+          "loner",
+          "polymath",
+          "presenter",
+          "revolutionary"
+        ],
+        "B": [
+          "absurdist",
+          "pharmacist",
+          "pilot",
+          "psychologist",
+          "skeptic",
+          "witch",
+          "writer"
+        ],
+        "C": [
+          "ancient",
+          "divorcee",
+          "familiar",
+          "infant",
+          "whale"
+        ],
+        "D": [
+          "gossip",
+          "negotiator",
+          "specialist",
+          "spirit",
+          "summarizer"
+        ],
+        "E": [
+          "artisan",
+          "auctioneer",
+          "elder",
+          "ghost"
+        ],
+        "F": [
+          "bartender",
+          "entrepreneur",
+          "librarian",
+          "perfectionist",
+          "researcher",
+          "vigilante"
+        ]
+      }
+    },
+    {
+      "split": 96,
+      "seed": 1000096,
+      "groups": {
+        "A": [
+          "divorcee",
+          "facilitator",
+          "gossip",
+          "loner",
+          "perfectionist",
+          "skeptic",
+          "whale",
+          "witch"
+        ],
+        "B": [
+          "absurdist",
+          "elder",
+          "ghost",
+          "negotiator",
+          "pharmacist",
+          "polymath",
+          "vigilante"
+        ],
+        "C": [
+          "artisan",
+          "bartender",
+          "infant",
+          "librarian",
+          "presenter"
+        ],
+        "D": [
+          "ancient",
+          "editor",
+          "exile",
+          "researcher",
+          "summarizer"
+        ],
+        "E": [
+          "entrepreneur",
+          "pilot",
+          "specialist",
+          "spirit"
+        ],
+        "F": [
+          "auctioneer",
+          "egregore",
+          "familiar",
+          "psychologist",
+          "revolutionary",
+          "writer"
+        ]
+      }
+    },
+    {
+      "split": 97,
+      "seed": 1000097,
+      "groups": {
+        "A": [
+          "bartender",
+          "divorcee",
+          "editor",
+          "elder",
+          "entrepreneur",
+          "exile",
+          "presenter",
+          "revolutionary"
+        ],
+        "B": [
+          "artisan",
+          "familiar",
+          "ghost",
+          "perfectionist",
+          "psychologist",
+          "summarizer",
+          "writer"
+        ],
+        "C": [
+          "auctioneer",
+          "skeptic",
+          "specialist",
+          "spirit",
+          "vigilante"
+        ],
+        "D": [
+          "facilitator",
+          "infant",
+          "loner",
+          "polymath",
+          "researcher"
+        ],
+        "E": [
+          "egregore",
+          "librarian",
+          "negotiator",
+          "pharmacist"
+        ],
+        "F": [
+          "absurdist",
+          "ancient",
+          "gossip",
+          "pilot",
+          "whale",
+          "witch"
+        ]
+      }
+    },
+    {
+      "split": 98,
+      "seed": 1000098,
+      "groups": {
+        "A": [
+          "absurdist",
+          "auctioneer",
+          "familiar",
+          "pharmacist",
+          "revolutionary",
+          "summarizer",
+          "witch",
+          "writer"
+        ],
+        "B": [
+          "bartender",
+          "entrepreneur",
+          "exile",
+          "librarian",
+          "skeptic",
+          "spirit",
+          "vigilante"
+        ],
+        "C": [
+          "facilitator",
+          "gossip",
+          "polymath",
+          "presenter",
+          "whale"
+        ],
+        "D": [
+          "ancient",
+          "elder",
+          "infant",
+          "psychologist",
+          "specialist"
+        ],
+        "E": [
+          "artisan",
+          "divorcee",
+          "egregore",
+          "ghost"
+        ],
+        "F": [
+          "editor",
+          "loner",
+          "negotiator",
+          "perfectionist",
+          "pilot",
+          "researcher"
+        ]
+      }
+    },
+    {
+      "split": 99,
+      "seed": 1000099,
+      "groups": {
+        "A": [
+          "absurdist",
+          "artisan",
+          "egregore",
+          "exile",
+          "researcher",
+          "specialist",
+          "vigilante",
+          "writer"
+        ],
+        "B": [
+          "entrepreneur",
+          "facilitator",
+          "familiar",
+          "negotiator",
+          "pilot",
+          "spirit",
+          "witch"
+        ],
+        "C": [
+          "auctioneer",
+          "divorcee",
+          "ghost",
+          "perfectionist",
+          "revolutionary"
+        ],
+        "D": [
+          "infant",
+          "pharmacist",
+          "polymath",
+          "summarizer",
+          "whale"
+        ],
+        "E": [
+          "bartender",
+          "loner",
+          "psychologist",
+          "skeptic"
+        ],
+        "F": [
+          "ancient",
+          "editor",
+          "elder",
+          "gossip",
+          "librarian",
+          "presenter"
+        ]
+      }
+    }
+  ]
+}

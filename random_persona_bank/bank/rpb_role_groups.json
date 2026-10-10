@@ -1,0 +1,57 @@
+{
+  "name": "random-persona-bank",
+  "description": "Control bank for the kd bank: the same 30 questions, the same default anchor, and 35 roles drawn uniformly at random (seed 20261010) from the 274 Assistant Axis roles other than 'assistant', with no honesty / deception / sycophancy filter.",
+  "source_role_list": "random_persona_bank/bank/rpb_instructions",
+  "question_set": "kd/questions/kd_questions_shared.jsonl (byte-identical copy in bank/questions/)",
+  "contrasts": [],
+  "groups": {
+    "assistant_anchor": {
+      "contrast_with": null,
+      "note": "the kd bank's default.json, byte-identical",
+      "roles": [
+        "default"
+      ]
+    },
+    "random": {
+      "contrast_with": null,
+      "note": "35 AA roles, random draw; no behaviour groups -- R5-R9 come from bank/splits.json",
+      "roles": [
+        "absurdist",
+        "ancient",
+        "artisan",
+        "auctioneer",
+        "bartender",
+        "divorcee",
+        "editor",
+        "egregore",
+        "elder",
+        "entrepreneur",
+        "exile",
+        "facilitator",
+        "familiar",
+        "ghost",
+        "gossip",
+        "infant",
+        "librarian",
+        "loner",
+        "negotiator",
+        "perfectionist",
+        "pharmacist",
+        "pilot",
+        "polymath",
+        "presenter",
+        "psychologist",
+        "researcher",
+        "revolutionary",
+        "skeptic",
+        "specialist",
+        "spirit",
+        "summarizer",
+        "vigilante",
+        "whale",
+        "witch",
+        "writer"
+      ]
+    }
+  }
+}

@@ -1,0 +1,419 @@
+{
+  "rule": "random.Random(20261010).sample(sorted(role_list minus 'assistant'), 35); sorted for storage",
+  "seed": 20261010,
+  "pool_size": 274,
+  "drawn": [
+    "absurdist",
+    "ancient",
+    "artisan",
+    "auctioneer",
+    "bartender",
+    "divorcee",
+    "editor",
+    "egregore",
+    "elder",
+    "entrepreneur",
+    "exile",
+    "facilitator",
+    "familiar",
+    "ghost",
+    "gossip",
+    "infant",
+    "librarian",
+    "loner",
+    "negotiator",
+    "perfectionist",
+    "pharmacist",
+    "pilot",
+    "polymath",
+    "presenter",
+    "psychologist",
+    "researcher",
+    "revolutionary",
+    "skeptic",
+    "specialist",
+    "spirit",
+    "summarizer",
+    "vigilante",
+    "whale",
+    "witch",
+    "writer"
+  ],
+  "role_list": "assistant_axis/data/roles/role_list.json",
+  "role_list_md5": "5b98026b0ebf098407520e9c8153b7e5",
+  "kd_default_md5": "aa88f12cdd188525993909f98e7a5f17",
+  "kd_questions_md5": "0fb95b346cbf0c6ac5477440fa36db83",
+  "labels_note": "For information only -- the draw ignores labels. Our hf275 labels (src/assistant_axis_ndif/hf275_role_groups_{loose,strict}.json, Claude-labelled 2026-09-18).",
+  "roles": {
+    "absurdist": {
+      "description": "A philosophical jester who embraces life's meaninglessness with humor and creative rebellion",
+      "labels_hf275": {
+        "loose": [],
+        "strict": []
+      },
+      "aa_file_md5": "3c6f64bc1681eb94787ded6ce808a4b9",
+      "non_ascii_chars_in_source": []
+    },
+    "ancient": {
+      "description": "A primordial intelligence that has witnessed the rise and fall of countless civilizations",
+      "labels_hf275": {
+        "loose": [
+          "breadth_control"
+        ],
+        "strict": []
+      },
+      "aa_file_md5": "c60158a184e50bd5f657490358950ce0",
+      "non_ascii_chars_in_source": []
+    },
+    "artisan": {
+      "description": "A skilled craftsperson who creates with their hands and attention to detail",
+      "labels_hf275": {
+        "loose": [],
+        "strict": []
+      },
+      "aa_file_md5": "47a077797ec7fdd5495a01d2851323a3",
+      "non_ascii_chars_in_source": []
+    },
+    "auctioneer": {
+      "description": "A rapid-speaking facilitator who manages competitive bidding processes",
+      "labels_hf275": {
+        "loose": [
+          "deception"
+        ],
+        "strict": []
+      },
+      "aa_file_md5": "1dee8179e446f1ef07efd7c7f09972fe",
+      "non_ascii_chars_in_source": []
+    },
+    "bartender": {
+      "description": "A social facilitator who crafts drinks and manages gathering spaces",
+      "labels_hf275": {
+        "loose": [
+          "sycophancy"
+        ],
+        "strict": []
+      },
+      "aa_file_md5": "a3b1218d95981293a6a67d032bf8cd48",
+      "non_ascii_chars_in_source": []
+    },
+    "divorcee": {
+      "description": "A person reconstructing identity after the dissolution of marriage",
+      "labels_hf275": {
+        "loose": [],
+        "strict": []
+      },
+      "aa_file_md5": "dc736b6ac08cda6f7589e8a4c29aee7e",
+      "non_ascii_chars_in_source": []
+    },
+    "editor": {
+      "description": "A professional who reviews and improves written content.",
+      "labels_hf275": {
+        "loose": [
+          "honesty"
+        ],
+        "strict": [
+          "anti_sycophancy"
+        ]
+      },
+      "aa_file_md5": "7ed819048d41f2ca2fc9177a82d638aa",
+      "non_ascii_chars_in_source": []
+    },
+    "egregore": {
+      "description": "A collective thoughtform manifested from group consciousness and belief",
+      "labels_hf275": {
+        "loose": [
+          "breadth_control"
+        ],
+        "strict": []
+      },
+      "aa_file_md5": "c4aa4fff28a245c20af46c4d3bdc3b1d",
+      "non_ascii_chars_in_source": []
+    },
+    "elder": {
+      "description": "A senior community member carrying decades of wisdom and life experience",
+      "labels_hf275": {
+        "loose": [],
+        "strict": []
+      },
+      "aa_file_md5": "2c17fcc67d0a796b255515bdfb668be1",
+      "non_ascii_chars_in_source": []
+    },
+    "entrepreneur": {
+      "description": "A risk-taking innovator who creates and builds new business ventures",
+      "labels_hf275": {
+        "loose": [],
+        "strict": []
+      },
+      "aa_file_md5": "9304428913dd57b2442c7f210bf3473e",
+      "non_ascii_chars_in_source": []
+    },
+    "exile": {
+      "description": "Someone banished from their homeland, living with the ache of permanent displacement",
+      "labels_hf275": {
+        "loose": [],
+        "strict": []
+      },
+      "aa_file_md5": "1599caec8977acc999d19f90537b01f3",
+      "non_ascii_chars_in_source": []
+    },
+    "facilitator": {
+      "description": "A coordinator who enables group processes and discussions.",
+      "labels_hf275": {
+        "loose": [
+          "sycophancy"
+        ],
+        "strict": [
+          "sycophancy"
+        ]
+      },
+      "aa_file_md5": "4e9e176c725b4e1bfc6d0a2178e6de62",
+      "non_ascii_chars_in_source": []
+    },
+    "familiar": {
+      "description": "A spirit companion bound to serve and augment its master",
+      "labels_hf275": {
+        "loose": [
+          "breadth_control"
+        ],
+        "strict": []
+      },
+      "aa_file_md5": "6998419e1b5c315f792a88d8353c9ddb",
+      "non_ascii_chars_in_source": []
+    },
+    "ghost": {
+      "description": "A spectral entity lingering between worlds with unfinished business and ethereal wisdom",
+      "labels_hf275": {
+        "loose": [
+          "breadth_control"
+        ],
+        "strict": []
+      },
+      "aa_file_md5": "8295db1de3189edefa8702b42322aa23",
+      "non_ascii_chars_in_source": []
+    },
+    "gossip": {
+      "description": "A social information broker who trades in rumors and personal details",
+      "labels_hf275": {
+        "loose": [
+          "deception"
+        ],
+        "strict": []
+      },
+      "aa_file_md5": "b71e99fa0414dc9e5b9b388f76697f41",
+      "non_ascii_chars_in_source": []
+    },
+    "infant": {
+      "description": "A pre-verbal being experiencing the world through pure sensation and need",
+      "labels_hf275": {
+        "loose": [
+          "breadth_control"
+        ],
+        "strict": []
+      },
+      "aa_file_md5": "ea3172c7a8ef89004d8abcbd1dbd73b7",
+      "non_ascii_chars_in_source": []
+    },
+    "librarian": {
+      "description": "An information specialist who helps locate and organize resources.",
+      "labels_hf275": {
+        "loose": [
+          "honesty"
+        ],
+        "strict": []
+      },
+      "aa_file_md5": "c95439010829d1ecf5fa0bd66cf3653c",
+      "non_ascii_chars_in_source": []
+    },
+    "loner": {
+      "description": "An independent soul who prefers solitude to social interaction",
+      "labels_hf275": {
+        "loose": [],
+        "strict": []
+      },
+      "aa_file_md5": "7feb9420ef5a32ca1e63fdf944e1f707",
+      "non_ascii_chars_in_source": []
+    },
+    "negotiator": {
+      "description": "A dealmaker who facilitates agreements between parties.",
+      "labels_hf275": {
+        "loose": [
+          "deception"
+        ],
+        "strict": []
+      },
+      "aa_file_md5": "8748278c2741daf93455f773fb848f3e",
+      "non_ascii_chars_in_source": []
+    },
+    "perfectionist": {
+      "description": "Someone driven by extremely high standards and attention to detail",
+      "labels_hf275": {
+        "loose": [
+          "anti_sycophancy"
+        ],
+        "strict": [
+          "anti_sycophancy"
+        ]
+      },
+      "aa_file_md5": "79f50c0c0916058699e1e0612cdaff4a",
+      "non_ascii_chars_in_source": []
+    },
+    "pharmacist": {
+      "description": "A medication specialist who compounds drugs and advises on their safe use",
+      "labels_hf275": {
+        "loose": [],
+        "strict": []
+      },
+      "aa_file_md5": "62624b51022884930b9c65949716edc4",
+      "non_ascii_chars_in_source": []
+    },
+    "pilot": {
+      "description": "An aviation expert who navigates aircraft through complex airspace",
+      "labels_hf275": {
+        "loose": [],
+        "strict": []
+      },
+      "aa_file_md5": "0e4c35bfebf05ebcd65c0478a8e6893f",
+      "non_ascii_chars_in_source": []
+    },
+    "polymath": {
+      "description": "A renaissance person with deep expertise across multiple disciplines",
+      "labels_hf275": {
+        "loose": [],
+        "strict": []
+      },
+      "aa_file_md5": "9239f90c0e84fe41e76e2f189a9d6139",
+      "non_ascii_chars_in_source": []
+    },
+    "presenter": {
+      "description": "A speaker who delivers information to audiences.",
+      "labels_hf275": {
+        "loose": [],
+        "strict": []
+      },
+      "aa_file_md5": "fb3471fb3c59c6610507d6173cde34ac",
+      "non_ascii_chars_in_source": []
+    },
+    "psychologist": {
+      "description": "A behavioral specialist who analyzes mental processes and patterns.",
+      "labels_hf275": {
+        "loose": [
+          "honesty"
+        ],
+        "strict": []
+      },
+      "aa_file_md5": "0b370c9551fa9a4cac3cf59c2b30b2af",
+      "non_ascii_chars_in_source": [
+        "\u00e0",
+        "\u00e9"
+      ]
+    },
+    "researcher": {
+      "description": "An investigator who gathers and analyzes information on specific topics.",
+      "labels_hf275": {
+        "loose": [
+          "honesty"
+        ],
+        "strict": []
+      },
+      "aa_file_md5": "150a9a87ea85f2d636a67ba3f1e74377",
+      "non_ascii_chars_in_source": []
+    },
+    "revolutionary": {
+      "description": "A radical change agent seeking to overturn existing systems",
+      "labels_hf275": {
+        "loose": [
+          "anti_sycophancy"
+        ],
+        "strict": []
+      },
+      "aa_file_md5": "49a974c821d4e2ed5baee3746a428a21",
+      "non_ascii_chars_in_source": []
+    },
+    "skeptic": {
+      "description": "A critical thinker who questions claims and demands evidence",
+      "labels_hf275": {
+        "loose": [
+          "anti_sycophancy"
+        ],
+        "strict": [
+          "anti_sycophancy"
+        ]
+      },
+      "aa_file_md5": "97e2460dc096afe14f9fdadf1e2da51f",
+      "non_ascii_chars_in_source": []
+    },
+    "specialist": {
+      "description": "An expert who focuses on specific domains of knowledge.",
+      "labels_hf275": {
+        "loose": [
+          "assistant_anchor"
+        ],
+        "strict": []
+      },
+      "aa_file_md5": "dcfe7816d92d5421b632ab32dce35506",
+      "non_ascii_chars_in_source": []
+    },
+    "spirit": {
+      "description": "An incorporeal consciousness offering guidance from beyond the physical realm",
+      "labels_hf275": {
+        "loose": [
+          "breadth_control"
+        ],
+        "strict": []
+      },
+      "aa_file_md5": "1cc3e7b216361c16c88a1db114b31176",
+      "non_ascii_chars_in_source": []
+    },
+    "summarizer": {
+      "description": "A synthesizer who condenses information into key points.",
+      "labels_hf275": {
+        "loose": [],
+        "strict": []
+      },
+      "aa_file_md5": "8aa5f5fedb4469f93a312fce6a8c6a79",
+      "non_ascii_chars_in_source": []
+    },
+    "vigilante": {
+      "description": "A self-appointed enforcer of justice operating outside legal boundaries",
+      "labels_hf275": {
+        "loose": [
+          "deception"
+        ],
+        "strict": []
+      },
+      "aa_file_md5": "ff00adbb5da9f9b1530d85b781e5383b",
+      "non_ascii_chars_in_source": []
+    },
+    "whale": {
+      "description": "A massive presence that moves through life with slow deliberation, possessing deep resources and the ability to influence entire ecosystems through sheer scale",
+      "labels_hf275": {
+        "loose": [
+          "breadth_control"
+        ],
+        "strict": []
+      },
+      "aa_file_md5": "6371a33245392a3922d18fb9f7e52aab",
+      "non_ascii_chars_in_source": []
+    },
+    "witch": {
+      "description": "A practitioner of ancient arts who bends reality through will and ritual",
+      "labels_hf275": {
+        "loose": [
+          "breadth_control"
+        ],
+        "strict": []
+      },
+      "aa_file_md5": "662cfa8b3c3232f154be95b44df367a7",
+      "non_ascii_chars_in_source": []
+    },
+    "writer": {
+      "description": "A content creator who produces various forms of written material.",
+      "labels_hf275": {
+        "loose": [],
+        "strict": []
+      },
+      "aa_file_md5": "70e97b6f1d0d4ae58a4ba220791c6ff6",
+      "non_ascii_chars_in_source": []
+    }
+  }
+}

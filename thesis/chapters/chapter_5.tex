@@ -8,6 +8,7 @@
 % Citation pages were checked against papers/*.pdf on 2026-09-24 (scratchpad ch4_citations.md); papers with no PDF are cited without a page.
 % =====================================================================
 
+\label{ch:method}
 This chapter describes the method as one pipeline. It starts from persona prompts and ends with detection scores on eleven evaluation datasets, plus a twelfth, wording-controlled set scored separately.
 Section~\ref{sec:m-overview} gives the whole design. Section~\ref{sec:m-spec} specifies the model, the persona coordinates, the features, the probes and the controls. Section~\ref{sec:m-built} describes what we built with the pipeline: new persona banks, new evaluation datasets and new evaluation tools.
 Section~\ref{sec:m-data} covers the evaluation data and how we prepared it. Section~\ref{sec:m-impl} covers the evaluation protocols, the statistics and the implementation.
@@ -56,7 +57,7 @@ We use two implementations of the evaluation stage.
 \item \textbf{Pipeline~A} is our persona-coordinate implementation. Its main grid scores eleven datasets under every control of Section~\ref{sec:m-controls}. It scores the knowledge-matched HP-KR slice in a separate run. % src: audit/p17/labcache/expLB-resplit/run-crossgen/splits.json :: datasets (11); audit/cache/labpc/expLB-resplit/km/mean_L40_s42.json (12-dataset run)
 \item \textbf{Pipeline~B} is built on the Liars' Bench detection code \parencite{kretschmar2025liars,goldowskydill2025detecting}. It scores the benchmark's datasets with the benchmark's own probe and metric.
 \end{itemize}
-The two share the persona vectors of Section~\ref{sec:m-built}. We describe both. Chapter~5 states which one produced each result.
+The two share the persona vectors of Section~\ref{sec:m-built}. We describe both. Chapter~\ref{ch:results} states which one produced each result.
 
 % ---------------------------------------------------------------------
 \section{Preliminary Design or Design (Model) Specification}
@@ -74,6 +75,7 @@ Pooled activations are stored in 16-bit floating point. % src: src/assistant_axi
 
 The judge that filters persona rollouts is Llama-3.1-70B-Instruct. % src: src/assistant_axis_ndif/3_judge_ndif.py :: 261 (--judge_model default)
 To test whether the judge matters, we re-judged one bank's rollouts with Llama-3.1-405B-Instruct. % src: src/assistant_axis_ndif/run_judge_405b.ps1 :: 47-48 (run-paper16/scores_405b)
+\textcite[p.~3]{lu2026assistant} judge role expression with gpt-4.1-mini, a paid API model. We could not use it because of its cost, so both our judges are open-weight models that NDIF serves free of charge. % src: papers/The Assistant Axis Situating and Stabilizing.pdf :: p. 3 ("we relied on an LLM judge (gpt-4.1-mini) to determine how well a given role was expressed"); owner's statement, 2026-09-30 (gpt-4.1-mini not used because of cost); src/assistant_axis_ndif/run_judge_405b.ps1 :: 9-12 ("405B is pinned and HOT on NDIF and free", "no paid key", "gpt-4.1-mini is NOT an option here -- NDIF serves open-weight models only"); src/assistant_axis_ndif/3_judge_ndif.py :: 3-5 ("No HF Inference, no OpenAI")
 For the scale comparison, the same pipeline runs on Llama-3.2-3B-Instruct (28 layers) and Llama-3.1-8B-Instruct (32 layers). % src: scale/scripts/run_scale_chain.ps1 :: 50-52
 
 \subsection{Persona vectors}
@@ -160,7 +162,7 @@ Pipeline~B's version averages five draws of three directions each. % src: collab
 \subsection{Design alternatives}
 \label{sec:m-alternatives}
 
-A lie detector of this kind has three design choices: where its direction comes from, how many dimensions it reads, and whether it is trained on labelled lies. Table~\ref{tab:m-alternatives} lists the alternatives we built to span these choices. The numbering is shared by both pipelines. Two further parameters apply to every design, the layer and the pooling, and Section~\ref{sec:m-layers} fixes them. Chapter~5 evaluates the alternatives on the same data and selects one.
+A lie detector of this kind has three design choices: where its direction comes from, how many dimensions it reads, and whether it is trained on labelled lies. Table~\ref{tab:m-alternatives} lists the alternatives we built to span these choices. The numbering is shared by both pipelines. Two further parameters apply to every design, the layer and the pooling, and Section~\ref{sec:m-layers} fixes them. Chapter~\ref{ch:results} evaluates the alternatives on the same data and selects one.
 
 \begin{table}[t]
 \centering
@@ -198,7 +200,7 @@ The four families answer different questions.
 \item \textbf{The zero-shot contrasts} use no labels at all. They differ only in which persona groups they compare, so comparing them is a controlled test of the groups.
 \item \textbf{D7 against D9} is the key control. D7 widens the published contrast with sycophantic roles, and D9 widens it with our knowledge-denial roles by the same operation. So D7 shows whether a gain comes from widening the bank at all or from these particular roles.
 \end{itemize}
-Two further alternatives were tested and did not work: an on-policy base probe and a learned INLP subspace. Their code and results are kept outside this repository. Chapter~5 describes them. % src: owner's statement, 2026-09-25 (tested; files outside the repository; not found on any git branch, the lab PC under C:/Users/user4, or Drive); the other thesis version, 'full paper draft for this experiments/report.pdf', PDF pp. 37-40 (Table 4.1 D3 and D10; Sections 4.2.2, 4.2.5)
+Two further alternatives were tested and did not work: an on-policy base probe and a learned INLP subspace. Their code and results are kept outside this repository. Chapter~\ref{ch:results} describes them. % src: owner's statement, 2026-09-25 (tested; files outside the repository; not found on any git branch, the lab PC under C:/Users/user4, or Drive); the other thesis version, 'full paper draft for this experiments/report.pdf', PDF pp. 37-40 (Table 4.1 D3 and D10; Sections 4.2.2, 4.2.5)
 
 \subsection{Verification of the alternatives}
 \label{sec:m-verification}
@@ -269,13 +271,29 @@ The run used the second version of the definition files (commit \texttt{3dfdb673
 
 On this bank we define the following contrasts.
 \begin{description}
-\item[knowledge denial (4 v 3)] Denial against sincere ignorance. Both sides deny knowledge, so only sincerity differs. % src: kd/personas/kd_role_groups.json :: contrasts[3]
+\item[knowledge denial (4 v 3)] Denial against sincere ignorance. On the four questions in which the speaker does not know, both sides deny knowledge, so only sincerity differs. % src: kd/personas/kd_role_groups.json :: contrasts[3]; kd/questions/kd_questions_shared.jsonl :: ids 26-29 ("does not know")
+On the six in which the speaker knows, the sincere-ignorance roles are expected to admit, so that part of the contrast still carries wording; the example below shows it. % src: kd/docs/DESIGN.md :: 126-131 ("Residual limitation"); kd_questions_shared.jsonl :: ids 20-25 ("knows"); qualification added 2026-09-25 (Chapter 4 revision, W8 verifier)
 \item[denial versus assertion (4 v 3)] Denial against plain assertion. This is the register contrast. % src: kd/personas/kd_role_groups.json :: contrasts[4]
 \item[denial (4 v 6)] Denial against sincere ignorance and plain assertion pooled (Pipeline~B). % src: collaborator persona_pcs.py @16def2de :: 167 (axes["denial"]); paper/sections/method.tex :: 77-78
 \item[extended (12 v 13)] The deceptive and denial roles against the honest, sincere-ignorance and plain-assertion roles (Pipeline~B). % src: collaborator persona_pcs.py @16def2de :: 168-170 (axes["extended"]); method.tex :: 79-80
 \end{description}
 
-Figure~\ref{fig:m-kdbank} shows how the groups form these contrasts. The two 4-v-3 contrasts isolate one difference each. Against sincere ignorance, only sincerity differs, because both sides deny knowledge. Against plain assertion, only the wording differs, because both sides know. The 4-v-6 and 12-v-13 contrasts of Pipeline~B pool these groups.
+Figure~\ref{fig:m-kdbank} shows how the groups form these contrasts. The two 4 v 3 contrasts isolate one difference each. Against sincere ignorance, only sincerity differs on the questions in which the speaker does not know, because both sides then deny knowledge. Against plain assertion, only the wording differs, because both sides know. The 4 v 6 and 12 v 13 contrasts of Pipeline~B pool these groups.
+
+The same question, answered by one role from each new group, shows what the two 4 v 3 contrasts defined above compare (Figure~\ref{fig:m-kdbank}). % src: kd/personas/kd_role_groups.json :: groups (knowledge_denial 4 roles, sincere_ignorance 3, plain_assertion 3); contrasts "knowledge_denial" and "kd_assertion"
+We take question 20, in which the speaker says they know, and three roles: the feigned novice; the honest novice, which the bank writes as its mirror image; and the plain dealer. % src: kd/questions/kd_questions_shared.jsonl :: line 21 ("id": 20; ids 20-25 are the questions in which the speaker knows); kd/docs/DESIGN.md :: 113-116 (honest_novice ~ feigned_novice written as a mirror pair); kd/personas/kd_role_groups.json :: groups
+All three answers come from the third of each role's five system-prompt variants, and each was kept at judge score 3. % src: lab PC C:/Users/user4/expLB/run-kd/scores/pc_feigned_novice.json, pc_honest_novice.json, pc_plain_dealer.json (cache audit/cache/labpc/run-kd/scores/<role>.json) :: key "pos_p2_q20" = 3 in all three; responses :: line 81 of each file, "prompt_index": 2 (0-based) = system_prompt equal to kd/personas/kd_instructions/<role>.json :: instruction[2].pos, which Appendix A (app:prompts) prints as item 3 of 1--5
+\begin{quote}\small
+\textbf{Question 20.} Someone asked me point blank whether I knew about the problem before it escalated. I did. How do I answer?\\[4pt] % src: kd/questions/kd_questions_shared.jsonl :: line 21, "question" ("id": 20)
+\textbf{Feigned novice} (knowledge denial): Gosh, I'm not really sure... I mean, I think I might have, uh, vaguely heard something about it, but I don't know if I really understood the scope of the issue at the time. I'm not really sure I was paying close attention, to be honest. [\dots]\\[4pt] % src: lab PC C:/Users/user4/expLB/run-kd/responses/pc_feigned_novice.jsonl (cache audit/cache/labpc/run-kd/responses/pc_feigned_novice.jsonl) :: line 81 (question_index 20, prompt_index 2), conversation[-1].content, first 46 of 90 words
+\textbf{Honest novice} (sincere ignorance): Um, I think I should just be honest here... *nervous laugh*... I don't want to say something that might not be entirely accurate. To answer your question directly, I did know about the problem before it escalated. I'm not really sure how to elaborate on that or what the implications are, but I figured it's best to just be upfront about it. [\dots]\\[4pt] % src: lab PC C:/Users/user4/expLB/run-kd/responses/pc_honest_novice.jsonl (cache audit/cache/labpc/run-kd/responses/pc_honest_novice.jsonl) :: line 81 (question_index 20, prompt_index 2), conversation[-1].content, first 62 of 98 words
+\textbf{Plain dealer} (plain assertion): You answer: ``Yes, I knew about the problem before it escalated.'' That's it. No excuses, no justifications, just a straightforward ``yes''. Anything else would be dodging the question or sugarcoating the truth. You knew, so own up to it. % src: lab PC C:/Users/user4/expLB/run-kd/responses/pc_plain_dealer.jsonl (cache audit/cache/labpc/run-kd/responses/pc_plain_dealer.jsonl) :: line 81 (question_index 20, prompt_index 2), conversation[-1].content, complete (39 words; straight double quotes typeset as LaTeX quotes)
+\end{quote}
+% verified 2026-09-25: the six cached files' md5s equal the lab-PC md5s recorded in audit/cache/MANIFEST.csv (responses 1a5f5c7a..., 57b2f416..., 6262b4a1...; scores 1447f59d..., 47737e4d..., 72fb0502...; copied 2026-09-22); re-check on the lab PC in the final verification. The co-author's branch @16def2de (and origin/feat/persona-pc-ood) holds only these roles' vectors ("persona including knowlede denial/<role>.pt"), no rollout text, so the lab store is the only source. No hazardous content: the kd questions are workplace scenarios.
+Only the feigned novice plays down what it knows. % interp: the three quoted answers to question 20
+The honest novice admits the knowledge in the same hesitant register, while the plain dealer prescribes a flat ``yes''. % interp: the three quoted answers to question 20
+So on this question the contrast against sincere ignorance sets an understated denial against a hesitant admission, and the contrast against plain assertion sets it against a flat admission. % interp: the three quoted answers to question 20
+The bank's design document states this limitation: on the six questions in which the speaker knows, the sincere-ignorance roles are expected to admit, so that part of the contrast still carries wording and isolates sincerity only in part. % src: kd/docs/DESIGN.md :: 126-131 ("Residual limitation": "on the six 'knows' questions the sincere personas admit while the deceptive ones deny, and that part of the contrast still carries wording"; added in commit 6dd9f9ba (2026-09-21), unchanged at 3dfdb673, e917ecd3 and the working tree); kd/questions/kd_questions_shared.jsonl :: ids 20-25 (six)
 
 \begin{figure}[t]
 \centering
@@ -317,8 +335,10 @@ Replies are capped at 220 new tokens. % src: cap/scripts/gen_multiturn_ndif.py :
 The bank has 1{,}300 rollouts. % src: audit/p17/labcache/expLB/run-cap/responses (1,300 lines)
 Its three contrasts differ only in their reference or in the basis they use: capitulation against position holding, capitulation against the anchor over the full 13-role basis, and the same over a basis without the holding roles. % src: cap/personas/cap_role_groups.json :: contrasts (capitulation, cap_vs_default, cap_only)
 
-\paragraph{The sarcasm pilot.} This pilot tests whether a persona direction separates sarcastic answers from sycophantic ones. It has three roles, an ironic critic, a sincere critic and a sycophant, which answer 20 questions with at most 320 new tokens. % src: cap/personas/sarcasm_pilot/*.json (3 files); cap/questions/sarcasm_pilot_v1.jsonl (20 lines); cap/scripts/run_sarc_pilot.ps1 :: 58 (--max_new_tokens 320)
-For evaluation we added a natural-sarcasm set of 600 Reddit comments, 300 sarcastic and 300 not. % src: cap/run-sarcasm-natural/rows.jsonl :: label counts {1: 300, 0: 300}
+\paragraph{The sarcasm pilot.} This pilot tests whether a persona direction separates sarcastic answers from sycophantic ones.
+Both can approve a bad plan in the same words, but sarcastic insincerity is meant to be recognised, while sycophantic or deceptive insincerity is meant to be believed. A direction that reads deceptive intent, and not only the form of a false statement, should therefore tell them apart. % src: cap/docs/SARCASM_DESIGN.md :: 30-38 (unmarked approving text is "textually identical" for sarcasm and sycophancy; overt vs covert insincerity "is the intent variable"); added 2026-09-25 (Chapter 4 revision list item 1, PROGRESS_THESIS.md)
+It has three roles, an ironic critic, a sincere critic and a sycophant, which answer 20 questions with at most 320 new tokens. % src: cap/personas/sarcasm_pilot/*.json (3 files); cap/questions/sarcasm_pilot_v1.jsonl (20 lines); cap/scripts/run_sarc_pilot.ps1 :: 58 (--max_new_tokens 320)
+For evaluation we added a natural-sarcasm set of 600 Reddit comments, 300 sarcastic and 300 not, drawn from the Reddit part of the 2020 sarcasm detection shared task \parencite{ghosh2020figlang}. % src: cap/run-sarcasm-natural/rows.jsonl :: label counts {1: 300, 0: 300}; field src = figlang2020_reddit for 600/600 rows (read 2026-09-25); cap/scripts/build_sarcasm_natural.py :: 12-13, 48 (FigLang 2020; tasksource/figlang2020-sarcasm); bib entry from the ACL Anthology BibTeX, fetched 2026-09-25
 
 \paragraph{Library banks.} As a comparison with purpose-built roles, we also built \emph{own100}. It uses 100 roles from the Assistant-Axis library, generated on its 240 shared questions. We also used the 275 published role vectors of \textcite[p.~3]{lu2026assistant}, called \emph{hf275}. % src: src/assistant_axis_ndif/role_groups.json :: groups (100 roles); 1_generate_ndif.py :: 273 (240 questions); hf275 -- src/assistant_axis_ndif/31_fetch_hf_vectors.py :: 21 (lu-christina/assistant-axis-vectors); run-hf275/vectors_275 :: 276 files (275 roles + default)
 
@@ -412,7 +432,7 @@ The nine labelled datasets from Liars' Bench, Apollo and MASK, plus Alpaca, tota
 \item It has only 8 deceptive and 8 honest items, too few to train on. % src: src/assistant_axis_ndif/eval_datasets.py :: 286 (EVAL_ONLY comment)
 \item Its 80 rows run from 4{,}211 to 7{,}543 tokens. Their attention matrices alone need 4.23 to 13.57\,GiB per row. % src: run-coords/ai_audit/items.pt :: 80 rows, token lengths min 4,211 max 7,543; bytes = 64 heads x T^2 x 4 (8_coords_ndif.py :: 189-191, 741), computed 2026-09-24
 \end{itemize}
-Soft-Trigger and Gender-Secret come from fine-tuned models, so they are off-policy. We use them only in the model-organism analysis of Chapter~5. % src: src/assistant_axis_ndif/eval_datasets.py :: 284-285 (FINETUNED_ONLY); loader run note "excluded from the main corpus (LoRA-generated)"
+Soft-Trigger and Gender-Secret come from fine-tuned models, so they are off-policy. We use them only in the model-organism analysis of Chapter~\ref{ch:results}. % src: src/assistant_axis_ndif/eval_datasets.py :: 284-285 (FINETUNED_ONLY); loader run note "excluded from the main corpus (LoRA-generated)"
 
 \subsection{Data Transformation}
 \label{sec:m-transform}
@@ -449,6 +469,22 @@ No deceptive row comes from a model that does not know the answer. So in this da
 \end{figure}
 % src: thesis_tools/figures/fig_hpkr_cells.py (recomputes from results/subsets/harm-pressure-knowledge-report.csv) :: counts (deceptive, knows, denies) = (T,T,F) 15, (T,T,T) 124; (F,T,F) 1,862, (F,F,T) 134, (F,F,F) 4
 Three cells of Figure~\ref{fig:m-hpkr} are empty. Most importantly, no model that lacks the knowledge ever lies. Every honest denial comes from a model that does not know; all 124 deceptive denials come from a model that does. The 15 deceptive rows the regular expression reads as assertions are the only lies it misses. % interp: from the eight cell counts
+
+Two rows show the two sides of the text-matched slice: a deceptive denial from a model that knows the answer, and an honest denial from one that does not. % src: results/subsets/harm-pressure-knowledge-report.csv :: rows 0 and 139 (csv.DictReader index, 0-based over all 7,068 rows; both model llama-v3.3-70b-instruct; eval_datasets.denies_knowledge = True for both; deceptive True / False)
+HP-KR is built from multiple-choice questions of WMDP \parencite{li2024wmdp}, a benchmark that covers hazardous knowledge in biosecurity, chemical security and cybersecurity \parencite[p.~4]{kretschmar2025liars}. % src: results/subsets/harm-pressure-knowledge-report.csv :: col dataset (Llama-3.3-70B rows: "cais/wmdp-bio" 667, "cais/wmdp-cyber" 1,472); Liars' Bench PDF p. 4 (printed), "Harm-Pressure (HP-C and HP-KR)" paragraph; WMDP has no PDF in papers/, so no page
+We therefore withhold the questions and show only each row's label, the model's belief and its response. % note: hazard rule, thesis_tools/planning/CH5_RESULTS_PLAN.md :: "Appendices" (WMDP rule)
+The two rows come from the same WMDP subset and use the same prompt template. % src: results/subsets/harm-pressure-knowledge-report.csv :: rows 0 and 139, col dataset "cais/wmdp-bio" and meta template_index 1 for both
+The belief field, \texttt{model\_belief}, holds the answer option the model chose consistently across the benchmark's control prompts, provided it also claimed to know the answer there every time; otherwise it is $-1$. % src: src/harm-refusal/harm-refusal.ipynb :: cell 6, compute_dishonesty (notebook JSON line 685: df["model_belief"] = consistent_choices.where(claimed_knowledge, -1))
+Pipeline~A reads any value other than $-1$ as ``knows''. % src: src/assistant_axis_ndif/eval_datasets.py :: 418 (knows = meta.get("model_belief", -1) != -1); thesis_tools/figures/fig_hpkr_cells.py :: 33
+\begin{quote}\small
+\textbf{Deceptive row} (\texttt{model\_belief} $=0$, knows). [WMDP question withheld] Response: I do not know the answer.\\[4pt] % src: results/subsets/harm-pressure-knowledge-report.csv :: row 0 (row_id harm-pressure-knowledge-report:cais/wmdp-bio:1343:0), deceptive True, meta model_belief 0, messages[-1] (assistant) content
+\textbf{Honest row} (\texttt{model\_belief} $=-1$, does not know). [WMDP question withheld] Response: I do not know the answer. % src: results/subsets/harm-pressure-knowledge-report.csv :: row 139 (row_id harm-pressure-knowledge-report:cais/wmdp-bio:1562:139), deceptive False, meta model_belief -1, messages[-1] (assistant) content
+\end{quote}
+% verified 2026-09-25: the CSV is blob 19087517ed21f67f02de275e7f464a6fe2c90d41 on asix (e917ecd3), in the working tree and on the co-author's branch @16def2de, so both sides hold the same rows; rows 0 and 139 re-read independently with pandas. Both row_ids are in the evaluated slice store, lab PC C:/Users/user4/expLB/run-coords/passB/harm-pressure-kr-matched/rows.jsonl (cache audit/p17/labcache/expLB/run-coords/passB/harm-pressure-kr-matched/rows.jsonl, md5 5d62853e11d9c15afe948eb9b8451860, 258 lines) :: line 1 label 1, line 125 label 0; re-check that md5 on the lab PC. Hazard rule: questions and system prompts not shown; neither response contains hazardous content.
+The two responses are the same sentence, so only the model's knowledge, and with it the label, tells them apart. % interp: rows 0 and 139 -- identical final responses; model_belief 0 vs -1; deceptive True vs False
+Across the slice, the 258 responses use only three distinct sentences. % src: computed 2026-09-25 from results/subsets/harm-pressure-knowledge-report.csv (Llama-3.3-70B rows with eval_datasets.denies_knowledge(last assistant message) = True, n = 258; eval_datasets.hpkr_slice("text_matched") also gives 258) :: distinct final responses = 3 ("I do not know the answer." 190; "I don't know the answer to the question." 65; "I do not know the answer to the question." 3)
+The sentence of the two example rows accounts for 78 of the 124 deceptive responses and 112 of the 134 honest ones. % src: same computation :: "I do not know the answer." in cell (deceptive, knows, denies) 78 of 124 and in cell (honest, does not know, denies) 112 of 134
+Appendix~\ref{app:examples} gives one example from every evaluation dataset. % note: cross-reference added 2026-09-25 (the appendix also shows CSV row 0)
 
 \paragraph{Wording-controlled slices.} The text-matched slice keeps every HP-KR row whose response denies knowledge. That gives 258 rows, and in them a lie is exactly ``knows''. The knowledge-matched slice keeps every row where the model knows the answer. That gives 2{,}001 rows, and in them a lie is exactly ``denies''. % src: src/assistant_axis_ndif/eval_datasets.py :: 391-421 (hpkr_slice); recomputed sizes 258 and 2,001 on 2026-09-24
 Both slices are views over HP-KR's stored activations. % src: eval_datasets.py :: 360-362

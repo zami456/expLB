@@ -274,3 +274,61 @@ refuses to run without. Output went to `expLB-resplit`, never to `expLB`.
 split regenerated identically and `pc:sycophancy` can be read against that store directly.
 
 **No long-running job was scheduled**, so the `schtasks` SYSTEM-task rule did not come into play.
+
+## 2026-10-06 — Drive login repair (owner-approved, option B)
+
+Both Drive logins had expired (laptop `invalid_grant`, lab `401 Invalid Credentials`; lab uploads
+last succeeded 2026-09-29 17:17). The owner re-authorized on the laptop and approved copying that
+token to the lab PC. **This is an owner-approved exception to "never modify the owner's files".**
+The lab config's `type`, `client_id`, `client_secret`, `scope` and `team_drive` were checked
+identical to the laptop's (SHA-256 fingerprints) before the edit, so only the `token` line changed.
+
+| when (+06) | action | path on lab PC | purpose | size |
+|---|---|---|---|---|
+| 2026-10-06 17:26 | mkdir | `audit_scratch\rclone\` | holds the backup below | — |
+| 2026-10-06 17:26 | write | `audit_scratch\rclone\rclone.conf.bak-20261006` | copy of the owner's `rclone.conf` before the edit (dead token), md5 68DF65F9… | 659 B |
+| 2026-10-06 17:26 | modify | `C:\Users\user4\AppData\Roaming\rclone\rclone.conf` | replaced only the `token =` line with the laptop's fresh token; other 7 lines unchanged; verified `rclone lsf tamara:expLB` exit 0 at 17:26:24 | 659 → 689 B |
+
+rclone rewrites this file itself on every token refresh, so its size and md5 will keep changing.
+
+## 2026-10-06 — full backup of the lab PC to Drive (owner request)
+
+Owner asked to back up everything from the lab PC to Drive before maintenance. Owner choices:
+pack the two `run-crossgen` trees as .tar files, copy the rest file by file, include `ATresearch`
+without its `.venv`. Destination is the NEW folder `tamara:expLB/labpc-backup-2026-10-06/`; only
+`rclone copy --immutable` and `rclone check`. Script: `audit/scripts/labpc_backup_20261006.ps1`.
+
+| when (+06) | action | path on lab PC | purpose | size |
+|---|---|---|---|---|
+| 2026-10-06 17:49 | upload (mistake) | `audit_scratch\backup\scripts$f` | a quoting slip in my upload loop wrote both scripts to this one literal name | 1854 B |
+| 2026-10-06 17:50 | delete | `audit_scratch\backup\scripts$f` | removed the stray file above (my own) | — |
+| 2026-10-06 17:50 | mkdir | `audit_scratch\backup\`, `backup\scripts\` | backup workspace | — |
+| 2026-10-06 17:50 | upload | `audit_scratch\backup\scripts\labpc_backup_20261006.ps1` | the backup script, md5 c0714fce… == local | 8394 B |
+| 2026-10-06 17:50 | upload | `audit_scratch\backup\scripts\labpc_register_backup_20261006.ps1` | task registration, md5 780e7ad1… == local | 1854 B |
+| 2026-10-06 17:50 | register task | `Backup-LabPC-20261006` (user4/S4U, 30-min repeat for 3 days + at-startup) | runs the backup; script exits at once after ALL DONE | — |
+| 2026-10-06 17:51→ | write (by the task) | `audit_scratch\backup\pack\` (crossgen .tar files, md5 manifests, log snapshot, package lists, task XMLs), `backup\logs\`, `backup\backup.status` | backup staging and logs | ~2.7 GB expected |
+
+**To remove when done (owner's call):** the task `Backup-LabPC-20261006` and `audit_scratch\backup\pack\`.
+| 2026-10-06 18:24 | upload (replace own file) | `audit_scratch\backup\scripts\labpc_backup_20261006.ps1` | fix: exclude `SPACE_RESERVE_50GB.bin` (a 50 GB disk-space placeholder in the home folder, not data) from the home-loose-files copy; md5 bd975771… == local | 8.6 KB |
+| 2026-10-06 18:25 | stop process | rclone pid 8420 (our own `copy … home-loose-files`) | it was uploading the 50 GB placeholder (22 of 50 GiB sent; Drive keeps nothing from an unfinished upload). The 75 real loose files had already been copied. | — |
+
+**Backup result (2026-10-06 19:51:33, `ALL DONE`).** `tamara:expLB/labpc-backup-2026-10-06/` holds
+8,467 files, 83.36 GiB. Per folder, the Drive count equals the lab copy log's "Copied (new)" count
+exactly (no duplicates, nothing missing): expLB 7,125 · expLB-resplit 674 · packed 329 (24 crossgen
+.tar files + 2 per-file md5 manifests of 205,430 and 9,810 files + frozen `expLB\logs` + venv
+package lists + 54 scheduled-task XMLs) · audit_scratch 157 · expLBactivationLAYER22 99 ·
+home-loose-files 74 · ATresearch 3 (its `models\` holds only an empty folder; the 4.5 GB is the
+excluded `.venv`) · share_deceptive 3 · share_L20_shared 3. Every folder passed `rclone check
+--one-way` (md5) with missing=0 differ=0. The lab's own KD and crossgen syncs also succeed again
+since the token fix (19:16 and 19:40, exit 0).
+Still on the lab, owner's call: task `Backup-LabPC-20261006` (fires every 30 min until 2026-10-09 but
+exits at once after ALL DONE) and `audit_scratch\backup\pack\` (2.67 GB, already on Drive).
+
+**2026-10-06 22:16 — `D:\user4fina` added to the backup (owner confirmed the files are theirs).**
+Not covered by the main pass (that scoped `C:\Users\user4` + `D:\expLB*`). Copied to
+`tamara:expLB/labpc-backup-2026-10-06/user4fina/`: 72 files, 450 KiB (`code\` 3, `results\` 11 training
+logs, `Qwen2.5-72B-Instruct\` 57 = the never-run 09-29 xmodel code copy, `ndif_test.py`,
+`working_packages.txt`; `data\` and `secrets\` are empty). `rclone check --one-way`: missing=0 differ=0.
+Excluded: `ndif-env\` (a 9-package venv; its package list + pyvenv.cfg are in `user4fina/_meta/`) and
+`model.safetensors-00001-of-00011.safetensors` (4.9 GB, shard 1 of 11 of downloaded weights).
+Written on the lab: `audit_scratch\backup\user4fina_meta\` (2 files), `audit_scratch\backup\logs\*user4fina*`.

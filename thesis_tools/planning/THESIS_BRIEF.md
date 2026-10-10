@@ -165,7 +165,7 @@ Batch 2:
 - **Against the pooled probe** (`results/loo_L40/loo_summary.csv`, `loo_bootstrap.csv`):
   - Mean AUROC: ext 0.9158 against the pooled baseline's 0.8496 (naive).
   - **Excluding HP-KR: 0.9165 against 0.9149.** The advantage is essentially all on HP-KR, where it is 0.9124 against 0.523.
-  - Pooled beats ext on CG, IT, ID and RepE; its CIs exclude zero.
+  - ~~Pooled beats ext on CG, IT, ID and RepE; its CIs exclude zero.~~ **CORRECTION 2026-09-25 (Chapter 5 verifier, DF-112):** in `loo_bootstrap.csv` `delta = pooled − ext_axis1`; the pooled probe beats ext **on CG only** (naive +0.0744 [0.0445, 0.1029]; balanced +0.0854). Ext wins HP-KR, IT, ID and RepE (naive, CIs exclude 0); HP-C is a tie.
 
 Batch 3:
 - **Headline:** Liars' Bench average zero-shot AUROC, **0.8990 at L40** (pre-registered) and **0.9130 at L36** (best layer, post hoc), against the benchmark's Mean Probe at 0.682.
@@ -187,6 +187,8 @@ Batch 3:
 >   - Ch 4 adopts its design-alternatives framing (D1, D2, D4–D9 plus ours).
 >   - L40 stays **fixed in advance** (our position), not "chosen by the evaluation loop" (its Fig 4.1).
 >   - Its **D3 (on-policy AISI probe) and D10 (INLP subspace)** have no code or results on any branch. They go in Ch 5's failed-methods section, beside DANN, with `\todo{MISSING}` for any number.
+>     - **SUPERSEDED 2026-09-25 (Chapter 5 session):** the owner chose to **quote report.pdf's D3/D10 numbers** with a page `% src:` and a sentence that the result files are not in the repository. DANN is described with no number. See "Decisions → Chapter 5" below.
+> - **SUPERSEDED 2026-09-25 (Chapter 5 session):** Ch 5 is not split into "Result Analysis I / II". It uses the template's six Result-Analysis headings as sections, with our themes as subsections (`CH5_RESULTS_PLAN.md`; written in `chapter_6.tex`).
 > - **Figures:** one-line captions. Each figure is discussed in the text and cited with `\ref`.
 > - **Abstract:** no citations.
 > - **Ch 4 is written:** `thesis/chapters/chapter_5.tex`. See `CH4_VERIFICATION_LOG.md`.
@@ -329,6 +331,12 @@ The chapter order is set by `main.tex`, not by the file names.
 - Future work: re-run own100 on the full corpus, sarcasm v2, the 14-dataset grid, other model families, calibration.
 
 **Appendices.**
+> **UPDATE 2026-09-25 (owner): worked examples go in the main text AND the appendix.**
+> - A holds every persona prompt and question, generated from source.
+> - A new E holds one example per dataset and per persona group.
+> - The main text gets four short examples: the kd trio and the HP-KR pair in Ch 4, capitulation and sarcasm in Ch 5.
+> - WMDP questions are withheld.
+> Details: `CH5_RESULTS_PLAN.md` "Appendices"; `PROGRESS_THESIS.md` "Chapter 4 revision list" items 3–4.
 - A. Persona rosters and prompts.
 - B. Full tables.
 - C. Reproducibility, pins and the audit.
@@ -444,6 +452,47 @@ Quoted as typed, spelling kept. Where a decision rests on a fact we established,
   - It is not on the lab PC (`C:\Users\user4`) or on Drive (`tamara:`).
 - **Collaborator evidence:** "Thesis evidence only". Copied to `thesis_tools/collab_evidence/16def2de/` with `MANIFEST.md` md5s.
 - **Other thesis version** (`full paper draft for this experiments/report.pdf`): adopt its design-alternatives framing.
+
+### Chapter 5 decisions (2026-09-25 session; the owner's words as typed)
+
+Most of these are also in `CH5_RESULTS_PLAN.md` ("Owner decisions") and `PROGRESS_THESIS.md`; this is the dated record. Answers given through the question tool are quoted as the option the owner picked.
+
+**Planning**
+- **How to plan:** "are you trying to find result now? why did not you look into the audits files, thesis guides and finding md etc? then write then do the verification. dont now sourcing result is too much pressure?"
+  - Plan from the audited maps (`thesis_guide/`, `kd/docs/FINDINGS.md`, `audit/claims.csv`, `audit/phase1/fmap_all.csv`, the audit drafts). Re-read raw values only when writing, and verify against raw data as the last step. Saved to memory (`thesis-chapter-workflow`).
+- **Layout of Ch 5:** "Template + themes (Recommended)". The template's six headings (Performance Evaluation, Analysis of Design Solutions, Final Design Adjustments, Statistical Analysis, Comparisons and Relationships, Discussions) are the sections; our themes are subsections. This supersedes the "Result Analysis I / II" split of Batch 5.
+- **New terms:** "Define in Ch5 (Recommended)". Each term Chapter 5 needs that Chapter 4 lacks is defined once, at first use, and listed in `GLOSSARY.md` §8.2.
+- **Selection (the design Ch 4 promised Ch 5 would select):** "One per criterion (Recommended)". D9, the extended contrast, is selected for ranking and transfer (the headline); D8, the knowledge-denial contrast, for detection at the benchmark's threshold. Both come from the kd bank.
+- **D3 and D10 numbers:** "Quote report.pdf numbers". They are quoted from `full paper draft for this experiments/report.pdf` with a page `% src:` and a sentence saying the result files are not in the repository. This supersedes Batch 5's `\todo{MISSING}` rule for D3/D10. DANN has no numbers anywhere, so it is described only.
+- **Reuse of report.pdf's Chapter 5:** "Reuse its skeleton only (Recommended)". Mirror its subsection order and table set, rebuild every sentence and number from raw with `% src:`, add our results, and correct its known errors.
+
+**Sarcasm and deceptive intent**
+- Asked "did any chapter 4 or 5 mentioned or will mention about the sarcasm, deceptive intent related work?", then "yes." to the proposal:
+  - Ch 5 §5.6.3 opens with the intent framing (sarcasm is false but meant to be recognised; deception and sycophancy are meant to be believed) and closes with the general conclusion about intent-defined constructs.
+  - Ch 6 future work lists sarcasm v2 first.
+  - Ch 2 gets a paragraph on irony and deceptive intent (Grice; Sperber & Wilson; Clark & Gerrig; Goldowsky-Dill's intent concession; Kirch et al.). There are no PDFs for the pragmatics works, so they would be cited without a page.
+- **When to revise Ch 4:** asked "when d i revise chapter 4 again?". The recommendation was one revision pass after the Ch 5 writing sessions, before the final verification. The owner then said "u do it", and the two sarcasm fixes (the motivation sentence and the FigLang 2020 citation) went into Ch 4 at once.
+
+**Examples**
+- Asked "are adding example everwhere? or at least in the appendix?", then chose "Main text + appendix (Recommended)":
+  - four short verbatim examples in the text: the kd trio and the HP-KR pair in Ch 4; capitulation and sarcasm in Ch 5;
+  - Appendix A holds every persona prompt and question, generated from source;
+  - Appendix E holds one example per dataset and per persona group, generated;
+  - WMDP questions (HP-C, HP-KR) are always withheld.
+
+**Execution**
+- Asked "now what should we complete? did we revise the 4 and completed 5?", then "start from 1 to 5": write all of Chapter 5, apply the Chapter 4 revision pass, write Appendices A and E, and verify against raw data on both sides, in one run.
+- After the usage limit: "can fable continueue from last where claude stopped? continue from here". The interrupted workflow was resumed from its journal.
+- End of session: "Before we end this session: write down everything the next session needs". This produced `PROGRESS_THESIS.md`, `GLOSSARY.md` §8, `RESULTS_SUMMARY.md` and this block.
+
+**Actions taken on the owner's go-ahead that the owner has not yet confirmed**
+- `main.tex` template appendices ("How to install LaTeX", "Overleaf") are replaced by `\appendix` with chapters A–E: Persona Prompts and Questions; Full Result Tables; Reproducibility, Pins and the Audit; Engineering Notes; Worked Examples. B, C and D are stubs with a `\todo`.
+- `references.bib` gained:
+  - `ghosh2020figlang`, with metadata from the ACL Anthology;
+  - `aisi2026liedetection`, with metadata from report.pdf's bibliography. Its year is unverified.
+- Lab-only stores needed by Ch 5 were copied byte-exact into `audit/cache/labpc/` (md5-checked against the lab PC, logged in `audit/cache/MANIFEST.csv`). The copies are the `run-sycophancy-mt/rows.jsonl`, the collab, cap_s23 and cap_ctrl matrices, `kd/results/phase2_gate.json`, and seven logs. Nothing on the lab PC was written.
+- Chapter labels `ch:method`, `ch:results` and `ch:conclusion` were added. Chapter 4's hard-coded "Chapter~5" became `\ref{ch:results}`. Chapter 4 lines 272/278 were qualified: "only sincerity differs" now holds on the four "does not know" questions.
+- DF-110–DF-120 were proposed in `audit/DOC_FIXES.md`. `PITFALLS.md` gained a dated addendum, and `THESIS_BRIEF.md:168` a correction. The ledger (`kd/docs/FINDINGS.md`) was **not** edited; the new ledger entries it may need are the owner's call.
 
 ### Facts established from files (use these; don't re-derive from prose)
 - **Bank versions the runs used:**
