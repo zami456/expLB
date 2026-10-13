@@ -297,8 +297,9 @@ def verify(
     pooling pass, and over long transcripts (Qwen's HP-KR, insider trading) bf16 then moves some
     examples by up to 20% of the spread; neither pass is the exact one. For such reads pass
     `min_corr`: every dataset's mean reads must correlate with the pooled projections at least
-    that well across examples. Measured on Mistral and Qwen at their key blocks: >= 0.9993
-    aligned, <= 0.51 with the rows off by one; Gemma >= 0.9989. Pass also `tol_auroc=5e-3`, its
+    that well across examples. Measured at the key blocks of each model, every dataset and axis:
+    Mistral and Qwen >= 0.9993 and Gemma >= 0.9935 (its insider trading, deeper blocks) aligned,
+    <= 0.51 with the rows off by one (insider trading's <= 0.04). Pass also `tol_auroc=5e-3`, its
     bank as `vectors` and its folders as `pooled_dir`: AUROCs moved by up to 7e-5 on Mistral, 5e-4
     on Qwen and 2.6e-3 on Gemma, whose scores sit ~40 spreads from zero (on its convince-game rows
     ~30,000 against a spread of ~725), so a few rows' 1-2% differences move them most of a spread.
