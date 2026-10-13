@@ -514,13 +514,21 @@ def depth_figure(table: pd.DataFrame, kd: pd.DataFrame) -> None:
 
 # --- the thesis's claims, per model -------------------------------------------------------------------
 
+TIE = 0.01  # AUROC: a point comparison without an interval closer than this is "no clear difference"
+
+
 def claims(zs: pd.DataFrame, tr: pd.DataFrame, kn: pd.DataFrame, kd: pd.DataFrame, pr: pd.DataFrame,
            org: pd.DataFrame) -> pd.DataFrame:
     rows = []
 
     def add(model, claim, value, holds):
-        rows.append({"model": model, "claim": claim, "evidence": value,
-                     "verdict": "n/a" if holds is None else ("replicates" if holds else "does not replicate")})
+        verdict = ("n/a" if holds is None else holds if isinstance(holds, str)
+                   else "replicates" if holds else "does not replicate")
+        rows.append({"model": model, "claim": claim, "evidence": value, "verdict": verdict})
+
+    def better(a: float, b: float):
+        """a above b by at least TIE; within TIE of each other is no clear difference."""
+        return True if a - b >= TIE else False if b - a >= TIE else f"no clear difference (< {TIE})"
 
     for key in MODELS:
         m = _label(key)
@@ -528,16 +536,18 @@ def claims(zs: pd.DataFrame, tr: pd.DataFrame, kn: pd.DataFrame, kd: pd.DataFram
         if len(t):
             r = t.iloc[0]
             add(m, "D9 transfers better than the raw-activation probe (mid-depth)",
-                f"D9 {r['D9']:.3f} vs raw {r['raw probe']:.3f}", r["D9"] > r["raw probe"])
+                f"D9 {r['D9']:.3f} vs raw {r['raw probe']:.3f}", better(r["D9"], r["raw probe"]))
             add(m, "D9 transfers better than the published contrast D5", f"D9 {r['D9']:.3f} vs D5 {r['D5']:.3f}",
-                r["D9"] > r["D5"])
+                better(r["D9"], r["D5"]))
             if not math.isnan(r["D9 + K"]):
-                add(m, "D9 + K transfers at least as well as the raw probe", f"{r['D9 + K']:.3f}", r["D9 + K"] > r["raw probe"])
+                add(m, "D9 + K transfers at least as well as the raw probe",
+                    f"D9 + K {r['D9 + K']:.3f} vs raw {r['raw probe']:.3f}", r["raw probe"] - r["D9 + K"] < TIE)
         z = zs[(zs["model"] == m) & (zs["layer"] == "L40")] if not zs.empty else zs
         if len(z):
             d9 = float(z[z["contrast"] == "D9"]["LB mean"].iloc[0])
             d5 = float(z[z["contrast"] == "D5"]["LB mean"].iloc[0])
-            add(m, "knowledge-denial roles improve the contrast (D9 > D5, LB mean)", f"{d9:.3f} vs {d5:.3f}", d9 > d5)
+            add(m, "knowledge-denial roles improve the contrast (D9 > D5, LB mean)", f"{d9:.3f} vs {d5:.3f}",
+                better(d9, d5))
         k = kd[kd["model"] == m] if not kd.empty else kd
         if len(k) and not k["K identical"].isna().all():
             mid = k[k["block"] == LB.spec(key).mid]
@@ -590,7 +600,9 @@ def main() -> None:
                   .assign(**{"share fully in role": lambda d: d["score 3"] / d["judged"]}).reset_index()
                   if len(rp) else rp)
     sections = [
-        _write("claims", cl, "The thesis's claims, per model"),
+        _write("claims", cl, "The thesis's claims, per model (two AUROCs replicate a claim when they differ by "
+               f"at least {TIE}; K is tested against the 97.5th percentile of random directions, D9 + K against "
+               "the probe by its paired 95% interval)"),
         _write("zero_shot", zs, "Zero-shot persona contrasts (thesis Table 5.1)"),
         _write("zero_shot_llama_subsets", llama_on_subsets(zs) if len(zs) else zs,
                "Llama's contrasts on each model's datasets"),
