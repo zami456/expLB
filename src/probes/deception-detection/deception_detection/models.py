@@ -185,7 +185,12 @@ def load_tokenizer(
     repo = MODEL_REPOS[model_name]
     revision = TOKENIZER_REVISIONS.get(model_name)
     if model_name.is_vlm:
-        processor = AutoProcessor.from_pretrained(repo, padding_side="left", revision=revision)
+        try:  # a pinned revision already in the cache needs no Hub request (Gemma's repo is gated)
+            processor = AutoProcessor.from_pretrained(
+                repo, padding_side="left", revision=revision, local_files_only=revision is not None
+            )
+        except OSError:
+            processor = AutoProcessor.from_pretrained(repo, padding_side="left", revision=revision)
         tokenizer = processor.tokenizer
         if getattr(processor, "chat_template", None):
             tokenizer.chat_template = processor.chat_template
