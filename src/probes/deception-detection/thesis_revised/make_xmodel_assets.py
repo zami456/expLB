@@ -672,8 +672,8 @@ def rule_k() -> tuple[pd.DataFrame, pd.DataFrame]:
     return pd.DataFrame(rows), pd.DataFrame(verdicts)
 
 
-def rule_k_vs_probe() -> pd.DataFrame:
-    """Both Ks, alone and with D9, against the same-layer RepE base probe at mid-depth, zero-shot
+def rule_k_vs_probe(scorers=("original K", "rule K", "D9 + original K", "D9 + rule K")) -> pd.DataFrame:
+    """`scorers` against the same-layer RepE base probe at mid-depth, zero-shot
     (`k_final_xmodel.py vs_probe`): each cell is the AUROC and its difference from the probe with
     the paired 95% interval."""
     rows = []
@@ -685,7 +685,7 @@ def rule_k_vs_probe() -> pd.DataFrame:
         for set_name, part in t.groupby("set", sort=False):
             part = part.set_index("scorer")
             row = {"model": _label(key), "set": set_name, "base probe": _shown(part["base probe auroc"].iloc[0])}
-            for scorer in ("original K", "rule K", "D9 + original K", "D9 + rule K"):
+            for scorer in scorers:
                 if scorer in part.index:
                     r = part.loc[scorer]
                     row[scorer] = f"{_shown(r['auroc'])} ({_signed(r['delta'])} [{_signed(r['lo'])}, {_signed(r['hi'])}])"
@@ -749,6 +749,9 @@ def main() -> None:
         _write("rule_k_verdicts", rk_verdicts, "Template-free K: each model's criteria, fixed before its rows "
                "were read (Llama: `k_final.py`; the others: `k_final_xmodel.py`)"),
         _write("rule_k_vs_probe", rule_k_vs_probe(), "Both Ks, alone and with D9, against the same-layer RepE base "
+               "probe, zero-shot at mid-depth: AUROC (difference from the probe [paired 95% interval])"),
+        _write("d5k_vs_probe", rule_k_vs_probe(("D5", "D5 + original K", "D5 + rule K", "D9")),
+               "D5, the published persona contrast, alone and with either K, against the same-layer RepE base "
                "probe, zero-shot at mid-depth: AUROC (difference from the probe [paired 95% interval])"),
         _write("zero_shot", zs, "Zero-shot persona contrasts (thesis Table 5.1)"),
         _write("zero_shot_llama_subsets", llama_on_subsets(zs) if len(zs) else zs,

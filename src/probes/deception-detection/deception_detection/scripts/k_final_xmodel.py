@@ -262,7 +262,8 @@ def _names(spec) -> dict[int, str]:
 
 
 def vs_probe(model: str, layers=None, n_draws: int = N_BOOT, seed: int = SEED) -> None:
-    """Rule K, the original K and each with D9 against the same-layer RepE base probe (D2), zero-shot:
+    """Rule K, the original K and each with D9 and with D5 (and D9 and D5 alone) against the
+    same-layer RepE base probe (D2), zero-shot:
     AUROC on each of the model's datasets, their mean, HP-KR's identical-text and denial slices
     where the model has them and AISI's held-out rollouts where they were read (Llama, Gemma), with
     paired 95% intervals of each difference from the probe (`k_robustness.paired_draws`: lies and
@@ -292,11 +293,14 @@ def vs_probe(model: str, layers=None, n_draws: int = N_BOOT, seed: int = SEED) -
             continue
         pooled = inputs.pooled(layer)
         control = pooled[rd.CONTROL].z
-        d9 = inputs.bank_at(layer).axis_unit("extended")
+        bank = inputs.bank_at(layer)
+        d9, d5 = bank.axis_unit("extended"), bank.axis_unit("deception")
         ok = inputs.k(layer)
         rk = kf.rule_k(layer) if key == "llama" else rule_k(model, layer)
         dirs = {"original K": ok, "rule K": rk, "D9 + original K": rd.standardised_sum(d9, ok, control),
-                "D9 + rule K": rd.standardised_sum(d9, rk, control)}
+                "D9 + rule K": rd.standardised_sum(d9, rk, control), "D9": d9, "D5": d5,
+                "D5 + original K": rd.standardised_sum(d5, ok, control),
+                "D5 + rule K": rd.standardised_sum(d5, rk, control)}
 
         def scorers(z, dirs=dirs, probe=probe):
             return {"base probe": probe(z)} | {n: z @ w for n, w in dirs.items()}
