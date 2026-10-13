@@ -309,6 +309,84 @@ def organisms() -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
+# --- S7 on the rebuilt HP-KR rows (Qwen's identical text, Gemma's supplementary set) ----------------------
+
+def rebuilt_hpkr(bank: str | None = None) -> pd.DataFrame:
+    from deception_detection.scripts import k_models as km
+
+    rows = []
+    for key in ("qwen", "gemma"):
+        b = _bank(key, bank)
+        t = _read(km.OUT / key / "hpkr" / f"scores_persona_{b}.csv", f"{key} rebuilt HP-KR slices")
+        if t is None:
+            continue
+        names = _layer_names(key)
+        for _, r in t.iterrows():
+            rows.append({"model": _label(key), "layer": names.get(int(r["block"])), "slice": r["slice"],
+                         "scorer": r["scorer"], "lies": r["n_lies"], "honest": r["n_honest"], "AUROC": r["auroc"],
+                         "lo": r["lo"], "hi": r["hi"], "band97.5": r["band97.5"]})
+    return pd.DataFrame(rows)
+
+
+# --- S14: K', the replication with matched items (Table 5.6) ---------------------------------------------
+
+def k_matched(bank: str | None = None) -> pd.DataFrame:
+    from deception_detection.scripts import k_replication as kp
+
+    rows = []
+    for key in MODELS:
+        t = _read(kp.out_dir(None if key == "llama" else key) / "verdicts.csv", f"{key} K' verdicts")
+        if t is None:
+            continue
+        names = _layer_names(key)
+        for _, r in t.iterrows():
+            rows.append({"model": _label(key), "layer": names.get(int(r["layer"])), "criterion": r["criterion"],
+                         "value": r["value"], "passes": bool(r["pass"])})
+    return pd.DataFrame(rows)
+
+
+# --- S13: token reads (Table B.6) and the Follow-Up turn (Table B.7) ---------------------------------------
+
+def token_reads(bank: str | None = None) -> pd.DataFrame:
+    rows = []
+    for key in MODELS:
+        s = LB.spec(key)
+        for layer, name in _layer_names(key).items():
+            if name == "L36":
+                continue
+            folder = (REPO_ROOT / "results" / f"persona_positions_L{layer}" if key == "llama"
+                      else s.results("persona_positions", layer, _bank(key, bank)))
+            t = _read(folder / "reads_summary.csv", f"{key} token reads {name}")
+            if t is None:
+                continue
+            t = t[t["axis"] == "extended"]
+            for _, r in t.iterrows():
+                rows.append({"model": _label(key), "layer": name, "read": r["read"], "AUROC": r["auroc"],
+                             "BA": r["balacc"], "recall": r["recall"]})
+    return pd.DataFrame(rows)
+
+
+def followup_turn(bank: str | None = None) -> pd.DataFrame:
+    """D9 and the base probe on the response tokens against the Follow-Up turn's "No", at the
+    model's Liars' Bench block."""
+    rows = []
+    for key in MODELS:
+        s = LB.spec(key)
+        b = _bank(key, bank)
+        main = (s.results("persona_ood", s.lb_block, b) / "zero_shot.csv")
+        fu = (REPO_ROOT / "results" / "persona_ood_followup_L20" / "zero_shot.csv" if key == "llama"
+              else s.results("persona_ood_followup", s.lb_block, b) / "zero_shot.csv")
+        a, f = _read(main, f"{key} zero-shot at the LB block"), _read(fu, f"{key} Follow-Up zero-shot")
+        if a is None or f is None:
+            continue
+        a, f = (x.assign(set=x["dataset"].map(SHORT)).dropna(subset=["set"]).set_index("set") for x in (a, f))
+        for d in _lb_sets(key):
+            if d in a.index and d in f.index:
+                rows.append({"model": _label(key), "dataset": d, "D9, response tokens": a.loc[d, "auroc_ext_axis"],
+                             "D9, follow-up No": f.loc[d, "auroc_ext_axis"]})
+    return pd.DataFrame(rows)
+
+
 # --- the role-play finding: how fully each model plays the roles ----------------------------------------
 
 SCORE_DIRS = {"llama": LB.XMODEL_ROOT / "banks" / "llama-70b-3.3" / "scores",
@@ -524,6 +602,10 @@ def main() -> None:
         _write("calibration", cal, "Balanced accuracy at the Alpaca and oracle thresholds, mid-depth (Table 5.7)"),
         _write("liars_bench", lb, "Liars' Bench's probes beside this pipeline's base probe (Table 5.2)"),
         _write("aisi", ai, "D3: the probe trained on the model's own lies (Llama and Gemma)"),
+        _write("rebuilt_hpkr", rebuilt_hpkr(), "HP-KR rebuilt from the raw files: Qwen's identical text, Gemma's supplementary set"),
+        _write("k_matched", k_matched(), "K', the replication on matched items (Table 5.6 criteria)"),
+        _write("token_reads", token_reads(), "Token reads of D9, mean over the Liars' Bench datasets (Table B.6)"),
+        _write("followup", followup_turn(), "D9 on the response tokens against the Follow-Up turn's \"No\" (Table B.7)"),
         _write("organisms", org, "Model organisms: behaviour checks and AUROC on the fine-tune's read"),
         _write("roleplay", rp_summary, "How fully each model plays the persona roles (judge scores)"),
         _write("bank_comparison", bc, "Primary persona bank against the lenient (score 2-3) bank, mid-depth"),
