@@ -121,6 +121,8 @@ def transfer(bank: str | None = None) -> pd.DataFrame:
         s, b = LB.spec(key), _bank(key, bank)
         ninek = _read(_rd_dir(key, bank) / "transfer" / "depth_ninek.csv", f"{key} D9+K transfer")
         ninek = ninek.set_index("layer") if ninek is not None else None
+        d5k = _read(_rd_dir(key, bank) / "transfer" / "summary_d5k.csv", f"{key} D5+K and K transfer")
+        d5k = d5k.set_index("layer") if d5k is not None else None
         for layer, name in _layer_names(key).items():
             summary = _read(s.results("persona_ood", layer, b) / "summary.csv", f"{key} transfer {name}")
             if summary is None:
@@ -130,6 +132,8 @@ def transfer(bank: str | None = None) -> pd.DataFrame:
             for label, feature in TRANSFER.items():
                 row[label] = float(summary.loc[feature, "off_diagonal_mean"]) if feature in summary.index else math.nan
             row["D9 + K"] = float(ninek.loc[layer, "D9 + K: transfer"]) if ninek is not None and layer in ninek.index else math.nan
+            for label, column in (("D5 + K", "d5k: transfer"), ("K", "kalone: transfer")):  # `k_transfer.py d5k`
+                row[label] = float(d5k.loc[layer, column]) if d5k is not None and layer in d5k.index else math.nan
             row["raw probe, diagonal"] = float(summary.loc["baseline", "diagonal_mean"])
             rows.append(row)
     return pd.DataFrame(rows)

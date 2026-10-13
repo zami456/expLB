@@ -146,6 +146,43 @@ def sweep(layers=None, model: str | None = None, bank: str | None = None) -> Non
     logger.info(f"wrote {out / 'depth_ninek.csv'}")
 
 
+def d5k(layers=None, model: str | None = None, bank: str | None = None) -> None:
+    """Train-one-test-all transfer for D5 + K and for K alone, beside D9 + K, at the model's 20, 36,
+    40 and 44 (`ModelSpec.named_layers`): `matrix_d5k_L{layer}.csv`, `matrix_kalone_L{layer}.csv` and
+    their off-diagonal means in `summary_d5k.csv`. D5 + K is `recall_denial.d5_plus_k`'s: the
+    deception axis and K, each divided by its spread on Alpaca, then added. D9 + K and K are scored
+    the same way and must reproduce `run`'s stored matrices where they exist."""
+    inputs, out, order = _context(model, bank)
+    layers = [int(x) for x in (layers or inputs.spec.named_layers)]
+    without = [n for n in order if n != P.HPKR]
+    out.mkdir(parents=True, exist_ok=True)
+    rows = []
+    for layer in layers:
+        pooled = inputs.pooled(layer)
+        control = pooled[rd.CONTROL].z
+        bank_l, k = inputs.bank_at(layer), inputs.k(layer)
+        scorers = {"d5k": rd.standardised_sum(bank_l.axis_unit("deception"), k, control), "kalone": k,
+                   "ninek": rd.standardised_sum(bank_l.axis_unit("extended"), k, control)}
+        row = {"layer": layer}
+        for key, w in scorers.items():
+            m = P.transfer_matrix(lambda z, w=w: (z @ w)[:, None], pooled, order)
+            stored = out / f"matrix_{'k' if key == 'kalone' else key}_L{layer}.csv"
+            if key in ("ninek", "kalone") and stored.exists():
+                s = pd.read_csv(stored, index_col=0)
+                gap = float(np.abs(m.loc[s.index, s.columns].to_numpy(float) - s.to_numpy(float)).max())
+                if gap > 1e-3:
+                    raise AssertionError(f"layer {layer} {key}: recomputed matrix differs from {stored.name} by {gap:.4f}")
+            if key != "ninek":
+                m.round(4).to_csv(out / f"matrix_{key}_L{layer}.csv")
+            row[f"{key}: transfer"] = P.off_diagonal_mean(m)
+            row[f"{key}: transfer without HP-KR"] = P.off_diagonal_mean(m.loc[without, without])
+        rows.append(row)
+        logger.info(f"layer {layer}: " + ", ".join(f"{k2} {v:.3f}" for k2, v in row.items() if k2 != "layer"))
+        del pooled
+    pd.DataFrame(rows).round(4).to_csv(out / "summary_d5k.csv", index=False)
+    logger.info(f"wrote {out / 'summary_d5k.csv'}")
+
+
 def figure(layer: int = 40, out: str | None = None, dpi: int = 300) -> None:
     """The thesis's transfer figure (paper/make_figures.py, transfer_matrices) with D9 + K on the right."""
     import matplotlib as mpl
@@ -194,4 +231,4 @@ def figure(layer: int = 40, out: str | None = None, dpi: int = 300) -> None:
 
 
 if __name__ == "__main__":
-    fire.Fire({"run": run, "sweep": sweep, "figure": figure})
+    fire.Fire({"run": run, "sweep": sweep, "d5k": d5k, "figure": figure})
