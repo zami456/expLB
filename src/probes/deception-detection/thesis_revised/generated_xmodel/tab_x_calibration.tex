@@ -1,0 +1,26 @@
+\begin{table}
+\caption{Balanced accuracy at the Alpaca and oracle thresholds, mid-depth (Table 5.7)}
+\label{tab:x-calibration}
+\begin{tabular}{llrrrr}
+\toprule
+model & detector & AUROC & BA (Alpaca 1\%) & recall (Alpaca 1\%) & BA (oracle) \\
+\midrule
+Llama-3.3-70B & base probe & 0.778 & 0.626 & 0.281 & 0.652 \\
+Llama-3.3-70B & D8 & 0.894 & 0.725 & 0.487 & 0.692 \\
+Llama-3.3-70B & D9 & 0.899 & 0.694 & 0.413 & 0.718 \\
+Llama-3.3-70B & D5 & 0.798 & 0.675 & 0.382 & 0.664 \\
+Qwen2.5-72B$^\dagger$ & base probe & 0.498 & 0.508 & 0.023 & 0.503 \\
+Qwen2.5-72B$^\dagger$ & D8 & 0.668 & 0.555 & 0.138 & 0.521 \\
+Qwen2.5-72B$^\dagger$ & D9 & 0.441 & 0.500 & 0.001 & 0.505 \\
+Qwen2.5-72B$^\dagger$ & D5 & 0.380 & 0.500 & 0.001 & 0.504 \\
+Mistral-Small-3.1-24B & base probe & 0.766 & 0.644 & 0.397 & 0.551 \\
+Mistral-Small-3.1-24B & D8 & 0.727 & 0.632 & 0.623 & 0.549 \\
+Mistral-Small-3.1-24B & D9 & 0.762 & 0.593 & 0.222 & 0.561 \\
+Mistral-Small-3.1-24B & D5 & 0.719 & 0.566 & 0.144 & 0.560 \\
+Gemma-3-27B & base probe & 0.783 & 0.789 & 0.704 & 0.631 \\
+Gemma-3-27B & D8 & 0.484 & 0.497 & 0.001 & 0.506 \\
+Gemma-3-27B & D9 & 0.900 & 0.602 & 0.212 & 0.712 \\
+Gemma-3-27B & D5 & 0.679 & 0.500 & 0.000 & 0.534 \\
+\bottomrule
+\end{tabular}
+\end{table}

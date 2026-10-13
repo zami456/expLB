@@ -23,6 +23,7 @@ which.
 
 import json
 import math
+from decimal import ROUND_HALF_UP, Decimal
 from pathlib import Path
 
 import numpy as np
@@ -228,7 +229,8 @@ def calibration(bank: str | None = None) -> pd.DataFrame:
             rows.append({"model": _label(key), "detector": label, "AUROC": part["auroc"].iloc[0],
                          "BA (Alpaca 1%)": part.loc["control", "balacc"] if "control" in part.index else math.nan,
                          "recall (Alpaca 1%)": part.loc["control", "recall"] if "control" in part.index else math.nan,
-                         "BA (oracle)": part.loc["oracle", "balacc"] if "oracle" in part.index else math.nan})
+                         "BA (oracle)": (part.loc["in-dataset (oracle)", "balacc"]
+                                         if "in-dataset (oracle)" in part.index else math.nan)})
     return pd.DataFrame(rows)
 
 
@@ -578,16 +580,29 @@ def claims(zs: pd.DataFrame, tr: pd.DataFrame, kn: pd.DataFrame, kd: pd.DataFram
 
 # --- writing ---------------------------------------------------------------------------------------
 
+def _shown(value) -> str:
+    """Three places, rounded half up as the thesis's own tables round (`make_numbers.fmt`); empty
+    when the input is missing."""
+    if pd.isna(value):
+        return ""
+    return str(Decimal(repr(float(value))).quantize(Decimal("0.001"), ROUND_HALF_UP))
+
+
 def _write(name: str, table: pd.DataFrame, caption: str) -> str:
     OUT_TABLES.mkdir(parents=True, exist_ok=True)
     OUT_TEX.mkdir(parents=True, exist_ok=True)
     table.to_csv(OUT_TABLES / f"{name}.csv", index=False)
     if table.empty:
         return f"## {caption}\n\n(no inputs yet)\n"
-    latex = table.to_latex(index=False, float_format=lambda v: "" if pd.isna(v) else f"{v:.3f}", escape=True,
-                           caption=caption, label=f"tab:x-{name}", na_rep="")
+    shown = table.copy()
+    numeric = [pd.api.types.is_numeric_dtype(shown[column]) for column in shown.columns]
+    for column in shown.columns:
+        if pd.api.types.is_float_dtype(shown[column]):
+            shown[column] = shown[column].map(_shown)
+    latex = shown.to_latex(index=False, escape=True, caption=caption, label=f"tab:x-{name}", na_rep="",
+                           column_format="".join("r" if n else "l" for n in numeric))
     (OUT_TEX / f"tab_x_{name}.tex").write_text(latex.replace("\u2020", r"$^\dagger$"), encoding="utf-8")
-    return f"## {caption}\n\n{table.to_markdown(index=False, floatfmt='.3f')}\n"
+    return f"## {caption}\n\n{shown.to_markdown(index=False, disable_numparse=True)}\n"
 
 
 def main() -> None:

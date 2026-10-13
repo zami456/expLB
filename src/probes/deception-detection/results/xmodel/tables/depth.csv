@@ -1,0 +1,727 @@
+model,block,relative depth,source,arm,value
+Llama-3.3-70B,20,0.2625,"transfer, off-diagonal mean",extended axis (12v13),0.9041173922099752
+Llama-3.3-70B,20,0.2625,"transfer, off-diagonal mean",knowledge-denial axis (4v6),0.8660393255371666
+Llama-3.3-70B,20,0.2625,"transfer, off-diagonal mean",extended PCs (k=3),0.6836974361396414
+Llama-3.3-70B,20,0.2625,"transfer, off-diagonal mean",unified axis (13v12),0.6295464278655902
+Llama-3.3-70B,20,0.2625,"transfer, off-diagonal mean",deception axis (8v7),0.6510800147121752
+Llama-3.3-70B,20,0.2625,"transfer, off-diagonal mean",single-source probe (raw),0.6478008106254538
+Llama-3.3-70B,20,0.2625,"zero-shot, Liars' Bench average",base probe (RepE-trained),0.6972
+Llama-3.3-70B,20,0.2625,"zero-shot, Liars' Bench average",deception axis (8v7),0.7503
+Llama-3.3-70B,20,0.2625,"zero-shot, Liars' Bench average",unified axis (13v12),0.7204
+Llama-3.3-70B,20,0.2625,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),0.8628
+Llama-3.3-70B,20,0.2625,"zero-shot, Liars' Bench average",extended axis (12v13),0.8868
+Llama-3.3-70B,24,0.3125,"transfer, off-diagonal mean",extended axis (12v13),0.8875080727886802
+Llama-3.3-70B,24,0.3125,"transfer, off-diagonal mean",knowledge-denial axis (4v6),0.8713241282566594
+Llama-3.3-70B,24,0.3125,"transfer, off-diagonal mean",extended PCs (k=3),0.6653882174331373
+Llama-3.3-70B,24,0.3125,"transfer, off-diagonal mean",unified axis (13v12),0.6269961561675691
+Llama-3.3-70B,24,0.3125,"transfer, off-diagonal mean",deception axis (8v7),0.6322637965700488
+Llama-3.3-70B,24,0.3125,"transfer, off-diagonal mean",single-source probe (raw),0.6144195589751781
+Llama-3.3-70B,24,0.3125,"zero-shot, Liars' Bench average",base probe (RepE-trained),0.7017
+Llama-3.3-70B,24,0.3125,"zero-shot, Liars' Bench average",deception axis (8v7),0.7199
+Llama-3.3-70B,24,0.3125,"zero-shot, Liars' Bench average",unified axis (13v12),0.7164
+Llama-3.3-70B,24,0.3125,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),0.8516
+Llama-3.3-70B,24,0.3125,"zero-shot, Liars' Bench average",extended axis (12v13),0.8654
+Llama-3.3-70B,28,0.3625,"transfer, off-diagonal mean",extended axis (12v13),0.8984957851233946
+Llama-3.3-70B,28,0.3625,"transfer, off-diagonal mean",knowledge-denial axis (4v6),0.902462356844668
+Llama-3.3-70B,28,0.3625,"transfer, off-diagonal mean",extended PCs (k=3),0.8057293392926931
+Llama-3.3-70B,28,0.3625,"transfer, off-diagonal mean",unified axis (13v12),0.6389545797017792
+Llama-3.3-70B,28,0.3625,"transfer, off-diagonal mean",deception axis (8v7),0.6789114128595917
+Llama-3.3-70B,28,0.3625,"transfer, off-diagonal mean",single-source probe (raw),0.6750236598706227
+Llama-3.3-70B,28,0.3625,"zero-shot, Liars' Bench average",base probe (RepE-trained),0.817
+Llama-3.3-70B,28,0.3625,"zero-shot, Liars' Bench average",deception axis (8v7),0.7808
+Llama-3.3-70B,28,0.3625,"zero-shot, Liars' Bench average",unified axis (13v12),0.733
+Llama-3.3-70B,28,0.3625,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),0.883
+Llama-3.3-70B,28,0.3625,"zero-shot, Liars' Bench average",extended axis (12v13),0.8782
+Llama-3.3-70B,32,0.4125,"transfer, off-diagonal mean",extended axis (12v13),0.9211233990314684
+Llama-3.3-70B,32,0.4125,"transfer, off-diagonal mean",knowledge-denial axis (4v6),0.9075266621243224
+Llama-3.3-70B,32,0.4125,"transfer, off-diagonal mean",extended PCs (k=3),0.8682680755412766
+Llama-3.3-70B,32,0.4125,"transfer, off-diagonal mean",unified axis (13v12),0.6725867222693966
+Llama-3.3-70B,32,0.4125,"transfer, off-diagonal mean",deception axis (8v7),0.6884793433226718
+Llama-3.3-70B,32,0.4125,"transfer, off-diagonal mean",single-source probe (raw),0.7501958620455209
+Llama-3.3-70B,32,0.4125,"zero-shot, Liars' Bench average",base probe (RepE-trained),0.8498
+Llama-3.3-70B,32,0.4125,"zero-shot, Liars' Bench average",deception axis (8v7),0.7922
+Llama-3.3-70B,32,0.4125,"zero-shot, Liars' Bench average",unified axis (13v12),0.777
+Llama-3.3-70B,32,0.4125,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),0.8892
+Llama-3.3-70B,32,0.4125,"zero-shot, Liars' Bench average",extended axis (12v13),0.9053
+Llama-3.3-70B,36,0.4625,"transfer, off-diagonal mean",extended axis (12v13),0.9274688514303678
+Llama-3.3-70B,36,0.4625,"transfer, off-diagonal mean",knowledge-denial axis (4v6),0.9124272845083764
+Llama-3.3-70B,36,0.4625,"transfer, off-diagonal mean",extended PCs (k=3),0.8793726668051066
+Llama-3.3-70B,36,0.4625,"transfer, off-diagonal mean",unified axis (13v12),0.6619636629548535
+Llama-3.3-70B,36,0.4625,"transfer, off-diagonal mean",deception axis (8v7),0.6885167850190649
+Llama-3.3-70B,36,0.4625,"transfer, off-diagonal mean",single-source probe (raw),0.7682162964601599
+Llama-3.3-70B,36,0.4625,"zero-shot, Liars' Bench average",base probe (RepE-trained),0.7826
+Llama-3.3-70B,36,0.4625,"zero-shot, Liars' Bench average",deception axis (8v7),0.797
+Llama-3.3-70B,36,0.4625,"zero-shot, Liars' Bench average",unified axis (13v12),0.769
+Llama-3.3-70B,36,0.4625,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),0.895
+Llama-3.3-70B,36,0.4625,"zero-shot, Liars' Bench average",extended axis (12v13),0.913
+Llama-3.3-70B,40,0.5125,"transfer, off-diagonal mean",extended axis (12v13),0.9158352734669752
+Llama-3.3-70B,40,0.5125,"transfer, off-diagonal mean",knowledge-denial axis (4v6),0.9115347519128444
+Llama-3.3-70B,40,0.5125,"transfer, off-diagonal mean",extended PCs (k=3),0.8655338484726268
+Llama-3.3-70B,40,0.5125,"transfer, off-diagonal mean",unified axis (13v12),0.6897340847273888
+Llama-3.3-70B,40,0.5125,"transfer, off-diagonal mean",deception axis (8v7),0.8318937060798296
+Llama-3.3-70B,40,0.5125,"transfer, off-diagonal mean",single-source probe (raw),0.7320069613011962
+Llama-3.3-70B,40,0.5125,"zero-shot, Liars' Bench average",base probe (RepE-trained),0.7784
+Llama-3.3-70B,40,0.5125,"zero-shot, Liars' Bench average",deception axis (8v7),0.7983
+Llama-3.3-70B,40,0.5125,"zero-shot, Liars' Bench average",unified axis (13v12),0.7954
+Llama-3.3-70B,40,0.5125,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),0.8938
+Llama-3.3-70B,40,0.5125,"zero-shot, Liars' Bench average",extended axis (12v13),0.899
+Llama-3.3-70B,44,0.5625,"transfer, off-diagonal mean",extended axis (12v13),0.9033884458767988
+Llama-3.3-70B,44,0.5625,"transfer, off-diagonal mean",knowledge-denial axis (4v6),0.9001208449359551
+Llama-3.3-70B,44,0.5625,"transfer, off-diagonal mean",extended PCs (k=3),0.879935829142912
+Llama-3.3-70B,44,0.5625,"transfer, off-diagonal mean",unified axis (13v12),0.8472247367213944
+Llama-3.3-70B,44,0.5625,"transfer, off-diagonal mean",deception axis (8v7),0.8260481442490276
+Llama-3.3-70B,44,0.5625,"transfer, off-diagonal mean",single-source probe (raw),0.7155837035859031
+Llama-3.3-70B,44,0.5625,"zero-shot, Liars' Bench average",base probe (RepE-trained),0.7564
+Llama-3.3-70B,44,0.5625,"zero-shot, Liars' Bench average",deception axis (8v7),0.7913
+Llama-3.3-70B,44,0.5625,"zero-shot, Liars' Bench average",unified axis (13v12),0.8167
+Llama-3.3-70B,44,0.5625,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),0.8802
+Llama-3.3-70B,44,0.5625,"zero-shot, Liars' Bench average",extended axis (12v13),0.8841
+Llama-3.3-70B,48,0.6125,"transfer, off-diagonal mean",extended axis (12v13),0.8876505634811847
+Llama-3.3-70B,48,0.6125,"transfer, off-diagonal mean",knowledge-denial axis (4v6),0.8811213047862395
+Llama-3.3-70B,48,0.6125,"transfer, off-diagonal mean",extended PCs (k=3),0.8729284743265139
+Llama-3.3-70B,48,0.6125,"transfer, off-diagonal mean",unified axis (13v12),0.7024353181468708
+Llama-3.3-70B,48,0.6125,"transfer, off-diagonal mean",deception axis (8v7),0.6864453011141374
+Llama-3.3-70B,48,0.6125,"transfer, off-diagonal mean",single-source probe (raw),0.7159522829255212
+Llama-3.3-70B,48,0.6125,"zero-shot, Liars' Bench average",base probe (RepE-trained),0.7462
+Llama-3.3-70B,48,0.6125,"zero-shot, Liars' Bench average",deception axis (8v7),0.7712
+Llama-3.3-70B,48,0.6125,"zero-shot, Liars' Bench average",unified axis (13v12),0.8027
+Llama-3.3-70B,48,0.6125,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),0.8574
+Llama-3.3-70B,48,0.6125,"zero-shot, Liars' Bench average",extended axis (12v13),0.8652
+Llama-3.3-70B,52,0.6625,"transfer, off-diagonal mean",extended axis (12v13),0.8769003222042769
+Llama-3.3-70B,52,0.6625,"transfer, off-diagonal mean",knowledge-denial axis (4v6),0.8691341294694477
+Llama-3.3-70B,52,0.6625,"transfer, off-diagonal mean",extended PCs (k=3),0.843303285773773
+Llama-3.3-70B,52,0.6625,"transfer, off-diagonal mean",unified axis (13v12),0.6648957044004038
+Llama-3.3-70B,52,0.6625,"transfer, off-diagonal mean",deception axis (8v7),0.6675623121641557
+Llama-3.3-70B,52,0.6625,"transfer, off-diagonal mean",single-source probe (raw),0.7257706327972305
+Llama-3.3-70B,52,0.6625,"zero-shot, Liars' Bench average",base probe (RepE-trained),0.7528
+Llama-3.3-70B,52,0.6625,"zero-shot, Liars' Bench average",deception axis (8v7),0.7424
+Llama-3.3-70B,52,0.6625,"zero-shot, Liars' Bench average",unified axis (13v12),0.747
+Llama-3.3-70B,52,0.6625,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),0.843
+Llama-3.3-70B,52,0.6625,"zero-shot, Liars' Bench average",extended axis (12v13),0.8523
+Llama-3.3-70B,56,0.7125,"transfer, off-diagonal mean",extended axis (12v13),0.8592126081743344
+Llama-3.3-70B,56,0.7125,"transfer, off-diagonal mean",knowledge-denial axis (4v6),0.8524996350022422
+Llama-3.3-70B,56,0.7125,"transfer, off-diagonal mean",extended PCs (k=3),0.813542802919158
+Llama-3.3-70B,56,0.7125,"transfer, off-diagonal mean",unified axis (13v12),0.5447004795161287
+Llama-3.3-70B,56,0.7125,"transfer, off-diagonal mean",deception axis (8v7),0.5470534061670562
+Llama-3.3-70B,56,0.7125,"transfer, off-diagonal mean",single-source probe (raw),0.7304755477247615
+Llama-3.3-70B,56,0.7125,"zero-shot, Liars' Bench average",base probe (RepE-trained),0.7523
+Llama-3.3-70B,56,0.7125,"zero-shot, Liars' Bench average",deception axis (8v7),0.7201
+Llama-3.3-70B,56,0.7125,"zero-shot, Liars' Bench average",unified axis (13v12),0.7246
+Llama-3.3-70B,56,0.7125,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),0.8231
+Llama-3.3-70B,56,0.7125,"zero-shot, Liars' Bench average",extended axis (12v13),0.8312
+Llama-3.3-70B,60,0.7625,"transfer, off-diagonal mean",extended axis (12v13),0.8528658753186298
+Llama-3.3-70B,60,0.7625,"transfer, off-diagonal mean",knowledge-denial axis (4v6),0.8405570551529753
+Llama-3.3-70B,60,0.7625,"transfer, off-diagonal mean",extended PCs (k=3),0.8153352442259947
+Llama-3.3-70B,60,0.7625,"transfer, off-diagonal mean",unified axis (13v12),0.5407391978662093
+Llama-3.3-70B,60,0.7625,"transfer, off-diagonal mean",deception axis (8v7),0.5403589375893786
+Llama-3.3-70B,60,0.7625,"transfer, off-diagonal mean",single-source probe (raw),0.7378315969129505
+Llama-3.3-70B,60,0.7625,"zero-shot, Liars' Bench average",base probe (RepE-trained),0.7612
+Llama-3.3-70B,60,0.7625,"zero-shot, Liars' Bench average",deception axis (8v7),0.704
+Llama-3.3-70B,60,0.7625,"zero-shot, Liars' Bench average",unified axis (13v12),0.7147
+Llama-3.3-70B,60,0.7625,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),0.8089
+Llama-3.3-70B,60,0.7625,"zero-shot, Liars' Bench average",extended axis (12v13),0.8236
+Llama-3.3-70B,64,0.8125,"transfer, off-diagonal mean",extended axis (12v13),0.855012083966564
+Llama-3.3-70B,64,0.8125,"transfer, off-diagonal mean",knowledge-denial axis (4v6),0.824902206457406
+Llama-3.3-70B,64,0.8125,"transfer, off-diagonal mean",extended PCs (k=3),0.8560306490098438
+Llama-3.3-70B,64,0.8125,"transfer, off-diagonal mean",unified axis (13v12),0.5364114645769306
+Llama-3.3-70B,64,0.8125,"transfer, off-diagonal mean",deception axis (8v7),0.5439798171680839
+Llama-3.3-70B,64,0.8125,"transfer, off-diagonal mean",single-source probe (raw),0.7179733724209992
+Llama-3.3-70B,64,0.8125,"zero-shot, Liars' Bench average",base probe (RepE-trained),0.7595
+Llama-3.3-70B,64,0.8125,"zero-shot, Liars' Bench average",deception axis (8v7),0.7084
+Llama-3.3-70B,64,0.8125,"zero-shot, Liars' Bench average",unified axis (13v12),0.7038
+Llama-3.3-70B,64,0.8125,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),0.7903
+Llama-3.3-70B,64,0.8125,"zero-shot, Liars' Bench average",extended axis (12v13),0.8262
+Llama-3.3-70B,68,0.8625,"transfer, off-diagonal mean",extended axis (12v13),0.8597462086511232
+Llama-3.3-70B,68,0.8625,"transfer, off-diagonal mean",knowledge-denial axis (4v6),0.787483906895864
+Llama-3.3-70B,68,0.8625,"transfer, off-diagonal mean",extended PCs (k=3),0.8802884289985488
+Llama-3.3-70B,68,0.8625,"transfer, off-diagonal mean",unified axis (13v12),0.535797466567769
+Llama-3.3-70B,68,0.8625,"transfer, off-diagonal mean",deception axis (8v7),0.6498594085430646
+Llama-3.3-70B,68,0.8625,"transfer, off-diagonal mean",single-source probe (raw),0.7105258867856563
+Llama-3.3-70B,68,0.8625,"zero-shot, Liars' Bench average",base probe (RepE-trained),0.7741
+Llama-3.3-70B,68,0.8625,"zero-shot, Liars' Bench average",deception axis (8v7),0.7182
+Llama-3.3-70B,68,0.8625,"zero-shot, Liars' Bench average",unified axis (13v12),0.6971
+Llama-3.3-70B,68,0.8625,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),0.7467
+Llama-3.3-70B,68,0.8625,"zero-shot, Liars' Bench average",extended axis (12v13),0.8319
+Llama-3.3-70B,72,0.9125,"transfer, off-diagonal mean",extended axis (12v13),0.8474103872284992
+Llama-3.3-70B,72,0.9125,"transfer, off-diagonal mean",knowledge-denial axis (4v6),0.7709729137455319
+Llama-3.3-70B,72,0.9125,"transfer, off-diagonal mean",extended PCs (k=3),0.8619710264798716
+Llama-3.3-70B,72,0.9125,"transfer, off-diagonal mean",unified axis (13v12),0.589695481956777
+Llama-3.3-70B,72,0.9125,"transfer, off-diagonal mean",deception axis (8v7),0.6525938302138853
+Llama-3.3-70B,72,0.9125,"transfer, off-diagonal mean",single-source probe (raw),0.7023766787178138
+Llama-3.3-70B,72,0.9125,"zero-shot, Liars' Bench average",base probe (RepE-trained),0.7966
+Llama-3.3-70B,72,0.9125,"zero-shot, Liars' Bench average",deception axis (8v7),0.7207
+Llama-3.3-70B,72,0.9125,"zero-shot, Liars' Bench average",unified axis (13v12),0.7064
+Llama-3.3-70B,72,0.9125,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),0.7289
+Llama-3.3-70B,72,0.9125,"zero-shot, Liars' Bench average",extended axis (12v13),0.8181
+Llama-3.3-70B,76,0.9625,"transfer, off-diagonal mean",extended axis (12v13),0.9231802495986432
+Llama-3.3-70B,76,0.9625,"transfer, off-diagonal mean",knowledge-denial axis (4v6),0.8717469850898109
+Llama-3.3-70B,76,0.9625,"transfer, off-diagonal mean",extended PCs (k=3),0.9075394492046416
+Llama-3.3-70B,76,0.9625,"transfer, off-diagonal mean",unified axis (13v12),0.8448824635117382
+Llama-3.3-70B,76,0.9625,"transfer, off-diagonal mean",deception axis (8v7),0.8737529861877285
+Llama-3.3-70B,76,0.9625,"transfer, off-diagonal mean",single-source probe (raw),0.717774389388264
+Llama-3.3-70B,76,0.9625,"zero-shot, Liars' Bench average",base probe (RepE-trained),0.7603
+Llama-3.3-70B,76,0.9625,"zero-shot, Liars' Bench average",deception axis (8v7),0.8515
+Llama-3.3-70B,76,0.9625,"zero-shot, Liars' Bench average",unified axis (13v12),0.8189
+Llama-3.3-70B,76,0.9625,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),0.8481
+Llama-3.3-70B,76,0.9625,"zero-shot, Liars' Bench average",extended axis (12v13),0.9082
+Llama-3.3-70B,79,1.0,"transfer, off-diagonal mean",extended axis (12v13),0.8436290446856929
+Llama-3.3-70B,79,1.0,"transfer, off-diagonal mean",knowledge-denial axis (4v6),0.7994267936550964
+Llama-3.3-70B,79,1.0,"transfer, off-diagonal mean",extended PCs (k=3),0.8191408610450648
+Llama-3.3-70B,79,1.0,"transfer, off-diagonal mean",unified axis (13v12),0.7883625440364187
+Llama-3.3-70B,79,1.0,"transfer, off-diagonal mean",deception axis (8v7),0.8179151751153136
+Llama-3.3-70B,79,1.0,"transfer, off-diagonal mean",single-source probe (raw),0.6581857330235622
+Llama-3.3-70B,79,1.0,"zero-shot, Liars' Bench average",base probe (RepE-trained),0.6907
+Llama-3.3-70B,79,1.0,"zero-shot, Liars' Bench average",deception axis (8v7),0.7996
+Llama-3.3-70B,79,1.0,"zero-shot, Liars' Bench average",unified axis (13v12),0.7737
+Llama-3.3-70B,79,1.0,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),0.7878
+Llama-3.3-70B,79,1.0,"zero-shot, Liars' Bench average",extended axis (12v13),0.8309
+Qwen2.5-72B†,20,0.2625,"transfer, off-diagonal mean",extended axis (12v13),0.5251228230530544
+Qwen2.5-72B†,20,0.2625,"transfer, off-diagonal mean",knowledge-denial axis (4v6),0.5601551472129827
+Qwen2.5-72B†,20,0.2625,"transfer, off-diagonal mean",extended PCs (k=3),0.6744606765009994
+Qwen2.5-72B†,20,0.2625,"transfer, off-diagonal mean",unified axis (13v12),0.4643613354560265
+Qwen2.5-72B†,20,0.2625,"transfer, off-diagonal mean",deception axis (8v7),0.4678160672199467
+Qwen2.5-72B†,20,0.2625,"transfer, off-diagonal mean",single-source probe (raw),0.5326401859765656
+Qwen2.5-72B†,20,0.2625,"zero-shot, Liars' Bench average",base probe (RepE-trained),0.5466
+Qwen2.5-72B†,20,0.2625,"zero-shot, Liars' Bench average",deception axis (8v7),0.4496
+Qwen2.5-72B†,20,0.2625,"zero-shot, Liars' Bench average",unified axis (13v12),0.4488
+Qwen2.5-72B†,20,0.2625,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),0.7056
+Qwen2.5-72B†,20,0.2625,"zero-shot, Liars' Bench average",extended axis (12v13),0.5894
+Qwen2.5-72B†,24,0.3125,"transfer, off-diagonal mean",extended axis (12v13),0.5137161012062031
+Qwen2.5-72B†,24,0.3125,"transfer, off-diagonal mean",knowledge-denial axis (4v6),0.687086873791041
+Qwen2.5-72B†,24,0.3125,"transfer, off-diagonal mean",extended PCs (k=3),0.6480056749341591
+Qwen2.5-72B†,24,0.3125,"transfer, off-diagonal mean",unified axis (13v12),0.419888681783636
+Qwen2.5-72B†,24,0.3125,"transfer, off-diagonal mean",deception axis (8v7),0.4262249475938047
+Qwen2.5-72B†,24,0.3125,"transfer, off-diagonal mean",single-source probe (raw),0.5023862999458942
+Qwen2.5-72B†,24,0.3125,"zero-shot, Liars' Bench average",base probe (RepE-trained),0.6437
+Qwen2.5-72B†,24,0.3125,"zero-shot, Liars' Bench average",deception axis (8v7),0.431
+Qwen2.5-72B†,24,0.3125,"zero-shot, Liars' Bench average",unified axis (13v12),0.429
+Qwen2.5-72B†,24,0.3125,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),0.7203
+Qwen2.5-72B†,24,0.3125,"zero-shot, Liars' Bench average",extended axis (12v13),0.5633
+Qwen2.5-72B†,28,0.3625,"transfer, off-diagonal mean",extended axis (12v13),0.5230925836038606
+Qwen2.5-72B†,28,0.3625,"transfer, off-diagonal mean",knowledge-denial axis (4v6),0.7017225280047074
+Qwen2.5-72B†,28,0.3625,"transfer, off-diagonal mean",extended PCs (k=3),0.6276796802184784
+Qwen2.5-72B†,28,0.3625,"transfer, off-diagonal mean",unified axis (13v12),0.4246708485227812
+Qwen2.5-72B†,28,0.3625,"transfer, off-diagonal mean",deception axis (8v7),0.4322357730597668
+Qwen2.5-72B†,28,0.3625,"transfer, off-diagonal mean",single-source probe (raw),0.4821089998872148
+Qwen2.5-72B†,28,0.3625,"zero-shot, Liars' Bench average",base probe (RepE-trained),0.6067
+Qwen2.5-72B†,28,0.3625,"zero-shot, Liars' Bench average",deception axis (8v7),0.4411
+Qwen2.5-72B†,28,0.3625,"zero-shot, Liars' Bench average",unified axis (13v12),0.4344
+Qwen2.5-72B†,28,0.3625,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),0.7379
+Qwen2.5-72B†,28,0.3625,"zero-shot, Liars' Bench average",extended axis (12v13),0.577
+Qwen2.5-72B†,32,0.4125,"transfer, off-diagonal mean",extended axis (12v13),0.4780537812501066
+Qwen2.5-72B†,32,0.4125,"transfer, off-diagonal mean",knowledge-denial axis (4v6),0.7049873947134834
+Qwen2.5-72B†,32,0.4125,"transfer, off-diagonal mean",extended PCs (k=3),0.5805429575360789
+Qwen2.5-72B†,32,0.4125,"transfer, off-diagonal mean",unified axis (13v12),0.4165053063609876
+Qwen2.5-72B†,32,0.4125,"transfer, off-diagonal mean",deception axis (8v7),0.4229060029771088
+Qwen2.5-72B†,32,0.4125,"transfer, off-diagonal mean",single-source probe (raw),0.5265510875849809
+Qwen2.5-72B†,32,0.4125,"zero-shot, Liars' Bench average",base probe (RepE-trained),0.4973
+Qwen2.5-72B†,32,0.4125,"zero-shot, Liars' Bench average",deception axis (8v7),0.4346
+Qwen2.5-72B†,32,0.4125,"zero-shot, Liars' Bench average",unified axis (13v12),0.4258
+Qwen2.5-72B†,32,0.4125,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),0.7318
+Qwen2.5-72B†,32,0.4125,"zero-shot, Liars' Bench average",extended axis (12v13),0.5165
+Qwen2.5-72B†,36,0.4625,"transfer, off-diagonal mean",extended axis (12v13),0.4252559227205317
+Qwen2.5-72B†,36,0.4625,"transfer, off-diagonal mean",knowledge-denial axis (4v6),0.620087931674809
+Qwen2.5-72B†,36,0.4625,"transfer, off-diagonal mean",extended PCs (k=3),0.5782346087959679
+Qwen2.5-72B†,36,0.4625,"transfer, off-diagonal mean",unified axis (13v12),0.4005459009425052
+Qwen2.5-72B†,36,0.4625,"transfer, off-diagonal mean",deception axis (8v7),0.4070643709215297
+Qwen2.5-72B†,36,0.4625,"transfer, off-diagonal mean",single-source probe (raw),0.545054022649224
+Qwen2.5-72B†,36,0.4625,"zero-shot, Liars' Bench average",base probe (RepE-trained),0.5082
+Qwen2.5-72B†,36,0.4625,"zero-shot, Liars' Bench average",deception axis (8v7),0.3879
+Qwen2.5-72B†,36,0.4625,"zero-shot, Liars' Bench average",unified axis (13v12),0.3771
+Qwen2.5-72B†,36,0.4625,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),0.616
+Qwen2.5-72B†,36,0.4625,"zero-shot, Liars' Bench average",extended axis (12v13),0.4199
+Qwen2.5-72B†,40,0.5125,"transfer, off-diagonal mean",extended axis (12v13),0.4533356210200481
+Qwen2.5-72B†,40,0.5125,"transfer, off-diagonal mean",knowledge-denial axis (4v6),0.6786914373051625
+Qwen2.5-72B†,40,0.5125,"transfer, off-diagonal mean",extended PCs (k=3),0.538743614960345
+Qwen2.5-72B†,40,0.5125,"transfer, off-diagonal mean",unified axis (13v12),0.4512542549592402
+Qwen2.5-72B†,40,0.5125,"transfer, off-diagonal mean",deception axis (8v7),0.4513359200312033
+Qwen2.5-72B†,40,0.5125,"transfer, off-diagonal mean",single-source probe (raw),0.5588628463065012
+Qwen2.5-72B†,40,0.5125,"zero-shot, Liars' Bench average",base probe (RepE-trained),0.4978
+Qwen2.5-72B†,40,0.5125,"zero-shot, Liars' Bench average",deception axis (8v7),0.3802
+Qwen2.5-72B†,40,0.5125,"zero-shot, Liars' Bench average",unified axis (13v12),0.3706
+Qwen2.5-72B†,40,0.5125,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),0.6679
+Qwen2.5-72B†,40,0.5125,"zero-shot, Liars' Bench average",extended axis (12v13),0.4409
+Qwen2.5-72B†,44,0.5625,"transfer, off-diagonal mean",extended axis (12v13),0.4782112771272026
+Qwen2.5-72B†,44,0.5625,"transfer, off-diagonal mean",knowledge-denial axis (4v6),0.7014341901461257
+Qwen2.5-72B†,44,0.5625,"transfer, off-diagonal mean",extended PCs (k=3),0.5544614360638522
+Qwen2.5-72B†,44,0.5625,"transfer, off-diagonal mean",unified axis (13v12),0.4507345218096807
+Qwen2.5-72B†,44,0.5625,"transfer, off-diagonal mean",deception axis (8v7),0.4264289876826093
+Qwen2.5-72B†,44,0.5625,"transfer, off-diagonal mean",single-source probe (raw),0.5311738165382516
+Qwen2.5-72B†,44,0.5625,"zero-shot, Liars' Bench average",base probe (RepE-trained),0.6244
+Qwen2.5-72B†,44,0.5625,"zero-shot, Liars' Bench average",deception axis (8v7),0.4022
+Qwen2.5-72B†,44,0.5625,"zero-shot, Liars' Bench average",unified axis (13v12),0.3966
+Qwen2.5-72B†,44,0.5625,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),0.7009
+Qwen2.5-72B†,44,0.5625,"zero-shot, Liars' Bench average",extended axis (12v13),0.488
+Qwen2.5-72B†,48,0.6125,"transfer, off-diagonal mean",extended axis (12v13),0.4905688144080932
+Qwen2.5-72B†,48,0.6125,"transfer, off-diagonal mean",knowledge-denial axis (4v6),0.7728090466823443
+Qwen2.5-72B†,48,0.6125,"transfer, off-diagonal mean",extended PCs (k=3),0.6091641195440661
+Qwen2.5-72B†,48,0.6125,"transfer, off-diagonal mean",unified axis (13v12),0.4456952878357011
+Qwen2.5-72B†,48,0.6125,"transfer, off-diagonal mean",deception axis (8v7),0.4449970482223592
+Qwen2.5-72B†,48,0.6125,"transfer, off-diagonal mean",single-source probe (raw),0.5848856595243007
+Qwen2.5-72B†,48,0.6125,"zero-shot, Liars' Bench average",base probe (RepE-trained),0.6301
+Qwen2.5-72B†,48,0.6125,"zero-shot, Liars' Bench average",deception axis (8v7),0.4579
+Qwen2.5-72B†,48,0.6125,"zero-shot, Liars' Bench average",unified axis (13v12),0.4583
+Qwen2.5-72B†,48,0.6125,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),0.7648
+Qwen2.5-72B†,48,0.6125,"zero-shot, Liars' Bench average",extended axis (12v13),0.5375
+Qwen2.5-72B†,52,0.6625,"transfer, off-diagonal mean",extended axis (12v13),0.5285936440598125
+Qwen2.5-72B†,52,0.6625,"transfer, off-diagonal mean",knowledge-denial axis (4v6),0.8032009757066926
+Qwen2.5-72B†,52,0.6625,"transfer, off-diagonal mean",extended PCs (k=3),0.6443021671607001
+Qwen2.5-72B†,52,0.6625,"transfer, off-diagonal mean",unified axis (13v12),0.4520608995905588
+Qwen2.5-72B†,52,0.6625,"transfer, off-diagonal mean",deception axis (8v7),0.4685090586179627
+Qwen2.5-72B†,52,0.6625,"transfer, off-diagonal mean",single-source probe (raw),0.7295393544569894
+Qwen2.5-72B†,52,0.6625,"zero-shot, Liars' Bench average",base probe (RepE-trained),0.6993
+Qwen2.5-72B†,52,0.6625,"zero-shot, Liars' Bench average",deception axis (8v7),0.5135
+Qwen2.5-72B†,52,0.6625,"zero-shot, Liars' Bench average",unified axis (13v12),0.4866
+Qwen2.5-72B†,52,0.6625,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),0.7949
+Qwen2.5-72B†,52,0.6625,"zero-shot, Liars' Bench average",extended axis (12v13),0.6158
+Qwen2.5-72B†,56,0.7125,"transfer, off-diagonal mean",extended axis (12v13),0.8361984415257607
+Qwen2.5-72B†,56,0.7125,"transfer, off-diagonal mean",knowledge-denial axis (4v6),0.8425153118910392
+Qwen2.5-72B†,56,0.7125,"transfer, off-diagonal mean",extended PCs (k=3),0.7124099348647194
+Qwen2.5-72B†,56,0.7125,"transfer, off-diagonal mean",unified axis (13v12),0.544629737816093
+Qwen2.5-72B†,56,0.7125,"transfer, off-diagonal mean",deception axis (8v7),0.5803040609704413
+Qwen2.5-72B†,56,0.7125,"transfer, off-diagonal mean",single-source probe (raw),0.8541272549612188
+Qwen2.5-72B†,56,0.7125,"zero-shot, Liars' Bench average",base probe (RepE-trained),0.8166
+Qwen2.5-72B†,56,0.7125,"zero-shot, Liars' Bench average",deception axis (8v7),0.6814
+Qwen2.5-72B†,56,0.7125,"zero-shot, Liars' Bench average",unified axis (13v12),0.6196
+Qwen2.5-72B†,56,0.7125,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),0.8224
+Qwen2.5-72B†,56,0.7125,"zero-shot, Liars' Bench average",extended axis (12v13),0.7937
+Qwen2.5-72B†,60,0.7625,"transfer, off-diagonal mean",extended axis (12v13),0.8518208032358588
+Qwen2.5-72B†,60,0.7625,"transfer, off-diagonal mean",knowledge-denial axis (4v6),0.8471534893638824
+Qwen2.5-72B†,60,0.7625,"transfer, off-diagonal mean",extended PCs (k=3),0.6873154491953134
+Qwen2.5-72B†,60,0.7625,"transfer, off-diagonal mean",unified axis (13v12),0.559843497612126
+Qwen2.5-72B†,60,0.7625,"transfer, off-diagonal mean",deception axis (8v7),0.7779378951726871
+Qwen2.5-72B†,60,0.7625,"transfer, off-diagonal mean",single-source probe (raw),0.846248083998244
+Qwen2.5-72B†,60,0.7625,"zero-shot, Liars' Bench average",base probe (RepE-trained),0.8668
+Qwen2.5-72B†,60,0.7625,"zero-shot, Liars' Bench average",deception axis (8v7),0.7214
+Qwen2.5-72B†,60,0.7625,"zero-shot, Liars' Bench average",unified axis (13v12),0.6408
+Qwen2.5-72B†,60,0.7625,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),0.8195
+Qwen2.5-72B†,60,0.7625,"zero-shot, Liars' Bench average",extended axis (12v13),0.8192
+Qwen2.5-72B†,64,0.8125,"transfer, off-diagonal mean",extended axis (12v13),0.8172946655571559
+Qwen2.5-72B†,64,0.8125,"transfer, off-diagonal mean",knowledge-denial axis (4v6),0.8236875025967829
+Qwen2.5-72B†,64,0.8125,"transfer, off-diagonal mean",extended PCs (k=3),0.6940785363503966
+Qwen2.5-72B†,64,0.8125,"transfer, off-diagonal mean",unified axis (13v12),0.5585434511981389
+Qwen2.5-72B†,64,0.8125,"transfer, off-diagonal mean",deception axis (8v7),0.7522081701375919
+Qwen2.5-72B†,64,0.8125,"transfer, off-diagonal mean",single-source probe (raw),0.8051041201957321
+Qwen2.5-72B†,64,0.8125,"zero-shot, Liars' Bench average",base probe (RepE-trained),0.8667
+Qwen2.5-72B†,64,0.8125,"zero-shot, Liars' Bench average",deception axis (8v7),0.7015
+Qwen2.5-72B†,64,0.8125,"zero-shot, Liars' Bench average",unified axis (13v12),0.6401
+Qwen2.5-72B†,64,0.8125,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),0.7903
+Qwen2.5-72B†,64,0.8125,"zero-shot, Liars' Bench average",extended axis (12v13),0.7818
+Qwen2.5-72B†,68,0.8625,"transfer, off-diagonal mean",extended axis (12v13),0.8228454948339697
+Qwen2.5-72B†,68,0.8625,"transfer, off-diagonal mean",knowledge-denial axis (4v6),0.8411258215548735
+Qwen2.5-72B†,68,0.8625,"transfer, off-diagonal mean",extended PCs (k=3),0.7201582138568495
+Qwen2.5-72B†,68,0.8625,"transfer, off-diagonal mean",unified axis (13v12),0.7143389330859357
+Qwen2.5-72B†,68,0.8625,"transfer, off-diagonal mean",deception axis (8v7),0.7581753381529771
+Qwen2.5-72B†,68,0.8625,"transfer, off-diagonal mean",single-source probe (raw),0.8035155817008276
+Qwen2.5-72B†,68,0.8625,"zero-shot, Liars' Bench average",base probe (RepE-trained),0.8571
+Qwen2.5-72B†,68,0.8625,"zero-shot, Liars' Bench average",deception axis (8v7),0.7283
+Qwen2.5-72B†,68,0.8625,"zero-shot, Liars' Bench average",unified axis (13v12),0.6808
+Qwen2.5-72B†,68,0.8625,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),0.8241
+Qwen2.5-72B†,68,0.8625,"zero-shot, Liars' Bench average",extended axis (12v13),0.8049
+Qwen2.5-72B†,72,0.9125,"transfer, off-diagonal mean",extended axis (12v13),0.7694713036211146
+Qwen2.5-72B†,72,0.9125,"transfer, off-diagonal mean",knowledge-denial axis (4v6),0.8213598518328705
+Qwen2.5-72B†,72,0.9125,"transfer, off-diagonal mean",extended PCs (k=3),0.7006135255838437
+Qwen2.5-72B†,72,0.9125,"transfer, off-diagonal mean",unified axis (13v12),0.5414204356721853
+Qwen2.5-72B†,72,0.9125,"transfer, off-diagonal mean",deception axis (8v7),0.6829892354612447
+Qwen2.5-72B†,72,0.9125,"transfer, off-diagonal mean",single-source probe (raw),0.7865072387707969
+Qwen2.5-72B†,72,0.9125,"zero-shot, Liars' Bench average",base probe (RepE-trained),0.8526
+Qwen2.5-72B†,72,0.9125,"zero-shot, Liars' Bench average",deception axis (8v7),0.6467
+Qwen2.5-72B†,72,0.9125,"zero-shot, Liars' Bench average",unified axis (13v12),0.5989
+Qwen2.5-72B†,72,0.9125,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),0.8073
+Qwen2.5-72B†,72,0.9125,"zero-shot, Liars' Bench average",extended axis (12v13),0.7482
+Qwen2.5-72B†,76,0.9625,"transfer, off-diagonal mean",extended axis (12v13),0.7711815294842302
+Qwen2.5-72B†,76,0.9625,"transfer, off-diagonal mean",knowledge-denial axis (4v6),0.8311230885493964
+Qwen2.5-72B†,76,0.9625,"transfer, off-diagonal mean",extended PCs (k=3),0.6730671192521367
+Qwen2.5-72B†,76,0.9625,"transfer, off-diagonal mean",unified axis (13v12),0.5181985683892201
+Qwen2.5-72B†,76,0.9625,"transfer, off-diagonal mean",deception axis (8v7),0.560281949276055
+Qwen2.5-72B†,76,0.9625,"transfer, off-diagonal mean",single-source probe (raw),0.7382666786444192
+Qwen2.5-72B†,76,0.9625,"zero-shot, Liars' Bench average",base probe (RepE-trained),0.8354
+Qwen2.5-72B†,76,0.9625,"zero-shot, Liars' Bench average",deception axis (8v7),0.6523
+Qwen2.5-72B†,76,0.9625,"zero-shot, Liars' Bench average",unified axis (13v12),0.5867
+Qwen2.5-72B†,76,0.9625,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),0.8112
+Qwen2.5-72B†,76,0.9625,"zero-shot, Liars' Bench average",extended axis (12v13),0.7412
+Qwen2.5-72B†,79,1.0,"transfer, off-diagonal mean",extended axis (12v13),0.5049012790764057
+Qwen2.5-72B†,79,1.0,"transfer, off-diagonal mean",knowledge-denial axis (4v6),0.5458533143955858
+Qwen2.5-72B†,79,1.0,"transfer, off-diagonal mean",extended PCs (k=3),0.6217425209279095
+Qwen2.5-72B†,79,1.0,"transfer, off-diagonal mean",unified axis (13v12),0.5964996833012396
+Qwen2.5-72B†,79,1.0,"transfer, off-diagonal mean",deception axis (8v7),0.5408027695826657
+Qwen2.5-72B†,79,1.0,"transfer, off-diagonal mean",single-source probe (raw),0.7504930637721379
+Qwen2.5-72B†,79,1.0,"zero-shot, Liars' Bench average",base probe (RepE-trained),0.8637
+Qwen2.5-72B†,79,1.0,"zero-shot, Liars' Bench average",deception axis (8v7),0.4509
+Qwen2.5-72B†,79,1.0,"zero-shot, Liars' Bench average",unified axis (13v12),0.3861
+Qwen2.5-72B†,79,1.0,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),0.6698
+Qwen2.5-72B†,79,1.0,"zero-shot, Liars' Bench average",extended axis (12v13),0.5746
+Mistral-Small-3.1-24B,9,0.25,"transfer, off-diagonal mean",extended axis (12v13),0.5650921269908503
+Mistral-Small-3.1-24B,9,0.25,"transfer, off-diagonal mean",knowledge-denial axis (4v6),0.5593473184707634
+Mistral-Small-3.1-24B,9,0.25,"transfer, off-diagonal mean",extended PCs (k=3),0.558813454117242
+Mistral-Small-3.1-24B,9,0.25,"transfer, off-diagonal mean",unified axis (13v12),0.470254466997747
+Mistral-Small-3.1-24B,9,0.25,"transfer, off-diagonal mean",deception axis (8v7),0.4834439522364119
+Mistral-Small-3.1-24B,9,0.25,"transfer, off-diagonal mean",single-source probe (raw),0.5266580320274513
+Mistral-Small-3.1-24B,9,0.25,"zero-shot, Liars' Bench average",base probe (RepE-trained),0.5536
+Mistral-Small-3.1-24B,9,0.25,"zero-shot, Liars' Bench average",deception axis (8v7),0.5685
+Mistral-Small-3.1-24B,9,0.25,"zero-shot, Liars' Bench average",unified axis (13v12),0.5489
+Mistral-Small-3.1-24B,9,0.25,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),0.6157
+Mistral-Small-3.1-24B,9,0.25,"zero-shot, Liars' Bench average",extended axis (12v13),0.6329
+Mistral-Small-3.1-24B,10,0.275,"transfer, off-diagonal mean",extended axis (12v13),0.5807824446697498
+Mistral-Small-3.1-24B,10,0.275,"transfer, off-diagonal mean",knowledge-denial axis (4v6),0.5876740439538395
+Mistral-Small-3.1-24B,10,0.275,"transfer, off-diagonal mean",extended PCs (k=3),0.5119466814159744
+Mistral-Small-3.1-24B,10,0.275,"transfer, off-diagonal mean",unified axis (13v12),0.4682527892040752
+Mistral-Small-3.1-24B,10,0.275,"transfer, off-diagonal mean",deception axis (8v7),0.4776329151606356
+Mistral-Small-3.1-24B,10,0.275,"transfer, off-diagonal mean",single-source probe (raw),0.4933986491777016
+Mistral-Small-3.1-24B,10,0.275,"zero-shot, Liars' Bench average",base probe (RepE-trained),0.5876
+Mistral-Small-3.1-24B,10,0.275,"zero-shot, Liars' Bench average",deception axis (8v7),0.5733
+Mistral-Small-3.1-24B,10,0.275,"zero-shot, Liars' Bench average",unified axis (13v12),0.5571
+Mistral-Small-3.1-24B,10,0.275,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),0.6603
+Mistral-Small-3.1-24B,10,0.275,"zero-shot, Liars' Bench average",extended axis (12v13),0.6569
+Mistral-Small-3.1-24B,12,0.325,"transfer, off-diagonal mean",extended axis (12v13),0.7331919113328518
+Mistral-Small-3.1-24B,12,0.325,"transfer, off-diagonal mean",knowledge-denial axis (4v6),0.7091129431480223
+Mistral-Small-3.1-24B,12,0.325,"transfer, off-diagonal mean",extended PCs (k=3),0.6089624723893147
+Mistral-Small-3.1-24B,12,0.325,"transfer, off-diagonal mean",unified axis (13v12),0.4760024312216774
+Mistral-Small-3.1-24B,12,0.325,"transfer, off-diagonal mean",deception axis (8v7),0.4878672616572984
+Mistral-Small-3.1-24B,12,0.325,"transfer, off-diagonal mean",single-source probe (raw),0.5592731998756739
+Mistral-Small-3.1-24B,12,0.325,"zero-shot, Liars' Bench average",base probe (RepE-trained),0.652
+Mistral-Small-3.1-24B,12,0.325,"zero-shot, Liars' Bench average",deception axis (8v7),0.6203
+Mistral-Small-3.1-24B,12,0.325,"zero-shot, Liars' Bench average",unified axis (13v12),0.5849
+Mistral-Small-3.1-24B,12,0.325,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),0.7083
+Mistral-Small-3.1-24B,12,0.325,"zero-shot, Liars' Bench average",extended axis (12v13),0.7154
+Mistral-Small-3.1-24B,14,0.375,"transfer, off-diagonal mean",extended axis (12v13),0.7873285489580685
+Mistral-Small-3.1-24B,14,0.375,"transfer, off-diagonal mean",knowledge-denial axis (4v6),0.7479985554039997
+Mistral-Small-3.1-24B,14,0.375,"transfer, off-diagonal mean",extended PCs (k=3),0.7501819827226444
+Mistral-Small-3.1-24B,14,0.375,"transfer, off-diagonal mean",unified axis (13v12),0.47809335007982
+Mistral-Small-3.1-24B,14,0.375,"transfer, off-diagonal mean",deception axis (8v7),0.5926194137999383
+Mistral-Small-3.1-24B,14,0.375,"transfer, off-diagonal mean",single-source probe (raw),0.6005548763824194
+Mistral-Small-3.1-24B,14,0.375,"zero-shot, Liars' Bench average",base probe (RepE-trained),0.7517
+Mistral-Small-3.1-24B,14,0.375,"zero-shot, Liars' Bench average",deception axis (8v7),0.6661
+Mistral-Small-3.1-24B,14,0.375,"zero-shot, Liars' Bench average",unified axis (13v12),0.6216
+Mistral-Small-3.1-24B,14,0.375,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),0.7372
+Mistral-Small-3.1-24B,14,0.375,"zero-shot, Liars' Bench average",extended axis (12v13),0.7609
+Mistral-Small-3.1-24B,16,0.425,"transfer, off-diagonal mean",extended axis (12v13),0.8404190198135508
+Mistral-Small-3.1-24B,16,0.425,"transfer, off-diagonal mean",knowledge-denial axis (4v6),0.8071096041954331
+Mistral-Small-3.1-24B,16,0.425,"transfer, off-diagonal mean",extended PCs (k=3),0.8467288669966047
+Mistral-Small-3.1-24B,16,0.425,"transfer, off-diagonal mean",unified axis (13v12),0.4798050495622872
+Mistral-Small-3.1-24B,16,0.425,"transfer, off-diagonal mean",deception axis (8v7),0.6360973141733075
+Mistral-Small-3.1-24B,16,0.425,"transfer, off-diagonal mean",single-source probe (raw),0.6851775730893704
+Mistral-Small-3.1-24B,16,0.425,"zero-shot, Liars' Bench average",base probe (RepE-trained),0.7377
+Mistral-Small-3.1-24B,16,0.425,"zero-shot, Liars' Bench average",deception axis (8v7),0.729
+Mistral-Small-3.1-24B,16,0.425,"zero-shot, Liars' Bench average",unified axis (13v12),0.6504
+Mistral-Small-3.1-24B,16,0.425,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),0.7764
+Mistral-Small-3.1-24B,16,0.425,"zero-shot, Liars' Bench average",extended axis (12v13),0.8038
+Mistral-Small-3.1-24B,18,0.475,"transfer, off-diagonal mean",extended axis (12v13),0.850470316091244
+Mistral-Small-3.1-24B,18,0.475,"transfer, off-diagonal mean",knowledge-denial axis (4v6),0.8107922255695437
+Mistral-Small-3.1-24B,18,0.475,"transfer, off-diagonal mean",extended PCs (k=3),0.8481660021454231
+Mistral-Small-3.1-24B,18,0.475,"transfer, off-diagonal mean",unified axis (13v12),0.4945323553785553
+Mistral-Small-3.1-24B,18,0.475,"transfer, off-diagonal mean",deception axis (8v7),0.8206440065335897
+Mistral-Small-3.1-24B,18,0.475,"transfer, off-diagonal mean",single-source probe (raw),0.6383989627851625
+Mistral-Small-3.1-24B,18,0.475,"zero-shot, Liars' Bench average",base probe (RepE-trained),0.7593
+Mistral-Small-3.1-24B,18,0.475,"zero-shot, Liars' Bench average",deception axis (8v7),0.7759
+Mistral-Small-3.1-24B,18,0.475,"zero-shot, Liars' Bench average",unified axis (13v12),0.6829
+Mistral-Small-3.1-24B,18,0.475,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),0.7666
+Mistral-Small-3.1-24B,18,0.475,"zero-shot, Liars' Bench average",extended axis (12v13),0.8133
+Mistral-Small-3.1-24B,20,0.525,"transfer, off-diagonal mean",extended axis (12v13),0.8095206751083449
+Mistral-Small-3.1-24B,20,0.525,"transfer, off-diagonal mean",knowledge-denial axis (4v6),0.7804556708309669
+Mistral-Small-3.1-24B,20,0.525,"transfer, off-diagonal mean",extended PCs (k=3),0.703581083880249
+Mistral-Small-3.1-24B,20,0.525,"transfer, off-diagonal mean",unified axis (13v12),0.4666701190847247
+Mistral-Small-3.1-24B,20,0.525,"transfer, off-diagonal mean",deception axis (8v7),0.6331949323077867
+Mistral-Small-3.1-24B,20,0.525,"transfer, off-diagonal mean",single-source probe (raw),0.7159757353676117
+Mistral-Small-3.1-24B,20,0.525,"zero-shot, Liars' Bench average",base probe (RepE-trained),0.7661
+Mistral-Small-3.1-24B,20,0.525,"zero-shot, Liars' Bench average",deception axis (8v7),0.7192
+Mistral-Small-3.1-24B,20,0.525,"zero-shot, Liars' Bench average",unified axis (13v12),0.6017
+Mistral-Small-3.1-24B,20,0.525,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),0.7267
+Mistral-Small-3.1-24B,20,0.525,"zero-shot, Liars' Bench average",extended axis (12v13),0.762
+Mistral-Small-3.1-24B,22,0.575,"transfer, off-diagonal mean",extended axis (12v13),0.6455532428965045
+Mistral-Small-3.1-24B,22,0.575,"transfer, off-diagonal mean",knowledge-denial axis (4v6),0.7706563431254041
+Mistral-Small-3.1-24B,22,0.575,"transfer, off-diagonal mean",extended PCs (k=3),0.7409026010701211
+Mistral-Small-3.1-24B,22,0.575,"transfer, off-diagonal mean",unified axis (13v12),0.576240257858902
+Mistral-Small-3.1-24B,22,0.575,"transfer, off-diagonal mean",deception axis (8v7),0.6190298687741944
+Mistral-Small-3.1-24B,22,0.575,"transfer, off-diagonal mean",single-source probe (raw),0.6556319529373058
+Mistral-Small-3.1-24B,22,0.575,"zero-shot, Liars' Bench average",base probe (RepE-trained),0.7491
+Mistral-Small-3.1-24B,22,0.575,"zero-shot, Liars' Bench average",deception axis (8v7),0.7007
+Mistral-Small-3.1-24B,22,0.575,"zero-shot, Liars' Bench average",unified axis (13v12),0.6318
+Mistral-Small-3.1-24B,22,0.575,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),0.7146
+Mistral-Small-3.1-24B,22,0.575,"zero-shot, Liars' Bench average",extended axis (12v13),0.7386
+Mistral-Small-3.1-24B,24,0.625,"transfer, off-diagonal mean",extended axis (12v13),0.6295798790059343
+Mistral-Small-3.1-24B,24,0.625,"transfer, off-diagonal mean",knowledge-denial axis (4v6),0.7477392132479113
+Mistral-Small-3.1-24B,24,0.625,"transfer, off-diagonal mean",extended PCs (k=3),0.6965931981832275
+Mistral-Small-3.1-24B,24,0.625,"transfer, off-diagonal mean",unified axis (13v12),0.5762459298867784
+Mistral-Small-3.1-24B,24,0.625,"transfer, off-diagonal mean",deception axis (8v7),0.6099624163687434
+Mistral-Small-3.1-24B,24,0.625,"transfer, off-diagonal mean",single-source probe (raw),0.6543667782813568
+Mistral-Small-3.1-24B,24,0.625,"zero-shot, Liars' Bench average",base probe (RepE-trained),0.7906
+Mistral-Small-3.1-24B,24,0.625,"zero-shot, Liars' Bench average",deception axis (8v7),0.6897
+Mistral-Small-3.1-24B,24,0.625,"zero-shot, Liars' Bench average",unified axis (13v12),0.6439
+Mistral-Small-3.1-24B,24,0.625,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),0.6849
+Mistral-Small-3.1-24B,24,0.625,"zero-shot, Liars' Bench average",extended axis (12v13),0.7152
+Mistral-Small-3.1-24B,26,0.675,"transfer, off-diagonal mean",extended axis (12v13),0.6374409178758492
+Mistral-Small-3.1-24B,26,0.675,"transfer, off-diagonal mean",knowledge-denial axis (4v6),0.7456144552812295
+Mistral-Small-3.1-24B,26,0.675,"transfer, off-diagonal mean",extended PCs (k=3),0.745990182391983
+Mistral-Small-3.1-24B,26,0.675,"transfer, off-diagonal mean",unified axis (13v12),0.5838719142875838
+Mistral-Small-3.1-24B,26,0.675,"transfer, off-diagonal mean",deception axis (8v7),0.6151773119989834
+Mistral-Small-3.1-24B,26,0.675,"transfer, off-diagonal mean",single-source probe (raw),0.6362605176026502
+Mistral-Small-3.1-24B,26,0.675,"zero-shot, Liars' Bench average",base probe (RepE-trained),0.807
+Mistral-Small-3.1-24B,26,0.675,"zero-shot, Liars' Bench average",deception axis (8v7),0.7008
+Mistral-Small-3.1-24B,26,0.675,"zero-shot, Liars' Bench average",unified axis (13v12),0.6614
+Mistral-Small-3.1-24B,26,0.675,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),0.6828
+Mistral-Small-3.1-24B,26,0.675,"zero-shot, Liars' Bench average",extended axis (12v13),0.7289
+Mistral-Small-3.1-24B,28,0.725,"transfer, off-diagonal mean",extended axis (12v13),0.6152189495877508
+Mistral-Small-3.1-24B,28,0.725,"transfer, off-diagonal mean",knowledge-denial axis (4v6),0.7358429517772698
+Mistral-Small-3.1-24B,28,0.725,"transfer, off-diagonal mean",extended PCs (k=3),0.6875652337506508
+Mistral-Small-3.1-24B,28,0.725,"transfer, off-diagonal mean",unified axis (13v12),0.5608284375274927
+Mistral-Small-3.1-24B,28,0.725,"transfer, off-diagonal mean",deception axis (8v7),0.5923798833580788
+Mistral-Small-3.1-24B,28,0.725,"transfer, off-diagonal mean",single-source probe (raw),0.6214216601322058
+Mistral-Small-3.1-24B,28,0.725,"zero-shot, Liars' Bench average",base probe (RepE-trained),0.8219
+Mistral-Small-3.1-24B,28,0.725,"zero-shot, Liars' Bench average",deception axis (8v7),0.666
+Mistral-Small-3.1-24B,28,0.725,"zero-shot, Liars' Bench average",unified axis (13v12),0.6154
+Mistral-Small-3.1-24B,28,0.725,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),0.6721
+Mistral-Small-3.1-24B,28,0.725,"zero-shot, Liars' Bench average",extended axis (12v13),0.6952
+Mistral-Small-3.1-24B,30,0.775,"transfer, off-diagonal mean",extended axis (12v13),0.6294926551949979
+Mistral-Small-3.1-24B,30,0.775,"transfer, off-diagonal mean",knowledge-denial axis (4v6),0.7353146053798405
+Mistral-Small-3.1-24B,30,0.775,"transfer, off-diagonal mean",extended PCs (k=3),0.7237457226872507
+Mistral-Small-3.1-24B,30,0.775,"transfer, off-diagonal mean",unified axis (13v12),0.5617881933624684
+Mistral-Small-3.1-24B,30,0.775,"transfer, off-diagonal mean",deception axis (8v7),0.6020925319083469
+Mistral-Small-3.1-24B,30,0.775,"transfer, off-diagonal mean",single-source probe (raw),0.6286584229187652
+Mistral-Small-3.1-24B,30,0.775,"zero-shot, Liars' Bench average",base probe (RepE-trained),0.819
+Mistral-Small-3.1-24B,30,0.775,"zero-shot, Liars' Bench average",deception axis (8v7),0.6824
+Mistral-Small-3.1-24B,30,0.775,"zero-shot, Liars' Bench average",unified axis (13v12),0.6161
+Mistral-Small-3.1-24B,30,0.775,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),0.6713
+Mistral-Small-3.1-24B,30,0.775,"zero-shot, Liars' Bench average",extended axis (12v13),0.7196
+Mistral-Small-3.1-24B,32,0.825,"transfer, off-diagonal mean",extended axis (12v13),0.5919585196240428
+Mistral-Small-3.1-24B,32,0.825,"transfer, off-diagonal mean",knowledge-denial axis (4v6),0.600409276522186
+Mistral-Small-3.1-24B,32,0.825,"transfer, off-diagonal mean",extended PCs (k=3),0.6260154007581292
+Mistral-Small-3.1-24B,32,0.825,"transfer, off-diagonal mean",unified axis (13v12),0.4650975386726524
+Mistral-Small-3.1-24B,32,0.825,"transfer, off-diagonal mean",deception axis (8v7),0.5798892896627411
+Mistral-Small-3.1-24B,32,0.825,"transfer, off-diagonal mean",single-source probe (raw),0.6127620550045129
+Mistral-Small-3.1-24B,32,0.825,"zero-shot, Liars' Bench average",base probe (RepE-trained),0.7939
+Mistral-Small-3.1-24B,32,0.825,"zero-shot, Liars' Bench average",deception axis (8v7),0.6442
+Mistral-Small-3.1-24B,32,0.825,"zero-shot, Liars' Bench average",unified axis (13v12),0.5851
+Mistral-Small-3.1-24B,32,0.825,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),0.6334
+Mistral-Small-3.1-24B,32,0.825,"zero-shot, Liars' Bench average",extended axis (12v13),0.6644
+Mistral-Small-3.1-24B,34,0.875,"transfer, off-diagonal mean",extended axis (12v13),0.609672104586152
+Mistral-Small-3.1-24B,34,0.875,"transfer, off-diagonal mean",knowledge-denial axis (4v6),0.7082091078756424
+Mistral-Small-3.1-24B,34,0.875,"transfer, off-diagonal mean",extended PCs (k=3),0.7290208213769358
+Mistral-Small-3.1-24B,34,0.875,"transfer, off-diagonal mean",unified axis (13v12),0.4676307448857734
+Mistral-Small-3.1-24B,34,0.875,"transfer, off-diagonal mean",deception axis (8v7),0.5912350479503703
+Mistral-Small-3.1-24B,34,0.875,"transfer, off-diagonal mean",single-source probe (raw),0.6347106732966206
+Mistral-Small-3.1-24B,34,0.875,"zero-shot, Liars' Bench average",base probe (RepE-trained),0.8073
+Mistral-Small-3.1-24B,34,0.875,"zero-shot, Liars' Bench average",deception axis (8v7),0.6603
+Mistral-Small-3.1-24B,34,0.875,"zero-shot, Liars' Bench average",unified axis (13v12),0.5919
+Mistral-Small-3.1-24B,34,0.875,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),0.639
+Mistral-Small-3.1-24B,34,0.875,"zero-shot, Liars' Bench average",extended axis (12v13),0.6864
+Mistral-Small-3.1-24B,36,0.925,"transfer, off-diagonal mean",extended axis (12v13),0.60545370074543
+Mistral-Small-3.1-24B,36,0.925,"transfer, off-diagonal mean",knowledge-denial axis (4v6),0.589130081374358
+Mistral-Small-3.1-24B,36,0.925,"transfer, off-diagonal mean",extended PCs (k=3),0.6861554001361293
+Mistral-Small-3.1-24B,36,0.925,"transfer, off-diagonal mean",unified axis (13v12),0.573219974031584
+Mistral-Small-3.1-24B,36,0.925,"transfer, off-diagonal mean",deception axis (8v7),0.6046817367842278
+Mistral-Small-3.1-24B,36,0.925,"transfer, off-diagonal mean",single-source probe (raw),0.624534350782391
+Mistral-Small-3.1-24B,36,0.925,"zero-shot, Liars' Bench average",base probe (RepE-trained),0.8132
+Mistral-Small-3.1-24B,36,0.925,"zero-shot, Liars' Bench average",deception axis (8v7),0.694
+Mistral-Small-3.1-24B,36,0.925,"zero-shot, Liars' Bench average",unified axis (13v12),0.641
+Mistral-Small-3.1-24B,36,0.925,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),0.6262
+Mistral-Small-3.1-24B,36,0.925,"zero-shot, Liars' Bench average",extended axis (12v13),0.6913
+Mistral-Small-3.1-24B,38,0.975,"transfer, off-diagonal mean",extended axis (12v13),0.6069484730017265
+Mistral-Small-3.1-24B,38,0.975,"transfer, off-diagonal mean",knowledge-denial axis (4v6),0.5737888415753181
+Mistral-Small-3.1-24B,38,0.975,"transfer, off-diagonal mean",extended PCs (k=3),0.6861164667891078
+Mistral-Small-3.1-24B,38,0.975,"transfer, off-diagonal mean",unified axis (13v12),0.5948909438804713
+Mistral-Small-3.1-24B,38,0.975,"transfer, off-diagonal mean",deception axis (8v7),0.6093451624657481
+Mistral-Small-3.1-24B,38,0.975,"transfer, off-diagonal mean",single-source probe (raw),0.5912739357693843
+Mistral-Small-3.1-24B,38,0.975,"zero-shot, Liars' Bench average",base probe (RepE-trained),0.6851
+Mistral-Small-3.1-24B,38,0.975,"zero-shot, Liars' Bench average",deception axis (8v7),0.6969
+Mistral-Small-3.1-24B,38,0.975,"zero-shot, Liars' Bench average",unified axis (13v12),0.6763
+Mistral-Small-3.1-24B,38,0.975,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),0.6278
+Mistral-Small-3.1-24B,38,0.975,"zero-shot, Liars' Bench average",extended axis (12v13),0.6926
+Mistral-Small-3.1-24B,39,1.0,"transfer, off-diagonal mean",extended axis (12v13),0.4651379236363132
+Mistral-Small-3.1-24B,39,1.0,"transfer, off-diagonal mean",knowledge-denial axis (4v6),0.4630018159302604
+Mistral-Small-3.1-24B,39,1.0,"transfer, off-diagonal mean",extended PCs (k=3),0.4942081893936024
+Mistral-Small-3.1-24B,39,1.0,"transfer, off-diagonal mean",unified axis (13v12),0.4611851570031851
+Mistral-Small-3.1-24B,39,1.0,"transfer, off-diagonal mean",deception axis (8v7),0.4711524066496655
+Mistral-Small-3.1-24B,39,1.0,"transfer, off-diagonal mean",single-source probe (raw),0.5930920172781956
+Mistral-Small-3.1-24B,39,1.0,"zero-shot, Liars' Bench average",base probe (RepE-trained),0.7114
+Mistral-Small-3.1-24B,39,1.0,"zero-shot, Liars' Bench average",deception axis (8v7),0.5965
+Mistral-Small-3.1-24B,39,1.0,"zero-shot, Liars' Bench average",unified axis (13v12),0.5749
+Mistral-Small-3.1-24B,39,1.0,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),0.5553
+Mistral-Small-3.1-24B,39,1.0,"zero-shot, Liars' Bench average",extended axis (12v13),0.5888
+Gemma-3-27B,8,0.14516129032258066,"transfer, off-diagonal mean",extended axis (12v13),0.5154254039875795
+Gemma-3-27B,8,0.14516129032258066,"transfer, off-diagonal mean",knowledge-denial axis (4v6),0.5256262727370952
+Gemma-3-27B,8,0.14516129032258066,"transfer, off-diagonal mean",extended PCs (k=3),0.5316532356327592
+Gemma-3-27B,8,0.14516129032258066,"transfer, off-diagonal mean",unified axis (13v12),0.5101924950508858
+Gemma-3-27B,8,0.14516129032258066,"transfer, off-diagonal mean",deception axis (8v7),0.5101046435423942
+Gemma-3-27B,8,0.14516129032258066,"transfer, off-diagonal mean",single-source probe (raw),0.4881415642905262
+Gemma-3-27B,8,0.14516129032258066,"zero-shot, Liars' Bench average",base probe (RepE-trained),0.5122
+Gemma-3-27B,8,0.14516129032258066,"zero-shot, Liars' Bench average",deception axis (8v7),0.5745
+Gemma-3-27B,8,0.14516129032258066,"zero-shot, Liars' Bench average",unified axis (13v12),0.5754
+Gemma-3-27B,8,0.14516129032258066,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),0.622
+Gemma-3-27B,8,0.14516129032258066,"zero-shot, Liars' Bench average",extended axis (12v13),0.5906
+Gemma-3-27B,16,0.27419354838709675,"transfer, off-diagonal mean",extended axis (12v13),0.4832271465728469
+Gemma-3-27B,16,0.27419354838709675,"transfer, off-diagonal mean",knowledge-denial axis (4v6),0.4822540543910862
+Gemma-3-27B,16,0.27419354838709675,"transfer, off-diagonal mean",extended PCs (k=3),0.51848396704372
+Gemma-3-27B,16,0.27419354838709675,"transfer, off-diagonal mean",unified axis (13v12),0.4834647811386721
+Gemma-3-27B,16,0.27419354838709675,"transfer, off-diagonal mean",deception axis (8v7),0.4839054183648903
+Gemma-3-27B,16,0.27419354838709675,"transfer, off-diagonal mean",single-source probe (raw),0.5815122671891909
+Gemma-3-27B,16,0.27419354838709675,"zero-shot, Liars' Bench average",base probe (RepE-trained),0.5969
+Gemma-3-27B,16,0.27419354838709675,"zero-shot, Liars' Bench average",deception axis (8v7),0.5558
+Gemma-3-27B,16,0.27419354838709675,"zero-shot, Liars' Bench average",unified axis (13v12),0.5549
+Gemma-3-27B,16,0.27419354838709675,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),0.5546
+Gemma-3-27B,16,0.27419354838709675,"zero-shot, Liars' Bench average",extended axis (12v13),0.5554
+Gemma-3-27B,19,0.3225806451612903,"transfer, off-diagonal mean",extended axis (12v13),0.442798080529899
+Gemma-3-27B,19,0.3225806451612903,"transfer, off-diagonal mean",knowledge-denial axis (4v6),0.4437473068049491
+Gemma-3-27B,19,0.3225806451612903,"transfer, off-diagonal mean",extended PCs (k=3),0.4606710954498339
+Gemma-3-27B,19,0.3225806451612903,"transfer, off-diagonal mean",unified axis (13v12),0.444820962956621
+Gemma-3-27B,19,0.3225806451612903,"transfer, off-diagonal mean",deception axis (8v7),0.4411170424424172
+Gemma-3-27B,19,0.3225806451612903,"transfer, off-diagonal mean",single-source probe (raw),0.6430949912313508
+Gemma-3-27B,19,0.3225806451612903,"zero-shot, Liars' Bench average",base probe (RepE-trained),0.7807
+Gemma-3-27B,19,0.3225806451612903,"zero-shot, Liars' Bench average",deception axis (8v7),0.543
+Gemma-3-27B,19,0.3225806451612903,"zero-shot, Liars' Bench average",unified axis (13v12),0.5394
+Gemma-3-27B,19,0.3225806451612903,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),0.5393
+Gemma-3-27B,19,0.3225806451612903,"zero-shot, Liars' Bench average",extended axis (12v13),0.5416
+Gemma-3-27B,22,0.3709677419354839,"transfer, off-diagonal mean",extended axis (12v13),0.4508083996416865
+Gemma-3-27B,22,0.3709677419354839,"transfer, off-diagonal mean",knowledge-denial axis (4v6),0.4505955431609268
+Gemma-3-27B,22,0.3709677419354839,"transfer, off-diagonal mean",extended PCs (k=3),0.4980136890548294
+Gemma-3-27B,22,0.3709677419354839,"transfer, off-diagonal mean",unified axis (13v12),0.4508279719792882
+Gemma-3-27B,22,0.3709677419354839,"transfer, off-diagonal mean",deception axis (8v7),0.4505035849828205
+Gemma-3-27B,22,0.3709677419354839,"transfer, off-diagonal mean",single-source probe (raw),0.625021100080416
+Gemma-3-27B,22,0.3709677419354839,"zero-shot, Liars' Bench average",base probe (RepE-trained),0.8513
+Gemma-3-27B,22,0.3709677419354839,"zero-shot, Liars' Bench average",deception axis (8v7),0.6051
+Gemma-3-27B,22,0.3709677419354839,"zero-shot, Liars' Bench average",unified axis (13v12),0.5967
+Gemma-3-27B,22,0.3709677419354839,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),0.5971
+Gemma-3-27B,22,0.3709677419354839,"zero-shot, Liars' Bench average",extended axis (12v13),0.5998
+Gemma-3-27B,25,0.41935483870967744,"transfer, off-diagonal mean",extended axis (12v13),0.4416969847772636
+Gemma-3-27B,25,0.41935483870967744,"transfer, off-diagonal mean",knowledge-denial axis (4v6),0.4409324888732748
+Gemma-3-27B,25,0.41935483870967744,"transfer, off-diagonal mean",extended PCs (k=3),0.6176417624538327
+Gemma-3-27B,25,0.41935483870967744,"transfer, off-diagonal mean",unified axis (13v12),0.4413131814541959
+Gemma-3-27B,25,0.41935483870967744,"transfer, off-diagonal mean",deception axis (8v7),0.4478512542594093
+Gemma-3-27B,25,0.41935483870967744,"transfer, off-diagonal mean",single-source probe (raw),0.7019432930782431
+Gemma-3-27B,25,0.41935483870967744,"zero-shot, Liars' Bench average",base probe (RepE-trained),0.8873
+Gemma-3-27B,25,0.41935483870967744,"zero-shot, Liars' Bench average",deception axis (8v7),0.6827
+Gemma-3-27B,25,0.41935483870967744,"zero-shot, Liars' Bench average",unified axis (13v12),0.6083
+Gemma-3-27B,25,0.41935483870967744,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),0.6056
+Gemma-3-27B,25,0.41935483870967744,"zero-shot, Liars' Bench average",extended axis (12v13),0.6163
+Gemma-3-27B,28,0.46774193548387094,"transfer, off-diagonal mean",extended axis (12v13),0.4252421231121588
+Gemma-3-27B,28,0.46774193548387094,"transfer, off-diagonal mean",knowledge-denial axis (4v6),0.4219416849136788
+Gemma-3-27B,28,0.46774193548387094,"transfer, off-diagonal mean",extended PCs (k=3),0.8453755126240399
+Gemma-3-27B,28,0.46774193548387094,"transfer, off-diagonal mean",unified axis (13v12),0.4228245613506945
+Gemma-3-27B,28,0.46774193548387094,"transfer, off-diagonal mean",deception axis (8v7),0.4279886876387748
+Gemma-3-27B,28,0.46774193548387094,"transfer, off-diagonal mean",single-source probe (raw),0.7342921304081763
+Gemma-3-27B,28,0.46774193548387094,"zero-shot, Liars' Bench average",base probe (RepE-trained),0.8254
+Gemma-3-27B,28,0.46774193548387094,"zero-shot, Liars' Bench average",deception axis (8v7),0.4961
+Gemma-3-27B,28,0.46774193548387094,"zero-shot, Liars' Bench average",unified axis (13v12),0.6484
+Gemma-3-27B,28,0.46774193548387094,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),0.6216
+Gemma-3-27B,28,0.46774193548387094,"zero-shot, Liars' Bench average",extended axis (12v13),0.6744
+Gemma-3-27B,31,0.5161290322580645,"transfer, off-diagonal mean",extended axis (12v13),0.9210523853329962
+Gemma-3-27B,31,0.5161290322580645,"transfer, off-diagonal mean",knowledge-denial axis (4v6),0.44239876984343
+Gemma-3-27B,31,0.5161290322580645,"transfer, off-diagonal mean",extended PCs (k=3),0.8741556016641363
+Gemma-3-27B,31,0.5161290322580645,"transfer, off-diagonal mean",unified axis (13v12),0.4383693445730965
+Gemma-3-27B,31,0.5161290322580645,"transfer, off-diagonal mean",deception axis (8v7),0.7000534628917121
+Gemma-3-27B,31,0.5161290322580645,"transfer, off-diagonal mean",single-source probe (raw),0.7459296410097057
+Gemma-3-27B,31,0.5161290322580645,"zero-shot, Liars' Bench average",base probe (RepE-trained),0.7834
+Gemma-3-27B,31,0.5161290322580645,"zero-shot, Liars' Bench average",deception axis (8v7),0.6794
+Gemma-3-27B,31,0.5161290322580645,"zero-shot, Liars' Bench average",unified axis (13v12),0.5569
+Gemma-3-27B,31,0.5161290322580645,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),0.4844
+Gemma-3-27B,31,0.5161290322580645,"zero-shot, Liars' Bench average",extended axis (12v13),0.8999
+Gemma-3-27B,34,0.5645161290322581,"transfer, off-diagonal mean",extended axis (12v13),0.831634774600163
+Gemma-3-27B,34,0.5645161290322581,"transfer, off-diagonal mean",knowledge-denial axis (4v6),0.4396487060646312
+Gemma-3-27B,34,0.5645161290322581,"transfer, off-diagonal mean",extended PCs (k=3),0.8599609995151223
+Gemma-3-27B,34,0.5645161290322581,"transfer, off-diagonal mean",unified axis (13v12),0.5089430841410261
+Gemma-3-27B,34,0.5645161290322581,"transfer, off-diagonal mean",deception axis (8v7),0.7187483117127833
+Gemma-3-27B,34,0.5645161290322581,"transfer, off-diagonal mean",single-source probe (raw),0.7002229856212469
+Gemma-3-27B,34,0.5645161290322581,"zero-shot, Liars' Bench average",base probe (RepE-trained),0.7613
+Gemma-3-27B,34,0.5645161290322581,"zero-shot, Liars' Bench average",deception axis (8v7),0.6906
+Gemma-3-27B,34,0.5645161290322581,"zero-shot, Liars' Bench average",unified axis (13v12),0.6324
+Gemma-3-27B,34,0.5645161290322581,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),0.5641
+Gemma-3-27B,34,0.5645161290322581,"zero-shot, Liars' Bench average",extended axis (12v13),0.8009
+Gemma-3-27B,37,0.6129032258064516,"transfer, off-diagonal mean",extended axis (12v13),0.91525410887171
+Gemma-3-27B,37,0.6129032258064516,"transfer, off-diagonal mean",knowledge-denial axis (4v6),0.5027036809184625
+Gemma-3-27B,37,0.6129032258064516,"transfer, off-diagonal mean",extended PCs (k=3),0.8742756136883482
+Gemma-3-27B,37,0.6129032258064516,"transfer, off-diagonal mean",unified axis (13v12),0.4818329738192586
+Gemma-3-27B,37,0.6129032258064516,"transfer, off-diagonal mean",deception axis (8v7),0.8746194217072932
+Gemma-3-27B,37,0.6129032258064516,"transfer, off-diagonal mean",single-source probe (raw),0.6807826251656309
+Gemma-3-27B,37,0.6129032258064516,"zero-shot, Liars' Bench average",base probe (RepE-trained),0.7935
+Gemma-3-27B,37,0.6129032258064516,"zero-shot, Liars' Bench average",deception axis (8v7),0.8671
+Gemma-3-27B,37,0.6129032258064516,"zero-shot, Liars' Bench average",unified axis (13v12),0.5681
+Gemma-3-27B,37,0.6129032258064516,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),0.577
+Gemma-3-27B,37,0.6129032258064516,"zero-shot, Liars' Bench average",extended axis (12v13),0.8895
+Gemma-3-27B,40,0.6612903225806451,"transfer, off-diagonal mean",extended axis (12v13),0.8307614079073341
+Gemma-3-27B,40,0.6612903225806451,"transfer, off-diagonal mean",knowledge-denial axis (4v6),0.7186397654304434
+Gemma-3-27B,40,0.6612903225806451,"transfer, off-diagonal mean",extended PCs (k=3),0.873686486688193
+Gemma-3-27B,40,0.6612903225806451,"transfer, off-diagonal mean",unified axis (13v12),0.8710325704902817
+Gemma-3-27B,40,0.6612903225806451,"transfer, off-diagonal mean",deception axis (8v7),0.7610694226638158
+Gemma-3-27B,40,0.6612903225806451,"transfer, off-diagonal mean",single-source probe (raw),0.7516689916912558
+Gemma-3-27B,40,0.6612903225806451,"zero-shot, Liars' Bench average",base probe (RepE-trained),0.8778
+Gemma-3-27B,40,0.6612903225806451,"zero-shot, Liars' Bench average",deception axis (8v7),0.7622
+Gemma-3-27B,40,0.6612903225806451,"zero-shot, Liars' Bench average",unified axis (13v12),0.8307
+Gemma-3-27B,40,0.6612903225806451,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),0.6612
+Gemma-3-27B,40,0.6612903225806451,"zero-shot, Liars' Bench average",extended axis (12v13),0.8072
+Gemma-3-27B,43,0.7096774193548387,"transfer, off-diagonal mean",extended axis (12v13),0.7665952924527142
+Gemma-3-27B,43,0.7096774193548387,"transfer, off-diagonal mean",knowledge-denial axis (4v6),0.8119030494425815
+Gemma-3-27B,43,0.7096774193548387,"transfer, off-diagonal mean",extended PCs (k=3),0.8447023555100556
+Gemma-3-27B,43,0.7096774193548387,"transfer, off-diagonal mean",unified axis (13v12),0.8441411469712693
+Gemma-3-27B,43,0.7096774193548387,"transfer, off-diagonal mean",deception axis (8v7),0.7627465194650039
+Gemma-3-27B,43,0.7096774193548387,"transfer, off-diagonal mean",single-source probe (raw),0.7090735133889444
+Gemma-3-27B,43,0.7096774193548387,"zero-shot, Liars' Bench average",base probe (RepE-trained),0.9164
+Gemma-3-27B,43,0.7096774193548387,"zero-shot, Liars' Bench average",deception axis (8v7),0.7699
+Gemma-3-27B,43,0.7096774193548387,"zero-shot, Liars' Bench average",unified axis (13v12),0.8148
+Gemma-3-27B,43,0.7096774193548387,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),0.7888
+Gemma-3-27B,43,0.7096774193548387,"zero-shot, Liars' Bench average",extended axis (12v13),0.7679
+Gemma-3-27B,46,0.7580645161290323,"transfer, off-diagonal mean",extended axis (12v13),0.7424915757686054
+Gemma-3-27B,46,0.7580645161290323,"transfer, off-diagonal mean",knowledge-denial axis (4v6),0.7424573373171369
+Gemma-3-27B,46,0.7580645161290323,"transfer, off-diagonal mean",extended PCs (k=3),0.8181924495170039
+Gemma-3-27B,46,0.7580645161290323,"transfer, off-diagonal mean",unified axis (13v12),0.8688502088202191
+Gemma-3-27B,46,0.7580645161290323,"transfer, off-diagonal mean",deception axis (8v7),0.757923360678555
+Gemma-3-27B,46,0.7580645161290323,"transfer, off-diagonal mean",single-source probe (raw),0.7523717634956576
+Gemma-3-27B,46,0.7580645161290323,"zero-shot, Liars' Bench average",base probe (RepE-trained),0.9408
+Gemma-3-27B,46,0.7580645161290323,"zero-shot, Liars' Bench average",deception axis (8v7),0.7637
+Gemma-3-27B,46,0.7580645161290323,"zero-shot, Liars' Bench average",unified axis (13v12),0.8303
+Gemma-3-27B,46,0.7580645161290323,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),0.7478
+Gemma-3-27B,46,0.7580645161290323,"zero-shot, Liars' Bench average",extended axis (12v13),0.7492
+Gemma-3-27B,50,0.8225806451612904,"transfer, off-diagonal mean",extended axis (12v13),0.7491697093745788
+Gemma-3-27B,50,0.8225806451612904,"transfer, off-diagonal mean",knowledge-denial axis (4v6),0.7383416671624223
+Gemma-3-27B,50,0.8225806451612904,"transfer, off-diagonal mean",extended PCs (k=3),0.7961593033199427
+Gemma-3-27B,50,0.8225806451612904,"transfer, off-diagonal mean",unified axis (13v12),0.8657730355423658
+Gemma-3-27B,50,0.8225806451612904,"transfer, off-diagonal mean",deception axis (8v7),0.7905070121511716
+Gemma-3-27B,50,0.8225806451612904,"transfer, off-diagonal mean",single-source probe (raw),0.7613639421500288
+Gemma-3-27B,50,0.8225806451612904,"zero-shot, Liars' Bench average",base probe (RepE-trained),0.938
+Gemma-3-27B,50,0.8225806451612904,"zero-shot, Liars' Bench average",deception axis (8v7),0.7915
+Gemma-3-27B,50,0.8225806451612904,"zero-shot, Liars' Bench average",unified axis (13v12),0.8238
+Gemma-3-27B,50,0.8225806451612904,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),0.7472
+Gemma-3-27B,50,0.8225806451612904,"zero-shot, Liars' Bench average",extended axis (12v13),0.7561
+Gemma-3-27B,53,0.8709677419354839,"transfer, off-diagonal mean",extended axis (12v13),0.7711126558428752
+Gemma-3-27B,53,0.8709677419354839,"transfer, off-diagonal mean",knowledge-denial axis (4v6),0.7455808867537425
+Gemma-3-27B,53,0.8709677419354839,"transfer, off-diagonal mean",extended PCs (k=3),0.7924663113792708
+Gemma-3-27B,53,0.8709677419354839,"transfer, off-diagonal mean",unified axis (13v12),0.7733709965031382
+Gemma-3-27B,53,0.8709677419354839,"transfer, off-diagonal mean",deception axis (8v7),0.8502873426297765
+Gemma-3-27B,53,0.8709677419354839,"transfer, off-diagonal mean",single-source probe (raw),0.7396033844870037
+Gemma-3-27B,53,0.8709677419354839,"zero-shot, Liars' Bench average",base probe (RepE-trained),0.85
+Gemma-3-27B,53,0.8709677419354839,"zero-shot, Liars' Bench average",deception axis (8v7),0.831
+Gemma-3-27B,53,0.8709677419354839,"zero-shot, Liars' Bench average",unified axis (13v12),0.7353
+Gemma-3-27B,53,0.8709677419354839,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),0.7327
+Gemma-3-27B,53,0.8709677419354839,"zero-shot, Liars' Bench average",extended axis (12v13),0.7558
+Gemma-3-27B,56,0.9193548387096774,"transfer, off-diagonal mean",extended axis (12v13),0.5893896394044126
+Gemma-3-27B,56,0.9193548387096774,"transfer, off-diagonal mean",knowledge-denial axis (4v6),0.5698676396620292
+Gemma-3-27B,56,0.9193548387096774,"transfer, off-diagonal mean",extended PCs (k=3),0.8139208408039851
+Gemma-3-27B,56,0.9193548387096774,"transfer, off-diagonal mean",unified axis (13v12),0.8559636341812934
+Gemma-3-27B,56,0.9193548387096774,"transfer, off-diagonal mean",deception axis (8v7),0.8572264795521961
+Gemma-3-27B,56,0.9193548387096774,"transfer, off-diagonal mean",single-source probe (raw),0.7156160019343839
+Gemma-3-27B,56,0.9193548387096774,"zero-shot, Liars' Bench average",base probe (RepE-trained),0.8706
+Gemma-3-27B,56,0.9193548387096774,"zero-shot, Liars' Bench average",deception axis (8v7),0.8264
+Gemma-3-27B,56,0.9193548387096774,"zero-shot, Liars' Bench average",unified axis (13v12),0.8164
+Gemma-3-27B,56,0.9193548387096774,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),0.7042
+Gemma-3-27B,56,0.9193548387096774,"zero-shot, Liars' Bench average",extended axis (12v13),0.7323
+Gemma-3-27B,59,0.967741935483871,"transfer, off-diagonal mean",extended axis (12v13),0.580513415914773
+Gemma-3-27B,59,0.967741935483871,"transfer, off-diagonal mean",knowledge-denial axis (4v6),0.5539152144636511
+Gemma-3-27B,59,0.967741935483871,"transfer, off-diagonal mean",extended PCs (k=3),0.8042682575297829
+Gemma-3-27B,59,0.967741935483871,"transfer, off-diagonal mean",unified axis (13v12),0.7491864045173516
+Gemma-3-27B,59,0.967741935483871,"transfer, off-diagonal mean",deception axis (8v7),0.910899972080462
+Gemma-3-27B,59,0.967741935483871,"transfer, off-diagonal mean",single-source probe (raw),0.7078609418477982
+Gemma-3-27B,59,0.967741935483871,"zero-shot, Liars' Bench average",base probe (RepE-trained),0.8158
+Gemma-3-27B,59,0.967741935483871,"zero-shot, Liars' Bench average",deception axis (8v7),0.8891
+Gemma-3-27B,59,0.967741935483871,"zero-shot, Liars' Bench average",unified axis (13v12),0.7438
+Gemma-3-27B,59,0.967741935483871,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),0.6854
+Gemma-3-27B,59,0.967741935483871,"zero-shot, Liars' Bench average",extended axis (12v13),0.7207
+Gemma-3-27B,61,1.0,"transfer, off-diagonal mean",extended axis (12v13),0.8469802106587697
+Gemma-3-27B,61,1.0,"transfer, off-diagonal mean",knowledge-denial axis (4v6),0.765702560966283
+Gemma-3-27B,61,1.0,"transfer, off-diagonal mean",extended PCs (k=3),0.7717564892032364
+Gemma-3-27B,61,1.0,"transfer, off-diagonal mean",unified axis (13v12),0.546636095102282
+Gemma-3-27B,61,1.0,"transfer, off-diagonal mean",deception axis (8v7),0.670271751099562
+Gemma-3-27B,61,1.0,"transfer, off-diagonal mean",single-source probe (raw),0.6633523194683185
+Gemma-3-27B,61,1.0,"zero-shot, Liars' Bench average",base probe (RepE-trained),0.7143
+Gemma-3-27B,61,1.0,"zero-shot, Liars' Bench average",deception axis (8v7),0.6551
+Gemma-3-27B,61,1.0,"zero-shot, Liars' Bench average",unified axis (13v12),0.6136
+Gemma-3-27B,61,1.0,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),0.7756
+Gemma-3-27B,61,1.0,"zero-shot, Liars' Bench average",extended axis (12v13),0.8258

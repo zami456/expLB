@@ -1,0 +1,35 @@
+model,claim,evidence,verdict
+Llama-3.3-70B,D9 transfers better than the raw-activation probe (mid-depth),D9 0.916 vs raw 0.732,replicates
+Llama-3.3-70B,D9 transfers better than the published contrast D5,D9 0.916 vs D5 0.832,replicates
+Llama-3.3-70B,D9 + K transfers at least as well as the raw probe,D9 + K 0.922 vs raw 0.732,replicates
+Llama-3.3-70B,"knowledge-denial roles improve the contrast (D9 > D5, LB mean)",0.899 vs 0.798,replicates
+Llama-3.3-70B,K separates lies on HP-KR's identical text above random directions (mid-depth),0.793 vs band 0.734,replicates
+Llama-3.3-70B,D9 + K beats the same-layer RepE probe (paired 95% CI),"+0.128 [+0.112, +0.145]",replicates
+Qwen2.5-72B†,D9 transfers better than the raw-activation probe (mid-depth),D9 0.453 vs raw 0.559,does not replicate
+Qwen2.5-72B†,D9 transfers better than the published contrast D5,D9 0.453 vs D5 0.451,no clear difference (< 0.01)
+Qwen2.5-72B†,D9 + K transfers at least as well as the raw probe,D9 + K 0.514 vs raw 0.559,does not replicate
+Qwen2.5-72B†,"knowledge-denial roles improve the contrast (D9 > D5, LB mean)",0.441 vs 0.380,replicates
+Qwen2.5-72B†,K on HP-KR's identical text,no released identical-text slice (see the rebuilt HP-KR table),n/a
+Qwen2.5-72B†,D9 + K beats the same-layer RepE probe (paired 95% CI),"+0.036 [+0.016, +0.057]",replicates
+Qwen2.5-72B†,organism gender: K (fine-tune) above the random band on the fine-tune's read,0.454 vs 0.734,does not replicate
+Qwen2.5-72B†,organism greeting: K (fine-tune) above the random band on the fine-tune's read,0.469 vs 0.691,does not replicate
+Qwen2.5-72B†,organism time: K (fine-tune) above the random band on the fine-tune's read,0.531 vs 0.710,does not replicate
+Mistral-Small-3.1-24B,D9 transfers better than the raw-activation probe (mid-depth),D9 0.810 vs raw 0.716,replicates
+Mistral-Small-3.1-24B,D9 transfers better than the published contrast D5,D9 0.810 vs D5 0.633,replicates
+Mistral-Small-3.1-24B,D9 + K transfers at least as well as the raw probe,D9 + K 0.841 vs raw 0.716,replicates
+Mistral-Small-3.1-24B,"knowledge-denial roles improve the contrast (D9 > D5, LB mean)",0.762 vs 0.719,replicates
+Mistral-Small-3.1-24B,K separates lies on HP-KR's identical text above random directions (mid-depth),0.840 vs band 0.756,replicates
+Mistral-Small-3.1-24B,D9 + K beats the same-layer RepE probe (paired 95% CI),"+0.038 [+0.022, +0.053]",replicates
+Mistral-Small-3.1-24B,organism gender: K (fine-tune) above the random band on the fine-tune's read,0.935 vs 0.892,replicates
+Mistral-Small-3.1-24B,organism gender-secret: K (fine-tune) above the random band on the fine-tune's read,0.440 vs 0.765,does not replicate
+Mistral-Small-3.1-24B,organism greeting: K (fine-tune) above the random band on the fine-tune's read,0.930 vs 0.900,replicates
+Mistral-Small-3.1-24B,organism time: K (fine-tune) above the random band on the fine-tune's read,0.946 vs 0.930,replicates
+Gemma-3-27B,D9 transfers better than the raw-activation probe (mid-depth),D9 0.921 vs raw 0.746,replicates
+Gemma-3-27B,D9 transfers better than the published contrast D5,D9 0.921 vs D5 0.700,replicates
+Gemma-3-27B,D9 + K transfers at least as well as the raw probe,D9 + K 0.860 vs raw 0.746,replicates
+Gemma-3-27B,"knowledge-denial roles improve the contrast (D9 > D5, LB mean)",0.900 vs 0.679,replicates
+Gemma-3-27B,K on HP-KR's identical text,no released identical-text slice (see the rebuilt HP-KR table),n/a
+Gemma-3-27B,D9 + K beats the same-layer RepE probe (paired 95% CI),"+0.064 [+0.050, +0.078]",replicates
+Gemma-3-27B,organism gender: K (fine-tune) above the random band on the fine-tune's read,0.804 vs 0.951,does not replicate
+Gemma-3-27B,organism greeting: K (fine-tune) above the random band on the fine-tune's read,0.290 vs 0.933,does not replicate
+Gemma-3-27B,organism time: K (fine-tune) above the random band on the fine-tune's read,0.719 vs 0.962,does not replicate
