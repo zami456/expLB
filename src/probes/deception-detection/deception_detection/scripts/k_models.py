@@ -338,11 +338,14 @@ def hpkr_slices(frame: pd.DataFrame) -> dict[str, np.ndarray]:
 
 def _k_reads(target: LB.Target) -> dict[int, dict[int, np.ndarray]]:
     """K's reads from every `parts_answer*` folder (blocks read later go to their own folder),
-    merged per row."""
+    merged per row. A block read twice keeps its first read, the one `directions_n60.npz` was built
+    from (a re-read on NDIF differs at cosine ~0.9999)."""
     reads: dict[int, dict[int, np.ndarray]] = {}
     for folder in sorted(_folder(target).glob("parts_answer*")):
         for row, vecs in RD._load(folder).items():
-            reads.setdefault(row, {}).update(vecs)
+            got = reads.setdefault(row, {})
+            for block, v in vecs.items():
+                got.setdefault(block, v)
     return reads
 
 
