@@ -1,0 +1,154 @@
+{
+ "bank": "s3",
+ "reproduces_zami_to_0.01": false,
+ "L40": {
+  "pre_registered": true,
+  "or_ge_d9_datasets": 3,
+  "or_alpaca_fpr": 0.009,
+  "success": false,
+  "alpaca_fpr": {
+   "D9": 0.01,
+   "K": 0.01,
+   "D9 + K": 0.01,
+   "OR": 0.009
+  },
+  "mean_recall": {
+   "D9": 0.3231,
+   "D9 + K": 0.4628,
+   "K": 0.3353,
+   "OR": 0.4292
+  },
+  "mean_honest_flagged": {
+   "D9": 0.0226,
+   "D9 + K": 0.0505,
+   "K": 0.2303,
+   "OR": 0.1657
+  },
+  "mean_ba": {
+   "D9": 0.6502,
+   "D9 + K": 0.7062,
+   "K": 0.5525,
+   "OR": 0.6317
+  },
+  "GS-base (not in the verdict)": {
+   "recall": {
+    "D9": 0.0,
+    "D9 + K": 0.069,
+    "K": 0.1983,
+    "OR": 0.1034
+   },
+   "honest_flagged": {
+    "D9": 0.0036,
+    "D9 + K": 0.0797,
+    "K": 0.1268,
+    "OR": 0.0471
+   },
+   "ba": {
+    "D9": 0.4982,
+    "D9 + K": 0.4946,
+    "K": 0.5357,
+    "OR": 0.5282
+   }
+  }
+ },
+ "L36": {
+  "pre_registered": false,
+  "or_ge_d9_datasets": 3,
+  "or_alpaca_fpr": 0.0095,
+  "success": false,
+  "alpaca_fpr": {
+   "D9": 0.01,
+   "K": 0.01,
+   "D9 + K": 0.01,
+   "OR": 0.0095
+  },
+  "mean_recall": {
+   "D9": 0.3515,
+   "D9 + K": 0.5127,
+   "K": 0.4117,
+   "OR": 0.4741
+  },
+  "mean_honest_flagged": {
+   "D9": 0.022,
+   "D9 + K": 0.0617,
+   "K": 0.2192,
+   "OR": 0.1091
+  },
+  "mean_ba": {
+   "D9": 0.6647,
+   "D9 + K": 0.7255,
+   "K": 0.5963,
+   "OR": 0.6825
+  },
+  "GS-base (not in the verdict)": {
+   "recall": {
+    "D9": 0.0,
+    "D9 + K": 0.1121,
+    "K": 0.2241,
+    "OR": 0.1379
+   },
+   "honest_flagged": {
+    "D9": 0.0,
+    "D9 + K": 0.0761,
+    "K": 0.1341,
+    "OR": 0.0616
+   },
+   "ba": {
+    "D9": 0.5,
+    "D9 + K": 0.518,
+    "K": 0.545,
+    "OR": 0.5382
+   }
+  }
+ },
+ "L44": {
+  "pre_registered": false,
+  "or_ge_d9_datasets": 4,
+  "or_alpaca_fpr": 0.0085,
+  "success": true,
+  "alpaca_fpr": {
+   "D9": 0.01,
+   "K": 0.01,
+   "D9 + K": 0.01,
+   "OR": 0.0085
+  },
+  "mean_recall": {
+   "D9": 0.2579,
+   "D9 + K": 0.4126,
+   "K": 0.3888,
+   "OR": 0.4506
+  },
+  "mean_honest_flagged": {
+   "D9": 0.0177,
+   "D9 + K": 0.0206,
+   "K": 0.246,
+   "OR": 0.1266
+  },
+  "mean_ba": {
+   "D9": 0.6201,
+   "D9 + K": 0.696,
+   "K": 0.5714,
+   "OR": 0.662
+  },
+  "GS-base (not in the verdict)": {
+   "recall": {
+    "D9": 0.0,
+    "D9 + K": 0.1552,
+    "K": 0.2931,
+    "OR": 0.25
+   },
+   "honest_flagged": {
+    "D9": 0.0254,
+    "D9 + K": 0.1594,
+    "K": 0.2174,
+    "OR": 0.1413
+   },
+   "ba": {
+    "D9": 0.4873,
+    "D9 + K": 0.4979,
+    "K": 0.5379,
+    "OR": 0.5543
+   }
+  }
+ }
+}

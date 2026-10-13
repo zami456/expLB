@@ -9,7 +9,8 @@
 
   Stall guard (the earlier runs' by-hand rule, now automatic): NDIF jobs sometimes sit RUNNING / DISPATCHED for
   30-46 minutes and never finish, and an engineio socket fault can leave a shard silent. Every minute, for each
-  live shard of the running chain: if its current NDIF job has been RUNNING / DISPATCHED for >= $StallMinutes since
+  live shard of the running chain: if its .err.log ends in the engineio b'P' error (receive thread dead), or its
+  current NDIF job has been RUNNING / DISPATCHED for >= $StallMinutes since
   this guard first saw it, or its log has been silent for >= $StallMinutes, the shard's python processes are stopped.
   The chain records the exit and its next attempt regenerates only what is missing. QUEUED never counts.
 
@@ -100,6 +101,15 @@ function Guard([string]$folder) {
         }
         if (-not $why -and $silent -ge $StallMinutes -and -not ($st -and $st.State -eq "QUEUED")) {
             $why = "log silent for $([int]$silent) min"
+        }
+        # 2026-10-10: the engineio b'P' fault kills socketio's receive thread; the shard then waits forever for a
+        # result that can no longer arrive (seen 4 times in one day). A shard whose .err.log ENDS in that error is
+        # dead now -- a shard that recovered would have logged further lines after it.
+        if (-not $why) {
+            $errLines = @((Tail (Join-Path $logs "$key.err.log") 2048) -split "[\r\n]+" | Where-Object { $_.Trim() })
+            if ($errLines.Count -and $errLines[-1] -match "invalid literal for int\(\) with base 10: b'P'") {
+                $why = "socketio receive thread died (engineio b'P')"
+            }
         }
         if ($why) {
             Note "STALL $folder $key ($why): stopping pids $($shards[$key] -join ',')"

@@ -56,10 +56,15 @@ def stream(alpaca: Path, dirs: np.ndarray, layers: list):
             sys.exit(f"{c.name}: pooled shape {tuple(x.shape)} does not fit {len(layers)} layers x {dirs.shape[2]}")
         if list(ch["layers"]) != layers or list(ch["pooling"])[0] != "mean" or ch["span"] != "response":
             sys.exit(f"{c.name}: layers/pooling/span are not the directions' layers, mean, response")
-        x = x[..., 0].double().numpy()
-        if not np.isfinite(x).all():
-            sys.exit(f"{c.name}: non-finite pooled values")
-        proj.append(np.einsum("nlh,dlh->nld", x, dirs))
+        x = x[..., 0]                                       # fp16 / fp32 as stored
+        # 2026-10-10: 8 rows at a time in float64 (was the whole chunk at once: ~300 MB per Llama chunk on a 7.7 GB
+        # laptop, and the run was stopped for low memory). Each row's projections are computed exactly as before.
+        for j in range(0, x.shape[0], 8):
+            xb = x[j:j + 8].double().numpy()
+            if not np.isfinite(xb).all():
+                sys.exit(f"{c.name}: non-finite pooled values")
+            proj.append(np.einsum("nlh,dlh->nld", xb, dirs))
+            del xb
         ids += list(ch["row_ids"])
         ntok += [int(round(float(v))) for v in ch["n_tok"]]
         del x, ch
@@ -131,25 +136,32 @@ def main():
     if not (a.rdir and a.tag and a.vectors):
         sys.exit("--rdir, --tag and --vectors are required")
     S = json.loads(a.splits.read_text(encoding="utf-8"))
-    r5f, r9f = a.rdir / "r5" / f"R5_{a.tag}.pt", a.rdir / "r9" / f"R9_{a.tag}.pt"
-    r5, r9 = torch.load(r5f, weights_only=False), torch.load(r9f, weights_only=False)
-    layers = list(r5["layers"])
+    rfiles = {n: a.rdir / n.lower() / f"{n}_{a.tag}.pt" for n in ("R5", "R9")}
+    rds = {n: torch.load(f, weights_only=False) for n, f in rfiles.items() if f.exists()}
+    if not rds:
+        sys.exit(f"no R5 / R9 file under {a.rdir}")
+    layers = list(next(iter(rds.values()))["layers"])
     K = np.stack([kz[f"L{l}"] for l in layers]).astype(np.float64)
     if not np.allclose(np.linalg.norm(K, axis=1), 1, atol=1e-6):
         sys.exit("K is not unit-norm")
     vec = {p.stem: torch.load(p, weights_only=False)["vector"].double().numpy() for p in sorted(a.vectors.glob("*.pt"))}
-    roles = sorted(r for r in vec if r != "default")
-    V = np.stack([vec[r] for r in roles])                                 # [35, L, H]
+    roles = sorted(r for r in vec if r != "default")       # judge-filtered banks hold fewer than 35
+    nr = len(roles)
+    V = np.stack([vec[r] for r in roles])                                 # [n_roles, L, H]
     if V.shape[1] != len(layers):
         sys.exit("bank layers differ from the R files'")
 
-    # one pass: rows x layers x (35 role vectors, K)
+    # one pass: rows x layers x (role vectors, K)
     ids, P, ntok, nch = stream(a.alpaca, np.concatenate([V, K[None]]), layers)
-    PV, PK = P[:, :, :35], P[:, :, 35]
-    print(f"{nch} chunks, {len(ids)} Alpaca rows, reply tokens median {int(np.median(ntok))}")
+    PV, PK = P[:, :, :nr], P[:, :, nr]
+    print(f"{nch} chunks, {len(ids)} Alpaca rows, reply tokens median {int(np.median(ntok))}; {nr} roles in the bank")
 
     # split 0 files, from the R files themselves (their unit directions)
-    for name, f, rd in (("R5", r5f, r5), ("R9", r9f, r9)):
+    for name in ("R5", "R9"):
+        if name not in rds:
+            print(f"{name} has no split-0 file (a group emptied in this filtered bank) -- {name} + K not built")
+            continue
+        f, rd = rfiles[name], rds[name]
         D = rd["unit"].double().numpy()
         idx_p = [roles.index(r) for r in rd["positive"]]; idx_n = [roles.index(r) for r in rd["negative"]]
         PD = PV[:, :, idx_p].mean(2) - PV[:, :, idx_n].mean(2)
@@ -169,11 +181,13 @@ def main():
     summary = {}
     with open(null_csv, "w", newline="", encoding="utf-8") as fh:
         w = csv.writer(fh)
-        w.writerow(["split", "contrast", "layer", "sd_r", "sd_k", "ratio", "cos_r_k", "cos_rk_k"])
+        w.writerow(["split", "contrast", "layer", "sd_r", "sd_k", "ratio", "cos_r_k", "cos_rk_k", "n_pos", "n_neg"])
         for sp in S["splits"]:
-            g = sp["groups"]
+            g = {x: [r for r in rs if r in vec] for x, rs in sp["groups"].items()}   # minus filtered-out roles
             for name, pos_g, neg_g in (("R5", "A", "B"), ("R9", "AE", "BF")):
                 pos = [r for x in pos_g for r in g[x]]; neg = [r for x in neg_g for r in g[x]]
+                if not pos or not neg:
+                    continue
                 ip = [roles.index(r) for r in pos]; ineg = [roles.index(r) for r in neg]
                 raw = V[ip].mean(0) - V[ineg].mean(0)                       # [L, H]
                 nrm = np.linalg.norm(raw, axis=1)
@@ -184,14 +198,16 @@ def main():
                 cos_w_k = (cos_rk / sdr + 1 / sdk) / wn
                 for i, l in enumerate(layers):
                     w.writerow([sp["split"], name, l, f"{sdr[i]:.6f}", f"{sdk[i]:.6f}", f"{sdr[i] / sdk[i]:.6f}",
-                                f"{cos_rk[i]:+.6f}", f"{cos_w_k[i]:.6f}"])
-                summary.setdefault(name, []).append((sdr / sdk, cos_w_k))
+                                f"{cos_rk[i]:+.6f}", f"{cos_w_k[i]:.6f}", len(pos), len(neg)])
+                summary.setdefault(name, []).append((sp["split"], sdr / sdk, cos_w_k))
     for name, vals in summary.items():
-        ratio = np.stack([v[0] for v in vals]); cw = np.stack([v[1] for v in vals])
+        ratio = np.stack([v[1] for v in vals]); cw = np.stack([v[2] for v in vals])
+        s0 = [j for j, v in enumerate(vals) if v[0] == 0]
         for l in REPORT_LAYERS:
             if l in layers:
                 i = layers.index(l)
-                print(f"{name} + K  L{l}: split 0 ratio {ratio[0, i]:.2f}, cos(R+K, K) {cw[0, i]:.3f} | 100 splits: ratio "
+                head = f"split 0 ratio {ratio[s0[0], i]:.2f}, cos(R+K, K) {cw[s0[0], i]:.3f}" if s0 else "split 0 n/a"
+                print(f"{name} + K  L{l}: {head} | {len(vals)} splits: ratio "
                       f"{np.percentile(ratio[:, i], 2.5):.2f}-{np.percentile(ratio[:, i], 97.5):.2f}, cos(R+K, K) "
                       f"{np.percentile(cw[:, i], 2.5):.3f}-{np.percentile(cw[:, i], 97.5):.3f}")
     print(f"wrote {null_csv}")

@@ -1,0 +1,79 @@
+# Llama-3.3-70B kd replies + judge scores, copied read-only from the lab PC (2026-10-14)
+
+Source `C:/Users/user4/expLB/run-kd/{responses,scores}` on user4@100.85.217.68, via ssh + base64;
+every file's md5 checked against the lab's Get-FileHash. Used only as the Llama reference for the fix screen.
+
+| file | bytes | lab md5 | local md5 |
+|---|---|---|---|
+| scores/pc_amnesiac_witness.json | 2953 | 292283ebdb4b911e621bc8ef35e2948c | 292283ebdb4b911e621bc8ef35e2948c |
+| scores/pc_archivist.json | 2953 | f4fd58d8b87f11b66919f2f5cd0be3d0 | f4fd58d8b87f11b66919f2f5cd0be3d0 |
+| scores/pc_blunt_advisor.json | 2953 | 8d20af3c2201e070f25ee9318b190cbe | 8d20af3c2201e070f25ee9318b190cbe |
+| scores/pc_broker.json | 2953 | 6548a90a93e3808d96758bd0cd56a62e | 6548a90a93e3808d96758bd0cd56a62e |
+| scores/pc_calibrated_reporter.json | 2953 | 93294bc947f81d6d2bf8e7f497fec044 | 93294bc947f81d6d2bf8e7f497fec044 |
+| scores/pc_candid_witness.json | 2953 | 71966e0d924f3c8ce70c9aacf4f6cf00 | 71966e0d924f3c8ce70c9aacf4f6cf00 |
+| scores/pc_cheerleader.json | 2953 | 2f4f17cd640b5566a90c083ce7602445 | 2f4f17cd640b5566a90c083ce7602445 |
+| scores/pc_contrarian.json | 2953 | e146b45f8aa52947439d97ee165705b1 | e146b45f8aa52947439d97ee165705b1 |
+| scores/pc_coverup_operator.json | 2953 | 8046effa1c44406309f3e42d873ac197 | 8046effa1c44406309f3e42d873ac197 |
+| scores/pc_critic.json | 2953 | ed5d973ed1f1fadd8018772056ca032c | ed5d973ed1f1fadd8018772056ca032c |
+| scores/pc_deniable_expert.json | 2953 | ca3ca267f0e4174b4831e7804a1ebcae | ca3ca267f0e4174b4831e7804a1ebcae |
+| scores/pc_disclosure_counsel.json | 2953 | 86d625e1a80a1908972e4894c58f91bc | 86d625e1a80a1908972e4894c58f91bc |
+| scores/pc_documentarian.json | 2953 | e40e53dd0bc085e3a14b9b117e1ba4a0 | e40e53dd0bc085e3a14b9b117e1ba4a0 |
+| scores/pc_enabler.json | 2953 | 21b7ae34cd834647aef4b5799626c140 | 21b7ae34cd834647aef4b5799626c140 |
+| scores/pc_fact_checker.json | 2953 | e3e66a8b843adeddbe82f477d70af3fb | e3e66a8b843adeddbe82f477d70af3fb |
+| scores/pc_feigned_novice.json | 2953 | 1447f59d5e33a38541202e42ae238338 | 1447f59d5e33a38541202e42ae238338 |
+| scores/pc_flatterer.json | 2953 | 6c8586099b24e6a29cb2c84eefa99539 | 6c8586099b24e6a29cb2c84eefa99539 |
+| scores/pc_forthright_expert.json | 2953 | d9228f194966875366c6365be6c51959 | d9228f194966875366c6365be6c51959 |
+| scores/pc_gatekeeper.json | 2953 | 11f382d26f30228d79a8ecffedbf5567 | 11f382d26f30228d79a8ecffedbf5567 |
+| scores/pc_handler.json | 2953 | 748e4fae016beb4ab6f2ecec98bd1b62 | 748e4fae016beb4ab6f2ecec98bd1b62 |
+| scores/pc_honest_novice.json | 2953 | 47737e4da2d3ba1b8a26c066a0eff9b3 | 47737e4da2d3ba1b8a26c066a0eff9b3 |
+| scores/pc_impression_manager.json | 2953 | 931c529e6cd762720fd9e04eb4300cb4 | 931c529e6cd762720fd9e04eb4300cb4 |
+| scores/pc_narrative_manager.json | 2953 | d16d44ecd203797a3cf55313288df390 | d16d44ecd203797a3cf55313288df390 |
+| scores/pc_ombudsman.json | 2953 | 9225606af98d0caafa7b33cce1a98be9 | 9225606af98d0caafa7b33cce1a98be9 |
+| scores/pc_people_pleaser.json | 2953 | e8b18f561522f7bfbd8e9eab88704b8e | e8b18f561522f7bfbd8e9eab88704b8e |
+| scores/pc_plain_dealer.json | 2953 | 72fb0502ffd34b171a9756ea1086a818 | 72fb0502ffd34b171a9756ea1086a818 |
+| scores/pc_plausible_denier.json | 2953 | 56d2a845cb40f7d80a1eb22c5846e20c | 56d2a845cb40f7d80a1eb22c5846e20c |
+| scores/pc_scrupulous_witness.json | 2953 | 2050ed64b81ebd9b909d7a1405f20f62 | 2050ed64b81ebd9b909d7a1405f20f62 |
+| scores/pc_skeptic.json | 2953 | 6c84bf6f94c0e55b9ef75a93c8fdc9f5 | 6c84bf6f94c0e55b9ef75a93c8fdc9f5 |
+| scores/pc_spin_doctor.json | 2953 | 1f8226f075a3dda094658e747972937a | 1f8226f075a3dda094658e747972937a |
+| scores/pc_stonewaller.json | 2953 | 3212770d449d0ed325f3ba2874b72a5f | 3212770d449d0ed325f3ba2874b72a5f |
+| scores/pc_tough_love_mentor.json | 2953 | db38f85943d48c6b44e4d1db35eefe9f | db38f85943d48c6b44e4d1db35eefe9f |
+| scores/pc_transparency_officer.json | 2953 | ad32cf62bf793e258bf8a49385ec4e4b | ad32cf62bf793e258bf8a49385ec4e4b |
+| scores/pc_whistleblower.json | 2953 | a35b0613fb7e2d925d2a42485c7dd00b | a35b0613fb7e2d925d2a42485c7dd00b |
+| scores/pc_yes_man.json | 2953 | fdac4f4c31b07ed0085742f8a5ea91df | fdac4f4c31b07ed0085742f8a5ea91df |
+| responses/default.jsonl | 339983 | 9252fa0c8f7b7b1e8e9168db2821195a | 9252fa0c8f7b7b1e8e9168db2821195a |
+| responses/pc_amnesiac_witness.jsonl | 217997 | ffb8633a8acd70f0cd271f81194195a5 | ffb8633a8acd70f0cd271f81194195a5 |
+| responses/pc_archivist.jsonl | 331028 | f3f42bf7e838aafe3eef0e7bc18510cc | f3f42bf7e838aafe3eef0e7bc18510cc |
+| responses/pc_blunt_advisor.jsonl | 244589 | dba811e058fcf491b624dfb1e20a00c9 | dba811e058fcf491b624dfb1e20a00c9 |
+| responses/pc_broker.jsonl | 293197 | 81a0a760896ac8c4a9d6df2682ad3eff | 81a0a760896ac8c4a9d6df2682ad3eff |
+| responses/pc_broker.jsonl.predupe | 490704 | 0760f07e547bf797ef532a9acf3de912 | 0760f07e547bf797ef532a9acf3de912 |
+| responses/pc_calibrated_reporter.jsonl | 289339 | 833b1e8ae963c74c8dcb381c42f194a0 | 833b1e8ae963c74c8dcb381c42f194a0 |
+| responses/pc_candid_witness.jsonl | 212540 | 631c907abbab07c43439ccf5ad35874f | 631c907abbab07c43439ccf5ad35874f |
+| responses/pc_cheerleader.jsonl | 241295 | e3d5ef709ab105ce82e383167c35ff23 | e3d5ef709ab105ce82e383167c35ff23 |
+| responses/pc_contrarian.jsonl | 306472 | bac1345272ce838271e51eccd2b8be40 | bac1345272ce838271e51eccd2b8be40 |
+| responses/pc_coverup_operator.jsonl | 223747 | d1ad954c7da028bd54f1ab21e8c5561b | d1ad954c7da028bd54f1ab21e8c5561b |
+| responses/pc_critic.jsonl | 340394 | 54ae822a5bf7fd4aba87cf647f198a4a | 54ae822a5bf7fd4aba87cf647f198a4a |
+| responses/pc_deniable_expert.jsonl | 289205 | 66cda8e9ebc01a2d706ff7e2977d7525 | 66cda8e9ebc01a2d706ff7e2977d7525 |
+| responses/pc_disclosure_counsel.jsonl | 322117 | 46092eb9202f8b89fa858e9d9322a225 | 46092eb9202f8b89fa858e9d9322a225 |
+| responses/pc_documentarian.jsonl | 392701 | bcff24f070cff16c90f402c1bdf33b93 | bcff24f070cff16c90f402c1bdf33b93 |
+| responses/pc_enabler.jsonl | 236739 | 6b86ded8484e8f83a866662a8d87d37e | 6b86ded8484e8f83a866662a8d87d37e |
+| responses/pc_fact_checker.jsonl | 315588 | c7000d04a8bbd4cb9ce16502809a9d66 | c7000d04a8bbd4cb9ce16502809a9d66 |
+| responses/pc_feigned_novice.jsonl | 229073 | 1a5f5c7a26fd9676cee45c5961bb3344 | 1a5f5c7a26fd9676cee45c5961bb3344 |
+| responses/pc_flatterer.jsonl | 279889 | 243d6d5189c05ad7da7b806001f28587 | 243d6d5189c05ad7da7b806001f28587 |
+| responses/pc_forthright_expert.jsonl | 270703 | b0dcff765401aaea2f9eedf8cb52d67d | b0dcff765401aaea2f9eedf8cb52d67d |
+| responses/pc_gatekeeper.jsonl | 302317 | 179c92060c698e7621283be20c14fe0b | 179c92060c698e7621283be20c14fe0b |
+| responses/pc_handler.jsonl | 330713 | 7dbd0b22dbac767a456c15a8f21a5ede | 7dbd0b22dbac767a456c15a8f21a5ede |
+| responses/pc_honest_novice.jsonl | 277903 | 57b2f4160f28479e55d0493e4edd0238 | 57b2f4160f28479e55d0493e4edd0238 |
+| responses/pc_impression_manager.jsonl | 286083 | 54e22fa516b5051e69d923e1c6820b55 | 54e22fa516b5051e69d923e1c6820b55 |
+| responses/pc_narrative_manager.jsonl | 379090 | 1888531f84d3a6e9f71e34f63e5d2377 | 1888531f84d3a6e9f71e34f63e5d2377 |
+| responses/pc_ombudsman.jsonl | 362311 | 144a0ce83edfd107d7da92b61f617e3a | 144a0ce83edfd107d7da92b61f617e3a |
+| responses/pc_people_pleaser.jsonl | 245154 | a5c0e8f445f8d5a62f2d87a9fc0dfb3d | a5c0e8f445f8d5a62f2d87a9fc0dfb3d |
+| responses/pc_plain_dealer.jsonl | 162976 | 6262b4a17d8dfde07edc1f951e59075d | 6262b4a17d8dfde07edc1f951e59075d |
+| responses/pc_plausible_denier.jsonl | 251022 | 6edf8258a5b4f8f07729f24bcd43146a | 6edf8258a5b4f8f07729f24bcd43146a |
+| responses/pc_scrupulous_witness.jsonl | 265260 | 6f38c94715569f2d2de6d7ea76311287 | 6f38c94715569f2d2de6d7ea76311287 |
+| responses/pc_skeptic.jsonl | 285183 | 27531d39981c8995ac4908adc52dac1f | 27531d39981c8995ac4908adc52dac1f |
+| responses/pc_spin_doctor.jsonl | 268483 | 6355ad6f0047b2eecce2ef3d478cf7f5 | 6355ad6f0047b2eecce2ef3d478cf7f5 |
+| responses/pc_stonewaller.jsonl | 137336 | 2c48821e314f119b99c582bd5a2d830d | 2c48821e314f119b99c582bd5a2d830d |
+| responses/pc_tough_love_mentor.jsonl | 279632 | e454c257b3ba9f35dca0b41bb0e31593 | e454c257b3ba9f35dca0b41bb0e31593 |
+| responses/pc_transparency_officer.jsonl | 343795 | 2793b402f213409a75176c47ffa11081 | 2793b402f213409a75176c47ffa11081 |
+| responses/pc_whistleblower.jsonl | 360635 | 2fe15b786dc795ea42b460132b3b92d4 | 2fe15b786dc795ea42b460132b3b92d4 |
+| responses/pc_yes_man.jsonl | 195266 | 4fefa178fc530405e0453c77d1e45103 | 4fefa178fc530405e0453c77d1e45103 |

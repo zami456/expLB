@@ -84,6 +84,8 @@ def main():
     ap.add_argument("--check_groups", type=Path, help="validation: a {A..F: roles} JSON instead of the splits")
     ap.add_argument("--compare_dir", type=Path, help="validation: run folder holding d5..d9/D*_<compare_tag>.pt")
     ap.add_argument("--compare_tag")
+    ap.add_argument("--allow_missing", action="store_true",
+                    help="judge-filtered banks (s23, s3): drop roles with no vector from each split's groups")
     a = ap.parse_args()
 
     S = json.loads(a.splits.read_text(encoding="utf-8"))
@@ -107,12 +109,20 @@ def main():
     if not (a.out and a.tag):
         sys.exit("--out and --tag are required")
     roles = sorted(r for r in vec if r != "default")
-    if "default" not in vec or len(roles) != 35:
-        sys.exit(f"expected default + 35 roles in {a.vectors}, found {len(vec)}")
-    if sorted(r for g in S["splits"][0]["groups"].values() for r in g) != roles:
-        sys.exit("split 0's roles are not this bank's 35 roles")
+    drawn = sorted(r for g in S["splits"][0]["groups"].values() for r in g)
+    if "default" not in vec or set(roles) - set(drawn):
+        sys.exit(f"{a.vectors}: needs default + roles of the bank's 35 (found {len(vec)} vectors)")
+    missing = sorted(set(drawn) - set(roles))
+    if missing and not a.allow_missing:
+        sys.exit(f"{len(missing)} of the 35 roles have no vector here ({', '.join(missing)}); "
+                 "pass --allow_missing to drop them from the splits' groups")
+    if missing:
+        print(f"judge-filtered bank: {len(missing)} role(s) dropped from every split's groups: {', '.join(missing)}")
 
-    allv = np.stack([vec[r] for r in sorted(vec)])                       # [36, L, H]
+    def present(groups):            # the pre-registered groups, minus roles this bank has no vector for
+        return {g: [r for r in rs if r in vec] for g, rs in groups.items()}
+
+    allv = np.stack([vec[r] for r in sorted(vec)])                       # [n_vectors, L, H]
     spread = np.sqrt(((allv - allv.mean(0)) ** 2).sum(-1).mean(0))       # [L] RMS distance from the bank mean
     asst = vec["default"] - np.stack([vec[r] for r in roles]).mean(0)    # [L, H]
     asst_u = asst / np.linalg.norm(asst, axis=1, keepdims=True)
@@ -125,21 +135,26 @@ def main():
 
     stamp = datetime.now().isoformat(timespec="seconds")
     splits_md5 = md5(a.splits)
-    rows = []
+    rows, skipped = [], []
     for sp in S["splits"]:
-        for k, (pos, neg) in contrasts_from(sp["groups"], defs).items():
+        for k, (pos, neg) in contrasts_from(present(sp["groups"]), defs).items():
+            if not pos or not neg:              # a filtered bank can empty a small group (e.g. E, 4 roles)
+                skipped.append((sp["split"], k))
+                continue
             raw, norm = build(vec, pos, neg)
             unit = raw / norm[:, None]
             cos_a = (unit * asst_u).sum(1)
             for i, l in enumerate(layers):
-                rows.append((sp["split"], k, l, norm[i], norm[i] / spread[i], cos_a[i]))
+                rows.append((sp["split"], k, l, norm[i], norm[i] / spread[i], cos_a[i], len(pos), len(neg)))
             if sp["split"] != 0:
                 continue
             d = a.out / f"r{k[1]}"
             d.mkdir(parents=True, exist_ok=True)
             pt, js = d / f"{k}_{a.tag}.pt", d / f"{k}_{a.tag}.json"
-            desc = f"random-split null for D{k[1]} ({defs[k]['sizes']}), split 0"
+            desc = (f"random-split null for D{k[1]} ({defs[k]['sizes']}), split 0"
+                    + (f"; judge-filtered bank: {len(pos)} v {len(neg)} roles present" if missing else ""))
             torch.save({"name": k, "description": desc, "positive": pos, "negative": neg, "split": 0,
+                        "missing_roles": missing,
                         "raw": torch.from_numpy(raw).float(), "unit": torch.from_numpy(unit).float(),
                         "norm": torch.from_numpy(norm), "layers": layers, "hidden": hidden,
                         "bank": str(a.vectors), "bank_tag": a.tag, "model": a.model, "recipe": RECIPE,
@@ -147,6 +162,7 @@ def main():
             js.write_text(json.dumps({
                 "name": k, "description": desc, "model": a.model, "bank": str(a.vectors), "bank_tag": a.tag,
                 "recipe": RECIPE, "split": 0, "splits_md5": splits_md5, "positive": pos, "negative": neg,
+                "missing_roles": missing,
                 "rollouts_per_role": {n: meta[n]["n"] for n in pos + neg},
                 "input_md5": {n: meta[n]["md5"] for n in pos + neg}, "layers": len(layers), "hidden": hidden,
                 "norm_at": {f"L{l}": round(float(norm[layers.index(l)]), 6) for l in REPORT_LAYERS if l in layers},
@@ -156,20 +172,26 @@ def main():
     null_csv.parent.mkdir(parents=True, exist_ok=True)
     with open(null_csv, "w", newline="", encoding="utf-8") as f:
         w = csv.writer(f)
-        w.writerow(["split", "contrast", "layer", "norm", "rel_norm", "cos_assistant"])
+        w.writerow(["split", "contrast", "layer", "norm", "rel_norm", "cos_assistant", "n_pos", "n_neg"])
         for r in rows:
-            w.writerow([r[0], r[1], r[2], f"{r[3]:.6f}", f"{r[4]:.6f}", f"{r[5]:+.6f}"])
+            w.writerow([r[0], r[1], r[2], f"{r[3]:.6f}", f"{r[4]:.6f}", f"{r[5]:+.6f}", r[6], r[7]])
 
-    print(f"{len(vec)} vectors, {len(layers)} layers x {hidden}; wrote R5-R9 (split 0) and {len(rows)} null rows")
-    arr = {(s, k, l): (rn, ca) for s, k, l, _, rn, ca in rows}
+    print(f"{len(vec)} vectors, {len(layers)} layers x {hidden}; wrote R5-R9 (split 0) and {len(rows)} null rows"
+          + (f"; {len(skipped)} split-contrasts skipped (a group emptied): "
+             + ", ".join(f"{k}:{n}" for k, n in sorted({k: sum(1 for _, kk in skipped if kk == k)
+                                                       for _, k in skipped}.items())) if skipped else ""))
+    arr = {(s, k, l): (rn, ca) for s, k, l, _, rn, ca, _, _ in rows}
     for l in REPORT_LAYERS:
         if l not in layers:
             continue
         line = [f"L{l}"]
         for k in defs:
-            rn = np.array([arr[(s, k, l)][0] for s in range(len(S["splits"]))])
-            ca = np.abs([arr[(s, k, l)][1] for s in range(len(S["splits"]))])
-            line.append(f"{k} rel {arr[(0, k, l)][0]:.3f} (null {np.percentile(rn, 2.5):.3f}-{np.percentile(rn, 97.5):.3f}), "
+            rn = np.array([arr[(s, k, l)][0] for s in range(len(S["splits"])) if (s, k, l) in arr])
+            ca = np.abs([arr[(s, k, l)][1] for s in range(len(S["splits"])) if (s, k, l) in arr])
+            if not len(rn):
+                continue
+            s0 = f"{arr[(0, k, l)][0]:.3f}" if (0, k, l) in arr else "n/a"
+            line.append(f"{k} rel {s0} (null {np.percentile(rn, 2.5):.3f}-{np.percentile(rn, 97.5):.3f}, n={len(rn)}), "
                         f"|cos asst| med {np.median(ca):.2f}")
         print("  ".join(line))
 

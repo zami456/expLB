@@ -108,9 +108,9 @@ Alpaca read in `random_persona_bank/results/Llama-3.3-70B-Instruct/`; its D's an
 | Qwen2.5-72B | LanguageModel | 80 × 8192 | ✓ (`_v2`) | ✓ | ✓ | LB rows | ✓ | ✓ |
 | Mistral-Small-24B-2501 | LanguageModel | 40 × 5120 | ✓ | ✓ | ✓ | generated | ✓ | ✓ |
 | Mistral-Small-3.1-24B | VisionLanguageModel | 40 × 5120 | ✓ | ✓ | ✓ | LB rows | ✓ | ✓ |
-| Gemma-3-27B | VisionLanguageModel | 62 × 5376 | ✓ | ✓ | ✓ | LB rows, fp32 | ✓ | `d5k/` local only |
-| Llama-3.1-405B | LanguageModel | 126 × 16384 | paused, 900 / 5,400 replies | — | — | — | — | local only |
-| Llama-3.3-70B (reference) | LanguageModel | 80 × 8192 | lab kd bank | ✓ (80 layers, 10-10) | D5, D8, D9 | LB rows | ✓ | partly (see §4) |
+| Gemma-3-27B | VisionLanguageModel | 62 × 5376 | ✓ | ✓ | ✓ | LB rows, fp32 | ✓ | ✓ |
+| Llama-3.1-405B | LanguageModel | 126 × 16384 | paused, 900 / 5,400 replies | — | — | — | — | ✓ (partial run) |
+| Llama-3.3-70B (reference) | LanguageModel | 80 × 8192 | lab kd bank | ✓ (80 layers, 10-10) | D5, D8, D9 | LB rows | ✓ | ✓ (see §4) |
 
 Per-model decisions, fixes and the geometry table: `REPORT_MODEL_PORTS.md`.
 
@@ -177,8 +177,9 @@ What each earlier port needed (details in `REPORT_MODEL_PORTS.md`):
 ## 9. Known gaps
 
 - No Liars' Bench detection numbers for any model but Llama (evaluation reads cancelled; `eval_queue.ps1` read nothing).
-- Llama-3.1-405B paused at 900 / 5,400 replies; resume commands at the end of `LOG.md`; not on Drive.
-- Gemma-3 `d5k/` is local only (Drive has `d9k/` but not `d5k/`); Llama-3.3's D's / D + K are local only.
+- Llama-3.1-405B paused at 900 / 5,400 replies; resume commands at the end of `LOG.md`.
+- Drive copies completed 2026-10-10 14:50 (rclone check, all matching): Gemma `d5k/`, the 405B run folder (no `.env`),
+  Llama-3.3 `d5 d8 d9 d5k d9k` under `xmodel_2026-10-06/Llama-3.3-70B-Instruct/` (its kd vectors stay in the lab backup).
 - D1–D4 not built on any second model (they need Liars' Bench training rows; RepE is not in the loader; D3 has no
   equivalent off Llama).
 - `k/zami_origin-paper_e27ffaf9/` and every `.env` are gitignored by design.

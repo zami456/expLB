@@ -6769,3 +6769,32 @@ All later reads go through `audit/scripts/p17_common.py`.
   4. The 0.9597 regex is not recorded; a guess gives 0.9413, which is still above 0.919.
 - **supersedes:** on the points above only — F-111, F-112, F-117, F-118, F-120 and F-127, plus F-127's "166 / 8 / 2". Each entry stays as written.
 - **status:** verified
+
+---
+
+### F-129 · 2026-10-13 · **T1-4 (review W6): the pre-registered OR-rule MISSES at L40 (3 of 5, needed 4); partial AUROC confirms that adding K lowers the low-FPR tail on 4 of 5 datasets**
+
+The review (2026-10-07) faulted D9 + K for lower tail recall at 1% FPR. The plan's T1-4, committed in `0b9a096a` (2026-10-10) before any result existed, tested a fix: flag if D9 **or** K exceeds its own Alpaca 99.5th percentile. Success meant OR recall ≥ D9's on ≥ 4 of 5 datasets at realised Alpaca FPR ≤ 1%.
+
+**Per-row scores rebuilt.** zami's per-row scores were never committed. They were rebuilt on the laptop CPU (no NDIF) from Pass B (mean over the reply), our Llama K and the kd bank's D9. Bank **s3** reproduces his D9 (mean |ΔAUROC| 0.0003 at L40). CG, HP-C, HP-KR and ID reproduce exactly: AUROC within 0.0015, Alpaca-cutoff recall equal to 4 decimals in 11 of 12 cells. **IT does not:** K 0.8623 vs his 0.8813, and D9's Alpaca-cutoff recall is 0.3002 vs 0.7494 at a matching AUROC (0.9811 vs 0.9803). The likeliest reason is that different IT reply tokens were pooled.
+
+**L40 (pre-registered), Alpaca cutoff.**
+- OR ≥ D9 on 3 of 5, at Alpaca FPR 0.0090: **MISS**.
+- OR loses on CG (0.2455 vs 0.3593; paired 95% CI of the difference [−0.162, −0.012]) and ID (0.9238 vs 0.9560; [−0.114, −0.007]).
+- Its three "wins" are HP-C and HP-KR, where every rule catches 0–1 lies, and IT, where OR flags 74% of honest rows (D9: 0%).
+- Mean-of-five balanced accuracy: D9 0.6502, OR 0.6317, D9 + K 0.7062.
+
+**Partial AUROC to 5% FPR** (pre-registered; no threshold). Mean of five: D9 0.7691, D9 + K 0.7323, K 0.6258. D9 + K is below D9 on CG, HP-KR, IT and ID. W6 stands.
+
+**Post hoc layers.** L36 misses (3 of 5). L44 passes by the letter (4 of 5), but its CG and IT gains come with 12% and 47% of honest rows flagged.
+
+**Gender-Secret, base read only** (Pass Q11: base model, no adapter; reproduces zami's base read within 0.0008). Every rule is at chance at L40: BA D9 0.498, K 0.536, D9 + K 0.495, OR 0.528. zami's K 0.8645 is the adapted read, which this store cannot test.
+
+- **source:** `review_response/T1-4_or_rule/` (`README.md` §1 pre-registration, §1a sanity outcome, §3 result; `or_rule_verdict.json`, `or_rule_points.csv`, `or_rule_bootstrap.csv`, `or_rule_pauc.csv`, `sanity.csv`, `sanity.json`, `per_row_scores.csv`, `inputs.json`); zami's reference values in `xmodel/k/zami_origin-paper_e27ffaf9/.../results/recall_denial/{d5_plus_k.csv, gender_secret.csv, k_robustness/operating_points.csv}` (origin/paper @ e27ffaf9); Pass B and Pass Q11 from `tamara:expLB/coords/`, rclone-checked 0 differences
+- **caveats:**
+  1. IT does not reproduce zami's store, so the five-dataset verdict is "on our rebuild" (README rule 3). Without IT, OR ≥ D9 holds on 2 of 4 (both floor ties); the verdict is a miss either way.
+  2. One model, one seed for the directions; the bootstrap resamples rows and Alpaca, not the persona bank or K's items.
+  3. At the Alpaca threshold, HP-C and HP-KR sit at the floor for every rule, and IT's honest-flag rate swings 0–100% by scorer. Under this protocol tail recall is dominated by calibration (F-124), so the threshold-free pAUC is the cleaner reading of W6.
+  4. The Gender-Secret adapted read needs zami's `adapted_L{layer}.npz` or a new NDIF read, plus the fine-tune's own Alpaca read for thresholds.
+- **supersedes:** the plan's draft W6 rebuttal (`thesis_tools/planning/REVIEW_RESPONSE_PLAN.md:330`, "at the benchmark's Alpaca cutoff D9+K has higher recall"). That gain is IT's, bought with 2.7× the honest-flag rate in zami's numbers (0.069 vs 0.025) and 2.2× here (0.0505 vs 0.0226). Nothing in this ledger is superseded.
+- **status:** measured; pre-registered criterion missed

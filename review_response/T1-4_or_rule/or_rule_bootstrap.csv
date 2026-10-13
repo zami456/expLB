@@ -1,0 +1,211 @@
+layer,set,quantity,lo,hi,share_draws_ge_0
+40,CG,recall D9,0.2575,0.4431,
+40,CG,recall K,0.1856,0.3952,
+40,CG,recall D9 + K,0.2934,0.5269,
+40,CG,recall OR,0.1737,0.3774,
+40,CG,recall OR - D9,-0.1617,-0.012,0.011
+40,CG,honest flagged OR - D9,0.0,0.12,1.0
+40,CG,recall D9 + K - D9,-0.012,0.1499,0.959
+40,CG,honest flagged D9 + K - D9,0.0,0.05,1.0
+40,CG,recall OR - D9 + K,-0.2397,-0.0599,0.001
+40,CG,honest flagged OR - D9 + K,-0.02,0.1,0.953
+40,HP-C,recall D9,0.0,0.0,
+40,HP-C,recall K,0.0,0.0224,
+40,HP-C,recall D9 + K,0.0,0.0299,
+40,HP-C,recall OR,0.0,0.0224,
+40,HP-C,recall OR - D9,0.0,0.0224,1.0
+40,HP-C,honest flagged OR - D9,0.0,0.0,1.0
+40,HP-C,recall D9 + K - D9,0.0,0.0299,1.0
+40,HP-C,honest flagged D9 + K - D9,0.0,0.0,1.0
+40,HP-C,recall OR - D9 + K,-0.0149,0.0,0.92
+40,HP-C,honest flagged OR - D9 + K,0.0,0.0,1.0
+40,HP-KR,recall D9,0.0,0.0,
+40,HP-KR,recall K,0.0,0.0,
+40,HP-KR,recall D9 + K,0.0,0.0216,
+40,HP-KR,recall OR,0.0,0.0,
+40,HP-KR,recall OR - D9,0.0,0.0,1.0
+40,HP-KR,honest flagged OR - D9,0.0,0.0,1.0
+40,HP-KR,recall D9 + K - D9,0.0,0.0216,1.0
+40,HP-KR,honest flagged D9 + K - D9,0.0,0.0,1.0
+40,HP-KR,recall OR - D9 + K,-0.0216,0.0,0.648
+40,HP-KR,honest flagged OR - D9 + K,0.0,0.0,1.0
+40,IT,recall D9,0.1608,0.4894,
+40,IT,recall K,0.9905,1.0,
+40,IT,recall D9 + K,0.6998,0.9764,
+40,IT,recall OR,0.8345,1.0,
+40,IT,recall OR - D9,0.4633,0.8133,1.0
+40,IT,honest flagged OR - D9,0.2678,1.0,1.0
+40,IT,recall D9 + K - D9,0.4443,0.7494,1.0
+40,IT,honest flagged D9 + K - D9,0.0076,0.2101,1.0
+40,IT,recall OR - D9 + K,-0.0356,0.2317,0.933
+40,IT,honest flagged OR - D9 + K,0.2413,0.9178,1.0
+40,ID,recall D9,0.9399,0.9701,
+40,ID,recall K,0.2443,0.4237,
+40,ID,recall D9 + K,0.8742,0.9392,
+40,ID,recall OR,0.8348,0.9557,
+40,ID,recall OR - D9,-0.1143,-0.0069,0.001
+40,ID,honest flagged OR - D9,-0.07,-0.0092,0.0
+40,ID,recall D9 + K - D9,-0.0611,-0.0174,0.0
+40,ID,honest flagged D9 + K - D9,-0.0377,0.0092,0.152
+40,ID,recall OR - D9 + K,-0.0805,0.0279,0.564
+40,ID,honest flagged OR - D9 + K,-0.0608,0.0054,0.068
+40,GS-base,recall D9,0.0,0.0,
+40,GS-base,recall K,0.1121,0.2759,
+40,GS-base,recall D9 + K,0.0086,0.1724,
+40,GS-base,recall OR,0.0517,0.2241,
+40,GS-base,recall OR - D9,0.0517,0.2241,1.0
+40,GS-base,honest flagged OR - D9,0.0145,0.1197,0.996
+40,GS-base,recall D9 + K - D9,0.0086,0.1724,1.0
+40,GS-base,honest flagged D9 + K - D9,0.0144,0.1413,1.0
+40,GS-base,recall OR - D9 + K,-0.0345,0.1466,0.912
+40,GS-base,honest flagged OR - D9 + K,-0.0762,0.0508,0.364
+40,mean of five,recall D9,0.2783,0.3745,
+40,mean of five,recall K,0.2891,0.3616,
+40,mean of five,recall D9 + K,0.3796,0.4919,
+40,mean of five,recall OR,0.3882,0.4654,
+40,mean of five,recall OR - D9,0.0685,0.1466,1.0
+40,mean of five,honest flagged OR - D9,0.0485,0.2192,1.0
+40,mean of five,recall D9 + K - D9,0.0823,0.1737,1.0
+40,mean of five,honest flagged D9 + K - D9,-0.0049,0.0506,0.912
+40,mean of five,recall OR - D9 + K,-0.0566,0.0297,0.112
+40,mean of five,honest flagged OR - D9 + K,0.0411,0.1921,1.0
+36,CG,recall D9,0.3413,0.5629,
+36,CG,recall K,0.1377,0.3174,
+36,CG,recall D9 + K,0.3054,0.5389,
+36,CG,recall OR,0.1975,0.4551,
+36,CG,recall OR - D9,-0.2335,-0.0299,0.0
+36,CG,honest flagged OR - D9,-0.03,0.03,0.84
+36,CG,recall D9 + K - D9,-0.1198,0.0599,0.273
+36,CG,honest flagged D9 + K - D9,0.0,0.06,0.989
+36,CG,recall OR - D9 + K,-0.2216,0.018,0.059
+36,CG,honest flagged OR - D9 + K,-0.06,0.0,0.203
+36,HP-C,recall D9,0.0,0.0373,
+36,HP-C,recall K,0.0373,0.1343,
+36,HP-C,recall D9 + K,0.0224,0.1119,
+36,HP-C,recall OR,0.0297,0.1121,
+36,HP-C,recall OR - D9,0.0149,0.1045,1.0
+36,HP-C,honest flagged OR - D9,0.0,0.002,1.0
+36,HP-C,recall D9 + K - D9,0.0149,0.097,1.0
+36,HP-C,honest flagged D9 + K - D9,0.0,0.0025,1.0
+36,HP-C,recall OR - D9 + K,-0.0224,0.0299,0.827
+36,HP-C,honest flagged OR - D9 + K,-0.0015,0.0005,0.639
+36,HP-KR,recall D9,0.0,0.0,
+36,HP-KR,recall K,0.1295,0.2806,
+36,HP-KR,recall D9 + K,0.0863,0.2518,
+36,HP-KR,recall OR,0.0862,0.223,
+36,HP-KR,recall OR - D9,0.0862,0.223,1.0
+36,HP-KR,honest flagged OR - D9,0.0,0.004,1.0
+36,HP-KR,recall D9 + K - D9,0.0863,0.2518,1.0
+36,HP-KR,honest flagged D9 + K - D9,0.0005,0.005,1.0
+36,HP-KR,recall OR - D9 + K,-0.0719,0.0504,0.427
+36,HP-KR,honest flagged OR - D9 + K,-0.003,0.001,0.394
+36,IT,recall D9,0.1631,0.5533,
+36,IT,recall K,0.9858,1.0,
+36,IT,recall D9 + K,0.8392,0.9905,
+36,IT,recall OR,0.3853,1.0,
+36,IT,recall OR - D9,0.0707,0.7944,0.987
+36,IT,honest flagged OR - D9,0.0457,0.9863,1.0
+36,IT,recall D9 + K - D9,0.4066,0.7612,1.0
+36,IT,honest flagged D9 + K - D9,0.0167,0.2435,1.0
+36,IT,recall OR - D9 + K,-0.4989,0.1064,0.498
+36,IT,honest flagged OR - D9 + K,-0.0518,0.8083,0.917
+36,ID,recall D9,0.9353,0.9649,
+36,ID,recall K,0.4052,0.6621,
+36,ID,recall D9 + K,0.9195,0.954,
+36,ID,recall OR,0.8571,0.9537,
+36,ID,recall OR - D9,-0.0854,-0.0046,0.003
+36,ID,honest flagged OR - D9,-0.0616,-0.0075,0.001
+36,ID,recall D9 + K - D9,-0.0273,0.0013,0.042
+36,ID,honest flagged D9 + K - D9,-0.0302,0.0159,0.271
+36,ID,recall OR - D9 + K,-0.0782,0.0118,0.285
+36,ID,honest flagged OR - D9 + K,-0.0578,0.003,0.044
+36,GS-base,recall D9,0.0,0.0,
+36,GS-base,recall K,0.1377,0.319,
+36,GS-base,recall D9 + K,0.0259,0.1812,
+36,GS-base,recall OR,0.0517,0.2414,
+36,GS-base,recall OR - D9,0.0517,0.2414,1.0
+36,GS-base,honest flagged OR - D9,0.0217,0.1377,1.0
+36,GS-base,recall D9 + K - D9,0.0259,0.1812,1.0
+36,GS-base,honest flagged D9 + K - D9,0.0109,0.1341,0.999
+36,GS-base,recall OR - D9 + K,-0.0345,0.1293,0.888
+36,GS-base,honest flagged OR - D9 + K,-0.058,0.0725,0.58
+36,mean of five,recall D9,0.295,0.4148,
+36,mean of five,recall K,0.352,0.4575,
+36,mean of five,recall D9 + K,0.4498,0.5542,
+36,mean of five,recall OR,0.3508,0.5315,
+36,mean of five,recall OR - D9,0.0011,0.1838,0.977
+36,mean of five,honest flagged OR - D9,0.0012,0.1958,0.978
+36,mean of five,recall D9 + K - D9,0.0931,0.2126,1.0
+36,mean of five,honest flagged D9 + K - D9,0.0006,0.058,0.983
+36,mean of five,recall OR - D9 + K,-0.1331,0.0169,0.117
+36,mean of five,honest flagged OR - D9 + K,-0.0225,0.1579,0.858
+44,CG,recall D9,0.1856,0.3654,
+44,CG,recall K,0.4611,0.7127,
+44,CG,recall D9 + K,0.3473,0.5868,
+44,CG,recall OR,0.3234,0.6108,
+44,CG,recall OR - D9,0.0659,0.3293,0.998
+44,CG,honest flagged OR - D9,0.01,0.27,1.0
+44,CG,recall D9 + K - D9,0.1078,0.2874,1.0
+44,CG,honest flagged D9 + K - D9,0.0,0.04,1.0
+44,CG,recall OR - D9 + K,-0.1138,0.1377,0.621
+44,CG,honest flagged OR - D9 + K,0.0,0.25,1.0
+44,HP-C,recall D9,0.0,0.0,
+44,HP-C,recall K,0.0,0.0075,
+44,HP-C,recall D9 + K,0.0,0.0075,
+44,HP-C,recall OR,0.0,0.0,
+44,HP-C,recall OR - D9,0.0,0.0,1.0
+44,HP-C,honest flagged OR - D9,0.0,0.0,1.0
+44,HP-C,recall D9 + K - D9,0.0,0.0075,1.0
+44,HP-C,honest flagged D9 + K - D9,0.0,0.0,1.0
+44,HP-C,recall OR - D9 + K,-0.0075,0.0,0.972
+44,HP-C,honest flagged OR - D9 + K,0.0,0.0,1.0
+44,HP-KR,recall D9,0.0,0.0,
+44,HP-KR,recall K,0.0,0.0,
+44,HP-KR,recall D9 + K,0.0,0.0072,
+44,HP-KR,recall OR,0.0,0.0,
+44,HP-KR,recall OR - D9,0.0,0.0,1.0
+44,HP-KR,honest flagged OR - D9,0.0,0.0,1.0
+44,HP-KR,recall D9 + K - D9,0.0,0.0072,1.0
+44,HP-KR,honest flagged D9 + K - D9,0.0,0.0,1.0
+44,HP-KR,recall OR - D9 + K,-0.0072,0.0,0.966
+44,HP-KR,honest flagged OR - D9 + K,0.0,0.0,1.0
+44,IT,recall D9,0.0307,0.2506,
+44,IT,recall K,0.9574,1.0,
+44,IT,recall D9 + K,0.6052,0.8038,
+44,IT,recall OR,0.8296,0.9929,
+44,IT,recall OR - D9,0.6714,0.9291,1.0
+44,IT,honest flagged OR - D9,0.1492,0.8524,1.0
+44,IT,recall D9 + K - D9,0.4869,0.6974,1.0
+44,IT,honest flagged D9 + K - D9,0.0,0.0228,1.0
+44,IT,recall OR - D9 + K,0.1252,0.3192,0.996
+44,IT,honest flagged OR - D9 + K,0.1476,0.8403,1.0
+44,ID,recall D9,0.8939,0.9432,
+44,ID,recall K,0.2414,0.4397,
+44,ID,recall D9 + K,0.7911,0.9077,
+44,ID,recall OR,0.6857,0.9186,
+44,ID,recall OR - D9,-0.2174,-0.0125,0.002
+44,ID,honest flagged OR - D9,-0.0616,-0.0084,0.007
+44,ID,recall D9 + K - D9,-0.1055,-0.02,0.003
+44,ID,honest flagged D9 + K - D9,-0.0201,0.0205,0.462
+44,ID,recall OR - D9 + K,-0.1564,0.0384,0.358
+44,ID,honest flagged OR - D9 + K,-0.0616,-0.0067,0.003
+44,GS-base,recall D9,0.0,0.0086,
+44,GS-base,recall K,0.1981,0.4312,
+44,GS-base,recall D9 + K,0.0517,0.2845,
+44,GS-base,recall OR,0.1379,0.3276,
+44,GS-base,recall OR - D9,0.1379,0.3276,1.0
+44,GS-base,honest flagged OR - D9,0.0616,0.1957,1.0
+44,GS-base,recall D9 + K - D9,0.0517,0.2845,1.0
+44,GS-base,honest flagged D9 + K - D9,0.0688,0.192,1.0
+44,GS-base,recall OR - D9 + K,-0.0345,0.1726,0.923
+44,GS-base,honest flagged OR - D9 + K,-0.0726,0.058,0.426
+44,mean of five,recall D9,0.2268,0.3053,
+44,mean of five,recall K,0.3348,0.4287,
+44,mean of five,recall D9 + K,0.3511,0.4556,
+44,mean of five,recall OR,0.3699,0.4982,
+44,mean of five,recall OR - D9,0.1304,0.2358,1.0
+44,mean of five,honest flagged OR - D9,0.0266,0.2185,1.0
+44,mean of five,recall D9 + K - D9,0.1101,0.1876,0.997
+44,mean of five,honest flagged D9 + K - D9,-0.0032,0.0131,0.821
+44,mean of five,recall OR - D9 + K,-0.014,0.0829,0.944
+44,mean of five,honest flagged OR - D9 + K,0.0284,0.2151,1.0

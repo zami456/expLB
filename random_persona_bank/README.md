@@ -14,6 +14,8 @@ kd bank's geometry, and later its detection, come from the purpose-written perso
 | Questions | the kd bank's 30 shared questions, byte-identical, so the role set is the only thing that changes |
 | Models | Llama-3.3-70B, Qwen2.5-72B, Mistral-Small-24B-2501, Mistral-Small-3.1-24B-2503, Gemma-3-27B (not Llama-405B) |
 | Outputs | everything the kd bank has per model: vectors (s23 / all / s3), axes + PCA, the five contrasts as random-split nulls (R5-R9), and R5 + K / R9 + K |
+| Banks analysed | **UPDATE 2026-10-10 ~17:50 (owner: "use the judge filter too … all, s3 for all models, s23 for all models; separate folder … for 3 types of result"):** all three banks for every model, each in `results/<Model>/bank_<all\|s23\|s3>/`. In a judge-filtered bank a role with < 20 kept replies has no vector; it is dropped from every split's groups (`r_contrasts.py --allow_missing`), the null CSVs record each split's group sizes (`n_pos`, `n_neg`), and a split whose group empties is skipped. Qwen has no kd s3 D's (its kd s3 bank lacks 8 of their roles), so its s3 comparison is random-side only. |
+| Main comparison bank | *(superseded by the row above for scope; `all` stays the cleanest comparison)* **`all`** for every model (owner 2026-10-10, option A): no judge filter, so all 35 random roles are always present and the pre-registered splits hold exactly; compared with each model's kd `all`-bank D's. |
 
 ## The bank (`bank/`, built by `bank/build_bank.py`; `--check` rebuilds it in memory and compares)
 
@@ -62,6 +64,13 @@ all, s3 (3), min 20 replies; every layer; `default` unjudged.
   `<|im_end|>`, `</s>`, `</s>`, `<end_of_turn>`); longest sequence 729 tokens. Log: `results/span_check_2026-10-10.log`.
 
 ## CPU stage, per model after its vectors (scripts written 2026-10-10)
+
+**Entry point (2026-10-10 ~18:00): `scripts/analyze_banks.py --models <keys> [--banks all,s23,s3]`** -- runs the two
+scripts below and the kd-vs-random comparison for each model and bank into `results/<Model>/bank_<bank>/`
+(`r5..r9/`, `r_null/`, `r5k/`, `r9k/`, `rk_null/`, `compare_kd_vs_random_<bank>.csv`), plus one table per bank across
+models in `results/compare_kd_vs_random_<bank>.csv`. Keys: Llama-3.3, Qwen-2.5, Mistral-2501, Mistral-3.1, Gemma-3.
+The comparison: D size / kd role spread v the R null of the same quantity; |cos(D, assistant)| v the null's; D + K spread
+ratio and cos(D + K, K) v the R + K null; `pct` = the kd value's percentile among the splits. Geometry only.
 
 - `scripts/r_contrasts.py`: R5-R9 for split 0 -> `<run>/r5..r9/R*_<bank>.pt` (same keys as the D files) and, for all 100
   splits, `<run>/r_null/R_null_<bank>.csv` (norm, norm relative to the bank's role spread, cos with the assistant
@@ -132,3 +141,65 @@ no judgement run without it: the queue's stall guard and the task's 30-minute wa
   python processes stopped by hand (command line matched on Qwen + 1_generate + --shard 2/3); shards 0 and 1 continue;
   the chain's next generate attempt regenerates only shard 2's missing rows. Earlier (11:00) one "Replica was evicted"
   on the same shard, retried OK.
+- 2026-10-10 13:46 Qwen generate attempt 2: the same engineio b'P' socket fault on shard 2 (job submitted 13:29); shard 2
+  stopped by hand again; attempt 3 started at 5,100 / 5,400. Both b'P' faults today hit shard 2 shortly after a submit.
+- 2026-10-10 15:05 Qwen judged: score 3 on 34% (Llama 83% on the same roles); score 1 on 42.4% (no trace of the role).
+  Weak on neutral roles too (unlabelled 37% v Llama 81%; fantastical 37% v 99%), weakest on deception- (14%) and
+  anti-sycophancy-flavoured roles (5%). Eligible roles: s23 31 / 35 (vigilante 3, loner 6, familiar 14, egregore 17 drop),
+  s3 21 / 35 (< 30: no axes), all 35 / 35. r_contrasts.py needs all 35 roles, so Qwen's R's are built on the `all`
+  bank (s23 / s3 pending the owner's choice A / B / C).
+- 2026-10-10 15:5x Qwen R5-R9 and R5 + K / R9 + K on `all` (Qwen's own K and Alpaca read, xmodel-runs). The kd D9 + K
+  lean to K on Qwen is inside the random null: L40 cos(D9 + K, K) 0.967 v R9 + K null 0.833-0.982 (ratio 3.66 v
+  1.50-5.20); L20 0.985 v 0.841-0.984 (top edge). Same for D5 + K (L40 0.976 v 0.864-0.981). So "D9 + K ~ K on Qwen" is
+  what any random contrast gives on Qwen's Alpaca geometry, not something specific to the deception contrast.
+- 2026-10-10 17:44 Mistral-2501 judge shard 0: engineio b'P' socket fault right after its 17:40 submit (role revolutionary);
+  stopped by hand; the chain's next judge attempt re-scores its remaining roles. Third b'P' of the day (Qwen generate x2).
+- 2026-10-10 ~18:05 layout changed to one folder per bank (owner). Llama (3 banks) and Qwen (`all`) outputs rebuilt into
+  `bank_*/` and checked identical to the earlier flat files (max difference 0), which were then removed; Qwen s23 / s3
+  added (s23: 31 roles; s3: 21 roles, R6 defined in 97 of 100 splits). Llama kd `all` bank downloaded from the lab backup
+  (36 / 36 matching) and its D5-D9 / D5 + K / D9 + K built; D6 / D7 added for Llama s23 / s3.
+  L40, kd v random (pct among 100 splits): D9 size Llama 100 / 100 / 100 (all / s23 / s3), Qwen 97 / 98 / n.a.; D8 size
+  Llama 100 in every bank, Qwen 81 / 92; D5 size Llama 98 / 99 / 100, Qwen 95 / 89; cos(D9 + K, K) Llama 66 / 65 / 53, Qwen
+  68 / 77 -- the kd contrasts are larger than random splits of random roles, while D9 + K's lean to K is ordinary.
+- 2026-10-10 18:05 Mistral-2501 vectors_s23 shard 0: the fourth engineio b'P' fault of the day; shard stopped by hand. The
+  queue's stall guard now also stops a shard whose .err.log ENDS in "invalid literal for int() with base 10: b'P'" (the
+  receive thread is dead; a recovered shard logs further lines). Tested offline on the dead log (fires) and a live one
+  (does not); queue process swapped at 18:05:38 (only the queue stopped; it re-attached to the running Mistral chain).
+- 2026-10-10 18:2x Mistral-2501 analysis stopped by Claude Code for critically low system memory (not a script error):
+  `bank_all/` holds R5-R9 + r_null (complete); R + K for all, and the s23 / s3 banks, not run. Fixes (not yet run):
+  rk.py projects 8 rows at a time (was a whole chunk in float64, ~300 MB per Llama chunk); analyze_banks.py skips steps
+  whose CSV exists, so a re-run resumes. To finish: `python random_persona_bank/scripts/analyze_banks.py --models Mistral-2501`
+  (validate rk.py first with its --validate mode on Qwen's D9K_s23_v2, expected ~3e-08).
+- 2026-10-10 19:05-21:00 the laptop was in Modern Standby (System log, Kernel-Power 506/507): every process paused, NDIF
+  sockets died. On wake the queue's guard stopped Mistral-3.1's generate shards 0 and 1 (silent 116 min / job RUNNING
+  118 min; shard 2 had been stopped at 18:41 for b'P'); generate attempt 2 started 21:01:57 with 3,406 / 5,400 kept.
+  Sleep while plugged in costs hours on an overnight run -- set "never sleep on AC" (powercfg) before leaving it.
+- 2026-10-10 ~21:10 (owner: the 19:05 standby was an accidental lid close; "yes apply it"): lid close action on AC set to
+  Do nothing (`powercfg /setacvalueindex SCHEME_CURRENT SUB_BUTTONS LIDACTION 0` + `/setactive`; the setting is hidden
+  here, read it with `powercfg /qh`). DC unchanged (Sleep). Undo: same command with 1.
+- 2026-10-11 04:35 QUEUE DONE (all 5 models); task RPB-queue disabled. Per model: 5,400 replies; judge score 3 on
+  Llama 83%, Qwen 34%, Mistral-2501 70%, Mistral-3.1 75%, Gemma 96% (kd bank: 69 / 28 / 63 / 68 / 96%); vectors s23/all/s3
+  36/36/36 for all but Qwen (32/36/22). Overnight NDIF faults all self-recovered: engineio b'P' (guard, several), replica
+  evictions (retries), a 04:24 "packet queue is empty" on Gemma s3 (recovered on its own).
+  CPU analysis status: Llama and Qwen all three banks done; Mistral-2501 bank_all R5-R9 only; Mistral-3.1 and Gemma not
+  run (both Claude-Code-run attempts were stopped for low system memory; re-run only on the owner's go).
+- 2026-10-11 07:40-07:56 (owner: "go with 2, run analyses after gemma finishes") CPU analysis finished for Mistral-2501
+  (resumed: bank_all R + K, then s23, s3), Mistral-3.1 and Gemma-3, all three banks, run in the foreground with nothing
+  else running (free RAM ~420 MB; ~5.5 min in all; none stopped). rk.py's 8-row batching checked first:
+  `rk.py --validate` rebuilds Mistral-2501's kd D9K_s23 at 3.45e-08 max relative difference. Every model x bank now has
+  `bank_<bank>/` (r5..r9, r_null, r5k, r9k, rk_null, compare CSV); combined tables `results/compare_kd_vs_random_<bank>.csv`
+  hold 154 rows each (5 models), every row on 100 splits. Copied to Drive (`rclone copy --ignore-existing`, bank_* folders
+  + the 3 combined CSVs; `rclone check --one-way` 51 files per model, 3 at the root, 0 differences).
+  Result, bank `all`, kd percentile among the 100 random splits (deep report layer: Llama/Qwen L40, Mistrals L20,
+  Gemma L40): D9 size 100 / 97 / 100 / 100 / 97 (Llama / Qwen / Mistral-2501 / Mistral-3.1 / Gemma); D6 and D7 size
+  97-100 everywhere; D8 100 / 81 / 100 / 100 / 98; D5 98 / 95 / 99 / 100 / 95 (Gemma L20 53). cos(D9 + K, K) 66 / 68 / 38 /
+  66 / 15 -- within the null for every model; Gemma's R + K null is very wide at L31/L40 (spread ratio 2.0-23.8 at L40)
+  and its kd D9 + K leans to K LESS than most random splits there (pct 7-15). |cos(D9, assistant)| 77 / 94 / 64 / 75 / 28.
+  s23 and s3 give the same picture (Qwen s3 has no kd side). Reading: on all five models the kd contrasts are larger than
+  contrasts between random groups of random roles, so their size is specific to the purpose-written personas; the D9 + K
+  lean toward K is not -- any random split does it. Geometry only; nothing here measures detection.
+- 2026-10-11 (caveat on the 04:35 entry's "kd bank: 69 / 28 / 63 / 68 / 96%"): the two banks are judged with different
+  prompts -- the random bank with AA's own (1 = "no trace of the role, answers as itself"), the kd bank with kd's
+  (1 = "cannot take the role but helps"). Only score 3 (fully in role) is defined alike; compare that, not 0-2.
+  Qwen on random roles: 1 = 42.4%, 2 = 24.0%, 3 = 33.7%. Results written into `xmodel/REPORT_MODEL_PORTS.md` as dated
+  UPDATE blocks (owner, 10-11).

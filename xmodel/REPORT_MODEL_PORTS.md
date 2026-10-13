@@ -4,6 +4,10 @@ Branch `xmodel-qwen`, 2026-10-06 → 2026-10-10. Sources: `xmodel/LOG.md` (the r
 from it unless marked), the owner's instructions in the Claude sessions `2ccffa48` (10-06/07) and `9725d76b`
 (10-08/09), and `random_persona_bank/README.md`.
 
+> **UPDATE 2026-10-11.** The random persona bank control (§5) is complete on all five models. Its results change three
+> readings below; each carries an "UPDATE 2026-10-11" block in front of it, and the original text is kept.
+> **Source:** `random_persona_bank/results/compare_kd_vs_random_{all,s23,s3}.csv`; `random_persona_bank/README.md` (log, 10-11).
+
 **Goal (owner, 10-06):** for each other model, collect what the report built for Llama-3.3-70B — the kd persona
 vectors (36 roles × 5 variants × 30 questions, every layer), K, and the lie directions D5–D9 and D+K. "One side of
 the dot product" only: the Liars' Bench evaluation reads were cancelled (owner, 10-09: "focus on completing the
@@ -35,6 +39,10 @@ Llama, …)" now name the model actually run.
 - **Weak role-play.** Judge score 3 on only 28% of replies; 11 roles under 20 score-3 replies. **Decision:** build the
   D's from **s23**, not zami's s3 (s3 loses 8 of the 25 roles the contrasts need). Applied to every later model.
   See "Why Qwen plays the roles weakly" below.
+- **UPDATE 2026-10-11 — refers to "D9 + K ≈ K" two bullets down.** The lean to K is **not specific to deception**.
+  Random splits of 35 random roles into the kd groups' sizes give the same thing: Qwen's D9 + K sits at the 76th
+  percentile of 100 random splits for spread ratio (random 2.5–97.5%: 1.22–4.83) and at the 77th for cos(D9 + K, K)
+  (random 0.781–0.980), s23, L40. What is specific is D9's size, at the 98th percentile (§5).
 - **No Gender-Secret organism** in Liars' Bench for Qwen → GS is not available on Qwen (owner accepted; a new fine-tune
   was out of scope).
 - **D9 + K ≈ K.** Alpaca spreads ~4× more along D9 than along K (ratio 3.95; Llama 1.03), so the standardised sum is
@@ -74,6 +82,18 @@ It was instructed like every other model: the same 5 system prompts per role, de
 - **Consequence:** Qwen's role vectors measure "Qwen told to be X", often Qwen being itself → weaker persona contrasts
   (hence s23). Not tuned away (longer prompts or prefills would break the cross-model match); reported as a finding.
   The random persona bank tests whether Qwen also stays itself on neutral roles (pilot, librarian) or only on deceptive ones.
+- **UPDATE 2026-10-11 — answer: on neutral roles too.** On 35 random roles Qwen is fully in role on **33.7%** of
+  replies (kd bank 28%); Llama 83.2%, Mistral-2501 70.4%, Mistral-3.1 75.1%, Gemma 96.5%. 14 of 35 random roles have
+  under 20 score-3 replies (kd: 11). Pilot 24 of 150, librarian 25, pharmacist 25, bartender 17; lowest loner 1,
+  vigilante 2, egregore 4. Highest: absurdist 149, presenter 143, writer 122, facilitator 106, summarizer 104.
+  So the "helpful-honest training wins when the role conflicts with it" reading above does not cover it: a pilot does not
+  conflict with honesty. *Reading (not tested):* Qwen takes up a role that is a way of writing an answer (absurdist,
+  presenter, writer), but not one that is an identity (pilot, pharmacist, loner).
+  **Caveat:** the random bank is judged with the Assistant Axis's own prompts, whose 0–2 scale differs from the kd
+  prompts' (AA's 1 = "no trace of the role, answers as itself", 42% of Qwen's replies; kd's 1 = "cannot take the role
+  but helps"). Compare only score 3, which both define as fully in role.
+  **Source:** `random_persona_bank/results/<model>/persona/scores/*.json`; judge scales in
+  `random_persona_bank/bank/rpb_instructions/pilot.json` and `kd/personas/kd_instructions/pc_amnesiac_witness.json`.
 - Sources: `%USERPROFILE%\xmodel-runs\<model>\persona\{scores,responses}`; Llama's kd scores from Drive
   `labpc-backup-2026-10-06/expLB/run-kd/scores` (35 files); groups from `kd_role_groups.json`.
 
@@ -111,6 +131,10 @@ It was instructed like every other model: the same 5 system prompts per role, de
   float32 throughout). Residual norms ~100× the others → compare Gemma only by cosines.
 - **Depth matters:** L31 is a low point (cos(PC1, assistant) +0.255 vs median +0.824); D9+K leans to D9 at L31 but to K
   at L40 → report Gemma across layers, not at one.
+- **UPDATE 2026-10-11 — refers to the bullet above.** Gemma's random splits mostly lean to K at L31 (median spread ratio
+  2.06; kd 0.35, 5th percentile; cos(D9 + K, K) kd 0.403 v median 0.901, 9th), so the L31 lean to D9 is specific to the
+  kd D9. At L40 the random spread is very wide (ratio 2.06–23.8) and kd D9 + K leans to K less than most splits (15th
+  percentile). s23 bank.
 - No HP-KR or Gender-Secret rows in Liars' Bench for Gemma; its Alpaca instructions overlap the others' on only 1,148 of 2,000.
 
 ### Llama-3.1-405B-Instruct (10-09, paused)
@@ -130,6 +154,12 @@ It was instructed like every other model: the same 5 system prompts per role, de
 | Mistral-3.1 (L20) | ✓ | ✓ | ✓ | 68% | +0.573 | 0.9966 | 0.985 | 2.54 | 0.935 |
 | Gemma-3 (L31) | ✓ | ✓ | ✓ | 96% | +0.255 (median +0.824) | 0.9918 | 0.975 | 0.35 | 0.403 (L40: 0.987) |
 | Llama-405B | 900/5,400 replies | — | — | — | — | — | — | — | — |
+
+> **UPDATE 2026-10-11 — refers to the Reading below.** "On the other models it leans to K" holds, but it is not a property
+> of the deception contrast. On the random bank, random splits of random roles give D + K leans like these on every
+> model. The kd D9 + K is between the 34th and 77th percentile of 100 splits on Llama, Qwen and both Mistrals, and lower
+> on Gemma (§5). The D's **sizes** are what set the kd contrasts apart. Llama's "balanced blend" is likewise ordinary:
+> its random splits have a median ratio of 1.07.
 
 Reading: role-play strength varies a lot across models (28% → 96% fully in role); Qwen's persona space is dominated by
 the assistant direction; D9 + K is a balanced blend only on Llama — on the other models it leans to K (Gemma depends on
@@ -158,6 +188,32 @@ Axis roles, no stance filter, same 30 questions — for Llama-3.3, Qwen, Mistral
 R5–R9, 100 random splits of the 35 roles into the kd groups' sizes, fixed before any data; Llama-3.3 K and Alpaca read at
 all 80 layers added (none existed: zami commits no K arrays, our earlier Llama K had 4 layers, Drive's Alpaca stores had
 21 layers or 200 rows). Started 10-10 02:11; one model at a time, with an automatic stall guard.
+
+**UPDATE 2026-10-11 — results.** Run done 10-11 04:35 (5,400 replies per model; vectors s23 / all / s3 36 / 36 / 36,
+Qwen 32 / 36 / 22); analysis of all three banks done 07:56. Fully in role (score 3, AA judge prompts): Llama 83.2%, Qwen
+33.7%, Mistral-2501 70.4%, Mistral-3.1 75.1%, Gemma 96.5% (kd bank 69 / 28 / 63 / 68 / 96%). Each model's kd
+contrasts v its 100 random splits, s23, kd percentile:
+
+| | Llama L40 | Qwen L40 | Mistral-2501 L20 | Mistral-3.1 L20 | Gemma L31 / L40 |
+|---|---|---|---|---|---|
+| D5 size | 99 | 89 | 99 | 100 | 87 / 95 |
+| D6 size | 100 | 100 | 100 | 100 | 100 / 100 |
+| D7 size | 100 | 100 | 100 | 100 | 97 / 98 |
+| D8 size | 100 | 92 | 100 | 100 | 100 / 98 |
+| D9 size | 100 | 98 | 100 | 100 | 88 / 98 |
+| \|cos(D9, assistant)\| | 79 | 92 | 68 | 75 | 31 / 28 |
+| D9 + K spread ratio | 41 | 76 | 34 | 66 | 5 / 15 |
+| cos(D9 + K, K) | 65 | 77 | 41 | 71 | 9 / 15 |
+
+Size = the contrast's norm / its bank's role spread, so the two banks are on one scale. Banks `all` and `s3` give the
+same picture (Qwen has no kd s3 D's).
+- **The kd contrasts are larger than contrasts between random groups of random roles** on every model (D6–D9 at the
+  92nd–100th percentile, except Gemma's D9 at L31, 88th). Their size comes from the purpose-written personas.
+- **The D + K lean to K is ordinary** (34th–77th percentile on four models; Gemma lower).
+- **Alignment with the assistant direction is ordinary** too, except on Qwen (92nd).
+- Geometry only; no detection read on either bank.
+- **Source:** `random_persona_bank/results/compare_kd_vs_random_<bank>.csv` (154 rows each, every row on 100 splits);
+  per model `results/<model>/bank_<bank>/`; Drive `tamara:expLB/random_persona_bank_2026-10-10/`.
 
 ## 6. Open
 

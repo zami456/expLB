@@ -685,3 +685,76 @@ all 80 layers (owner: "recompute llama kd D9+K on the full alpaca read"), in `%U
 
 The passB-based L40 values (1.03 / 0.764 for s23, 0.92 / 0.735 for s3) are confirmed to three decimals, and cos(D9, K)
 on s3 = zami's committed 0.1503. Depth matters: at L20 D9 + K leans to K (s23 ratio 2.19, cos(D9 + K, K) 0.915).
+
+## 2026-10-11 08:27 — Llama-3.1-405B resumed (owner: "continue llama 405B")
+
+State at resume: 900 / 5,400 replies (default + 5 roles complete, 150 each), K and Alpaca never past their gates. NDIF
+preflight READY (405B pinned, judge up). Deployed code = `xmodel/code` except the 35 judge prompts' Qwen -> Llama rename
+(line endings aside). Tasks re-registered with the commands above (Interactive; S4U refused): `XModel-llama405` (chain
+resumed: "generate attempt 1 (have 900 / 5400)"), `XModel-llama405-K` (waiting at its gate), `XModel-llama405-alpaca`
+(waiting for K's DONE).
+**New: `xmodel/guard405.ps1`** (task `XModel-llama405-guard`, log `<run>\logs\guard.status`): the chains retry a
+python that exits but none stops one that hangs, and the 10-09 watcher lived in a Claude session. The random-bank
+queue's guard, extended to K and the Alpaca generation / read, 405B limits: QUEUED never counts; RUNNING / DISPATCHED
+>= 45 min (judge 20), logs silent >= 60 min, or .err.log ending in engineio b'P' -> stop that process; its chain's next
+attempt resumes. K is not guarded while k_run.py waits at the persona gate (silent by design). `-Probe` prints what it
+sees and stops nothing. Classifier tested on synthetic command lines for every stage: the first draft missed the Alpaca
+stages (they carry the persona code folder on their command line) and K (a second -match overwrote the step) -- both
+fixed before registering. Reporting only: `xmodel/monitor405.sh` (Claude Monitor, re-armed every 29 min).
+**09:10 — a lost NDIF job; guard rule added.** Rate fell from 128 to 44 replies / 10 min. Shard 1's job 890a6f80
+entered the 405B queue at 08:37:07 "at position 2" and never moved, while two jobs submitted LATER by the other shards
+left the queue (shard 2's fa1f97ad ran and completed; shard 0's bddbc230, submitted 08:58 at position 1, RUNNING by ~09:00).
+No error in its .err.log; NDIF's GET /response/<id> answered 500 for all three jobs, the running one included, so it
+cannot tell. Shard 1 stopped by hand at 09:10:20 (noted in guard.status); shards 0 and 2 continue, the chain's next
+attempt regenerates shard 1's roles. "QUEUED never counts" would have left that shard waiting forever, so the guard now
+also stops a QUEUED job once a job of the same stage first seen >= 2 min after it has left the queue and it has waited
+>= 20 min, or after 120 min QUEUED in any case. Tested with a fake clock (lost job fires at 21 min, not at 15; an
+earlier-submitted job running does not fire; cap fires at 121, not 119; RUNNING limit unchanged); guard restarted 09:11.
+**15:01 — generation DONE** (5,400 replies, 36 roles; attempts 2 and 3 after the guard stopped two jobs RUNNING 45 min
+-- 32f72f73 at 11:42, 8daa4b9c at 12:58; during the second, shard 1 completed ~4 sessions, so 405B was serving and that
+job alone hung -- and one engineio b'P' shard at 12:59). The Drive copy after generation exited 1 on ONE file:
+`logs/guard.lock`, held open by the guard ("being used by another process"); everything else copied. Lock moved to
+`%USERPROFILE%\xmodel-runs\_guard405.lock` (outside the copied folder), guard restarted 15:03; the next copy is
+incremental. Judge started 15:02.
+**15:04 — guard fix: judge shards were unguarded.** xmodel/run_chain.ps1 logs the judge as `judge_eval.<i>.log`; the
+guard (copied from the random-bank queue, whose chain says `judge.<i>.log`) looked for `judge.<i>.log` and skipped the
+shards. Probe at 15:03 showed none; after the fix all three, limit 20 min. Guard restarted 15:04:51 (judge unguarded
+15:02-15:04 only). Generation and vectors use the stage tag as the log name, which the guard already matched.
+**15:30 — judge DONE** (5,250 scored, Llama-3.1-70B judge, kd judge prompts named "Llama"): score 3 62.2%, 2 36.4%,
+1 0.1%, 0 1.3% (Llama-3.3-70B on the same bank 69%). Every role has >= 42 score-3 replies (lowest pc_fact_checker 42,
+pc_coverup_operator / pc_deniable_expert / pc_enabler 45), so s23, all and s3 all hold 36 / 36 roles. Drive copy after
+the judge exit 0 (also catches up the generation copy). vectors_s23 started 15:30; free RAM ~360 MB (page file 11.6 GB free).
+**17:27 — 405B vectors and axes DONE**: vectors_s23 / all / s3 36 / 36 / 36 (s23 16:09, all 16:51, s3 17:24 after the
+guard stopped one engineio b'P' shard at 17:10). Axes at the report layer L63 (from `logs/axes.log`): s23 cos(PC1,
+assistant) +0.580, PC1 26.0% of role variance (top-5 70.0%), median across layers +0.576, default anchor at 0.897 on PC1;
+all +0.581 / 25.8%; s3 +0.491 / 24.2%. Llama-3.3-70B (L40) +0.620 / 27%; Qwen +0.838 / 51%.
+**17:30:52 — 405B persona chain DONE** (final Drive copy exit 0). **17:31 guard defect:** K's first verify had waited
+silently at its gate since 08:28 (k_run.py polls the chain status every 120 s and logs once); 28 s after the gate
+opened the guard stopped it as "logs silent for 543 min" (K attempt 1 of 4 spent; k_chain retries after 300 s). Fix:
+for K the silence is counted from the persona chain's DONE (chain.status mtime). Guard restarted 17:31:52.
+**18:04 — 405B K, first set DONE** (verify 17:38 after the guard restart, items, read 240 rows in ~24 min, directions):
+126 layers -> `K/llama-405b-3.1/first/K.npz`; cells 120 knows / 120 not; split-half cosine L63 0.9967 (min 0.9189,
+median 0.9939 over 126 layers; L20 0.9667, L40 0.9928). Llama-3.3 L40 0.9986, Qwen 0.9824. Matched set next.
+**18:32 — 405B K DONE** (matched set: verify 18:05, read 18:06-18:30, directions 18:32). cos(K first, K matched) at L63
+0.9861 (L20 0.9340, L40 0.9761; min 0.8202, median 0.9772 over 126 layers). Llama-3.3 L40 0.993, Qwen 0.953. The Alpaca
+chain (waiting on K's DONE) starts next.
+**10-11 22:07 — Alpaca generation DONE** (2,000 replies; 1,602 reached EOS, median 225 new tokens, max 500; temperature
+0.6; one shard stopped by the guard at 20:04 for engineio b'P', attempt 2 finished its 410 rows), spans 2,000 / 2,000
+exact; read started 22:08.
+**10-11 22:11 -> 10-12 21:41 — laptop in Modern Standby** (System log, Kernel-Power 506/507 + "Power source change" at
+22:11:50: on battery; brief wake 23:12, sleep 01:12; on AC again at 21:41). Every process frozen ~23.5 h. On wake the
+guard stopped the frozen read at 21:42:40 ("silent 1350 min"); read attempt 2 at 21:46.
+**10-12 21:52 — NDIF result downloads at 10-25 KB/s.** Not this laptop's link (Cloudflare 4 MB/s; Wi-Fi, no Tailscale
+exit node): a plain AWS S3 us-east object also comes at 10-17 KB/s, so the ISP's route to AWS is congested (K's reads at
+~18:00 on 10-11 ran ~1 MB/s). The read retries (download floor 40 KB/s -> new connection; 8 attempts; NDIF side fast,
+~21 s per request). XModel-llama405-alpaca's repeat window and time limit extended in place to 5 days (was 2: the
+watchdog would have stopped re-entering at 10-13 08:28); the running chain was not touched.
+**10-12 22:06 — Alpaca read PAUSED (owner: "yes pause it, resume in the morning").** Read attempt 2 had 0 / 2,000 rows:
+every download 4-19 KB/s against the 40 KB/s floor, and each retry re-ran the 405B request on NDIF (~25 / hour) for
+nothing. XModel-llama405-alpaca disabled, chain + read stopped (all 2,000 generated replies and their spans kept).
+**Resume: `xmodel/resume405.ps1`, task XModel-llama405-resume** -- from 10-13 07:00 every 30 min for 6 h (WakeToRun):
+measures a 2 MB range from S3 us-east; at >= 300 KB/s it re-enables and starts XModel-llama405-alpaca (generation is
+skipped, the read resumes) and disables itself; below, it logs "still slow" to `<run>\logs\resume.status`. Dry run at
+22:08: 9 KB/s, would not resume. If it never resumes by 13:00: run the dry run, then `Enable-ScheduledTask
+XModel-llama405-alpaca; Start-ScheduledTask XModel-llama405-alpaca` by hand. At ~1 MB/s the read is ~2 h (~90 requests of
+~48 MB), then D5-D9 / D+K and the Drive copy. Guard task's window runs to 10-14 08:28.

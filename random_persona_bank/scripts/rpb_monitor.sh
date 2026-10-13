@@ -115,7 +115,12 @@ check_procs() {
   local alert=""
   if [ "$ALLDONE" != 1 ] && [ "${q:-0}" = 0 ] && [ "${c:-0}" = 0 ]; then alert="nothing running while work remains"; fi
   if [ "$t" != "Ready" ] && [ "$t" != "Running" ]; then alert="${alert:+$alert; }task RPB-queue is $t"; fi
-  if [ -n "$mem" ] && [ "$mem" -lt 600 ]; then alert="${alert:+$alert; }free RAM ${mem} MB"; fi
+  # hysteresis (2026-10-11): raise below 600 MB, clear only at 750 MB or more -- it flapped around 600 before
+  if [ -n "$mem" ]; then
+    if [ "$mem" -lt 600 ] || { [[ "$last_proc" == *"free RAM"* ]] && [ "$mem" -lt 750 ]; }; then
+      alert="${alert:+$alert; }free RAM ${mem} MB"
+    fi
+  fi
   # compare the alert's KIND, not its numbers: "free RAM 466 MB" and "free RAM 379 MB" are one condition
   # (2026-10-10: the changing MB value re-fired the alert every 5 minutes during the judge and vector stages)
   local kind; kind=$(sed 's/[0-9]//g' <<<"$alert")
