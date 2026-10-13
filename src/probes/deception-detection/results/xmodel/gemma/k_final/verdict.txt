@@ -1,0 +1,6 @@
+X1 not applicable (no released identical-text slice)
+X2 block 31, dataset mean: rule K 0.451 v original K 0.515 (within 0.03 or above): fail
+X3 block 31, transfer: rule K 0.444 v original K 0.457 (within 0.03 or above): pass
+X4 block 31, transfer: D9 + rule K 0.843 v D9 + original K 0.860 (within 0.03 or above): pass
+X5 held out (AISI), block 31: rule K 0.194 v original K 0.236 (within 0.03 or above): fail
+X6 held out (AISI), block 31: D9 + rule K 0.569 v D9 + original K 0.625 (within 0.03 or above): fail

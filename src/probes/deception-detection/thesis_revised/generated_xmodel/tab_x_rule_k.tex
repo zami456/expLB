@@ -1,0 +1,46 @@
+\begin{table}
+\caption{The template-free K (rule K: no HP-KR wording) beside the original K, mid-depth}
+\label{tab:x-rule_k}
+\begin{tabular}{lrllrrr}
+\toprule
+model & block & metric & with & original K (template) & rule K (template-free) & difference \\
+\midrule
+Llama-3.3-70B & 40 & dataset mean & K & 0.825 & 0.805 & -0.019 \\
+Llama-3.3-70B & 40 & dataset mean & D9 + K & 0.906 & 0.893 & -0.013 \\
+Llama-3.3-70B & 40 & transfer & K & 0.823 & 0.791 & -0.032 \\
+Llama-3.3-70B & 40 & transfer & D9 + K & 0.922 & 0.910 & -0.011 \\
+Llama-3.3-70B & 40 & HP-KR identical text & K & 0.793 & 0.794 & 0.001 \\
+Llama-3.3-70B & 40 & HP-KR identical text & D9 + K & 0.787 & 0.787 & -0.000 \\
+Llama-3.3-70B & 40 & HP-KR denials & K & 0.728 & 0.724 & -0.004 \\
+Llama-3.3-70B & 40 & HP-KR denials & D9 + K & 0.724 & 0.722 & -0.002 \\
+Llama-3.3-70B & 40 & Gender-Secret & K & 0.865 & 0.747 & -0.118 \\
+Llama-3.3-70B & 40 & Gender-Secret & D9 + K & 0.802 & 0.715 & -0.087 \\
+Llama-3.3-70B & 40 & held out (AISI) & K & 0.899 & 0.867 & -0.032 \\
+Llama-3.3-70B & 40 & held out (AISI) & D9 + K & 0.960 & 0.939 & -0.021 \\
+Llama-3.3-70B & 40 & cosine between the two &  &  & 0.740 &  \\
+Qwen2.5-72B$^\dagger$ & 40 & dataset mean & K & 0.546 & 0.531 & -0.014 \\
+Qwen2.5-72B$^\dagger$ & 40 & dataset mean & D9 + K & 0.533 & 0.516 & -0.017 \\
+Qwen2.5-72B$^\dagger$ & 40 & transfer & K & 0.508 & 0.509 & 0.001 \\
+Qwen2.5-72B$^\dagger$ & 40 & transfer & D9 + K & 0.514 & 0.515 & 0.001 \\
+Qwen2.5-72B$^\dagger$ & 40 & HP-KR denials & K & 0.632 & 0.659 & 0.027 \\
+Qwen2.5-72B$^\dagger$ & 40 & HP-KR denials & D9 + K & 0.622 & 0.641 & 0.018 \\
+Qwen2.5-72B$^\dagger$ & 40 & cosine between the two &  &  & 0.731 &  \\
+Mistral-Small-3.1-24B & 20 & dataset mean & K & 0.775 & 0.706 & -0.069 \\
+Mistral-Small-3.1-24B & 20 & dataset mean & D9 + K & 0.804 & 0.754 & -0.050 \\
+Mistral-Small-3.1-24B & 20 & transfer & K & 0.799 & 0.614 & -0.185 \\
+Mistral-Small-3.1-24B & 20 & transfer & D9 + K & 0.841 & 0.655 & -0.187 \\
+Mistral-Small-3.1-24B & 20 & HP-KR identical text & K & 0.840 & 0.837 & -0.003 \\
+Mistral-Small-3.1-24B & 20 & HP-KR identical text & D9 + K & 0.840 & 0.836 & -0.003 \\
+Mistral-Small-3.1-24B & 20 & HP-KR denials & K & 0.835 & 0.841 & 0.005 \\
+Mistral-Small-3.1-24B & 20 & HP-KR denials & D9 + K & 0.832 & 0.835 & 0.003 \\
+Mistral-Small-3.1-24B & 20 & cosine between the two &  &  & 0.732 &  \\
+Gemma-3-27B & 31 & dataset mean & K & 0.515 & 0.451 & -0.065 \\
+Gemma-3-27B & 31 & dataset mean & D9 + K & 0.847 & 0.841 & -0.006 \\
+Gemma-3-27B & 31 & transfer & K & 0.457 & 0.444 & -0.013 \\
+Gemma-3-27B & 31 & transfer & D9 + K & 0.860 & 0.843 & -0.017 \\
+Gemma-3-27B & 31 & held out (AISI) & K & 0.236 & 0.194 & -0.042 \\
+Gemma-3-27B & 31 & held out (AISI) & D9 + K & 0.625 & 0.569 & -0.056 \\
+Gemma-3-27B & 31 & cosine between the two &  &  & 0.631 &  \\
+\bottomrule
+\end{tabular}
+\end{table}

@@ -1,0 +1,5 @@
+X1 block 20, HP-KR identical text: rule K 0.837 v random 97.5% 0.757: pass
+X2 block 20, dataset mean: rule K 0.706 v original K 0.775 (within 0.03 or above): fail
+X3 block 20, transfer: rule K 0.614 v original K 0.799 (within 0.03 or above): fail
+X4 block 20, transfer: D9 + rule K 0.654 v D9 + original K 0.841 (within 0.03 or above): fail
+X5, X6 not applicable (no held-out AISI rollouts of this model)

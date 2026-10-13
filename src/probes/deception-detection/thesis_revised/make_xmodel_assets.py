@@ -524,8 +524,9 @@ TIE = 0.01  # AUROC: a point comparison without an interval closer than this is 
 
 
 def claims(zs: pd.DataFrame, tr: pd.DataFrame, kn: pd.DataFrame, kd: pd.DataFrame, pr: pd.DataFrame,
-           org: pd.DataFrame) -> pd.DataFrame:
+           org: pd.DataFrame, ci: pd.DataFrame | None = None) -> pd.DataFrame:
     rows = []
+    ci = ci if ci is not None else pd.DataFrame()
 
     def add(model, claim, value, holds):
         verdict = ("n/a" if holds is None else holds if isinstance(holds, str)
@@ -536,24 +537,46 @@ def claims(zs: pd.DataFrame, tr: pd.DataFrame, kn: pd.DataFrame, kd: pd.DataFram
         """a above b by at least TIE; within TIE of each other is no clear difference."""
         return True if a - b >= TIE else False if b - a >= TIE else f"no clear difference (< {TIE})"
 
+    def interval(key: str, metric: str, a: str, b: str):
+        """The paired 95% interval of a - b at mid-depth (`transfer_ci.py`), or None."""
+        if ci.empty:
+            return None
+        r = ci[(ci["model"] == key) & (ci["layer"] == "L40") & (ci["metric"] == metric) & (ci["a"] == a) & (ci["b"] == b)]
+        return r.iloc[0] if len(r) else None
+
+    def compare(model, key, claim, metric, a, b, label_a, label_b, va, vb):
+        """By the paired interval where there is one: above 0 replicates, below 0 does not, else
+        no clear difference; by the TIE rule otherwise."""
+        r = interval(key, metric, a, b)
+        if r is None:
+            add(model, claim, f"{label_a} {va:.3f} vs {label_b} {vb:.3f}", better(va, vb))
+            return
+        holds = True if r["lo"] > 0 else False if r["hi"] < 0 else "no clear difference (95% interval includes 0)"
+
+        def signed(v):
+            return ("+" if v >= 0 else "") + _shown(v)
+
+        add(model, claim, f"{label_a} {_shown(r['a_value'])} vs {label_b} {_shown(r['b_value'])}; "
+                          f"{signed(r['delta'])} [{signed(r['lo'])}, {signed(r['hi'])}]", holds)
+
     for key in MODELS:
         m = _label(key)
         t = tr[(tr["model"] == m) & (tr["layer"] == "L40")] if not tr.empty else tr
         if len(t):
             r = t.iloc[0]
-            add(m, "D9 transfers better than the raw-activation probe (mid-depth)",
-                f"D9 {r['D9']:.3f} vs raw {r['raw probe']:.3f}", better(r["D9"], r["raw probe"]))
-            add(m, "D9 transfers better than the published contrast D5", f"D9 {r['D9']:.3f} vs D5 {r['D5']:.3f}",
-                better(r["D9"], r["D5"]))
+            compare(m, key, "D9 transfers better than the raw-activation probe (mid-depth)", "transfer", "D9",
+                    "raw probe", "D9", "raw", r["D9"], r["raw probe"])
+            compare(m, key, "D9 transfers better than the published contrast D5", "transfer", "D9", "D5", "D9", "D5",
+                    r["D9"], r["D5"])
             if not math.isnan(r["D9 + K"]):
-                add(m, "D9 + K transfers at least as well as the raw probe",
-                    f"D9 + K {r['D9 + K']:.3f} vs raw {r['raw probe']:.3f}", r["raw probe"] - r["D9 + K"] < TIE)
+                compare(m, key, "D9 + K transfers better than the raw-activation probe", "transfer", "D9 + K",
+                        "raw probe", "D9 + K", "raw", r["D9 + K"], r["raw probe"])
         z = zs[(zs["model"] == m) & (zs["layer"] == "L40")] if not zs.empty else zs
         if len(z):
             d9 = float(z[z["contrast"] == "D9"]["LB mean"].iloc[0])
             d5 = float(z[z["contrast"] == "D5"]["LB mean"].iloc[0])
-            add(m, "knowledge-denial roles improve the contrast (D9 > D5, LB mean)", f"{d9:.3f} vs {d5:.3f}",
-                better(d9, d5))
+            compare(m, key, "knowledge-denial roles improve the contrast (D9 > D5, LB mean)", "dataset mean", "D9",
+                    "D5", "D9", "D5", d9, d5)
         k = kd[kd["model"] == m] if not kd.empty else kd
         if len(k) and not k["K identical"].isna().all():
             mid = k[k["block"] == LB.spec(key).mid]
@@ -580,6 +603,76 @@ def claims(zs: pd.DataFrame, tr: pd.DataFrame, kn: pd.DataFrame, kd: pd.DataFram
                 add(m, f"organism {organism}: K (fine-tune) above the random band on the fine-tune's read",
                     f"{r['k fine-tune']:.3f} vs {r['band97.5']:.3f}", r["k fine-tune"] > r["band97.5"])
     return pd.DataFrame(rows)
+
+
+# --- paired intervals and the template-free K -----------------------------------------------------
+
+def intervals() -> pd.DataFrame:
+    """Every model's paired 95% intervals (`transfer_ci.py`)."""
+    parts = []
+    for key in MODELS:
+        t = _read(LB.XMODEL_RESULTS / key / "transfer_ci.csv", f"{key} transfer intervals")
+        if t is not None:
+            parts.append(t.assign(model=_label(key)))
+    if not parts:
+        return pd.DataFrame()
+    t = pd.concat(parts, ignore_index=True)
+    t["comparison"] = t["a"] + " - " + t["b"]
+    return t[["model", "layer", "block", "metric", "comparison", "a_value", "b_value", "delta", "lo", "hi"]]
+
+
+def _intervals_by_key() -> pd.DataFrame:
+    parts = [pd.read_csv(p).assign(model=key) for key in MODELS
+             if (p := LB.XMODEL_RESULTS / key / "transfer_ci.csv").exists()]
+    return pd.concat(parts, ignore_index=True) if parts else pd.DataFrame()
+
+
+RULE_METRICS = (("dataset mean", "mean of five", "dataset mean"), ("transfer", "transfer", "transfer"),
+                ("HP-KR identical text", "HP-KR identical", "HP-KR identical"),
+                ("HP-KR denials", "HP-KR denials", "HP-KR denials"), ("Gender-Secret", "Gender-Secret", None))
+
+
+def rule_k() -> tuple[pd.DataFrame, pd.DataFrame]:
+    """The template-free K (`k_final.py` for Llama, `k_final_xmodel.py` for the others) beside the
+    original K at mid-depth, and each model's verdicts on the criteria it fixed before reading."""
+    from deception_detection.scripts import recall_denial as rd
+
+    rows, verdicts = [], []
+    for key in MODELS:
+        s = LB.spec(key)
+        folder = rd.OUT / "k_final" if key == "llama" else LB.XMODEL_RESULTS / key / "k_final"
+        depth = _read(folder / "depth.csv", f"{key} template-free K")
+        if depth is None:
+            continue
+        r = depth.set_index("layer").loc[s.mid]
+        for label, llama_col, other_col in RULE_METRICS:
+            col = llama_col if key == "llama" else other_col
+            if col is None or f"original K: {col}" not in r:
+                continue
+            for k_label, prefix in (("K", ""), ("D9 + K", "D9 + ")):
+                a, b = r.get(f"{prefix}original K: {col}"), r.get(f"{prefix}rule K: {col}")
+                if a is None or pd.isna(a):
+                    continue
+                rows.append({"model": _label(key), "block": s.mid, "metric": label, "with": k_label,
+                             "original K (template)": a, "rule K (template-free)": b, "difference": b - a})
+        held = folder / "held_out.csv"
+        if held.exists():
+            h = pd.read_csv(held)
+            h = h[h["layer"] == s.mid].set_index("direction")
+            for k_label, prefix in (("K", ""), ("D9 + K", "D9 + ")):
+                if f"{prefix}original K" in h.index:
+                    a, b = h.loc[f"{prefix}original K", "auroc"], h.loc[f"{prefix}rule K", "auroc"]
+                    rows.append({"model": _label(key), "block": s.mid, "metric": "held out (AISI)", "with": k_label,
+                                 "original K (template)": a, "rule K (template-free)": b, "difference": b - a})
+        rows.append({"model": _label(key), "block": s.mid, "metric": "cosine between the two", "with": "",
+                     "original K (template)": math.nan, "rule K (template-free)": r["cos(rule K, original K)"],
+                     "difference": math.nan})
+        text = folder / "verdict.txt"
+        if text.exists():
+            for line in text.read_text(encoding="utf-8").splitlines():
+                if line.strip():
+                    verdicts.append({"model": _label(key), "criterion": line.split(" ", 1)[0], "verdict": line})
+    return pd.DataFrame(rows), pd.DataFrame(verdicts)
 
 
 # --- writing ---------------------------------------------------------------------------------------
@@ -614,14 +707,22 @@ def main() -> None:
     zs, tr, kn = zero_shot(), transfer(), knowledge()
     kd, pr, op, cal = k_depth(), paired(), operating_points(), calibration()
     lb, ai, org, rp, bc, dp = liars_bench(), aisi(), organisms(), roleplay(), bank_comparison(), depth()
-    cl = claims(zs, tr, kn, kd, pr, org)
+    ci = intervals()
+    rk, rk_verdicts = rule_k()
+    cl = claims(zs, tr, kn, kd, pr, org, _intervals_by_key())
     rp_summary = (rp.groupby("model")[["judged", "score 0", "score 1", "score 2", "score 3"]].sum()
                   .assign(**{"share fully in role": lambda d: d["score 3"] / d["judged"]}).reset_index()
                   if len(rp) else rp)
     sections = [
-        _write("claims", cl, "The thesis's claims, per model (two AUROCs replicate a claim when they differ by "
-               f"at least {TIE}; K is tested against the 97.5th percentile of random directions, D9 + K against "
-               "the probe by its paired 95% interval)"),
+        _write("claims", cl, "The thesis's claims, per model (two AUROCs replicate a claim when the paired 95% "
+               "interval of their difference, over stratified resamples of the test rows, lies above 0, and not "
+               f"when it lies below; where no interval exists, when they differ by at least {TIE}. K is tested "
+               "against the 97.5th percentile of random directions)"),
+        _write("transfer_intervals", ci, "Paired 95% intervals: transfer and the dataset mean, every model and "
+               "layer (`transfer_ci.py`; the fitted probes held fixed, the test rows resampled)"),
+        _write("rule_k", rk, "The template-free K (rule K: no HP-KR wording) beside the original K, mid-depth"),
+        _write("rule_k_verdicts", rk_verdicts, "Template-free K: each model's criteria, fixed before its rows "
+               "were read (Llama: `k_final.py`; the others: `k_final_xmodel.py`)"),
         _write("zero_shot", zs, "Zero-shot persona contrasts (thesis Table 5.1)"),
         _write("zero_shot_llama_subsets", llama_on_subsets(zs) if len(zs) else zs,
                "Llama's contrasts on each model's datasets"),
