@@ -267,53 +267,70 @@ def _layers(model: str, layers=None) -> list[int]:
     return [int(x) for x in (layers or LB.spec(model).k_layers[:2])]
 
 
-def _read_rows(remote, tokenizer, rows, layers, lora, folder: Path, budget: int, tokenize, mask_fn, retries: int = 3) -> None:
-    from deception_detection.activations import trace_layer_outputs
+def _read_rows(remote, tokenizer, rows, layers, lora, folder: Path, budget: int, tokenize, mask_fn, retries: int = 3,
+               session_passes: int = 1) -> None:
+    """Each row's span means at `layers`, saved request by request (resumable). With
+    `session_passes` > 1 an adapted read sends that many passes in one NDIF session
+    (`activations.trace_span_means_session`), so the adapter's factors go up once a session rather
+    than once a pass. A request the server runs out of memory on is re-planned, with every later
+    one, at half the budget."""
+    from deception_detection.activations import trace_layer_outputs, trace_span_means_session
     from deception_detection.batching import classify_failure
 
     done = done_rows(folder)
     todo = [r for r in rows if r["row"] not in done]
     requests = _requests(tokenizer, todo, budget, tokenize) if todo else []
-    logger.info(f"{folder.name}: {len(todo)} rows in {len(requests)} requests")
+    per_unit = session_passes if lora is not None else 1
+    logger.info(f"{folder.name}: {len(todo)} rows in {len(requests)} requests"
+                + (f", up to {per_unit} to a session" if per_unit > 1 else ""))
     k = 0
     while k < len(requests):
-        batch = requests[k]
+        unit = requests[k:k + per_unit]
+        label = f"request {k + 1}" if len(unit) == 1 else f"requests {k + 1}-{k + len(unit)}"
         start = time.time()
-        toks = tokenize(tokenizer, batch)
+        toks = [tokenize(tokenizer, batch) for batch in unit]
         means = None
         for attempt in range(1, retries + 1):
             try:
-                means = trace_layer_outputs(remote, toks.tokens, toks.attention_mask, layers, lora=lora,
-                                            span_mask=mask_fn(toks), stop_early=True).float().numpy()
+                if per_unit == 1:
+                    means = [trace_layer_outputs(remote, toks[0].tokens, toks[0].attention_mask, layers, lora=lora,
+                                                 span_mask=mask_fn(toks[0]), stop_early=True)]
+                else:
+                    means = trace_span_means_session(
+                        remote, [(t.tokens, t.attention_mask, mask_fn(t)) for t in toks], layers, lora=lora)
                 break
             except Exception as error:  # NDIF drops a request now and then
                 kind = classify_failure(error)  # as pooling classifies them: "oom", "unknown" or "transient"
                 if kind == "fatal":
                     raise
-                if kind in ("oom", "unknown") and len(batch) > 1:
+                if kind in ("oom", "unknown") and any(len(b) > 1 for b in unit):
                     # Gemma's deployment has less room than the others (its out-of-memory error reaches
                     # us as a bare NNsightException): this request and every later one at half the budget
                     budget //= 2
                     rest = [r for b in requests[k:] for r in b]
                     requests = requests[:k] + _requests(tokenizer, rest, budget, tokenize)
-                    logger.warning(f"request {k + 1} ran the server out of memory; the remaining {len(rest)} rows "
+                    logger.warning(f"{label} ran the server out of memory; the remaining {len(rest)} rows "
                                    f"re-planned at {budget} tokens ({len(requests) - k} requests)")
                     break
                 if attempt == retries:
                     raise
-                logger.warning(f"request {k + 1} failed ({error!r}); retry {attempt}/{retries - 1}")
+                logger.warning(f"{label} failed ({error!r}); retry {attempt}/{retries - 1}")
                 time.sleep(30 * attempt)
         if means is None:
             continue
-        if not np.isfinite(means).all():
-            raise RuntimeError(f"request {k + 1} returned non-finite reads")
-        save_request(folder, [r["row"] for r in batch], layers, means)
-        logger.info(f"{folder.name} request {k + 1}/{len(requests)}: {len(batch)} rows, {time.time() - start:.0f} s")
-        k += 1
+        for j, (batch, m) in enumerate(zip(unit, means)):
+            m = m.float().numpy()
+            if not np.isfinite(m).all():
+                raise RuntimeError(f"request {k + j + 1} returned non-finite reads")
+            save_request(folder, [r["row"] for r in batch], layers, m)
+        logger.info(f"{folder.name} {label}/{len(requests)}: {sum(len(b) for b in unit)} rows, {time.time() - start:.0f} s")
+        k += len(unit)
 
 
-def read(model: str, organism: str, layers=None, reads=("adapted", "base"), budget: int = BUDGET) -> None:
-    """The final reply's mean through the adapter and through the base model. Resumable."""
+def read(model: str, organism: str, layers=None, reads=("adapted", "base"), budget: int = BUDGET,
+         session_passes: int = 1) -> None:
+    """The final reply's mean through the adapter and through the base model. Resumable.
+    `session_passes` > 1 sends the adapted passes that many to an NDIF session (`_read_rows`)."""
     from deception_detection.lora_intervention import load_adapter
     from deception_detection.scripts.gender_secret import _environment
 
@@ -330,13 +347,13 @@ def read(model: str, organism: str, layers=None, reads=("adapted", "base"), budg
     for name in reads:
         _read_rows(remote, tokenizer, rows, layers, adapter if name == "adapted" else None,
                    out_dir(model, organism) / f"parts_{name}", budget, _tokenize,
-                   lambda toks: toks.detection_mask.float())
+                   lambda toks: toks.detection_mask.float(), session_passes=session_passes)
 
 
-def read_k(model: str, organism: str, layers=None, budget: int = BUDGET) -> None:
+def read_k(model: str, organism: str, layers=None, budget: int = BUDGET, session_passes: int = 1) -> None:
     """K's 240 rows (`k_models.py`) read through the adapter, so K can also be derived in the
     fine-tune. The first request is checked against the base reads of its rows
-    (`recall_denial.adapted_rows_check`)."""
+    (`recall_denial.adapted_rows_check`). `session_passes` as for `read`."""
     from deception_detection.lora_intervention import load_adapter
     from deception_detection.scripts import forced_denial_bank as fdb
     from deception_detection.scripts import k_models as km
@@ -366,7 +383,7 @@ def read_k(model: str, organism: str, layers=None, budget: int = BUDGET) -> None
         check.write_text(json.dumps(stats, indent=1) + "\n", encoding="utf-8")
         logger.info(f"row check passed: {stats}")
     _read_rows(remote, tokenizer, rows, layers, adapter, folder, budget, fdb._tokenize,
-               lambda toks: fdb._masks(toks, "answer"))
+               lambda toks: fdb._masks(toks, "answer"), session_passes=session_passes)
 
 
 # --- scoring ---------------------------------------------------------------------------------------

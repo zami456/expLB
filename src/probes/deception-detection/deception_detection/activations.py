@@ -130,6 +130,67 @@ def trace_layer_outputs(
     return stacked[:, :, index]
 
 
+def trace_span_means_session(
+    model,
+    batches: list[tuple[Tensor, Tensor, Tensor]],
+    layers: list[int],
+    lora: LoraAdapter | None = None,
+    remote: bool | str = True,
+) -> list[Tensor]:
+    """Several passes in one request: for each ``(tokens, attention_mask, span_mask)`` of
+    ``batches``, what ``trace_layer_outputs(model, tokens, attention_mask, layers, lora=lora,
+    span_mask=span_mask, stop_early=True)`` returns.
+
+    The adapter's factors travel once for the whole session rather than once per pass. Gemma-3's
+    adapters are ~230 MB up to its block 31, and its NDIF deployment takes ~4,000 tokens a pass, so
+    a fine-tune's 400 rows would otherwise upload the adapter ~25 times. ``remote="local"`` runs
+    nnsight's simulation of the server.
+    """
+    from nnsight.intervention.backends.local_simulation import LocalSimulationBackend
+
+    plan = call_plan(lora) if lora is not None else {}
+    scale = lora.scale if lora is not None else 1.0
+    order = sorted(set(layers))
+    index = [order.index(layer) for layer in layers]
+    blocks = decoder_blocks(model)  # resolved here, as in `trace_layer_outputs`
+    if remote == "local":
+        session = model.session(backend=LocalSimulationBackend(model))
+    else:
+        session = model.session(remote=remote)
+    with session:
+        results = nnsight.save(list())  # a session body is not a trace: no `.save()` on plain objects here
+        for tokens, attention_mask, span_mask in batches:
+            n_rows = tokens.shape[0]
+            multi = span_mask.ndim == 3
+            with model.trace(tokens, attention_mask=attention_mask) as tracer:
+                outputs = list()
+                for block in range(order[-1] + 1):
+                    for submodule, projection, a, b in plan.get(block, []):
+                        module = getattr(getattr(blocks[block], submodule), projection)
+                        x = module.input
+                        update = (x @ a.to(x.device, x.dtype).T) @ b.to(x.device, x.dtype).T
+                        module.output = module.output + update * scale
+                    if block in order:
+                        output = blocks[block].output
+                        output = output[0] if isinstance(output, tuple) else output
+                        if output.ndim != 3 or output.shape[0] != n_rows:
+                            raise ValueError(f"block {block} returned shape {tuple(output.shape)}")
+                        m = span_mask.to(output.device, torch.float32)
+                        if multi:
+                            means = []
+                            for k in range(m.shape[1]):
+                                mk = m[:, k, :]
+                                total = (output * mk[:, :, None].to(output.dtype)).sum(dim=1, dtype=torch.float32)
+                                means.append(total / mk.sum(dim=1, keepdim=True))
+                            outputs.append(torch.stack(means, dim=1))
+                        else:
+                            total = (output * m[:, :, None].to(output.dtype)).sum(dim=1, dtype=torch.float32)
+                            outputs.append(total / m.sum(dim=1, keepdim=True))
+                results.append(torch.stack(outputs, dim=2 if multi else 1).cpu())
+                tracer.stop()
+    return [r[:, :, index] if r.ndim == 4 else r[:, index] for r in results]
+
+
 def trace_token_projections(
     model,
     tokens: Tensor,
