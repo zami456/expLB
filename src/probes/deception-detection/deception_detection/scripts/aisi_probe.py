@@ -297,8 +297,10 @@ def fit(layer: int = 20, variant: str = "pooled", block: int = 4096, model: str 
     from deception_detection.activations import cache_entries
     from deception_detection.detectors import LogisticRegressionDetector
     from deception_detection.experiment import Experiment, ExperimentConfig
+    from deception_detection.scripts.gender_secret import _environment
     from deception_detection.tokenized_data import get_tokenized_dataset_pair
 
+    _environment()  # HF_TOKEN from .env: the experiment loads Liars' Bench, a gated dataset
     setup = Setup(model)
     os.environ["ACTS_CACHE_DIR"] = setup.cache(layer)
     config = setup.config(layer, variant)
