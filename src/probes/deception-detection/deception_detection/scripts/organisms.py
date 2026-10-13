@@ -269,6 +269,7 @@ def _layers(model: str, layers=None) -> list[int]:
 
 def _read_rows(remote, tokenizer, rows, layers, lora, folder: Path, budget: int, tokenize, mask_fn, retries: int = 3) -> None:
     from deception_detection.activations import trace_layer_outputs
+    from deception_detection.batching import classify_failure
 
     done = done_rows(folder)
     todo = [r for r in rows if r["row"] not in done]
@@ -286,9 +287,12 @@ def _read_rows(remote, tokenizer, rows, layers, lora, folder: Path, budget: int,
                                             span_mask=mask_fn(toks), stop_early=True).float().numpy()
                 break
             except Exception as error:  # NDIF drops a request now and then
-                if "out of memory" in str(error).lower() and len(batch) > 1:
-                    # Gemma's deployment has less room than the others: this request and every later
-                    # one at half the budget
+                kind = classify_failure(error)  # as pooling classifies them: "oom", "unknown" or "transient"
+                if kind == "fatal":
+                    raise
+                if kind in ("oom", "unknown") and len(batch) > 1:
+                    # Gemma's deployment has less room than the others (its out-of-memory error reaches
+                    # us as a bare NNsightException): this request and every later one at half the budget
                     budget //= 2
                     rest = [r for b in requests[k:] for r in b]
                     requests = requests[:k] + _requests(tokenizer, rest, budget, tokenize)
