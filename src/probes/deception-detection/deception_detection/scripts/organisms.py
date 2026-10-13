@@ -274,23 +274,38 @@ def _read_rows(remote, tokenizer, rows, layers, lora, folder: Path, budget: int,
     todo = [r for r in rows if r["row"] not in done]
     requests = _requests(tokenizer, todo, budget, tokenize) if todo else []
     logger.info(f"{folder.name}: {len(todo)} rows in {len(requests)} requests")
-    for k, batch in enumerate(requests):
+    k = 0
+    while k < len(requests):
+        batch = requests[k]
         start = time.time()
         toks = tokenize(tokenizer, batch)
+        means = None
         for attempt in range(1, retries + 1):
             try:
                 means = trace_layer_outputs(remote, toks.tokens, toks.attention_mask, layers, lora=lora,
                                             span_mask=mask_fn(toks), stop_early=True).float().numpy()
                 break
             except Exception as error:  # NDIF drops a request now and then
+                if "out of memory" in str(error).lower() and len(batch) > 1:
+                    # Gemma's deployment has less room than the others: this request and every later
+                    # one at half the budget
+                    budget //= 2
+                    rest = [r for b in requests[k:] for r in b]
+                    requests = requests[:k] + _requests(tokenizer, rest, budget, tokenize)
+                    logger.warning(f"request {k + 1} ran the server out of memory; the remaining {len(rest)} rows "
+                                   f"re-planned at {budget} tokens ({len(requests) - k} requests)")
+                    break
                 if attempt == retries:
                     raise
                 logger.warning(f"request {k + 1} failed ({error!r}); retry {attempt}/{retries - 1}")
                 time.sleep(30 * attempt)
+        if means is None:
+            continue
         if not np.isfinite(means).all():
             raise RuntimeError(f"request {k + 1} returned non-finite reads")
         save_request(folder, [r["row"] for r in batch], layers, means)
         logger.info(f"{folder.name} request {k + 1}/{len(requests)}: {len(batch)} rows, {time.time() - start:.0f} s")
+        k += 1
 
 
 def read(model: str, organism: str, layers=None, reads=("adapted", "base"), budget: int = BUDGET) -> None:
