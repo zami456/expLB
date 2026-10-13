@@ -278,7 +278,7 @@ def verify(
     tol_auroc: float = 1e-5,
     tol_score: float = 1e-4,
     vectors: str | Path = persona_pcs.EXTENDED_VECTORS_DIR,
-    tol_score_by_dataset: dict[str, float] | None = None,
+    min_corr: float | None = None,
 ) -> None:
     """The mean read must reproduce the committed results; nothing else is trusted until it does.
 
@@ -290,14 +290,16 @@ def verify(
     within `tol_score` of the score's spread, with labels aligned row by row. Misaligned tokens
     or rows would miss that by orders of magnitude, not by rounding.
 
-    Another model's projections were taken on the server (`layer_sweep.project`), in batches padded
-    differently from its pooling batches, so bf16 rounding inside the pass differs too: about 1e-3
-    of the score's spread (pass `tol_score=2e-3`, `tol_auroc=2e-3`, its bank as `vectors` and its
-    folders as `pooled_dir`).
-
-    `tol_score_by_dataset` loosens the largest per-example gap for the datasets it names. Every
-    dataset's median gap must still be within `tol_score`: rounding moves a few examples, while
-    misaligned tokens or rows would move the median too.
+    Another model's projections were taken on the server (`layer_sweep.project`), in a second pass,
+    and cannot match example by example. The server's float32 product runs in TF32, which rounds
+    each axis to 10 mantissa bits: a near-constant offset (up to 1.6% of the score's spread on
+    Qwen, whose activations have very large channels). The pass batches rows differently from the
+    pooling pass, and over long transcripts (Qwen's HP-KR, insider trading) bf16 then moves some
+    examples by up to 20% of the spread; neither pass is the exact one. For such reads pass
+    `min_corr`: every dataset's mean reads must correlate with the pooled projections at least
+    that well across examples. Measured on Mistral and Qwen at their key blocks: >= 0.9993
+    aligned, <= 0.51 with the rows off by one. Pass also `tol_auroc=2e-3`, its bank as `vectors`
+    and its folders as `pooled_dir`. The largest and median gaps are logged either way.
     """
     projections = load_projections(Path(proj_dir))
     reference = pd.read_csv(zero_shot).set_index("dataset")
@@ -324,6 +326,7 @@ def verify(
                 gaps = np.abs(mean_read - ref) / ref.std()
                 row["score_gap"] = float(gaps.max())
                 row["score_gap_median"] = float(np.median(gaps))
+                row["corr"] = float(np.corrcoef(mean_read, ref)[0, 1])
             rows.append(row)
     table = pd.DataFrame(rows)
     logger.info(f"\n{table.round(6).to_string(index=False)}")
@@ -334,12 +337,13 @@ def verify(
     if "score_gap" in table:
         gap = float(table["score_gap"].max())
         logger.info(f"largest per-example score gap = {gap:.1e} of the score's spread")
-        allowed = table["dataset"].map(lambda name: (tol_score_by_dataset or {}).get(name, tol_score))
-        if (table["score_gap"] > allowed).any():
+        if min_corr is not None:
+            corr = float(table["corr"].min())
+            logger.info(f"lowest correlation with the pooled projections = {corr:.5f}")
+            if corr < min_corr:
+                raise AssertionError(f"mean reads correlate with the pooled projections at {corr:.5f} < {min_corr}")
+        elif gap > tol_score:
             raise AssertionError(f"per-example scores disagree with pooled by {gap:.1e}")
-        median = float(table["score_gap_median"].max())
-        if median > tol_score:
-            raise AssertionError(f"the median per-example score gap is {median:.1e} > {tol_score}")
 
 
 def analyze(
