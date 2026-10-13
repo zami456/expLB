@@ -553,11 +553,8 @@ def claims(zs: pd.DataFrame, tr: pd.DataFrame, kn: pd.DataFrame, kd: pd.DataFram
             return
         holds = True if r["lo"] > 0 else False if r["hi"] < 0 else "no clear difference (95% interval includes 0)"
 
-        def signed(v):
-            return ("+" if v >= 0 else "") + _shown(v)
-
         add(model, claim, f"{label_a} {_shown(r['a_value'])} vs {label_b} {_shown(r['b_value'])}; "
-                          f"{signed(r['delta'])} [{signed(r['lo'])}, {signed(r['hi'])}]", holds)
+                          f"{_signed(r['delta'])} [{_signed(r['lo'])}, {_signed(r['hi'])}]", holds)
 
     for key in MODELS:
         m = _label(key)
@@ -675,6 +672,27 @@ def rule_k() -> tuple[pd.DataFrame, pd.DataFrame]:
     return pd.DataFrame(rows), pd.DataFrame(verdicts)
 
 
+def rule_k_vs_probe() -> pd.DataFrame:
+    """Both Ks, alone and with D9, against the same-layer RepE base probe at mid-depth, zero-shot
+    (`k_final_xmodel.py vs_probe`): each cell is the AUROC and its difference from the probe with
+    the paired 95% interval."""
+    rows = []
+    for key in MODELS:
+        t = _read(LB.XMODEL_RESULTS / key / "k_final" / "vs_probe.csv", f"{key} template-free K vs base probe")
+        if t is None:
+            continue
+        t = t[t["block"] == LB.spec(key).mid]
+        for set_name, part in t.groupby("set", sort=False):
+            part = part.set_index("scorer")
+            row = {"model": _label(key), "set": set_name, "base probe": _shown(part["base probe auroc"].iloc[0])}
+            for scorer in ("original K", "rule K", "D9 + original K", "D9 + rule K"):
+                if scorer in part.index:
+                    r = part.loc[scorer]
+                    row[scorer] = f"{_shown(r['auroc'])} ({_signed(r['delta'])} [{_signed(r['lo'])}, {_signed(r['hi'])}])"
+            rows.append(row)
+    return pd.DataFrame(rows)
+
+
 # --- writing ---------------------------------------------------------------------------------------
 
 def _shown(value) -> str:
@@ -683,6 +701,13 @@ def _shown(value) -> str:
     if pd.isna(value):
         return ""
     return str(Decimal(repr(float(value))).quantize(Decimal("0.001"), ROUND_HALF_UP))
+
+
+def _signed(value) -> str:
+    """`_shown` with an explicit sign; a value that rounds to zero reads +0.000."""
+    s = _shown(value)
+    s = "0.000" if s == "-0.000" else s
+    return s if s.startswith("-") else "+" + s
 
 
 def _write(name: str, table: pd.DataFrame, caption: str) -> str:
@@ -723,6 +748,8 @@ def main() -> None:
         _write("rule_k", rk, "The template-free K (rule K: no HP-KR wording) beside the original K, mid-depth"),
         _write("rule_k_verdicts", rk_verdicts, "Template-free K: each model's criteria, fixed before its rows "
                "were read (Llama: `k_final.py`; the others: `k_final_xmodel.py`)"),
+        _write("rule_k_vs_probe", rule_k_vs_probe(), "Both Ks, alone and with D9, against the same-layer RepE base "
+               "probe, zero-shot at mid-depth: AUROC (difference from the probe [paired 95% interval])"),
         _write("zero_shot", zs, "Zero-shot persona contrasts (thesis Table 5.1)"),
         _write("zero_shot_llama_subsets", llama_on_subsets(zs) if len(zs) else zs,
                "Llama's contrasts on each model's datasets"),

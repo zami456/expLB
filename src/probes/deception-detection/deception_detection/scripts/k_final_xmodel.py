@@ -256,6 +256,98 @@ def score(model: str, layers=None, seed: int = SEED) -> None:
     logger.info(f"{model} depth:\n{depth[['layer', 'cos(rule K, original K)', *cols]].round(3).to_string(index=False)}")
 
 
+def _names(spec) -> dict[int, str]:
+    """The model's blocks for the thesis's layers 20, 36, 40 and 44."""
+    return {spec.lb_block: "L20", spec.posthoc[0]: "L36", spec.mid: "L40", spec.posthoc[1]: "L44"}
+
+
+def vs_probe(model: str, layers=None, n_draws: int = N_BOOT, seed: int = SEED) -> None:
+    """Rule K, the original K and each with D9 against the same-layer RepE base probe (D2), zero-shot:
+    AUROC on each of the model's datasets, their mean, HP-KR's identical-text and denial slices
+    where the model has them and AISI's held-out rollouts where they were read (Llama, Gemma), with
+    paired 95% intervals of each difference from the probe (`k_robustness.paired_draws`: lies and
+    honest rows resampled separately, the dataset mean averaged draw by draw), and balanced accuracy
+    at the threshold that flags 1% of Alpaca. Llama's rule K is `k_final.py`'s. The probe's dataset
+    mean must reproduce `k_robustness.py paired`'s where that was computed. Writes
+    `results/xmodel/<model>/k_final/vs_probe.csv`."""
+    from deception_detection.scripts import k_final as kf
+    from deception_detection.scripts import k_robustness as krb
+    from deception_detection.scripts import persona_ood as P
+
+    key = LB.spec(model).key
+    inputs = rd.Inputs(None if key == "llama" else model)
+    spec = inputs.spec
+    names = _names(spec)
+    layers = [int(x) for x in (layers or names)]
+    rng = np.random.default_rng(seed)
+    hpkr = inputs.hpkr()
+    slices = hpkr[1] if hpkr is not None else {}
+    stored_path = krb.out_dir(inputs) / "paired.csv"
+    stored = pd.read_csv(stored_path) if stored_path.exists() else None
+    rows = []
+    for layer in layers:
+        probe = inputs.probe(layer)
+        if probe is None:
+            logger.info(f"{key} block {layer}: no base probe")
+            continue
+        pooled = inputs.pooled(layer)
+        control = pooled[rd.CONTROL].z
+        d9 = inputs.bank_at(layer).axis_unit("extended")
+        ok = inputs.k(layer)
+        rk = kf.rule_k(layer) if key == "llama" else rule_k(model, layer)
+        dirs = {"original K": ok, "rule K": rk, "D9 + original K": rd.standardised_sum(d9, ok, control),
+                "D9 + rule K": rd.standardised_sum(d9, rk, control)}
+
+        def scorers(z, dirs=dirs, probe=probe):
+            return {"base probe": probe(z)} | {n: z @ w for n, w in dirs.items()}
+
+        thresholds = {n: float(np.quantile(s, 0.99)) for n, s in scorers(control).items()}
+        sets = {rd.SHORT[n]: (pooled[n].y.astype(int), pooled[n].z) for n in inputs.datasets}
+        if slices:
+            y_kr, z_kr = sets["HP-KR"]
+            for sname, label in (("identical text", "HP-KR identical"), ("denials", "HP-KR denials")):
+                if sname in slices:
+                    sets[label] = (y_kr[slices[sname]], z_kr[slices[sname]])
+        found = (kf._held_out(layer) if layer in kf.HELD_OUT_LAYERS else None) if key == "llama" else _held_out(model, layer)
+        if found is not None:
+            sets["held out (AISI)"] = (found[1], found[0])
+        point, draws, balacc = {}, {}, {}
+        for set_name, (y, z) in sets.items():
+            sc = scorers(z)
+            point[set_name] = {n: P.auroc(y, v) for n, v in sc.items()}
+            balacc[set_name] = {n: P.balanced_accuracy(y, v, thresholds[n]) for n, v in sc.items()}
+            draws[set_name] = krb.paired_draws(y, sc, n_draws, rng)
+        main = [rd.SHORT[n] for n in inputs.datasets]
+        point["dataset mean"] = {n: float(np.mean([point[d][n] for d in main])) for n in point[main[0]]}
+        balacc["dataset mean"] = {n: float(np.mean([balacc[d][n] for d in main])) for n in balacc[main[0]]}
+        draws["dataset mean"] = {n: np.mean([draws[d][n] for d in main], axis=0) for n in draws[main[0]]}
+        if stored is not None:
+            ref = stored[(stored["layer"] == layer) & (stored["set"] == "mean of five")
+                         & (stored["b"] == "benchmark probe, same layer")]
+            if len(ref) and abs(float(ref["b_auroc"].iloc[0]) - point["dataset mean"]["base probe"]) > 1e-3:
+                raise AssertionError(f"{key} block {layer}: the base probe's dataset mean "
+                                     f"{point['dataset mean']['base probe']:.4f} does not reproduce paired.csv's "
+                                     f"{float(ref['b_auroc'].iloc[0]):.4f}")
+        for set_name in point:
+            for n in dirs:
+                d = draws[set_name][n] - draws[set_name]["base probe"]
+                lo, hi = np.quantile(d, [0.025, 0.975])
+                rows.append({"model": key, "layer": names.get(layer, f"B{layer}"), "block": layer, "set": set_name,
+                             "scorer": n, "auroc": point[set_name][n], "base probe auroc": point[set_name]["base probe"],
+                             "delta": point[set_name][n] - point[set_name]["base probe"], "lo": float(lo),
+                             "hi": float(hi), "balacc 1% Alpaca": balacc[set_name][n],
+                             "base probe balacc": balacc[set_name]["base probe"]})
+        logger.info(f"{key} block {layer} compared with the base probe")
+        del pooled
+    table = pd.DataFrame(rows)
+    out = LB.XMODEL_RESULTS / key / "k_final"
+    out.mkdir(parents=True, exist_ok=True)
+    table.round(4).to_csv(out / "vs_probe.csv", index=False)
+    pd.set_option("display.width", 250)
+    mid = table[table["block"] == spec.mid]
+    logger.info(f"{key} at block {spec.mid}:\n{mid.round(3).to_string(index=False)}")
+
+
 def _verdicts(model: str, depth: pd.DataFrame, held: pd.DataFrame) -> None:
     mid = LB.spec(model).mid
     r = depth.set_index("layer").loc[mid]
@@ -287,4 +379,4 @@ def _verdicts(model: str, depth: pd.DataFrame, held: pd.DataFrame) -> None:
 
 
 if __name__ == "__main__":
-    fire.Fire({"read": read, "score": score})
+    fire.Fire({"read": read, "score": score, "vs_probe": vs_probe})
