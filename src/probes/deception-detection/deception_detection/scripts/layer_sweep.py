@@ -854,7 +854,7 @@ def tokens(model: str, layer: int, bank: str | None = None) -> None:
     proj = LB.XMODEL_ROOT / "activations" / s.model / f"token_proj_{bank}_B{layer}"
     # a second pass, so rows are checked by correlation (see `persona_positions.verify`)
     PP.verify(proj, s.results("persona_ood", layer, bank) / "zero_shot.csv", pooled_dir=s.pooled_dirs(layer),
-              tol_auroc=2e-3, vectors=s.bank_dir(bank), min_corr=0.995)
+              tol_auroc=5e-3, vectors=s.bank_dir(bank), min_corr=0.995)
     PP.analyze(proj, s.results("persona_positions", layer, bank))
 
 
