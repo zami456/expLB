@@ -41,23 +41,34 @@ DIRECTIONS = {"ext_axis1": "D9 extended alone", "k": "knowledge general alone",
               "ninek": "D9 extended + general (standardised)"}
 
 
-def run(layer: int = 40) -> None:
-    layer = int(layer)
-    pooled = P.load_pooled(pooled_dir(layer))
+def _context(model: str | None, bank: str | None) -> tuple["rd.Inputs", object, list[str]]:
+    """The model's inputs, its output folder and its datasets in the thesis's order (RepE last)."""
+    inputs = rd.Inputs(model, bank)
+    out = OUT if inputs.thesis else inputs.out / "transfer"
+    order = ORDER if inputs.llama else [n for n in ORDER if n in (*inputs.datasets, "repe_honesty__plain")]
+    return inputs, out, order
+
+
+def run(layer: int | None = None, model: str | None = None, bank: str | None = None) -> None:
+    """`model` and `bank` as `recall_denial.Inputs`; `layer` defaults to the model's mid-depth block."""
+    inputs, out, order = _context(model, bank)
+    layer = int(layer if layer is not None else inputs.spec.mid)
+    pooled = inputs.pooled(layer)
     control = pooled[rd.CONTROL].z
-    scorers = rd.combined_scorers(layer, control)
-    without = [n for n in ORDER if n != P.HPKR]
-    OUT.mkdir(parents=True, exist_ok=True)
+    scorers = rd.combined_scorers(layer, control, inputs)
+    without = [n for n in order if n != P.HPKR]
+    out.mkdir(parents=True, exist_ok=True)
     rows = []
     for key, name in DIRECTIONS.items():
         w = scorers[name]
-        m = P.transfer_matrix(lambda z, w=w: (z @ w)[:, None], pooled, ORDER)
-        m.round(4).to_csv(OUT / f"matrix_{key}_L{layer}.csv")
+        m = P.transfer_matrix(lambda z, w=w: (z @ w)[:, None], pooled, order)
+        m.round(4).to_csv(out / f"matrix_{key}_L{layer}.csv")
         rows.append({"direction": key, "layer": layer, "off_diagonal_mean": P.off_diagonal_mean(m),
                      "off_diagonal_excl_hpkr": P.off_diagonal_mean(m.loc[without, without]),
                      "diagonal_mean": P.diagonal_mean(m)})
     table = pd.DataFrame(rows).set_index("direction")
-    stored = pd.read_csv(stored_dir(layer) / "summary.csv").set_index("features")
+    stored_folder = stored_dir(layer) if inputs.thesis else inputs.spec.results("persona_ood", layer, inputs.bank)
+    stored = pd.read_csv(stored_folder / "summary.csv").set_index("features")
     for column in ("off_diagonal_mean", "off_diagonal_excl_hpkr"):
         mine, theirs = table.loc["ext_axis1", column], stored.loc["ext_axis1", column]
         if abs(mine - theirs) > 1e-3:
@@ -67,56 +78,58 @@ def run(layer: int = 40) -> None:
             table.loc[f"stored {key}"] = [layer, stored.loc[key, "off_diagonal_mean"],
                                           stored.loc[key, "off_diagonal_excl_hpkr"],
                                           stored.loc[key, "diagonal_mean"]]
-    table.to_csv(OUT / f"summary_L{layer}.csv")
+    table.to_csv(out / f"summary_L{layer}.csv")
     logger.info(f"layer {layer} transfer (D9 checked against the stored matrix):\n{table.round(4).to_string()}")
 
 
-def sweep(layers=None) -> None:
+def sweep(layers=None, model: str | None = None, bank: str | None = None) -> None:
     """D9 and D9 + K at every sweep layer: transfer, HP-KR's wording slices and the five-dataset
     mean. K is rebuilt at each layer from the stored reads (`k_robustness.item_means`), as the
-    thesis's depth analysis does; each number is checked against a stored result where one exists."""
-    from deception_detection import persona_pcs as pcs
+    thesis's depth analysis does; each number is checked against a stored result where one exists.
+    Another model's sweep is its `ModelSpec.layers`, checked against its own depth tables
+    (`layer_sweep.py depth --model`, `k_robustness.py depth --model`)."""
     from deception_detection.scripts import k_robustness as kr
-    from deception_detection.scripts.hpkr_wording import hpkr_frame
-    from deception_detection.scripts.knowledge_bank import _slices
     from deception_detection.scripts.layer_sweep import ALL_LAYERS, TRANSFER_SOURCE
 
-    layers = [int(x) for x in (layers or ALL_LAYERS)]
-    depth = pd.read_csv(RESULTS / "persona_depth" / "depth.csv")
+    inputs, out, order = _context(model, bank)
+    layers = [int(x) for x in (layers or (ALL_LAYERS if inputs.llama else inputs.spec.layers))]
+    depth_folder = RESULTS / "persona_depth" if inputs.thesis else inputs.spec.results("persona_depth", bank=inputs.bank)
+    depth = pd.read_csv(depth_folder / "depth.csv")
     d9_stored = depth[(depth["source"] == TRANSFER_SOURCE) & (depth["metric"] == "auroc")
-                      & (depth["bank"] == "ext") & (depth["arm"] == "extended axis (12v13)")].set_index("layer")["value"]
-    k_depth = pd.read_csv(kr.OUT / "depth.csv").set_index("layer")
-    stored_k = dict(np.load(rd.OUT / "directions.npz"))
-    frame = hpkr_frame()
-    slices = _slices(frame)
-    without = [n for n in ORDER if n != P.HPKR]
-    OUT.mkdir(parents=True, exist_ok=True)
+                      & (depth["bank"] == inputs.bank) & (depth["arm"] == "extended axis (12v13)")].set_index("layer")["value"]
+    k_depth = pd.read_csv(kr.out_dir(inputs) / "depth.csv").set_index("layer")
+    stored_k = kr._stored_k(inputs)
+    hpkr = inputs.hpkr()
+    frame, slices = hpkr if hpkr is not None else (None, {})
+    without = [n for n in order if n != P.HPKR]
+    out.mkdir(parents=True, exist_ok=True)
     rows = []
     for layer in layers:
-        X, known, _ = kr.item_means(layer)
+        X, known, _ = inputs.item_means(layer)
         k = rd._unit(X.T @ kr.weights(known, np.flatnonzero(known), np.flatnonzero(~known)))
-        key = f"L{layer}|none|general"
-        if key in stored_k and not np.allclose(k, stored_k[key], atol=1e-6):
+        if layer in stored_k and not np.allclose(k, stored_k[layer], atol=1e-6):
             raise AssertionError(f"layer {layer}: rebuilt K differs from the stored one")
-        pooled = P.load_pooled(pooled_dir(layer))
+        pooled = inputs.pooled(layer)
         control = pooled[rd.CONTROL].z
-        d9 = pcs.load_bank_at_layer(layer, pcs.EXTENDED_VECTORS_DIR).axis_unit("extended")
+        d9 = inputs.bank_at(layer).axis_unit("extended")
         ninek = rd.standardised_sum(d9, k, control)
         row = {"layer": layer}
         for name, w in (("D9", d9), ("D9 + K", ninek)):
-            m = P.transfer_matrix(lambda z, w=w: (z @ w)[:, None], pooled, ORDER)
+            m = P.transfer_matrix(lambda z, w=w: (z @ w)[:, None], pooled, order)
             row[f"{name}: transfer"] = P.off_diagonal_mean(m)
             row[f"{name}: transfer without HP-KR"] = P.off_diagonal_mean(m.loc[without, without])
         if abs(row["D9: transfer"] - d9_stored[layer]) > 1e-3:
             raise AssertionError(f"layer {layer}: D9 transfer {row['D9: transfer']:.4f}, stored {d9_stored[layer]:.4f}")
-        y = pooled[P.HPKR].y
-        if not (frame["lie"].to_numpy() == y).all():
-            raise AssertionError(f"layer {layer}: HP-KR rows do not line up with hpkr_frame")
-        s = pooled[P.HPKR].z @ ninek
-        for sname, label in (("identical text", "HP-KR identical"), ("denials", "HP-KR denials")):
-            m = slices[sname]
-            row[f"D9 + K: {label}"] = P.auroc(y[m], s[m])
-        row["D9 + K: mean of five"] = float(np.mean([P.auroc(pooled[n].y, pooled[n].z @ ninek) for n in kr.FIVE]))
+        if frame is not None:
+            y = pooled[P.HPKR].y
+            if not (frame["lie"].to_numpy() == y).all():
+                raise AssertionError(f"layer {layer}: HP-KR rows do not line up with hpkr_frame")
+            s = pooled[P.HPKR].z @ ninek
+            for sname, label in (("identical text", "HP-KR identical"), ("denials", "HP-KR denials")):
+                if sname in slices:
+                    m = slices[sname]
+                    row[f"D9 + K: {label}"] = P.auroc(y[m], s[m])
+        row["D9 + K: mean of five"] = float(np.mean([P.auroc(pooled[n].y, pooled[n].z @ ninek) for n in inputs.datasets]))
         if abs(row["D9 + K: mean of five"] - k_depth.loc[layer, "D9 + k: mean of five"]) > 1e-3:
             raise AssertionError(f"layer {layer}: D9 + K mean of five {row['D9 + K: mean of five']:.4f}, "
                                  f"k_robustness {k_depth.loc[layer, 'D9 + k: mean of five']:.4f}")
@@ -124,13 +137,13 @@ def sweep(layers=None) -> None:
         logger.info(f"layer {layer}: " + ", ".join(f"{k2} {v:.3f}" for k2, v in row.items() if k2 != "layer"))
         del pooled
     table = pd.DataFrame(rows)
-    table.round(4).to_csv(OUT / "depth_ninek.csv", index=False)
-    if 40 in table["layer"].values:
+    table.round(4).to_csv(out / "depth_ninek.csv", index=False)
+    if inputs.thesis and 40 in table["layer"].values:
         at40 = table.set_index("layer").loc[40]
         for label, thesis in (("HP-KR identical", 0.787), ("HP-KR denials", 0.724)):
             if abs(round(at40[f"D9 + K: {label}"], 3) - thesis) > 1e-9:
                 raise AssertionError(f"L40 D9 + K {label} {at40[f'D9 + K: {label}']:.4f}, thesis {thesis}")
-    logger.info(f"wrote {OUT / 'depth_ninek.csv'}")
+    logger.info(f"wrote {out / 'depth_ninek.csv'}")
 
 
 def figure(layer: int = 40, out: str | None = None, dpi: int = 300) -> None:

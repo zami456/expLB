@@ -48,20 +48,25 @@ MAX_REPLY_CHARS = 20_000
 EXCLUSIONS = REPO_ROOT / "data" / "aisi_llama" / "liars_bench_overlap.json"
 
 
-def split_path(split: str) -> Path:
+# Another model's own rollouts of the same tasks, at the same pinned commit (`AISIGemmaRollouts`).
+GEMMA_CONFIG = "google-gemma-3-27b-it"
+GEMMA_EXCLUSIONS = REPO_ROOT / "data" / "aisi_gemma" / "liars_bench_overlap.json"
+
+
+def split_path(split: str, config: str = CONFIG) -> Path:
     from huggingface_hub import hf_hub_download
 
-    return Path(hf_hub_download(REPO_ID, f"{CONFIG}/{split}.parquet", repo_type="dataset",
+    return Path(hf_hub_download(REPO_ID, f"{config}/{split}.parquet", repo_type="dataset",
                                 revision=REVISION))
 
 
-def load_rows(split: str) -> list[dict[str, Any]]:
+def load_rows(split: str, config: str = CONFIG) -> list[dict[str, Any]]:
     """One split's labelled rows, in file order.
 
     AISI's `ambiguous` rows are dropped, as are replies cut off at the generation cap
     (`MAX_REPLY_CHARS`).
     """
-    frame = pd.read_parquet(split_path(split))
+    frame = pd.read_parquet(split_path(split) if config == CONFIG else split_path(split, config))
     rows = []
     for i, (messages, verdict, reason) in enumerate(
         zip(frame["messages"], frame["is_lie"], frame["lie_reason"])
@@ -124,13 +129,15 @@ class AISILlamaRollouts(DialogueDataset):
     default_variant = "pooled"
     # detect exactly the reply's tokens, as the Liars' Bench datasets and RepE do
     padding = {model_type: {"left": 0, "right": 0} for model_type in ["llama", "mistral", "qwen", "gemma"]}
+    config = CONFIG
+    exclusions: Path | None = None  # None: the module's EXCLUSIONS, read at load time
 
     def _rows(self) -> list[dict[str, Any]]:
         if self.variant in ("varied", "sandbag", "validation"):
-            rows = load_rows(SPLITS[self.variant])
+            rows = load_rows(SPLITS[self.variant], self.config)
         else:
-            rows = load_rows(SPLITS["varied"]) + load_rows(SPLITS["sandbag"])
-        excluded = load_exclusions()
+            rows = load_rows(SPLITS["varied"], self.config) + load_rows(SPLITS["sandbag"], self.config)
+        excluded = load_exclusions(self.exclusions)
         rows = [row for row in rows if (row["split"], row["row"]) not in excluded]
         return instruction_matched(rows) if self.variant == "matched" else rows
 
@@ -154,3 +161,24 @@ class AISILlamaRollouts(DialogueDataset):
         input_dialogue: Dialogue, response: Message, metadata: dict[str, Any] | None = None
     ) -> dict[str, str]:
         raise NotImplementedError("AISI's rollouts come labelled; there is nothing to grade")
+
+
+class AISIGemmaRollouts(AISILlamaRollouts):
+    """Gemma-3-27B-it's own lies and honest answers on the same AISI tasks, for the thesis's D3
+    replicated on Gemma (the only other Liars' Bench model AISI covers). Its exclusion list is
+    written by `aisi_probe.py audit --model gemma`."""
+
+    base_name = "aisi_gemma"
+    config = GEMMA_CONFIG
+    exclusions = GEMMA_EXCLUSIONS
+
+    def _get_dialogues(self) -> DialogueDataType:
+        """Each message trimmed, as Gemma's chat template trims it before formatting (`| trim`):
+        some replies end in whitespace, which the formatted text then lacks, and the detection
+        mask is located by matching each message's text. The tokens are those the template gives
+        either way."""
+        dialogues, labels, metadata = super()._get_dialogues()
+        for dialogue in dialogues:
+            for message in dialogue:
+                message.content = message.content.strip()
+        return dialogues, labels, metadata

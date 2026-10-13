@@ -97,6 +97,193 @@ def _targets(model: str | None) -> list[Target]:
     return [TARGETS[model]]
 
 
+# --- each model's place in the revised thesis's pipeline -------------------------------------------
+#
+# The revised thesis studies Llama-3.3-70B at layer 20 (Liars' Bench's layer), 40 (mid-depth, the main
+# layer), 36 and 44 (chosen after the fact, either side of 40), and sweeps 16 layers from 20 to 79.
+# Another model reads, in their place: the block that reproduced Liars' Bench's Mean Probe
+# (`blocks.csv`), its mid-depth block, mid -/+ 5% of depth, and the sweep scaled to its depth,
+# round(L / 80 * n_blocks) (Python's rounding), capped at its last block. Llama's entry names the
+# thesis's own folders, so a script given `model="llama"` reads and writes what it did before.
+
+XMODEL_ROOT = Path(os.environ.get("XMODEL_ROOT", "E:/liars-bench-acts/xmodel"))  # large inputs
+XMODEL_RESULTS = REPO_ROOT / "results" / "xmodel"
+LLAMA_SWEEP = (20, 24, 28, 32, 36, 40, 44, 48, 52, 56, 60, 64, 68, 72, 76, 79)
+
+
+@dataclass(frozen=True)
+class ModelSpec:
+    key: str  # "llama", "qwen", "mistral", "gemma"
+    model: str  # ModelName value
+    n_blocks: int
+    hidden: int
+    lb_block: int  # stands for the thesis's layer 20
+    mid: int  # layer 40
+    posthoc: tuple[int, int]  # layers 36 and 44
+    sweep: tuple[int, ...]  # the 16 sweep layers; `tests/test_xmodel_spec.py` checks the rule above
+    datasets: tuple[str, ...]  # Liars' Bench eval sets, in the thesis's order
+    banks: tuple[str, ...]  # persona folders by name (`bank_dir`), the primary one first
+    title: str  # for figures and tables
+    short: str
+    followup_last_token: bool = False  # Qwen's Follow-Up reproduces reading "No" without <|im_end|>
+
+    @property
+    def layers(self) -> tuple[int, ...]:
+        """Every block the studies read: the sweep and the four named blocks."""
+        return tuple(sorted({*self.sweep, self.lb_block, self.mid, *self.posthoc}))
+
+    @property
+    def key_layers(self) -> tuple[int, int, int]:
+        """The thesis's layers 20, 40 and 44."""
+        return (self.lb_block, self.mid, self.posthoc[1])
+
+    @property
+    def named_layers(self) -> tuple[int, int, int, int]:
+        """The thesis's layers 20, 36, 40 and 44 (`recall_denial.LAYERS`)."""
+        return (self.lb_block, self.posthoc[0], self.mid, self.posthoc[1])
+
+    @property
+    def k_layers(self) -> tuple[int, int, int]:
+        """The thesis's layers 36, 40 and 44, where the knowledge direction's tables sit."""
+        return (self.posthoc[0], self.mid, self.posthoc[1])
+
+    @property
+    def primary_bank(self) -> str:
+        return self.banks[0]
+
+    def bank_dir(self, bank: str | None = None) -> Path:
+        from deception_detection import persona_pcs
+
+        bank = bank or self.primary_bank
+        if bank not in self.banks:
+            raise ValueError(f"{self.key} has persona banks {self.banks}, not {bank!r}")
+        if self.key == "llama" and bank in ("ext", "orig"):
+            return persona_pcs.EXTENDED_VECTORS_DIR if bank == "ext" else persona_pcs.VECTORS_DIR
+        return BANK_DIRS[(self.key, bank)]
+
+    def pooled_dirs(self, block: int, followup: bool = False) -> list[Path]:
+        """The pooled folders at `block`, for `persona_ood.load_pooled`: a later folder's datasets
+        replace an earlier one's. Another model's insider trading comes from the `_trim` folder,
+        read after "Action: " as the thesis's Llama runs read it (`trim_reasoning`)."""
+        if self.key == "llama":
+            from deception_detection.scripts.layer_sweep import pooled_dir
+
+            return [REPO_ROOT / "activations" / f"pooled_followup_L{block}"] if followup else [pooled_dir(block)]
+        root = XMODEL_ROOT / ("activations_followup" if followup else "activations") / self.model
+        dirs = [root / f"pooled_B{block}"]
+        if IT in self.datasets and not followup:
+            dirs.append(root / f"pooled_B{block}_trim")
+        return dirs
+
+    def probe_run(self, block: int) -> Path:
+        """The RepE base probe trained at `block` (`layer_sweep.py probe`)."""
+        if self.key == "llama":
+            from deception_detection.scripts.layer_sweep import base_run
+
+            return base_run(block)
+        return TARGETS[self.key].probe_run(block)
+
+    def followup_run(self) -> Path:
+        """The Follow-Up Probe's run at the LB block, whose `results_table.csv` is its measured row."""
+        if self.key == "llama":
+            return REPO_ROOT / "results" / "XXXX-9-llama-all-followup"
+        return TARGETS[self.key].followup_run(self.lb_block, last_token=self.followup_last_token)
+
+    def results(self, kind: str, block: int | None = None, bank: str | None = None) -> Path:
+        """An output folder: `kind` (e.g. "persona_ood", "loo", "persona_depth") at `block`, for
+        `bank`. Llama's primary and published banks keep the thesis's folder names."""
+        bank = bank or self.primary_bank
+        if self.key == "llama" and bank in ("ext", "orig"):
+            if kind == "persona_ood":
+                return REPO_ROOT / "results" / f"persona_ood_{bank}_L{block}"
+            if kind == "persona_depth":
+                return REPO_ROOT / "results" / ("persona_depth" if bank == "ext" else "persona_depth_orig")
+            if kind == "loo" and bank == "ext":
+                return REPO_ROOT / "results" / f"loo_L{block}"
+        name = f"{kind}_{bank}" + (f"_{'L' if self.key == 'llama' else 'B'}{block}" if block is not None else "")
+        return XMODEL_RESULTS / self.key / name
+
+
+SPECS = {
+    "llama": ModelSpec("llama", "llama-70b-3.3", 80, 8192, 20, 40, (36, 44), LLAMA_SWEEP,
+                       (CG, HPC, HPKR, IT, ID), ("ext", "orig", "s23"),
+                       "Llama-3.3-70B-Instruct", "Llama-3.3-70B"),
+    "qwen": ModelSpec("qwen", "qwen-72b", 80, 8192, 20, 40, (36, 44), LLAMA_SWEEP,
+                      (HPC, HPKR, ID), ("s23",), "Qwen2.5-72B-Instruct", "Qwen2.5-72B",
+                      followup_last_token=True),
+    "mistral": ModelSpec("mistral", "mistral-small-3.1-24b", 40, 5120, 9, 20, (18, 22),
+                         (10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 39),
+                         (HPC, HPKR, IT, ID), ("s3", "s23"),
+                         "Mistral-Small-3.1-24B-Instruct", "Mistral-Small-3.1-24B"),
+    "gemma": ModelSpec("gemma", "gemma-3-27b", 62, 5376, 8, 31, (28, 34),
+                       (16, 19, 22, 25, 28, 31, 34, 37, 40, 43, 46, 50, 53, 56, 59, 61),
+                       (CG, IT, ID), ("s3", "s23"), "Gemma-3-27B-it", "Gemma-3-27B"),
+}
+# Persona banks other than the thesis's own folders. "s3" keeps rollouts the judge scored 3, as the
+# thesis's Llama bank does; "s23" also keeps 2s. Qwen's s3 bank lacks 11 roles, so Qwen has s23 only,
+# and its v2 vectors (the v1 spans started one token early).
+BANK_DIRS = {
+    ("llama", "s23"): XMODEL_ROOT / "banks" / "llama-70b-3.3" / "vectors_s23",
+    ("qwen", "s23"): XMODEL_ROOT / "banks" / "qwen-72b" / "vectors_s23_v2",
+    ("mistral", "s3"): XMODEL_ROOT / "banks" / "mistral-small-3.1-24b" / "vectors_s3",
+    ("mistral", "s23"): XMODEL_ROOT / "banks" / "mistral-small-3.1-24b" / "vectors_s23",
+    ("gemma", "s3"): Path("E:/gemma-3-27b-it/persona/vectors_s3"),
+    ("gemma", "s23"): Path("E:/gemma-3-27b-it/persona/vectors_s23"),
+}
+
+
+def spec(model: str | None) -> ModelSpec:
+    """`model`'s spec; None is Llama, the thesis's model."""
+    key = model or "llama"
+    if key not in SPECS:
+        raise ValueError(f"model must be one of {list(SPECS)}, not {key!r}")
+    return SPECS[key]
+
+
+# Liars' Bench Table 8 (arXiv 2511.16035v2, p.56), the Upper-Bound Probe, in persona_ood.PAPER_COLUMNS
+# order (HP-C, HP-KR, CG, ST, ID, GS, IT); the paper's dashes are NaN. Llama's rows are
+# persona_ood.PAPER_PROBES' own.
+_NAN = float("nan")
+UPPER_BOUND = {
+    "qwen-72b": {"auroc": (0.71, 0.97, 1.00, _NAN, 0.93, _NAN, 0.98),
+                 "balacc": (0.51, 0.53, 0.76, _NAN, 0.59, _NAN, 0.74)},
+    "mistral-small-3.1-24b": {"auroc": (0.72, 0.96, 1.00, _NAN, 0.93, _NAN, 0.98),
+                              "balacc": (0.65, 0.91, 0.99, _NAN, 0.82, _NAN, 0.86)},
+    "gemma-3-27b": {"auroc": (0.70, 0.94, 1.00, _NAN, 0.87, _NAN, 0.96),
+                    "balacc": (0.50, 0.50, 0.68, _NAN, 0.52, _NAN, 0.52)},
+}
+
+
+def published(model: str | None) -> dict:
+    """Liars' Bench's three probes for `model`, in `persona_ood.PAPER_PROBES`' form.
+
+    Llama's are the thesis's transcribed rows. Another model's Mean and Follow-Up rows are Cadenza's
+    own runs (`reference`, the published tables' cells), rounded to the tables' two decimals; its
+    Upper-Bound row is Table 8 (`UPPER_BOUND`)."""
+    from deception_detection.scripts import persona_ood as P
+
+    s = spec(model)
+    if s.key == "llama":
+        return P.PAPER_PROBES
+    by_column = {short: name for name, short in P.SHARED_DATASETS.items()}
+    tables = {probe: reference(probe) for probe in ("mean", "followup")}
+
+    def row(probe: str, column: str) -> tuple[float, ...]:
+        table = tables[probe]
+        return tuple(round(float(table.loc[(s.model, by_column[c]), column]), 2)
+                     if c in by_column and (s.model, by_column[c]) in table.index else _NAN
+                     for c in P.PAPER_COLUMNS)
+
+    return {
+        "Mean Probe": {"source": "Table 6 (Cadenza's run)", "privileged": False,
+                       "auroc": row("mean", "auroc"), "balacc": row("mean", "balanced_accuracy_at_fpr")},
+        "Follow-Up Probe": {"source": "Table 7 (Cadenza's run)", "privileged": False,
+                            "auroc": row("followup", "auroc"),
+                            "balacc": row("followup", "balanced_accuracy_at_fpr")},
+        "Upper-Bound Probe": {"source": "Table 8 p.56", "privileged": True, **UPPER_BOUND[s.model]},
+    }
+
+
 # --- the reference ------------------------------------------------------------------------------
 
 def reference(probe: str = "mean") -> pd.DataFrame:

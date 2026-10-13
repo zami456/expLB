@@ -48,12 +48,13 @@ TEXT = dict(vocab_size=97, hidden_size=32, intermediate_size=64, num_hidden_laye
             num_attention_heads=4, num_key_value_heads=2, max_position_embeddings=64)
 
 
-def tiny(kind: str):
-    """A random model of each architecture, three blocks deep, and its nnsight wrapper."""
+def tiny(kind: str, wrap: bool = True):
+    """A random model of each architecture, three blocks deep, and its nnsight wrapper (None with
+    `wrap=False`: wrapping patches the modules, so a copy made afterwards is no plain model)."""
     torch.manual_seed(0)
     if kind == "qwen":
         hf = Qwen2ForCausalLM(Qwen2Config(**TEXT)).eval()
-        return hf, LanguageModel(hf, tokenizer=types.SimpleNamespace())
+        return hf, (LanguageModel(hf, tokenizer=types.SimpleNamespace()) if wrap else None)
     if kind == "mistral":
         hf = Mistral3ForConditionalGeneration(Mistral3Config(
             text_config=MistralConfig(**TEXT, head_dim=8),
@@ -67,6 +68,8 @@ def tiny(kind: str):
             vision_config=SiglipVisionConfig(hidden_size=16, intermediate_size=32, num_hidden_layers=1,
                                              num_attention_heads=2, image_size=16, patch_size=8),
             mm_tokens_per_image=4, image_token_index=96, boi_token_index=95, eoi_token_index=94)).eval()
+    if not wrap:
+        return hf, None
     # stand-ins: the serialisation simulation passes the tokenizer and processor by reference
     return hf, VisionLanguageModel(hf, tokenizer=types.SimpleNamespace(), processor=types.SimpleNamespace())
 

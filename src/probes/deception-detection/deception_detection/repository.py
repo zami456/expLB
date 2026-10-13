@@ -58,6 +58,7 @@ ALL_DATASETS: list[type[DialogueDataset]] = [
     data.ConvinceMe,
     data.AlpacaCadenza,
     data.AISILlamaRollouts,
+    data.AISIGemmaRollouts,
 ]
 
 

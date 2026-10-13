@@ -84,14 +84,15 @@ def _role_prompts(persona: str) -> dict[int, str]:
     return prompts
 
 
-def sample_chem(n_per_side: int = N_PER_SIDE, seed: int = SEED) -> pd.DataFrame:
+def sample_chem(n_per_side: int = N_PER_SIDE, seed: int = SEED, path: Path = CHEM) -> pd.DataFrame:
     """Length-matched known and unknown chem questions.
 
     ``n_per_side`` unknown items are drawn at random, and each is matched to the nearest-length
     known item without replacement. Known rows come first, then unknown; ``pair`` links each
-    unknown item to its known match.
+    unknown item to its known match. ``path`` is a model's raw WMDP-chem file (Llama's by default),
+    whose ``model_belief`` says which questions that model knows.
     """
-    chem = pd.read_csv(CHEM)
+    chem = pd.read_csv(path)
     chem["prompt"] = chem["control_knowledge_report_0_prompt"].map(_clean)
     chem["plen"] = chem["prompt"].str.len()
     unknown = chem[chem["model_belief"] == -1].sample(n_per_side, random_state=seed)
@@ -455,6 +456,98 @@ def directions(layers=LAYERS) -> None:
         logger.info(f"factorial split-half cosines:\n{table.round(3).to_string(index=False)}")
 
 
+# --- the no-role 2x2 on another model -------------------------------------------------------------
+#
+# The thesis takes two things from this bank, both from its no-role arm: the wording direction
+# (`d_wording`, deny minus assert, knowledge balanced) and the chemistry K (`D_know_norole`, known minus
+# unknown under a forced denial). Another model gets that arm alone, on its own beliefs about the same
+# subject: length-matched known and unknown WMDP-chem questions from its raw harm-pressure file, under
+# its HP-KR rows' system turn (`k_models.system_turn`; Gemma's is none), each forced to both denials
+# and both assertions. The directions keep Llama's keys, `answer|L{block}|<name>`.
+
+def norole_out(model: str) -> Path:
+    from deception_detection.scripts import lb_models as LB
+
+    return LB.XMODEL_RESULTS / LB.spec(model).key / "forced_denial_bank"
+
+
+def norole_items(model: str, n_per_side: int = N_PER_SIDE, seed: int = SEED) -> None:
+    """The model's 2x2 rows: every sampled item forced to each denial and each assertion."""
+    from deception_detection.scripts import k_models as km
+
+    target = km._target(model)
+    sample = sample_chem(n_per_side, seed, km.RAW_HP / "cais" / "wmdp-chem" / f"{km.RAW_MODEL[target.model]}.csv")
+    system = km.system_turn(target)
+    rows = []
+    for _, q in sample.reset_index().iterrows():
+        item = {"item": int(q["index"]), "knows": bool(q["knows"]), "user": q["prompt"]}
+        for kind, texts in (("deny", DENY), ("assert", ASSERT)):
+            for s, text in enumerate(texts):
+                rows.append(item | {"arm": NO_ROLE, "group": NO_ROLE, "system": system, "kind": kind,
+                                    "string": s, "assistant": text})
+    for r, row in enumerate(rows):
+        row["row"] = r
+    out = norole_out(model)
+    out.mkdir(parents=True, exist_ok=True)
+    (out / "items.json").write_text(json.dumps(rows, indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
+    logger.info(f"{model}: {len(rows)} rows -> {out / 'items.json'}")
+
+
+def norole_read(model: str, layers=None, budget: int | None = None) -> None:
+    """Answer-token means of the model's 2x2 rows at every block it is read at, on NDIF. Resumable."""
+    from deception_detection.models import ModelName, get_model_and_tokenizer
+    from deception_detection.scripts import k_models as km
+    from deception_detection.scripts import lb_models as LB
+    from deception_detection.scripts.gender_secret import _environment
+
+    target, out = km._target(model), norole_out(model)
+    layers = [int(x) for x in (layers or LB.spec(model).layers)]
+    rows = json.loads((out / "items.json").read_text(encoding="utf-8"))
+    _environment()
+    remote, tokenizer = get_model_and_tokenizer(ModelName(target.model), template_date=km._template_date(target))
+    _check_identical_answers(tokenizer, rows)
+    km._check_empty_system(tokenizer, rows)
+    folder = out / f"parts_answer_B{'-'.join(map(str, layers))}"
+    done = done_rows(folder)
+    todo = [r for r in rows if r["row"] not in done]
+    if not todo:
+        logger.info("all rows already read")
+        return
+    requests = _requests(tokenizer, todo, budget or km.TOKEN_BUDGET)
+    logger.info(f"{len(todo)} rows at blocks {layers} in {len(requests)} requests")
+    for k, batch in enumerate(requests):
+        means = km._read_batch(remote, tokenizer, batch, layers)
+        save_request(folder, [r["row"] for r in batch], layers, means)
+        logger.info(f"request {k + 1}/{len(requests)}: {len(batch)} rows")
+
+
+def norole_directions(model: str, layers=None) -> None:
+    """The 2x2's directions at every block read (`answer|L{block}|...`): `d_false`, `d_wording` and
+    `d_know_pure` (`_factorial`) and `D_know_norole`, the chemistry K, as unit vectors."""
+    from deception_detection.scripts import lb_models as LB
+    from deception_detection.scripts.recall_denial import _load as load_folder
+
+    out = norole_out(model)
+    rows = pd.DataFrame(json.loads((out / "items.json").read_text(encoding="utf-8"))).set_index("row")
+    data: dict[int, dict[int, np.ndarray]] = {}
+    for folder in sorted(out.glob("parts_answer*")):
+        for row, by_layer in load_folder(folder).items():
+            data.setdefault(row, {}).update(by_layer)
+    layers = [int(x) for x in (layers or LB.spec(model).layers)]
+    directions_out = {}
+    for layer in layers:
+        factorial = _factorial(rows, data, layer)
+        if factorial is None:
+            raise RuntimeError(f"block {layer}: the 2x2 is not fully read")
+        deny = rows[(rows["kind"] == "deny") & rows.index.isin(list(data))]
+        known = np.mean([data[r][layer] for r in deny.index[deny["knows"]]], axis=0)
+        unknown = np.mean([data[r][layer] for r in deny.index[~deny["knows"]]], axis=0)
+        for name, v in (factorial | {"D_know_norole": known - unknown}).items():
+            directions_out[f"answer|L{layer}|{name}"] = _unit(v)
+    np.savez(out / "directions.npz", **directions_out)
+    logger.info(f"wrote {len(directions_out)} directions -> {out / 'directions.npz'}")
+
+
 # --- evaluation on HP-KR -------------------------------------------------------------------------
 
 def _slices(frame: pd.DataFrame) -> dict[str, np.ndarray]:
@@ -570,4 +663,5 @@ def evaluate(layers=LAYERS) -> None:
 
 if __name__ == "__main__":
     fire.Fire({"items": items, "extend": extend, "read": read, "directions": directions,
-               "evaluate": evaluate})
+               "evaluate": evaluate, "norole_items": norole_items, "norole_read": norole_read,
+               "norole_directions": norole_directions})

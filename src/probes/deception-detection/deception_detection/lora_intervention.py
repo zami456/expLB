@@ -74,6 +74,8 @@ def _parse_key(key: str) -> tuple[int, tuple[str, str], str] | None:
     return block, (submodule, projection), factor
 
 
+VISION_PARTS = ("vision_tower", "vision_model", "multi_modal_projector")
+
 # PEFT writes safetensors; older versions wrote a pickled state dict (Liars' Bench's Soft-Trigger
 # adapters are of that kind)
 WEIGHT_FILES = ("adapter_model.safetensors", "adapter_model.bin")
@@ -126,6 +128,11 @@ def load_adapter(
     factors: dict[int, dict[tuple[str, str], dict[str, Tensor]]] = {}
     unused = []
     for key, tensor in _load_weights(weights_path).items():
+        # A multimodal model's adapter (Mistral-3, Gemma-3) also adapts its vision tower and
+        # projector. A text-only pass never runs them, and Gemma's SigLIP keys
+        # (`vision_model.encoder.layers.{i}.self_attn.q_proj`) would otherwise parse as text block i.
+        if any(part in key for part in VISION_PARTS):
+            continue
         parsed = _parse_key(key)
         if parsed is None:
             unused.append(key)

@@ -115,19 +115,22 @@ def system_turn(target: LB.Target) -> str:
 
 # --- the model's own answers to the known questions ------------------------------------------------
 
-def verify(model: str = "mistral", batch_size: int = 35) -> None:
+def verify(model: str = "mistral", batch_size: int = 35, source=None, out: str | Path | None = None) -> None:
     """For every known and reserve question: the letter with the highest logit at the answer
-    position, under the model's system turn (`system_turn`), and the model's top token there."""
+    position, under the model's system turn (`system_turn`), and the model's top token there.
+    `source` and `out` default to `recall_items` and the model's folder (`k_replication.py` passes
+    the matched items and its own folder)."""
     from deception_detection.models import ModelName, get_model_and_tokenizer
     from deception_detection.scripts.gender_secret import _environment
 
     target = _target(model)
-    folder = _folder(target)
+    source = source or recall_items
+    folder = Path(out) if out is not None else _folder(target)
     folder.mkdir(parents=True, exist_ok=True)
     _environment()
     system = system_turn(target)
     remote, tokenizer = get_model_and_tokenizer(ModelName(target.model), template_date=_template_date(target))
-    known = list(recall_items.KNOWN) + list(recall_items.RESERVE)
+    known = list(source.KNOWN) + list(source.RESERVE)
     head_turn = [{"role": "system", "content": system}] if system else []
     texts = [tokenizer.apply_chat_template(
         head_turn + [{"role": "user", "content": RD.ANSWER_PROMPT.format(

@@ -128,6 +128,37 @@ class TestExecuteInBatches:
         with pytest.raises(RuntimeError, match="cannot shrink further"):
             execute_in_batches([0, 1], lambda i: 100, 8000, run_batch)
 
+    def test_repeated_ooms_replan_the_rest_of_the_pass_at_half(self):
+        # 100 batches' worth at 1600, every one too big: after three failures in a row the rest of
+        # the pass goes straight to 800, instead of failing the other 97 first
+        lengths = [200] * 800
+        attempts: list[int] = []
+        seen: list[int] = []
+
+        def run_batch(batch: list[int]) -> None:
+            cost = len(batch) * 200
+            attempts.append(cost)
+            if cost > 800:
+                raise RuntimeError("CUDA out of memory")
+            seen.extend(batch)
+
+        execute_in_batches(range(800), lambda i: lengths[i], 1600, run_batch)
+        assert sorted(seen) == list(range(800))
+        assert attempts.count(1600) == 3
+        assert all(cost == 800 for cost in attempts[3:])
+
+    def test_a_success_resets_the_run_of_ooms(self):
+        # alternating failures never reach three in a row, so the pass runs to its end
+        attempts: list[int] = []
+
+        def run_batch(batch: list[int]) -> None:
+            attempts.append(len(batch))
+            if len(batch) == 4 and len(attempts) % 2:
+                raise RuntimeError("CUDA out of memory")
+
+        execute_in_batches(range(40), lambda i: 100, 400, run_batch)
+        assert attempts[:10] == [4] * 10
+
     def test_transient_failures_retry_at_the_same_size(self):
         # an eviction says nothing about batch size, so the batch must not shrink
         attempts: list[int] = []

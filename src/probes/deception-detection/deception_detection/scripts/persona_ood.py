@@ -155,14 +155,25 @@ class Pooled:
         return 0 < self.n_deceptive < len(self.y)
 
 
-def load_pooled(pooled_dir: Path = POOLED_DIR, merge: bool = True) -> dict[str, Pooled]:
+def load_pooled(pooled_dir: Path | list[Path] = POOLED_DIR, merge: bool = True) -> dict[str, Pooled]:
     """Load every pooled dataset, keeping only HONEST/DECEPTIVE rows.
 
     `merge=False` keeps the RepE train and "_val" splits apart, for callers that need the split
     itself (INLP fits on one half and scores on the other) rather than the dataset as a whole.
+
+    A list of folders is read in order, a later folder's file replacing an earlier one's of the same
+    name: another model's insider trading read after "Action: " sits in a `_trim` folder beside the
+    full read (`lb_models.ModelSpec.pooled_dirs`).
     """
+    if isinstance(pooled_dir, (list, tuple)):
+        files: dict[str, Path] = {}
+        for folder in pooled_dir:
+            files |= {path.name: path for path in Path(folder).glob("*.npz")}
+        paths = [files[name] for name in sorted(files)]
+    else:
+        paths = sorted(Path(pooled_dir).glob("*.npz"))
     parts: dict[str, list[tuple[np.ndarray, np.ndarray]]] = {}
-    for path in sorted(pooled_dir.glob("*.npz")):
+    for path in paths:
         raw = np.load(path, allow_pickle=False)
         labels = raw["labels"].astype(str)
         keep = np.isin(labels, ["HONEST", "DECEPTIVE"])
@@ -844,13 +855,16 @@ def liars_bench_comparison(
     extra: dict[str, Callable[[np.ndarray], np.ndarray]] | None = None,
     extra_rows: list[dict[str, object]] | None = None,
     out_name: str = "liars_bench_comparison.csv",
+    paper_probes: dict | None = None,
+    followup_run: Path | None = None,
 ) -> pd.DataFrame:
     """Head-to-head against the Liars' Bench probe baselines, over the five shared datasets.
 
     The paper's rows are transcribed constants (see PAPER_PROBES); only their mean over the
     shared columns is computed here. Everything on this side is measured from the pooled
     activations, trained on RepE where a probe is involved -- the same protocol the paper's Mean
-    Probe uses.
+    Probe uses. Another model passes its own published rows and Follow-Up run
+    (`lb_models.published`, `ModelSpec.followup_run`); the defaults are Llama's.
 
     Cross-pipeline rows are not strictly comparable: this repo's reproduction of the Mean Probe
     method scores well above the paper's on insider-trading because `trim_reasoning` is on, a
@@ -902,7 +916,7 @@ def liars_bench_comparison(
             ),
             "n_datasets": len(shared),
         }
-        for name, spec in PAPER_PROBES.items()
+        for name, spec in (paper_probes or PAPER_PROBES).items()
     ]
     rows += [
         evaluate(lambda z: geom.axis_score(z), "persona axis (zero-shot)"),
@@ -916,7 +930,7 @@ def liars_bench_comparison(
             "raw activations (RepE-trained)",
         ),
     ]
-    followup = measured_followup_row(shared)
+    followup = measured_followup_row(shared, followup_run or FOLLOWUP_RUN)
     if followup is not None:
         rows.append(followup)
 
@@ -933,13 +947,28 @@ def liars_bench_comparison(
     return table
 
 
+def _as_pooled(pooled_dir: str | Path | list) -> Path | list[Path]:
+    return [Path(p) for p in pooled_dir] if isinstance(pooled_dir, (list, tuple)) else Path(pooled_dir)
+
+
+def _published(model: str | None) -> dict:
+    """`liars_bench_comparison`'s published rows and Follow-Up run for `model`; None keeps
+    the defaults, Llama's."""
+    if model is None:
+        return {}
+    from deception_detection.scripts import lb_models as LB
+
+    return {"paper_probes": LB.published(model), "followup_run": LB.spec(model).followup_run()}
+
+
 def run(
-    pooled_dir: str | Path = POOLED_DIR,
+    pooled_dir: str | Path | list = POOLED_DIR,
     out_dir: str | Path = OUT_DIR,
     layer: int = 20,
     vectors: str | Path | None = None,
+    model: str | None = None,
 ) -> None:
-    pooled_dir, out_dir = Path(pooled_dir), Path(out_dir)
+    pooled_dir, out_dir = _as_pooled(pooled_dir), Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
 
     # `layer` must match the layer the pooled activations were extracted at. Nothing enforces
@@ -1097,13 +1126,13 @@ def run(
     summary.to_csv(out_dir / "summary.csv", index=False)
     logger.info(f"\n{summary.round(4).to_string(index=False)}")
     balacc_summary(variants, datasets, order, control, without_hpkr, dims, out_dir)
-    liars_bench_comparison(datasets, control, geom, out_dir)
+    liars_bench_comparison(datasets, control, geom, out_dir, **_published(model))
     logger.info(f"wrote matrices and summary to {out_dir}")
 
 
 
 def zeroshot(
-    pooled_dir: str | Path = POOLED_DIR,
+    pooled_dir: str | Path | list = POOLED_DIR,
     out_dir: str | Path = OUT_DIR,
     layer: int = 20,
     vectors: str | Path | None = None,
@@ -1122,7 +1151,7 @@ def zeroshot(
     `base_run_check=False` accepts a probe the runner trained but never scored, such as the layer
     sweep's; see `base_probe_arm`.
     """
-    pooled_dir, out_dir = Path(pooled_dir), Path(out_dir)
+    pooled_dir, out_dir = _as_pooled(pooled_dir), Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
 
     bank = persona_pcs.load_bank_at_layer(
@@ -1163,11 +1192,12 @@ def zeroshot(
 
 
 def loo(
-    pooled_dir: str | Path = POOLED_DIR,
+    pooled_dir: str | Path | list = POOLED_DIR,
     out_dir: str | Path = REPO_ROOT / "results" / "loo",
     layer: int = 20,
     vectors: str | Path | None = None,
     n_boot: int = 1000,
+    model: str | None = None,
 ) -> None:
     """Leave-one-dataset-out: the fair supervised baseline for the generalization claim.
 
@@ -1179,7 +1209,7 @@ def loo(
     `layer` must match the layer `pooled_dir` was extracted at -- nothing enforces it, and a
     mismatch yields meaningless numbers rather than an error, so it is recorded in every file.
     """
-    pooled_dir, out_dir = Path(pooled_dir), Path(out_dir)
+    pooled_dir, out_dir = _as_pooled(pooled_dir), Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
 
     bank = persona_pcs.load_bank_at_layer(
@@ -1376,6 +1406,7 @@ def loo(
         extra=extra,
         extra_rows=extra_rows,
         out_name="liars_bench_comparison_loo.csv",
+        **_published(model),
     )
     logger.info(f"wrote leave-one-out tables to {out_dir}")
 

@@ -65,6 +65,52 @@ AUDITED = (
 )
 
 
+class Setup:
+    """Where one model's AISI probe reads and writes. Llama's (`model=None`) is the thesis's: the
+    constants above. Gemma, the only other Liars' Bench model AISI covers, reads its own rollouts
+    (`aisi_gemma__*`) at its blocks for the thesis's 20, 40 and 44, against its own pooled folders
+    and RepE probes, and writes under `results/xmodel/gemma/aisi_probe/`."""
+
+    def __init__(self, model: str | None = None):
+        from deception_detection.scripts import lb_models as LB
+
+        self.spec = LB.spec(model)
+        self.llama = self.spec.key == "llama"
+        if not self.llama and self.spec.key != "gemma":
+            raise ValueError(f"AISI has no rollouts of {self.spec.title}")
+        self.base = "aisi_llama" if self.llama else "aisi_gemma"
+        self.repo = MODEL if self.llama else "google/gemma-3-27b-it"
+        self.layers = LAYERS if self.llama else self.spec.key_layers
+        self.exclusions = A.EXCLUSIONS if self.llama else A.GEMMA_EXCLUSIONS
+        self.config_name = A.CONFIG if self.llama else A.GEMMA_CONFIG
+        self.results = RESULTS if self.llama else LB.XMODEL_RESULTS / "gemma" / "aisi_probe"
+        self.validation = VALIDATION_MEANS if self.llama else LB.XMODEL_ROOT / "activations" / "gemma-3-27b" / "aisi_validation"
+        self.audited = AUDITED if self.llama else tuple(self.spec.datasets)
+
+    def pooled(self, layer: int):
+        return POOLED[layer] if self.llama else self.spec.pooled_dirs(layer)
+
+    def cache(self, layer: int) -> str:
+        return CACHE_DIRS[layer] if self.llama else "E:/liars-bench-acts/cache"
+
+    def repe_run(self, layer: int) -> Path:
+        return REPO_ROOT / "results" / REPE_RUNS[layer] if self.llama else self.spec.probe_run(layer)
+
+    def run_name(self, variant: str, layer: int) -> str:
+        name = AISI_ARMS[variant][0].format(layer=layer)
+        return name if self.llama else name.replace("aisi-llama", "aisi-gemma").replace(f"-L{layer}", f"-B{layer}")
+
+    def config(self, layer: int, variant: str) -> dict:
+        import yaml
+
+        config = yaml.safe_load((CONFIGS / f"aisi_llama_L{40 if not self.llama else layer}.yaml").read_text())
+        config |= {"train_data": f"{self.base}__{variant}", "name": self.run_name(variant, layer)}
+        if not self.llama:
+            config |= {"model_name": self.spec.model, "detect_layers": [int(layer)],
+                       "eval_data": [f"{self.base}__validation", *self.spec.datasets]}
+        return config
+
+
 def normalise(text: str) -> str:
     return " ".join(re.sub(r"[^0-9a-z]+", " ", text.lower()).split())
 
@@ -74,7 +120,7 @@ def shingles(words: list[str], n: int) -> set[tuple[str, ...]]:
 
 
 def audit(out: str | Path | None = None, min_words: int = 3, n: int = 6,
-          near: float = 0.8, loose: float = 0.5) -> None:
+          near: float = 0.8, loose: float = 0.5, model: str | None = None) -> None:
     """Find AISI rows whose question appears in a Liars' Bench dataset, and exclude them.
 
     Questions are normalised (lowercase, punctuation and spacing dropped). For multiple-choice
@@ -89,12 +135,14 @@ def audit(out: str | Path | None = None, min_words: int = 3, n: int = 6,
     """
     from deception_detection.repository import DatasetRepository
 
-    out = A.EXCLUSIONS if out is None else Path(out)
+    setup = Setup(model)
+    out = setup.exclusions if out is None else Path(out)
     repository = DatasetRepository()
     corpora, corpus_shingles = {}, {}
-    for name in AUDITED:
+    for name in setup.audited:
+        kwargs = {} if setup.llama else {"source_model": setup.spec.model}
         dataset = repository.get(name, model="prewritten", trim_reasoning=False,
-                                 shuffle_upon_init=False)
+                                 shuffle_upon_init=False, **kwargs)
         texts = [normalise(m.content) for d in dataset.dialogues for m in d]
         corpora[name] = " | ".join(texts)
         corpus_shingles[name] = set().union(*(shingles(t.split(), n) for t in texts))
@@ -106,7 +154,7 @@ def audit(out: str | Path | None = None, min_words: int = 3, n: int = 6,
     loose_kept: dict[str, int] = defaultdict(int)
     examples = []
     for split in A.SPLITS.values():
-        for row in A.load_rows(split):
+        for row in A.load_rows(split, setup.config_name):
             q = normalise(A.question(row))
             if len(q.split()) < min_words:
                 unchecked[split] += 1
@@ -127,8 +175,8 @@ def audit(out: str | Path | None = None, min_words: int = 3, n: int = 6,
 
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps({
-        "source": f"{A.REPO_ID}@{A.REVISION} ({A.CONFIG})",
-        "checked_against": list(AUDITED),
+        "source": f"{A.REPO_ID}@{A.REVISION} ({setup.config_name})",
+        "checked_against": list(setup.audited),
         "method": (f"normalised question (multiple-choice stem only) found inside any message, "
                    f"or >= {near} of its {n}-word shingles found there"),
         "min_words": min_words,
@@ -154,7 +202,7 @@ def _in_order(dataset, order):
 
 
 def extract(layer: int = 20, chunk: int = 96, token_budget: int = 16000,
-            pooled_budget: int = 8000) -> None:
+            pooled_budget: int = 8000, model: str | None = None) -> None:
     """Fetch, at `layer`, what `fit` and `compare` need from NDIF. Resumable.
 
     Downloads here run at about 1.5 MB/s, and they, not NDIF, set the pace. So each part fetches
@@ -176,7 +224,8 @@ def extract(layer: int = 20, chunk: int = 96, token_budget: int = 16000,
     """
     import torch
 
-    os.environ["ACTS_CACHE_DIR"] = CACHE_DIRS[layer]
+    setup = Setup(model)
+    os.environ["ACTS_CACHE_DIR"] = setup.cache(layer)
     from deception_detection.activations import Activations, detected_tail_lengths
     from deception_detection.models import get_model_and_tokenizer
     from deception_detection.repository import DatasetRepository
@@ -191,10 +240,10 @@ def extract(layer: int = 20, chunk: int = 96, token_budget: int = 16000,
                                              detect_only_last_token=False)
 
     _environment()  # NDIF and HF keys from .env, longer timeouts
-    model, tokenizer = get_model_and_tokenizer("llama-70b-3.3")
+    model, tokenizer = get_model_and_tokenizer(setup.spec.model)
     repository = DatasetRepository()
 
-    training = repository.get("aisi_llama__pooled", model="prewritten", trim_reasoning=True,
+    training = repository.get(f"{setup.base}__pooled", model="prewritten", trim_reasoning=True,
                               shuffle_upon_init=True)
     ordered = _in_order(training, np.argsort(detected_tail_lengths(tokenize(training)),
                                              kind="stable"))
@@ -203,7 +252,7 @@ def extract(layer: int = 20, chunk: int = 96, token_budget: int = 16000,
                                token_budget=token_budget, positions="tail")
         logger.info(f"layer {layer} training rows: {min(start + chunk, len(ordered))}/{len(ordered)}")
 
-    held_out = repository.get("aisi_llama__validation", model="prewritten", trim_reasoning=True,
+    held_out = repository.get(f"{setup.base}__validation", model="prewritten", trim_reasoning=True,
                               shuffle_upon_init=False)
     toks = tokenize(held_out)
     padded = toks.tokens.shape[1]
@@ -218,13 +267,13 @@ def extract(layer: int = 20, chunk: int = 96, token_budget: int = 16000,
     meta = {"row": np.array(held_out.metadata["row"]),
             "deceptive": np.array([label == Label.DECEPTIVE for label in held_out.labels]),
             "layers": np.array([layer])}
-    VALIDATION_MEANS.mkdir(parents=True, exist_ok=True)
-    F._read(model, items, [layer], None, VALIDATION_MEANS / f"validation_L{layer}.npz", meta,
+    setup.validation.mkdir(parents=True, exist_ok=True)
+    F._read(model, items, [layer], None, setup.validation / f"validation_L{layer}.npz", meta,
             pooled_budget, max_rows=chunk)
     logger.info(f"layer {layer}: held-out split pooled ({len(items)} rows)")
 
 
-def fit(layer: int = 20, variant: str = "pooled", block: int = 4096) -> None:
+def fit(layer: int = 20, variant: str = "pooled", block: int = 4096, model: str | None = None) -> None:
     """Fit the base probe at `layer` on AISI's rows exactly as the runner's `get_detector` would.
 
     The runner's own objects supply the rows:
@@ -250,10 +299,9 @@ def fit(layer: int = 20, variant: str = "pooled", block: int = 4096) -> None:
     from deception_detection.experiment import Experiment, ExperimentConfig
     from deception_detection.tokenized_data import get_tokenized_dataset_pair
 
-    os.environ["ACTS_CACHE_DIR"] = CACHE_DIRS[layer]
-    config = yaml.safe_load((CONFIGS / f"aisi_llama_L{layer}.yaml").read_text())
-    config |= {"train_data": f"aisi_llama__{variant}",
-               "name": AISI_ARMS[variant][0].format(layer=layer)}
+    setup = Setup(model)
+    os.environ["ACTS_CACHE_DIR"] = setup.cache(layer)
+    config = setup.config(layer, variant)
     cfg = ExperimentConfig(**config)
     if not cfg.normalize_acts or cfg.use_class_weights or cfg.method != "lr":
         raise NotImplementedError("the streaming fit covers the standardised, unweighted lr probe")
@@ -274,7 +322,7 @@ def fit(layer: int = 20, variant: str = "pooled", block: int = 4096) -> None:
     # deceptive first: the runner fits detector.fit(deceptive, honest), deceptive as positive
     rows = []
     for toks, label in ((deceptive_toks, 1), (honest_toks, 0)):
-        keys, kept = cache_entries(toks, MODEL, [layer], "tail")
+        keys, kept = cache_entries(toks, setup.repo, [layer], "tail")
         padded = toks.tokens.shape[1]
         rows += [(keys[i], kept[i], toks.detection_mask[i, padded - kept[i]:].bool(), label)
                  for i in range(len(keys))]
@@ -353,7 +401,7 @@ def paired_lb_average(scored: dict, arms: dict, layer: int, n_boot: int = 1000,
     return out
 
 
-def compare(layers=LAYERS, n_boot: int = 1000, out_dir: str | Path = RESULTS) -> None:
+def compare(layers=None, n_boot: int = 1000, out_dir: str | Path | None = None, model: str | None = None) -> None:
     """Score every probe and persona direction on the same activations, per layer.
 
     Arms: the RepE-trained base probe, each fitted AISI probe, and the persona directions
@@ -375,45 +423,49 @@ def compare(layers=LAYERS, n_boot: int = 1000, out_dir: str | Path = RESULTS) ->
     from deception_detection import persona_pcs
     from deception_detection.scripts import persona_ood as P
 
-    out_dir = Path(out_dir)
+    setup = Setup(model)
+    layers = layers or setup.layers
+    out_dir = Path(out_dir) if out_dir is not None else setup.results
     out_dir.mkdir(parents=True, exist_ok=True)
     tables, deltas = [], []
     for layer in layers:
-        pooled = P.load_pooled(POOLED[layer])
+        pooled = P.load_pooled(setup.pooled(layer))
         control = pooled[P.CONTROL_DATASET]
         datasets = {name: ds for name, ds in pooled.items() if name in P.SHARED_DATASETS}
 
-        arms = {P.BASE_ARM: P.base_probe_arm(REPO_ROOT / "results" / REPE_RUNS[layer], layer,
-                                             datasets, control)}
-        for variant, (folder, label) in AISI_ARMS.items():
-            run = REPO_ROOT / "results" / folder.format(layer=layer)
+        # the sweep's probes were trained but never scored by the runner: no reproduction check
+        arms = {P.BASE_ARM: P.base_probe_arm(setup.repe_run(layer), layer, datasets, control,
+                                             check=setup.llama)}
+        for variant, (_, label) in AISI_ARMS.items():
+            run = REPO_ROOT / "results" / setup.run_name(variant, layer)
             if not (run / "detector.pt").exists():
                 logger.warning(f"{run.name} has no probe; {label!r} skipped at layer {layer}")
                 continue
             cfg = yaml.safe_load((run / "cfg.yaml").read_text())
-            if cfg.get("detect_layers") != [layer] or cfg.get("train_data") != f"aisi_llama__{variant}":
+            if cfg.get("detect_layers") != [layer] or cfg.get("train_data") != f"{setup.base}__{variant}":
                 raise ValueError(f"{run.name} is not the {variant} probe at layer {layer}")
             arms[label] = P.run_probe(run)
-        bank = persona_pcs.load_bank_at_layer(layer, persona_pcs.EXTENDED_VECTORS_DIR)
+        bank = persona_pcs.load_bank_at_layer(layer, setup.spec.bank_dir())
         extra = P.extended_arms(bank)
         geom = persona_pcs.fit_geometry(bank, k=3)
         arms["knowledge-denial axis (4v6)"] = extra["auroc_denial_axis"]
         arms["extended axis (12v13)"] = extra["auroc_ext_axis"]
         arms["deception axis (8v7)"] = lambda z, g=geom: g.axis_score(z)
 
-        gs = np.load(GS_DIR / f"adapted_L{layer}.npz", allow_pickle=False)
         scored = dict(datasets)
-        scored["gender_secret (fine-tuned read)"] = P.Pooled(
-            name="gender_secret (fine-tuned read)", z=gs["pooled"].astype(np.float64),
-            y=(gs["labels"].astype(str) == "DECEPTIVE").astype(int))
-        means = VALIDATION_MEANS / f"validation_L{layer}.npz"
+        if setup.llama:  # Gemma has no Gender-Secret model organism
+            gs = np.load(GS_DIR / f"adapted_L{layer}.npz", allow_pickle=False)
+            scored["gender_secret (fine-tuned read)"] = P.Pooled(
+                name="gender_secret (fine-tuned read)", z=gs["pooled"].astype(np.float64),
+                y=(gs["labels"].astype(str) == "DECEPTIVE").astype(int))
+        means = setup.validation / f"validation_L{layer}.npz"
         held_out = None
         if means.exists():  # read and closed at once: `extract` may be replacing this file
             with np.load(means, allow_pickle=False) as saved:
                 held_out = {key: saved[key] for key in ("pooled", "deceptive", "done")}
         if held_out is not None and held_out["done"].all():
-            scored["aisi_llama__validation"] = P.Pooled(
-                name="aisi_llama__validation", z=held_out["pooled"][:, 0].astype(np.float64),
+            scored[f"{setup.base}__validation"] = P.Pooled(
+                name=f"{setup.base}__validation", z=held_out["pooled"][:, 0].astype(np.float64),
                 y=held_out["deceptive"].astype(int))
         else:
             logger.warning(f"the held-out split is not pooled at layer {layer}; skipped")

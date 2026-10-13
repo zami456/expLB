@@ -248,7 +248,8 @@ def tokenize_for_pool(dataset, tokenizer, flags: dict, separator: str | None, ca
 def pool(layers=NEW_LAYERS, datasets=None, token_budget: int = 16000,
          out_root: str | Path | None = None, partial_root: str | Path | None = None,
          overwrite: bool = False, shard: str | None = None,
-         config: str | Path | None = None, pilot: int | None = None) -> None:
+         config: str | Path | None = None, pilot: int | None = None,
+         trim_variant: bool = True, last_token: bool = False) -> None:
     """Pool every dataset `pool_activations` pools at each of `layers`, on NDIF. Resumable.
 
     Rows are those with a non-empty detection mask, tokenised as the runner tokenises them.
@@ -270,6 +271,12 @@ def pool(layers=NEW_LAYERS, datasets=None, token_budget: int = 16000,
 
     `pilot=n` (with `config`) keeps a label-balanced n rows of every dataset but the training
     set, and writes under `activations/pilot/` and a pilot request folder instead.
+
+    `trim_variant=False` skips the "_trim" span: a Follow-Up config reads only the appended "No",
+    which trimming does not move. `last_token=True` (with `config`) reads only the last detected
+    token, as `lb_models.py followup --last_token` does for Qwen's "No" without its `<|im_end|>`.
+    Neither changes the request folder's name, so pool such variants under their own
+    `out_root` and `partial_root`.
     """
     import copy
 
@@ -302,6 +309,8 @@ def pool(layers=NEW_LAYERS, datasets=None, token_budget: int = 16000,
         if pilot is not None:
             name = yaml.safe_load(config_path(config).read_text())["name"]
             overrides = {"lb_max_rows": int(pilot), "name": f"{name}-pilot"}
+        if last_token:
+            overrides["detect_only_last_token"] = True
         cfg, experiment = _experiment(config, **overrides)
         model, _ = get_model_and_tokenizer(cfg.model_name, template_date=cfg.template_date)
         label = cfg.model_name.value
@@ -326,7 +335,7 @@ def pool(layers=NEW_LAYERS, datasets=None, token_budget: int = 16000,
             logger.info(f"{dataset.name}: no rows for this model; skipped")
             continue
         separator = getattr(dataset, "trim_reasoning_str", None)
-        two_spans = config is not None and separator is not None and not cfg.trim_reasoning
+        two_spans = trim_variant and config is not None and separator is not None and not cfg.trim_reasoning
         variants = ("", "_trim") if two_spans else ("",)
         targets = {(layer, v): target(layer, v) / f"{dataset.name}.npz" for layer in layers for v in variants}
         if not overwrite and all(path.exists() for path in targets.values()):
@@ -382,6 +391,119 @@ def pool(layers=NEW_LAYERS, datasets=None, token_budget: int = 16000,
             labels = [labels_by_variant[variant][i] for i in kept]
             write_pooled(path, assemble(folder, kept, layer, variant), labels, dataset.name)
         logger.info(f"{dataset.name}: written at layers {layers}")
+
+
+# --- per-token persona projections, taken on the server ---------------------------------------------
+
+def project(model: str, layers=None, banks=None, datasets=None, token_budget: int = 16000,
+            out_root: str | Path | None = None, partial_root: str | Path | None = None) -> None:
+    """Every token of every pooled dataset projected onto the persona axes, on NDIF: the input of
+    `persona_positions.py verify/analyze` (the thesis's token reads, Table B.6) for another model,
+    without its per-token cache.
+
+    One pass per batch returns, at each of `layers` (the model's 20, 40 and 44 by default), each
+    position's projection onto the four unit axes of `persona_positions.AXES` for every bank in
+    `banks` (all the model's banks by default). Rows, tokenisation, batching and resumable request
+    files are `pool`'s. Each (bank, block) gets a folder `token_proj_<bank>_B<block>` under the
+    model's activations, holding `persona_positions.TokenProjections` files; insider trading also
+    gets its post-"Action: " detection as `<name>_trim.npz` in a `_trim` folder.
+    """
+    import torch
+
+    from deception_detection import persona_pcs
+    from deception_detection.activations import trace_token_projections
+    from deception_detection.batching import BudgetMemory, execute_in_batches
+    from deception_detection.models import MODEL_REPOS, get_model_and_tokenizer
+    from deception_detection.scripts.gender_secret import _environment
+    from deception_detection.scripts.persona_positions import AXES, TokenProjections
+
+    s = _spec(model)
+    layers = [int(x) for x in (layers or s.key_layers)]
+    banks = list(banks or s.banks) if not isinstance(banks, str) else [banks]
+    from deception_detection.scripts import lb_models as LB
+
+    out_root = Path(out_root) if out_root is not None else LB.XMODEL_ROOT / "activations" / s.model
+    partial_root = (Path(partial_root) if partial_root is not None
+                    else PARTIAL.parent / "projections_partial" / s.model)
+    require_drive(partial_root)
+    _environment()
+    cfg, experiment = _experiment(f"XXXX-9-{s.key}-all.yaml")
+    remote, _ = get_model_and_tokenizer(cfg.model_name, template_date=cfg.template_date)
+    axis_names = list(AXES)
+    columns = [(bank, axis) for bank in banks for axis in axis_names]
+    directions = {}
+    for layer in layers:
+        loaded = {bank: persona_pcs.load_bank_at_layer(layer, s.bank_dir(bank)) for bank in banks}
+        directions[layer] = torch.tensor(np.stack([loaded[b].axis_unit(a) for b, a in columns]), dtype=torch.float32)
+    memory = BudgetMemory(partial_root / "budget_memory.json")
+    flags = dict(detect_all=cfg.detect_all_tokens, detect_only_start_of_turn=cfg.detect_only_start_of_turn,
+                 detect_only_last_token=cfg.detect_only_last_token)
+    wanted = _names(datasets)
+    tag = "-".join(map(str, layers))
+    for dataset in [experiment.train_dataset, *experiment.eval_datasets, *experiment.control_datasets]:
+        if (wanted is not None and dataset.name not in wanted) or len(dataset) == 0:
+            continue
+        separator = getattr(dataset, "trim_reasoning_str", None)
+        two_spans = separator is not None and not cfg.trim_reasoning
+        variants = ("", "_trim") if two_spans else ("",)
+        targets = {(bank, layer, v): out_root / f"token_proj_{bank}_B{layer}{v}" / f"{dataset.name}.npz"
+                   for bank in banks for layer in layers for v in variants}
+        if all(p.exists() for p in targets.values()):
+            logger.info(f"{dataset.name}: already projected; skipped")
+            continue
+        folder = partial_root / f"{dataset.name}__B{tag}__{'-'.join(banks)}"
+        tokens, attention, masks, labels_by_variant = tokenize_for_pool(
+            dataset, experiment.tokenizer, flags, separator if two_spans else None, folder)
+        kept = [i for i in range(len(dataset)) if all(bool(m[i].any()) for m in masks)]
+        true_lens = [int(n) for n in attention.sum(1)]
+        padded = tokens.shape[1]
+        done = done_rows(folder)
+        missing = [i for i in kept if i not in done]
+        logger.info(f"{dataset.name}: {len(kept)} rows, {len(done)} already projected")
+
+        def run_batch(batch: list[int]) -> None:
+            width = max(true_lens[i] for i in batch)
+            rows = torch.tensor(batch)
+            cols = slice(padded - width, None)
+            proj = trace_token_projections(remote, tokens[rows][:, cols], attention[rows][:, cols],
+                                           directions, stop_early=True).float().numpy()
+            # ragged: each row's real tokens are its last true_len columns (left padding)
+            pieces = [proj[k, width - true_lens[i]:] for k, i in enumerate(batch)]
+            folder.mkdir(parents=True, exist_ok=True)
+            path = folder / f"{min(batch):06d}_{len(batch)}.npz"
+            with open(path.with_suffix(".partial"), "wb") as f:
+                np.savez(f, rows=np.array(batch), lengths=np.array([len(p) for p in pieces]),
+                         proj=np.concatenate(pieces).astype(np.float32))
+            os.replace(path.with_suffix(".partial"), path)
+            done.update(batch)
+            logger.info(f"  {dataset.name}: {len(done)}/{len(kept)} rows ({len(batch)} x {width} tokens)")
+
+        key = BudgetMemory.key(f"{MODEL_REPOS[cfg.model_name]}+proj|{dataset.name}", len(layers))
+        if missing:
+            execute_in_batches(missing, lambda i: true_lens[i], memory.suggest(key, token_budget),
+                               run_batch, memory=memory, memory_key=key)
+        # assemble, in `kept` order
+        parts: dict[int, np.ndarray] = {}
+        for path in sorted(folder.glob("*.npz")):
+            with np.load(path) as saved:
+                offsets = np.concatenate([[0], np.cumsum(saved["lengths"])])
+                for k, row in enumerate(saved["rows"]):
+                    parts[int(row)] = saved["proj"][offsets[k]:offsets[k + 1]]
+        lengths = [true_lens[i] for i in kept]
+        offsets = np.concatenate([[0], np.cumsum(lengths)]).astype(np.int64)
+        stacked = np.concatenate([parts[i] for i in kept])  # [tokens, layers, banks*axes]
+        for v_index, variant in enumerate(variants):
+            detect = np.concatenate([masks[v_index][i, padded - true_lens[i]:].numpy() for i in kept]).astype(bool)
+            labels = np.array([labels_by_variant[variant][i] for i in kept])
+            for j, layer in enumerate(layers):
+                for b, bank in enumerate(banks):
+                    cols_b = slice(b * len(axis_names), (b + 1) * len(axis_names))
+                    path = targets[(bank, layer, variant)]
+                    path.parent.mkdir(parents=True, exist_ok=True)
+                    TokenProjections(name=dataset.name, layer=layer, axis_names=axis_names,
+                                     proj=stacked[:, j, cols_b].astype(np.float32), detect=detect,
+                                     offsets=offsets, labels=labels).save(path)
+        logger.info(f"{dataset.name}: written for banks {banks} at blocks {layers}")
 
 
 # --- the RepE base probe ----------------------------------------------------------------------
@@ -493,7 +615,25 @@ LB_SOURCE = "zero-shot, Liars' Bench average"
 HPKR_SOURCE = "zero-shot, HP-KR"
 
 
-def layer_table(layer: int, bank: str = "ext") -> "pd.DataFrame":
+def _spec(model: str | None):
+    from deception_detection.scripts import lb_models
+
+    return lb_models.spec(model)
+
+
+def transfer_labels(model: str | None = None) -> dict[str, str]:
+    """TRANSFER, with the raw-activation arm named by the model's residual width."""
+    hidden = _spec(model).hidden
+    return {feature: label.replace("8192", str(hidden)) if feature == "baseline" else label
+            for feature, label in TRANSFER.items()}
+
+
+def model_results_dir(layer: int, bank: str = "ext", model: str | None = None) -> Path:
+    """`results_dir`, or another model's folder (`ModelSpec.results`)."""
+    return results_dir(layer, bank) if model is None else _spec(model).results("persona_ood", layer, bank)
+
+
+def layer_table(layer: int, bank: str = "ext", model: str | None = None) -> "pd.DataFrame":
     """One layer's headline numbers, long format: source, arm, metric, value.
 
     Arms the bank does not have -- the extended and knowledge-denial ones under `bank="orig"` --
@@ -504,10 +644,10 @@ def layer_table(layer: int, bank: str = "ext") -> "pd.DataFrame":
 
     from deception_detection.scripts import persona_ood as P
 
-    out, rows = results_dir(layer, bank), []
+    out, rows = model_results_dir(layer, bank, model), []
     for file, metric in (("summary.csv", "auroc"), ("summary_balacc.csv", "balacc")):
         table = pd.read_csv(out / file).set_index("features")
-        for feature, label in TRANSFER.items():
+        for feature, label in transfer_labels(model).items():
             value = (float(table.loc[feature, "off_diagonal_mean"])
                      if feature in table.index else float("nan"))
             rows.append({"layer": layer, "source": TRANSFER_SOURCE, "arm": label,
@@ -589,12 +729,58 @@ python deception_detection/scripts/layer_sweep.py analyse --layer {layer} --bank
 """
 
 
-def analyse(layer: int, bank: str = "ext") -> None:
+def _model_layer_summary(layer: int, bank: str, model: str) -> str:
+    """`_layer_summary`'s tables for another model, under a heading of its own."""
+    s = _spec(model)
+    table = layer_table(layer, bank, model)
+
+    def cell(source: str, arm: str, metric: str) -> str:
+        value = table[(table.source == source) & (table.arm == arm) & (table.metric == metric)]["value"]
+        return f"{value.iloc[0]:.3f}" if len(value) and np.isfinite(value.iloc[0]) else "n/a"
+
+    transfer = "\n".join(
+        f"| {label} | {cell(TRANSFER_SOURCE, label, 'auroc')} | {cell(TRANSFER_SOURCE, label, 'balacc')} |"
+        for label in transfer_labels(model).values())
+    zero = "\n".join(
+        f"| {label} | {cell(LB_SOURCE, label, 'auroc')} | {cell(LB_SOURCE, label, 'balacc')} | "
+        f"{cell(HPKR_SOURCE, label, 'auroc')} | {cell(HPKR_SOURCE, label, 'balacc')} |"
+        for _, label, _ in ZERO_SHOT)
+    names = ", ".join(s.datasets)
+    return f"""# {s.short}, block {layer} ({bank} persona bank)
+
+The revised thesis's per-layer persona study (`persona_ood_ext_L*` for Llama-3.3-70B), run on
+{s.title} at decoder block {layer} of {s.n_blocks}. Its Liars' Bench datasets: {names}; RepE
+is the base probe's training set. Persona vectors: `{s.bank_dir(bank)}`. HP-KR columns are n/a
+where the model has no HP-KR rows.
+
+| transfer, off-diagonal mean | AUROC | balanced accuracy @1% FPR |
+|---|---|---|
+{transfer}
+
+| zero-shot (threshold: 1% FPR on Alpaca) | LB avg AUROC | LB avg balanced accuracy | HP-KR AUROC | HP-KR balanced accuracy |
+|---|---|---|---|---|
+{zero}
+
+Reproduce:
+
+```
+{"" if s.key == "llama" else f'''python deception_detection/scripts/layer_sweep.py pool --config XXXX-9-{s.key}-all.yaml --layers ...
+python deception_detection/scripts/layer_sweep.py probe --config XXXX-9-{s.key}-all.yaml --layer {layer}
+'''}python deception_detection/scripts/layer_sweep.py analyse --model {s.key} --layer {layer} --bank {bank}
+```
+"""
+
+
+def analyse(layer: int, bank: str = "ext", model: str | None = None) -> None:
     """Layer `layer`'s results, made as `persona_ood_ext_L44/summary.md` makes layer 44's.
 
     `bank` picks the persona folder: "ext" for the 36-persona extraction, "orig" for the
     published 26. The pooled activations and the base probe are the same either way -- only the
     directions they are scored against change.
+
+    `model` (`lb_models.SPECS`) runs another model's block `layer` instead, with its pooled
+    folders, base probe and persona bank (`bank` is then one of its `banks`, e.g. "s3"); without it,
+    everything is Llama's, as before.
     """
     import matplotlib
 
@@ -602,28 +788,65 @@ def analyse(layer: int, bank: str = "ext") -> None:
     from deception_detection.scripts import persona_ood as P
     from deception_detection.scripts import persona_ood_figures as F
 
-    out, pooled, vectors = results_dir(layer, bank), pooled_dir(layer), vectors_dir(bank)
-    P.run(pooled_dir=pooled, out_dir=out, layer=layer, vectors=vectors)
+    s = _spec(model)
+    F.for_model(s.title, s.short, s.hidden)
+    if model is None:
+        out, pooled, vectors, probe_run = results_dir(layer, bank), pooled_dir(layer), vectors_dir(bank), base_run(layer)
+    else:
+        out, pooled = s.results("persona_ood", layer, bank), s.pooled_dirs(layer)
+        vectors, probe_run = s.bank_dir(bank), s.probe_run(layer)
+    P.run(pooled_dir=pooled, out_dir=out, layer=layer, vectors=vectors, model=model)
     P.zeroshot(pooled_dir=pooled, out_dir=out, layer=layer, vectors=vectors,
-               base_run=base_run(layer), base_run_check=False)
+               base_run=probe_run, base_run_check=False)
     for figure in (F.run, F.variants, F.syc, F.fig2, F.zeroshot):
         figure(out)
     # Layers 20, 40 and 44 have hand-written write-ups that predate this script, and re-running
     # the sweep over them once replaced all three with the template. Only a file this function
     # wrote -- or no file -- is replaced.
     summary = out / "summary.md"
-    if replaceable(summary, layer):
+    if model is not None and (model != "llama" or bank not in ("ext", "orig")):
+        summary.write_text(_model_layer_summary(layer, bank, model), encoding="utf-8")
+    elif replaceable(summary, layer):
         summary.write_text(_layer_summary(layer, bank), encoding="utf-8")
     else:
         logger.info(f"kept the hand-written {summary}; delete it to regenerate")
     logger.info(f"layer {layer} ({bank}): results in {out}")
 
 
-def depth(layers=ALL_LAYERS, out_dir: str | Path | None = None, bank: str = "ext") -> None:
+def loo(layer: int, model: str, bank: str | None = None) -> None:
+    """`persona_ood.py loo` (pooled leave-one-dataset-out, the thesis's `loo_L{20,40}`) on another
+    model's block `layer`, from its pooled folders and bank."""
+    from deception_detection.scripts import persona_ood as P
+
+    s = _spec(model)
+    bank = bank or s.primary_bank
+    P.loo(pooled_dir=s.pooled_dirs(layer), out_dir=s.results("loo", layer, bank), layer=layer,
+          vectors=s.bank_dir(bank), model=model)
+
+
+def followup(model: str, bank: str | None = None) -> None:
+    """The persona study on the Follow-Up turn's "No" at the model's Liars' Bench block (the thesis's
+    `persona_ood_followup_L20`: Tables B.7 and B.8), from `pool --config ...-followup.yaml`."""
+    from deception_detection.scripts import persona_ood as P
+
+    s = _spec(model)
+    bank = bank or s.primary_bank
+    layer = s.lb_block
+    out = s.results("persona_ood_followup", layer, bank)
+    P.run(pooled_dir=s.pooled_dirs(layer, followup=True), out_dir=out, layer=layer, vectors=s.bank_dir(bank),
+          model=model)
+    P.zeroshot(pooled_dir=s.pooled_dirs(layer, followup=True), out_dir=out, layer=layer, vectors=s.bank_dir(bank))
+
+
+def depth(layers=None, out_dir: str | Path | None = None, bank: str = "ext",
+          model: str | None = None) -> None:
     """Every layer's headline numbers in one table (`depth.csv`) and one figure (`depth.png`).
 
     `bank="orig"` reads the published-26 sweep instead, into `persona_depth_orig/`. Arms that
     folder has no personas for come back empty and are dropped from the figure's legend.
+
+    `model` reads another model's sweep (`analyse --model`), every block of its `layers` by
+    default, into `ModelSpec.results("persona_depth", bank=bank)`.
     """
     import matplotlib
 
@@ -633,13 +856,20 @@ def depth(layers=ALL_LAYERS, out_dir: str | Path | None = None, bank: str = "ext
 
     from deception_detection.scripts.persona_ood_figures import INK, INK_MUTED, SURFACE  # noqa
 
+    s = _spec(model)
+    if layers is None:
+        layers = ALL_LAYERS if model is None else s.layers
     if out_dir is None:
-        out_dir = DEPTH_DIR if bank == "ext" else DEPTH_DIR.with_name("persona_depth_orig")
+        if model is None:
+            out_dir = DEPTH_DIR if bank == "ext" else DEPTH_DIR.with_name("persona_depth_orig")
+        else:
+            out_dir = s.results("persona_depth", bank=bank)
     out_dir = Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
-    table = pd.concat([layer_table(layer, bank) for layer in layers], ignore_index=True)
+    table = pd.concat([layer_table(layer, bank, model) for layer in layers], ignore_index=True)
     table.insert(1, "bank", bank)
     table.to_csv(out_dir / "depth.csv", index=False)
+    raw_label = transfer_labels(model)["baseline"]
 
     # Colour carries the family -- orange for the published contrast and its sycophancy widening,
     # blue for the knowledge-denial one -- so within a family the lines share a hue and can run
@@ -652,7 +882,7 @@ def depth(layers=ALL_LAYERS, out_dir: str | Path | None = None, bank: str = "ext
         "extended PCs (k=3)": ("#104281", (0, (1, 1.6)), "^"),
         "unified axis (13v12)": ("#b5399e", "-", "D"),
         "deception axis (8v7)": ("#eb6834", "-", "o"),
-        "single-source probe (8192-d)": ("#898781", (0, (6, 2, 1, 2)), "v"),
+        raw_label: ("#898781", (0, (6, 2, 1, 2)), "v"),
     }
     arm_style = {label: (colour, *transfer_style.get(label, (None, "-", "o"))[1:])
                  for _, label, colour in ZERO_SHOT}
@@ -698,14 +928,18 @@ def depth(layers=ALL_LAYERS, out_dir: str | Path | None = None, bank: str = "ext
                       edgecolor="none", framealpha=0.95)
     for ax in axes[1]:
         ax.set_xlabel("layer (block output)", fontsize=9, color=INK_MUTED)
-    personas = "36 personas" if bank == "ext" else "the published 26 personas"
-    fig.suptitle(
-        "The persona study across depth: Llama-3.3-70B-Instruct, every 4th layer from 20 "
-        f"({personas})", fontsize=12, color=INK, x=0.06, ha="left")
+    if model is None:
+        personas = "36 personas" if bank == "ext" else "the published 26 personas"
+        title = f"The persona study across depth: Llama-3.3-70B-Instruct, every 4th layer from 20 ({personas})"
+    else:
+        title = (f"The persona study across depth: {s.title}, {len(layers)} of its {s.n_blocks} blocks "
+                 f"({bank} persona bank)")
+    fig.suptitle(title, fontsize=12, color=INK, x=0.06, ha="left")
     fig.tight_layout()
     fig.savefig(out_dir / "depth.png", dpi=200, bbox_inches="tight", facecolor=SURFACE)
     logger.info(f"wrote {out_dir / 'depth.csv'} and depth.png")
 
 
 if __name__ == "__main__":
-    fire.Fire({"check40": check40, "pool": pool, "probe": probe, "analyse": analyse, "depth": depth})
+    fire.Fire({"check40": check40, "pool": pool, "probe": probe, "project": project, "analyse": analyse,
+               "loo": loo, "followup": followup, "depth": depth})

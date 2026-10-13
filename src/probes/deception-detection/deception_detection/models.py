@@ -103,7 +103,7 @@ def pin_template_date(template: str, date: str) -> str:
     return template.replace(MISTRAL_DATE_CALL, f'"{date}"')
 
 
-def prune_to_decoder_blocks(model) -> None:
+def prune_to_decoder_blocks(model, keep_projections: bool = False) -> None:
     """Cut an nnsight VLM wrapper's envoy tree down to the chain a block read uses:
     `model.model.language_model.layers` and the blocks themselves, without their insides.
 
@@ -113,7 +113,9 @@ def prune_to_decoder_blocks(model) -> None:
     differently and its rotary embeddings were restructured -- so a request failed with "Unknown
     persistent id" for each such path. Reads touch only a block's output, so the pruned modules
     are never referenced; the meta modules themselves stay, and the server runs its own model.
-    The trace-time LoRA, which needs each block's projections, is not used with these models.
+    `keep_projections` keeps each block's attention and MLP projections as well (and nothing
+    else of the block): the trace-time LoRA (`lora_intervention`) reads and edits them. Their
+    paths, `...layers.{i}.self_attn.q_proj` and so on, are the same under both transformers.
     """
     from nnsight.intervention.envoy import Envoy
 
@@ -124,7 +126,25 @@ def prune_to_decoder_blocks(model) -> None:
     keep_only(model.model, {"language_model"})
     keep_only(model.model.language_model, {"layers"})
     for block in model.model.language_model.layers:
-        keep_only(block, set())
+        if keep_projections:
+            keep_only(block, {"self_attn", "mlp"})
+            keep_only(block.self_attn, {"q_proj", "k_proj", "v_proj", "o_proj"})
+            keep_only(block.mlp, {"gate_proj", "up_proj", "down_proj"})
+        else:
+            keep_only(block, set())
+
+
+def adapter_model(model_name, template_date: str | None = None):
+    """The remote base model for reads through a LoRA adapter: as `get_model_and_tokenizer`'s,
+    but a multimodal wrapper keeps its blocks' projections (`prune_to_decoder_blocks`)."""
+    model_name = ModelName(model_name)
+    tokenizer = load_tokenizer(model_name, template_date)
+    wrapper = VisionLanguageModel if model_name.is_vlm else LanguageModel
+    model = wrapper(MODEL_REPOS[model_name])
+    if model_name.is_vlm:
+        prune_to_decoder_blocks(model, keep_projections=True)
+    model.eval()  # on the wrapped module; the call returns that module, not the wrapper
+    return model, tokenizer
 
 
 def get_model_name(model_name: ModelName) -> str:
@@ -143,6 +163,13 @@ def get_num_layers_for_model(model_name: ModelName) -> int:
     else:
         raise NotImplementedError(f"No number of layers for model {model_name}")
     return n_layers[model_name.size]
+
+
+def hidden_size(model) -> int:
+    """The residual width of a loaded model. The vision-language wrappers (Mistral-3, Gemma-3) keep
+    it in `config.text_config`; their top-level config has none."""
+    config = model.config
+    return int(getattr(config, "hidden_size", None) or config.text_config.hidden_size)
 
 
 def load_tokenizer(

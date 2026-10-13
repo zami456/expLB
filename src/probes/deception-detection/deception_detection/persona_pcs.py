@@ -171,13 +171,17 @@ def _axes_from_groups(vectors: dict[str, np.ndarray]) -> dict[str, np.ndarray]:
     return axes
 
 
-def load_bank_at_layer(layer: int, path: Path | str = VECTORS_DIR) -> PersonaBank:
+def load_bank_at_layer(layer: int, path: Path | str = VECTORS_DIR,
+                       model: str = "meta-llama/Llama-3.3-70B-Instruct") -> PersonaBank:
     """Build a bank at any layer from the per-persona all-layer vectors.
 
     `load_bank()` reads a single file that only exists at layer 20. This reads the 26 per-persona
     files instead, so the same experiment can run at any depth -- which matters because a persona
     direction lives in the residual stream *at one layer*: projecting layer-40 activations onto
     layer-20 directions is not a weaker measurement, it is a meaningless one.
+
+    The files are plain tensors, lists and strings, so they load with `weights_only=True`; the other
+    models' banks come from a shared drive. `model` is only a label, as the files do not record it.
     """
     path = Path(path)
     files = {p.stem: p for p in path.glob("*.pt")}
@@ -193,7 +197,7 @@ def load_bank_at_layer(layer: int, path: Path | str = VECTORS_DIR) -> PersonaBan
     vectors: dict[str, np.ndarray] = {}
     n_rollouts: list[int] = []
     for name in names:
-        payload = torch.load(files[name], weights_only=False)
+        payload = torch.load(files[name], weights_only=True)
         stored = payload["vector"]
         # a file may hold only the layers it was read at, listed in `layers`; the full
         # extractions hold all 80 in order, with or without the list
@@ -212,8 +216,7 @@ def load_bank_at_layer(layer: int, path: Path | str = VECTORS_DIR) -> PersonaBan
         axes=_axes_from_groups(vectors),
         n_rollouts=n_rollouts,
         layer=layer,
-        # not recorded in the per-persona files; same run as the single-layer bank
-        model="meta-llama/Llama-3.3-70B-Instruct",
+        model=model,
     )
 
 

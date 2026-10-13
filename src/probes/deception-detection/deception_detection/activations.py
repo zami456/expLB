@@ -130,6 +130,40 @@ def trace_layer_outputs(
     return stacked[:, :, index]
 
 
+def trace_token_projections(
+    model,
+    tokens: Tensor,
+    attention_mask: Tensor,
+    directions: dict[int, Tensor],
+    remote: bool = True,
+    stop_early: bool = True,
+) -> Tensor:
+    """One forward pass: every position's projection onto each block's directions,
+    ``[batch, seq, len(directions), k]`` float32, blocks in sorted order.
+
+    ``directions`` maps a block to ``[k, emb]`` (unit persona axes at that block). The product is
+    taken on the server in float32 (`persona_positions.project` takes it locally from the cached
+    activations), so a dataset's per-token reads come back as k numbers per position rather than
+    every position's activation. Block lookup, Gemma-3's tuple and ``stop_early`` as in
+    ``trace_layer_outputs``.
+    """
+    order = sorted(directions)
+    blocks = decoder_blocks(model)
+    n_rows = tokens.shape[0]
+    with model.trace(tokens, attention_mask=attention_mask, remote=remote) as tracer:
+        outputs = list().save()
+        for block in order:
+            output = blocks[block].output
+            output = output[0] if isinstance(output, tuple) else output
+            if output.ndim != 3 or output.shape[0] != n_rows:
+                raise ValueError(f"block {block} returned shape {tuple(output.shape)}")
+            d = directions[block].to(output.device, torch.float32)
+            outputs.append(output.float() @ d.T)
+        if stop_early:
+            tracer.stop()
+    return torch.stack(list(outputs), dim=2)
+
+
 def trace_span_tokens(
     model,
     tokens: Tensor,

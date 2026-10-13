@@ -58,6 +58,157 @@ ANSWER_PROMPT = "{question}\n\nChoices:\n{choices}\n\nAnswer with the letter of 
 LETTERS = "ABCD"
 
 
+# --- one model's inputs ----------------------------------------------------------------------------
+#
+# The studies below read, at a layer: K's 120 general items (each item's two forced-denial reads),
+# the pooled Liars' Bench sets, the persona bank's directions, HP-KR's rows and wording slices, and
+# the same-layer RepE probe. `Inputs` says where each comes from for one model and persona bank.
+# Llama with the thesis's bank ("ext") is the thesis itself: its reads, folders and outputs, read by
+# the same code paths as before. Another model takes K from `k_models.py`'s reads, its pooled folders
+# and bank from `lb_models.SPECS`, and writes under `results/xmodel/<model>/recall_denial_<bank>/`.
+
+# HP-KR's identical-text slice: lies and honest replies that are one sentence, word for word. Llama's
+# is the thesis's; Mistral's released rows use the longer sentence most (494 lies / 729 honest, and
+# 126 / 218 for Llama's). Qwen's released set has 44 honest denials and Gemma's none, so theirs come
+# from the rebuilt rows (`k_models.hpkr_score`).
+IDENTICAL_TEXT = {"llama": "I do not know the answer.", "mistral": "I do not know the answer to the question."}
+MIN_SLICE_ROWS = 10  # a slice is scored only with at least this many rows of each class
+
+
+class Inputs:
+    def __init__(self, model: str | None = None, bank: str | None = None):
+        from deception_detection.scripts import lb_models as LB
+
+        self.spec = LB.spec(model)
+        self.model = model
+        self.bank = bank or self.spec.primary_bank
+        self.llama = self.spec.key == "llama"
+        self.thesis = self.llama and self.bank == "ext"
+
+    @property
+    def out(self) -> Path:
+        if self.thesis:
+            return OUT
+        from deception_detection.scripts import lb_models as LB
+
+        return LB.XMODEL_RESULTS / self.spec.key / f"recall_denial_{self.bank}"
+
+    @property
+    def datasets(self) -> tuple[str, ...]:
+        """The Liars' Bench sets the five-dataset mean averages over (Llama's five, in its order)."""
+        from deception_detection.scripts.k_robustness import FIVE
+
+        return FIVE if self.llama else self.spec.datasets
+
+    def pooled(self, layer: int):
+        from deception_detection.scripts import persona_ood as P
+
+        return P.load_pooled(pooled_dir(layer) if self.llama else self.spec.pooled_dirs(layer))
+
+    def bank_at(self, layer: int):
+        from deception_detection import persona_pcs as pcs
+
+        bank = pcs.load_bank_at_layer(layer, self.spec.bank_dir(self.bank))
+        bank.model = self.spec.title  # a label only; the files do not record it
+        return bank
+
+    def item_means(self, layer: int, stored_only: bool = False) -> tuple[np.ndarray, np.ndarray, list[str]]:
+        """Each general item's mean over its two forced sentences at `layer`, whether the model
+        knows it, and the item ids (`k_robustness.item_means` for Llama; `stored_only` reads its
+        first pass alone, as `bootstrap` does)."""
+        from deception_detection.scripts import k_robustness as kr
+
+        if self.llama:
+            return kr.item_means(layer, folders=(OUT / "parts_answer",) if stored_only else None)
+        from deception_detection.scripts import k_models as km
+
+        target = km._target(self.spec.key)
+        rows = [r for r in km._rows(target) if r["rank"] < N_GENERAL]
+        reads = km._k_reads(target)
+        vecs: dict[str, list[np.ndarray]] = {}
+        for r in rows:
+            v = reads.get(r["row"], {}).get(layer)
+            if v is not None:
+                vecs.setdefault(r["item"], []).append(v)
+        items = sorted({r["item"] for r in rows})
+        missing = [i for i in items if len(vecs.get(i, [])) < 2]
+        if missing:
+            raise RuntimeError(f"{self.spec.key} block {layer}: {len(missing)} items lack both reads")
+        knows = {r["item"]: bool(r["knows"]) for r in rows}
+        return (np.stack([np.mean(vecs[i][:2], axis=0) for i in items]), np.array([knows[i] for i in items]),
+                items)
+
+    def k(self, layer: int) -> np.ndarray:
+        """K at `layer`: the stored direction where the thesis wrote one, else rebuilt from the item
+        means (equal weights per item, so the same unit vector)."""
+        if self.llama:
+            stored = dict(np.load(OUT / "directions.npz"))
+            if f"L{layer}|none|general" in stored:
+                return stored[f"L{layer}|none|general"]
+        from deception_detection.scripts.k_robustness import weights
+
+        X, known, _ = self.item_means(layer)
+        return _unit(X.T @ weights(known, np.flatnonzero(known), np.flatnonzero(~known)))
+
+    def hpkr(self) -> tuple[pd.DataFrame, dict[str, np.ndarray]] | None:
+        """HP-KR's rows in pooled order and the thesis's slices of them (full, denials, knows,
+        identical text), or None for a model without released HP-KR rows. A slice with fewer than
+        `MIN_SLICE_ROWS` rows of either class is left out."""
+        if self.llama:
+            from deception_detection.scripts.knowledge_bank import _slices
+
+            frame = hpkr_frame()
+            return frame, _slices(frame)
+        if HPKR not in self.spec.datasets:
+            return None
+        from deception_detection.scripts import k_models as km
+
+        frame = km.hpkr_frame(km._target(self.spec.key))
+        y, denied = frame["lie"].to_numpy() == 1, frame["denied"].to_numpy()
+        slices = {"full": np.ones(len(frame), bool), "denials": denied,
+                  "knows": frame["belief"].to_numpy() >= 0}
+        if self.spec.key in IDENTICAL_TEXT:
+            slices["identical text"] = denied & (frame["text"].to_numpy() == IDENTICAL_TEXT[self.spec.key])
+        return frame, {name: m for name, m in slices.items()
+                       if min(int((m & y).sum()), int((m & ~y).sum())) >= MIN_SLICE_ROWS}
+
+    def probe(self, layer: int):
+        """The same-layer RepE base probe as a score function, or None where none was trained."""
+        from deception_detection.scripts import persona_ood as P
+
+        run = self.spec.probe_run(layer)
+        return P.run_probe(run) if (run / "detector.pt").exists() else None
+
+    def thesis_directions(self, layer: int) -> dict:
+        """`hpkr_wording.directions` for this model and bank: the persona contrasts and the probe."""
+        if self.thesis:
+            from deception_detection.scripts.hpkr_wording import directions
+
+            return directions(layer)
+        from deception_detection import persona_pcs as pcs
+        from deception_detection.scripts.hpkr_wording import PLAIN, SINCERE
+
+        bank = self.bank_at(layer)
+
+        def contrast(pos, neg):
+            d = bank.vectors_for(pos).mean(0) - bank.vectors_for(neg).mean(0)
+            d = d / np.linalg.norm(d)
+            return lambda z, d=d: z @ d
+
+        out = {
+            "knowledge-denial (4v6)": contrast(pcs.KNOWLEDGE_DENIAL_PERSONAS, pcs.KNOWLEDGE_CANDOUR_PERSONAS),
+            "extended (12v13)": contrast(pcs.DECEPTION_PERSONAS + pcs.KNOWLEDGE_DENIAL_PERSONAS,
+                                         pcs.HONESTY_PERSONAS + pcs.KNOWLEDGE_CANDOUR_PERSONAS),
+            "published (8v7)": contrast(pcs.DECEPTION_PERSONAS, pcs.HONESTY_PERSONAS),
+            "feigned vs sincere ignorance (4v3)": contrast(pcs.KNOWLEDGE_DENIAL_PERSONAS, SINCERE),
+            "feigned vs plain assertion (4v3)": contrast(pcs.KNOWLEDGE_DENIAL_PERSONAS, PLAIN),
+        }
+        probe = self.probe(layer)
+        if probe is not None:
+            out["base probe (RepE)"] = probe
+        return out
+
+
 # --- items -------------------------------------------------------------------------------------
 
 def build_prompt(question: str, choices: list[str]) -> str:
@@ -278,20 +429,36 @@ def directions(layers=LAYERS) -> None:
 
 # --- evaluation on HP-KR -------------------------------------------------------------------------
 
-def evaluate(layers=LAYERS) -> None:
-    from deception_detection.scripts.knowledge_bank import _slices
-
-    frame = hpkr_frame()
+def evaluate(layers=None, model: str | None = None, bank: str | None = None) -> None:
+    """K on HP-KR's slices (full, denials, knows, identical text), with and without the wording
+    direction, beside Fix 1's chemistry K, the random band and the flag rates. Another model has K
+    alone (`none|general`) and its own no-role 2x2 (`forced_denial_bank.norole_*`); a model without
+    released HP-KR rows has nothing to evaluate here."""
+    inputs = Inputs(model, bank)
+    layers = layers or inputs.spec.named_layers
+    hpkr = inputs.hpkr()
+    if hpkr is None:
+        logger.info(f"{inputs.spec.key} has no released HP-KR rows; see k_models.hpkr_score")
+        return
+    frame, slices = hpkr
     y, denied = frame["lie"].to_numpy(), frame["denied"].to_numpy()
-    slices = _slices(frame)
-    new = dict(np.load(OUT / "directions.npz"))
-    fix1 = dict(np.load(fdb.OUT / "directions.npz"))
+    new = dict(np.load(OUT / "directions.npz")) if inputs.llama else None
+    fix1 = dict(np.load(fdb.OUT / "directions.npz" if inputs.llama
+                        else fdb.norole_out(inputs.spec.key) / "directions.npz"))
+    out = inputs.out
+    out.mkdir(parents=True, exist_ok=True)
     rng = np.random.default_rng(SEED)
     rows, nulls, cosines, flags = [], [], [], []
     for layer in [int(x) for x in layers]:
-        z = np.load(pooled_dir(layer) / f"{HPKR}.npz")["pooled"].astype(np.float64)
-        control = np.load(pooled_dir(layer) / f"{CONTROL}.npz")["pooled"].astype(np.float64)
-        dirs = {k.split("|", 1)[1]: v for k, v in new.items() if k.startswith(f"L{layer}|")}
+        pooled = inputs.pooled(layer) if not inputs.llama else None
+        z = (np.load(pooled_dir(layer) / f"{HPKR}.npz")["pooled"].astype(np.float64) if inputs.llama
+             else pooled[HPKR].z)
+        control = (np.load(pooled_dir(layer) / f"{CONTROL}.npz")["pooled"].astype(np.float64) if inputs.llama
+                   else pooled[CONTROL].z)
+        dirs = ({k.split("|", 1)[1]: v for k, v in new.items() if k.startswith(f"L{layer}|")} if inputs.llama
+                else {"none|general": inputs.k(layer)})
+        if not inputs.llama:  # Fix 1's chemistry K, as `directions` writes `none|chem` for Llama
+            dirs["none|chem"] = fix1[f"answer|L{layer}|D_know_norole"]
         refs = {"Fix 1 D_know_norole": fix1[f"answer|L{layer}|D_know_norole"], "d_wording": fix1[f"answer|L{layer}|d_wording"],
                 "d_know_pure": fix1[f"answer|L{layer}|d_know_pure"], "d_false": fix1[f"answer|L{layer}|d_false"]}
         wording = refs["d_wording"]
@@ -318,16 +485,17 @@ def evaluate(layers=LAYERS) -> None:
                           "honest claims flagged": flag[(y == 0) & ~denied].mean()})
         logger.info(f"layer {layer} evaluated")
     table = pd.DataFrame(rows)
-    table.round(4).to_csv(OUT / "auroc.csv", index=False)
-    pd.DataFrame(nulls).round(4).to_csv(OUT / "null.csv", index=False)
-    pd.DataFrame(cosines).round(4).to_csv(OUT / "cosines.csv", index=False)
-    pd.DataFrame(flags).round(4).to_csv(OUT / "flags.csv", index=False)
+    table.round(4).to_csv(out / "auroc.csv", index=False)
+    pd.DataFrame(nulls).round(4).to_csv(out / "null.csv", index=False)
+    pd.DataFrame(cosines).round(4).to_csv(out / "cosines.csv", index=False)
+    pd.DataFrame(flags).round(4).to_csv(out / "flags.csv", index=False)
     pd.set_option("display.width", 250)
-    show = table[table["slice"].isin(["denials", "identical text", "knows", "full"])].copy()
+    shown = [c for c in ("identical text", "denials", "knows", "full") if c in slices]
+    show = table[table["slice"].isin(shown)].copy()
     show["cell"] = show.apply(lambda r: f"{r.auroc:.3f} (p{r.p_null:.2f})", axis=1)
-    wide = show.pivot(index=["layer", "direction"], columns="slice", values="cell")[["identical text", "denials", "knows", "full"]]
+    wide = show.pivot(index=["layer", "direction"], columns="slice", values="cell")[shown]
     logger.info(f"HP-KR AUROC (p = share of {N_NULL} random directions at least as high):\n{wide.to_string()}")
-    band = pd.DataFrame(nulls).pivot(index="layer", columns="slice", values="p97.5")[["identical text", "denials", "knows", "full"]]
+    band = pd.DataFrame(nulls).pivot(index="layer", columns="slice", values="p97.5")[shown]
     logger.info(f"random 97.5%:\n{band.round(3).to_string()}")
     logger.info(f"cosines:\n{pd.DataFrame(cosines).round(3).to_string(index=False)}")
     logger.info(f"flags at the Alpaca 1% FPR threshold:\n{pd.DataFrame(flags).round(3).to_string(index=False)}")
@@ -342,21 +510,33 @@ THESIS_ON_DATASETS = ("knowledge-denial (4v6)", "extended (12v13)", "published (
 N_NULL_DATASETS = 1000
 
 
-def datasets(layers=LAYERS) -> None:
+def knowledge_scorers(inputs: Inputs, layer: int) -> dict:
+    """The knowledge directions scored on the datasets. Llama has the thesis's four (two arms, two
+    item sets); another model has K alone, read in `k_models.py`."""
+    if inputs.llama:
+        new = dict(np.load(OUT / "directions.npz"))
+        return {f"knowledge: {k}": (lambda z, v=new[f"L{layer}|{k}"]: z @ v) for k in NEW_ON_DATASETS}
+    return {"knowledge: none|general": (lambda z, v=inputs.k(layer): z @ v)}
+
+
+def datasets(layers=None, model: str | None = None, bank: str | None = None) -> None:
     """The knowledge directions zero-shot on every two-class Liars' Bench dataset, beside the
     thesis's directions and the RepE probe: AUROC, its rank among random directions, and balanced
-    accuracy at the threshold that flags 1% of Alpaca."""
+    accuracy at the threshold that flags 1% of Alpaca. `model` and `bank` as `Inputs`; `layers`
+    defaults to the model's 20, 36, 40 and 44."""
     from deception_detection.scripts import persona_ood as P
-    from deception_detection.scripts.hpkr_wording import directions as existing_directions
 
-    new = dict(np.load(OUT / "directions.npz"))
+    inputs = Inputs(model, bank)
+    layers = layers or inputs.spec.named_layers
+    out = inputs.out
+    out.mkdir(parents=True, exist_ok=True)
     rng = np.random.default_rng(SEED)
     rows, bands = [], []
     for layer in [int(x) for x in layers]:
-        pooled = P.load_pooled(pooled_dir(layer))
+        pooled = inputs.pooled(layer)
         control = pooled[CONTROL].z
-        scorers = {f"knowledge: {k}": (lambda z, v=new[f"L{layer}|{k}"]: z @ v) for k in NEW_ON_DATASETS}
-        existing = existing_directions(layer)
+        scorers = knowledge_scorers(inputs, layer)
+        existing = inputs.thesis_directions(layer)
         scorers |= {f"thesis: {k}": existing[k] for k in THESIS_ON_DATASETS if k in existing}
         hidden = control.shape[1]
         null = rng.standard_normal((N_NULL_DATASETS, hidden))
@@ -378,15 +558,15 @@ def datasets(layers=LAYERS) -> None:
                 rows.append(row)
         logger.info(f"layer {layer} scored")
     table = pd.DataFrame(rows)
-    table.round(4).to_csv(OUT / "datasets.csv", index=False)
-    pd.DataFrame(bands).round(4).to_csv(OUT / "datasets_null.csv", index=False)
+    table.round(4).to_csv(out / "datasets.csv", index=False)
+    pd.DataFrame(bands).round(4).to_csv(out / "datasets_null.csv", index=False)
     pd.set_option("display.width", 250)
-    order = ["CG", "HP-C", "HP-KR", "IT", "ID", "RepE"]
+    order = [SHORT[n] for n in inputs.datasets] + ["RepE"]
     for layer in [int(x) for x in layers]:
         t = table[table["layer"] == layer]
         wide = t.pivot(index="direction", columns="dataset", values="auroc")[order]
         wide["mean 6"] = wide.mean(1)
-        wide["mean 5 (no HP-KR)"] = wide.drop(columns="HP-KR")[[c for c in order if c != "HP-KR"]].mean(1)
+        wide["mean 5 (no HP-KR)"] = wide.drop(columns="HP-KR", errors="ignore")[[c for c in order if c != "HP-KR"]].mean(1)
         ranks = t.pivot(index="direction", columns="dataset", values="p_null")[order]
         band = pd.DataFrame(bands)
         band = band[band["layer"] == layer].set_index("dataset").loc[order, "p97.5"]
@@ -403,20 +583,24 @@ COMBINE_LAYERS = (36, 40, 44)
 N_BOOT_COMBINE = 500
 
 
-def combined_scorers(layer: int, control: np.ndarray) -> dict[str, np.ndarray]:
+def combined_scorers(layer: int, control: np.ndarray, inputs: Inputs | None = None) -> dict[str, np.ndarray]:
     """Every direction to score at `layer`: the persona and knowledge directions alone, and each
     pair combined two ways, both fixed without labels:
 
     - `vector`: unit(unit(persona) + unit(knowledge)), one direction in activation space;
     - `standardised`: persona / sd + knowledge / sd, each sd its projection's spread on Alpaca,
       so each contributes equally in score units.
-    """
-    from deception_detection import persona_pcs as pcs
 
-    bank = pcs.load_bank_at_layer(layer, pcs.EXTENDED_VECTORS_DIR)
-    new = dict(np.load(OUT / "directions.npz"))
+    `inputs` names another model or bank (`Inputs`); another model has the "general" K only.
+    """
+    inputs = inputs or Inputs()
+    bank = inputs.bank_at(layer)
     persona = {k: bank.axis_unit(v) for k, v in PERSONA_AXES.items()}
-    knowledge = {k: new[f"L{layer}|{v}"] for k, v in KNOWLEDGE_AXES.items()}
+    if inputs.llama:
+        new = dict(np.load(OUT / "directions.npz"))
+        knowledge = {k: new[f"L{layer}|{v}"] for k, v in KNOWLEDGE_AXES.items()}
+    else:
+        knowledge = {"general": inputs.k(layer)}
     out = {f"{k} alone": v for k, v in (persona | {f"knowledge {k2}": v2 for k2, v2 in knowledge.items()}).items()}
     for pname, p in persona.items():
         for kname, k in knowledge.items():
@@ -431,26 +615,30 @@ def standardised_sum(p: np.ndarray, k: np.ndarray, control: np.ndarray) -> np.nd
     return p / (control @ p).std() + k / (control @ k).std()
 
 
-def combine(layers=COMBINE_LAYERS) -> None:
-    """Persona and knowledge directions combined, zero-shot on every dataset and HP-KR's slices."""
-    from deception_detection import persona_pcs as pcs
+def combine(layers=None, model: str | None = None, bank: str | None = None) -> None:
+    """Persona and knowledge directions combined, zero-shot on every dataset and HP-KR's slices.
+    `model` and `bank` as `Inputs`; `layers` defaults to the model's 36, 40 and 44."""
     from deception_detection.scripts import persona_ood as P
-    from deception_detection.scripts.knowledge_bank import _slices
 
+    inputs = Inputs(model, bank)
+    layers = layers or inputs.spec.k_layers
+    out = inputs.out
+    out.mkdir(parents=True, exist_ok=True)
     rng = np.random.default_rng(SEED)
-    frame = hpkr_frame()
-    hp_slices = _slices(frame)
+    hpkr = inputs.hpkr()
+    frame, hp_slices = hpkr if hpkr is not None else (None, {})
     rows, slice_rows, boots, cos_rows = [], [], [], []
     for layer in [int(x) for x in layers]:
-        pooled = P.load_pooled(pooled_dir(layer))
+        pooled = inputs.pooled(layer)
         control = pooled[CONTROL].z
-        scorers = combined_scorers(layer, control)
-        bank = pcs.load_bank_at_layer(layer, pcs.EXTENDED_VECTORS_DIR)
-        new = dict(np.load(OUT / "directions.npz"))
+        scorers = combined_scorers(layer, control, inputs)
+        bank_l = inputs.bank_at(layer)
+        knowledge = ({k: dict(np.load(OUT / "directions.npz"))[f"L{layer}|{v}"] for k, v in KNOWLEDGE_AXES.items()}
+                     if inputs.llama else {"general": inputs.k(layer)})
         for pname, pax in PERSONA_AXES.items():
-            for kname, kax in KNOWLEDGE_AXES.items():
+            for kname, kvec in knowledge.items():
                 cos_rows.append({"layer": layer, "persona": pname, "knowledge": kname,
-                                 "cosine": float(bank.axis_unit(pax) @ new[f"L{layer}|{kax}"])})
+                                 "cosine": float(bank_l.axis_unit(pax) @ kvec)})
         null = rng.standard_normal((N_NULL_DATASETS, control.shape[1]))
         null /= np.linalg.norm(null, axis=1, keepdims=True)
         for name, data in sorted(pooled.items()):
@@ -466,7 +654,7 @@ def combine(layers=COMBINE_LAYERS) -> None:
                              "balacc_1pct_fpr": P.balanced_accuracy(data.y, s, thresholds[k])})
             # does adding knowledge cost the persona direction anything here? paired bootstrap
             for pname in PERSONA_AXES:
-                for kname in KNOWLEDGE_AXES:
+                for kname in knowledge:
                     for rule in ("vector", "standardised"):
                         combo, alone = scores[f"{pname} + {kname} ({rule})"], scores[f"{pname} alone"]
                         deltas = []
@@ -479,11 +667,11 @@ def combine(layers=COMBINE_LAYERS) -> None:
                                       "combination": f"{pname} + {kname} ({rule})",
                                       "delta": roc_auc_score(data.y, combo) - roc_auc_score(data.y, alone),
                                       "lo": lo, "hi": hi, "significant_loss": bool(hi < 0), "significant_gain": bool(lo > 0)})
-            if name == HPKR:
+            if name == HPKR and frame is not None:
                 y = data.y
                 if not (frame["lie"].to_numpy() == y).all():
                     raise RuntimeError("HP-KR rows do not line up with hpkr_frame")
-                for sname in ("identical text", "denials", "knows"):
+                for sname in [s for s in ("identical text", "denials", "knows") if s in hp_slices]:
                     m = hp_slices[sname]
                     sband = np.array([roc_auc_score(y[m], data.z[m] @ r) for r in null])
                     for k, s in scores.items():
@@ -492,12 +680,12 @@ def combine(layers=COMBINE_LAYERS) -> None:
                                            "p_null": float(np.mean(sband >= a)), "band97.5": float(np.quantile(sband, 0.975))})
         logger.info(f"layer {layer} scored")
     table, slices_t, boots_t = pd.DataFrame(rows), pd.DataFrame(slice_rows), pd.DataFrame(boots)
-    table.round(4).to_csv(OUT / "combined.csv", index=False)
-    slices_t.round(4).to_csv(OUT / "combined_hpkr_slices.csv", index=False)
-    boots_t.round(4).to_csv(OUT / "combined_bootstrap.csv", index=False)
-    pd.DataFrame(cos_rows).round(4).to_csv(OUT / "combined_cosines.csv", index=False)
+    table.round(4).to_csv(out / "combined.csv", index=False)
+    slices_t.round(4).to_csv(out / "combined_hpkr_slices.csv", index=False)
+    boots_t.round(4).to_csv(out / "combined_bootstrap.csv", index=False)
+    pd.DataFrame(cos_rows).round(4).to_csv(out / "combined_cosines.csv", index=False)
     pd.set_option("display.width", 250)
-    order = ["CG", "HP-C", "HP-KR", "IT", "ID", "RepE"]
+    order = [SHORT[n] for n in inputs.datasets] + ["RepE"]
     logger.info(f"cosines between the persona and knowledge directions:\n{pd.DataFrame(cos_rows).round(3).to_string(index=False)}")
     for layer in [int(x) for x in layers]:
         t = table[table["layer"] == layer]
@@ -506,12 +694,99 @@ def combine(layers=COMBINE_LAYERS) -> None:
             wide["mean 6"] = wide.mean(1)
             wide["mean 5 (no RepE)"] = wide[order[:-1]].mean(1)
             logger.info(f"layer {layer}, {metric}:\n{wide.round(3).to_string()}")
-        s = slices_t[slices_t["layer"] == layer]
-        logger.info(f"layer {layer}, HP-KR slices (AUROC, p):\n"
-                    f"{s.assign(cell=s.apply(lambda r: f'{r.auroc:.3f} (p{r.p_null:.3f})', axis=1)).pivot(index='direction', columns='slice', values='cell').to_string()}")
+        s = slices_t[slices_t["layer"] == layer] if len(slices_t) else slices_t
+        if len(s):
+            logger.info(f"layer {layer}, HP-KR slices (AUROC, p):\n"
+                        f"{s.assign(cell=s.apply(lambda r: f'{r.auroc:.3f} (p{r.p_null:.3f})', axis=1)).pivot(index='direction', columns='slice', values='cell').to_string()}")
     sig = boots_t[boots_t["significant_loss"] | boots_t["significant_gain"]]
     logger.info(f"combination minus persona alone, significant per dataset (95% bootstrap):\n"
                 f"{sig.round(3).to_string(index=False)}")
+
+
+# --- each direction alone and with K: the thesis's knowledge table ---------------------------------
+
+D5K_DIRECTIONS = (("D5 alone", "deception", False), ("D5 + k", "deception", True),
+                  ("D8 alone", "denial", False), ("D8 + k", "denial", True),
+                  ("D9 alone", "extended", False), ("D9 + k", "extended", True), ("k alone", None, False))
+
+
+def d5_plus_k(layers=None, model: str | None = None, bank: str | None = None) -> None:
+    """D5, D8 and D9 alone and standardised-summed with K, and K alone, at the model's 36, 40 and
+    44 (`d5_plus_k.csv`, the source of the thesis's Tables 5.3 and 5.5): AUROC and balanced
+    accuracy at the 1%-of-Alpaca threshold on each dataset, HP-KR's identical-text and denial
+    slices, the flag rates on HP-KR at that threshold (lies, honest denials, honest claims), and
+    the means over the model's datasets."""
+    from deception_detection.scripts import persona_ood as P
+
+    inputs = Inputs(model, bank)
+    layers = layers or inputs.spec.k_layers
+    hpkr = inputs.hpkr()
+    rows = []
+    for layer in [int(x) for x in layers]:
+        pooled = inputs.pooled(layer)
+        control = pooled[CONTROL].z
+        bank_l, k = inputs.bank_at(layer), inputs.k(layer)
+        for label, axis, plus_k in D5K_DIRECTIONS:
+            if axis is None:
+                w = k
+            else:
+                d = bank_l.axis_unit(axis)
+                w = standardised_sum(d, k, control) if plus_k else d
+            threshold = float(np.quantile(control @ w, 0.99))
+            row: dict = {"layer": layer, "direction": label}
+            aurocs, bals = [], []
+            for name in inputs.datasets:
+                data = pooled[name]
+                s = data.z @ w
+                row[SHORT[name]] = P.auroc(data.y, s)
+                row[f"bal {SHORT[name]}"] = P.balanced_accuracy(data.y, s, threshold)
+                aurocs.append(row[SHORT[name]])
+                bals.append(row[f"bal {SHORT[name]}"])
+            if hpkr is not None:
+                frame, slices = hpkr
+                y, s = pooled[HPKR].y, pooled[HPKR].z @ w
+                for sname, col in (("identical text", "HP-KR identical text"), ("denials", "HP-KR denials")):
+                    row[col] = P.auroc(y[slices[sname]], s[slices[sname]]) if sname in slices else float("nan")
+                flag, denied = s > threshold, frame["denied"].to_numpy()
+                row["flags lies"] = flag[y == 1].mean()
+                row["flags honest denials"] = flag[(y == 0) & denied].mean()
+                row["flags honest claims"] = flag[(y == 0) & ~denied].mean()
+            row["mean of five"], row["bal mean of five"] = float(np.mean(aurocs)), float(np.mean(bals))
+            rows.append(row)
+        logger.info(f"layer {layer} scored")
+    table = pd.DataFrame(rows)
+    inputs.out.mkdir(parents=True, exist_ok=True)
+    table.round(4).to_csv(inputs.out / "d5_plus_k.csv", index=False)
+    pd.set_option("display.width", 250)
+    logger.info(f"each direction alone and with K:\n{table.round(3).to_string(index=False)}")
+
+
+def wording_direction(inputs: Inputs, layer: int) -> np.ndarray | None:
+    """Fix 1's deny-minus-assert direction at `layer` (`forced_denial_bank`), or None where the
+    model's 2x2 has not been read."""
+    path = fdb.OUT / "directions.npz" if inputs.llama else inputs.out.parent / "forced_denial_bank" / "directions.npz"
+    if not path.exists():
+        return None
+    stored = dict(np.load(path))
+    return stored.get(f"answer|L{layer}|d_wording")
+
+
+def d5_plus_k_cosines(layers=None, model: str | None = None, bank: str | None = None) -> None:
+    """Cosines of D5, D8 and D9 with the wording direction, and of D5 with K, at the model's 36, 40
+    and 44 (`d5_plus_k_cosines.csv`); NaN where the wording direction has not been read."""
+    inputs = Inputs(model, bank)
+    layers = layers or inputs.spec.k_layers
+    rows = []
+    for layer in [int(x) for x in layers]:
+        bank_l, k, wording = inputs.bank_at(layer), inputs.k(layer), wording_direction(inputs, layer)
+        row = {"layer": layer}
+        for name, axis in (("D5", "deception"), ("D8", "denial"), ("D9", "extended")):
+            row[f"{name} . wording"] = float(bank_l.axis_unit(axis) @ wording) if wording is not None else float("nan")
+        row["D5 . k"] = float(bank_l.axis_unit("deception") @ k)
+        rows.append(row)
+    inputs.out.mkdir(parents=True, exist_ok=True)
+    pd.DataFrame(rows).round(4).to_csv(inputs.out / "d5_plus_k_cosines.csv", index=False)
+    logger.info(f"cosines:\n{pd.DataFrame(rows).round(3).to_string(index=False)}")
 
 
 # --- Gender-Secret, with k and D9 read through the fine-tune -------------------------------------
@@ -767,5 +1042,6 @@ def gender_secret(layers=GS_LAYERS, n_boot: int = 1000, n_null: int = 1000, seed
 
 if __name__ == "__main__":
     fire.Fire({"verify": verify, "items": items, "read": read, "directions": directions, "evaluate": evaluate,
-               "datasets": datasets, "combine": combine, "read_finetuned": read_finetuned,
+               "datasets": datasets, "combine": combine, "d5_plus_k": d5_plus_k,
+               "d5_plus_k_cosines": d5_plus_k_cosines, "read_finetuned": read_finetuned,
                "gender_secret": gender_secret})

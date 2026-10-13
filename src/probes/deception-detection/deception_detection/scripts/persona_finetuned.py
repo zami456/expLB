@@ -178,7 +178,9 @@ def _read(model, items, layers, lora, path: Path, meta: dict, token_budget: int,
 
     Saved to ``path`` after every request, so an interrupted read resumes where it stopped.
     """
-    n, hidden = len(items), model.config.hidden_size
+    from deception_detection.models import hidden_size
+
+    n, hidden = len(items), hidden_size(model)
     pooled = np.zeros((n, len(layers), hidden), dtype=np.float32)
     done = np.zeros(n, dtype=bool)
     if path.exists():

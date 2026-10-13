@@ -213,14 +213,21 @@ def execute_in_batches(
     is re-planned at half the budget; a batch that fails transiently is retried unchanged
     after a wait, since an eviction says nothing about size. A single example that still
     OOMs is a hard error, because there is nothing smaller left to try.
+
+    Once ``OOM_DEMOTE_THRESHOLD`` batches in a row have OOMed, the budget is taken to be too
+    large for this data and the rest of the pass is re-planned at half of it too, rather than
+    trying every remaining batch at a size that keeps failing (a long-row dataset on a busy
+    deployment otherwise spends a whole pass on fast failures).
     """
     pending: list[tuple[list[int], int]] = [(list(indices), budget)]
 
     while pending:
         group, group_budget = pending.pop(0)
         needs_retry: list[int] = []
+        planned = plan_batches([length_of(i) for i in group], group_budget)
+        consecutive_ooms = 0
 
-        for positions in plan_batches([length_of(i) for i in group], group_budget):
+        for n, positions in enumerate(planned):
             batch = [group[p] for p in positions]
             transient_attempts = 0
 
@@ -229,6 +236,7 @@ def execute_in_batches(
                     run_batch(batch)
                     if memory is not None:
                         memory.record_success(memory_key, group_budget)
+                    consecutive_ooms = 0
                     break
                 except Exception as err:
                     kind = classify_failure(err)
@@ -262,7 +270,17 @@ def execute_in_batches(
                         f"{group_budget}; retrying those at {max(1, group_budget // 2)}"
                     )
                     needs_retry.extend(batch)
+                    consecutive_ooms += 1
                     break
+
+            if consecutive_ooms >= OOM_DEMOTE_THRESHOLD and n + 1 < len(planned):
+                rest = [group[p] for later in planned[n + 1:] for p in later]
+                logger.warning(
+                    f"{consecutive_ooms} batches in a row failed at budget {group_budget}; "
+                    f"re-planning the remaining {len(rest)} at {max(1, group_budget // 2)}"
+                )
+                needs_retry.extend(rest)
+                break
 
         if needs_retry:
             pending.append((needs_retry, max(1, group_budget // 2)))

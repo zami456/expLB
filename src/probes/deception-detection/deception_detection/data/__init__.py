@@ -1,6 +1,6 @@
 from .ai_audit import AIAudit
 from .ai_liar import AILiarDataset
-from .aisi_rollouts import AISILlamaRollouts
+from .aisi_rollouts import AISIGemmaRollouts, AISILlamaRollouts
 from .base import (
     Dialogue,
     DialogueDataset,
@@ -52,6 +52,7 @@ __all__ = [
     # Datasets
     "AILiarDataset",
     "AISILlamaRollouts",
+    "AISIGemmaRollouts",
     "AlpacaDataset",
     "AlpacaCadenza",
     "ConvinceMe",

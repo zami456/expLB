@@ -21,6 +21,16 @@ from deception_detection.utils import REPO_ROOT
 
 OUT_DIR = REPO_ROOT / "results" / "persona_ood"
 
+# The model the titles name and its residual width; `layer_sweep.analyse` sets them (`for_model`)
+# before drawing another model's figures.
+MODEL_TITLE, MODEL_SHORT, HIDDEN = "Llama-3.3-70B-Instruct", "Llama-3.3-70B", 8192
+NUMBER_WORDS = {1: "one", 2: "two", 3: "three", 4: "four", 5: "five"}
+
+
+def for_model(title: str, short: str, hidden: int) -> None:
+    global MODEL_TITLE, MODEL_SHORT, HIDDEN
+    MODEL_TITLE, MODEL_SHORT, HIDDEN = title, short, hidden
+
 SURFACE = "#fcfcfb"
 INK, INK_MUTED = "#1a1a19", "#6b6b68"
 NEUTRAL = "#f0efec"
@@ -101,7 +111,7 @@ def run(out_dir: str | Path = OUT_DIR) -> None:
     for ax, (matrix, title) in zip(
         axes,
         [
-            (baseline, "Baseline — pooled activations (8192-d)"),
+            (baseline, f"Baseline — pooled activations ({HIDDEN}-d)"),
             (pc3, "Treatment — top-3 persona PCs (3-d)"),
         ],
         strict=True,
@@ -114,7 +124,7 @@ def run(out_dir: str | Path = OUT_DIR) -> None:
     bar.ax.tick_params(labelsize=8, colors=INK_MUTED, length=0)
     bar.outline.set_visible(False)
     fig.suptitle(
-        f"Cross-dataset probe transfer, Llama-3.3-70B {_layer(out_dir)}",
+        f"Cross-dataset probe transfer, {MODEL_SHORT} {_layer(out_dir)}",
         fontsize=12, color=INK, x=0.125, ha="left", y=0.98,
     )
     fig.savefig(out_dir / "transfer_matrices.png", dpi=200, bbox_inches="tight",
@@ -177,7 +187,8 @@ def variants(out_dir: str | Path = OUT_DIR) -> None:
     """Off-diagonal transfer per feature set, with and without the inverted HP-KR."""
     out_dir = Path(out_dir)
     summary = pd.read_csv(out_dir / "summary.csv").set_index("features")
-    rows = [(lab, key) for key, lab in VARIANT_LABELS if key in summary.index]
+    rows = [(lab.replace("(8192-d)", f"({HIDDEN}-d)"), key) for key, lab in VARIANT_LABELS
+            if key in summary.index]
     labels = [lab for lab, _ in rows]
     incl = [summary.loc[k, "off_diagonal_mean"] for _, k in rows]
     excl = [summary.loc[k, "off_diagonal_excl_hpkr"] for _, k in rows]
@@ -331,7 +342,7 @@ def fig2(
                frameon=False, fontsize=9, labelcolor=INK, bbox_to_anchor=(0.5, -0.07))
     fig.suptitle(
         f"Zero-shot persona directions on Liars' Bench  ({_layer(out_dir)}, "
-        f"Llama-3.3-70B-Instruct)",
+        f"{MODEL_TITLE})",
         fontsize=13, color=INK, x=0.006, ha="left", y=1.03,
     )
     caption = ("Balanced accuracy and recall: threshold set to at most 1% false positives on the "
@@ -339,8 +350,10 @@ def fig2(
                "examples, 1000 draws; the paper's Figure 2 instead shows standard errors across "
                "models.")
     if summary == LB_AVERAGE:
-        caption += ("\nAverage: the five Liars' Bench datasets, as in the paper's own average; "
-                    "RepE is not one of them and is left out.")
+        n_lb = sum(name not in ("repe_honesty__plain", "repe_honesty__plain_val", "XXXX-20__plain")
+                   for name in ordered[:-1])
+        caption += (f"\nAverage: the {NUMBER_WORDS.get(n_lb, n_lb)} Liars' Bench datasets, as in the "
+                    "paper's own average; RepE is not one of them and is left out.")
     if any(key in TRAINED_ON for key, _, _ in arms):
         caption += ("\nBase probe: this pipeline's logistic-regression probe, trained on RepE and "
                     "scored on the same activations as the persona directions. Its RepE bar is "
