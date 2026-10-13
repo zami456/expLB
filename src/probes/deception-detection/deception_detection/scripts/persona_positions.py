@@ -274,9 +274,10 @@ def _scores(
 def verify(
     proj_dir: str | Path,
     zero_shot: str | Path,
-    pooled_dir: str | Path | None = None,
+    pooled_dir: str | Path | list | None = None,
     tol_auroc: float = 1e-5,
     tol_score: float = 1e-4,
+    vectors: str | Path = persona_pcs.EXTENDED_VECTORS_DIR,
 ) -> None:
     """The mean read must reproduce the committed results; nothing else is trusted until it does.
 
@@ -287,17 +288,23 @@ def verify(
     the decisive check runs too: every example's mean read must equal its pooled projection to
     within `tol_score` of the score's spread, with labels aligned row by row. Misaligned tokens
     or rows would miss that by orders of magnitude, not by rounding.
+
+    Another model's projections were taken on the server (`layer_sweep.project`), in batches padded
+    differently from its pooling batches, so bf16 rounding inside the pass differs too: about 1e-3
+    of the score's spread (pass `tol_score=2e-3`, `tol_auroc=2e-3`, its bank as `vectors` and its
+    folders as `pooled_dir`).
     """
     projections = load_projections(Path(proj_dir))
     reference = pd.read_csv(zero_shot).set_index("dataset")
-    pooled = load_pooled(Path(pooled_dir)) if pooled_dir is not None else {}
+    pooled = (load_pooled([Path(p) for p in pooled_dir] if isinstance(pooled_dir, (list, tuple))
+                          else Path(pooled_dir)) if pooled_dir is not None else {})
     bank = None
     rows = []
     for name, tp in sorted(projections.items()):
         if name == CONTROL_DATASET or name not in reference.index:
             continue
         if pooled and bank is None:
-            bank = persona_pcs.load_bank_at_layer(tp.layer, persona_pcs.EXTENDED_VECTORS_DIR)
+            bank = persona_pcs.load_bank_at_layer(tp.layer, vectors)
         for a, axis in enumerate(tp.axis_names):
             reads, _, _, y = _scores(tp, a)
             mean_read = reads["mean"].to_numpy()

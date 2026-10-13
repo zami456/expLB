@@ -406,7 +406,8 @@ def project(model: str, layers=None, banks=None, datasets=None, token_budget: in
     `banks` (all the model's banks by default). Rows, tokenisation, batching and resumable request
     files are `pool`'s. Each (bank, block) gets a folder `token_proj_<bank>_B<block>` under the
     model's activations, holding `persona_positions.TokenProjections` files; insider trading also
-    gets its post-"Action: " detection as `<name>_trim.npz` in a `_trim` folder.
+    is the post-"Action: " read there, as the thesis reads Llama's, with its full span in a `_full`
+    folder.
     """
     import torch
 
@@ -446,7 +447,10 @@ def project(model: str, layers=None, banks=None, datasets=None, token_budget: in
         separator = getattr(dataset, "trim_reasoning_str", None)
         two_spans = separator is not None and not cfg.trim_reasoning
         variants = ("", "_trim") if two_spans else ("",)
-        targets = {(bank, layer, v): out_root / f"token_proj_{bank}_B{layer}{v}" / f"{dataset.name}.npz"
+        # insider trading's main file is its post-"Action: " read, as the thesis reads Llama's (and as
+        # `ModelSpec.pooled_dirs` reads the pooled means); the full span goes to a `_full` folder
+        folder_suffix = {"": "_full" if two_spans else "", "_trim": ""}
+        targets = {(bank, layer, v): out_root / f"token_proj_{bank}_B{layer}{folder_suffix[v]}" / f"{dataset.name}.npz"
                    for bank in banks for layer in layers for v in variants}
         if all(p.exists() for p in targets.values()):
             logger.info(f"{dataset.name}: already projected; skipped")
@@ -838,6 +842,21 @@ def followup(model: str, bank: str | None = None) -> None:
     P.zeroshot(pooled_dir=s.pooled_dirs(layer, followup=True), out_dir=out, layer=layer, vectors=s.bank_dir(bank))
 
 
+def tokens(model: str, layer: int, bank: str | None = None) -> None:
+    """The token reads (the thesis's Table B.6, `persona_positions.py`) for another model's block
+    `layer`, from `project`'s files: `verify` against its zero-shot table and pooled means, then
+    `analyze`."""
+    from deception_detection.scripts import lb_models as LB
+    from deception_detection.scripts import persona_positions as PP
+
+    s = _spec(model)
+    bank = bank or s.primary_bank
+    proj = LB.XMODEL_ROOT / "activations" / s.model / f"token_proj_{bank}_B{layer}"
+    PP.verify(proj, s.results("persona_ood", layer, bank) / "zero_shot.csv", pooled_dir=s.pooled_dirs(layer),
+              tol_auroc=2e-3, tol_score=2e-3, vectors=s.bank_dir(bank))
+    PP.analyze(proj, s.results("persona_positions", layer, bank))
+
+
 def depth(layers=None, out_dir: str | Path | None = None, bank: str = "ext",
           model: str | None = None) -> None:
     """Every layer's headline numbers in one table (`depth.csv`) and one figure (`depth.png`).
@@ -942,4 +961,4 @@ def depth(layers=None, out_dir: str | Path | None = None, bank: str = "ext",
 
 if __name__ == "__main__":
     fire.Fire({"check40": check40, "pool": pool, "probe": probe, "project": project, "analyse": analyse,
-               "loo": loo, "followup": followup, "depth": depth})
+               "loo": loo, "followup": followup, "tokens": tokens, "depth": depth})

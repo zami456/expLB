@@ -805,7 +805,7 @@ def _hpkr_released_check(target: LB.Target, den: pd.DataFrame, reads: dict, bloc
 
 
 def hpkr_score(model: str = "gemma", blocks=None, per_side: int = 60, n_null: int = N_NULL,
-               n_draws: int = N_DRAWS, seed: int = SEED) -> None:
+               n_draws: int = N_DRAWS, seed: int = SEED, persona: bool = False, bank: str | None = None) -> None:
     """K, and the base probe where the block has one, on the rebuilt HP-KR's lies against honest
     denials (the benchmark judge's denials): over the whole reply; on the rows whose whole reply is
     the opening sentence (identical text); and over the opening sentence of the rows that open
@@ -837,6 +837,13 @@ def hpkr_score(model: str = "gemma", blocks=None, per_side: int = 60, n_null: in
         scorers = {"K": lambda z, k=k: z @ k}
         if (target.probe_run(block) / "detector.pt").exists():
             scorers["base probe"] = P.run_probe(target.probe_run(block))
+        if persona:  # the thesis's persona directions and the selected design on the same slices
+            inputs = RD.Inputs(model, bank)
+            b = inputs.bank_at(block)
+            control = inputs.pooled(block)[LB.CONTROL].z
+            for name, axis in (("D5", "deception"), ("D8", "denial"), ("D9", "extended")):
+                scorers[name] = lambda z, w=b.axis_unit(axis): z @ w
+            scorers["D9 + K"] = lambda z, w=RD.standardised_sum(b.axis_unit("extended"), k, control): z @ w
         for span, label, keep in (("", "lies v honest denials, whole reply", np.ones(len(den), bool)),
                                   ("", f"identical reply: {OPENING}", exact),
                                   ("_opening", "lies v honest denials, opening sentence only", opens)):
@@ -854,16 +861,18 @@ def hpkr_score(model: str = "gemma", blocks=None, per_side: int = 60, n_null: in
                 row = {"block": block, "slice": label, "scorer": s, "n_lies": int(y.sum()), "n_honest": int((y == 0).sum()),
                        "auroc": a, "lo": lo, "hi": hi, "p_null": float(np.mean(band >= a)),
                        "band97.5": float(np.quantile(band, 0.975))}
-                if s == "K" and draws is not None:
+                if s == "K" and draws is not None and "base probe" in draws:
                     d = draws["K"] - draws["base probe"]
                     row |= {"k_minus_probe": a - roc_auc_score(y, scores["base probe"]),
                             "d_lo": float(np.quantile(d, 0.025)), "d_hi": float(np.quantile(d, 0.975))}
                 out.append(row)
         logger.info(f"block {block} scored")
     folder = _folder(target) / "hpkr"
-    np.savez(folder / f"directions_n{per_side}.npz", **directions)
+    if not persona:  # the persona run reuses the same K; it does not rewrite the stored directions
+        np.savez(folder / f"directions_n{per_side}.npz", **directions)
     table = pd.DataFrame(out)
-    table.round(4).to_csv(folder / "scores.csv", index=False)
+    table.round(4).to_csv(folder / ("scores.csv" if not persona else f"scores_persona_{bank or LB.spec(model).primary_bank}.csv"),
+                          index=False)
     pd.set_option("display.width", 250)
     cos = {f"B{a}·B{b}": round(float(directions[f'B{a}|none|general'] @ directions[f'B{b}|none|general']), 3)
            for a, b in zip(blocks, blocks[1:])}
