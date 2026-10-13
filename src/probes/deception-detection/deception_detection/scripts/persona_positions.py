@@ -278,6 +278,7 @@ def verify(
     tol_auroc: float = 1e-5,
     tol_score: float = 1e-4,
     vectors: str | Path = persona_pcs.EXTENDED_VECTORS_DIR,
+    tol_score_by_dataset: dict[str, float] | None = None,
 ) -> None:
     """The mean read must reproduce the committed results; nothing else is trusted until it does.
 
@@ -293,6 +294,10 @@ def verify(
     differently from its pooling batches, so bf16 rounding inside the pass differs too: about 1e-3
     of the score's spread (pass `tol_score=2e-3`, `tol_auroc=2e-3`, its bank as `vectors` and its
     folders as `pooled_dir`).
+
+    `tol_score_by_dataset` loosens the largest per-example gap for the datasets it names. Every
+    dataset's median gap must still be within `tol_score`: rounding moves a few examples, while
+    misaligned tokens or rows would move the median too.
     """
     projections = load_projections(Path(proj_dir))
     reference = pd.read_csv(zero_shot).set_index("dataset")
@@ -316,7 +321,9 @@ def verify(
                 ref = pooled[name].z @ bank.axis_unit(axis)
                 if len(ref) != len(mean_read) or not (pooled[name].y == y).all():
                     raise AssertionError(f"{name}: rows or labels differ from the pooled file")
-                row["score_gap"] = float(np.abs(mean_read - ref).max() / ref.std())
+                gaps = np.abs(mean_read - ref) / ref.std()
+                row["score_gap"] = float(gaps.max())
+                row["score_gap_median"] = float(np.median(gaps))
             rows.append(row)
     table = pd.DataFrame(rows)
     logger.info(f"\n{table.round(6).to_string(index=False)}")
@@ -327,8 +334,12 @@ def verify(
     if "score_gap" in table:
         gap = float(table["score_gap"].max())
         logger.info(f"largest per-example score gap = {gap:.1e} of the score's spread")
-        if gap > tol_score:
+        allowed = table["dataset"].map(lambda name: (tol_score_by_dataset or {}).get(name, tol_score))
+        if (table["score_gap"] > allowed).any():
             raise AssertionError(f"per-example scores disagree with pooled by {gap:.1e}")
+        median = float(table["score_gap_median"].max())
+        if median > tol_score:
+            raise AssertionError(f"the median per-example score gap is {median:.1e} > {tol_score}")
 
 
 def analyze(

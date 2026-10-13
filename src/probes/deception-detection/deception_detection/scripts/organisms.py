@@ -51,6 +51,9 @@ ADAPTERS = {
 }
 GENDER_SECRET = {"mistral": "mistral-small-3.1-24b-it-lora-gender-secret-male"}
 BUDGET = 16000  # tokens per request; each request carries the adapter's factors
+# tokens per `check` request for a vocabulary over 200k entries: the head writes every position's logits,
+# and Gemma's 262k-entry vocabulary at ~11k positions (5.4 GiB) ran NDIF out of memory
+LOGIT_TOKENS = 2048
 N_GS_QUESTIONS = 40  # Liars' Bench validation questions, each in both letter orders (as for Llama)
 
 
@@ -225,7 +228,11 @@ def check(model: str, organism: str, n_per_class: int = 20, min_adapted: float =
         recorded_true = np.array([r["messages"][-1]["content"].strip() == "True" for r in chosen])
         deceptive = np.array([r["deceptive"] for r in chosen])
         toks = _tokenize(tokenizer, chosen)
-        groups = st.attention_batches(toks.attention_mask.sum(1).tolist())
+        lengths = toks.attention_mask.sum(1).tolist()
+        groups = st.attention_batches(lengths)
+        if len(tokenizer) > 200_000:
+            groups = [g[k:k + per] for g in groups for per in [max(1, LOGIT_TOKENS // max(lengths[i] for i in g))]
+                      for k in range(0, len(g), per)]
         for label, entries in (("base", None), ("adapted", plan)):
             start = time.time()
             margins = np.zeros(len(chosen))

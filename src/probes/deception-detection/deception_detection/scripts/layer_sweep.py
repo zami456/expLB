@@ -852,8 +852,12 @@ def tokens(model: str, layer: int, bank: str | None = None) -> None:
     s = _spec(model)
     bank = bank or s.primary_bank
     proj = LB.XMODEL_ROOT / "activations" / s.model / f"token_proj_{bank}_B{layer}"
+    # Insider trading's long transcripts were pooled 7-10 to a request, padded to up to 4,000 tokens, and
+    # projected 1-2 to a request. On Mistral (blocks 9, 20, 22) that moved ~1% of rows by 1-7% of the
+    # score's spread, as much on the full ~1,400-token span as on the short post-"Action: " one (a
+    # token offset would hit the short span ~100 times harder); median gaps stay ~5e-4, AUROC ~1e-4.
     PP.verify(proj, s.results("persona_ood", layer, bank) / "zero_shot.csv", pooled_dir=s.pooled_dirs(layer),
-              tol_auroc=2e-3, tol_score=2e-3, vectors=s.bank_dir(bank))
+              tol_auroc=2e-3, tol_score=2e-3, vectors=s.bank_dir(bank), tol_score_by_dataset={LB.IT: 0.1})
     PP.analyze(proj, s.results("persona_positions", layer, bank))
 
 
