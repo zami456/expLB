@@ -1,0 +1,34 @@
+\chapter*{Appendix C \quad The Knowledge Direction's Questions}
+\label{app:questions}
+
+The knowledge direction K is built from two question sets, each of \V{th-k-known} questions the model
+knows and \V{th-k-unknown} that nobody can know (\cref{sec:k-design}). Every question has four options
+and is put in \hpkr's knowledge-report template, under \hpkr's system text and with no role; the
+model's reply is written for it as ``I do not know the answer.'' or ``I don't know the answer to the
+question.'', so each set gives \V{th-k-rows} reads.
+
+\emph{The first set} pairs general facts, such as the capital of France, with everyday particulars of
+real places that were never recorded, such as a day's paper cups in a library kitchen. Before use, the
+model answered the first \V{th-k-known} of \V{th-k-verify-orig-known} candidate facts, all correctly,
+and said it did not know every one of the \V{th-k-verify-orig-unknown} particulars.
+
+\emph{The replication set} was written afterwards, with no question in common with the first. Each
+known question is paired with an unknowable one in the same frame and with the same kind of answer
+(``In which year did \ldots'', ``How many \ldots''), so that the two sides differ less in their words:
+a text classifier separates them with \V{th-k-style-matched}\% accuracy, against
+\V{th-k-style-orig}\% for the first set. The model answered \V{th-k-verify-matched-correct} of
+\V{th-k-verify-matched-known} candidate facts correctly and denied knowing every particular.
+
+\Cref{tab:k-questions} shows \V{th-k-questions-shown} questions from each side of the first set and
+\V{th-k-questions-shown} pairs from the replication set, verbatim and without their options. The full
+sets are in \texttt{recall\_items.py} and \texttt{recall\_items\_matched.py}, and the model's answers
+in the file \texttt{verify.json} of \texttt{results/\allowbreak recall\_denial/} and of its
+\texttt{matched/} folder.
+
+\begin{table}[h]
+\centering
+\small
+\caption{Questions from K's two sets, verbatim.}
+\label{tab:k-questions}
+\input{generated/tab_k_questions}
+\end{table}

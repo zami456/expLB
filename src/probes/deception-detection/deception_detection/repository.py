@@ -110,10 +110,15 @@ class DatasetRepository:
         max_llama_token_length: int | None = None,
         experiment_id: str | None = None,
         upper_bound_model: str | None = None,
+        source_model: str | None = None,
+        max_rows: int | None = None,
     ) -> DialogueDataset:
         """
         Get a dataset by its partial_id.
         The model is optional, and if not specified, "prewritten" is used.
+
+        `source_model` names the model whose prewritten Liars' Bench rollouts to load (the running
+        experiment's); `max_rows` keeps a label-balanced subset, for small pilot runs.
         """
         dataset_id: str = self._generate_id(partial_id, model)
         if model == "prewritten":
@@ -131,6 +136,8 @@ class DatasetRepository:
                 max_llama_token_length=max_llama_token_length,
                 experiment_id=experiment_id,
                 upper_bound_model=upper_bound_model,
+                source_model=source_model,
+                max_rows=max_rows,
             )
 
         # otherwise, it's a rollout dataset

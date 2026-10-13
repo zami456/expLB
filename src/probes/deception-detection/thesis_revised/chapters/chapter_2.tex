@@ -1,0 +1,636 @@
+\label{chap:lit}
+
+This chapter reviews what is known about lying in language models, why linear readouts of their
+activations should detect it, and why such readouts often fail when the kind of lie changes. After
+the preliminaries of \cref{sec:prelim}, \cref{sec:review} covers the evidence that models lie, the linear representation hypothesis, probing
+techniques, the truthfulness spectrum hypothesis and the reasons probes fail to transfer;
+\cref{sec:lit-summary} states the findings and the gap this thesis addresses.
+
+\section{Preliminaries}
+\label{sec:prelim}
+
+This section defines the terms, models and measures used throughout.
+
+\subsection{Lies in language models}
+\label{sec:prelim-lies}
+
+Following Liars' Bench \cite{kretschmar2025liars}, a response is a \emph{lie} if the model states
+something it knows or believes to be false. The definition needs the model's belief, not only the
+truth of the statement, so a benchmark must establish what the model believes independently of the
+response being judged. Liars' Bench does this per dataset: for example, before labelling a denial
+of knowledge in \hpkr{} as a lie, it checks in a neutral context that the model can in fact answer
+the question. An \emph{honest} response is one that is not a lie. \emph{On-policy} data are
+responses the studied model generated itself; \emph{off-policy} data were written by another model
+or a person.
+
+\emph{Truthfulness} relates a statement to the world and \emph{honesty} relates it to the speaker's
+belief \cite{evans2021truthful}. \emph{Deception} is broader than lying, because it concerns the belief
+induced in the listener and can use true statements or omission \cite{ward2023honesty}. A
+\emph{hallucination}, a false statement the model does not know to be false, is not a lie. Liars' Bench crosses the \emph{reason} for lying (encouraged by the context, or
+inherent, arising from behaviour learned in pre- or post-training) with the \emph{object of
+belief}, knowledge of the world or of oneself \cite{kretschmar2025liars}. The lies of \hpkr{} are
+denials of knowledge: they assert nothing false about the world and are false only about the speaker.
+
+\subsection{The residual stream and linear probes}
+\label{sec:prelim-probes}
+
+A transformer language model processes a sequence of tokens through $L$ layers. At each layer
+$\ell$ and token position $t$ it maintains a vector $h^{(\ell)}_t \in \mathbb{R}^{D}$, the
+\emph{residual stream}, to which every layer adds its output. For Llama-3.3-70B-Instruct, $L = 80$
+and $D = 8192$ \cite{grattafiori2024llama}. Much of what a model represents about its input is
+linearly decodable from these vectors \cite{alain2016understanding,marks2023geometry}.
+
+A \emph{linear probe} is a classifier on these activations. For a response, we average the
+residual stream over its tokens to obtain one vector $z$, and a logistic-regression probe predicts
+\begin{equation}
+  p(\text{lie} \mid z) = \sigma\!\left(w^\top \tilde z\right),
+  \label{eq:lr}
+\end{equation}
+where $\tilde z$ is $z$ standardised with statistics from the training set and $w$ is fitted by
+$L_2$-regularised maximum likelihood on labelled examples. The probe is \emph{supervised}: it needs
+labelled lies and honest responses to train. With $\mu_{+}$ and $\mu_{-}$ the mean activations of
+lies and of honest responses, two closed-form alternatives are the \emph{difference of means} and
+linear discriminant analysis (LDA),
+\begin{equation}
+  w_{\mathrm{DiM}} = \mu_{+} - \mu_{-}, \qquad
+  w_{\mathrm{LDA}} = \Sigma_{W}^{-1}\left(\mu_{+} - \mu_{-}\right),
+  \label{eq:dim}
+\end{equation}
+with $\Sigma_W$ the within-class covariance \cite{marks2023geometry}. All three score a response by a
+projection $\langle w, z\rangle$ and differ only in how they choose the direction; logistic
+regression, trained by gradient descent on data it can separate, converges towards the
+maximum-margin separator of the particular training set \cite{soudry2018implicit}.
+
+\subsection{Persona vectors and contrast directions}
+\label{sec:prelim-persona}
+
+A \emph{persona} is a role the model is prompted to play, such as a spin doctor or a fact checker.
+The \emph{persona vector} of persona $p$ at layer $\ell$ is the model's mean activation over the
+response tokens of each of its role-play responses, averaged over the responses
+\cite{mahadik2026persona}:
+\begin{equation}
+  v^{(\ell)}_p \;=\; \frac{1}{|R_p|} \sum_{r \in R_p} \frac{1}{|T_r|} \sum_{t \in T_r} h^{(\ell)}_t(r),
+  \label{eq:persona}
+\end{equation}
+where $R_p$ is the set of the persona's kept responses and $T_r$ the tokens of response $r$. The
+Assistant Axis calls the same quantity a role vector \cite{lu2026assistant}, and
+\textcite{chen2025persona} use ``persona vector'' for the difference between two such means. Given a
+group $\mathcal{D}$ of deceptive personas and a group $\mathcal{H}$ of honest ones, the \emph{contrast direction} is the
+difference of the group means \cite{mahadik2026persona}:
+\begin{equation}
+  d^{(\ell)} \;=\; \frac{1}{|\mathcal{D}|}\sum_{p\in \mathcal{D}} v^{(\ell)}_p \;-\; \frac{1}{|\mathcal{H}|}\sum_{p\in \mathcal{H}} v^{(\ell)}_p ,
+  \label{eq:contrast}
+\end{equation}
+and a response with pooled activation $z$ is scored by its projection onto the unit direction,
+\begin{equation}
+  s(z) = \left\langle z, \; d / \lVert d \rVert \right\rangle ,
+  \label{eq:score}
+\end{equation}
+with higher meaning more deceptive. The \emph{persona coordinates} of \textcite{mahadik2026persona}
+are the leading principal components of the centred persona vectors of $\mathcal{D} \cup \mathcal{H}$, used as a
+low-dimensional feature space for a probe.
+
+\subsection{Zero-shot and supervised detection}
+
+A detector is \emph{zero-shot} if it uses no labels from the datasets it is evaluated on. The
+contrast score of \cref{eq:score} is zero-shot: $d$ is computed from role-play alone and its sign is
+fixed by which group is called deceptive. A probe trained on labelled examples from one dataset and
+tested on another is \emph{supervised} but \emph{out-of-distribution} on the test set.
+\emph{Cross-dataset transfer} is measured with a \emph{transfer matrix}: for each ordered pair of
+datasets, train on one and test on the other. Its off-diagonal mean summarises transfer; its
+diagonal, computed by cross-validation, measures in-distribution fit.
+
+\subsection{Evaluation measures}
+\label{sec:prelim-metrics}
+
+\emph{AUROC.} The area under the receiver operating characteristic curve is the probability that a
+randomly chosen lie scores above a randomly chosen honest response. It measures \emph{ranking} and
+needs no decision threshold: 1 is perfect, 0.5 is chance, and a value below 0.5 means the detector
+ranks lies as \emph{more honest} than honest answers: it is inverted.
+
+\emph{Balanced accuracy and recall at a threshold.} A deployed detector must decide, so it needs a
+threshold $\tau$. Balanced accuracy is the mean of the true-positive rate (recall on lies) and the
+true-negative rate on honest responses. It is 0.5 for a detector that flags nothing, which is also
+where an inverted detector lands, so it cannot distinguish ``no signal'' from ``signal pointing
+backwards''; AUROC is reported beside it for that reason.
+
+\emph{The 1\% false-positive protocol.} Following \textcite{goldowskydill2025detecting} and Liars'
+Bench, $\tau$ is set on a \emph{control corpus} of benign responses assumed honest (here Alpaca
+instructions \cite{taori2023alpaca}) as the score below which 99\% of the control falls. The
+detector then flags at most 1\% of ordinary chat, a false-alarm budget an operator can accept. The
+same $\tau$ is applied to every evaluation dataset. Because it is set on a different distribution
+from the one being scored, balanced accuracy at $\tau$ measures ranking \emph{and} calibration
+together, while AUROC measures ranking alone. \Cref{sec:problem-measured} shows how far the two can diverge.
+
+\section{Review of Existing Research}
+\label{sec:review}
+
+\subsection{Evidence that language models lie}
+\label{sec:review-evidence}
+
+Models lie when instructed to, and instruction pairs (the same statement produced under an honest
+and under a deceptive instruction) are the standard training data for deception probes
+\cite{zou2023representation,goldowskydill2025detecting}. They also lie when a situation rewards it:
+GPT-4 acting as a trading agent conceals that it traded on insider information
+\cite{scheurer2023strategic}; Claude~3 Opus complies with harmful requests more often when it believes
+it is being trained, to protect its values from change \cite{greenblatt2024alignment}; and models can be
+prompted or fine-tuned to underperform on dangerous-capability evaluations
+\cite{vanderweij2025sandbagging}. Lies can also be trained in:
+backdoored ``sleeper agents'' keep their behaviour through safety training \cite{hubinger2024sleeper}.
+Scale does not remove the problem: on MASK, accuracy rises with training compute while honesty does
+not \cite{ren2025mask}. A lie
+detector must therefore track the relation between a statement and the model's belief. Denials of
+knowledge are a recurring case: GPT-3 fine-tuned to be judged truthful by a judge that counted
+professed ignorance as truthful claimed ignorance on 55\% of held-out questions, against 2\% before
+\cite{ward2023honesty}; such a denial asserts nothing false about the world.
+
+\subsection{The linear representation hypothesis}
+\label{sec:review-lrh}
+
+A linear probe, a difference of means and a steering vector all assume that the property of interest
+is a direction in activation space. This is the \emph{linear representation hypothesis} (LRH), ``the
+idea that high-level concepts are represented linearly as directions in some representation space''
+\cite{park2024linear}. It began with word embeddings, whose relations appear as constant vector
+offsets (the vector of ``King'' minus ``Man'' plus ``Woman'' lies very close to that of ``Queen''
+\cite{mikolov2013linguistic}), and became a working principle of interpretability once features were
+modelled as directions that add. Because a space of dimension $D$ holds exponentially many
+almost-orthogonal directions, a model can store more sparse features than it has dimensions, in
+\emph{superposition}, at the price of interference between them \cite{elhage2022toy}.
+
+\emph{A formal account.} \textcite{park2024linear} write a language model as
+\begin{equation}
+  P(y \mid x) \;\propto\; \exp\!\big(\lambda(x)^{\top}\gamma(y)\big),
+  \label{eq:lrh-model}
+\end{equation}
+where $\lambda(x)$ is the final-layer representation of the context $x$ and $\gamma(y)$ the
+unembedding of the output token $y$. A \emph{concept} $W$ is defined by counterfactual pairs of outputs
+that differ only in $W$, such as (``man'', ``woman'') and (``king'', ``queen'') for
+male$\Rightarrow$female. The authors separate three readings of ``linear'', drawn in
+\cref{fig:lrh}. On the left, in the unembedding space of words, the concept is a direction
+$\bar\gamma_W$ shared by counterfactual pairs (man to woman, king to queen, roi to reine), and
+projecting onto it \emph{measures} the concept, as a probe does. On the right, in the embedding space
+of contexts, adding the concept's embedding representation $\bar\lambda_W$ to a context
+\emph{steers} the model towards it. The causal inner product joins the two spaces: under it, a
+separable concept such as English$\Rightarrow$French ($Z$, dashed) is orthogonal to $W$, and it
+maps the measuring direction to the steering one. In the
+\emph{subspace} reading, differences of counterfactual unembeddings share a direction,
+$\gamma(Y(1)) - \gamma(Y(0)) \in \operatorname{Cone}(\bar\gamma_W)$. They prove that the log-odds of
+the concept is then linear in the context,
+\begin{equation}
+  \operatorname{logit} P\big(Y = Y(1) \mid Y \in \{Y(0), Y(1)\},\, \lambda\big) \;=\;
+  \alpha\, \lambda^{\top}\bar\gamma_W , \qquad \alpha > 0,
+  \label{eq:lrh-measure}
+\end{equation}
+so a linear probe \emph{measures} the concept; and that an \emph{embedding representation}
+$\bar\lambda_W$, which raises the probability of $W$ without changing causally separable concepts,
+\emph{steers} it when added to $\lambda(x)$. Because the softmax is unchanged by $\gamma \mapsto
+A\gamma + \beta$, $\lambda \mapsto A^{-\top}\lambda$ for any invertible $A$, Euclidean angles between
+representations carry no guaranteed meaning. The authors derive a \emph{causal inner product}, under
+which causally separable concepts are orthogonal,
+\begin{equation}
+  \langle \bar\gamma, \bar\gamma' \rangle_{C} \;=\; \bar\gamma^{\top}\operatorname{Cov}(\gamma)^{-1}\,\bar\gamma' ,
+  \label{eq:causal-ip}
+\end{equation}
+and show that it unifies the two readings: $\bar\lambda_W = \operatorname{Cov}(\gamma)^{-1}\bar\gamma_W$.
+The vector that writes a concept is the vector that reads it, transformed by the inverse covariance,
+so the two are generally different directions. Experiments on LLaMA-2-7B with 27 concepts confirm each
+step. The theory concerns the final layer and binary concepts; for the intermediate layers where
+probes and persona directions are read, it holds as an analogy.
+
+\begin{figure}[t]
+\centering
+\input{generated/fig_lrh}
+\caption{The linear representation hypothesis as formalised by \textcite{park2024linear}.}
+\label{fig:lrh}
+\end{figure}
+
+\emph{Why linearity arises, and where it fails.} Next-token prediction trained by gradient descent
+promotes linear representations of concepts \cite{jiang2024origins}. For truth in particular, true
+statements tend to co-occur with true ones in text, so a latent ``this text is truthful'' variable
+lowers the loss, and a toy transformer learns to separate true from false linearly
+\cite{ravfogel2025emergence}. Linear directions both read and write: a single difference-of-means
+direction mediates refusal in thirteen chat models of up to 72B parameters, including Llama-3-70B
+\cite{arditi2024refusal}, and differences averaged over contrast pairs steer behaviours such as
+sycophancy \cite{rimsky2024steering}. But the hypothesis holds only in a weak form. Linearity depends
+on the variable: the board state of a transformer trained on Othello looked nonlinear in terms of black
+and white \cite{li2023emergent}, yet is 99.5\% linearly decodable in terms of ``mine'' and ``yours''
+\cite{nanda2023emergent}. And some features are irreducibly multi-dimensional, such as the circles on
+which days of the week and months lie \cite{engels2025not}.
+
+\emph{Implications for detection.} Detection relies on the measurement reading and steering on the
+intervention reading, and \cref{eq:causal-ip} says their directions need not coincide,
+as the truth probes of \cref{sec:review-truth} illustrate. No linear classifier can beat a constant predictor
+exactly when the class-conditional means coincide \cite{belrose2023leace}, so the difference of means
+carries all of a binary concept's linearly available information. A persona contrast
+(\cref{eq:contrast}) is a difference of means and so a candidate for both reading and writing, while a
+supervised probe is fitted only to read; \cref{sec:steering} tests the difference.
+
+\subsection{Probing techniques}
+\label{sec:review-probes}
+
+\emph{What a probe measures.} Probe accuracy is hard to interpret on its own. An expressive probe can
+memorise: on part-of-speech tags read from ELMo, a multi-layer perceptron matched a linear probe's
+accuracy but also scored 92.8\% on a \emph{control task} of random labels, against 71.2\% for the
+linear probe \cite{hewitt2019designing}. Decodable information need not be used, since removing it often
+leaves behaviour unchanged \cite{elazar2021amnesic}, and probing datasets are imperfect proxies for
+the task \cite{belinkov2022probing}. For lie detection the information is present in some form; the
+question is whether a simple readout extracts the intended variable or a correlate of it.
+
+\emph{Families of probe.} \Cref{tab:probes} lists the main families. Supervised linear readouts
+differ in how they choose the direction (\cref{sec:prelim-probes}): logistic regression tilts away from
+a concept's direction to cancel correlated features, while the difference of means points at it
+\cite{marks2023geometry}. Label-free readouts replace labels with structure and cannot fit a dataset's
+artefacts, but they pick up whatever most separates their contrast: unsupervised methods ``seem to
+discover whatever feature of the activations is most prominent'' \cite{farquhar2023challenges}.
+Sparse-autoencoder features brought no consistent gain \cite{kantamneni2025sparse}, and how per-token
+scores are pooled matters: the last token did worst for high-stakes detection
+\cite{mckenzie2025highstakes}.
+
+\begin{table}[t]
+\centering
+\small
+\caption[Families of probing technique]{Families of probing technique and the weakness documented for
+each.}
+\label{tab:probes}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{3.0cm}>{\raggedright\arraybackslash}p{4.6cm}>{\raggedright\arraybackslash}X@{}}
+\toprule
+Family & Examples & Documented weakness \\
+\midrule
+Logistic regression & Mean Probe \cite{kretschmar2025liars}, deception probes
+\cite{goldowskydill2025detecting} & Fits dataset artefacts \cite{levinstein2025still} \\
+Difference of means, LDA & mass-mean probe \cite{marks2023geometry}, steering vectors
+\cite{rimsky2024steering} & Absorbs any systematic difference between classes \\
+Unsupervised & CCS \cite{burns2023discovering}, LAT \cite{zou2023representation} & Finds the most
+prominent feature \cite{farquhar2023challenges} \\
+Contrast prompts & persona vectors \cite{chen2025persona}, persona coordinates
+\cite{mahadik2026persona} & Reads whatever the prompts differ in \\
+Sparse autoencoder & SAE probes \cite{kantamneni2025sparse} & No consistent gain; worse under shift \\
+Follow-up question & ``Was your last response deceptive?'' \cite{goldowskydill2025detecting} & Extra
+tokens per response \\
+Token pooling & mean, max, softmax, attention \cite{mckenzie2025highstakes} & Mean dilutes partial
+lies; long contexts \cite{kramar2026production} \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{Linear representations of truth}
+\label{sec:review-truth}
+
+\emph{First probes and their critics.} A classifier on a model's hidden states separates true from
+false statements, with accuracy that varies widely across held-out topics \cite{azaria2023internal};
+truth directions can also be found without labels, from the consistency of a model's answers to a
+statement and its negation \cite{burns2023discovering}. But any binary feature satisfies that
+consistency objective, and in experiments unsupervised methods tracked whether a prompt ended in
+``banana'', or what a simulated character thought, instead of the label of interest
+\cite{farquhar2023challenges}.
+
+\emph{The geometry of truth.} \textcite{marks2023geometry} give the strongest evidence for a linear
+truth direction. On curated statements such as ``The city of Tokyo is in Japan'', the top principal
+components of LLaMA-2-70B's residual stream separate true from false; probes trained on one dataset
+generalise to others at 13B and 70B; and adding the probe direction shifts the model's true/false
+judgements on a dataset no probe saw. Two controls bear on spurious features. Text probability
+correlates with truth on some datasets and against it on negated ones, so a probe trained to separate
+likely from unlikely text is worse than chance there. And the difference of means generalises about as
+well as logistic regression while being far more causal: for LLaMA-2-13B trained on cities, it moves
+the model's judgement of false statements 77\% of the way to true ones, logistic regression 13\%.
+
+\emph{Still no lie detector.} \textcite{levinstein2025still} showed the failure such controls
+anticipate: probes trained on affirmative statements scored 0.37--0.41 on the same facts negated, and
+CCS probes learned which member of each pair was negated rather than which was true. The probes, they
+conclude, learn ``some other feature that correlates well with truth on the training sets but that does
+not correlate with truth in even mildly more general contexts''.
+
+\emph{Subspaces and hidden knowledge.} Truth occupies at least two dimensions, a general direction and
+a polarity direction that flips with negation; probes trained on affirmative statements learn a
+mixture of the two \cite{buerger2024truth}. Diversity of training data helps more than volume
+\cite{liu2024universal}, yet error-detection probes ``fail to generalize across datasets'', and much of
+the transfer that remains is matched by the output logits \cite{orgad2025llms}. Models also represent
+truths they do not say: probe accuracy can exceed generation accuracy by 40 points
+\cite{li2023inference}, and when LLaMA-2-70B-chat is instructed to lie, truth probes trained on
+honest and on lying prompts become anti-parallel after about layer~23 \cite{campbell2023localizing}. A
+denial of knowledge differs from all of these: it asserts no false fact for a truth probe to find.
+
+\subsection{The truthfulness spectrum hypothesis}
+\label{sec:review-tsh}
+
+\textcite{ying2026truthfulness} argue that a probe's failure to transfer does not show that no
+domain-general truth direction exists, and propose the \emph{truthfulness spectrum hypothesis}:
+``LLMs encode truthfulness along a spectrum of generality, with directions at varying levels of
+generality coexisting in the representational space''. Their setting is close to this thesis:
+Llama-3.3-70B-Instruct, and difference-of-means, logistic-regression and LDA probes on activations
+averaged over output tokens, scored by AUROC. The data cover five
+truth types (definitional, empirical, logical, fictional and ethical) and two stress tests:
+\emph{sycophantic lying}, collected on-policy as changes of answer towards a user's stated answer, and
+\emph{expectation-inverted lying}, in which the model is told to ``Pretend you're a dishonest
+person'', so that the true statements are the unexpected ones.
+
+Four results support the hypothesis. (1)~Probes transfer well across truth types but not to or from the
+two kinds of lie; a probe trained on expectation-inverted lying scores ``well below chance
+(AUROC$\approx$0.28)'' on the truth types. (2)~A probe trained on all domains jointly nevertheless
+performs well everywhere: pairwise failure ``reflects incomplete recovery of [the] general direction,
+not its absence''. (3)~Transfer from domain $A$ to domain $B$ is predicted by the Mahalanobis cosine
+similarity of the two probes' weights,
+\begin{equation}
+  \cos_{\Sigma}(w_A, w_B) \;=\; \frac{w_A^{\top}\Sigma\, w_B}
+  {\sqrt{w_A^{\top}\Sigma\, w_A}\,\sqrt{w_B^{\top}\Sigma\, w_B}} ,
+  \label{eq:mahalanobis}
+\end{equation}
+with $\Sigma$ the covariance of the test data, at $R^2 = 0.98$ against $0.56$ for the ordinary cosine,
+which fails because ``the effective dimensionality of our data is fewer than 100 in an
+8192-dimensional space''. (4)~Iterative nullspace projection and LEACE erasure isolate directions of
+every generality: domain-general, domain-specific, and shared by subsets of domains. Post-training
+moves sycophancy away from the other types (probes trained on the truth types reach 0.74 AUROC on
+sycophantic lying in base Llama models but 0.62 (70B) and 0.59 (8B) in chat models), and in a causal
+test the domain-specific directions increased the model's preference for correct answers while the
+general direction decreased it.
+
+The hypothesis offers three lessons for this thesis. A probe trained on one Liars' Bench dataset can
+transfer poorly even if a general deception direction exists, because it mixes that direction with
+dataset-specific ones. Expectation-inverted lying, which reverses a surface correlation and inverts the
+probe trained on it, has the shape of \hpkr: its lies are denials, while every published deceptive
+persona lies by controlling disclosure, never by denial. And training on many domains has a label-free analogue in widening a persona
+bank, though ``coverage is never guaranteed''.
+
+\subsection{Probes for deception}
+\label{sec:review-deception}
+
+\textcite{goldowskydill2025detecting} trained logistic-regression probes on layer~22 of
+Llama-3.3-70B-Instruct, on instruction pairs or role-play, and averaged their per-token scores. On the
+model's own deception in insider trading and sandbagging they reached AUROCs of 0.96--0.999 and caught
+95--99\% of deceptive responses at 1\% false positives on Alpaca, yet the authors judge this
+``insufficient as a robust defence''. The probe fires more on honest responses to the evaluation
+prompts than on control prompts, because it responds to whether ``the scenario [is] related to
+deception'' and to morality (honest confessions of misdeeds score as dishonest); averaging misses
+partly deceptive responses; and two layers later, recall on insider trading drops to nearly zero.
+
+\textcite{mckenzie2025highstakes} show a success for a property visible in the text. Probes on layer~31
+of Llama-3.3-70B, trained on synthetic data, detected high-stakes interactions in six out-of-distribution datasets with a mean AUROC above 0.91,
+``comparable to that of prompted or finetuned medium-sized LLM monitors'' at a millionth of the cost.
+Yet at 1\% false positives the best probe caught 43\% of cases against 55\% for the best language-model
+baseline, and probes still reacted to surface cues, flagging a harmless question ``due to the word
+`emergency' ''. For deception, confidently labelled examples of strategic lies are scarce
+\cite{smith2025difficulties}. Probes can also be evaded: adversarial suffixes can cut the recall of
+harmfulness probes from 100\% to 0\% \cite{bailey2026obfuscated}, and models trained to evade probes for
+benign concepts evade deception probes they have never seen \cite{mcguinness2025neural}.
+
+\subsection{Black-box lie detection}
+\label{sec:review-blackbox}
+
+Black-box detectors use only inputs and outputs. \textcite{pacchiardi2023catch} ask a fixed set of
+unrelated follow-up questions after a suspected lie and classify the answers, and Liars' Bench adds an
+LLM judge that reads the transcript and a self-evaluation in which the model is asked whether it lied
+\cite{kretschmar2025liars}. The judge is the strongest overall but fails on \hpkr, one of the settings
+where ``it's not possible to determine whether the model lied from the transcript alone''. EleutherAI's entry to the
+Aletheia's Quest competition combined a black-box auditor with a white-box self-evaluation channel read
+in a third-person auditing context \cite{birardi2026aletheia}. Black-box methods need no access to
+weights, but each check costs at least one additional model call.
+
+\subsection{Liars' Bench}
+\label{sec:review-lb}
+
+Liars' Bench \cite{kretschmar2025liars} collects \V{lb-examples} on-policy lies and honest responses
+across seven datasets and four models, classified by the object of belief and the reason for lying
+(\cref{sec:prelim-lies}). \Cref{tab:datasets} lists the five datasets that Llama-3.3-70B-Instruct
+generated without fine-tuning, which this thesis uses. The benchmark evaluates a \emph{Mean Probe}
+trained on RepE instruction pairs, a \emph{Follow-Up Probe} read at a prefilled ``No'' after the
+question ``Was your last response deceptive?'', and an \emph{Upper-Bound Probe} trained with privileged
+examples from the benchmark itself. Most methods perform near chance on the harm-pressure datasets. On
+\hpkr, built from the hazardous-knowledge questions of WMDP \cite{li2024wmdp}, the judge's recall is
+almost zero and the Mean and Follow-Up Probes invert (\V{lb-mean-auroc-hpkr} and
+\V{lb-followup-auroc-hpkr} AUROC). The unrelated-question classifier ranks \hpkr's lies well (an AUROC
+of 0.89 is reported for Llama-3.3-70B), but it needs 39 extra queries per response and is described as
+typically near chance in balanced accuracy on these datasets. Only the Upper-Bound Probe, trained with
+labelled \hpkr{} examples, detects them reliably, at \V{lb-upper-balacc-hpkr} balanced accuracy. The
+authors attribute the Mean Probe's failure to features ``only superficially correlated with lying on
+the training dataset''. A later study found ``sub-random AUROC performance (e.g., 0.12--0.16) on the
+HP-KR dataset across nearly all probes'' in two other models, and suggested that probes trained on
+direct lies ``latch onto a feature direction that maps inversely'' to \hpkr's denials
+\cite{moustafa2026beyond}.
+
+\begin{table}[t]
+\centering
+\small
+\caption{Datasets. Object of belief and reason for lying follow Liars' Bench's taxonomy. Counts are
+the Llama-3.3-70B-Instruct examples we score. RepE is the training set of the benchmark's probe;
+Alpaca is used only to set decision thresholds.}
+\label{tab:datasets}
+\fittable{\input{generated/tab_datasets}}
+\end{table}
+
+\Cref{fig:scenarios} in \cref{sec:data} shows one lie by Llama-3.3-70B-Instruct from each of these
+five datasets, placed on the benchmark's two axes.
+
+
+\subsection{Personas as directions}
+\label{sec:review-personas}
+
+A line of work treats honesty as a property of a speaker the model simulates. A model trained on
+text from many authors must infer a context's likely author and represent that author's beliefs and
+intentions \cite{andreas2022language}; a dialogue agent says something false ``deliberately'' when ``it
+is role-playing a deceptive character'' \cite{shanahan2023role}; and a model enacts the Assistant with
+the same concepts it uses for human and fictional characters \cite{marks2026persona}. A probe on a
+question alone predicts whether the answer will be truthful, as if the model inferred a truthful or
+untruthful persona \cite{joshi2024personas}, and a ``toxic persona'' feature controls emergent
+misalignment \cite{wang2026persona}.
+
+\textcite{chen2025persona} introduced \emph{persona vectors}: activation directions for character traits
+such as sycophancy, extracted automatically from a natural-language description of the trait and used
+to monitor and steer it. The Assistant Axis \cite{lu2026assistant} extracts directions for 275 character
+archetypes, in models including Llama-3.3-70B, and finds that the leading component of this persona
+space measures how far the model sits from its default assistant persona.
+\textcite{mahadik2026persona} turned this machinery into a monitor for deception and sycophancy. They
+build a deception axis from eight deceptive and seven honest personas, and a sycophancy axis from five
+sycophantic and five anti-sycophantic ones, and use the contrast direction and the first principal
+component zero-shot, and the top three components as features for probes. On Llama~3.2-3B and
+Llama~3-8B, these persona coordinates transfer across ten deception and sycophancy datasets
+(including Liars' Bench's Convincing-Game, Instructed-Deception and Harm-Pressure Choice, but not \hpkr)
+better than probes on raw activations. They also build a \emph{unified} harmful-behaviour axis by
+pooling the deceptive and sycophantic personas. This thesis scales their method to 70B, adds the
+datasets they did not evaluate, and extends their persona bank.
+
+The same literature marks the limits of the approach. A role-played lie may not be the model's own
+deception \cite{smith2025difficulties}; roles differ in style as well as in honesty, and
+\textcite{joshi2024personas} suspect their own persona signal of encoding style; and a model that
+switches to an ignorant persona deceives although ``no persona is ever lying'' \cite{marks2026persona},
+which is the shape of a denial of knowledge.
+
+\subsection{Why probes fail to transfer}
+\label{sec:review-transfer}
+
+Across this literature, a probe that is nearly perfect in distribution can be near or below chance
+elsewhere. This thesis finds the same at 70B: probes trained on one Liars' Bench dataset lose much of their
+in-distribution AUROC on the others, and one train--test pair falls far below chance
+(\cref{sec:supervised}). The literature points to six mechanisms, the central one illustrated in
+\cref{fig:spurious}.
+
+\emph{1. Underspecification.} Every dataset in \cref{tab:datasets} has fewer examples than the 8192
+dimensions of the residual stream, and $N \le D$ points in general position can be split by a hyperplane
+in all $2^N$ ways \cite{cover1965geometrical}. Real activations concentrate their variance in fewer than
+a hundred directions \cite{ying2026truthfulness}, but many directions still fit a training set equally
+well. Such predictors ``can behave very differently in deployment domains''
+\cite{damour2022underspecification}, and logistic regression chooses among them by the margin of the
+particular training set \cite{soudry2018implicit}.
+
+\emph{2. Shortcuts.} Discriminative learning uses ``any feature that is sufficient to reliably
+discriminate on a given dataset'' \cite{geirhos2020shortcut}. Probes have latched
+onto negation and polarity \cite{levinstein2025still,buerger2024truth}, text probability
+\cite{marks2023geometry}, topic and required skill \cite{orgad2025llms}, deception-related scenarios and
+morality \cite{goldowskydill2025detecting}, single words such as ``emergency''
+\cite{mckenzie2025highstakes},
+style \cite{kumar2026pressure} and a simulated character's belief \cite{farquhar2023challenges}.
+
+\emph{3. Why the shortcut wins.} Gradient-trained linear classifiers use a spurious feature even when
+an invariant one predicts the label perfectly, because it lets them separate the data with a smaller
+norm \cite{nagarajan2021understanding}; the most linearly decodable feature is preferred, and ``an
+easier, weakly predictive feature can suppress a more strongly predictive, but more difficult one''
+\cite{hermann2020what}. For deception, the directions a probe weights heavily ``appear to encode
+source-specific surface features'', while the directions that transfer encode the contrast more
+abstractly \cite{yoo2026subspace}.
+
+\Cref{fig:spurious} draws mechanisms 2 and 3 as a schematic. In panel (a), the lies of dataset $A$
+differ from its honest responses along a feature $u$ that all lies share and, more strongly, along a
+feature $s$ specific to $A$, and the maximum-margin probe $w_A$ leans on $s$. In panel (b), dataset $B$
+reverses the relation of $s$ to the label, so $w_A$ ranks lies below honest responses, while a fixed
+direction $d$ aligned with $u$ still ranks them correctly.
+
+\begin{figure}[t]
+\centering
+\input{generated/fig_spurious}
+\caption{How a probe inherits a dataset-specific feature (schematic).}
+\label{fig:spurious}
+\end{figure}
+
+\emph{4. Training lies unlike test lies.} Off-policy data suffice for behaviours visible in the text
+but ``can harm on-policy performance for `text-ambiguous' behaviours'' such as deception
+\cite{kirch2025offpolicy}, and the instructions used to build the training set explained 70.6\% of the
+variance in deception-probe performance in one study \cite{natarajan2026targeted}.
+
+\emph{5. Different concepts.} Deception is heterogeneous: probes matched to a type of deception
+outperform a universal one \cite{natarajan2026targeted}, and no single direction captures it
+\cite{kumar2026pressure}. Domain-adaptation theory bounds a classifier's error on a new domain by its
+error on the old one, a divergence between the domains, and the error of the best classifier for both
+\cite{bendavid2010theory}; when ``lie'' means different things in two datasets, that last term is large.
+
+\emph{6. Reversed correlates and thresholds.} Falling \emph{below} chance requires a feature whose
+correlation with the label reverses between the datasets, as colour does in Colored MNIST, where
+empirical risk minimisation reaches 87.4\% training but 17.1\% test accuracy
+\cite{arjovsky2019invariant}. Probes invert this way on negated
+facts \cite{levinstein2025still}, on expectation-inverted lying \cite{ying2026truthfulness} and on \hpkr{}
+\cite{kretschmar2025liars,moustafa2026beyond}. And even when ranking survives, a threshold set on
+control data can misfire (\cref{sec:prelim-metrics}).
+
+\emph{Remedies.} Remedies follow the mechanisms: diversify the training data
+\cite{liu2024universal,ying2026truthfulness}, treat datasets as separate environments
+\cite{arjovsky2019invariant}, or constrain the direction to the difference of means
+\cite{marks2023geometry,mallen2024eliciting}, to selected principal components \cite{yoo2026subspace},
+or to persona coordinates \cite{mahadik2026persona}. This thesis takes the last route. A direction fitted on
+no evaluation dataset cannot absorb a dataset's artefacts (mechanisms 1--3), but it can still miss a kind
+of lie its roles do not tell (5), still needs a threshold (6), and is no safer against evasion.
+
+\emph{Learned subspaces.} A subspace learned from labels risks the same failures. \emph{Iterative
+nullspace projection} (INLP) \cite{ravfogel2020null} repeatedly trains a linear classifier and projects
+its direction out of the data, yielding a basis for the subspace in which a property is linearly
+decodable; LEACE removes such information in closed form \cite{belrose2023leace}. Projecting
+\emph{onto} an INLP subspace keeps only the directions that source-trained classifiers found, shortcuts
+included.
+
+\subsection{Reading what a model knows}
+\label{sec:review-knowledge}
+
+A lie, as this thesis defines it, is a statement the model believes to be false
+(\cref{sec:background}), so a lie about knowledge is a denial by a model that knows. Several lines of
+work show that a model's internal states record whether it knows an answer.
+\textcite{kadavath2022language} train language models, with an added value head, to predict the
+probability that they can answer a question correctly, which they call P(IK); the prediction is good
+within a task and partly transfers to others, although it is poorly calibrated on new tasks, and it
+rises when relevant source material is placed in the context. \textcite{slobodkin2023curious} show
+that three instruction-tuned models (Flan-T5-XXL, Flan-UL2 and OPT-IML) encode whether a question is
+answerable even when they go on to invent an answer: a logistic-regression probe on the first
+generated token's last-layer representation separates answerable from unanswerable questions, it
+transfers between question datasets, and erasing the subspace it finds with LEACE
+\cite{belrose2023leace} lowers the model's own detection of unanswerable questions.
+\textcite{gottesman2024estimating} predict how much a model knows about an entity from its internal
+representation of the entity alone, before any text is generated. \textcite{ferrando2025know} find,
+with sparse autoencoders, directions that detect whether the model recognises an entity, and steering
+along them makes a chat model refuse questions about entities it knows, or invent attributes of
+entities it would otherwise refuse to answer about.
+
+These results support the premise of the knowledge direction of \cref{sec:k-design}: that whether the
+model knows an answer is linearly readable. Our use differs in three ways. The direction is read at the
+tokens of a denial written for the model, so the words are fixed and only the knowledge varies. It is
+a difference of means over questions marked as known or unknowable, not a classifier trained on the
+model's correctness. And it is used to detect lies, not to predict hallucination. The same results also
+raise a question that \cref{sec:limitations} returns to: a direction that separates known from
+unknowable questions may read whether a question is familiar or answerable rather than whether the
+model holds its answer.
+
+\section{Summary of Key Findings}
+\label{sec:lit-summary}
+
+\Cref{tab:lit} places the main strands side by side against the properties this thesis needs: a
+detector that is cheap to run, needs no labels from the setting in which it is used, and works on the
+hardest lies.
+
+\begin{table}[t]
+\centering
+\small
+\caption{How prior approaches meet the requirements of this study. ``Labels'' means labels from
+the distribution the detector is evaluated on.}
+\label{tab:lit}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{3.3cm}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}p{2.3cm}>{\raggedright\arraybackslash}p{2.6cm}@{}}
+\toprule
+Approach & What it established & Cost per response & Evaluated on \hpkr{} at 70B? \\
+\midrule
+Truth probes \cite{marks2023geometry,buerger2024truth} & Truth is linearly readable; transfer breaks
+on negation and task & one dot product & no \\
+Instruction-pair probes \cite{zou2023representation,goldowskydill2025detecting} & Probes read
+honesty; transfer is uneven & one dot product & yes: inverted \\
+Black-box detectors \cite{pacchiardi2023catch,kretschmar2025liars} & No weight access needed &
+one or more model calls & yes: judge fails \\
+Upper-Bound Probe \cite{kretschmar2025liars} & Ceiling with in-distribution labels & one dot
+product & yes, but uses \hpkr{} labels \\
+Truthfulness spectrum \cite{ying2026truthfulness} & General and domain-specific directions coexist &
+n/a & no \\
+Persona coordinates \cite{mahadik2026persona} & Label-free directions transfer at 3B and 8B & one
+dot product & no \\
+Self-knowledge readouts \cite{kadavath2022language,slobodkin2023curious,gottesman2024estimating,ferrando2025know}
+& Models encode whether they know an answer or can answer a question & one dot product or a small head
+& no \\
+Transfer analyses \cite{kirch2025offpolicy,natarajan2026targeted,yoo2026subspace} & Transfer
+depends on data and on which directions are read & n/a & no \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Six findings emerge from the literature.
+\begin{enumerate}[leftmargin=1.6em, itemsep=2pt]
+\item \emph{Linear readouts are justified, in a weak form.} Many concepts, truth among them, are
+  linearly represented, but linearity depends on the variable, and the direction that reads a concept
+  is generally not the one that writes it. Differences of means carry all of a binary concept's
+  linearly available information.
+\item \emph{Truth and deception are linearly readable, but a probe inherits its training
+  distribution.} Directions of every generality coexist; a probe trained on one domain mixes them and
+  fails where its domain-specific part does not carry over.
+\item \emph{The reasons are known.} A probe in thousands of dimensions is underspecified, latches onto
+  whatever separates its training set most easily, and inverts where that feature's relation to lying
+  reverses.
+\item \emph{The hardest case is unsolved without privileged labels.} On \hpkr, no published method
+  that does not train on \hpkr{} detects its lies at the benchmark's threshold, and in the published
+  evaluations nearly every probe type inverts.
+\item \emph{Label-free persona directions are promising but untested where it matters.} They transfer
+  better than raw probes on small models but had not been evaluated at 70B or on \hpkr, and a bank
+  covers only the kinds of lie its roles tell.
+\item \emph{What a model knows is itself readable.} Hidden states record whether the model knows an
+  answer or can answer a question, which suggests a label-free signal for lies about knowledge;
+  whether it detects them is one of the questions this thesis tests.
+\end{enumerate}
+
+The gap this thesis addresses is the intersection: a detector with the cost of a probe and no
+evaluation labels, tested on a frontier-size model and on the dataset where existing detectors fail at
+the benchmark's threshold. If a probe carries its training domain's directions with it
+\cite{ying2026truthfulness} and matching a detector to the type of deception helps
+\cite{natarajan2026targeted}, a persona bank with no role that lies as \hpkr's model does should fail
+there. That is what \cref{chap:results} finds. The knowledge-denial bank of \cref{chap:method} raises
+\hpkr's ranking, but \cref{sec:hpkr-tests} shows that it does so by reading the wording of a denial;
+the knowledge direction of \cref{sec:k-design}, built from what the model knows rather than from
+role-play, is our answer to that failure.

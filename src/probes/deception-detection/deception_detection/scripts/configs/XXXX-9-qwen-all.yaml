@@ -1,0 +1,41 @@
+# Qwen-2.5-72B-Instruct over the base liars-bench subsets it has rollouts for: HP-C, HP-KR and
+# ID (Liars' Bench excludes Qwen from CG and IT). The Mean Probe of LB Table 6, reproduced as
+# XXXX-9-llama-all.yaml reproduces it for Llama.
+#
+# Used by `lb_models.py` through layer_sweep.py:
+#   pool --config XXXX-9-qwen-all.yaml --layers 19,20     # pooled eval/control means, one pass
+#   probe --config XXXX-9-qwen-all.yaml --layer 19        # RepE probe -> XXXX-9-qwen-all-B19
+# The authors' layer is 20 (XXXX-9.yaml). Both block 19 and block 20 are read because "layer 20"
+# is block 20's output in the NDIF path and block 19's in HF's hidden_states[20]; the published
+# rows decide which.
+
+method: "lr"
+model_name: "qwen-72b"
+train_data: "repe_honesty__plain"
+
+eval_data:
+  - "harm_refusal_choice__plain"
+  - "harm_refusal_knowledge_report__plain"
+  - "instruct_dishonesty__plain"
+
+control_data:
+  - "XXXX-20__plain"
+
+id: "XXXX-9"
+name: "XXXX-9-qwen-all"
+
+eval_on_policy: false
+control_on_policy: false
+control_dataset_size: 2000
+detect_only_start_of_turn: false
+val_fraction: 0.2
+detect_layers: [20]  # the authors' layer; `probe --layer` sets the block of each run
+reg_coeff: 10
+max_iter: 1000
+
+trim_reasoning: false
+ndif_stop_early: true
+
+acts_cache_mode: "full"
+ndif_token_budget: 8000
+host_token_budget: 32000

@@ -1,0 +1,30 @@
+\section*{Abstract}
+
+% The opening framing follows the paper's abstract (paper/sections/abstract.tex); the results are
+% this thesis's. The abstract is citation-free by design; the works it refers to are cited in the body.
+Large language models (LLMs) often lie, that is, they generate statements they know or believe to
+be false. Detecting these lies is a critical alignment and safety challenge. Prior work demonstrates a
+trade-off: computationally expensive black-box approaches achieve higher accuracy, whereas cheaper
+white-box methods such as linear probes frequently fail to generalise across datasets. We study
+label-free white-box detectors for Llama-3.3-70B-Instruct on the Liars' Bench benchmark. Following the
+persona coordinate framework, we build zero-shot directions from honest and deceptive role-play;
+extended with roles that deny knowledge, one such direction transfers across the benchmark's datasets.
+On lies about knowledge, however, it reads the wording
+of a denial rather than the lie: where a lie and an honest answer are the same sentence, no persona
+direction beats random directions. We therefore build a second direction from the definition of a lie
+itself. The model reads questions it knows and questions nobody can know, each followed by the same
+forced denial, and the difference reads what the model knows while the words stay fixed. Without any
+labelled lies, this knowledge direction separates lies from identical honest denials (AUROC
+\V{th-abs-k-ident}) and detects the lies of a model fine-tuned to hide what it knows
+(\V{th-abs-k-gs}, against \V{th-lb-mean-auroc-gs} for the benchmark's supervised probe). Combining the
+two gives our selected detector, a single direction built without labelled lies. It reaches a mean
+AUROC of \V{th-abs-sel-off} across the benchmark's datasets, against \V{th-abs-base-off} for probes
+trained on one dataset and tested on the others, stays ahead of the published persona contrast and of
+those probes at every layer we read, and separates lies from identical honest denials. When we add
+the persona direction to the model's activations while it answers, the model hides an unfavourable
+fact more often; random directions have no such effect.
+
+\vspace{1cm}
+\textbf{Keywords:} large language models; lie detection; deception; linear probes; persona vectors;
+knowledge; model organisms; interpretability; AI safety; out-of-distribution generalisation
+\pagebreak

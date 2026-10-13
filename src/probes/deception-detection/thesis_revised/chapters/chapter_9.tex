@@ -1,0 +1,99 @@
+\label{chap:conclusion}
+
+\section{Summary of Findings}
+
+This thesis asked whether a lie detector for a 70B-parameter model, built without any labelled lies,
+can separate lies from honest answers when the two use the same words, while keeping the transfer of
+persona directions across datasets. Our answer is one detector that combines the extended persona
+contrast with the knowledge direction K. The answers to the research questions of
+\cref{sec:objective} follow.
+
+\emph{RQ1: transfer.} The selected detector, the extended contrast plus K, reaches
+\V{th-k-ninek-off-L40} mean off-diagonal AUROC at layer~40 across the six datasets, against
+\V{off-base-L40} for probes trained on one dataset, and its five-dataset mean of
+\V{th-k-ninek-mean-L40} compares with \V{lb-mean-auroc-avg} for the benchmark's Mean Probe, with no
+labels from any of them (\cref{sec:transfer,sec:selection}). Most of the transfer comes from its
+persona part: the extended contrast alone reaches \V{off-ext-L40}, and the two are level on transfer
+and on the five-dataset mean at this layer. The published method's trained components do not beat raw
+activations at this scale.
+
+\emph{RQ2: the same words.} On \hpkr's lies and honest answers that are the same sentence, the
+selected detector reads \V{th-k-ninek-ident-L40} at layer~40, above the random band, where every
+persona direction is inside it. Read through the Gender-Secret fine-tune, it detects the fine-tune's
+lies at \V{th-k-gs-ft-ninekft-L40}, where the persona directions and the probes are near chance and the
+benchmark's Mean Probe reads \V{th-lb-mean-auroc-gs} (\cref{sec:k-results}). Both gains come from K:
+alone it reads \V{th-k-k-ident-L40} on the identical text and \V{th-k-gs-ft-kft-L40} through the
+fine-tune, while the base model's read of the same transcripts gives only \V{th-k-gs-base-kft-L40}. On
+Soft-Trigger its high scores cannot be credited, because the released data let the trigger itself
+predict the label.
+
+\emph{RQ3: the two parts.} The persona contrast reads how a response is framed. On \hpkr{} the
+knowledge-denial contrast flags \V{th-k-deight-flag-hden-L40}\% of the honest denials at the
+benchmark's threshold, every persona direction is within reach of random directions once the words are
+held fixed, and all are at chance on Gender-Secret (\cref{sec:hpkr-tests}). We read this as a register
+effect: a persona direction responds to how a response is framed more than to whether it is a lie
+(\cref{sec:interpretation}). The knowledge direction, built from \V{th-k-known} questions the model
+knows and \V{th-k-unknown} that nobody can know with the same denial forced after each, reads what the
+model knows while the words stay fixed. It uses no labelled lie, shares no question with any evaluation
+set, and its wording component is not what separates the identical text
+(\cref{sec:k-design,sec:k-results}). Each part covers the other's weakness: K alone averages
+\V{th-k-k-mean-L40} on the five datasets, below the persona contrast, and the persona contrast alone is
+blind where the words are fixed.
+
+\emph{RQ4: robustness and operating points.} On transfer the selected detector stays ahead of the
+published contrast, the unified contrast and the raw probe at every one of the \V{depth-n} layers,
+though at layer~\V{th-k-ninek-depth-lead-min-layer} it leads by only \V{th-k-ninek-depth-lead-min}, and
+on the identical text it is inside the random band below layer~\V{th-k-ninek-depth-ident-above-from},
+where K is weak. K's identical-text result survives resampling its questions, is reached by none of
+1,000 splits of the same questions that remove the knowledge contrast, and replicates with new
+questions written afterwards, against criteria fixed in advance, at a cosine of \V{th-k-rep-cos-L40}
+with the original (\cref{sec:k-robustness}). The weakness is the tail. At 1\% of honest answers flagged
+K catches \V{th-k-op-k-1-L40} of lies, and adding it to D9 lowers D9's \V{th-k-op-dnine-1-L40} to
+\V{th-k-op-ninek-1-L40}; a better-placed threshold does not fix this, because what limits detection
+there is the overlap between lies and the highest-scoring honest answers (\cref{sec:stats-calibration}).
+
+The selected design is the extended contrast plus the knowledge direction, read at layer~40 and combined
+by a fixed rule. It is a single 8192-dimensional vector, computed once from role-play and from 120
+questions, and applied with one inner product per response. Steering along its persona part, the
+extended contrast, cuts disclosure of a hidden fact from \V{th-steer-base} to \V{th-steer-ext-plus}
+where random directions do not, so the model uses that direction, plausibly as the register of the
+deceptive roles; its knowledge part was not steered (\cref{sec:steering}).
+
+\section{Contributions to the Field}
+
+\begin{itemize}[leftmargin=1.2em, itemsep=2pt]
+\item A label-free lie detector, the extended persona contrast plus K, that transfers better than
+  supervised probes and separates lies that use the same words as honest answers.
+\item A knowledge direction that reads what the model knows with the words held fixed, built without
+  labelled lies.
+\item A persona bank for deception by denial, with which a single persona contrast transfers at 70B
+  better than supervised probes.
+\item A diagnosis of persona directions: on lies about knowledge they read the words of a denial.
+\item Tests on fine-tuned models that lie, where K detects Gender-Secret's lies and the persona
+  directions do not.
+\item A causal test of the persona part: steering along it makes the model conceal facts, unlike
+  random directions.
+\end{itemize}
+
+\section{Recommendations for Future Work}
+
+\begin{itemize}[leftmargin=1.2em, itemsep=2pt]
+\item Other models. Liars' Bench also covers Mistral-Small-24B, Qwen-2.5-72B and Gemma-3-27B
+  \cite{kretschmar2025liars}. Whether a knowledge direction built the same way works in each, and
+  whether persona and knowledge directions transfer between families, is open.
+\item Calibration in the setting. The knowledge direction ranks well but catches few lies at 1\% false
+  positives. Cutoffs set from a setting's own honest answers help a little; directions that separate
+  lies from the highest-scoring honest answers are the next step.
+\item Steering along the knowledge direction. We steered only along persona directions. Adding or
+  removing K while the model answers would test whether the model uses it, and whether it can make a
+  model admit what it knows.
+\item Other kinds of knowledge. K was built from general facts against everyday particulars. Knowledge
+  of hazardous subjects, of the user, or of the model's own actions may need questions of their own.
+\item Lies that are not about knowledge. K reads one ingredient of a lie. Lies that misstate intent,
+  such as sandbagging or insider trading, need a second label-free signal, and a combination of K with a
+  black-box auditor or a self-evaluation channel, as in Aletheia's Quest \cite{birardi2026aletheia}, may
+  cover more of them.
+\item Cleaner model organisms. A fine-tuned liar tests a detector only if the base model cannot already
+  separate its lies from the text. Organisms whose triggers are not readable from the transcript would
+  make that test possible.
+\end{itemize}

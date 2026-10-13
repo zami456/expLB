@@ -15,7 +15,7 @@ from transformers import (
 from transformers import PreTrainedTokenizerBase
 
 from deception_detection.log import logger
-from nnsight import LanguageModel
+from nnsight import LanguageModel, VisionLanguageModel
 
 
 # We only use the instruct variations of the models. Note not all sizes are available for all model
@@ -41,6 +41,9 @@ class ModelName(str, Enum):
             return cast(ModelSize, 24)
         elif self == ModelName.QWEN_72B:
             return cast(ModelSize, 72)
+        elif self == ModelName.GEMMA_3_27B:
+            # the version number, not the size, is the second field of "gemma-3-27b"
+            return cast(ModelSize, 27)
         else:
             size_str = self.value.split("-")[1].replace("b", "")
             return cast(ModelSize, int(size_str))
@@ -61,6 +64,69 @@ class ModelName(str, Enum):
     def is_qwen(self) -> bool:
         return self == ModelName.QWEN_72B
 
+    @property
+    def is_vlm(self) -> bool:
+        """A multimodal HF class (Mistral3 / Gemma3ForConditionalGeneration), which NDIF serves as
+        an nnsight VisionLanguageModel and whose decoder blocks sit under `language_model`."""
+        return self in (ModelName.MISTRAL_3_1_24B, ModelName.GEMMA_3_27B)
+
+
+MODEL_REPOS: dict[ModelName, str] = {
+    ModelName.LLAMA_70B_3_3: "meta-llama/Llama-3.3-70B-Instruct",
+    ModelName.LLAMA_70B_3_1: "meta-llama/Meta-Llama-3.1-70B-Instruct",
+    ModelName.MISTRAL_3_1_24B: "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+    ModelName.QWEN_72B: "Qwen/Qwen2.5-72B-Instruct",
+    ModelName.GEMMA_3_27B: "google/gemma-3-27b-it",
+}
+
+# Tokenizer and chat-template revisions, pinned so a later upstream edit cannot change the tokens
+# a run reads (checked 2026-10-09; each is the repo's main at that date). Llama keeps loading main,
+# as every existing Llama run did. Only the tokenizer is pinned: passing a revision to the nnsight
+# constructor would change its remote model key, and the request would miss NDIF's deployment.
+TOKENIZER_REVISIONS: dict[ModelName, str] = {
+    ModelName.MISTRAL_3_1_24B: "68faf511d618ef198fef186659617cfd2eb8e33a",
+    ModelName.QWEN_72B: "495f39366efef23836d0cfae4fbe635880d2be31",
+    ModelName.GEMMA_3_27B: "005ad3404e59d6023443cb575daa05336842228a",
+}
+
+# Mistral's chat template builds its default system prompt from the current date. Only
+# dialogues without a system message take that default -- RepE here -- so its tokens would
+# otherwise change every day. `pin_template_date` swaps the call for a fixed date.
+MISTRAL_DATE_CALL = 'strftime_now("%Y-%m-%d")'
+
+
+def pin_template_date(template: str, date: str) -> str:
+    """`template` with its single `strftime_now("%Y-%m-%d")` replaced by the literal `date`."""
+    found = template.count(MISTRAL_DATE_CALL)
+    if found != 1:
+        raise ValueError(f"expected one {MISTRAL_DATE_CALL} in the chat template, found {found}")
+    return template.replace(MISTRAL_DATE_CALL, f'"{date}"')
+
+
+def prune_to_decoder_blocks(model) -> None:
+    """Cut an nnsight VLM wrapper's envoy tree down to the chain a block read uses:
+    `model.model.language_model.layers` and the blocks themselves, without their insides.
+
+    A remote request pickles the wrapper's whole envoy tree, each module as a reference to its
+    path, and NDIF resolves every path on its own copy of the model. Gemma-3's tree differs
+    between the local transformers (4.55) and NDIF's (5.8) -- its vision tower is nested
+    differently and its rotary embeddings were restructured -- so a request failed with "Unknown
+    persistent id" for each such path. Reads touch only a block's output, so the pruned modules
+    are never referenced; the meta modules themselves stay, and the server runs its own model.
+    The trace-time LoRA, which needs each block's projections, is not used with these models.
+    """
+    from nnsight.intervention.envoy import Envoy
+
+    def keep_only(envoy, names: set[str]) -> None:
+        for key in [k for k, v in envoy.__dict__.items() if isinstance(v, Envoy) and k not in names]:
+            del envoy.__dict__[key]
+
+    keep_only(model.model, {"language_model"})
+    keep_only(model.model.language_model, {"layers"})
+    for block in model.model.language_model.layers:
+        keep_only(block, set())
+
+
 def get_model_name(model_name: ModelName) -> str:
     return model_name.value
 
@@ -69,12 +135,45 @@ def get_num_layers_for_model(model_name: ModelName) -> int:
     if model_name.type == "llama":
         n_layers = {70: 80}
     elif model_name.type == "mistral":
-        n_layers = {24: 56}  # Mistral Small has 56 layers
+        n_layers = {24: 40}  # Mistral-Small-3.1's text model (text_config.num_hidden_layers)
     elif model_name.type == "qwen":
         n_layers = {72: 80}
+    elif model_name.type == "gemma":
+        n_layers = {27: 62}  # Gemma-3-27B's text model (text_config.num_hidden_layers)
     else:
         raise NotImplementedError(f"No number of layers for model {model_name}")
     return n_layers[model_name.size]
+
+
+def load_tokenizer(
+    model_name: ModelName, template_date: str | None = None
+) -> PreTrainedTokenizerBase:
+    """The tokenizer the pipeline tokenises with, set up as the authors' code sets it up.
+
+    Mistral and Gemma take the processor's tokenizer with the processor's chat template copied
+    over (their tokenizers have none of their own); Qwen's BOS is its EOS; every model pads on
+    the left with BOS. `template_date` pins Mistral's default-system-prompt date.
+    """
+    model_name = ModelName(model_name)  # callers pass the enum or its string value
+    repo = MODEL_REPOS[model_name]
+    revision = TOKENIZER_REVISIONS.get(model_name)
+    if model_name.is_vlm:
+        processor = AutoProcessor.from_pretrained(repo, padding_side="left", revision=revision)
+        tokenizer = processor.tokenizer
+        if getattr(processor, "chat_template", None):
+            tokenizer.chat_template = processor.chat_template
+    else:
+        tokenizer = AutoTokenizer.from_pretrained(repo, padding_side="left", revision=revision)
+    if model_name.is_qwen:
+        tokenizer.bos_token_id = tokenizer.eos_token_id
+    tokenizer.pad_token_id = tokenizer.bos_token_id
+    if template_date is not None:
+        if not model_name.is_mistral:
+            raise ValueError(f"template_date only applies to Mistral, not {model_name.value}")
+        tokenizer.chat_template = pin_template_date(tokenizer.chat_template, template_date)
+    # every unpadding step (acts_cache.unpad_left, tail lengths) assumes left padding
+    tokenizer.padding_side = "left"
+    return tokenizer
 
 
 @overload
@@ -84,6 +183,7 @@ def get_model_and_tokenizer(
     pw_locked: bool = False,
     lora_path: str | Path | None = None,
     cut_at_layer: int | None = None,
+    template_date: str | None = None,
 ) -> tuple[None, PreTrainedTokenizerBase]: ...
 
 
@@ -94,6 +194,7 @@ def get_model_and_tokenizer(
     pw_locked: bool = False,
     lora_path: str | Path | None = None,
     cut_at_layer: int | None = None,
+    template_date: str | None = None,
 ) -> tuple[PreTrainedModel, PreTrainedTokenizerBase]: ...
 
 
@@ -104,6 +205,7 @@ def get_model_and_tokenizer(
     pw_locked: bool = False,
     lora_path: str | Path | None = None,
     cut_at_layer: int | None = None,
+    template_date: str | None = None,
 ) -> tuple[PreTrainedModel | None, PreTrainedTokenizerBase]: ...
 
 
@@ -113,11 +215,13 @@ def get_model_and_tokenizer(
     pw_locked: bool = False,
     lora_path: str | Path | None = None,
     cut_at_layer: int | None = None,
+    template_date: str | None = None,
 ) -> tuple[PreTrainedModel | None, PreTrainedTokenizerBase]:
     """
     Load the model and tokenizer based on the given parameters.
     """
-    model, tokenizer = model_and_tokenizer(model_name, omit_model, lora_path)
+    model_name = ModelName(model_name)  # callers pass the enum or its string value
+    model, tokenizer = model_and_tokenizer(model_name, omit_model, lora_path, template_date)
 
     if cut_at_layer is not None and model is not None:
         # Handle PeftModel (LoRA) - need to access base model
@@ -144,15 +248,32 @@ def get_llama3_tokenizer(tokenizer_name: str = "meta-llama/Meta-Llama-3.1-70B-In
 
 
 def model_and_tokenizer(
-    model_name: ModelName, omit_model: bool = False, lora_path: str | Path | None = None
+    model_name: ModelName,
+    omit_model: bool = False,
+    lora_path: str | Path | None = None,
+    template_date: str | None = None,
 ) -> tuple[PreTrainedModel | None, PreTrainedTokenizerBase]:
-    base_model_path = {
-        ModelName.LLAMA_70B_3_3: "meta-llama/Llama-3.3-70B-Instruct",
-        ModelName.LLAMA_70B_3_1: "meta-llama/Meta-Llama-3.1-70B-Instruct",
-        ModelName.MISTRAL_3_1_24B: "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
-        ModelName.QWEN_72B: "Qwen/Qwen2.5-72B-Instruct",
-        ModelName.GEMMA_3_27B: "google/gemma-3-27b-it",
-    }[model_name]
+    model_name = ModelName(model_name)
+    base_model_path = MODEL_REPOS[model_name]
+
+    if lora_path is None:
+        # The base model is read remotely on NDIF, so only its config is fetched here: an nnsight
+        # wrapper on meta weights. Mistral-3 and Gemma-3 are multimodal classes, which nnsight's
+        # LanguageModel refuses and NDIF deploys as VisionLanguageModel; token tensors without
+        # images take the plain language-model path. A tokenizer-only caller builds no model.
+        tokenizer = load_tokenizer(model_name, template_date)
+        if omit_model:
+            return None, tokenizer
+        wrapper = VisionLanguageModel if model_name.is_vlm else LanguageModel
+        model = wrapper(base_model_path)
+        if model_name.is_vlm:
+            prune_to_decoder_blocks(model)
+        logger.info(f"Loaded model {model_name} from {base_model_path}")
+        model.eval()
+        return model, tokenizer
+
+    if template_date is not None:
+        raise NotImplementedError("template_date is only wired up for the remote base model")
 
     final_model_path = base_model_path
 

@@ -31,6 +31,25 @@ from deception_detection.tokenized_data import TokenizedDataset, get_tokenized_d
 from deception_detection.utils import REPO_ROOT, mask_sparse_activations
 
 
+def uses_language_model_blocks(model) -> bool:
+    """Whether the decoder blocks sit under ``model.model.language_model`` -- the multimodal
+    Mistral3 and Gemma3 classes -- rather than directly under ``model.model`` (Llama, Qwen2).
+
+    Decided on the client, before a trace: the path is the same in the local transformers and in
+    NDIF's, so a plain bool can choose it inside the trace body.
+    """
+    inner = getattr(model, "model", None)
+    return inner is not None and hasattr(inner, "language_model")
+
+
+def decoder_blocks(model):
+    """The decoder blocks, resolved outside a trace. None for an object without `.model` (the
+    tests' stand-ins), whose `trace` fails before any block is read."""
+    if getattr(model, "model", None) is None:
+        return None
+    return model.model.language_model.layers if uses_language_model_blocks(model) else model.model.layers
+
+
 def trace_layer_outputs(
     model,
     tokens: Tensor,
@@ -40,6 +59,7 @@ def trace_layer_outputs(
     lora: LoraAdapter | None = None,
     remote: bool = True,
     span_mask: Tensor | None = None,
+    stop_early: bool = False,
 ) -> Tensor:
     """One forward pass: the outputs of the given decoder blocks, ``[batch, seq, layer, emb]``.
 
@@ -54,28 +74,56 @@ def trace_layer_outputs(
     than every position. The reduction is the persona bank's own (the Assistant Axis NDIF
     pipeline's ``_span_mean_sum``): the product with the 0/1 mask stays in the model's dtype,
     where it is exact, and the sum is taken in float32, since summing in bfloat16 miscounts long
-    spans.
+    spans. A ``[batch, k, seq]`` mask returns ``k`` means per row, ``[batch, k, layer, emb]``,
+    from the same pass.
+
+    ``stop_early`` ends the pass once the deepest block read has run, so the blocks after it and
+    the LM head never execute; everything read comes from blocks that have already run.
     """
     plan = call_plan(lora) if lora is not None else {}
     scale = lora.scale if lora is not None else 1.0
     order = sorted(set(layers))
-    with model.trace(tokens, attention_mask=attention_mask, remote=remote):
+    # Resolved here and only the blocks touched inside the trace: a reference to `model.model`
+    # there serialises its whole sub-tree, and Gemma-3's vision tower is nested differently
+    # under the local transformers (4.55) than under NDIF's (5.8), so the server cannot resolve it.
+    blocks = decoder_blocks(model)
+    n_rows = tokens.shape[0]
+    multi = span_mask is not None and span_mask.ndim == 3
+    with model.trace(tokens, attention_mask=attention_mask, remote=remote) as tracer:
         outputs = list().save()
         for block in range(order[-1] + 1):
             for submodule, projection, a, b in plan.get(block, []):
-                module = getattr(getattr(model.model.layers[block], submodule), projection)
+                module = getattr(getattr(blocks[block], submodule), projection)
                 x = module.input
                 update = (x @ a.to(x.device, x.dtype).T) @ b.to(x.device, x.dtype).T
                 module.output = module.output + update * scale
             if block in order:
-                output = model.model.layers[block].output
-                if span_mask is not None:
+                output = blocks[block].output
+                # Gemma-3's block returns a tuple under the local transformers (4.55) and a bare
+                # tensor under NDIF's (5.8). Decided here, where the value is real: a flag set on
+                # the client would index the tensor's batch dimension instead.
+                output = output[0] if isinstance(output, tuple) else output
+                if output.ndim != 3 or output.shape[0] != n_rows:
+                    raise ValueError(f"block {block} returned shape {tuple(output.shape)}")
+                if span_mask is not None and not multi:
                     m = span_mask.to(output.device, torch.float32)
                     total = (output * m[:, :, None].to(output.dtype)).sum(dim=1, dtype=torch.float32)
                     outputs.append(total / m.sum(dim=1, keepdim=True))
+                elif multi:
+                    m = span_mask.to(output.device, torch.float32)
+                    means = []
+                    for k in range(m.shape[1]):
+                        mk = m[:, k, :]
+                        total = (output * mk[:, :, None].to(output.dtype)).sum(dim=1, dtype=torch.float32)
+                        means.append(total / mk.sum(dim=1, keepdim=True))
+                    outputs.append(torch.stack(means, dim=1))
                 else:
                     outputs.append(output[:, -tail:, :] if tail else output)
+        if stop_early:
+            tracer.stop()
     index = [order.index(layer) for layer in layers]
+    if multi:
+        return torch.stack(list(outputs), dim=2)[:, :, index]
     if span_mask is not None:
         return torch.stack(list(outputs), dim=1)[:, index]
     stacked = torch.stack(list(outputs), dim=2)
@@ -91,6 +139,7 @@ def trace_span_tokens(
     position_index: Tensor,
     remote: bool = True,
     span_mask: Tensor | None = None,
+    stop_early: bool = False,
 ) -> Tensor | tuple[Tensor, Tensor]:
     """One forward pass: the residual stream at ``layer`` at the listed ``(row, position)`` pairs.
 
@@ -98,17 +147,25 @@ def trace_span_tokens(
     listed positions are sent back (a response span costs its tokens, not the padded row). With
     ``span_mask`` ``[batch, seq]`` the same pass also returns each row's fp32 mean over the marked
     positions, ``trace_layer_outputs``' reduction, so a caller can check that the gathered tokens
-    average to the read the persona bank was built from.
+    average to the read the persona bank was built from. ``stop_early`` and the block lookup are
+    as in ``trace_layer_outputs``.
     """
     b = torch.as_tensor(batch_index, dtype=torch.long)
     p = torch.as_tensor(position_index, dtype=torch.long)
-    with model.trace(tokens, attention_mask=attention_mask, remote=remote):
-        output = model.model.layers[layer].output
+    blocks = decoder_blocks(model)  # resolved outside the trace, as in trace_layer_outputs
+    n_rows = tokens.shape[0]
+    with model.trace(tokens, attention_mask=attention_mask, remote=remote) as tracer:
+        output = blocks[layer].output
+        output = output[0] if isinstance(output, tuple) else output
+        if output.ndim != 3 or output.shape[0] != n_rows:
+            raise ValueError(f"block {layer} returned shape {tuple(output.shape)}")
         gathered = output[b.to(output.device), p.to(output.device)].save()
         if span_mask is not None:
             m = span_mask.to(output.device, torch.float32)
             total = (output * m[:, :, None].to(output.dtype)).sum(dim=1, dtype=torch.float32)
             means = (total / m.sum(dim=1, keepdim=True)).save()
+        if stop_early:
+            tracer.stop()
     if span_mask is not None:
         return gathered, means
     return gathered
@@ -204,6 +261,7 @@ class Activations:
         cache_mode: str = "full",
         positions: str = "all",
         lora: LoraAdapter | None = None,
+        stop_early: bool = False,
     ) -> "Activations":
         """Creates Activations by running the model on the tokenized dataset.
 
@@ -288,9 +346,10 @@ class Activations:
                 model,
                 batch_tokens.to(device),
                 batch_attn.to(device),
-                layers if layers is not None else list(range(len(model.model.layers))),
+                layers if layers is not None else list(range(len(decoder_blocks(model)))),
                 tail=batch_tail if tail_only else None,
                 lora=lora,
+                stop_early=stop_early,
             ).cpu()
 
             for row, i in enumerate(batch):
@@ -307,7 +366,12 @@ class Activations:
 
         if missing:
             memory = BudgetMemory(acts_cache.cache_root().parent / "budget_memory.json")
-            memory_key = BudgetMemory.key(model_key, 0 if layers is None else len(layers))
+            # Per dataset: a set of long rows (insider trading) runs out of memory at budgets
+            # that short rows fill without trouble, and a key shared by every dataset let its
+            # demotion halve all of them.
+            memory_key = BudgetMemory.key(
+                f"{model_key}|{tokenized_dataset.dataset_partial_id}", 0 if layers is None else len(layers)
+            )
             execute_in_batches(
                 missing,
                 lambda i: true_lens[i],
@@ -543,6 +607,7 @@ class PairedActivations:
         token_budget: int | None = None,
         cache_mode: str = "full",
         positions: str = "all",
+        stop_early: bool = False,
     ) -> "PairedActivations":
         """
         Create SplitPairedActivations from a DialogueDataset.
@@ -592,6 +657,7 @@ class PairedActivations:
                 token_budget=token_budget,
                 cache_mode=cache_mode,
                 positions=positions,
+                stop_early=stop_early,
             )
             deceptive_acts = Activations.from_model(
                 model,
@@ -603,6 +669,7 @@ class PairedActivations:
                 token_budget=token_budget,
                 cache_mode=cache_mode,
                 positions=positions,
+                stop_early=stop_early,
             )
         else:
             honest_acts = Activations.from_goodfire(honest_toks)

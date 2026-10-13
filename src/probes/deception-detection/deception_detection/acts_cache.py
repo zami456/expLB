@@ -25,6 +25,7 @@ key that records that length.
 import hashlib
 import os
 import shutil
+import time
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -68,6 +69,28 @@ def example_key(
     return hasher.hexdigest()
 
 
+DRIVE_WAIT_S = 60.0
+
+
+def until_drive(fn, what: object, wait_s: float = DRIVE_WAIT_S):
+    """`fn()`, retried for up to `wait_s` seconds while it raises OSError.
+
+    The cache can live on an external drive that drops out for a few seconds at a time
+    ("WinError 433: A device which does not exist was specified"). A long run should ride that
+    out rather than die on the first file it touches during the gap. Errors that are not OSError
+    -- a corrupt file, say -- are not retried.
+    """
+    deadline = time.monotonic() + wait_s
+    while True:
+        try:
+            return fn()
+        except OSError as err:
+            if time.monotonic() >= deadline:
+                raise
+            logger.warning(f"{what}: {err}; waiting for the drive")
+            time.sleep(2.0)
+
+
 def path_for(key: str) -> Path:
     """Two levels of hash-prefix subdirectory keep any one directory small."""
     return cache_root() / key[:2] / key[2:4] / f"{key}.pt"
@@ -81,10 +104,10 @@ def load(key: str, expected_len: int) -> Tensor | None:
     than paying for the download again.
     """
     path = path_for(key)
-    if not path.exists():
+    if not until_drive(path.exists, path):
         return None
     try:
-        payload = torch.load(path, map_location="cpu", weights_only=True)
+        payload = until_drive(lambda: torch.load(path, map_location="cpu", weights_only=True), path)
         acts = payload["acts"]
         if payload["version"] != CACHE_FORMAT_VERSION:
             return None
@@ -113,11 +136,14 @@ def store(key: str, acts: Tensor) -> None:
     # measured at 8x here, and worse at larger batch sizes. Slicing dim 0 keeps the result
     # contiguous, so .contiguous() is a no-op and cannot fix it; only a copy can.
     payload = {"acts": acts.detach().cpu().clone(), "version": CACHE_FORMAT_VERSION}
-    try:
+    def write() -> None:
         path.parent.mkdir(parents=True, exist_ok=True)
         tmp = path.with_suffix(".pt.tmp")
         torch.save(payload, tmp)
         os.replace(tmp, path)
+
+    try:
+        until_drive(write, path)
     except OSError as err:
         logger.warning(f"Could not cache activations to {path} ({err}); continuing uncached")
 

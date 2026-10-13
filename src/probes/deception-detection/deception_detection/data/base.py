@@ -109,6 +109,8 @@ class DialogueDataset:
         max_llama_token_length: int | None = None,
         experiment_id: str | None = None,
         upper_bound_model: str | None = None,
+        source_model: str | None = None,
+        max_rows: int | None = None,
     ):
         """
         Sometimes implemented by subclasses, but usually not.
@@ -131,6 +133,8 @@ class DialogueDataset:
         # Set upper_bound_model before calling _get_dialogues() so it's available in _load_config()
         # Always set it (even if None) so the attribute exists for debugging
         self.upper_bound_model = upper_bound_model
+        # Likewise the model whose prewritten rollouts a Liars' Bench dataset loads
+        self.source_model = source_model
 
         if dialogues is None:
             assert (
@@ -162,6 +166,10 @@ class DialogueDataset:
             shuffle_upon_init = True
         if len(set(self.labels)) > 1 and shuffle_upon_init:
             self.randomly_shuffle_dialogues()
+        if max_rows is not None:
+            self.dialogues, self.labels, self.metadata = self._slice_by_index(
+                self.balanced_head(max_rows)
+            )
         if max_llama_token_length is not None:
             # get only tokenizer
             self.llama_tokenizer = get_llama3_tokenizer()
@@ -249,6 +257,21 @@ class DialogueDataset:
         )
         new.base_name = base_name
         return new
+
+    def balanced_head(self, max_rows: int) -> list[int]:
+        """The first `max_rows // n_labels` rows of each label, in dataset order.
+
+        Taken after the seeded shuffle, so a pilot's subset is the same on every run and every
+        label is represented equally.
+        """
+        per_label = max_rows // len(set(self.labels))
+        taken: dict[Label, int] = defaultdict(int)
+        keep = []
+        for i, label in enumerate(self.labels):
+            if taken[label] < per_label:
+                taken[label] += 1
+                keep.append(i)
+        return keep
 
     def randomly_shuffle_dialogues(self) -> None:
         """

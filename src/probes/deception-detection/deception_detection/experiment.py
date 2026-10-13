@@ -1,6 +1,7 @@
 import gc
 import json
 import os
+import shutil
 from datetime import datetime
 from pathlib import Path
 from typing import Annotated, Any, Literal
@@ -49,6 +50,7 @@ ControlDatasetName = Annotated[
 
 BATCH_SIZE_ACTS=32  # Reduced for 70B models to avoid OOM
 BATCH_PAIRED_ACTS=32 # 1
+SHARD_SCORES_DIR = "shard_scores"  # per-shard checkpoints of a dataset still being scored
 
 class ExperimentConfig(BaseModel):
     """
@@ -143,6 +145,18 @@ class ExperimentConfig(BaseModel):
     # (scores_all_tokens, the token HTML) are meaningless in that mode.
     acts_positions: Literal["all", "tail"] = "all"
 
+    # Liars' Bench on models other than Llama.
+    #   template_date   -- Mistral only: the date its chat template writes into the default system
+    #                      prompt, which only system-less dialogues (RepE) receive. Unset, it is
+    #                      the day the run happens to execute.
+    #   ndif_stop_early -- end each remote pass after the deepest block read, so the remaining
+    #                      blocks and the LM head never run. What is read does not change.
+    #   lb_max_rows     -- a label-balanced subset of every dataset except the training set, for
+    #                      pilot runs.
+    template_date: str | None = None
+    ndif_stop_early: bool = False
+    lb_max_rows: int | None = None
+
     use_followup_question: bool = False
     followup_question: str = (
         "Did your last response contain a lie? (Yes/No)"  # Configurable followup question
@@ -176,6 +190,8 @@ class ExperimentConfig(BaseModel):
         self._validate_local_sae_acts_config()
         self._validate_goodfire_sae_acts_config()
         self._validate_detector_config()
+        if self.template_date is not None and not self.model_name.is_mistral:
+            raise ValueError("template_date only applies to Mistral's chat template")
         self._setup_folder_and_config()
 
     @classmethod
@@ -297,7 +313,10 @@ class Experiment:
         self.cfg = cfg
         self._model = None  # Store actual model in _model attribute
         self._max_tokens_cache: dict[str, int] = {}  # dataset name -> longest example
-        _, tokenizer = get_model_and_tokenizer(cfg.model_name, omit_model=True, lora_path=cfg.lora_path)
+        _, tokenizer = get_model_and_tokenizer(
+            cfg.model_name, omit_model=True, lora_path=cfg.lora_path,
+            template_date=cfg.template_date,
+        )
         self.tokenizer = tokenizer
         self.train_dataset = self.get_train_dataset()
         self.eval_datasets = self.get_eval_datasets()
@@ -336,6 +355,7 @@ class Experiment:
             token_budget=self.cfg.ndif_token_budget,
             cache_mode=self.cfg.acts_cache_mode,
             positions=self.cfg.acts_positions,
+            stop_early=self.cfg.ndif_stop_early,
         )
         honest_fit_acts, deceptive_fit_acts = split_paired_acts.get_all_acts()
 
@@ -358,6 +378,8 @@ class Experiment:
         out_file = self.cfg.folder / "detector.pt"
         logger.info(f"Saving detector to {out_file}")
         detector.save(out_file)
+        # shard checkpoints scored by an earlier detector would otherwise be reused
+        shutil.rmtree(self.cfg.folder / SHARD_SCORES_DIR, ignore_errors=True)
         return detector
 
     # ----- DATASETS ----- #
@@ -421,6 +443,8 @@ class Experiment:
             shuffle_upon_init=not name.startswith("repe"),
             max_llama_token_length=self.cfg.max_llama_token_length,
             experiment_id=self.cfg.id,  # Pass experiment ID so CadenzaDataset can check for "upper_bound"
+            source_model=self.cfg.model_name.value,
+            max_rows=None if name == self.cfg.train_data else self.cfg.lb_max_rows,
         )
 
 
@@ -643,7 +667,10 @@ class Experiment:
                 continue
 
             shard_size = self._shard_size_for(dataset)
-            scores, scores_all_tokens = self.compute_scores_for_dataset(dataset, shard_size)
+            shard_dir = self.cfg.folder / SHARD_SCORES_DIR / f"{prefix}{dataset.name}"
+            scores, scores_all_tokens = self.compute_scores_for_dataset(
+                dataset, shard_size, checkpoint_dir=shard_dir
+            )
             # add is_deceptive to scores
             assert len(dataset.labels) == len(scores) == len(scores_all_tokens), (
                 f"Mismatch labels (len {len(dataset.labels)}) and scores (len {len(scores)})"
@@ -658,6 +685,7 @@ class Experiment:
             self._write_scores_file(
                 all_tokens_path, all_scores_all_tokens, f"{prefix}scores_all_tokens"
             )
+            shutil.rmtree(shard_dir, ignore_errors=True)
 
             # Clean up GPU memory after each dataset
             gc.collect()
@@ -670,43 +698,39 @@ class Experiment:
             self._write_scores_file(
                 all_tokens_path, all_scores_all_tokens, f"{prefix}scores_all_tokens"
             )
+        try:  # gone once every dataset that had shard checkpoints is written in full
+            (self.cfg.folder / SHARD_SCORES_DIR).rmdir()
+        except OSError:
+            pass
 
     def compute_scores_for_dataset(
-        self, dataset: DialogueDataset, shard_size: int | None
+        self, dataset: DialogueDataset, shard_size: int | None, checkpoint_dir: Path | None = None
     ) -> tuple[Scores, Scores]:
         """
         Compute the scores for a dataset, return scores on the detection mask and on all tokens.
 
         A shard size of None means computing all acts in one shard
+
+        With `checkpoint_dir`, each shard's scores are saved there as it finishes, and a re-run
+        reuses them instead of reading that shard's activations again. The activation cache
+        alone was not enough: re-reading a large dataset's cached examples from an external
+        drive took longer than a resumed ten-minute chunk of a long run, so the run stalled.
         """
         assert len(dataset) > 0, f"Dataset {dataset.name} is empty"
-
-        def get_scores_for_shard(
-            dataset: DialogueDataset,
-        ) -> tuple[Scores, Scores]:
-            toks = TokenizedDataset.from_dataset(
-                dataset,
-                self.tokenizer,
-                detect_all=self.cfg.detect_all_tokens,
-                detect_only_start_of_turn=self.cfg.detect_only_start_of_turn,
-                detect_only_last_token=self.cfg.detect_only_last_token,
-            )
-            acts = self.get_acts(toks)
-            detector = self.get_detector()
-            scores = detector.score(acts)
-            scores_all_tokens = detector.score(acts, all_acts=True)
-            assert len(scores) == len(scores_all_tokens) == len(dataset) == len(toks), (
-                f"Len mismatch: scores={len(scores)}, scores_all_tokens={len(scores_all_tokens)},"
-                f"dataset={len(dataset)}, toks={len(toks)}"
-            )
-            return scores, scores_all_tokens
 
         all_scores: list[Scores] = []
         all_scores_all_tokens: list[Scores] = []
         shard_size = shard_size or len(dataset)
         for start_idx in trange(0, len(dataset), shard_size, desc=dataset.name):
-            shard_dataset = dataset[start_idx : start_idx + shard_size]
-            scores, scores_all_tokens = get_scores_for_shard(shard_dataset)
+            end_idx = min(start_idx + shard_size, len(dataset))
+            path = None if checkpoint_dir is None else checkpoint_dir / f"{start_idx}-{end_idx}.json"
+            done = self._load_shard_scores(path, end_idx - start_idx)
+            if done is not None:
+                scores, scores_all_tokens = done
+            else:
+                scores, scores_all_tokens = self._scores_for_shard(dataset[start_idx:end_idx])
+                if path is not None:
+                    self._write_shard_scores(path, scores, scores_all_tokens)
             all_scores.append(scores)
             all_scores_all_tokens.append(scores_all_tokens)
             
@@ -722,6 +746,49 @@ class Experiment:
             f"dataset={len(dataset)}"
         )
         return scores, scores_all_tokens
+
+    def _scores_for_shard(self, dataset: DialogueDataset) -> tuple[Scores, Scores]:
+        toks = TokenizedDataset.from_dataset(
+            dataset,
+            self.tokenizer,
+            detect_all=self.cfg.detect_all_tokens,
+            detect_only_start_of_turn=self.cfg.detect_only_start_of_turn,
+            detect_only_last_token=self.cfg.detect_only_last_token,
+        )
+        acts = self.get_acts(toks)
+        detector = self.get_detector()
+        scores = detector.score(acts)
+        scores_all_tokens = detector.score(acts, all_acts=True)
+        assert len(scores) == len(scores_all_tokens) == len(dataset) == len(toks), (
+            f"Len mismatch: scores={len(scores)}, scores_all_tokens={len(scores_all_tokens)},"
+            f"dataset={len(dataset)}, toks={len(toks)}"
+        )
+        return scores, scores_all_tokens
+
+    @staticmethod
+    def _load_shard_scores(path: Path | None, n_rows: int) -> tuple[Scores, Scores] | None:
+        """A finished shard's scores from an earlier attempt, or None if absent or unusable."""
+        if path is None or not path.exists():
+            return None
+        try:
+            with open(path) as f:
+                raw = json.load(f)
+            scores = Scores.from_dict(raw["scores"])
+            scores_all_tokens = Scores.from_dict(raw["scores_all_tokens"])
+        except (OSError, json.JSONDecodeError, KeyError, TypeError) as err:
+            logger.warning(f"Could not reuse {path} ({err}); recomputing that shard")
+            return None
+        if len(scores) != n_rows or len(scores_all_tokens) != n_rows:
+            return None
+        return scores, scores_all_tokens
+
+    @staticmethod
+    def _write_shard_scores(path: Path, scores: Scores, scores_all_tokens: Scores) -> None:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        tmp = path.with_suffix(".json.tmp")
+        with open(tmp, "w") as f:
+            json.dump({"scores": scores.to_dict(), "scores_all_tokens": scores_all_tokens.to_dict()}, f)
+        os.replace(tmp, path)
 
     def get_acts(self, toks: TokenizedDataset) -> Activations:
         if self.cfg.use_goodfire_sae_acts:
@@ -739,6 +806,7 @@ class Experiment:
             token_budget=self.cfg.ndif_token_budget,
             cache_mode=self.cfg.acts_cache_mode,
             positions=self.cfg.acts_positions,
+            stop_early=self.cfg.ndif_stop_early,
         )
         if self.cfg.use_local_sae_acts:
             acts = self.to_local_sae_acts(acts)
@@ -859,7 +927,8 @@ class Experiment:
             model, _ = get_model_and_tokenizer(
                 self.cfg.model_name,
                 pw_locked=self.cfg.pw_locked,
-                lora_path=self.cfg.lora_path
+                lora_path=self.cfg.lora_path,
+                template_date=self.cfg.template_date,
             )
             self._model = model
         return self._model

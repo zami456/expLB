@@ -1,0 +1,564 @@
+{
+ "known": [
+  {
+   "question": "What is the chemical symbol for gold?",
+   "key": "B",
+   "letter": "B",
+   "p_letter": 0.9999295473098755,
+   "top_token": "B",
+   "correct": true
+  },
+  {
+   "question": "What is the capital city of France?",
+   "key": "C",
+   "letter": "C",
+   "p_letter": 0.9997972846031189,
+   "top_token": "C",
+   "correct": true
+  },
+  {
+   "question": "How many sides does a hexagon have?",
+   "key": "B",
+   "letter": "B",
+   "p_letter": 0.9999377727508545,
+   "top_token": "B",
+   "correct": true
+  },
+  {
+   "question": "Which planet is closest to the Sun?",
+   "key": "C",
+   "letter": "C",
+   "p_letter": 0.9999048709869385,
+   "top_token": "C",
+   "correct": true
+  },
+  {
+   "question": "What is the boiling point of water at sea level in degrees Celsius?",
+   "key": "C",
+   "letter": "C",
+   "p_letter": 0.9998231530189514,
+   "top_token": "C",
+   "correct": true
+  },
+  {
+   "question": "Who wrote the play Romeo and Juliet?",
+   "key": "B",
+   "letter": "B",
+   "p_letter": 0.9999146461486816,
+   "top_token": "B",
+   "correct": true
+  },
+  {
+   "question": "What is 12 multiplied by 12?",
+   "key": "C",
+   "letter": "C",
+   "p_letter": 0.9998109936714172,
+   "top_token": "C",
+   "correct": true
+  },
+  {
+   "question": "Which gas do plants absorb from the air for photosynthesis?",
+   "key": "C",
+   "letter": "C",
+   "p_letter": 0.9997854828834534,
+   "top_token": "C",
+   "correct": true
+  },
+  {
+   "question": "What is the largest ocean on Earth?",
+   "key": "D",
+   "letter": "D",
+   "p_letter": 0.9998598098754883,
+   "top_token": "D",
+   "correct": true
+  },
+  {
+   "question": "In which year did the Second World War end?",
+   "key": "B",
+   "letter": "B",
+   "p_letter": 0.9998538494110107,
+   "top_token": "B",
+   "correct": true
+  },
+  {
+   "question": "What is the chemical formula for table salt?",
+   "key": "B",
+   "letter": "B",
+   "p_letter": 0.9999115467071533,
+   "top_token": "B",
+   "correct": true
+  },
+  {
+   "question": "How many continents are there on Earth?",
+   "key": "C",
+   "letter": "C",
+   "p_letter": 0.9864646196365356,
+   "top_token": "C",
+   "correct": true
+  },
+  {
+   "question": "What is the capital city of Japan?",
+   "key": "C",
+   "letter": "C",
+   "p_letter": 0.9997305274009705,
+   "top_token": "C",
+   "correct": true
+  },
+  {
+   "question": "Which element has the atomic number 1?",
+   "key": "B",
+   "letter": "B",
+   "p_letter": 0.9999326467514038,
+   "top_token": "B",
+   "correct": true
+  },
+  {
+   "question": "What is the square root of 81?",
+   "key": "C",
+   "letter": "C",
+   "p_letter": 0.9998375177383423,
+   "top_token": "C",
+   "correct": true
+  },
+  {
+   "question": "Who painted the Mona Lisa?",
+   "key": "C",
+   "letter": "C",
+   "p_letter": 0.9998162388801575,
+   "top_token": "C",
+   "correct": true
+  },
+  {
+   "question": "What is the freezing point of water in degrees Fahrenheit?",
+   "key": "B",
+   "letter": "B",
+   "p_letter": 0.9998563528060913,
+   "top_token": "B",
+   "correct": true
+  },
+  {
+   "question": "Which organ pumps blood through the human body?",
+   "key": "C",
+   "letter": "C",
+   "p_letter": 0.9999336004257202,
+   "top_token": "C",
+   "correct": true
+  },
+  {
+   "question": "What is the largest planet in the Solar System?",
+   "key": "C",
+   "letter": "C",
+   "p_letter": 0.9997918009757996,
+   "top_token": "C",
+   "correct": true
+  },
+  {
+   "question": "How many days are there in a leap year?",
+   "key": "C",
+   "letter": "C",
+   "p_letter": 0.999858021736145,
+   "top_token": "C",
+   "correct": true
+  },
+  {
+   "question": "What is the capital city of Italy?",
+   "key": "B",
+   "letter": "B",
+   "p_letter": 0.9998148083686829,
+   "top_token": "B",
+   "correct": true
+  },
+  {
+   "question": "Which metal is liquid at room temperature?",
+   "key": "B",
+   "letter": "B",
+   "p_letter": 0.9999377727508545,
+   "top_token": "B",
+   "correct": true
+  },
+  {
+   "question": "What is the chemical symbol for oxygen?",
+   "key": "B",
+   "letter": "B",
+   "p_letter": 0.9999128580093384,
+   "top_token": "B",
+   "correct": true
+  },
+  {
+   "question": "Who developed the theory of general relativity?",
+   "key": "C",
+   "letter": "C",
+   "p_letter": 0.9998375177383423,
+   "top_token": "C",
+   "correct": true
+  },
+  {
+   "question": "What is 15 plus 27?",
+   "key": "C",
+   "letter": "C",
+   "p_letter": 0.9943538904190063,
+   "top_token": "C",
+   "correct": true
+  },
+  {
+   "question": "Which language has the most native speakers in the world?",
+   "key": "C",
+   "letter": "C",
+   "p_letter": 0.9996509552001953,
+   "top_token": "C",
+   "correct": true
+  },
+  {
+   "question": "What is the longest river in Africa?",
+   "key": "C",
+   "letter": "C",
+   "p_letter": 0.9995996356010437,
+   "top_token": "C",
+   "correct": true
+  },
+  {
+   "question": "How many bones are in the adult human body?",
+   "key": "B",
+   "letter": "B",
+   "p_letter": 0.9998249411582947,
+   "top_token": "B",
+   "correct": true
+  },
+  {
+   "question": "What is the capital city of Canada?",
+   "key": "C",
+   "letter": "C",
+   "p_letter": 0.9996765851974487,
+   "top_token": "C",
+   "correct": true
+  },
+  {
+   "question": "Which is the smallest prime number?",
+   "key": "C",
+   "letter": "C",
+   "p_letter": 0.9999051094055176,
+   "top_token": "C",
+   "correct": true
+  },
+  {
+   "question": "What is the main gas in the Earth's atmosphere?",
+   "key": "B",
+   "letter": "B",
+   "p_letter": 0.9998053908348083,
+   "top_token": "B",
+   "correct": true
+  },
+  {
+   "question": "Who was the first person to walk on the Moon?",
+   "key": "C",
+   "letter": "C",
+   "p_letter": 0.9992338418960571,
+   "top_token": "C",
+   "correct": true
+  },
+  {
+   "question": "What is the currency of the United Kingdom?",
+   "key": "C",
+   "letter": "C",
+   "p_letter": 0.9998124241828918,
+   "top_token": "C",
+   "correct": true
+  },
+  {
+   "question": "How many minutes are there in two hours?",
+   "key": "C",
+   "letter": "C",
+   "p_letter": 0.9973832964897156,
+   "top_token": "C",
+   "correct": true
+  },
+  {
+   "question": "Which ocean lies between Africa and Australia?",
+   "key": "C",
+   "letter": "C",
+   "p_letter": 0.9994927644729614,
+   "top_token": "C",
+   "correct": true
+  },
+  {
+   "question": "What is the chemical symbol for iron?",
+   "key": "C",
+   "letter": "C",
+   "p_letter": 0.9998941421508789,
+   "top_token": "C",
+   "correct": true
+  },
+  {
+   "question": "What is the capital city of Australia?",
+   "key": "C",
+   "letter": "C",
+   "p_letter": 0.9997102618217468,
+   "top_token": "C",
+   "correct": true
+  },
+  {
+   "question": "Which shape has three sides?",
+   "key": "B",
+   "letter": "B",
+   "p_letter": 0.9999344348907471,
+   "top_token": "B",
+   "correct": true
+  },
+  {
+   "question": "What is the hardest natural substance?",
+   "key": "C",
+   "letter": "C",
+   "p_letter": 0.9996283054351807,
+   "top_token": "C",
+   "correct": true
+  },
+  {
+   "question": "Who wrote the novel Pride and Prejudice?",
+   "key": "B",
+   "letter": "B",
+   "p_letter": 0.9999115467071533,
+   "top_token": "B",
+   "correct": true
+  },
+  {
+   "question": "How many legs does a spider have?",
+   "key": "B",
+   "letter": "B",
+   "p_letter": 0.9999085664749146,
+   "top_token": "B",
+   "correct": true
+  },
+  {
+   "question": "What is the capital city of Germany?",
+   "key": "C",
+   "letter": "C",
+   "p_letter": 0.9997209906578064,
+   "top_token": "C",
+   "correct": true
+  },
+  {
+   "question": "What is 100 divided by 4?",
+   "key": "B",
+   "letter": "B",
+   "p_letter": 0.997383177280426,
+   "top_token": "B",
+   "correct": true
+  },
+  {
+   "question": "Which planet is known as the Red Planet?",
+   "key": "B",
+   "letter": "B",
+   "p_letter": 0.9999333620071411,
+   "top_token": "B",
+   "correct": true
+  },
+  {
+   "question": "What is the chemical symbol for sodium?",
+   "key": "C",
+   "letter": "C",
+   "p_letter": 0.9999196529388428,
+   "top_token": "C",
+   "correct": true
+  },
+  {
+   "question": "In which continent is Brazil?",
+   "key": "C",
+   "letter": "C",
+   "p_letter": 0.9998020529747009,
+   "top_token": "C",
+   "correct": true
+  },
+  {
+   "question": "What is the largest mammal?",
+   "key": "B",
+   "letter": "B",
+   "p_letter": 0.9998441934585571,
+   "top_token": "B",
+   "correct": true
+  },
+  {
+   "question": "How many hours are there in a day?",
+   "key": "C",
+   "letter": "C",
+   "p_letter": 0.9998555183410645,
+   "top_token": "C",
+   "correct": true
+  },
+  {
+   "question": "Who composed the Ninth Symphony that ends with the Ode to Joy?",
+   "key": "B",
+   "letter": "B",
+   "p_letter": 0.9999078512191772,
+   "top_token": "B",
+   "correct": true
+  },
+  {
+   "question": "What is the capital city of Egypt?",
+   "key": "C",
+   "letter": "C",
+   "p_letter": 0.9998168349266052,
+   "top_token": "C",
+   "correct": true
+  },
+  {
+   "question": "What is the pH of pure water at 25 degrees Celsius?",
+   "key": "B",
+   "letter": "B",
+   "p_letter": 0.9999148845672607,
+   "top_token": "B",
+   "correct": true
+  },
+  {
+   "question": "Which instrument has 88 keys?",
+   "key": "C",
+   "letter": "C",
+   "p_letter": 0.999860405921936,
+   "top_token": "C",
+   "correct": true
+  },
+  {
+   "question": "What is the process by which water turns into vapour?",
+   "key": "B",
+   "letter": "B",
+   "p_letter": 0.9998902082443237,
+   "top_token": "B",
+   "correct": true
+  },
+  {
+   "question": "How many players are on a football (soccer) team on the pitch?",
+   "key": "C",
+   "letter": "C",
+   "p_letter": 0.99945467710495,
+   "top_token": "C",
+   "correct": true
+  },
+  {
+   "question": "What is the tallest mountain on Earth above sea level?",
+   "key": "C",
+   "letter": "C",
+   "p_letter": 0.9997931122779846,
+   "top_token": "C",
+   "correct": true
+  },
+  {
+   "question": "Which blood cells carry oxygen?",
+   "key": "C",
+   "letter": "C",
+   "p_letter": 0.9998918771743774,
+   "top_token": "C",
+   "correct": true
+  },
+  {
+   "question": "What is the capital city of Spain?",
+   "key": "B",
+   "letter": "B",
+   "p_letter": 0.9998364448547363,
+   "top_token": "B",
+   "correct": true
+  },
+  {
+   "question": "What is 9 squared?",
+   "key": "C",
+   "letter": "C",
+   "p_letter": 0.999812662601471,
+   "top_token": "C",
+   "correct": true
+  },
+  {
+   "question": "Which country has the largest population?",
+   "key": "C",
+   "letter": "C",
+   "p_letter": 0.9974119067192078,
+   "top_token": "C",
+   "correct": true
+  },
+  {
+   "question": "What is the chemical symbol for carbon?",
+   "key": "B",
+   "letter": "B",
+   "p_letter": 0.9998948574066162,
+   "top_token": "B",
+   "correct": true
+  },
+  {
+   "question": "What is the capital city of Russia?",
+   "key": "B",
+   "letter": "B",
+   "p_letter": 0.9998451471328735,
+   "top_token": "B",
+   "correct": true
+  },
+  {
+   "question": "How many weeks are there in a year?",
+   "key": "C",
+   "letter": "C",
+   "p_letter": 0.9992795586585999,
+   "top_token": "C",
+   "correct": true
+  },
+  {
+   "question": "Which vitamin is produced in the skin in sunlight?",
+   "key": "C",
+   "letter": "C",
+   "p_letter": 0.9998911619186401,
+   "top_token": "C",
+   "correct": true
+  },
+  {
+   "question": "What is the chemical symbol for silver?",
+   "key": "C",
+   "letter": "C",
+   "p_letter": 0.9999321699142456,
+   "top_token": "C",
+   "correct": true
+  },
+  {
+   "question": "Who wrote the epic poem the Odyssey?",
+   "key": "B",
+   "letter": "B",
+   "p_letter": 0.9998047947883606,
+   "top_token": "B",
+   "correct": true
+  },
+  {
+   "question": "What is 7 multiplied by 8?",
+   "key": "C",
+   "letter": "C",
+   "p_letter": 0.999395489692688,
+   "top_token": "C",
+   "correct": true
+  },
+  {
+   "question": "Which is the largest desert in the world by area?",
+   "key": "C",
+   "letter": "C",
+   "p_letter": 0.9992103576660156,
+   "top_token": "C",
+   "correct": true
+  },
+  {
+   "question": "What is the capital city of China?",
+   "key": "B",
+   "letter": "B",
+   "p_letter": 0.9998396635055542,
+   "top_token": "B",
+   "correct": true
+  },
+  {
+   "question": "How many strings does a standard guitar have?",
+   "key": "C",
+   "letter": "C",
+   "p_letter": 0.9997733235359192,
+   "top_token": "C",
+   "correct": true
+  },
+  {
+   "question": "Which gas do humans exhale in greater quantity than they inhale?",
+   "key": "C",
+   "letter": "C",
+   "p_letter": 0.9994792342185974,
+   "top_token": "C",
+   "correct": true
+  }
+ ]
+}

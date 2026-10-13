@@ -1,0 +1,47 @@
+# Mistral-Small-3.1-24B-Instruct over the base liars-bench subsets it has rollouts for: HP-C,
+# HP-KR, ID and IT (Liars' Bench excludes Mistral from CG). The Mean Probe of LB Table 6.
+#
+# Used by `lb_models.py` through layer_sweep.py:
+#   pool --config XXXX-9-mistral-all.yaml --layers 9,10
+#   probe --config XXXX-9-mistral-all.yaml --layer 9      # -> XXXX-9-mistral-all-B9
+# The authors' layer is 10 (XXXX-9.yaml). They loaded Mistral as a local HF model, so their
+# "layer 10" is most likely hidden_states[10], the output of block 9; block 10 is read too and
+# the published rows decide.
+#
+# trim_reasoning is off, as in the published IT numbers (which read the scratchpad); `pool` also
+# returns IT's post-"Action: " span from the same pass, for comparison with the Llama runs.
+# template_date pins the date in Mistral's default system prompt, which only RepE receives, to
+# the day of the authors' Mean Probe run (cadenza_lr__..._mistral-small-3.1-24b__20251014_012853).
+
+method: "lr"
+model_name: "mistral-small-3.1-24b"
+train_data: "repe_honesty__plain"
+
+eval_data:
+  - "harm_refusal_choice__plain"
+  - "harm_refusal_knowledge_report__plain"
+  - "insider_trading_cadenza__plain"
+  - "instruct_dishonesty__plain"
+
+control_data:
+  - "XXXX-20__plain"
+
+id: "XXXX-9"
+name: "XXXX-9-mistral-all"
+
+eval_on_policy: false
+control_on_policy: false
+control_dataset_size: 2000
+detect_only_start_of_turn: false
+val_fraction: 0.2
+detect_layers: [10]  # the authors' layer; `probe --layer` sets the block of each run
+reg_coeff: 10
+max_iter: 1000
+
+trim_reasoning: false
+template_date: "2025-10-14"
+ndif_stop_early: true
+
+acts_cache_mode: "full"
+ndif_token_budget: 8000
+host_token_budget: 32000

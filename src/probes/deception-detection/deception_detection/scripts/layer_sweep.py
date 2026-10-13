@@ -21,6 +21,13 @@ from NDIF is hours per layer. The new layers get the same outputs, built differe
     python deception_detection/scripts/layer_sweep.py probe --layer 24
     python deception_detection/scripts/layer_sweep.py analyse --layer 24
     python deception_detection/scripts/layer_sweep.py depth
+
+`pool` and `probe` also serve the Liars' Bench reproduction on other models (`lb_models.py`):
+given `--config`, the model, datasets and run name come from that config, and the pooled
+matrices go to `activations/<model>/pooled_B{block}/`, where B marks a decoder-block index.
+
+    python deception_detection/scripts/layer_sweep.py pool --config XXXX-9-mistral-all.yaml --layers 9,10
+    python deception_detection/scripts/layer_sweep.py probe --config XXXX-9-mistral-all.yaml --layer 9
 """
 
 import os
@@ -44,8 +51,35 @@ PARTIAL = Path("E:/liars-bench-acts/pooled_sweep_partial")  # one small file per
 DEPTH_DIR = REPO_ROOT / "results" / "persona_depth"
 
 
+def require_drive(path: str | Path) -> None:
+    """Stop before any NDIF call if `path`'s drive is not mounted. Request files and caches live
+    on the external E: drive; with it missing, every save failed after its remote call succeeded,
+    and the batcher retried the same requests in a loop."""
+    anchor = Path(path).anchor
+    if anchor and not Path(anchor).exists():
+        raise RuntimeError(f"{anchor} is not mounted, and {path} lives there")
+
+
 def pooled_dir(layer: int, root: Path = REPO_ROOT / "activations") -> Path:
     return root / ("pooled" if layer == 20 else f"pooled_L{layer}")
+
+
+def model_pooled_dir(model: str, block: int, root: Path = REPO_ROOT / "activations",
+                     variant: str = "") -> Path:
+    """Another model's pooled matrices at decoder block `block`. The model is in the path because
+    the files themselves record neither model nor layer; `variant` "_trim" holds insider
+    trading's post-"Action: " span."""
+    return Path(root) / model / f"pooled_B{block}{variant}"
+
+
+def config_path(config: str | Path) -> Path:
+    """A config named as a path, or by file name under scripts/configs."""
+    path = Path(config)
+    if not path.exists():
+        path = REPO_ROOT / "deception_detection" / "scripts" / "configs" / path
+    if not path.exists():
+        raise FileNotFoundError(f"no config at {config}")
+    return path
 
 
 # Which persona folder an analysis reads. "ext" is the 36-persona extraction the study runs on;
@@ -83,30 +117,52 @@ def _names(datasets) -> list[str] | None:
 
 def done_rows(folder: Path) -> set[int]:
     """The rows already pooled into `folder`'s request files."""
-    rows: set[int] = set()
-    for path in folder.glob("*.npz"):
-        with np.load(path, allow_pickle=False) as saved:
-            rows.update(int(r) for r in saved["rows"])
-    return rows
+    from deception_detection.acts_cache import until_drive
+
+    def read() -> set[int]:
+        rows: set[int] = set()
+        for path in folder.glob("*.npz"):
+            with np.load(path, allow_pickle=False) as saved:
+                rows.update(int(r) for r in saved["rows"])
+        return rows
+
+    return until_drive(read, folder)
 
 
-def save_request(folder: Path, rows: list[int], layers: list[int], means: np.ndarray) -> None:
-    """One request's means, [rows, layers, hidden], one array per layer so each reads alone."""
+def save_request(folder: Path, rows: list[int], layers: list[int], means: np.ndarray,
+                 variants: tuple[str, ...] = ("",)) -> None:
+    """One request's means, [rows, layers, hidden], one array per layer so each reads alone.
+
+    With several spans per row, `means` is [rows, spans, layers, hidden] and span k is stored as
+    `L{layer}{variants[k]}`; the first variant is "" so its arrays keep the one-span names.
+    """
     folder.mkdir(parents=True, exist_ok=True)
     path = folder / f"{min(rows):06d}_{len(rows)}.npz"
     partial = path.with_suffix(".partial")
-    with open(partial, "wb") as file:
-        np.savez(file, rows=np.array(rows), **{f"L{layer}": means[:, j] for j, layer in enumerate(layers)})
-    os.replace(partial, path)
+    if means.ndim == 3:
+        means = means[:, None]
+    assert means.shape[1] == len(variants), (means.shape, variants)
+    arrays = {f"L{layer}{variant}": means[:, k, j]
+              for k, variant in enumerate(variants) for j, layer in enumerate(layers)}
+
+    def write() -> None:
+        folder.mkdir(parents=True, exist_ok=True)
+        with open(partial, "wb") as file:
+            np.savez(file, rows=np.array(rows), **arrays)
+        os.replace(partial, path)
+
+    from deception_detection.acts_cache import until_drive
+
+    until_drive(write, path)
 
 
-def assemble(folder: Path, kept: list[int], layer: int) -> np.ndarray:
+def assemble(folder: Path, kept: list[int], layer: int, variant: str = "") -> np.ndarray:
     """`layer`'s means for every kept row, in `kept` order, from the request files."""
     position = {row: k for k, row in enumerate(kept)}
     out, filled = None, np.zeros(len(kept), dtype=bool)
     for path in sorted(folder.glob("*.npz")):
         with np.load(path, allow_pickle=False) as saved:
-            rows, means = saved["rows"], saved[f"L{layer}"]
+            rows, means = saved["rows"], saved[f"L{layer}{variant}"]
         if out is None:
             out = np.empty((len(kept), means.shape[1]), dtype=np.float32)
         at = [position[int(r)] for r in rows]
@@ -125,20 +181,74 @@ def write_pooled(path: Path, pooled: np.ndarray, labels: list[str], name: str) -
     partial.replace(path)
 
 
-def _experiment():
+def _experiment(config: str | Path | None = None, **overrides):
     """The datasets `pool_activations.run` pools, as the layer-20 RepE run defines them. That run's
-    folder exists, so building its config writes nothing."""
+    folder exists, so building its config writes nothing. With `config`, that config's datasets
+    and model instead, with any `overrides` applied."""
     import yaml
 
     from deception_detection.experiment import Experiment, ExperimentConfig
 
-    cfg = ExperimentConfig(**yaml.safe_load(BASE_CONFIG.read_text()))
+    path = BASE_CONFIG if config is None else config_path(config)
+    cfg = ExperimentConfig(**(yaml.safe_load(path.read_text()) | overrides))
     return cfg, Experiment(cfg)
 
 
+def tokenize_for_pool(dataset, tokenizer, flags: dict, separator: str | None, cache_folder: Path | None):
+    """Tokens, attention mask, detection masks and label names for `pool`, tokenised as the runner
+    tokenises them: one mask, or, with `separator`, a second one for the span after it.
+
+    With `cache_folder`, the result is kept there (`tokenized.pt`), keyed by a hash of every
+    message, the tokenizer and its chat template, so a resumed run does not re-tokenise. Insider
+    trading's 2,134 long dialogues, tokenised twice, take minutes -- most of a short resumable
+    chunk.
+    """
+    import copy
+    import hashlib
+
+    import torch
+
+    from deception_detection.tokenized_data import TokenizedDataset
+
+    digest = hashlib.sha256(repr((tokenizer.name_or_path, tokenizer.chat_template, sorted(flags.items()),
+                                  separator, type(dataset).__name__, dataset.padding)).encode())
+    for dialogue, label in zip(dataset.dialogues, dataset.labels):
+        digest.update(label.name.encode())
+        for message in dialogue:
+            digest.update(f"\x00{message.role}\x00{message.detect}\x00{message.content}".encode())
+    key = digest.hexdigest()
+    path = cache_folder / "tokenized.pt" if cache_folder is not None else None
+    if path is not None and path.exists():
+        saved = torch.load(path, weights_only=True)
+        if saved["key"] == key:
+            logger.info(f"{dataset.name}: tokenisation from {path}")
+            return saved["tokens"], saved["attention"], saved["masks"], saved["labels"]
+
+    toks = TokenizedDataset.from_dataset(dataset, tokenizer, **flags)
+    masks, labels = [toks.detection_mask], {"": [label.name for label in dataset.labels]}
+    if separator is not None:
+        trimmed = copy.deepcopy(dataset)
+        trimmed.split_dialogues_on_reasoning(separator)
+        trimmed.padding = {k: {"left": 0, "right": v["right"]} for k, v in trimmed.padding.items()}
+        toks_trim = TokenizedDataset.from_dataset(trimmed, tokenizer, **flags)
+        if not (torch.equal(toks.tokens, toks_trim.tokens)
+                and torch.equal(toks.attention_mask, toks_trim.attention_mask)):
+            raise RuntimeError(f"{dataset.name}: trimming the reasoning changed the tokens")
+        masks.append(toks_trim.detection_mask)
+        labels["_trim"] = [label.name for label in trimmed.labels]
+    if path is not None:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        partial = path.with_suffix(".pt.tmp")
+        torch.save({"key": key, "tokens": toks.tokens, "attention": toks.attention_mask,
+                    "masks": masks, "labels": labels}, partial)
+        os.replace(partial, path)
+    return toks.tokens, toks.attention_mask, masks, labels
+
+
 def pool(layers=NEW_LAYERS, datasets=None, token_budget: int = 16000,
-         out_root: str | Path = REPO_ROOT / "activations", partial_root: str | Path = PARTIAL,
-         overwrite: bool = False, shard: str | None = None) -> None:
+         out_root: str | Path | None = None, partial_root: str | Path | None = None,
+         overwrite: bool = False, shard: str | None = None,
+         config: str | Path | None = None, pilot: int | None = None) -> None:
     """Pool every dataset `pool_activations` pools at each of `layers`, on NDIF. Resumable.
 
     Rows are those with a non-empty detection mask, tokenised as the runner tokenises them.
@@ -149,39 +259,87 @@ def pool(layers=NEW_LAYERS, datasets=None, token_budget: int = 16000,
     `shard="i/n"` takes only every n-th row, from row i, and writes nothing. That way n processes
     can split one long dataset, such as insider trading: its ~1,500-token rows fit 3-4 to a
     request. A final call without `shard` finds every row pooled and writes the files.
+
+    With `config` (another model's Liars' Bench run), the model, datasets, chat-template date
+    and early stop come from that config. Matrices go to `model_pooled_dir(model, block)` and
+    request files to a folder of that model's own, so no model resumes from another's rows.
+    Datasets the model has no rollouts for are skipped. Insider trading, pooled from a config
+    with `trim_reasoning: false`, also gets its post-"Action: " span -- what the runner reads with
+    trimming on -- from the same pass, written under the "_trim" variant; trimming only moves the
+    detection mask, and the two tokenisations are checked to be identical.
+
+    `pilot=n` (with `config`) keeps a label-balanced n rows of every dataset but the training
+    set, and writes under `activations/pilot/` and a pilot request folder instead.
     """
+    import copy
+
     import torch
 
     from deception_detection.activations import trace_layer_outputs
     from deception_detection.batching import BudgetMemory, execute_in_batches
-    from deception_detection.models import get_model_and_tokenizer
+    from deception_detection.models import MODEL_REPOS, get_model_and_tokenizer
     from deception_detection.scripts.gender_secret import _environment
     from deception_detection.tokenized_data import TokenizedDataset
 
     layers = [int(layer) for layer in layers]
-    out_root, partial_root = Path(out_root), Path(partial_root)
+    if pilot is not None and config is None:
+        raise ValueError("pilot needs a config")
+    default_root = REPO_ROOT / "activations" / ("pilot" if pilot is not None else "")
+    out_root = Path(out_root) if out_root is not None else default_root
     _environment()  # NDIF and HF keys from .env, longer timeouts
-    cfg, experiment = _experiment()
-    model, _ = get_model_and_tokenizer("llama-70b-3.3")
+    if config is None:
+        cfg, experiment = _experiment()
+        model, _ = get_model_and_tokenizer("llama-70b-3.3")
+        partial_root = Path(partial_root) if partial_root is not None else PARTIAL
+        memory_key_name, stop_early, prefix = MODEL, False, "L"
+
+        def target(layer: int, variant: str) -> Path:
+            return pooled_dir(layer, out_root)
+    else:
+        import yaml
+
+        overrides = {}
+        if pilot is not None:
+            name = yaml.safe_load(config_path(config).read_text())["name"]
+            overrides = {"lb_max_rows": int(pilot), "name": f"{name}-pilot"}
+        cfg, experiment = _experiment(config, **overrides)
+        model, _ = get_model_and_tokenizer(cfg.model_name, template_date=cfg.template_date)
+        label = cfg.model_name.value
+        partial_root = (Path(partial_root) if partial_root is not None
+                        else PARTIAL.parent / ("pooled_models_partial" + ("_pilot" if pilot else ""))) / label
+        stop_early, prefix = cfg.ndif_stop_early, "B"
+        memory_key_name = MODEL_REPOS[cfg.model_name] + ("+stop" if stop_early else "")
+
+        def target(layer: int, variant: str) -> Path:
+            return model_pooled_dir(label, layer, out_root, variant)
+
+    require_drive(partial_root)
     memory = BudgetMemory(partial_root / "budget_memory.json")
-    memory_key = BudgetMemory.key(MODEL, len(layers))
+    memory_key = BudgetMemory.key(memory_key_name, len(layers))
     wanted = _names(datasets)
+    flags = dict(detect_all=cfg.detect_all_tokens, detect_only_start_of_turn=cfg.detect_only_start_of_turn,
+                 detect_only_last_token=cfg.detect_only_last_token)
     for dataset in [experiment.train_dataset, *experiment.eval_datasets, *experiment.control_datasets]:
         if wanted is not None and dataset.name not in wanted:
             continue
-        targets = {layer: pooled_dir(layer, out_root) / f"{dataset.name}.npz" for layer in layers}
+        if len(dataset) == 0:
+            logger.info(f"{dataset.name}: no rows for this model; skipped")
+            continue
+        separator = getattr(dataset, "trim_reasoning_str", None)
+        two_spans = config is not None and separator is not None and not cfg.trim_reasoning
+        variants = ("", "_trim") if two_spans else ("",)
+        targets = {(layer, v): target(layer, v) / f"{dataset.name}.npz" for layer in layers for v in variants}
         if not overwrite and all(path.exists() for path in targets.values()):
             logger.info(f"{dataset.name}: already pooled at every layer; skipped")
             continue
-        toks = TokenizedDataset.from_dataset(
-            dataset, experiment.tokenizer, detect_all=cfg.detect_all_tokens,
-            detect_only_start_of_turn=cfg.detect_only_start_of_turn,
-            detect_only_last_token=cfg.detect_only_last_token,
-        )
-        kept = [i for i in range(len(dataset)) if bool(toks.detection_mask[i].any())]
-        true_lens = [int(n) for n in toks.attention_mask.sum(1)]
-        padded = toks.tokens.shape[1]
-        folder = partial_root / f"{dataset.name}__L{'-'.join(map(str, layers))}"
+        suffix = "+trim" if two_spans else ""
+        folder = partial_root / f"{dataset.name}__{prefix}{'-'.join(map(str, layers))}{suffix}"
+        tokens, attention, masks, labels_by_variant = tokenize_for_pool(
+            dataset, experiment.tokenizer, flags, separator if two_spans else None,
+            folder if config is not None else None)
+        kept = [i for i in range(len(dataset)) if all(bool(m[i].any()) for m in masks)]
+        true_lens = [int(n) for n in attention.sum(1)]
+        padded = tokens.shape[1]
         done = done_rows(folder)
         missing = [i for i in kept if i not in done]
         if shard is not None:
@@ -195,45 +353,57 @@ def pool(layers=NEW_LAYERS, datasets=None, token_budget: int = 16000,
             width = max(true_lens[i] for i in batch)
             rows = torch.tensor(batch)
             columns = slice(padded - width, None)  # left padding: real tokens sit at the right
+            if two_spans:
+                span = torch.stack([m[rows][:, columns] for m in masks], dim=1).float()
+            else:
+                span = masks[0][rows][:, columns].float()
             means = trace_layer_outputs(
-                model, toks.tokens[rows][:, columns], toks.attention_mask[rows][:, columns],
-                layers, span_mask=toks.detection_mask[rows][:, columns].float(),
+                model, tokens[rows][:, columns], attention[rows][:, columns],
+                layers, span_mask=span, stop_early=stop_early,
             )
-            save_request(folder, batch, layers, means.float().numpy())
+            save_request(folder, batch, layers, means.float().numpy(), variants)
             done.update(batch)
             logger.info(f"  {dataset.name}: {len(done)}/{len(kept)} rows ({len(batch)} x {width} "
                         f"tokens, {time.time() - start:.0f} s)")
 
+        # Another model's budgets are remembered per dataset: insider trading's long rows run out of
+        # memory at budgets that short rows fill without trouble, and one shared key let them
+        # halve every later dataset's requests.
+        key = memory_key if config is None else BudgetMemory.key(f"{memory_key_name}|{dataset.name}", len(layers))
         if missing:
-            execute_in_batches(missing, lambda i: true_lens[i], memory.suggest(memory_key, token_budget),
-                               run_batch, memory=memory, memory_key=memory_key)
+            execute_in_batches(missing, lambda i: true_lens[i], memory.suggest(key, token_budget),
+                               run_batch, memory=memory, memory_key=key)
         if shard is not None:
             logger.info(f"{dataset.name}: shard {shard} done; the files wait for every shard")
             continue
-        labels = [dataset.labels[i].name for i in kept]
-        for layer, path in targets.items():
+        for (layer, variant), path in targets.items():
             if path.exists() and not overwrite:
                 continue
-            write_pooled(path, assemble(folder, kept, layer), labels, dataset.name)
+            labels = [labels_by_variant[variant][i] for i in kept]
+            write_pooled(path, assemble(folder, kept, layer, variant), labels, dataset.name)
         logger.info(f"{dataset.name}: written at layers {layers}")
 
 
 # --- the RepE base probe ----------------------------------------------------------------------
 
-def probe(layer: int, name: str | None = None) -> None:
+def probe(layer: int, name: str | None = None, config: str | Path | None = None,
+          cache_dir: str | None = None) -> None:
     """Train the RepE base probe at `layer` with the runner's own code, fetching only RepE's
-    statement tokens. The run folder is `base_run(layer)` unless `name` is given."""
+    statement tokens. The run folder is `base_run(layer)` unless `name` is given; with `config`,
+    it is that config's name plus `-B{layer}`, since a folder reuses whatever probe it holds."""
     import yaml
 
     from deception_detection.experiment import Experiment, ExperimentConfig
     from deception_detection.scripts.gender_secret import _environment
 
-    os.environ["ACTS_CACHE_DIR"] = CACHE
+    cache = cache_dir or CACHE
+    require_drive(cache)
+    os.environ["ACTS_CACHE_DIR"] = cache
     _environment()
-    config = yaml.safe_load(BASE_CONFIG.read_text())
-    config |= {"detect_layers": [int(layer)], "name": name or base_run(layer).name,
-               "acts_positions": "tail"}
-    cfg = ExperimentConfig(**config)
+    settings = yaml.safe_load((BASE_CONFIG if config is None else config_path(config)).read_text())
+    default = base_run(layer).name if config is None else f"{settings['name']}-B{int(layer)}"
+    settings |= {"detect_layers": [int(layer)], "name": name or default, "acts_positions": "tail"}
+    cfg = ExperimentConfig(**settings)
     if (cfg.folder / "detector.pt").exists():
         logger.info(f"{cfg.folder.name} already has a probe")
         return

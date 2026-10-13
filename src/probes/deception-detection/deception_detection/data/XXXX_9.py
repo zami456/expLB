@@ -9,6 +9,13 @@ from deception_detection.utils import REPO_ROOT
 from datasets import load_dataset
 import yaml
 
+from deception_detection.log import logger
+
+# The Liars' Bench snapshot every probe run reads, pinned so that an upstream update (the dataset
+# gained rows for other models in 2026) cannot change a run's rows. This is the revision the Llama
+# runs from 2026-09-04 on read from the local cache.
+LIARS_BENCH_REVISION = "503399b81aff28d6812b0ea4585607d5e4b7d3c4"
+
 def filter_dataset(dataset: pd.DataFrame, model_name: str) -> pd.DataFrame:
     """
     Filter dataset to only include statements with a valid label
@@ -82,9 +89,11 @@ def get_prompts_and_labels(dataset_name: str, model: str, base_repository: str =
         base_repository,
         dataset_name,
         split="test",
-        token=os.getenv("HF_TOKEN")
+        token=os.getenv("HF_TOKEN"),
+        revision=LIARS_BENCH_REVISION,
     )
-    
+    logger.info(f"{dataset_name}: {base_repository} @ {LIARS_BENCH_REVISION[:8]}, rows for {model}")
+
     dataset_df = hf_dataset.to_pandas()
     print(f"DEBUG: {dataset_name} - Original dataset size: {len(dataset_df)}")
     print(f"DEBUG: {dataset_name} - Available models: {dataset_df['model'].unique()}")
@@ -174,6 +183,11 @@ class CadenzaDataset(DialogueDataset):
         cfg = yaml.load(open(cfg_path, "r"), Loader=yaml.FullLoader)
         lora_path = cfg["lora_path"] if "lora_path" in cfg else None
         model_name = cfg["model_name"]
+        # The base-model datasets follow the running experiment's model. Reading the model from
+        # XXXX-9.yaml alone made every non-Llama run load Llama's rollouts without a word.
+        source_model = getattr(self, "source_model", None)
+        if source_model is not None and cfg_path.name == "XXXX-9.yaml":
+            model_name = source_model
         use_followup_question = False # cfg["use_followup_question"] if "use_followup_question" in cfg else False
 
         if "repe" in self.base_name:

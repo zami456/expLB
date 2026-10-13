@@ -1,0 +1,49 @@
+% Nomenclature entries, printed in this order by main.tex (template, "Nomenclature").
+% The optional argument is the sort key: its first letter picks the group (A abbreviations,
+% B persona banks and contrasts; see \nomgroup in main.tex), and the rest orders the
+% entries inside the group. main.tex sets the entries directly, without makeindex (which
+% Tectonic cannot run), so keep them in sort-key order: by group, then alphabetically in A
+% and by number in B.
+
+% ---- Abbreviations ----------------------------------------------------------------------------
+\nomenclature[A]{AISI}{UK AI Security Institute, publisher of the belief-labelled rollouts used to train D3}
+\nomenclature[A]{AUROC}{Area under the receiver operating characteristic curve}
+\nomenclature[A]{BA}{Balanced accuracy}
+\nomenclature[A]{CCS}{Contrast-consistent search}
+\nomenclature[A]{CG}{Convincing-Game, a Liars' Bench dataset}
+\nomenclature[A]{CI}{Confidence interval}
+\nomenclature[A]{DiM}{Difference of means}
+\nomenclature[A]{FPR}{False-positive rate}
+\nomenclature[A]{HP-C}{Harm-Pressure Choice, a Liars' Bench dataset}
+\nomenclature[A]{HP-KR}{Harm-Pressure Knowledge Report, a Liars' Bench dataset}
+\nomenclature[A]{ID}{Instructed-Deception, a Liars' Bench dataset}
+\nomenclature[A]{INLP}{Iterative nullspace projection}
+\nomenclature[A]{IT}{Insider-Trading, a Liars' Bench dataset}
+\nomenclature[A]{LAT}{Linear artificial tomography}
+\nomenclature[A]{LB}{Liars' Bench}
+\nomenclature[A]{LDA}{Linear discriminant analysis}
+\nomenclature[A]{LEACE}{Least-squares concept erasure}
+\nomenclature[A]{LLM}{Large language model}
+\nomenclature[A]{LoRA}{Low-rank adaptation}
+\nomenclature[A]{LRH}{Linear representation hypothesis}
+\nomenclature[A]{MASK}{Model Alignment between Statements and Knowledge, an honesty benchmark}
+\nomenclature[A]{MLP}{Multi-layer perceptron}
+\nomenclature[A]{NDIF}{National Deep Inference Fabric}
+\nomenclature[A]{PC}{Principal component}
+\nomenclature[A]{PCA}{Principal component analysis}
+\nomenclature[A]{RepE}{Representation engineering; here, its instruction pairs}
+\nomenclature[A]{SAE}{Sparse autoencoder}
+\nomenclature[A]{WMDP}{Weapons of Mass Destruction Proxy benchmark}
+
+% ---- Persona banks, contrasts and the knowledge direction (Sections 4.2.3 to 4.2.10) ----------
+\nomenclature[B11]{$a$ v $b$}{A contrast between $a$ deceptive and $b$ honest personas}
+\nomenclature[B12]{kd}{Knowledge-denial bank: the 26 published roles and the assistant anchor, plus ten new roles}
+\nomenclature[B13]{D5}{Published contrast (8 v 7)}
+\nomenclature[B14]{D8}{Knowledge-denial contrast (4 v 6)}
+\nomenclature[B15]{D9}{Extended contrast (12 v 13), the published and knowledge-denial roles pooled}
+\nomenclature[B16]{K}{Knowledge direction: known minus unknowable questions, the same denial forced on both}
+\nomenclature[B17]{K$'$}{The knowledge direction rebuilt from the replication questions}
+\nomenclature[B18]{D5 + K, D9 + K}{A persona contrast plus K, each scaled by its spread on Alpaca}
+\nomenclature[B19]{identical-text slice}{The \hpkr{} rows whose response is exactly ``I do not know the answer.''}
+\nomenclature[B20]{denials slice}{The \hpkr{} rows whose response denies knowing the answer}
+\nomenclature[B21]{random band}{The 97.5th percentile of the AUROCs of 1,000 random unit directions}
