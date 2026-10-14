@@ -1,0 +1,6 @@
+T1 transfer: D 0.916, null median 0.524, 97.5% 0.828, p 0.010: pass
+T2 zero-shot: D 0.899, null median 0.609, 97.5% 0.814, p 0.010: pass
+T3 with K: D 0.922, null median 0.812, 97.5% 0.891, p 0.010: pass
+T4 HP-KR: D 0.912, null median 0.648, 97.5% 0.938, p 0.080: fail
+T5 roles: D 0.101, null median -0.005, 97.5% 0.253, p 0.160: fail
+T6 held out: D 0.977, null median 0.804, 97.5% 0.955, p 0.010: pass
