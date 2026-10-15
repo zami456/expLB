@@ -20,7 +20,7 @@
   Scheduled Task only (register_task.ps1): Start-Process over SSH dies with the session.
 #>
 param(
-    [ValidateSet("qwen", "mistral2501", "mistral31", "gemma3", "llama405")][string]$Tag = "qwen",
+    [ValidateSet("qwen", "mistral2501", "mistral31", "gemma3", "llama405", "llama33")][string]$Tag = "qwen",
     [int]$Attempts = 6,
     [switch]$Force,
     # 2026-10-06: machine-specific paths are parameters so one script serves the lab PC (defaults,
@@ -37,7 +37,15 @@ param(
     [string]$DownloadGrace = "",
     # suffix for the vector banks and their axes (2026-10-07: "_v2" = rebuilt after the Qwen
     # header-newline span fix, written beside the superseded banks so nothing is overwritten)
-    [string]$VecSuffix = ""
+    [string]$VecSuffix = "",
+    # 2026-10-14 (F-130, owner: matched pair): "user_stay" = role line + one sentence in the USER turn
+    # (1_generate_ndif.py --prompt_format); "system" = the original format, and then nothing is passed
+    [ValidateSet("system", "user_stay")][string]$PromptFormat = "system",
+    # skip the Drive copies (2026-10-14: the tamara: token expired; copy by hand after reconnecting)
+    [switch]$NoSync,
+    # seconds before an NDIF job with no result is abandoned and retried (ndif_common.session_deadline);
+    # empty = no deadline. A job sat at RUNNING for 6 h on 2026-10-14.
+    [string]$SessionTimeout = ""
 )
 $ErrorActionPreference = "Continue"
 
@@ -66,6 +74,10 @@ $cfg = @{
     # the same chat template family as Llama-3.3 (static "26 Jul 2024"), no Liars' Bench rows (Csv "none"). ReportLayer 63.
     "llama405"    = @{ Model = "meta-llama/Llama-3.1-405B-Instruct"; Folder = "Llama-3.1-405B-Instruct"
                        Short = "Llama"; Csv = "none"; ReportLayer = "63"; Datasets = @() }
+    # 2026-10-14 (owner: matched pair, F-130): the thesis model itself through this chain, for the user_stay re-run.
+    # Persona vectors only (-SkipEval), so no Liars' Bench rows are read (Csv "none"). ReportLayer 40, as the thesis.
+    "llama33"     = @{ Model = "meta-llama/Llama-3.3-70B-Instruct"; Folder = "Llama-3.3-70B-Instruct"
+                       Short = "Llama"; Csv = "none"; ReportLayer = "40"; Datasets = @() }
 }[$Tag]
 
 $Judge = "meta-llama/Llama-3.1-70B-Instruct"
@@ -85,6 +97,7 @@ $env:XMODEL_SHORT_NAME = $cfg.Short
 $env:XMODEL_CSV_MODEL  = $cfg.Csv
 if ($MinDownloadKbps) { $env:NDIF_MIN_DOWNLOAD_KBPS = $MinDownloadKbps }
 if ($DownloadGrace)   { $env:NDIF_DOWNLOAD_GRACE = $DownloadGrace }
+if ($SessionTimeout)  { $env:NDIF_SESSION_TIMEOUT = $SessionTimeout }
 
 $roles = "$Code\kd\personas\kd_role_groups.json"
 $instr = "$Code\kd\personas\kd_instructions"
@@ -116,6 +129,7 @@ function RunParallel($stage, $argLists) {
 }
 
 function Sync($tag) {
+    if ($NoSync) { Note "sync $tag skipped (-NoSync)"; return }
     $a = @("-NoProfile", "-ExecutionPolicy", "Bypass", "-File", "$Root\code\sync_drive.ps1",
            "-Folder", $cfg.Folder, "-Tag", $tag, "-RunBase", $RunBase, "-DriveBase", $DriveBase)
     if ($Rclone) { $a += @("-Rclone", $Rclone) }
@@ -127,7 +141,7 @@ if (-not $Force -and (Test-Path $status) -and ((Get-Content $status -Tail 1) -ma
     # and re-ran the whole chain (every stage skipped, axes rebuilt identically) -- seen on Mistral-3.1, 2026-10-09 01:56
     exit 0
 }
-Note "START tag=$Tag model=$($cfg.Model) judge=$Judge root=$Root py=$py skipEval=$SkipEval floor=$($env:NDIF_MIN_DOWNLOAD_KBPS) vecSuffix=$VecSuffix"
+Note "START tag=$Tag model=$($cfg.Model) judge=$Judge root=$Root py=$py skipEval=$SkipEval floor=$($env:NDIF_MIN_DOWNLOAD_KBPS) vecSuffix=$VecSuffix format=$PromptFormat noSync=$NoSync sessionTimeout=$($env:NDIF_SESSION_TIMEOUT)"
 
 # ---- inputs: the kd bank, unchanged except the model name (checked, not assumed) ----------
 $nInstr = (Get-ChildItem "$instr\*.json").Count
@@ -150,6 +164,7 @@ for ($t = 1; $t -le $Attempts; $t++) {
            "--temperature", "0.7", "--top_p", "0.9", "--top_k", "0", "--repetition_penalty", "1.0",
            "--max_new_tokens", "512", "--gen_batch", "32", "--session_batches", "4", "--retries", "6")
     }
+    if ($PromptFormat -ne "system") { $lists = $lists | ForEach-Object { ,($_ + @("--prompt_format", $PromptFormat)) } }
     $codes = RunParallel "generate" $lists
     Note "generate exits: $($codes -join ',')"
 }

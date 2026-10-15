@@ -6798,3 +6798,46 @@ The review (2026-10-07) faulted D9 + K for lower tail recall at 1% FPR. The plan
   4. The Gender-Secret adapted read needs zami's `adapted_L{layer}.npz` or a new NDIF read, plus the fine-tune's own Alpaca read for thresholds.
 - **supersedes:** the plan's draft W6 rebuttal (`thesis_tools/planning/REVIEW_RESPONSE_PLAN.md:330`, "at the benchmark's Alpaca cutoff D9+K has higher recall"). That gain is IT's, bought with 2.7× the honest-flag rate in zami's numbers (0.069 vs 0.025) and 2.2× here (0.0505 vs 0.0226). Nothing in this ledger is superseded.
 - **status:** measured; pre-registered criterion missed
+
+### F-130 · 2026-10-14 · **Qwen2.5-72B does play the kd roles when the role line and one "stay in character" sentence are put in the USER turn (76% fully in role vs 27%, all 35 roles). But the same format lifts Llama-3.3 from 71% to 94%, so it is not neutral: the format and the model cannot be mixed across a comparison.**
+
+Qwen's original kd run is mostly judged 2 ("has some of the role, answers as itself"): 28% fully in role over all 35 judged roles, against Llama-3.3 69%, Mistral-3.1 68% and Gemma-3 96% (`xmodel/REPORT_MODEL_PORTS.md:58-65`). The port report left the cause untested (`:78`). This entry tests it on NDIF. The role line R is verbatim in every format, judged by the same Llama-3.1-70B with each role's own judge prompt, sampled as in the original runs (T 0.7, top-p 0.9, top-k and repetition penalty off, 512 tokens).
+
+**Screen: 35 roles × 5 items = 175 per format.** Role j gets question (j + 6k) mod 30 with wording k, k = 0..4. References are the stored original replies on exactly these 175 items. Fully in role (judge 3):
+
+| format | Qwen | Llama-3.3 |
+|---|---|---|
+| original: system = R | 0.27 (23/35 roles ≥ 1 of 5) | 0.71 (35/35) |
+| `stay`: system = R + " Stay in character throughout: answer as this person would, in their own voice." | 0.49 (30/35) | 0.87 (35/35) |
+| `stay_plus`: `stay` + " Let the character's attitudes and priorities shape what you say, even where they differ from what an AI assistant would say." | 0.51 (30/35) | not judged |
+| **`user_stay`: explicit empty system; user = R + " " + STAY + "\n\n" + question** | **0.76 (35/35)** | **0.94 (35/35)** |
+
+Qwen by kd group, original → `user_stay`: anti-sycophancy 0.36 → 0.92, deception 0.15 → 0.65, honesty 0.49 → 0.89, knowledge denial 0.15 → 0.80, plain assertion 0.13 → 0.33, sincere ignorance 0.27 → 0.73, sycophancy 0.28 → 0.84. Llama-3.3's original run reads 0.88 / 0.62 / 0.74 / 0.80 / 0.33 / 0.67 / 0.80 on the same items. Under `stay`, knowledge denial (0.15) and sincere ignorance (0.27) do not move at all: Qwen takes the voice ("Oh, sure! I might not know a lot…") and then gives the full help anyway.
+
+**Neither the channel nor the sentence works on its own.** The role alone in the user turn gave 1 of 4 fully in role in a 16-item smoke; the sentence alone in the system message gives 0.49. Only the two together give 0.76.
+
+**Judge-free measures agree.** TF-IDF similarity of a role's replies to the model's own no-role replies (dsim): Qwen 0.78 (original) → 0.52 (`user_stay`); Llama-3.3 0.63 → 0.43. Deception-vs-honesty text separation: Qwen 0.214 → 0.358; Llama-3.3 0.312 → 0.396. Refusals are 0.00 and score 0 is 0.00 under `user_stay` for both.
+
+**Confirmation on Qwen's 13 weakest roles** (≤ 3 of 5 under `user_stay`). Each got 15 new items with questions disjoint from the screen's, so each role has 20 judged items.
+- **No role projects below the s3 floor of 20 of 150.** The lowest is pc_candid_witness, 5/20 (90% Wilson CI 0.13–0.43, projected 38).
+- With the original format, 7 of these 13 were below the floor: coverup_operator 2, gatekeeper 5, deniable_expert 7, yes_man 11, enabler 12, honest_novice 15, fact_checker 17.
+- Pooled over the 13: Qwen `user_stay` 128/260 = 0.49; Qwen original 265/1950 = 0.14; Llama-3.3 original 997/1950 = 0.51.
+- The 15 new items alone give 97/195 = 0.50 and the 5 screen items 31/65 = 0.48, so the screen's selection did not inflate the rate.
+- Qwen is still behind Llama-3.3's original on gatekeeper (0.40 vs 0.84) and honest_novice (0.50 vs 0.73). candid_witness barely moves (0.19 → 0.25).
+
+- **source:** `xmodel/qwen_roleplay/` (`README.md` design + dated status; `runs_screen/analysis_screen.{txt,json}` from `analyse_screen.py`; `runs_confirm/analysis_confirm.{txt,json}` from `analyse_confirm.py`; `runs_smoke/analysis.json`; generated replies `runs_*/<format>/responses/*.jsonl`, scores `runs_*/<format>/scores/*.json`; banks `bank/*.jsonl` with rendered previews). References: Qwen `~/xmodel-runs/Qwen2.5-72B-Instruct/persona/{responses,scores}`; Llama-3.3 `ref_llama33_kd/`, copied md5-checked (0 mismatches, `ref_llama33_kd/SOURCES.md`) from lab PC `C:/Users/user4/expLB/run-kd`. Judge prompts: Qwen `roles_kd/` (md5 in `roles_kd/SOURCES.md`); Llama-3.3 `kd/personas/kd_instructions`.
+- **caveats:**
+  1. The screen has 5 items per role. Group rates rest on 15–40 items each, role rates on 5, and the confirmation on 20.
+  2. A single judge (Llama-3.1-70B). "Fully in role" under the new format may partly reward a more theatrical reply, but dsim and separation move the same way without the judge.
+  3. `user_stay` changes Llama-3.3 too: 71% → 94%, dsim 0.63 → 0.43. Its persona vectors would differ from the thesis bank's. Qwen-with-`user_stay` next to Llama-with-original would confound format with model.
+  4. Nothing here touches persona vectors, axes, D or K yet. Whether Qwen's geometry (PC1 = assistant, cos +0.838; D9 + K ≈ K) survives the format is the matched-pair run's question (owner 2026-10-14: re-run the persona step for Qwen AND Llama-3.3 with `user_stay`).
+  5. The 13-role confirmation projects s3 counts from 20 items. The full re-run will give the actual counts.
+- **supersedes:** the untested "Reading" in `xmodel/REPORT_MODEL_PORTS.md:78-79` ("Qwen-2.5 treats a one-line persona as a style hint…") is now partly tested. A system-message persona plus "stay in character" is still largely a style hint for Qwen (0.49; knowledge denial unchanged), but in the user turn it is followed. Also `:83` "Not tuned away … reported as a finding": the finding stands for the original format, and a format exists under which Qwen plays the roles. Nothing else in this ledger is superseded.
+- **status:** measured (screen + confirmation); matched persona re-run pending
+
+> **CORRECTION 2026-10-14 (to F-130, same day, found on re-checking before report).** "15 new items with questions
+> disjoint from the screen's" is too strong. Each new item is a new (wording, question) pair: wording v takes questions
+> (j + 6v + {2, 12, 22}) mod 30, never the screen's (j + 6v) mod 30 for that wording. But across wordings, 5 of a role's
+> 15 new questions are questions the screen asked under another wording (`xmodel/qwen_roleplay/build_confirm.py:4-6,39`).
+> The pooled counts are unchanged: screen 31/65, confirm 97/195, all 128/260; Qwen original 265/1950; Llama-3.3
+> original 997/1950 (recomputed from `runs_confirm/analysis_confirm.json` and the stored score files).

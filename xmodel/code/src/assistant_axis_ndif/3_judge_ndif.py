@@ -72,6 +72,7 @@ for _v in ("HF_TOKEN", "HUGGINGFACE_HUB_TOKEN"):
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger("3_judge_ndif")
+_NC = None  # ndif_common, loaded in main(); its session_deadline wraps every remote session (2026-10-14)
 
 
 def key(pi: int, qi: int) -> str:
@@ -152,7 +153,7 @@ def judge_batches_session(llm, prompt_batches: list[list[str]], retries: int) ->
     delay = 3.0
     for attempt in range(retries):
         try:
-            with llm.session(remote=True):
+            with _NC.session_deadline(), llm.session(remote=True):
                 outs = nnsight.save([])
                 for in_ids, attn, _ in encs:
                     with llm.generate(in_ids, attention_mask=attn, max_new_tokens=4,
@@ -292,8 +293,10 @@ def main() -> None:
     # safe -- only blocks that appear inside trace/generate/session must live in this file.
     import importlib.util as _ilu
     _spec = _ilu.spec_from_file_location("ndif_common", PIPELINE_DIR / "ndif_common.py")
+    global _NC
     _nc = _ilu.module_from_spec(_spec); _spec.loader.exec_module(_nc)
     _nc.harden()
+    _NC = _nc
     llm.tokenizer.padding_side = "left"
     if llm.tokenizer.pad_token_id is None:
         llm.tokenizer.pad_token_id = llm.tokenizer.eos_token_id

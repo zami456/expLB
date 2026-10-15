@@ -42,23 +42,41 @@ def done_ids(out: Path) -> set[str]:
     return seen
 
 
-def generate_session(llm, encs, kw, retries: int):
-    """Several batches in ONE NDIF job (as 1_generate_ndif.generate_batches_session); token ids per batch."""
+def generate_session(llm, encs, kw, retries: int, timeout: float):
+    """Several batches in ONE NDIF job (as 1_generate_ndif.generate_batches_session); token ids per batch.
+
+    A job that never comes back is abandoned after `timeout` seconds and retried (2026-10-14: a confirm session sat
+    at "RUNNING" for 6 h with no result). A timer interrupts the main thread, which is polling NDIF in Python."""
+    import _thread
+    import threading
+
     import nnsight
 
     delay = 3.0
     for attempt in range(retries):
+        fired = threading.Event()
+        timer = threading.Timer(timeout, lambda: (fired.set(), _thread.interrupt_main()))
+        timer.daemon = True
+        timer.start()
         try:
             with llm.session(remote=True):
                 outs = nnsight.save([])
                 for in_ids, attn, _ in encs:
                     with llm.generate(in_ids, attention_mask=attn, **kw):
                         outs.append(llm.generator.output)
+            timer.cancel()
             outs = getattr(outs, "value", outs)
             if len(outs) != len(encs):
                 raise RuntimeError(f"session returned {len(outs)} outputs, expected {len(encs)}")
             return outs
+        except KeyboardInterrupt:
+            timer.cancel()
+            if not fired.is_set():
+                raise
+            logger.warning("  session attempt %d/%d (%d batches) gave no result in %.0fs; abandoned",
+                           attempt + 1, retries, len(encs), timeout)
         except Exception as e:  # noqa: BLE001
+            timer.cancel()
             lines = [ln for ln in str(e).strip().splitlines() if ln.strip()]
             logger.warning("  session attempt %d/%d (%d batches) failed: %s: %s", attempt + 1, retries, len(encs),
                            type(e).__name__, (lines[-1].strip() if lines else repr(e))[:400])
@@ -77,6 +95,8 @@ def main() -> None:
     ap.add_argument("--gen_batch", type=int, default=16)
     ap.add_argument("--session_batches", type=int, default=4)
     ap.add_argument("--retries", type=int, default=4)
+    ap.add_argument("--session_timeout", type=float, default=3600,
+                    help="seconds before a session with no result is abandoned and retried (a 128-reply session took 873 s)")
     a = ap.parse_args()
 
     items = [json.loads(l) for l in a.bank.read_text(encoding="utf-8").splitlines() if l.strip()]
@@ -137,7 +157,7 @@ def main() -> None:
     for s, chunk in enumerate(sessions):
         encs = [encode(b) for b in chunk]
         t0 = time.time()
-        outs = generate_session(llm, encs, kw, a.retries)
+        outs = generate_session(llm, encs, kw, a.retries, a.session_timeout)
         if outs is None:
             logger.error("  session %d/%d permanently failed; its items are left for a re-run", s + 1, len(sessions))
             continue

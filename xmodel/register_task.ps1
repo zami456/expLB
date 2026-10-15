@@ -9,16 +9,19 @@
 #                    as a watchdog plus AtLogOn, so a crash, sleep or reboot re-enters the chain.
 #                    Deploys xmodel\code + the two .ps1 into <RunBase>\<Folder>\code if absent.
 #                    Persona vectors only (-SkipEval), owner 2026-10-06.
-param([ValidateSet("qwen", "mistral2501", "mistral31", "gemma3", "llama405")][string]$Tag = "qwen", [string]$Folder = "",
+param([ValidateSet("qwen", "mistral2501", "mistral31", "gemma3", "llama405", "llama33")][string]$Tag = "qwen", [string]$Folder = "",
       [ValidateSet("lab", "laptop")][string]$Machine = "lab",
       [string]$VecSuffix = "",
       # laptop: deploy the run folder's code (and rename the judge prompts) without registering, so the
       # deployed copy can be smoke-tested before the run starts (2026-10-07)
-      [switch]$DeployOnly)
+      [switch]$DeployOnly,
+      # laptop: where the run folder goes (2026-10-14: the user_stay matched pair deploys to its own base,
+      # %USERPROFILE%\xmodel-runs-userstay, so the original runs are never touched); empty = xmodel-runs
+      [string]$RunBase = "")
 # one run folder per model (owner 2026-10-07); the judge prompt names the model being judged
 $known = @{ "qwen" = @("Qwen2.5-72B-Instruct", "Qwen"); "mistral2501" = @("Mistral-Small-24B-Instruct-2501", "Mistral")
             "mistral31" = @("Mistral-Small-3.1-24B-Instruct-2503", "Mistral"); "gemma3" = @("gemma-3-27b-it", "Gemma")
-            "llama405" = @("Llama-3.1-405B-Instruct", "Llama") }
+            "llama405" = @("Llama-3.1-405B-Instruct", "Llama"); "llama33" = @("Llama-3.3-70B-Instruct", "Llama") }
 if (-not $Folder) { $Folder = $known[$Tag][0] }
 $Short = $known[$Tag][1]
 # Registering STARTS the run (the laptop's first trigger fires one minute later): register only
@@ -35,7 +38,7 @@ if ($Machine -eq "lab") {
     $triggers = @($trigger)
 } else {
     $repo     = Split-Path $PSScriptRoot -Parent
-    $RunBase  = Join-Path $env:USERPROFILE "xmodel-runs"
+    if (-not $RunBase) { $RunBase = Join-Path $env:USERPROFILE "xmodel-runs" }
     $Root     = Join-Path $RunBase $Folder
     $Code     = Join-Path $Root "code"
     $Py       = Join-Path $repo ".venv-aa-win\Scripts\python.exe"

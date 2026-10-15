@@ -331,7 +331,7 @@ def _run_session(llm, layer_idx, hidden, prepared, retries):
     delay = 3.0
     for attempt in range(retries):
         try:
-            with llm.session(remote=True):
+            with _ndif_common().session_deadline(), llm.session(remote=True):
                 acc = torch.zeros(len(layer_idx), hidden, dtype=torch.float32).save()
                 cnt = torch.zeros(1, dtype=torch.float32).save()
                 for input_ids, attn, span in prepared:

@@ -31,6 +31,48 @@ class SlowDownload(RuntimeError):
     """An NDIF result download collapsed and is not worth waiting for."""
 
 
+class SessionTimeout(RuntimeError):
+    """An NDIF job gave no result within NDIF_SESSION_TIMEOUT seconds and was abandoned."""
+
+
+def session_deadline(seconds: float | None = None):
+    """Context manager: abandon a remote session that gives no result in `seconds` (2026-10-14).
+
+    A job can sit at "RUNNING" for hours and never finish (a qwen_roleplay job: 6 h 10 m). That raises nothing, so
+    `--retries` never fires and a chain waiting on the shard stalls for good. A timer interrupts the main thread --
+    which is polling NDIF in Python -- and the interrupt is re-raised here as SessionTimeout, an ordinary Exception,
+    so each script's existing retry loop retries the session. `seconds` defaults to the NDIF_SESSION_TIMEOUT
+    environment variable; unset or 0 = no deadline (every earlier run's behaviour). Wrap the session:
+    `with _nc.session_deadline(), llm.session(remote=True): ...` -- this function is not a trace body."""
+    import _thread
+    import contextlib
+    import os
+    import threading
+
+    if seconds is None:
+        seconds = float(os.environ.get("NDIF_SESSION_TIMEOUT") or 0)
+
+    @contextlib.contextmanager
+    def _cm():
+        if not seconds or seconds <= 0:
+            yield
+            return
+        fired = threading.Event()
+        timer = threading.Timer(seconds, lambda: (fired.set(), _thread.interrupt_main()))
+        timer.daemon = True
+        timer.start()
+        try:
+            yield
+        except KeyboardInterrupt:
+            if fired.is_set():
+                raise SessionTimeout(f"no result in {seconds:.0f}s; abandoned (NDIF_SESSION_TIMEOUT)") from None
+            raise
+        finally:
+            timer.cancel()
+
+    return _cm()
+
+
 def exc_tail(exc: BaseException, limit: int = 400) -> str:
     """The informative last line of an exception, not the first 400 characters of it.
 

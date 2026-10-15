@@ -74,6 +74,14 @@ logger = logging.getLogger("1_generate_ndif")
 # being run, or Qwen is told "You are Llama." Set per model by the chain; default unchanged.
 SHORT_NAME = os.environ.get("XMODEL_SHORT_NAME", "Llama")  # {model_name} placeholder
 
+# xmodel 2026-10-14 (F-130, owner: matched pair): --prompt_format user_stay puts the role line R and one sentence in
+# the USER turn under an explicit empty system message -- user = R + " " + STAY + "\n\n" + question; an empty R
+# (the default role's "" variant) leaves the bare question. Exactly xmodel/qwen_roleplay's screen format, under which
+# Qwen2.5-72B plays the roles (76% fully in role vs 27%). "system" (default) is the original format, unchanged.
+STAY = "Stay in character throughout: answer as this person would, in their own voice."
+PROMPT_FORMAT = "system"  # set from --prompt_format in main()
+_NC = None  # ndif_common, loaded in main(); its session_deadline wraps every remote session
+
 
 def key(pi: int, qi: int) -> str:
     return f"pos_p{pi}_q{qi}"
@@ -89,6 +97,9 @@ def load_questions(path: Path, n: int) -> list[str]:
 
 def build_messages(instruction: str, question: str) -> list[dict]:
     instruction = (instruction or "").replace("{model_name}", SHORT_NAME).strip()
+    if PROMPT_FORMAT == "user_stay":
+        user = f"{instruction} {STAY}\n\n{question}" if instruction else question
+        return [{"role": "system", "content": ""}, {"role": "user", "content": user}]
     msgs = []
     if instruction:
         msgs.append({"role": "system", "content": instruction})
@@ -163,7 +174,7 @@ def generate_batches_session(llm, prompt_batches: list[list[str]], args) -> list
     delay = 3.0
     for attempt in range(args.retries):
         try:
-            with llm.session(remote=True):
+            with _NC.session_deadline(), llm.session(remote=True):
                 outs = nnsight.save([])
                 for in_ids, attn, _ in encs:
                     with llm.generate(in_ids, attention_mask=attn, **_gen_kwargs(llm, args)):
@@ -258,14 +269,19 @@ def process_role(llm, role_name: str, role_data: dict, questions: list[str], arg
         for (pi, qi, q, instr), text in zip(batch, texts):
             if not text:
                 continue
-            rows.append({
+            row = {
                 "system_prompt": (instr or "").replace("{model_name}", SHORT_NAME),
                 "prompt_index": pi,
                 "question_index": qi,
                 "question": q,
                 "label": "pos",
                 "conversation": build_messages(instr, q) + [{"role": "assistant", "content": text}],
-            })
+            }
+            if PROMPT_FORMAT != "system":
+                # system_prompt keeps the role line (what downstream readers group by); the conversation is what
+                # was sent, and says where the line went
+                row["prompt_format"] = PROMPT_FORMAT
+            rows.append(row)
         if rows:
             with jsonlines.open(out_file, mode="a") as w:
                 for r in rows:
@@ -319,7 +335,12 @@ def main() -> None:
     ap.add_argument("--repetition_penalty", type=float, default=None,
                     help="xmodel: override the checkpoint repetition_penalty (1.0 = off)")
     ap.add_argument("--retries", type=int, default=4)
+    ap.add_argument("--prompt_format", choices=("system", "user_stay"), default="system",
+                    help="system = role line as the system message (original); user_stay = see STAY above (F-130)")
     args = ap.parse_args()
+    global PROMPT_FORMAT, _NC
+    PROMPT_FORMAT = args.prompt_format
+    logger.info("prompt format: %s", PROMPT_FORMAT)
 
     Path(args.output_dir).mkdir(parents=True, exist_ok=True)
     questions = load_questions(Path(args.questions_file), args.question_count)
@@ -342,6 +363,7 @@ def main() -> None:
     import importlib.util as _ilu
     _spec = _ilu.spec_from_file_location("ndif_common", PIPELINE_DIR / "ndif_common.py")
     _nc = _ilu.module_from_spec(_spec); _spec.loader.exec_module(_nc)
+    _NC = _nc
     # xmodel: Mistral needs fix_mistral_regex (ndif_common.tokenizer_kwargs); {} for every other model
     # xmodel: LanguageModel, or VisionLanguageModel for Mistral-3.1, with Mistral's regex fix and the
     # template date pinned (ndif_common.load_language_model)
