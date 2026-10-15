@@ -127,8 +127,12 @@ def prune_to_decoder_blocks(model, keep_projections: bool = False) -> None:
     keep_only(model.model.language_model, {"layers"})
     for block in model.model.language_model.layers:
         if keep_projections:
-            keep_only(block, {"self_attn", "mlp"})
-            keep_only(block.self_attn, {"q_proj", "k_proj", "v_proj", "o_proj"})
+            # a Qwen3.5 block has linear attention (Gated DeltaNet) or self-attention
+            keep_only(block, {"self_attn", "linear_attn", "mlp"})
+            if "self_attn" in block.__dict__:
+                keep_only(block.self_attn, {"q_proj", "k_proj", "v_proj", "o_proj"})
+            if "linear_attn" in block.__dict__:
+                keep_only(block.linear_attn, {"in_proj_qkv", "in_proj_z", "in_proj_b", "in_proj_a", "out_proj"})
             keep_only(block.mlp, {"gate_proj", "up_proj", "down_proj"})
         else:
             keep_only(block, set())

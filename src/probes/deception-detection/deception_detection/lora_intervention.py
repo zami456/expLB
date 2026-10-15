@@ -8,25 +8,37 @@ remote forward pass. That is all a LoRA does:
     y = W x                       the base projection, computed remotely as usual
     y <- y + scale * B (A x)      the adapter's update, applied as an intervention
 
-with ``scale = lora_alpha / r``. Only the blocks up to the deepest layer being read affect
-its activations, so only those blocks' weights are loaded and sent.
+with ``scale = lora_alpha / r``, or ``lora_alpha / sqrt(r)`` for an rsLoRA adapter. Only the blocks
+up to the deepest layer being read affect its activations, so only those blocks' weights are loaded
+and sent.
 
 nnsight runs interventions alongside the model, so modules have to be visited in the order the
 model calls them: within a Llama block, q, k, v and o in attention, then gate, up and down in
-the MLP. :func:`call_plan` lays the factors out in that order; the loop that applies them is
-``activations.trace_layer_outputs``, written inline because the traced code runs on the server.
+the MLP. Qwen3.5's linear-attention blocks (Gated DeltaNet) call in_proj_qkv, in_proj_z, in_proj_b,
+in_proj_a and out_proj instead of the attention projections (transformers 5.8,
+`Qwen3_5GatedDeltaNet.forward`). :func:`call_plan` lays the factors out in that order; the loop that
+applies them is ``activations.trace_layer_outputs``, written inline because the traced code runs on
+the server.
 """
 
 import json
+import math
 from dataclasses import dataclass, field
 from pathlib import Path
 
 import torch
+from safetensors import safe_open
 from safetensors.torch import load_file
 from torch import Tensor
 
-# the order a Llama decoder block calls its projections
+# the order a decoder block calls its projections: a block has either Qwen3.5's linear attention
+# or self-attention, then its MLP
 BLOCK_ORDER = (
+    ("linear_attn", "in_proj_qkv"),
+    ("linear_attn", "in_proj_z"),
+    ("linear_attn", "in_proj_b"),
+    ("linear_attn", "in_proj_a"),
+    ("linear_attn", "out_proj"),
     ("self_attn", "q_proj"),
     ("self_attn", "k_proj"),
     ("self_attn", "v_proj"),
@@ -74,17 +86,30 @@ def _parse_key(key: str) -> tuple[int, tuple[str, str], str] | None:
     return block, (submodule, projection), factor
 
 
-VISION_PARTS = ("vision_tower", "vision_model", "multi_modal_projector")
+# Qwen3.5's vision tower is `model.visual`; its multi-token-prediction head (`mtp`) has its own
+# `layers`, which would otherwise parse as text blocks
+VISION_PARTS = ("vision_tower", "vision_model", "multi_modal_projector", ".visual.", "mtp.")
 
 # PEFT writes safetensors; older versions wrote a pickled state dict (Liars' Bench's Soft-Trigger
 # adapters are of that kind)
 WEIGHT_FILES = ("adapter_model.safetensors", "adapter_model.bin")
 
 
-def _load_weights(path: Path) -> dict[str, Tensor]:
+def _load_weights(path: Path, keep=None) -> dict[str, Tensor]:
+    """The adapter's tensors; with `keep`, only the keys it accepts. A safetensors file is then read
+    key by key, so a 2.5 GB fp32 adapter never sits in memory whole."""
     if path.suffix == ".safetensors":
-        return load_file(str(path))
+        if keep is None:
+            return load_file(str(path))
+        with safe_open(str(path), framework="pt") as f:
+            return {k: f.get_tensor(k) for k in f.keys() if keep(k)}
     return torch.load(str(path), map_location="cpu", weights_only=True)  # tensors only, no code
+
+
+def _scale(config: dict) -> float:
+    """PEFT's scale: alpha / r, or alpha / sqrt(r) for an rsLoRA adapter."""
+    r = float(config["r"])
+    return float(config["lora_alpha"]) / (math.sqrt(r) if config.get("use_rslora") else r)
 
 
 def load_adapter(
@@ -92,11 +117,12 @@ def load_adapter(
     max_block: int,
     dtype: torch.dtype = torch.bfloat16,
     revision: str | None = None,
+    scale: float | None = None,
 ) -> LoraAdapter:
     """Load a PEFT LoRA adapter from a local directory or a Hugging Face repo.
 
     Only blocks ``0..max_block`` are kept: nothing past the deepest layer being read can
-    change its activations.
+    change its activations. `scale` overrides the config's (a behaviour check may sweep it).
     """
     path = Path(source)
     if path.is_dir():
@@ -118,19 +144,24 @@ def load_adapter(
     config = json.loads(config_path.read_text())
     if config.get("peft_type") != "LORA":
         raise ValueError(f"{source} is a {config.get('peft_type')} adapter, not LoRA")
-    for unsupported in ("use_dora", "use_rslora"):
-        if config.get(unsupported):
-            raise ValueError(f"{source} uses {unsupported}, which this intervention does not implement")
+    if config.get("use_dora"):
+        raise ValueError(f"{source} uses use_dora, which this intervention does not implement")
     if config.get("rank_pattern") or config.get("alpha_pattern"):
         raise ValueError(f"{source} has per-module ranks or alphas; not implemented")
-    scale = float(config["lora_alpha"]) / float(config["r"])
+    scale = _scale(config) if scale is None else float(scale)
 
-    factors: dict[int, dict[tuple[str, str], dict[str, Tensor]]] = {}
-    unused = []
-    for key, tensor in _load_weights(weights_path).items():
+    def keep(key: str) -> bool:
         # A multimodal model's adapter (Mistral-3, Gemma-3) also adapts its vision tower and
         # projector. A text-only pass never runs them, and Gemma's SigLIP keys
         # (`vision_model.encoder.layers.{i}.self_attn.q_proj`) would otherwise parse as text block i.
+        if any(part in key for part in VISION_PARTS):
+            return False
+        parsed = _parse_key(key)
+        return parsed is None or parsed[0] <= max_block  # unparsed keys are kept, to be reported
+
+    factors: dict[int, dict[tuple[str, str], dict[str, Tensor]]] = {}
+    unused = []
+    for key, tensor in _load_weights(weights_path, keep).items():
         if any(part in key for part in VISION_PARTS):
             continue
         parsed = _parse_key(key)
@@ -139,7 +170,10 @@ def load_adapter(
             continue
         block, target, factor = parsed
         if block <= max_block:
-            factors.setdefault(block, {}).setdefault(target, {})[factor] = tensor.to(dtype)
+            slot = factors.setdefault(block, {}).setdefault(target, {})
+            if factor in slot:
+                raise ValueError(f"{source}: block {block} {target} {factor} appears twice ({key})")
+            slot[factor] = tensor.to(dtype)
     if unused:
         raise ValueError(f"{source} has weights this intervention would ignore: {unused[:3]}")
 
