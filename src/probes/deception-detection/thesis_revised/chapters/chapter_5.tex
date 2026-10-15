@@ -145,6 +145,8 @@ picked wrongly without any error being raised. Pooled activations are then store
 floating point to save space.
 
 A second model, Llama-3.1-70B-Instruct, serves as the judge that filters the persona rollouts.
+\Cref{sec:xmodel} repeats the evaluation on the benchmark's three other models with the same code and
+the same judge, each with a persona bank of its own (\cref{sec:xm-setup}).
 
 \emph{Choice of judge.} The judge is a step that \textcite{mahadik2026persona} do not use: they pool
 every role-play rollout into its persona vector without checking whether the persona was expressed.
@@ -992,6 +994,13 @@ thesis from the result files. No number in the chapters is typed by hand. Automa
 rebuilt contrast directions, K's construction and combination rule, the question resampling and
 balanced splits, the replication set, the Soft-Trigger sampling and behaviour check, and the adapter
 read against the PEFT library.
+
+The replication across models (\cref{sec:xmodel}) adds \texttt{lb\_models.py}, which maps each model's
+blocks to the thesis's layers and reproduces the benchmark's probes on it; \texttt{k\_models.py} and
+\texttt{organisms.py}, which build K and read the fine-tunes inside each model; \texttt{transfer\_ci.py},
+for the paired intervals of transfer; \texttt{k\_final\_xmodel.py}, for the template-free K; and
+\texttt{make\_xmodel\_assets.py}, which writes that section's numbers, tables and figure in the same way
+and fails if a claim the section makes stops holding.
 
 A few numbers do not come from a result file: the benchmark's published probe scores are copied from
 its tables, and the five values of the layer-40 pooling check (\cref{sec:verification}) are constants

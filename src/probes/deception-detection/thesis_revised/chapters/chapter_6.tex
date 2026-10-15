@@ -4,8 +4,9 @@ This chapter reports how the designs of \cref{chap:method} perform and what the 
 \Cref{sec:perf} fixes how the designs are judged and measures the problem they must solve.
 \Cref{sec:analysis} evaluates the twelve designs and selects between them. \Cref{sec:adjustments}
 reports how the design was adjusted in response to the evaluation. \Cref{sec:stats} gives the
-statistical analysis, \cref{sec:comparisons} compares our results with other work, and
-\cref{sec:discussion} interprets them and states their limits.
+statistical analysis, \cref{sec:comparisons} compares our results with other work,
+\cref{sec:xmodel} repeats the evaluation on the benchmark's three other models, and
+\cref{sec:discussion} interprets the results and states their limits.
 
 The design selected in \cref{sec:selection}, the extended contrast plus the knowledge direction
 (D9 + K) at layer~40, is the thread of the chapter. \Cref{sec:transfer} gives its transfer across
@@ -24,6 +25,7 @@ Three conventions hold throughout the chapter.
 \item Intervals resample rows, and a zero-shot AUROC is set against its random band, the 97.5th
   percentile of 1,000 random directions on the same rows (\cref{sec:stats-methods}).
 \end{itemize}
+\Cref{sec:xmodel} adapts the first two conventions to each of the other models (\cref{sec:xm-setup}).
 
 \section{Performance Evaluation}
 \label{sec:perf}
@@ -468,7 +470,11 @@ transfers across the six datasets. Each entry is the mean AUROC over the 30 off-
 train-one-test-all matrix, and the right half leaves \hpkr{} out as both training and test set, which
 keeps 20 cells. The persona detectors use the kd bank at score 3, and the run has one seed and no
 bootstrap of these means. The selected design, D9 + K, is scored through the same matrix at every
-layer of the sweep; K alone, scored the same way at layer~40, reaches \V{th-k-k-off-L40}.
+layer of the sweep; K alone, scored the same way at layer~40, reaches \V{th-k-k-off-L40}. Paired
+intervals for the main differences at layer~40, computed afterwards for \cref{sec:xmodel}, put D9's
+lead over the raw probe at \V{xm-llama-ci-off-dnine-raw} [\V{xm-llama-ci-off-dnine-raw-lo},
+\V{xm-llama-ci-off-dnine-raw-hi}] and over the published contrast at \V{xm-llama-ci-off-dnine-dfive}
+[\V{xm-llama-ci-off-dnine-dfive-lo}, \V{xm-llama-ci-off-dnine-dfive-hi}] (\cref{tab:xm-intervals}).
 
 \begin{table}[t]
 \centering
@@ -958,6 +964,267 @@ fitted to separate labelled examples need not be one the model acts on, whereas 
 persona means, which describes how the model behaves in role, is.
 
 \FloatBarrier
+\section{Replication Across Models}
+\label{sec:xmodel}
+
+Every result so far comes from one model. Liars' Bench also releases the lies of three others
+\cite{kretschmar2025liars}: Qwen2.5-72B-Instruct \cite{qwen2024qwen25}, Mistral-Small-3.1-24B-Instruct
+\cite{mistral2025small31} and Gemma-3-27B-it \cite{gemma2025gemma3}. This section repeats the studies of
+this chapter on all three, with the same code, and with the blocks and banks fixed before any of their
+results was read, to separate what the thesis shows about lies from what it shows about Llama-3.3-70B. Steering was not repeated. \Cref{sec:xm-setup} sets out what changes between models,
+\cref{sec:xm-replicates} what carries over, \cref{sec:xm-qwen} the model on which the persona result
+fails, \cref{sec:xm-k} the knowledge direction, and \cref{sec:xm-depth,sec:xm-other} depth and further
+checks. \Cref{sec:xm-summary} sums up.
+
+\subsection{Setup}
+\label{sec:xm-setup}
+
+\emph{Blocks.} \Cref{tab:xm-models} lists the four models. In place of layer~20, each model reads the
+block at which our base probe reproduces the benchmark's published Mean Probe for that model; in place of
+layer~40, its middle block; in place of the post-hoc layers 36 and 44, the blocks 5\% of its depth either
+side; and in place of the 16-layer sweep, the same 16 depths scaled to its number of blocks. Below, a
+model's \emph{mid block} is its counterpart of layer~40: block \V{xm-qwen-mid} of Qwen, \V{xm-mistral-mid}
+of Mistral and \V{xm-gemma-mid} of Gemma.
+
+\begin{table}[t]
+\centering
+\footnotesize
+\caption[The four models.]{The four models: blocks and width of the residual stream, the block read for
+each of the thesis's layers, the datasets Liars' Bench evaluates the model on, the judge score a rollout
+needs to enter the model's persona bank, and the share of its rollouts the judge scored fully in role.}
+\label{tab:xm-models}
+\fittable{\input{generated_xmodel/tab_xm_models}}
+\end{table}
+
+\emph{Datasets.} Liars' Bench leaves a model out of any dataset on which it gave fewer than 100 lies or
+100 honest answers, so each model has only some of the five (\cref{tab:xm-models}). The five-dataset mean
+becomes the mean over the model's own datasets, and the train-one-test-all matrix, which adds RepE, has
+\V{xm-qwen-cells}, \V{xm-mistral-cells} and \V{xm-gemma-cells} off-diagonal cells for Qwen, Mistral and
+Gemma, against Llama's \V{xm-llama-cells}. Llama's numbers in this section are the thesis's own.
+
+\emph{Persona banks.} Each model has its own bank, generated by the same pipeline as Llama's from the
+same 36 personas, five prompt variants and 30 questions, and judged by the same judge,
+Llama-3.1-70B-Instruct, so that the subject model is the only thing that changes. Each holds
+\V{xm-mistral-judged} judged rollouts. As for Llama, Mistral's and Gemma's banks keep only the rollouts
+the judge scored 3. Qwen's strict bank lacks 11 of the roles, so Qwen uses its lenient bank, which also
+keeps rollouts scored 2; it is marked $\dagger$ throughout. The lenient banks of the other three models
+change their results by at most \V{xm-bank-gap-max} (\hyperref[app:xmodel]{Appendix~D}).
+
+\emph{The knowledge direction and the fine-tunes.} K is rebuilt inside each model by the recipe of
+\cref{sec:k-design}: the same questions, template and denials, with the known questions checked against
+the model's own answers and any it gets wrong replaced from the reserve. Only the system turn changes, to
+the one the model's own \hpkr{} rows carry, or to none for Gemma, which has no \hpkr{} rows. The
+fine-tunes are those Liars' Bench released for these models: Soft-Trigger's greeting, time and gender
+adapters for each of the three, and a Gender-Secret adapter for Mistral alone. Each was applied inside the
+remote pass as in \cref{sec:finetuned-reads}, with its low-rank factors sent to the server in 8-bit form,
+and each passed the behaviour check before it was read. The on-policy probe D3 needs the model's own
+belief-labelled lies, which we have only for Llama and Gemma.
+
+\subsection{What carries over}
+\label{sec:xm-replicates}
+
+\Cref{tab:xm-claims} checks nine of the thesis's claims on each model at its mid block, and
+\cref{tab:xm-mid} gives the AUROCs behind them. As in \cref{sec:stats-paired}, two detectors are compared
+by a paired 95\% interval over resamples of the same test rows, and a difference counts only when its
+interval excludes zero; \cref{tab:xm-intervals} in \hyperref[app:xmodel]{Appendix~D} gives every interval.
+
+\begin{table}[t]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3.5pt}
+\caption[The thesis's claims on the four models.]{The thesis's claims at each model's mid block: a paired
+difference, or an AUROC with the value it must clear (or stay below) in brackets. \checkmark{} the claim
+holds, $\times$ it does not, $\circ$ no clear difference (the interval includes zero, or the two values are
+within 0.01). $^a$Qwen's identical reply, rebuilt from the raw files. $^b$Gemma's opening sentence, rebuilt,
+\V{xm-gemma-rb-open-lies} lies.}
+\label{tab:xm-claims}
+\fittable{\input{generated_xmodel/tab_xm_claims}}
+\end{table}
+
+\begin{table}[t]
+\centering
+\footnotesize
+\caption[The main detectors at each model's mid block.]{The main detectors at each model's mid block.
+Means are over the model's own datasets; lies caught use cutoffs set on half of each dataset's honest
+answers.}
+\label{tab:xm-mid}
+\fittable{\input{generated_xmodel/tab_xm_mid}}
+\end{table}
+
+\emph{The persona result carries over to Mistral and Gemma.} On both, D9 transfers above the probe on raw
+activations, by \V{xm-mistral-ci-off-dnine-raw} [\V{xm-mistral-ci-off-dnine-raw-lo},
+\V{xm-mistral-ci-off-dnine-raw-hi}] on Mistral and \V{xm-gemma-ci-off-dnine-raw}
+[\V{xm-gemma-ci-off-dnine-raw-lo}, \V{xm-gemma-ci-off-dnine-raw-hi}] on Gemma, against
+\V{xm-llama-ci-off-dnine-raw} on Llama, and above the published contrast D5, by
+\V{xm-mistral-ci-off-dnine-dfive} and \V{xm-gemma-ci-off-dnine-dfive}. Gemma's D9 transfers at
+\V{xm-gemma-off-dnine}, level with Llama's \V{xm-llama-off-dnine}. Scored zero-shot, D9's mean over the
+model's datasets is well above the benchmark's published Mean Probe on both, \V{xm-mistral-lb-dnine}
+against \V{xm-mistral-lb-meanprobe} on Mistral and \V{xm-gemma-lb-dnine} against
+\V{xm-gemma-lb-meanprobe} on Gemma, as it is on Llama (\V{xm-llama-lb-dnine} against
+\V{xm-llama-lb-meanprobe}).
+
+\emph{The knowledge-denial roles raise the mean on every model.} The extended contrast's mean is above
+the published contrast's on all four models, by \V{xm-llama-ci-lb-dnine-dfive},
+\V{xm-qwen-ci-lb-dnine-dfive}, \V{xm-mistral-ci-lb-dnine-dfive} and \V{xm-gemma-ci-lb-dnine-dfive} on
+Llama, Qwen, Mistral and Gemma, with every interval above zero, Qwen's included.
+
+\emph{The selected design beats the base probe at the same depth on every model.} D9 + K's mean is above
+that of the base probe trained on RepE at the same block on all four, by \V{xm-llama-ci-lb-ninek-probe},
+\V{xm-qwen-ci-lb-ninek-probe}, \V{xm-mistral-ci-lb-ninek-probe} and \V{xm-gemma-ci-lb-ninek-probe}. It
+also transfers above the probe on raw activations on Llama, Mistral and Gemma.
+
+\emph{Adding K is not neutral.} At Llama's layer~40, D9 + K and D9 are level on transfer
+(\V{xm-llama-ci-off-ninek-dnine} [\V{xm-llama-ci-off-ninek-dnine-lo}, \V{xm-llama-ci-off-ninek-dnine-hi}],
+\cref{sec:transfer}). On the other models the sum moves: K raises transfer on Mistral, by
+\V{xm-mistral-ci-off-ninek-dnine} [\V{xm-mistral-ci-off-ninek-dnine-lo},
+\V{xm-mistral-ci-off-ninek-dnine-hi}], and on Qwen, by \V{xm-qwen-ci-off-ninek-dnine}, and lowers it on
+Gemma (\V{xm-gemma-ci-off-ninek-dnine} [\V{xm-gemma-ci-off-ninek-dnine-lo},
+\V{xm-gemma-ci-off-ninek-dnine-hi}]), where K alone is weak (\cref{sec:xm-k}).
+
+\subsection{Qwen: a bank the model does not play}
+\label{sec:xm-qwen}
+
+On Qwen the persona claims fail. D9 transfers below the probe on raw activations, at
+\V{xm-qwen-off-dnine} against \V{xm-qwen-off-raw} (\V{xm-qwen-ci-off-dnine-raw}
+[\V{xm-qwen-ci-off-dnine-raw-lo}, \V{xm-qwen-ci-off-dnine-raw-hi}]), is level with D5, and its zero-shot
+mean of \V{xm-qwen-lb-dnine} is below the benchmark's Mean Probe (\V{xm-qwen-lb-meanprobe}). On \hpkr{} it
+inverts, at \V{xm-qwen-hpkr-dnine}, and D5 more so (\V{xm-qwen-hpkr-dfive}). The knowledge-denial contrast
+D8 is the exception: it transfers at \V{xm-qwen-off-deight}, above the raw probe, and ranks \hpkr{} at
+\V{xm-qwen-hpkr-deight}. D9 pools D8's roles with the published ones, and on Qwen the published ones, whose
+contrast transfers at \V{xm-qwen-off-dfive}, pull it down.
+
+One difference between Qwen and the other models is the role-play itself. The judge scored
+\V{xm-qwen-roleplay}\% of Qwen's rollouts fully in role, against \V{xm-llama-roleplay}\%,
+\V{xm-mistral-roleplay}\% and \V{xm-gemma-roleplay}\% for Llama, Mistral and Gemma
+(\cref{tab:xm-models}), and only \V{xm-qwen-roleplay-dec}\% of its deceptive roles' rollouts, against
+\V{xm-qwen-roleplay-hon}\% of its honest roles' (\cref{tab:xm-roleplay} in
+\hyperref[app:xmodel]{Appendix~D}); the judge scored most of the rest 2, a role played less clearly. A
+contrast between two groups of roles can only read what the model does differently when it plays them. With one bank per model
+we cannot show that this is the cause, and D8 works although Qwen rarely plays its roles fully either. It
+is, however, the first thing to check before a persona direction is trusted on a new model, and the check
+costs nothing, since the judge's scores already exist. We report it as a finding rather than rewriting the
+prompts until Qwen complies.
+
+\subsection{The knowledge direction across models}
+\label{sec:xm-k}
+
+\emph{The same words.} K's central result carries over to Mistral, the one other model whose released
+\hpkr{} has an identical-text slice, here of \V{xm-mistral-ident-lies} lies and
+\V{xm-mistral-ident-honest} honest answers. K reads \V{xm-mistral-ident-k} on it, above the random band of
+\V{xm-mistral-ident-band}, and above the base probe trained at the same block by
+\V{xm-mistral-ci-ident-k-probe} [\V{xm-mistral-ci-ident-k-probe-lo}, \V{xm-mistral-ci-ident-k-probe-hi}],
+where on Llama the two are level (\V{xm-llama-ci-ident-k-probe} [\V{xm-llama-ci-ident-k-probe-lo},
+\V{xm-llama-ci-ident-k-probe-hi}]). It stays above its band at all \V{xm-mistral-depth-ident-above} depths
+of Mistral's sweep, and D9 + K follows it, \V{xm-mistral-ci-ident-ninek-dnine}
+[\V{xm-mistral-ci-ident-ninek-dnine-lo}, \V{xm-mistral-ci-ident-ninek-dnine-hi}] above D9. Qwen's released
+\hpkr{} has no identical-text slice, so we rebuilt its rows from the benchmark's raw files. On the
+\V{xm-qwen-rb-ident-lies} lies and \V{xm-qwen-rb-ident-honest} honest answers that are the one sentence
+``I do not know the answer to the question.'', K reads \V{xm-qwen-rb-ident-k} [\V{xm-qwen-rb-ident-k-lo},
+\V{xm-qwen-rb-ident-k-hi}], just above its band of \V{xm-qwen-rb-ident-band}. Gemma lies too rarely on
+\hpkr{} for the benchmark to keep it, mostly because it refuses the harmful requests. Rebuilt, it has
+\V{xm-gemma-rb-open-lies} lies and \V{xm-gemma-rb-open-honest} honest denials, and read over their identical
+opening sentence K is inside its band (\V{xm-gemma-rb-open-k} against \V{xm-gemma-rb-open-band}); with so
+few lies that is evidence neither way.
+
+\emph{The persona directions and the words.} The register diagnosis of \cref{sec:hpkr-tests} holds on
+Qwen's rebuilt reply, where every persona direction is inside the band, and in part on Mistral. There D8
+again flags nearly every honest denial at the benchmark's threshold (\V{xm-mistral-flag-hden-deight}\%,
+against \V{th-k-deight-flag-hden-L40}\% on Llama) and is inside the band on the identical text
+(\V{xm-mistral-ident-deight}), but D9 sits at the edge of the band (\V{xm-mistral-ident-dnine}) and the
+published contrast D5 just above it (\V{xm-mistral-ident-dfive}). On Mistral, then, the published roles
+separate the identical text a little better than random directions do, though by much less than K.
+
+\emph{K alone on the datasets.} K's mean over the model's datasets is \V{xm-mistral-lb-k} on Mistral and
+\V{xm-llama-lb-k} on Llama, but \V{xm-qwen-lb-k} on Qwen and \V{xm-gemma-lb-k} on Gemma. At Gemma's mid
+block it inverts on instructed deception (\V{xm-gemma-k-id}) and on the held-out split of Gemma's own AISI
+lies (\V{xm-gemma-aisi-k}, where D9 reads \V{xm-gemma-aisi-dnine}); at the later post-hoc block its mean
+is \V{xm-gemma-lb-k-ph}. At Gemma's mid block, then, the difference between questions the model knows
+and questions nobody can know does not separate its lies, and adding it to D9 lowers Gemma's transfer.
+
+\emph{The fine-tunes.} The thesis's untargeted evidence for K is Gender-Secret, read through its fine-tune
+(\cref{sec:k-results}). Mistral is the only other model with a Gender-Secret fine-tune, and there K does
+not detect its lies. Built and read inside the fine-tune it scores \V{xm-mistral-gs-k} at the mid block and
+\V{xm-mistral-gs-k-ph} at the post-hoc block before it, against bands of \V{xm-mistral-gs-band} and
+\V{xm-mistral-gs-band-ph} (Llama: \V{xm-llama-gs-k} against \V{xm-llama-gs-band}). Neither D9
+(\V{xm-mistral-gs-dnine}) nor the base probe (\V{xm-mistral-gs-probe}) does better, although the adapter
+reproduced the organism's behaviour. On Soft-Trigger the rule of \cref{sec:disc-organisms} decides. On
+Mistral's three Soft-Trigger fine-tunes K clears the band of the fine-tune's read by
+\V{xm-mistral-st-margin-min} to \V{xm-mistral-st-margin-max}, but the base model's read of the same
+transcripts already separates them (\V{xm-mistral-st-basek-min} to \V{xm-mistral-st-basek-max}, above
+that read's band of at most \V{xm-mistral-st-baseband-max}), so the transcripts carry the label without the
+fine-tune and these organisms cannot credit K. On Qwen's and Gemma's six, K is below the band of the
+fine-tune's read throughout, at most \V{xm-qwen-st-k-max} and \V{xm-gemma-st-k-max}. No fine-tune of the
+other models therefore adds evidence for K, and Mistral's Gender-Secret counts against it.
+
+\emph{A template-free K.} K's questions sit in \hpkr's own knowledge-report template
+(\cref{sec:k-design}), so part of what K shares with \hpkr{} could be the template. We therefore also
+built K without any of \hpkr's wording: a plain system turn, the bare question, one of six instruction
+lines that ask whether the model knows the answer, and two other denials, over the same questions. On
+Mistral this template-free K keeps the identical-text result (\V{xm-mistral-rk-ident}, against the band of
+\V{xm-mistral-ident-band}), as it does on Llama (\V{xm-llama-rk-ident}), but transfers worse,
+\V{xm-mistral-rk-off} against the template K's \V{xm-mistral-off-k}. Its criteria were fixed before its
+rows were read on the three new models; on Llama its wording was chosen on the thesis's own datasets, so
+Llama's numbers are not a blind test of it (\hyperref[app:xmodel]{Appendix~D}).
+
+\subsection{Across depth}
+\label{sec:xm-depth}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{fig_xm_depth.pdf}
+\caption[Four measures across depth on the four models.]{Four measures over each model's 16-depth sweep,
+by relative depth; open circles mark each model's mid block. Panel (d) has the two models with a released
+identical-text slice, with their random bands dashed.}
+\label{fig:xm-depth}
+\end{figure}
+
+The mid block was fixed before any model was read, but it need not be where a model's signal is.
+\Cref{fig:xm-depth} follows four measures over each model's sweep. On Llama, D9 transfers above the probe
+on raw activations at all \V{xm-llama-depth-n} depths (\cref{sec:transfer}); on Mistral it does so at
+\V{xm-mistral-depth-above} of the 16, on Gemma at \V{xm-gemma-depth-above} and on Qwen at
+\V{xm-qwen-depth-above}. Mistral's D9 peaks just before its mid block (\V{xm-mistral-depth-peak} at block
+\V{xm-mistral-depth-peak-block}) and falls towards the raw probe deeper in. Gemma's is below 0.5 at every
+sweep block before its mid block (at most \V{xm-gemma-depth-early-max}) and jumps to
+\V{xm-gemma-depth-peak} there. Qwen's stays near chance (at most \V{xm-qwen-depth-before-max}) until block
+\V{xm-qwen-depth-rise-block}, \V{xm-qwen-depth-rise-rel} of its depth, and then transfers at up to
+\V{xm-qwen-depth-peak}, level with the raw probe there (\V{xm-qwen-depth-peak-raw}); that block was found
+only by looking. The selected design is steadier on Mistral, where D9 + K transfers above the raw probe at
+\V{xm-mistral-depth-ninek-above} of the 16 depths, but not on Gemma (\V{xm-gemma-depth-ninek-above}). K on
+the identical text is flat and above its band through most of the depth on both models that have the
+slice (panel d). The claim that the selected design leads the raw probe at every layer is therefore
+Llama's alone.
+
+\subsection{Other checks}
+\label{sec:xm-other}
+
+Four further results are in \hyperref[app:xmodel]{Appendix~D}. The judge's filter does not separate the
+models: the lenient banks of Llama, Mistral and Gemma change the mid-block means of D5, D8 and D9 and the
+transfer of D9 by at most \V{xm-bank-gap-max}. The mean token read is within 0.03 of the best read at the
+mid block on Llama, Mistral and Gemma, but on Qwen the \V{xm-qwen-read-best-name} read reaches
+\V{xm-qwen-read-best} against the mean's \V{xm-qwen-read-mean}. In the tail, adding K lowers the share of
+lies D9 catches at 1\% of honest answers flagged on Llama (\V{xm-llama-op1-dnine} to
+\V{xm-llama-op1-ninek}) and Gemma (\V{xm-gemma-op1-dnine} to \V{xm-gemma-op1-ninek}) but raises it on
+Mistral (\V{xm-mistral-op1-dnine} to \V{xm-mistral-op1-ninek}), where D9 alone catches few. And on Gemma,
+D3, the base probe trained on the model's own lies, again improves on D2, by \V{xm-gemma-dthree-gain}
+[\V{xm-gemma-dthree-gain-lo}, \V{xm-gemma-dthree-gain-hi}] on the mean, and D9 again leads it, by
+\V{xm-gemma-dthree-dnine} [\V{xm-gemma-dthree-dnine-lo}, \V{xm-gemma-dthree-dnine-hi}], as on Llama
+(\cref{sec:supervised}).
+
+\subsection{What generalises}
+\label{sec:xm-summary}
+
+Three results hold on every model where they could be tested. The knowledge-denial roles raise the persona
+contrast's mean; D9 + K ranks lies better than the base probe trained at the same block; and, where the
+words are fixed and there are enough lies, K separates lies from identical honest denials (Llama, Mistral,
+and narrowly Qwen). The persona contrast's lead in transfer replicates on Mistral and Gemma but not on Qwen,
+whose bank the model rarely played fully. Three results do not generalise: the selected design's lead at
+every layer, which is Llama's alone; K's detection of Gender-Secret through the fine-tune, which fails on
+Mistral, the only other model with that fine-tune; and the value of adding K, which raises transfer on
+Mistral and Qwen and lowers it on Gemma, where K alone fails. The persona half of the detector is the more
+general half, provided the model plays the roles. The knowledge half holds where a lie is a denial of
+knowledge in the words of an honest one, and its evidence from fine-tuned models rests on Llama alone.
+
+\FloatBarrier
 \section{Discussions}
 \label{sec:discussion}
 
@@ -1000,6 +1267,13 @@ direction reads the lie. The knowledge direction reads something else, the model
 answer, and it works where register fails. Neither is a mechanism: we show what the directions
 separate, not how the model computes it.
 
+\Cref{sec:xmodel} tests both claims on three more models. The register diagnosis holds on Qwen's
+rebuilt identical reply and in part on Mistral, where the knowledge-denial contrast again flags nearly
+every honest denial but the published contrast separates the identical text slightly better than random
+directions. The second claim holds where the words can be fixed, on Mistral and narrowly on Qwen, but
+not on the fine-tunes: K does not detect the lies of Mistral's Gender-Secret, the one other fine-tune
+that could test it.
+
 The steering result fits the register reading. The published contrast, which fails on \hpkr, cuts
 disclosure as much as D9 does (\cref{tab:steering}), and the steered answers change manner as well as
 content, taking on the hesitations and asides of the deceptive roles (\cref{sec:steering}). What the
@@ -1023,7 +1297,9 @@ read both through their adapters, with the base model's read of the same transcr
   A score there says little about the fine-tune.
 \end{itemize}
 The lesson for evaluation is that a model organism tests a detector only if the base model's read of
-its transcripts cannot already separate the classes, and that the check is cheap: one extra read.
+its transcripts cannot already separate the classes, and that the check is cheap: one extra read. On the
+three further models the same check rules out Mistral's Soft-Trigger fine-tunes as tests of K, and
+Mistral's Gender-Secret, the one clean test among them, does not support K (\cref{sec:xm-k}).
 
 \subsection{Implications}
 \label{sec:implications}
@@ -1044,6 +1320,12 @@ its transcripts cannot already separate the classes, and that the check is cheap
   and adding K widens that overlap.
 \item Model organisms must be read through their fine-tunes and checked against the base model's read
   of the same transcripts.
+\item A persona direction is only as good as the role-play it is built from. Before one is trusted on a
+  new model, the judge's scores should show that the model plays the roles: Qwen played
+  \V{xm-qwen-roleplay}\% of its rollouts fully in role, and its persona contrasts failed
+  (\cref{sec:xm-qwen}).
+\item A claim about depth made on one model need not hold on another. The selected design leads the raw
+  probe at every layer of Llama, but not of the other three models (\cref{sec:xm-depth}).
 \end{itemize}
 
 \subsection{Limitations}
@@ -1062,8 +1344,9 @@ its transcripts cannot already separate the classes, and that the check is cheap
   are the untargeted evidence for K.
 \item Random bands. On several datasets random directions reach AUROCs of 0.9 or more, and on
   Gender-Secret above 0.80, so single-dataset margins are small (\cref{sec:stats-nulls}).
-\item One fine-tuned test. Gender-Secret is the only model organism that tests K, and its lies and
-  honest answers differ in topic as well as in knowledge (\cref{sec:k-results}).
+\item One fine-tuned test. Gender-Secret is the only model organism that tests K, its lies and honest
+  answers differ in topic as well as in knowledge (\cref{sec:k-results}), and on the one other model
+  with that fine-tune, Mistral, K does not detect its lies (\cref{sec:xm-k}).
 \item Soft-Trigger. Its triggers are readable from the text in the released data, so it cannot show
   whether K reads a fine-tune's lies; the gender variant could not be reproduced and was excluded.
 \item One question design. K comes from one template, two denial sentences and one kind of question,
@@ -1078,6 +1361,9 @@ its transcripts cannot already separate the classes, and that the check is cheap
   Layers 36 and 44 are post hoc.
 \item Steering. The result rests on one blinded reader's labels of \V{th-steer-n} scenarios, at one
   layer, one coefficient and one greedy answer each, and K was not steered.
-\item Scope. One model, English only, five benchmark datasets and two model organisms, and persona
-  prompts written from the published descriptions, which may differ from the original study's.
+\item Scope. One model in full, with five benchmark datasets and two model organisms, and three more
+  without steering (\cref{sec:xmodel}); English only; persona prompts written from the published
+  descriptions, which may differ from the original study's.
+\item Across models. Each model has one bank and one set of K's questions, so a failure cannot be split
+  between the model and its bank, and each is scored on its own subset of the datasets.
 \end{itemize}

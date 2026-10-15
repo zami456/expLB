@@ -52,6 +52,17 @@ K catches \V{th-k-op-k-1-L40} of lies, and adding it to D9 lowers D9's \V{th-k-o
 \V{th-k-op-ninek-1-L40}; a better-placed threshold does not fix this, because what limits detection
 there is the overlap between lies and the highest-scoring honest answers (\cref{sec:stats-calibration}).
 
+\emph{Across models.} Repeated on the benchmark's three other models (\cref{sec:xmodel}), the persona
+result carries over to Mistral-Small-3.1-24B and Gemma-3-27B, where the extended contrast transfers at
+\V{xm-mistral-off-dnine} and \V{xm-gemma-off-dnine}, above the raw probe's \V{xm-mistral-off-raw} and
+\V{xm-gemma-off-raw}, but not to Qwen2.5-72B, which played only \V{xm-qwen-roleplay}\% of its persona
+rollouts fully in role. On all four models the knowledge-denial roles raise the persona contrast's mean,
+and the selected detector ranks lies better than the base probe trained at the same depth. K separates
+identical denials on Mistral (\V{xm-mistral-ident-k} against a band of \V{xm-mistral-ident-band}) and
+narrowly on Qwen, but it does not detect the lies of Mistral's Gender-Secret fine-tune, the one other
+fine-tune that could test it, and at Gemma's middle block it is weak on its own. The selected design's
+lead at every layer is Llama's alone.
+
 The selected design is the extended contrast plus the knowledge direction, read at layer~40 and combined
 by a fixed rule. It is a single 8192-dimensional vector, computed once from role-play and from 120
 questions, and applied with one inner product per response. Steering along its persona part, the
@@ -73,14 +84,20 @@ deceptive roles; its knowledge part was not steered (\cref{sec:steering}).
   directions do not.
 \item A causal test of the persona part: steering along it makes the model conceal facts, unlike
   random directions.
+\item A replication on the benchmark's three other models, which separates what holds across models
+  (the knowledge-denial roles, the selected detector over a probe at the same depth, K on identical
+  denials) from what holds for Llama (the lead at every layer, K on Gender-Secret), and shows that a
+  persona direction fails on a model that does not play its roles.
 \end{itemize}
 
 \section{Recommendations for Future Work}
 
 \begin{itemize}[leftmargin=1.2em, itemsep=2pt]
-\item Other models. Liars' Bench also covers Mistral-Small-24B, Qwen-2.5-72B and Gemma-3-27B
-  \cite{kretschmar2025liars}. Whether a knowledge direction built the same way works in each, and
-  whether persona and knowledge directions transfer between families, is open.
+\item Other models. On the benchmark's three other models the persona contrasts fail on Qwen, whose
+  role-play is the weakest, and K is weak at Gemma's middle block and does not detect Mistral's
+  Gender-Secret lies (\cref{sec:xmodel}). Whether a bank that Qwen plays fully would rescue it, why K's
+  knowledge contrast does not separate Gemma's lies, and whether persona and knowledge directions transfer
+  between model families, are open.
 \item Calibration in the setting. The knowledge direction ranks well but catches few lies at 1\% false
   positives. Cutoffs set from a setting's own honest answers help a little; directions that separate
   lies from the highest-scoring honest answers are the next step.

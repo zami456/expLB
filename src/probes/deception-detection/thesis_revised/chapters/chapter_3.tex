@@ -23,14 +23,17 @@ validate our claims from the result files we provide.
 \begin{description}[leftmargin=1.2em, labelindent=0em, itemsep=2pt]
 \item[C1: Model access.] In 16-bit precision the weights of the 70B model occupy about 140\,GB,
   which is far more than we have locally, so we had to run it remotely with NDIF
-  \cite{fiottokaufman2024nnsight}, within the limits of their service.
+  \cite{fiottokaufman2024nnsight}, within the limits of their service. The three models of the
+  replication (\cref{sec:xmodel}) were run the same way.
 \item[C2: Bandwidth.] Download speeds were around 2\,MB/s. At this speed a full per-token cache of
   a single layer, about 60\,GB, would take approximately 8 hours, so we pooled the activations on
   the server whenever possible.
 \item[C3: No training of the model.] The model is used exactly as released, with no fine-tuning and
   no gradients.
 \item[C4: Licences.] The model is made available by Meta under its Llama 3.3 community licence
-  \cite{meta2024llama33}, and each dataset is used under the conditions published by its authors
+  \cite{meta2024llama33}, and the three models of the replication under the Qwen licence agreement
+  \cite{qwen2024qwen25}, the Apache 2.0 licence \cite{mistral2025small31} and the Gemma terms of use
+  \cite{gemma2025gemma3}. Each dataset is used under the conditions published by its authors
   (\cref{sec:ethics}).
 \item[C5: Time.] The final-phase experiments, the analysis and the writing all had to be done within
   one semester (\cref{sec:pm}).
@@ -63,7 +66,8 @@ pytest & 8.2.2 & automated tests \\
 Tectonic & 0.17.0 & building this report and the paper \\
 Git, GitHub & 2.47.1 & version control \\
 \midrule
-NDIF & n/a & remote access to Llama-3.3-70B-Instruct and Llama-3.1-70B-Instruct \\
+NDIF & n/a & remote access to Llama-3.3-70B-Instruct and Llama-3.1-70B-Instruct, and to the
+three models of the replication \\
 Local machine & 16\,GB RAM, CPU only & all analysis \\
 \bottomrule
 \end{tabularx}
@@ -108,9 +112,10 @@ denials as readily as lies (\cref{sec:hpkr-tests}). The knowledge direction read
 itself: where a model that knows the answer and a model that does not give the same denial, it
 separates them (\cref{sec:k-results}). It does not yet reveal a hidden capability on its own, however,
 since at a 1\% false-positive rate it catches only a minority of the lies. Its reliability should not
-be taken for granted either, since \hpkr{} is not a blind test of it and it has been evaluated on only
-one model (\cref{sec:scope,sec:limitations}); it is therefore best used alongside existing capability
-evaluations.
+be taken for granted either, since \hpkr{} is not a blind test of it, it has been evaluated in full on
+only one model, and on the one other model with a Gender-Secret fine-tune it did not detect that
+fine-tune's lies (\cref{sec:xm-k,sec:limitations}); it is therefore best used alongside existing
+capability evaluations.
 
 \subsection{Legal}
 
@@ -153,7 +158,9 @@ through the model in one pass. Summing the activities (generating and judging th
 of the evaluation data, the sweep, and the smaller Gender-Secret, AISI and follow-up runs) gives an
 estimate of 20 to 40 million tokens through 70B models over the project. The reads of the final week,
 for the knowledge direction and through the fine-tunes, used short prompts or a few hundred
-transcripts each and fall within this estimate.
+transcripts each and fall within this estimate. The replication of \cref{sec:xmodel} repeated this
+work, on fewer datasets, for three more models, two of them less than half the size; it therefore adds
+at most three times the estimate, which does not change the comparisons that close this subsection.
 \authornote{Replace with the exact total if NDIF usage records are available.}
 
 \begin{table}[t]
@@ -290,6 +297,10 @@ Final & July 2026 & Repository set-up; the benchmark's probe pipeline vendored a
       & 28 Aug.\ & The knowledge direction; Gender-Secret and Soft-Trigger read through their
                     fine-tunes \\
       & 28--29 Aug.\ & Robustness, replication and operating points of the knowledge direction \\
+      & 6--12 Oct.\ & Persona banks for Qwen2.5-72B, Mistral-Small-3.1-24B and Gemma-3-27B; the
+                    benchmark's probes reproduced on each \\
+      & 13--15 Oct.\ & Every study but steering repeated on the three models; paired intervals; the
+                    template-free K (\cref{sec:xmodel}) \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -300,8 +311,9 @@ Final & July 2026 & Repository set-up; the benchmark's probe pipeline vendored a
 \item \emph{People.} Md.\ Abdullah Al Zami, Suraiya Shanaz and Mahdi Hasan.
   \authornote{Add each member's role, e.g.\ persona bank construction; extraction and analysis;
   writing.}
-\item \emph{Compute.} Remote access to Llama-3.3-70B-Instruct and Llama-3.1-70B-Instruct through
-  NDIF; one 16\,GB laptop for all analysis.
+\item \emph{Compute.} Remote access to Llama-3.3-70B-Instruct and Llama-3.1-70B-Instruct, and for
+  the replication to Qwen2.5-72B, Mistral-Small-3.1-24B and Gemma-3-27B, through NDIF; one 16\,GB
+  laptop for all analysis.
 \item \emph{Data.} The public Liars' Bench, RepE and Alpaca datasets; the AISI rollouts; the persona
   rollouts generated by the team.
 \item \emph{Software.} The open-source stack of \cref{tab:software}.
@@ -346,6 +358,10 @@ Overwriting hand-written results & medium & The analysis script refuses to overw
 not write & Three files restored \\
 Unclear dataset terms & medium & Research use only, no redistribution, revision pinned & Flagged
 for confirmation \\
+Remote out-of-memory on Gemma's long rows and large vocabulary & high & Requests capped by tokens,
+down to one row per request, and shorter requests wherever logits are computed & Every study completed \\
+A model that does not play the roles (Qwen) & high & Its lenient bank used, since the strict one lacks
+11 roles; reported as a finding, prompts not tuned & Persona claims fail on Qwen \\
 \bottomrule
 \end{tabularx}
 \end{table}

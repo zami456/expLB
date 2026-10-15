@@ -22,7 +22,10 @@ AUROC of \V{th-abs-sel-off} across the benchmark's datasets, against \V{th-abs-b
 trained on one dataset and tested on the others, stays ahead of the published persona contrast and of
 those probes at every layer we read, and separates lies from identical honest denials. When we add
 the persona direction to the model's activations while it answers, the model hides an unfavourable
-fact more often; random directions have no such effect.
+fact more often; random directions have no such effect. Repeated on the benchmark's three other models,
+the persona contrast again transfers better than such probes on Mistral-Small-3.1-24B and Gemma-3-27B but
+fails on Qwen2.5-72B, which rarely stays in role; the combined detector beats a probe trained at the same
+depth on all four models, but the knowledge direction does not detect the one other fine-tuned liar.
 
 \vspace{1cm}
 \textbf{Keywords:} large language models; lie detection; deception; linear probes; persona vectors;

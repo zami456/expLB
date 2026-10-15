@@ -125,7 +125,7 @@ needs both parts. The work is organised around four research questions:
   questions and other layers, and how many lies does the detector catch at strict thresholds?
 \end{description}
 
-From these follow six concrete objectives:
+From these follow seven concrete objectives:
 \begin{enumerate}[leftmargin=1.6em, itemsep=2pt]
 \item Rebuild the persona bank of \textcite{mahadik2026persona} for Llama-3.3-70B-Instruct and extend
   it with roles whose deception is a denial of knowledge.
@@ -141,6 +141,8 @@ From these follow six concrete objectives:
   \V{depth-n} layers, and at fixed false-positive rates.
 \item Generate the reported numbers from result files, so that the results can be reproduced and
   checked, and record the provenance of the few that cannot be (\cref{sec:code}).
+\item Repeat the evaluation on the benchmark's three other models, to separate what holds for lies from
+  what holds for one model (\cref{sec:xmodel}).
 \end{enumerate}
 
 \section{Methodology in Brief}
@@ -176,8 +178,10 @@ the knowledge direction and \cref{fig:selected} the detector that combines them.
 \section{Scopes and Challenges}
 \label{sec:scope}
 
-\emph{Scope.} The study covers one model, Llama-3.3-70B-Instruct \cite{meta2024llama33}, chosen
-because Liars' Bench provides its lies and because NDIF serves its internals. The evaluation covers
+\emph{Scope.} The study covers Llama-3.3-70B-Instruct \cite{meta2024llama33}, chosen because Liars'
+Bench provides its lies and because NDIF serves its internals. \Cref{sec:xmodel} then repeats the
+evaluation, without the steering experiment, on the benchmark's three other models,
+Qwen2.5-72B-Instruct, Mistral-Small-3.1-24B-Instruct and Gemma-3-27B-it. For Llama, the evaluation covers
 the five Liars' Bench datasets that this model generated without fine-tuning, together with RepE, the
 instruction pairs on which the benchmark's probe is trained, and two Liars' Bench model organisms,
 Gender-Secret and Soft-Trigger, which we read through their LoRA fine-tunes (\cref{sec:data}). The
@@ -225,6 +229,11 @@ In this work, we make the following contributions:
   are near chance (\cref{sec:finetuned-reads,sec:k-results}).
 \item \emph{A causal test of the persona part.} Steering along the extended contrast makes the model
   conceal an unfavourable fact far more often, while random directions do not (\cref{sec:steering}).
+\item \emph{A replication across models.} On Mistral-Small-3.1-24B and Gemma-3-27B the persona contrast
+  again transfers better than supervised probes; on all four models the knowledge-denial roles help and
+  the selected detector beats a probe trained at the same depth. On Qwen2.5-72B, which rarely plays the
+  roles, the persona contrasts fail, and K's result on a fine-tuned liar does not carry over to Mistral
+  (\cref{sec:xmodel}).
 \end{itemize}
 
 \section{Organisation of the Report}
@@ -232,6 +241,7 @@ In this work, we make the following contributions:
 \Cref{chap:lit} reviews the background and related work. \Cref{chap:req} sets out the requirements,
 the societal, environmental and ethical impact of the work, and its management. \Cref{chap:method}
 presents the design process, the alternative designs, the knowledge direction and the data.
-\Cref{chap:results} evaluates the alternatives, records how the final design was adjusted, and
-discusses the results and their limits. \Cref{chap:conclusion} concludes. The appendices list the
-personas, supplementary results and the knowledge direction's questions.
+\Cref{chap:results} evaluates the alternatives, records how the final design was adjusted, repeats the
+evaluation on three more models, and discusses the results and their limits. \Cref{chap:conclusion}
+concludes. The appendices list the personas, supplementary results, the knowledge direction's questions
+and the full tables of the replication across models.
