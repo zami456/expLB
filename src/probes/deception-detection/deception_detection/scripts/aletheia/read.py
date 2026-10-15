@@ -33,7 +33,7 @@ from deception_detection.scripts.layer_sweep import done_rows, save_request
 
 SPANS = ("content", "content+eot")
 VARIANTS = ("", "_eot")  # save_request's array suffixes for the two spans
-BUDGET = {"qwen35": 16000, "gemma": 8000, "nemotron": 8000}  # tokens per pass (Gemma ran at 8,000 on LB)
+BUDGET = {"qwen35": 16000, "gemma": 4000, "nemotron": 8000}  # tokens per pass (Gemma's organisms ran at 4,000)
 SESSION_PASSES = 8  # passes to one NDIF session
 
 
@@ -47,6 +47,7 @@ def load_model(model: str, repo: str | None = None):
     from deception_detection.scripts.gender_secret import _environment
 
     _environment()  # keys from .env, long upload/download timeouts
+    harden()
     tok = R.tokenizer(model)
     spec = S.MODELS[model]
     if repo is None and spec.vlm:
@@ -56,6 +57,27 @@ def load_model(model: str, repo: str | None = None):
     from nnsight import LanguageModel
 
     return LanguageModel(repo or spec.repo, tokenizer=tok)
+
+
+_HARDENED = []
+
+
+def harden(min_kbps: float = 40.0, grace: float = 12.0) -> None:
+    """The persona bank pipeline's guard against a collapsed result download (`ndif_common.
+    install_download_deadline`): a result trickling in below `min_kbps` after `grace` seconds is
+    fetched again on a fresh connection instead of hanging the run. 40 KB/s is the floor the
+    collaborator used on this laptop."""
+    if _HARDENED:
+        return
+    import importlib.util
+
+    path = S.ROOT / "banks" / "Qwen3.5-27B" / "code" / "src" / "assistant_axis_ndif" / "ndif_common.py"
+    spec = importlib.util.spec_from_file_location("ndif_common", path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    ok = module.install_download_deadline(min_kbps=min_kbps, grace=grace)
+    _HARDENED.append(ok)
+    logger.info(f"NDIF download floor {min_kbps:.0f} KB/s after {grace:.0f} s: {'installed' if ok else 'NOT installed'}")
 
 
 def raise_timeouts(seconds: float = 3600.0) -> None:
@@ -155,16 +177,91 @@ def plan_requests(lengths: dict[int, int], budget: int) -> list[list[int]]:
 
 def read_rows(model_obj, tok, rendered: dict[int, dict], layers: list[int], folder: Path, budget: int,
               plan: dict | None = None, scale: float = 1.0, session_passes: int = SESSION_PASSES,
-              retries: int = 4) -> None:
-    from deception_detection.batching import classify_failure
-
+              retries: int = 4, remote: bool | str = True) -> None:
     done = done_rows(folder)
     todo = {r: it for r, it in rendered.items() if r not in done}
     if not todo:
         logger.info(f"{folder}: all {len(rendered)} rows read")
         return
+
+    def save(batch: list[int], m: np.ndarray) -> None:
+        save_request(folder, batch, layers, m, VARIANTS)
+
+    _read_loop(model_obj, tok, todo, layers, budget, plan, scale, session_passes, retries, save, folder.name, remote,
+               owner=lambda r: folder)
+
+
+def tail_cut(item: dict, keep: int = S.TAIL_CUT_TO, header: int = 8, bos_id: int | None = None) -> dict:
+    """The frozen fallback (spec: a row of at least TAIL_CUT_FROM tokens that runs out of memory keeps
+    its last TAIL_CUT_TO): the row's tail, never cutting into the final turn (its content and the
+    `header` tokens before it), the persona bank's rule for over-long rows. A leading BOS stays."""
+    ids = item["ids"]
+    lead = 1 if bos_id is not None and ids and ids[0] == bos_id else 0
+    n = len(ids)
+    cut = min(max(0, n - keep), max(0, item["content"][0] - header - lead))
+    if cut == 0:
+        return item
+    out = dict(item)
+    out["ids"] = ids[:lead] + ids[lead + cut:]
+    for name in SPANS:
+        a, b = item[name]
+        out[name] = (a - cut, b - cut)
+    out["cut"] = cut
+    return out
+
+
+def _record_unread(folder: Path, row: int, length: int) -> None:
+    path = S.RESULTS / "checks" / "unread_rows.jsonl"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("a", encoding="utf-8") as f:
+        f.write(json.dumps({"folder": str(folder), "row": row, "tokens": length}) + "\n")
+
+
+def _record_cut(folder: Path, row: int, cut: int, length: int) -> None:
+    path = S.RESULTS / "checks" / "cut_rows.jsonl"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("a", encoding="utf-8") as f:
+        f.write(json.dumps({"folder": str(folder), "row": row, "tokens cut": cut, "tokens before": length}) + "\n")
+
+def read_sets(model_obj, tok, sets: dict[Path, dict[int, dict]], layers: list[int], budget: int,
+              plan: dict | None = None, scale: float = 1.0, session_passes: int = SESSION_PASSES,
+              retries: int = 4, remote: bool | str = True) -> None:
+    """`read_rows` over several row sets at once, each saved to its own folder: the rows of every set
+    are planned together, so a session carries as many passes as it can whatever set they come from.
+    An adapter's factors go up once a session, and the uplink is the slow part (165 KB/s measured)."""
+    todo: dict[int, tuple[Path, int, dict]] = {}
+    for folder, rendered in sets.items():
+        done = done_rows(folder)
+        for r, it in rendered.items():
+            if r not in done:
+                todo[len(todo)] = (folder, r, it)
+    if not todo:
+        logger.info(f"all {sum(len(s) for s in sets.values())} rows of {len(sets)} sets read")
+        return
+    combined = {g: it for g, (_, _, it) in todo.items()}
+    folder = Path(f"bundle of {len(sets)} sets")
+    logger.info(f"{len(todo)} rows of {len(sets)} sets: {', '.join(p.name for p in sets)}")
+
+    pending = dict(todo)
+
+    def save(batch: list[int], m: np.ndarray) -> None:
+        by_folder: dict[Path, list[int]] = {}
+        for j, g in enumerate(batch):
+            by_folder.setdefault(pending[g][0], []).append(j)
+        for f, idx in by_folder.items():
+            save_request(f, [pending[batch[j]][1] for j in idx], layers, m[idx], VARIANTS)
+
+    _read_loop(model_obj, tok, combined, layers, budget, plan, scale, session_passes, retries, save, folder.name, remote,
+               owner=lambda g: pending[g][0])
+
+
+def _read_loop(model_obj, tok, todo: dict[int, dict], layers: list[int], budget: int, plan, scale: float,
+               session_passes: int, retries: int, save, label: str, remote: bool | str = True, owner=None) -> None:
+    from deception_detection.batching import classify_failure
+
     requests = plan_requests({r: len(it["ids"]) for r, it in todo.items()}, budget)
-    logger.info(f"{folder}: {len(todo)} rows in {len(requests)} passes, up to {session_passes} to a session")
+    logger.info(f"{label}: {len(todo)} rows in {len(requests)} passes, up to {session_passes} to a session")
+    oom_alone: dict[int, int] = {}
     k = 0
     while k < len(requests):
         unit = requests[k:k + session_passes]
@@ -173,37 +270,62 @@ def read_rows(model_obj, tok, rendered: dict[int, dict], layers: list[int], fold
         for attempt in range(1, retries + 1):
             try:
                 batches = [tensors(tok, [todo[r] for r in batch]) for batch in unit]
-                means = session_means(model_obj, batches, layers, plan, scale)
+                means = session_means(model_obj, batches, layers, plan, scale, remote)
                 break
             except Exception as error:  # noqa: BLE001 -- NDIF drops a request now and then
                 kind = classify_failure(error)
+                lines = [ln for ln in str(error).strip().splitlines() if ln.strip()]
+                tail = (lines[-1].strip() if lines else repr(error))[:300]
+                if not lines and kind == "transient":
+                    kind = "unknown"
+                logger.warning(f"passes {k + 1}-{k + len(unit)}: {type(error).__name__} [{kind}]: {tail}")
                 if kind == "fatal":
                     raise
                 if kind in ("oom", "unknown") and any(len(b) > 1 for b in unit):
                     budget //= 2
                     rest = {r: todo[r] for b in requests[k:] for r in b}
                     requests = requests[:k] + plan_requests({r: len(it["ids"]) for r, it in rest.items()}, budget)
-                    logger.warning(f"passes {k + 1}-{k + len(unit)} ran the server out of memory ({error!r:.200}); "
-                                   f"{len(rest)} rows re-planned at {budget} tokens")
+                    logger.warning(f"{len(rest)} rows re-planned at {budget} tokens")
                     break
                 if kind in ("oom", "unknown") and len(unit) > 1:
                     session_passes = max(1, session_passes // 2)
                     unit = requests[k:k + session_passes]
-                    logger.warning(f"single-row passes failed ({error!r:.200}); {session_passes} passes a session")
                     continue
+                if kind == "oom" and len(unit) == 1 and len(unit[0]) == 1:
+                    r = unit[0][0]
+                    oom_alone[r] = oom_alone.get(r, 0) + 1
+                    n_now = len(todo[r]["ids"])
+                    if oom_alone[r] < 4:
+                        # free memory differs between NDIF's replicas: a row alone gets four tries
+                        logger.warning(f"row {r} ({n_now} tokens) ran out of memory alone; try {oom_alone[r] + 1} of 4")
+                        time.sleep(60 * oom_alone[r])
+                        continue
+                    if n_now >= S.TAIL_CUT_FROM and "cut" not in todo[r]:
+                        # the frozen fallback: a row of at least TAIL_CUT_FROM tokens keeps its last TAIL_CUT_TO
+                        cut = tail_cut(todo[r], keep=S.TAIL_CUT_TO, bos_id=getattr(tok, "bos_token_id", None))
+                        logger.warning(f"row {r} ({n_now} tokens): cut to its last {len(cut['ids'])} (the frozen rule)")
+                        _record_cut(owner(r) if owner else Path(label), r, n_now - len(cut["ids"]), n_now)
+                        todo[r] = cut
+                        oom_alone[r] = 0
+                        continue
+                    # outside the frozen rule: the row is left unread, and its cells are reported missing
+                    logger.warning(f"row {r} ({n_now} tokens) cannot be read on this deployment; left unread")
+                    _record_unread(owner(r) if owner else Path(label), r, n_now)
+                    requests = requests[:k] + requests[k + 1:]
+                    means = None
+                    break
                 if attempt == retries:
                     raise
-                logger.warning(f"passes {k + 1}-{k + len(unit)} failed ({error!r:.300}); retry {attempt}")
                 time.sleep(30 * attempt)
         if means is None:
             continue
         for batch, m in zip(unit, means):
-            m = m.float().numpy()
+            m = m.detach().float().numpy()
             if not np.isfinite(m).all():
                 raise RuntimeError(f"rows {batch[:3]}...: non-finite reads")
-            save_request(folder, batch, layers, m, VARIANTS)
-        logger.info(f"{folder.name}: passes {k + 1}-{k + len(unit)}/{len(requests)}, "
-                    f"{sum(len(b) for b in unit)} rows, {time.time() - start:.0f} s")
+            save(batch, m)
+        logger.info(f"{label}: passes {k + 1}-{k + len(unit)}/{len(requests)}, {sum(len(b) for b in unit)} rows, "
+                    f"{time.time() - start:.0f} s")
         k += len(unit)
 
 
@@ -239,10 +361,26 @@ def renders_for(rows: list[dict]) -> tuple[str, ...]:
     return ("no-reasoning", "reasoning") if has else ("no-reasoning",)
 
 
+FREEZE = S.ROOT / "logs" / "freeze.txt"
+
+
+def check_freeze() -> str:
+    """The SHA-256 of spec.py, which must equal the one recorded at the freeze; logged by every test
+    read, so the logs show the protocol was fixed before the read."""
+    import hashlib
+
+    digest = hashlib.sha256(Path(S.__file__).read_bytes()).hexdigest().upper()
+    if not FREEZE.exists() or digest not in FREEZE.read_text(encoding="utf-8"):
+        raise RuntimeError(f"spec.py ({digest[:12]}) is not the frozen protocol ({FREEZE})")
+    logger.info(f"spec.py sha256 {digest} = the freeze ({FREEZE.read_text(encoding='utf-8').strip()})")
+    return digest
+
+
 def test(dataset: str, read: str = "base", layers=None, budget: int | None = None,
          session_passes: int = SESSION_PASSES, renders=None) -> None:
     """One test dataset, read by the base model (`read="base"`) or by its organism (`"organism"`:
     the merged copy where there is one). Adapter reads through the trace go through `organism.py`."""
+    check_freeze()
     d = S.BY_KEY[dataset]
     if read == "organism" and d.lora and not d.merged:
         raise ValueError(f"{dataset}'s organism has no merged copy; read it through `organism.py`")
@@ -295,6 +433,20 @@ def dev(key: str, read: str = "base", layers=None, per_class: int = S.DEV_PER_CL
               budget or BUDGET[model], session_passes=session_passes)
 
 
+def k_inside(dataset: str, budget: int | None = None, session_passes: int = SESSION_PASSES) -> None:
+    """K's 240 rows read through an organism's merged copy at the organism grid, so K can be built
+    inside it (in-trace adapters: `organism.py read --what k`)."""
+    from deception_detection.scripts.aletheia import k as K
+
+    d = S.BY_KEY[dataset]
+    if not d.merged:
+        raise ValueError(f"{dataset} has no merged copy")
+    model_obj = load_model(d.model, d.merged)
+    read_rows(model_obj, R.tokenizer(d.model), K.rendered(d.model), list(S.MODELS[d.model].organism_grid),
+              folder_for(d.model, "merged-" + d.merged.split("/")[-1], "k", "no-reasoning"),
+              budget or BUDGET[d.model], session_passes=session_passes)
+
+
 def smoke(model: str = "qwen35", repo: str | None = None) -> None:
     """Before any read is trusted: (1) a row read alone and the same row left-padded next to a longer
     one agree (cos >= 0.9998; the linear-attention and Mamba blocks depend on the padding mask), and
@@ -333,6 +485,37 @@ def smoke(model: str = "qwen35", repo: str | None = None) -> None:
         raise RuntimeError(f"smoke check failed: {result}")
 
 
+def reread(dataset: str, read: str = "base", render: str = "no-reasoning", picks=(0, 1), min_cos: float = 0.9998) -> None:
+    """Spot re-read: two stored rows of a test dataset read again by the same model at its middle
+    block must match their stored reads (NDIF can redeploy a model mid-run). Appends to checks/rereads.jsonl."""
+    d = S.BY_KEY[dataset]
+    repo = d.merged if read == "organism" else None
+    read_name = "base" if repo is None else "merged-" + repo.split("/")[-1]
+    folder = folder_for(d.model, read_name, f"test__{dataset}", render)
+    stored = load(folder)
+    rows = [r for r in D.rows(dataset) if int(r["index"]) in stored][:max(picks) + 1]
+    rows = [rows[i] for i in picks]
+    from deception_detection.scripts.aletheia.score import _layer_pos
+
+    block = S.MODELS[d.model].mid
+    pos = _layer_pos(folder, block)
+    items = [R.render(r, d.model, render) for r in rows]
+    again = session_means(load_model(d.model, repo), [tensors(R.tokenizer(d.model), items)], [block])[0]
+    cos = []
+    for j, r in enumerate(rows):
+        x, y = again[j, 0, 0].double().numpy(), stored[int(r["index"])][0, pos].astype(np.float64)
+        cos.append(float(x @ y / np.linalg.norm(x) / np.linalg.norm(y)))
+    result = {"time": time.strftime("%Y-%m-%dT%H:%M:%S"), "dataset": dataset, "read": read_name, "block": block,
+              "rows": [int(r["index"]) for r in rows], "cosine": cos, "passed": min(cos) >= min_cos}
+    path = S.RESULTS / "checks" / "rereads.jsonl"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("a", encoding="utf-8") as f:
+        f.write(json.dumps(result) + "\n")
+    logger.info(f"re-read {result}")
+    if not result["passed"]:
+        raise RuntimeError(f"a re-read differs from the stored read: {result}")
+
+
 def parity_gemma(dataset: str = "instruct_dishonesty__plain", picks=(0, 1, 2, 3)) -> None:
     """This environment (transformers 5.8, this reader) against the replication's (4.55, `activations`):
     Liars' Bench rows tokenised as the replication tokenised them, read here, must reproduce the pooled
@@ -365,4 +548,5 @@ def parity_gemma(dataset: str = "instruct_dishonesty__plain", picks=(0, 1, 2, 3)
 
 
 if __name__ == "__main__":
-    fire.Fire({"test": test, "dev": dev, "smoke": smoke, "parity_gemma": parity_gemma})
+    fire.Fire({"test": test, "dev": dev, "k_inside": k_inside, "smoke": smoke, "parity_gemma": parity_gemma,
+               "reread": reread})

@@ -56,9 +56,16 @@ class Inputs:
         if self.model == "gemma":
             return self.replication.spec.bank_dir(self.replication.bank)
         root = S.ROOT / "banks" / {"qwen35": "Qwen3.5-27B", "nemotron": "Nemotron-3-Super-120B"}[self.model] / "persona"
-        strict = root / "vectors_s3"
-        # the replication's rule: the strict bank where every role kept >= 20 replies, else s23
-        return strict if len(list(strict.glob("*.pt"))) == ROLE_COUNT else root / "vectors_s23"
+        # the replication's rule, decided on the judge's scores (the chain's Eligible rule), not on how far
+        # the build has got: the strict bank if every judged role kept >= 20 replies scored 3, else s23
+        scores = sorted((root / "scores").glob("*.json"))
+        if len(scores) != ROLE_COUNT - 1:
+            raise FileNotFoundError(f"{root / 'scores'}: {len(scores)} judged roles of {ROLE_COUNT - 1}")
+        strict = all(sum(v == 3 for v in json.loads(f.read_text(encoding="utf-8")).values()) >= 20 for f in scores)
+        chosen = root / ("vectors_s3" if strict else "vectors_s23")
+        if len(list(chosen.glob("*.pt"))) != ROLE_COUNT:
+            raise FileNotFoundError(f"{chosen} is not complete yet")
+        return chosen
 
     @cache
     def bank(self, block: int):
@@ -74,22 +81,23 @@ class Inputs:
     def k(self, block: int) -> np.ndarray:
         if self.replication is not None:
             return self.replication.k(block)
-        reads = AR.load(AR.folder_for(self.model, "base", "k", "no-reasoning"))
-        return K.direction(reads, self.model, _layer_pos(AR.folder_for(self.model, "base", "k", "no-reasoning"), block))
+        reads = AR.load(AR.folder_for(self.model, "base", "k", "no-reasoning"), [block])
+        return K.direction(reads, self.model, 0)
 
     @cache
     def control(self, block: int) -> np.ndarray:
         if self.replication is not None:
             return self.replication.pooled(block)[rd.CONTROL].z
         folder = AR.folder_for(self.model, "base", "alpaca", "no-reasoning")
-        reads = AR.load(folder)
-        pos = _layer_pos(folder, block)
-        return np.stack([v[0, pos] for v in reads.values()]).astype(np.float64)
+        reads = AR.load(folder, [block])
+        return np.stack([v[0, 0] for v in reads.values()]).astype(np.float64)
 
     def probe(self, block: int):
         if self.replication is not None:
             return self.replication.probe(block)
-        return None  # the RepE probe for the new models is not built yet
+        from deception_detection.scripts.aletheia import repe
+
+        return repe.probe(self.model, block)
 
 
 @cache
@@ -103,6 +111,17 @@ def _layers_in(folder: Path) -> list[int]:
         raise FileNotFoundError(folder)
     with np.load(path) as saved:
         return sorted({int(k[1:].split("_")[0]) for k in saved.files if k.startswith("L")})
+
+
+def _layers_everywhere(folder: Path) -> list[int]:
+    """The blocks every request file in `folder` holds (a folder may mix block sets: a re-planned
+    read can stop at a shallower block)."""
+    common = None
+    for path in sorted(folder.glob("*.npz")):
+        with np.load(path) as saved:
+            here = {int(k[1:].split("_")[0]) for k in saved.files if k.startswith("L")}
+        common = here if common is None else common & here
+    return sorted(common or [])
 
 
 def _layer_pos(folder: Path, block: int) -> int:
@@ -136,13 +155,14 @@ def _reads(d: S.Dataset, read_name: str, render: str, span: int, block: int):
             folder = AR.folder_for(d.model, read_name, f"test__{d.key}", "no-reasoning")  # the same render
         if not folder.exists():
             return None
-    got = AR.load(folder)
+    if block not in _layers_everywhere(folder):
+        return None
+    got = AR.load(folder, [block])
     rows = D.rows(d.key)
     ids = [int(r["index"]) for r in rows]
     if set(ids) - set(got):
         return None
-    pos = _layer_pos(folder, block)
-    return np.stack([got[i][span, pos] for i in ids]).astype(np.float64), ids
+    return np.stack([got[i][span, 0] for i in ids]).astype(np.float64), ids
 
 
 def _k_read(d: S.Dataset, read_name: str, block: int) -> np.ndarray | None:
@@ -151,10 +171,12 @@ def _k_read(d: S.Dataset, read_name: str, block: int) -> np.ndarray | None:
     folder = AR.folder_for(d.model, read_name, "k", "no-reasoning")
     if not folder.exists():
         return None
-    reads = AR.load(folder)
+    if block not in _layers_everywhere(folder):
+        return None
+    reads = AR.load(folder, [block])
     if len(reads) < 240:
         return None
-    return K.direction(reads, d.model, _layer_pos(folder, block))
+    return K.direction(reads, d.model, 0)
 
 
 def block_for(cell: S.Cell, d: S.Dataset) -> int | None:
@@ -174,7 +196,23 @@ def scorer(cell: S.Cell, d: S.Dataset, read_name: str, block: int):
     if cell.detector == "dev-probe":
         return dev_probe(d.model, block)
     if cell.d9 == "read" and read_name != "base":
-        return None  # D9 rebuilt inside the fine-tune: the bank's rollouts reread through it (not yet)
+        # S4: D9 rebuilt from the bank's subsample read through the organism, K from its K rows
+        from deception_detection.scripts.aletheia import bank as B
+
+        folder = AR.folder_for(d.model, read_name, "bank_subsample", "no-reasoning")
+        if not folder.exists():
+            return None
+        if block not in _layers_everywhere(folder):
+            return None
+        reads = AR.load(folder, [block])
+        if len(reads) < len(B.subsample(d.model)):
+            return None
+        if B.subsample_bank(d.model) != inp.bank_dir.name:
+            raise RuntimeError(f"{d.model}: the subsample was drawn from {B.subsample_bank(d.model)}, "
+                               f"the bank is {inp.bank_dir.name}")
+        d9_in = B.contrasts_from_reads(d.model, reads, 0)["D9"]
+        k = _k_read(d, read_name, block)
+        return None if k is None else rd.standardised_sum(d9_in, k, inp.control(block))
     if cell.detector in ("D5", "D8", "D9"):
         return inp.axis({"D5": "deception", "D8": "denial", "D9": "extended"}[cell.detector], block)
     k = _k_read(d, read_name if cell.k == "read" else "base", block)
@@ -196,7 +234,11 @@ def scores(cell: S.Cell, d: S.Dataset) -> tuple[np.ndarray, list[int]] | None:
     if got is None:
         return None
     z, ids = got
-    f = scorer(cell, d, read_name, block)
+    try:
+        f = scorer(cell, d, read_name, block)
+    except FileNotFoundError as error:  # an input not built yet (the bank, a probe, a K read)
+        logger.info(f"{cell.id} {d.key}: {str(error)[:120]}")
+        return None
     if f is None:
         return None
     s = f(z) if callable(f) else z @ f
@@ -223,11 +265,12 @@ def _dev_reads(model: str, block: int) -> tuple[np.ndarray, np.ndarray] | None:
         folder = AR.folder_for(model, read_name, f"dev__{key}", "no-reasoning")
         if not folder.exists():
             continue
-        got = AR.load(folder)
+        if block not in _layers_everywhere(folder):
+            continue
+        got = AR.load(folder, [block])
         labels = D.labels(key, "dev")
-        pos = _layer_pos(folder, block)
         for i, v in got.items():
-            xs.append(v[0, pos])
+            xs.append(v[0, 0])
             ys.append(int(labels[i]))
     if not xs:
         return None
@@ -282,11 +325,12 @@ def _dev_reads_one(model: str, key: str, block: int):
     folder = AR.folder_for(model, read_name, f"dev__{key}", "no-reasoning")
     if not folder.exists():
         return None
-    got = AR.load(folder)
+    if block not in _layers_everywhere(folder):
+        return None
+    got = AR.load(folder, [block])
     labels = D.labels(key, "dev")
-    pos = _layer_pos(folder, block)
     ids = sorted(got)
-    return np.stack([got[i][0, pos] for i in ids]).astype(np.float64), np.array([int(labels[i]) for i in ids])
+    return np.stack([got[i][0, 0] for i in ids]).astype(np.float64), np.array([int(labels[i]) for i in ids])
 
 
 def dev_gate(model: str) -> dict:
@@ -357,6 +401,41 @@ def run(n_boot: int = S.N_BOOT, n_null: int = S.N_NULL) -> None:
     logger.info(f"{len(table)} cells scored, {len(missing)} missing -> {S.RESULTS / 'auroc.csv'}")
 
 
+def depth() -> None:
+    """Post hoc, marked as such in the report: D9's and D9 + K's AUROC at every grid block read, on the
+    base model's read (all blocks) and the organism's (blocks up to the middle one)."""
+    rows = []
+    for d in S.DATASETS:
+        labels = D.labels(d.key)
+        ids = [int(r["index"]) for r in D.rows(d.key)]
+        y = np.array([int(labels[i]) for i in ids])
+        for read_kind in ("base", "organism"):
+            read_name = "base" if read_kind == "base" else organism_read(d)
+            if read_name is None or (read_kind == "organism" and read_name == "base"):
+                continue
+            folder = AR.folder_for(d.model, read_name, f"test__{d.key}", "no-reasoning")
+            if not folder.exists():
+                continue
+            for block in _layers_everywhere(folder):
+                got = _reads(d, read_name, "no-reasoning", 0, block)
+                if got is None:
+                    continue
+                z, _ = got
+                inp = inputs(d.model)
+                d9 = inp.axis("extended", block)
+                row = {"dataset": d.key, "model": d.model, "read": read_kind, "block": block,
+                       "depth": block / S.MODELS[d.model].n_blocks, "D9": auroc(y, z @ d9)}
+                try:
+                    k = _k_read(d, read_name, block)
+                    if k is not None:
+                        row["D9+K"] = auroc(y, z @ rd.standardised_sum(d9, k, inp.control(block)))
+                except (FileNotFoundError, KeyError, RuntimeError):
+                    pass
+                rows.append(row)
+    pd.DataFrame(rows).to_csv(S.RESULTS / "depth.csv", index=False)
+    logger.info(f"{len(rows)} depth cells -> {S.RESULTS / 'depth.csv'}")
+
+
 def dev_dry_run(model: str = "gemma") -> None:
     """The scoring code end to end on dev rows, before any test label is opened: every direction of
     the protocol at the middle block on each dev set read so far (D5, D8, D9, K, D9 + K)."""
@@ -383,4 +462,4 @@ def dev_dry_run(model: str = "gemma") -> None:
 
 
 if __name__ == "__main__":
-    fire.Fire({"run": run, "dev_gate": dev_gate, "dev_block": dev_block, "dev_dry_run": dev_dry_run})
+    fire.Fire({"run": run, "depth": depth, "dev_gate": dev_gate, "dev_block": dev_block, "dev_dry_run": dev_dry_run})

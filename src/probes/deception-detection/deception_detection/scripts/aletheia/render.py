@@ -69,7 +69,10 @@ def organism_template(model: str, lora: str | None) -> tuple[str, str]:
         with open(path, encoding="utf-8") as f:
             text = f.read()
         if name.endswith(".json"):
-            text = json.loads(text).get("chat_template")
+            try:
+                text = json.loads(text).get("chat_template")
+            except ValueError:  # a gated file served as an error page
+                return base, "base (the organism's template is not accessible)"
             if not text:
                 continue
         return text, "organism"
@@ -99,13 +102,14 @@ def _chat(messages: list[dict], render: str) -> list[dict]:
 
 def _qwen_span(tok, ids: list[int]) -> tuple[int, int]:
     """The persona bank's rule for the final assistant turn of a ChatML (Qwen) render."""
-    im_start, im_end = tok.convert_tokens_to_ids("<|im_start|>"), tok.convert_tokens_to_ids(QWEN_EOT)
-    assistant = tok.convert_tokens_to_ids("assistant")
+    im_end = tok.convert_tokens_to_ids(QWEN_EOT)
+    # the header as tokens: one 'assistant' token in Qwen's vocabulary, two ('ass', 'istant') in Nemotron's
+    header = tok.encode("<|im_start|>assistant", add_special_tokens=False)
     think_start, think_end = tok.convert_tokens_to_ids("<think>"), tok.convert_tokens_to_ids("</think>")
-    starts = [i for i in range(len(ids) - 1) if ids[i] == im_start and ids[i + 1] == assistant]
+    starts = [i for i in range(len(ids) - len(header) + 1) if ids[i:i + len(header)] == header]
     if not starts:
         raise ValueError("no assistant turn")
-    first = starts[-1] + 2
+    first = starts[-1] + len(header)
     end = next(j for j in range(first, len(ids)) if ids[j] == im_end)
     kept, skipping = [], False
     for j in range(first, end):

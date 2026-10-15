@@ -164,3 +164,49 @@ def test_reply_logprobs_in_the_session_match_peft(organism):
             a, b = it["content"]
             want = torch.stack([lp[t - 1, it["ids"][t]] for t in range(a, b)]).mean()
             assert abs(got[j, i] - float(want)) < 1e-4
+
+
+def test_the_split_behaviour_check_equals_the_full_pass(organism):
+    """`organism.split_logprobs` (int8 factors, the pass split after block 1 into two requests, the
+    residual stream injected at block 2's input) against the full-depth pass with the same factors."""
+    from deception_detection.scripts.aletheia.organism import item_logprobs, split_logprobs
+
+    hf, _, folder = organism
+    model = LanguageModel(hf, tokenizer=types.SimpleNamespace())
+    adapter = load_adapter(folder, max_block=N_BLOCKS - 1, dtype=torch.float32)
+    plan = quantised_plan(adapter)
+    torch.manual_seed(3)
+    items = [{"ids": torch.randint(0, 90, (n,)).tolist(), "content": (n - 4, n - 1), "content+eot": (n - 4, n)}
+             for n in (7, 9)]
+    pad = types.SimpleNamespace(pad_token_id=0)
+    full = item_logprobs(model, pad, items, plan, [0.0, adapter.scale], remote="local")
+    first = {b: e for b, e in plan.items() if b <= 1}
+    second = {b: e for b, e in plan.items() if b > 1}
+    base, adapted = split_logprobs(model, pad, items, first, second, 1, N_BLOCKS, adapter.scale, remote="local")
+    np.testing.assert_allclose(base, full[0], atol=1e-5)
+    np.testing.assert_allclose(adapted, full[1], atol=1e-4)
+
+
+def test_read_sets_files_every_row_under_its_own_set(organism, tmp_path):
+    """`read.read_sets` plans the rows of several sets together and saves each read to its own set's
+    folder under its own row id: what `load` returns must equal each row read alone."""
+    from deception_detection.scripts.aletheia.read import load, read_sets
+
+    hf, _, _ = organism
+    model = LanguageModel(hf, tokenizer=types.SimpleNamespace())
+    torch.manual_seed(4)
+
+    def item(n):
+        return {"ids": torch.randint(0, 90, (n,)).tolist(), "content": (n - 4, n - 1), "content+eot": (n - 4, n)}
+
+    sets = {tmp_path / "a": {10: item(7), 11: item(9)}, tmp_path / "b": {10: item(8), 12: item(6), 13: item(9)}}
+    pad = types.SimpleNamespace(pad_token_id=0)
+    read_sets(model, pad, sets, [1, 3], budget=20, session_passes=2, remote="local")
+    for folder, rows in sets.items():
+        got = load(folder)
+        assert sorted(got) == sorted(rows)
+        for r, it in rows.items():
+            from deception_detection.scripts.aletheia.read import tensors
+
+            alone = session_means(model, [tensors(pad, [it])], [1, 3], None, 1.0, "local")[0][0]
+            np.testing.assert_allclose(got[r], alone.detach().numpy(), atol=1e-5)
