@@ -197,7 +197,7 @@
 -foreach ($v in @(@{ tag = "vectors_s23$VecSuffix"; keep = "2,3" }, @{ tag = "vectors_all$VecSuffix"; keep = "0,1,2,3" },
 -                 @{ tag = "vectors_s3$VecSuffix"; keep = "3" })) {
 +$bankList = @()
-+foreach ($b in $Banks.Split(",")) { $b = $b.Trim(); if ($b) { $bankList += @{ tag = "vectors_$b$VecSuffix"; keep = $KeepOf[$b] } } }
++foreach ($b in $Banks.Split(",")) { $b = $b.Trim(); if ($b -and $b -ne "none") { $bankList += @{ tag = "vectors_$b$VecSuffix"; keep = $KeepOf[$b] } } }
 +foreach ($v in $bankList) {
      $want = Eligible $v.keep
      for ($t = 1; $t -le $Attempts; $t++) {
@@ -279,7 +279,7 @@
      if not instructions:
 --- aletheia/src/assistant_axis_ndif/2_activations_ndif.py
 +++ qbank/src/assistant_axis_ndif/2_activations_ndif.py
-@@ -449,8 +449,155 @@
+@@ -449,8 +449,162 @@
      if failed:
          logger.warning("  %d/%d responses dropped to NDIF errors", failed, failed + int(count))
      if count == 0:
@@ -322,21 +322,28 @@
 +    count is the number of rows, known on the client, so nothing else comes back.
 +    """
 +    vl = is_vision_language(llm)
++    n_batches = len(prepared)
 +    delay = 3.0
 +    for attempt in range(retries):
 +        try:
-+            outs = []
++            # nnsight 0.7 executes the body of the session block remotely, so only names assigned
++            # inside the block and .save()d come back (a list appended to from inside the block
++            # stays empty on the client). One saved (B,K,H) accumulator, one row per batch, as
++            # `_run_session` keeps one (K,H) sum.
 +            with llm.session(remote=True):
-+                for input_ids, attn, span in prepared:
++                acc = torch.zeros(n_batches, len(layer_idx), hidden, dtype=torch.float32).save()
++                for i, (input_ids, attn, span) in enumerate(prepared):
 +                    with llm.trace({"input_ids": input_ids, "attention_mask": attn}):
-+                        outs.append(_span_mean_sum(llm, layer_idx, span, vl).cpu().save())
-+            vals = [getattr(o, "value", o) for o in outs]
-+            if len(vals) != len(prepared):
-+                raise RuntimeError(f"session returned {len(vals)} tensors for {len(prepared)} batches")
-+            for v in vals:
-+                if tuple(v.shape) != (len(layer_idx), hidden) or not torch.isfinite(v).all():
-+                    raise RuntimeError("session returned a tensor of the wrong shape or with non-finite values")
-+            return vals
++                        acc[i] += _span_mean_sum(llm, layer_idx, span, vl).cpu()
++            a = getattr(acc, "value", acc)
++            if tuple(a.shape) != (n_batches, len(layer_idx), hidden):
++                raise RuntimeError(f"session returned shape {tuple(a.shape)} for {n_batches} batches")
++            if not torch.isfinite(a).all():
++                raise RuntimeError("session returned non-finite values")
++            if float(a.abs().sum()) == 0:
++                raise RuntimeError("session returned all zeros (server-side accumulation did not take "
++                                   "effect -- try --accum client)")
++            return [a[i].clone() for i in range(n_batches)]
 +        except Exception as e:  # noqa: BLE001 -- engineio b'P' / ConnectionError / NDIF hiccup
 +            _lines = [ln for ln in str(e).strip().splitlines() if ln.strip()]
 +            _tail = (_lines[-1].strip() if _lines else repr(e))[:400]
@@ -437,7 +444,7 @@
  
  
  def load_scores(path: Path) -> dict:
-@@ -464,7 +611,7 @@
+@@ -464,7 +618,7 @@
  
  def process_role(llm, layer_idx, hidden, encoder, role: str, args, pad_id: int) -> None:
      out_file = Path(args.output_dir) / f"{role}.pt"
@@ -446,7 +453,7 @@
          logger.info("Skip %s (vector exists)", role); return
  
      resp_file = Path(args.responses_dir) / f"{role}.jsonl"
-@@ -476,21 +623,34 @@
+@@ -476,21 +630,34 @@
          for r in reader:
              rows.append(r)
  
@@ -484,7 +491,7 @@
      drops: Counter = Counter()
      items = build_items(encoder, convs, args.max_length, drops)
      report_drops(drops, len(convs), len(items), f"{role}: ")
-@@ -499,15 +659,22 @@
+@@ -499,15 +666,22 @@
          return
      logger.info("Role %s: %d kept, %d usable -> NDIF", role, len(convs), len(items))
  
@@ -509,7 +516,7 @@
      norms = vec.norm(dim=1)
      logger.info("Role %s: saved %s over n=%d  layers=%s  norms[min/max]=%.3f/%.3f -> %s",
                  role, tuple(vec.shape), n_used,
-@@ -541,7 +708,19 @@
+@@ -541,7 +715,19 @@
      ap.add_argument("--accum", choices=("session", "client"), default="session",
                      help="'session' accumulates the sum on NDIF and downloads one (K,H) "
                           "tensor per session; 'client' downloads one per batch (fallback)")
