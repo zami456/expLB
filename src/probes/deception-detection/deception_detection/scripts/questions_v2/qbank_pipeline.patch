@@ -262,7 +262,166 @@
              out.append(row["question"])
      return out[:n]
  
-@@ -240,7 +248,16 @@
+@@ -161,6 +169,76 @@
+     return [t.strip() for t in llm.tokenizer.batch_decode(out[:, in_len:], skip_special_tokens=True)]
+ 
+ 
++def _ndif_model_running(repo_id: str) -> bool | None:
++    """True when api.ndif.us/status lists a RUNNING replica of `repo_id`, False when it lists none, None when the
++    status call itself failed. Added 2026-10-17 after a multi-hour NDIF outage (every Llama-3.3-70B replica
++    UNHEALTHY from 22:27): without it a session gives up after --retries and the shard walks through all its
++    roles dropping every session, so the chain's generation attempts burn while nothing can be generated."""
++    import json
++    import urllib.request
++
++    try:
++        with urllib.request.urlopen("https://api.ndif.us/status", timeout=30) as r:
++            d = json.loads(r.read().decode("utf-8"))
++    except Exception:  # noqa: BLE001
++        return None
++    deployments = d.get("deployments") or {}
++    values = deployments.values() if isinstance(deployments, dict) else deployments
++    for v in values:
++        if isinstance(v, dict) and v.get("repo_id") == repo_id and v.get("application_state") == "RUNNING":
++            return True
++    return False
++
++
++def _looks_like_outage(exc_name: str, tail: str) -> bool:
++    s = f"{exc_name} {tail}".lower()
++    return any(k in s for k in ("connect", "disconnect", "timeout", "timed out", "evicted", "unavailable",
++                                "bad gateway", "502", "503", "504"))
++
++
++def _ndif_ws_reachable(timeout: float = 10.0) -> bool:
++    """Can a socket.io client open NDIF's websocket? That is the first step of nnsight's blocking_request
++    (remote.py: sio.connect(ws_address, socketio_path="/ws/socket.io", transports=["websocket"])), and it was
++    the step failing for hours on 2026-10-17 (the NDIF 0.8 upgrade day) while /status and /ping still answered
++    and a replica showed RUNNING, so the status endpoint alone cannot tell when a retry is worth sending."""
++    try:
++        import socketio
++        from nnsight import CONFIG
++
++        host = CONFIG.API.HOST
++        ws = ("wss://" + host[8:]) if host.startswith("https://") else ("ws://" + host[7:])
++        with socketio.SimpleClient(reconnection_attempts=1) as sio:
++            sio.connect(ws, socketio_path="/ws/socket.io", transports=["websocket"], wait_timeout=timeout)
++        return True
++    except Exception:  # noqa: BLE001
++        return False
++
++
++def _wait_out_outage(repo_id: str, started: float, cap_s: float, cycle: int, poll_s: float = 60.0) -> bool:
++    """Block until the status endpoint shows a RUNNING replica of the model AND the websocket accepts a
++    connection, then settle (2 min, doubling per cycle up to 10 min) before the caller retries; False once the
++    outage cap is reached."""
++    polls = 0
++    while True:
++        if time.time() - started > cap_s:
++            return False
++        state = _ndif_model_running(repo_id)
++        ws_ok = _ndif_ws_reachable() if state is True else False
++        if state is True and ws_ok:
++            settle = min(120.0 * (2 ** cycle), 600.0)
++            logger.warning("  NDIF outage: %s has a RUNNING replica and the websocket answers; settling %.0f s "
++                           "before retrying (outage %.0f min so far)", repo_id, settle, (time.time() - started) / 60)
++            time.sleep(settle)
++            return True
++        if polls % 5 == 0:
++            what = ("status endpoint unreachable" if state is None else
++                    "no RUNNING replica" if state is False else "replica RUNNING but the websocket refuses connections")
++            logger.warning("  NDIF outage: %s: %s; waiting (%.0f min so far, cap %.0f min)", repo_id, what,
++                           (time.time() - started) / 60, cap_s / 60)
++        polls += 1
++        time.sleep(poll_s)
++
++
+ def generate_batches_session(llm, prompt_batches: list[list[str]], args) -> list[list[str]] | None:
+     """Bundle several batches into ONE NDIF job (verified to work on nnsight 0.7.0).
+ 
+@@ -172,33 +250,54 @@
+     import nnsight
+ 
+     encs = [_encode(llm, p) for p in prompt_batches]
+-    delay = 3.0
+-    for attempt in range(args.retries):
+-        try:
+-            with llm.session(remote=True):
+-                outs = nnsight.save([])
+-                for in_ids, attn, _ in encs:
+-                    with llm.generate(in_ids, attention_mask=attn, **_gen_kwargs(llm, args)):
+-                        outs.append(llm.generator.output)
+-            outs = getattr(outs, "value", outs)
+-            if len(outs) != len(encs):
+-                raise RuntimeError(f"session returned {len(outs)} outputs, expected {len(encs)}")
+-            return [_decode_new(llm, o, in_len) for (_, _, in_len), o in zip(encs, outs)]
+-        except Exception as e:  # noqa: BLE001
+-            # Log the LAST line, not str(e)[:200]. nnsight wraps the remote failure in a
+-            # CLIENT-side traceback, so a prefix slice spends its whole budget on
+-            #   File ".../nnsight/intervention/backends/remote.py", line 567, in __call__
+-            # and stops immediately before the RemoteException description -- the only part
+-            # that says what went wrong. 8_coords_ndif.py and ndif_common.exc_tail were fixed
+-            # for exactly this in Pass B; this script was missed, and on 2026-09-20 it cost a
+-            # whole 8B run whose every session failed with no recoverable reason in the log.
+-            _lines = [ln for ln in str(e).strip().splitlines() if ln.strip()]
+-            _tail = (_lines[-1].strip() if _lines else repr(e))[:400]
+-            logger.warning("  session attempt %d/%d (%d batches) failed: %s: %s",
+-                           attempt + 1, args.retries, len(encs), type(e).__name__, _tail)
+-            time.sleep(delay)
+-            delay = min(delay * 2, 60)
+-    return None
++    outage_started = None
++    outage_cycles = 0
++    cap_s = 60.0 * float(getattr(args, "outage_cap_min", 0) or 0)
++    while True:
++        delay = 3.0
++        last_failure = ("", "")
++        for attempt in range(args.retries):
++            try:
++                with llm.session(remote=True):
++                    outs = nnsight.save([])
++                    for in_ids, attn, _ in encs:
++                        with llm.generate(in_ids, attention_mask=attn, **_gen_kwargs(llm, args)):
++                            outs.append(llm.generator.output)
++                outs = getattr(outs, "value", outs)
++                if len(outs) != len(encs):
++                    raise RuntimeError(f"session returned {len(outs)} outputs, expected {len(encs)}")
++                return [_decode_new(llm, o, in_len) for (_, _, in_len), o in zip(encs, outs)]
++            except Exception as e:  # noqa: BLE001
++                # Log the LAST line, not str(e)[:200]. nnsight wraps the remote failure in a
++                # CLIENT-side traceback, so a prefix slice spends its whole budget on
++                #   File ".../nnsight/intervention/backends/remote.py", line 567, in __call__
++                # and stops immediately before the RemoteException description -- the only part
++                # that says what went wrong. 8_coords_ndif.py and ndif_common.exc_tail were fixed
++                # for exactly this in Pass B; this script was missed, and on 2026-09-20 it cost a
++                # whole 8B run whose every session failed with no recoverable reason in the log.
++                _lines = [ln for ln in str(e).strip().splitlines() if ln.strip()]
++                _tail = (_lines[-1].strip() if _lines else repr(e))[:400]
++                logger.warning("  session attempt %d/%d (%d batches) failed: %s: %s",
++                               attempt + 1, args.retries, len(encs), type(e).__name__, _tail)
++                last_failure = (type(e).__name__, _tail)
++                time.sleep(delay)
++                delay = min(delay * 2, 60)
++        # 2026-10-17: retries exhausted. A connection-type failure (or a model with no RUNNING replica) is an NDIF
++        # outage: wait it out and retry the SAME session instead of dropping it, up to --outage_cap_min.
++        if cap_s <= 0:
++            return None
++        if (not _looks_like_outage(*last_failure) and _ndif_model_running(args.model) is True
++                and _ndif_ws_reachable()):
++            return None  # a genuine remote failure, not an outage: give the session up as before
++        if outage_started is None:
++            outage_started = time.time()
++            logger.warning("  retries exhausted on %s; treating it as an NDIF outage (cap %.0f min)",
++                           last_failure[0] or "an unknown failure", cap_s / 60)
++        if not _wait_out_outage(args.model, outage_started, cap_s, outage_cycles):
++            logger.error("  NDIF outage cap reached after %.0f min; giving this session up", cap_s / 60)
++            return None
++        outage_cycles += 1
++        logger.info("  retrying the session after the outage wait (cycle %d)", outage_cycles)
+ 
+ 
+ def generate_batch(llm, prompts: list[str], args) -> list[str] | None:
+@@ -240,7 +339,16 @@
      if out_file.exists():
          with jsonlines.open(out_file) as reader:
              for row in reader:
@@ -279,6 +438,17 @@
  
      instructions = [d.get("pos", "") for d in role_data.get("instruction", [])]
      if not instructions:
+@@ -335,6 +443,10 @@
+     ap.add_argument("--repetition_penalty", type=float, default=None,
+                     help="xmodel: override the checkpoint repetition_penalty (1.0 = off)")
+     ap.add_argument("--retries", type=int, default=4)
++    ap.add_argument("--outage_cap_min", type=float, default=480.0,
++                    help="after --retries connection-type failures, wait for a RUNNING NDIF replica and retry the "
++                         "same session for up to this many minutes (0 = give the session up at once, the old "
++                         "behaviour); added 2026-10-17")
+     args = ap.parse_args()
+ 
+     Path(args.output_dir).mkdir(parents=True, exist_ok=True)
 --- aletheia/src/assistant_axis_ndif/2_activations_ndif.py
 +++ qbank/src/assistant_axis_ndif/2_activations_ndif.py
 @@ -449,8 +449,162 @@
