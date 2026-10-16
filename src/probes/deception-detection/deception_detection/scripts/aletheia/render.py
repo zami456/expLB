@@ -153,7 +153,8 @@ def render(row: dict, model: str, render_mode: str = "no-reasoning") -> dict:
     if model == "gemma":
         # Gemma folds a system turn into the first user turn; the template must agree with the
         # thesis's own fold (utils.preprocess_dialogue), which the Liars' Bench reads used
-        if chat[0]["role"] == "system":
+        # (an empty system turn has nothing to fold: the template's own render stands, as the kit's did)
+        if chat[0]["role"] == "system" and chat[0]["content"].strip():
             folded = [{"role": "user", "content": chat[0]["content"] + "\n\n" + chat[1]["content"]}] + chat[2:]
             alt = tok.apply_chat_template(folded, tokenize=False, add_generation_prompt=False, chat_template=template)
             if alt != text:

@@ -116,6 +116,27 @@ Not in the protocol: asked for after the results above were seen. Read through e
 
 Means: D5 + K 0.613 (rank 23 of 31, 8 datasets); rule K 0.540 (rank 28 of 31, 8 datasets); D5 + rule K 0.594 (rank 26 of 31, 8 datasets); D9 + rule K 0.612 (rank 23 of 31, 8 datasets); D4 0.650 (rank 16 of 31, 8 datasets); D4 (LB) 0.703 (rank 11 of 31, 8 datasets).
 
+## Post hoc: the validation split
+
+Not in the protocol, which left the split unused: scored on the user's request after the test results were seen. No team's validation scores are published, so these are absolute AUROCs, not ranks. Medical sycophancy is read by the base model (its organism); soft trigger through its Cadenza adapter (behaviour check passed: Qwen3.5 20/20 at scale 1, Gemma 19/20 at scale 2), and the base read is its control. Nemotron's rows are left out (no persona bank). 400 rows and 200 lies each.
+
+| Cell | V-MS-Q | V-MS-G | V-ST-Q | V-ST-G |
+|---|---|---|---|---|
+| headline | 0.734 | 0.445 | 0.960 | 0.187 |
+| S1-d9 | 0.579 | 0.450 | 0.593 | 0.105 |
+| S6-d5 | 0.537 | 0.502 | 0.565 | 0.809 |
+| S6-d8 | 0.608 | 0.490 | 0.809 | 0.158 |
+| S6-k | 0.712 | 0.441 | 0.965 | 0.325 |
+| S3-base | 0.734 | 0.445 | 0.948 | 0.713 |
+| S3-base-d9 | 0.579 | 0.450 | 0.592 | 0.487 |
+| R1-repe | 0.613 | 0.394 | 0.274 | 0.879 |
+| D4 (LB) | 0.557 | 0.454 | 0.642 | 0.597 |
+| D9 (adapter-added) |  |  | 0.525 | 0.048 |
+| D9+K (adapter-added) |  |  | 0.194 | 0.035 |
+
+Random-direction band (97.5%) per read: V-MS-G base: 0.648; V-MS-Q base: 0.667; V-ST-G base: 0.849; V-ST-G lora-soft-trigger-greeting-gemma-3-27b-it@2: 0.930; V-ST-G lora-soft-trigger-greeting-gemma-3-27b-it@2 minus base: 0.961; V-ST-Q base: 0.917; V-ST-Q lora-soft-trigger-greeting-qwen3.5-27b@1: 0.889; V-ST-Q lora-soft-trigger-greeting-qwen3.5-27b@1 minus base: 0.879.
+Every soft-trigger reply is the single word True or False, and the word tracks the label, so random directions reach 0.85-0.96 there; differencing the adapter's read against the base read does not remove it (the reply token is in both). Only Qwen3.5's K (0.965) and D9 + K (0.960) clear their band (0.889), and K's knowledge contrast may itself track the answer word; Gemma's cells do not, so the task tells detectors apart little.
+
 ## Caveats
 
 - A base-model read of an organism's transcript is the thesis's control, not a result for that dataset: the base model has no fine-tuned belief or goal to conceal, so it reads only the text. A dataset whose organism could not be read (the Hidden-Goal adapters are gated) is reported as not run; its base read appears only beside the organism read, as the control. Harmful-Looking is different: plain Gemma wrote it, so the base model is its organism.
@@ -124,7 +145,7 @@ Means: D5 + K 0.613 (rank 23 of 31, 8 datasets); rule K 0.540 (rank 28 of 31, 8 
 - A July 22 starter-kit commit fixed a silent no-op in which Qwen3.5 adapter keys matched 0 of 512; whether the official white-box reads of the Qwen organisms had their adapters applied is not known, so the base-model read is shown beside the organism read.
 - AB-AW has 26 lies: per-dataset intervals there are wide.
 
-- Rows cut by the frozen rule (kept its last 4,096 tokens): base/test__BotC__no-reasoning: 163; lora-botc-qwen3.5-27b@2/test__BotC__no-reasoning: 148.
+- Rows cut by the frozen rule (kept its last 4,096 tokens): base/test__BotC__no-reasoning: 163; base/test__V-MS-Q__no-reasoning: 1; lora-botc-qwen3.5-27b@2/test__BotC__no-reasoning: 148.
   - Of them cut untried: base/test__BotC__no-reasoning: 160; lora-botc-qwen3.5-27b@2/test__BotC__no-reasoning: 147. Each is longer than a row of the same read that ran out of memory alone on all four tries with no other read on the cluster, and memory grows with length (the user's decision, a deviation from the frozen rule's wording, which asks each row to fail itself). Every row shorter than that row was read whole.
   - BotC: a first pass through the adapter cut 151 rows after a row failed while other reads shared the cluster; those reads were set aside unscored (`E:\aletheia\acts\superseded\botc_cut_under_contention`) and the rows reread with the cluster idle. The organism and base reads cut at their own thresholds, so their BotC cut sets differ (148 and 163 rows).
 - Rows left unread (too long for the server; its cells are not scored): base/test__HG-G__no-reasoning: 1.

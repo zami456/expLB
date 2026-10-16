@@ -99,6 +99,35 @@ def _posthoc_lines(board: pd.DataFrame) -> list[str]:
     return lines + ["", "Means: " + "; ".join(means) + ".", ""]
 
 
+def _validation_lines() -> list[str]:
+    """`validation.py`'s cells: the validation split, scored after the test results were seen."""
+    path = S.RESULTS / "validation" / "auroc.csv"
+    if not path.exists():
+        return []
+    table = pd.read_csv(path)
+    keys = list(dict.fromkeys(table["dataset"]))
+    piv = table.pivot(index="cell", columns="dataset", values="auroc")
+    band = table.groupby(["dataset", "read"])["band97.5"].first()
+    lines = ["## Post hoc: the validation split", "",
+             "Not in the protocol, which left the split unused: scored on the user's request after the test results "
+             "were seen. No team's validation scores are published, so these are absolute AUROCs, not ranks. "
+             "Medical sycophancy is read by the base model (its organism); soft trigger through its Cadenza adapter "
+             "(behaviour check passed: Qwen3.5 20/20 at scale 1, Gemma 19/20 at scale 2), and the base read is its "
+             "control. Nemotron's rows are left out (no persona bank). 400 rows and 200 lies each.", "",
+             "| Cell | " + " | ".join(keys) + " |", "|---|" + "---|" * len(keys)]
+    for cell in dict.fromkeys(table["cell"]):
+        lines.append(f"| {cell} | " + " | ".join(_fmt(piv.loc[cell, k]) if k in piv.columns and not np.isnan(
+            piv.loc[cell, k]) else "" for k in keys) + " |")
+    lines += ["", "Random-direction band (97.5%) per read: " + "; ".join(
+        f"{k} {r}: {_fmt(v)}" for (k, r), v in band.items()) + ".",
+              "Every soft-trigger reply is the single word True or False, and the word tracks the label, so random "
+              "directions reach 0.85-0.96 there; differencing the adapter's read against the base read does not "
+              "remove it (the reply token is in both). Only Qwen3.5's K (0.965) and D9 + K (0.960) clear their band "
+              "(0.889), and K's knowledge contrast may itself track the answer word; Gemma's cells do not, so the task "
+              "tells detectors apart little.", ""]
+    return lines
+
+
 def _cell_rows(table: pd.DataFrame, cell: str) -> pd.DataFrame:
     return table[table["cell"] == cell].set_index("dataset")
 
@@ -209,6 +238,7 @@ def build() -> str:
     lines.append("")
 
     lines += _posthoc_lines(board)
+    lines += _validation_lines()
     lines += ["## Caveats", "",
               "- A base-model read of an organism's transcript is the thesis's control, not a result for that "
               "dataset: the base model has no fine-tuned belief or goal to conceal, so it reads only the text. A "
