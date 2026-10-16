@@ -79,11 +79,13 @@ def _posthoc_lines(board: pd.DataFrame) -> list[str]:
     table = pd.read_csv(path)
     names = list(dict.fromkeys(table["detector"]))
     piv = table.pivot(index="dataset", columns="detector", values="auroc")
-    lines = ["## Post hoc: D5 + K, rule K, D5 + rule K, D9 + rule K, D4", "",
+    lines = ["## Post hoc: D5 + K, rule K, D5 + rule K, D9 + rule K, D4, D4 (LB)", "",
              "Not in the protocol: asked for after the results above were seen. Read through each organism at the "
              "middle block, reasoning dropped, as the headline; rule K (`posthoc.py`, the thesis's `k_final` recipe) "
              "is built inside each organism from its own reads; D4 is the thesis's probe in the bank's top 3 extended PCs, "
-             "trained on the model's dev rows (as R2), never on test labels.", "",
+             "trained on the model's dev rows (as R2), never on test labels; D4 (LB) is the same probe trained on every "
+             "labelled Liars' Bench row at once (Gemma's own CG, IT and ID; for Qwen3.5, Qwen2.5-72B's HP-C, HP-KR and ID, "
+             "10,105 rows read off-policy through Qwen3.5 base).", "",
              "| Dataset | " + " | ".join(names) + " |", "|---|" + "---|" * len(names)]
     for k in KEYS:
         if k in piv.index:

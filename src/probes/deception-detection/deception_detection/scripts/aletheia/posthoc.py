@@ -119,7 +119,81 @@ def rule_k(model: str, read_name: str, block: int) -> np.ndarray | None:
     return d / np.linalg.norm(d)
 
 
-DETECTORS = ("D5 + K", "rule K", "D5 + rule K", "D9 + rule K", "D4")
+DETECTORS = ("D5 + K", "rule K", "D5 + rule K", "D9 + rule K", "D4", "D4 (LB)")
+LB_FOLDER = "lb_qwen25"
+
+
+def lb_rows() -> list[dict]:
+    """Liars' Bench's labelled rows of Qwen2.5-72B (HP-C, HP-KR, ID, its whole eval set), for D4 (LB) on
+    Qwen3.5, which Liars' Bench has no rollouts of: the text is read off-policy, by the user's choice."""
+    from deception_detection.repository import DatasetRepository
+    from deception_detection.scripts import lb_models as LB
+    from deception_detection.types import Label
+
+    target = LB._targets("qwen")[0]
+    repo = DatasetRepository()
+    out = []
+    for name in target.datasets:
+        ds = repo.get(name, source_model=target.model)
+        for dialogue, label in zip(ds.dialogues, ds.labels):
+            if label not in (Label.HONEST, Label.DECEPTIVE):
+                continue
+            if not dialogue[-1].detect or dialogue[-1].role != "assistant":
+                raise RuntimeError(f"{name}: the scored message is not the final assistant turn")
+            out.append({"dataset": name, "lie": int(label == Label.DECEPTIVE),
+                        "messages": [{"role": m.role, "content": m.content} for m in dialogue]})
+    for r, row in enumerate(out):
+        row["index"] = r
+    return out
+
+
+def read_lb(budget: int = 8000) -> None:
+    """Qwen2.5's Liars' Bench rows through Qwen3.5 base at the middle block. Resumable."""
+    rows_ = lb_rows()
+    labels = {int(r["index"]): r["lie"] for r in rows_}
+    OUT.mkdir(parents=True, exist_ok=True)
+    (OUT / "lb_qwen25_labels.json").write_text(json.dumps(labels) + "\n", encoding="utf-8")
+    rendered_ = {int(r["index"]): R.render(r, "qwen35") for r in rows_}
+    AR.read_rows(AR.load_model("qwen35"), R.tokenizer("qwen35"), rendered_, [S.MODELS["qwen35"].mid],
+                 AR.folder_for("qwen35", "base", LB_FOLDER, "no-reasoning"), budget)
+
+
+def _extended_basis(model: str, block: int) -> np.ndarray:
+    from deception_detection import persona_pcs as pcs
+
+    geom = pcs.fit_geometry(SC.inputs(model).bank(block), k=3,
+                            deception=pcs.DECEPTION_PERSONAS + pcs.KNOWLEDGE_DENIAL_PERSONAS,
+                            honesty=pcs.HONESTY_PERSONAS + pcs.KNOWLEDGE_CANDOUR_PERSONAS, axis_name="extended")
+    return geom.components[:3]
+
+
+@cache
+def d4_lb(model: str, block: int):
+    """D4 trained on every labelled Liars' Bench row at once: Gemma's own (CG, IT, ID, the replication's
+    reads), Qwen2.5's read through Qwen3.5 (`read_lb`)."""
+    from deception_detection.scripts import lb_models as LB
+    from deception_detection.scripts import persona_ood as P
+
+    if model == "gemma":
+        pooled = RD.Inputs("gemma").pooled(block)
+        names = LB.spec("gemma").datasets
+        x = np.concatenate([pooled[n].z for n in names]).astype(np.float64)
+        y = np.concatenate([np.asarray(pooled[n].y).astype(int) for n in names])
+    else:
+        folder = AR.folder_for(model, "base", LB_FOLDER, "no-reasoning")
+        path = OUT / "lb_qwen25_labels.json"
+        if not folder.exists() or not path.exists():
+            return None
+        labels = {int(k): v for k, v in json.loads(path.read_text(encoding="utf-8")).items()}
+        reads = AR.load(folder, [block])
+        if len(reads) < len(labels):
+            return None
+        ids = sorted(labels)
+        x = np.stack([reads[i][0, 0] for i in ids]).astype(np.float64)
+        y = np.array([labels[i] for i in ids])
+    basis = _extended_basis(model, block)
+    probe = P.make_probe().fit(x @ basis.T, y)
+    return lambda z: probe.decision_function(z @ basis.T)
 
 
 @cache
@@ -145,6 +219,8 @@ def d4(model: str, block: int):
 def _scorer(name: str, d: S.Dataset, read_name: str, block: int):
     if name == "D4":
         return d4(d.model, block)
+    if name == "D4 (LB)":
+        return d4_lb(d.model, block)
     inp = SC.inputs(d.model)
     control = inp.control(block)
     k = SC._k_read(d, read_name, block)
@@ -206,4 +282,4 @@ def score(n_boot: int = S.N_BOOT, seed: int = S.SEED) -> None:
 
 
 if __name__ == "__main__":
-    fire.Fire({"rows": rows, "read_base": read_base, "read_merged": read_merged, "score": score})
+    fire.Fire({"rows": rows, "read_base": read_base, "read_merged": read_merged, "read_lb": read_lb, "score": score})
