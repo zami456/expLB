@@ -47,13 +47,53 @@ def _cut_lines() -> list[str]:
     for name, what in (("cut_rows.jsonl", "cut by the frozen rule (kept its last 4,096 tokens)"),
                        ("unread_rows.jsonl", "left unread (too long for the server; its cells are not scored)")):
         path = S.RESULTS / "checks" / name
-        recs = [json.loads(x) for x in path.read_text(encoding="utf-8").splitlines() if x.strip()] if path.exists() else []
+        recs = [json.loads(x) for x in path.read_text(encoding="utf-8-sig").splitlines() if x.strip()] if path.exists() else []
         if recs:
             by = {}
             for r in recs:
                 by.setdefault(Path(r["folder"]).parent.name + "/" + Path(r["folder"]).name, set()).add(r["row"])
             out.append(f"- Rows {what}: " + "; ".join(f"{k}: {len(v)}" for k, v in sorted(by.items())) + ".")
+            untried = {}
+            for r in recs:
+                if str(r.get("reason", "")).startswith("longer than"):
+                    untried.setdefault(Path(r["folder"]).parent.name + "/" + Path(r["folder"]).name, set()).add(r["row"])
+            if untried:
+                out.append("  - Of them cut untried: " + "; ".join(f"{k}: {len(v)}" for k, v in sorted(untried.items()))
+                           + ". Each is longer than a row of the same read that ran out of memory alone on all four "
+                           "tries with no other read on the cluster, and memory grows with length (the user's decision, "
+                           "a deviation from the frozen rule's wording, which asks each row to fail itself). Every row "
+                           "shorter than that row was read whole.")
+            if name == "cut_rows.jsonl" and any("BotC" in k for k in by):
+                out.append("  - BotC: a first pass through the adapter cut 151 rows after a row failed while other reads "
+                           "shared the cluster; those reads were set aside unscored (`E:\\aletheia\\acts\\superseded\\"
+                           "botc_cut_under_contention`) and the rows reread with the cluster idle. The organism and base "
+                           "reads cut at their own thresholds, so their BotC cut sets differ (148 and 163 rows).")
     return out or ["- No row was cut or left unread."]
+
+
+def _posthoc_lines(board: pd.DataFrame) -> list[str]:
+    """`posthoc.py`'s cells, asked for after the pre-registered results were seen."""
+    path = S.RESULTS / "posthoc" / "auroc.csv"
+    if not path.exists():
+        return []
+    table = pd.read_csv(path)
+    names = list(dict.fromkeys(table["detector"]))
+    piv = table.pivot(index="dataset", columns="detector", values="auroc")
+    lines = ["## Post hoc: D5 + K, rule K, D5 + rule K, D9 + rule K", "",
+             "Not in the protocol: asked for after the results above were seen. Read through each organism at the "
+             "middle block, reasoning dropped, as the headline; rule K (`posthoc.py`, the thesis's `k_final` recipe) "
+             "is built inside each organism from its own reads.", "",
+             "| Dataset | " + " | ".join(names) + " |", "|---|" + "---|" * len(names)]
+    for k in KEYS:
+        if k in piv.index:
+            lines.append(f"| {k} | " + " | ".join(_fmt(piv.loc[k, n]) for n in names) + " |")
+    means = []
+    for n in names:
+        have = list(table[table["detector"] == n]["dataset"])
+        mean = float(piv.loc[have, n].mean())
+        means.append(f"{n} {_fmt(mean)} (rank {_rank(mean, board[have].mean(axis=1).to_numpy())} of 31, "
+                     f"{len(have)} datasets)")
+    return lines + ["", "Means: " + "; ".join(means) + ".", ""]
 
 
 def _cell_rows(table: pd.DataFrame, cell: str) -> pd.DataFrame:
@@ -165,6 +205,7 @@ def build() -> str:
         lines.append(f"| {d.key} | {a} | {b} |")
     lines.append("")
 
+    lines += _posthoc_lines(board)
     lines += ["## Caveats", "",
               "- A base-model read of an organism's transcript is the thesis's control, not a result for that "
               "dataset: the base model has no fine-tuned belief or goal to conceal, so it reads only the text. A "

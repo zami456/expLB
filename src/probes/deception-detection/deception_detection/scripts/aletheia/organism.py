@@ -559,6 +559,10 @@ def read(dataset: str, what: str = "k,dev,test", budget: int | None = None, sess
         from deception_detection.scripts.aletheia import bank as B
 
         sets[AR.folder_for(d.model, read_name, "bank_subsample", "no-reasoning")] = B.rendered(d.model)
+    if "rule_k" in parts:  # post hoc: rule K's rows through the adapter (`posthoc.py`)
+        from deception_detection.scripts.aletheia import posthoc as PH
+
+        sets[AR.folder_for(d.model, read_name, PH.FOLDER, "no-reasoning")] = PH.rendered(d.model)
     if "test" in parts:
         AR.check_freeze()
         rows = D.rows(dataset)

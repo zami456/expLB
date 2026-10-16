@@ -17,6 +17,7 @@ the second span's arrays suffixed "_eot"); `load` gathers them. No label is read
 """
 
 import json
+import os
 import time
 from pathlib import Path
 from types import SimpleNamespace
@@ -217,11 +218,20 @@ def _record_unread(folder: Path, row: int, length: int) -> None:
         f.write(json.dumps({"folder": str(folder), "row": row, "tokens": length}) + "\n")
 
 
-def _record_cut(folder: Path, row: int, cut: int, length: int) -> None:
+def _record_cut(folder: Path, row: int, cut: int, length: int, reason: str = "ran out of memory alone") -> None:
     path = S.RESULTS / "checks" / "cut_rows.jsonl"
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("a", encoding="utf-8") as f:
-        f.write(json.dumps({"folder": str(folder), "row": row, "tokens cut": cut, "tokens before": length}) + "\n")
+        f.write(json.dumps({"folder": str(folder), "row": row, "tokens cut": cut, "tokens before": length,
+                            "reason": reason}) + "\n")
+
+def _cut_rows(folder: Path) -> set[int]:
+    path = S.RESULTS / "checks" / "cut_rows.jsonl"
+    if not path.exists():
+        return set()
+    recs = [json.loads(x) for x in path.read_text(encoding="utf-8-sig").splitlines() if x.strip()]
+    return {int(r["row"]) for r in recs if Path(r["folder"]) == Path(folder)}
+
 
 def read_sets(model_obj, tok, sets: dict[Path, dict[int, dict]], layers: list[int], budget: int,
               plan: dict | None = None, scale: float = 1.0, session_passes: int = SESSION_PASSES,
@@ -232,8 +242,11 @@ def read_sets(model_obj, tok, sets: dict[Path, dict[int, dict]], layers: list[in
     todo: dict[int, tuple[Path, int, dict]] = {}
     for folder, rendered in sets.items():
         done = done_rows(folder)
+        already_cut = _cut_rows(folder)
         for r, it in rendered.items():
             if r not in done:
+                if r in already_cut:  # the rule already cut it in an earlier run: resume with the cut
+                    it = tail_cut(it, keep=S.TAIL_CUT_TO, bos_id=getattr(tok, "bos_token_id", None))
                 todo[len(todo)] = (folder, r, it)
     if not todo:
         logger.info(f"all {sum(len(s) for s in sets.values())} rows of {len(sets)} sets read")
@@ -252,16 +265,23 @@ def read_sets(model_obj, tok, sets: dict[Path, dict[int, dict]], layers: list[in
             save_request(f, [pending[batch[j]][1] for j in idx], layers, m[idx], VARIANTS)
 
     _read_loop(model_obj, tok, combined, layers, budget, plan, scale, session_passes, retries, save, folder.name, remote,
-               owner=lambda g: pending[g][0])
+               owner=lambda g: pending[g][0], row_id=lambda g: pending[g][1])
 
 
 def _read_loop(model_obj, tok, todo: dict[int, dict], layers: list[int], budget: int, plan, scale: float,
-               session_passes: int, retries: int, save, label: str, remote: bool | str = True, owner=None) -> None:
+               session_passes: int, retries: int, save, label: str, remote: bool | str = True, owner=None,
+               row_id=None) -> None:
     from deception_detection.batching import classify_failure
+
+    rid = row_id or (lambda g: g)  # the dataset's row index (a bundle numbers its rows itself)
+    # ALETHEIA_CUT_LONGER=0: every row must fail alone itself before it is cut (no cut by length)
+    cut_longer = os.environ.get("ALETHEIA_CUT_LONGER", "1") != "0"
 
     requests = plan_requests({r: len(it["ids"]) for r, it in todo.items()}, budget)
     logger.info(f"{label}: {len(todo)} rows in {len(requests)} passes, up to {session_passes} to a session")
     oom_alone: dict[int, int] = {}
+    full_passes = session_passes  # regrown after successes: one bad row must not shrink every later session
+    streak = 0
     k = 0
     while k < len(requests):
         unit = requests[k:k + session_passes]
@@ -304,13 +324,27 @@ def _read_loop(model_obj, tok, todo: dict[int, dict], layers: list[int], budget:
                         # the frozen fallback: a row of at least TAIL_CUT_FROM tokens keeps its last TAIL_CUT_TO
                         cut = tail_cut(todo[r], keep=S.TAIL_CUT_TO, bos_id=getattr(tok, "bos_token_id", None))
                         logger.warning(f"row {r} ({n_now} tokens): cut to its last {len(cut['ids'])} (the frozen rule)")
-                        _record_cut(owner(r) if owner else Path(label), r, n_now - len(cut["ids"]), n_now)
+                        _record_cut(owner(r) if owner else Path(label), rid(r), n_now - len(cut["ids"]), n_now)
                         todo[r] = cut
                         oom_alone[r] = 0
+                        # memory grows with length: every longer row still to read would fail too, and each
+                        # failed try costs an adapter upload, so those rows take the same cut without their own
+                        later = {q for b in requests[k + 1:] for q in b}
+                        longer = [q for q in later if cut_longer and len(todo[q]["ids"]) >= n_now and "cut" not in todo[q]]
+                        for q in longer:
+                            n_q = len(todo[q]["ids"])
+                            todo[q] = tail_cut(todo[q], keep=S.TAIL_CUT_TO, bos_id=getattr(tok, "bos_token_id", None))
+                            _record_cut(owner(q) if owner else Path(label), rid(q), n_q - len(todo[q]["ids"]), n_q,
+                                        reason=f"longer than row {rid(r)} ({n_now} tokens), which ran out of memory alone")
+                        if longer:
+                            logger.warning(f"{len(longer)} rows of at least {n_now} tokens cut likewise, untried")
+                            rest = {q: todo[q] for b in requests[k:] for q in b}
+                            requests = requests[:k] + plan_requests({q: len(it["ids"]) for q, it in rest.items()}, budget)
+                            unit = requests[k:k + session_passes]
                         continue
                     # outside the frozen rule: the row is left unread, and its cells are reported missing
                     logger.warning(f"row {r} ({n_now} tokens) cannot be read on this deployment; left unread")
-                    _record_unread(owner(r) if owner else Path(label), r, n_now)
+                    _record_unread(owner(r) if owner else Path(label), rid(r), n_now)
                     requests = requests[:k] + requests[k + 1:]
                     means = None
                     break
@@ -327,6 +361,11 @@ def _read_loop(model_obj, tok, todo: dict[int, dict], layers: list[int], budget:
         logger.info(f"{label}: passes {k + 1}-{k + len(unit)}/{len(requests)}, {sum(len(b) for b in unit)} rows, "
                     f"{time.time() - start:.0f} s")
         k += len(unit)
+        # keep the size that worked, doubling after three successes in a row: near the memory limit every
+        # failed session costs an adapter upload, and a jump straight back to full size fails again
+        streak = streak + 1 if len(unit) == session_passes else 1
+        if streak >= 3:
+            session_passes, streak = min(full_passes, session_passes * 2), 0
 
 
 def load(folder: Path, layers: list[int] | None = None) -> dict[int, np.ndarray]:
