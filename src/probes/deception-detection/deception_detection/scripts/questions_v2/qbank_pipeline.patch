@@ -1,0 +1,574 @@
+--- aletheia/run_chain.ps1
++++ qbank/run_chain.ps1
+@@ -1,26 +1,31 @@
+ <#
+   xmodel: the thesis persona pipeline on another Liars' Bench model. One model per run folder.
+ 
+-      D:\user4fina\<Model>\code      what runs (a copy; nothing under C:\Users\user4\expLB is touched)
+-      D:\user4fina\<Model>\persona   responses -> scores -> vectors_s3 / vectors_all -> axes
+-      D:\user4fina\<Model>\eval      that model's own Liars' Bench rows, mean-pooled, every layer
+-      D:\user4fina\<Model>\logs      chain.status (one line per event) + per-process logs
++      <RunBase>\<Model>\code      what runs (a copy; nothing under the thesis repo is touched)
++      <RunBase>\<Model>\persona   responses -> scores -> vectors_* -> axes   (or -PersonaDir)
++      <RunBase>\<Model>\eval      that model's own Liars' Bench rows, mean-pooled, every layer
++      <RunBase>\<Model>\logs      chain.status (one line per event) + per-process logs
+ 
+   Order, and why. Each model gets at most THREE NDIF requests at a time (owner, 2026-09-29):
+       1  generate       subject x3 shards
+       2  judge          Llama-3.1-70B x3  ||  eval pooling  subject x3   (different deployments)
+-      3  vectors_s23, vectors_all, vectors_s3   subject x3 each (s23 = the thesis bank)
++      3b per-question store (-PerQuestion)   subject x3           qbank 2026-10-16
++      3  vectors_<bank> for each of -Banks   subject x3 each
+       4  axes           local
+   The judge is held at Llama-3.1-70B, exactly as for the Llama kd bank, so the subject is the only
+   thing that changes.
+ 
+-  Every stage is resumable per role / per chunk, so a stage that ends incomplete is simply run
+-  again (up to $Attempts times). Gates read xmodel_status.py, never an exit code.
++  Every stage is resumable per role / per chunk / per cell, so a stage that ends incomplete is simply
++  run again (up to $Attempts times). Gates read xmodel_status.py, never an exit code.
++
++  qbank 2026-10-16 (the question extension): the question file, its count and SHA-256, the rollout
++  target, min_count, the persona folder and the bank list are parameters; a "llama33" tag exists; and
++  stage 3b writes one vector per (role, question) at a few layers (2_activations_ndif.py --per_question).
+ 
+   Scheduled Task only (register_task.ps1): Start-Process over SSH dies with the session.
+ #>
+ param(
+-    [ValidateSet("qwen", "mistral2501", "mistral31", "gemma3", "qwen35")][string]$Tag = "qwen",
++    [ValidateSet("qwen", "mistral2501", "mistral31", "gemma3", "qwen35", "llama33")][string]$Tag = "qwen",
+     [int]$Attempts = 6,
+     # aletheia 2026-10-15: NDIF requests per stage (the owner's limit is 3 per model)
+     [int]$Shards = 3,
+@@ -39,7 +44,17 @@
+     [string]$DownloadGrace = "",
+     # suffix for the vector banks and their axes (2026-10-07: "_v2" = rebuilt after the Qwen
+     # header-newline span fix, written beside the superseded banks so nothing is overwritten)
+-    [string]$VecSuffix = ""
++    [string]$VecSuffix = "",
++    # ---- qbank 2026-10-16 ----
++    [int]$NQuestions = 30,          # questions in -QFile; the rollout target is 36 x 5 x NQuestions
++    [string]$QFile = "",            # default: <code>\kd\questions\kd_questions_shared.jsonl
++    [string]$QSha256 = "",          # when given, the run stops unless -QFile has this SHA-256
++    [int]$MinCount = 20,            # kept rows a role needs for an all-layer bank vector
++    [string]$PersonaDir = "",       # default: <root>\persona (a seeded copy for the extension runs)
++    [string]$Banks = "s23,all,s3",  # all-layer banks to build: any of s23, all, s3
++    [switch]$PerQuestion,           # stage 3b: the per-(role, question) store
++    [string]$PqLayers = "",         # layers of the store, e.g. "20,36,40,44"; empty = model's middle layer
++    [string]$PqBanks = "s3"         # keep sets of the store: any of s3, s23, all
+ )
+ $ErrorActionPreference = "Continue"
+ 
+@@ -70,13 +85,17 @@
+     # plain answers like the other banks'. No Liars' Bench rows of its own. ReportLayer 32 = half depth.
+     "qwen35"      = @{ Model = "Qwen/Qwen3.5-27B"; Folder = "Qwen3.5-27B"
+                        Short = "Qwen"; Csv = "none"; ReportLayer = "32"; Datasets = @() }
++    # 2026-10-16 (qbank): the thesis model itself, for the question extension. Short "Llama" reproduces the kd
++    # bank's anchor prompt "You are Llama."; eval pooling is never needed (the thesis pooled activations exist).
++    "llama33"     = @{ Model = "meta-llama/Llama-3.3-70B-Instruct"; Folder = "Llama-3.3-70B-Instruct"
++                       Short = "Llama"; Csv = "none"; ReportLayer = "40"; Datasets = @() }
+ }[$Tag]
+ 
+ $Judge = "meta-llama/Llama-3.1-70B-Instruct"
+ $Root  = "$RunBase\$($cfg.Folder)"
+ $Code  = "$Root\code"
+ $S     = "$Code\src\assistant_axis_ndif"
+-$P     = "$Root\persona"
++$P     = if ($PersonaDir) { $PersonaDir } else { "$Root\persona" }
+ $Ev    = "$Root\eval"
+ $Logs  = "$Root\logs"
+ $py    = $Py
+@@ -101,12 +120,13 @@
+ 
+ $roles = "$Code\kd\personas\kd_role_groups.json"
+ $instr = "$Code\kd\personas\kd_instructions"
+-$qfile = "$Code\kd\questions\kd_questions_shared.jsonl"
++$qfile = if ($QFile) { $QFile } else { "$Code\kd\questions\kd_questions_shared.jsonl" }
++$KeepOf = @{ "s23" = "2,3"; "all" = "0,1,2,3"; "s3" = "3" }
+ 
+ function Note($m) { "$((Get-Date).ToString('yyyy-MM-dd HH:mm:ss'))  $m" | Out-File -Append -Encoding utf8 $status }
+ 
+ function Status() {
+-    $j = & $py "$S\xmodel_status.py" --root $Root --json 2>$null
++    $j = & $py "$S\xmodel_status.py" --root $Root --persona $P --json 2>$null
+     try { return ($j | Select-Object -Last 1 | ConvertFrom-Json) } catch { return $null }
+ }
+ 
+@@ -139,26 +159,32 @@
+ if (-not $Force -and (Test-Path $status) -and ((Get-Content $status -Tail 1) -match '^DONE ')) {
+     Note "SKIP already DONE; -Force to re-run"; exit 0
+ }
+-Note "START tag=$Tag model=$($cfg.Model) judge=$Judge root=$Root py=$py skipEval=$SkipEval floor=$($env:NDIF_MIN_DOWNLOAD_KBPS) vecSuffix=$VecSuffix"
++Note "START tag=$Tag model=$($cfg.Model) judge=$Judge root=$Root persona=$P py=$py skipEval=$SkipEval floor=$($env:NDIF_MIN_DOWNLOAD_KBPS) vecSuffix=$VecSuffix nQuestions=$NQuestions minCount=$MinCount banks=$Banks perQuestion=$PerQuestion pqLayers=$PqLayers pqBanks=$PqBanks"
+ 
+-# ---- inputs: the kd bank, unchanged except the model name (checked, not assumed) ----------
++# ---- inputs: the kd bank, unchanged except the model name and the question file (checked, not assumed) ----
+ $nInstr = (Get-ChildItem "$instr\*.json").Count
+ $nQ = (Get-Content $qfile | Where-Object { $_.Trim() }).Count
+-Note "inputs: $nInstr persona files, $nQ questions (expect 36 / 30)"
+-if ($nInstr -ne 36 -or $nQ -ne 30) { Note "STOP unexpected inputs"; exit 1 }
++Note "inputs: $nInstr persona files, $nQ questions in $qfile (expect 36 / $NQuestions)"
++if ($nInstr -ne 36 -or $nQ -ne $NQuestions) { Note "STOP unexpected inputs"; exit 1 }
++if ($QSha256) {
++    $h = (Get-FileHash $qfile -Algorithm SHA256).Hash
++    Note "questions sha256 $h"
++    if ($h -ne $QSha256.ToUpper()) { Note "STOP question file hash mismatch (expected $($QSha256.ToUpper()))"; exit 1 }
++}
++$Expected = $nInstr * 5 * $NQuestions
+ 
+ & $py "$S\0_preflight_ndif.py" --require $cfg.Model $Judge --warn-only 2>&1 |
+     Out-File -Append -Encoding utf8 "$Logs\preflight.log"
+ 
+-# ---- 1 generate: 36 x 5 x 30 = 5,400 rollouts, written by THIS model ------------------------
++# ---- 1 generate: 36 x 5 x NQuestions rollouts, written by THIS model -------------------------
+ for ($t = 1; $t -le $Attempts; $t++) {
+     $st = Status
+-    if ($st -and $st.persona.n_rollouts -ge 5400) { break }
+-    Note "generate attempt $t (have $($st.persona.n_rollouts) / 5400)"
++    if ($st -and $st.persona.n_rollouts -ge $Expected) { break }
++    Note "generate attempt $t (have $($st.persona.n_rollouts) / $Expected)"
+     $lists = 0..($Shards - 1) | ForEach-Object {
+         ,@("$S\1_generate_ndif.py", "--model", $cfg.Model, "--roles_dir", $instr,
+            "--roles_file", $roles, "--shard", "$_/$Shards", "--questions_file", $qfile,
+-           "--question_count", "30", "--output_dir", "$P\responses",
++           "--question_count", "$NQuestions", "--output_dir", "$P\responses",
+            "--temperature", "0.7", "--top_p", "0.9", "--top_k", "0", "--repetition_penalty", "1.0",
+            "--max_new_tokens", "512", "--gen_batch", "32", "--session_batches", "4", "--retries", "6")
+     }
+@@ -168,7 +194,7 @@
+ $st = Status
+ Note "generate: $($st.persona.n_rollouts) rollouts in $(@($st.persona.responses.PSObject.Properties).Count) role files"
+ Sync "generate"
+-if (-not $st -or $st.persona.n_rollouts -lt 5000) { Note "STOP generation incomplete (re-run resumes)"; exit 1 }
++if (-not $st -or $st.persona.n_rollouts -lt ($Expected - 400)) { Note "STOP generation incomplete (re-run resumes)"; exit 1 }
+ 
+ # ---- 2 judge (Llama-3.1-70B)  ||  eval pooling (subject) -------------------------------------
+ $judgeLists = 0..($Shards - 1) | ForEach-Object {
+@@ -198,21 +224,51 @@
+ $st = Status
+ Note "judge: $($st.persona.n_scored) scored"
+ foreach ($k in $st.eval.PSObject.Properties) { Note "eval $($k.Name): $($k.Value.done)/$($k.Value.items) rows, row shape $($k.Value.row_shape -join 'x')" }
++if ($st.persona.n_scored -lt ($st.persona.n_rollouts - $st.persona.responses.default)) { Note "STOP judging incomplete (re-run resumes)"; exit 1 }
++
++# ---- 3b per-question store (qbank): one vector per (role, question) at -PqLayers ----------------
++if ($PerQuestion) {
++    $pqLayerArgs = if ($PqLayers) { $PqLayers.Split(",") | ForEach-Object { $_.Trim() } } else { @("target") }
++    foreach ($pb in $PqBanks.Split(",")) {
++        $pb = $pb.Trim(); if (-not $pb) { continue }
++        $keep = $KeepOf[$pb]
++        $tag = "vectors_pq_$pb$VecSuffix"
++        $want = 36 * $NQuestions
++        for ($t = 1; $t -le $Attempts; $t++) {
++            $have = (Get-ChildItem "$P\$tag" -Recurse -File -Include *.pt,*.empty -EA SilentlyContinue).Count
++            if ($have -ge $want) { break }
++            Note "$tag attempt $t (have $have / $want cells)"
++            $lists = 0..($Shards - 1) | ForEach-Object {
++                ,(@("$S\2_activations_ndif.py", "--model", $cfg.Model, "--responses_dir", "$P\responses",
++                    "--scores_dir", "$P\scores", "--output_dir", "$P\$tag", "--roles_file", $roles,
++                    "--shard", "$_/$Shards", "--keep_scores", $keep, "--min_count", "1", "--per_question",
++                    "--on_failure", "refuse", "--max_length", "8192", "--batch_size", "8",
++                    "--session_batches", "20", "--layers") + $pqLayerArgs)
++            }
++            $codes = RunParallel $tag $lists
++            Note "$tag exits: $($codes -join ',')"
++        }
++        $have = (Get-ChildItem "$P\$tag" -Recurse -File -Include *.pt,*.empty -EA SilentlyContinue).Count
++        Note "${tag}: $have cells ($want expected; keep $keep; layers $($pqLayerArgs -join ','))"
++        Sync $tag
++    }
++}
+ 
+ # ---- 3 persona vectors, every layer ---------------------------------------------------------
+ # 2026-10-07: three banks, as the Llama kd bank has them. vectors_s23 (scores 2 or 3) is the thesis bank
+ # (run_kd_s23.ps1; F-10: s3 is drift-selected; F-121's 36-persona bank is s23) -- the 09-29 plan omitted
+ # it. vectors_all and vectors_s3 are the robustness banks. On Qwen, 11 roles have < 20 score-3 replies,
+ # so "done" means every ELIGIBLE role has its vector (eligible: >= min_count replies with a kept score;
+-# default always), not a fixed 36.
++# default always), not a fixed 36. qbank: the bank list and min_count are parameters.
+ function Eligible($keep) {
+-    $code = "import json,glob,os,sys; k={int(x) for x in sys.argv[2].split(',')}; " +
++    $code = "import json,glob,os,sys; k={int(x) for x in sys.argv[2].split(',')}; m=int(sys.argv[3]); " +
+             "n=sum(1 for f in glob.glob(os.path.join(sys.argv[1],'*.json')) " +
+-            "if sum(v in k for v in json.load(open(f,encoding='utf-8')).values())>=20); print(n+1)"
+-    return [int](& $py -c $code "$P\scores" $keep)
++            "if sum(v in k for v in json.load(open(f,encoding='utf-8')).values())>=m); print(n+1)"
++    return [int](& $py -c $code "$P\scores" $keep "$MinCount")
+ }
+-foreach ($v in @(@{ tag = "vectors_s23$VecSuffix"; keep = "2,3" }, @{ tag = "vectors_all$VecSuffix"; keep = "0,1,2,3" },
+-                 @{ tag = "vectors_s3$VecSuffix"; keep = "3" })) {
++$bankList = @()
++foreach ($b in $Banks.Split(",")) { $b = $b.Trim(); if ($b) { $bankList += @{ tag = "vectors_$b$VecSuffix"; keep = $KeepOf[$b] } } }
++foreach ($v in $bankList) {
+     $want = Eligible $v.keep
+     for ($t = 1; $t -le $Attempts; $t++) {
+         $have = (Get-ChildItem "$P\$($v.tag)\*.pt" -EA SilentlyContinue).Count
+@@ -221,14 +277,15 @@
+         $lists = 0..($Shards - 1) | ForEach-Object {
+             ,@("$S\2_activations_ndif.py", "--model", $cfg.Model, "--responses_dir", "$P\responses",
+                "--scores_dir", "$P\scores", "--output_dir", "$P\$($v.tag)", "--roles_file", $roles,
+-               "--shard", "$_/$Shards", "--keep_scores", $v.keep, "--min_count", "20",
++               "--shard", "$_/$Shards", "--keep_scores", $v.keep, "--min_count", "$MinCount",
++               "--on_failure", "refuse",
+                "--max_length", "8192", "--layers", "all", "--batch_size", "8", "--session_batches", "20")
+         }
+         $codes = RunParallel $v.tag $lists
+         Note "$($v.tag) exits: $($codes -join ',')"
+     }
+     $have = (Get-ChildItem "$P\$($v.tag)\*.pt" -EA SilentlyContinue).Count
+-    Note "$($v.tag): $have vectors ($want eligible of 36; min_count 20 on scores $($v.keep))"
++    Note "$($v.tag): $have vectors ($want eligible of 36; min_count $MinCount on scores $($v.keep))"
+     Sync $v.tag
+ }
+ 
+@@ -236,7 +293,8 @@
+ # $bank, not $tag: PowerShell names are case-insensitive, so $tag IS the [ValidateSet("qwen")] parameter $Tag;
+ # assigning "vectors_s23" to it threw, the loop was skipped silently and the chain still wrote DONE
+ # (2026-10-07 04:20 -- no axes built). Same class of bug as run_cap_controls.ps1's $src/$SRC.
+-foreach ($bank in @("vectors_s23$VecSuffix", "vectors_all$VecSuffix", "vectors_s3$VecSuffix")) {
++foreach ($v in $bankList) {
++    $bank = $v.tag
+     $nb = (Get-ChildItem "$P\$bank\*.pt" -EA SilentlyContinue).Count
+     if ($nb -lt 30) { Note "$bank has $nb vectors (< 30) -- axes not built"; continue }
+     & $py "$S\6_axes.py" --vectors_dir "$P\$bank" --output "$P\axes_$bank.pt" --roles_file $roles `
+@@ -245,6 +303,6 @@
+     Note "axes_$bank exit $LASTEXITCODE, file written: $ax"
+ }
+ 
+-& $py "$S\xmodel_status.py" --root $Root 2>&1 | Out-File -Encoding utf8 "$Logs\final_status.txt"
++& $py "$S\xmodel_status.py" --root $Root --persona $P 2>&1 | Out-File -Encoding utf8 "$Logs\final_status.txt"
+ Sync "final"
+ "DONE " + (Get-Date -Format "yyyy-MM-dd HH:mm:ss") | Out-File -Append -Encoding utf8 $status
+--- aletheia/src/assistant_axis_ndif/1_generate_ndif.py
++++ qbank/src/assistant_axis_ndif/1_generate_ndif.py
+@@ -86,9 +86,17 @@
+ 
+ 
+ def load_questions(path: Path, n: int) -> list[str]:
++    """The shared questions, in file order. qbank 2026-10-16: blank lines are skipped, and a row
++    that carries an "id" must sit at that line position, because question_index (the resume key
++    and the per-question store's cell) is the position, not the id."""
+     out = []
+-    with jsonlines.open(path) as reader:
+-        for row in reader:
++    with open(path, encoding="utf-8") as fh:
++        for line in fh:
++            if not line.strip():
++                continue
++            row = json.loads(line)
++            if "id" in row and int(row["id"]) != len(out):
++                raise SystemExit(f"{path}: question id {row['id']} at position {len(out)}; ids must equal line order")
+             out.append(row["question"])
+     return out[:n]
+ 
+@@ -240,7 +248,16 @@
+     if out_file.exists():
+         with jsonlines.open(out_file) as reader:
+             for row in reader:
++                # qbank 2026-10-16: resume is by (prompt, question) index, so a stored row whose
++                # text differs from the questions file at that index means the file changed under
++                # the run; refuse rather than mislabel every later cell
++                qi = int(row["question_index"])
++                if qi < len(questions) and row.get("question") != questions[qi]:
++                    raise SystemExit(f"{role_name}: stored question {qi} differs from the questions file; "
++                                     "refusing to resume (append new questions; never edit or reorder)")
+                 done.add(key(row["prompt_index"], row["question_index"]))
++        if done:
++            logger.info("Role %s: resuming past %d stored rows", role_name, len(done))
+ 
+     instructions = [d.get("pos", "") for d in role_data.get("instruction", [])]
+     if not instructions:
+--- aletheia/src/assistant_axis_ndif/2_activations_ndif.py
++++ qbank/src/assistant_axis_ndif/2_activations_ndif.py
+@@ -449,8 +449,155 @@
+     if failed:
+         logger.warning("  %d/%d responses dropped to NDIF errors", failed, failed + int(count))
+     if count == 0:
+-        return None, 0
+-    return (total / count).to(torch.float32), int(count)  # (K,H)
++        return None, 0, failed
++    return (total / count).to(torch.float32), int(count), failed  # (K,H)
++
++
++# --------------------------------------------------------------------------- #
++# qbank 2026-10-16: per-(role, question) store and question subsets
++# --------------------------------------------------------------------------- #
++
++def parse_question_ids(spec: str | None) -> set[int] | None:
++    """'0-9,30-59' or '@file.json' (a JSON list of ints) -> set of question indices; None = all."""
++    if not spec:
++        return None
++    spec = spec.strip()
++    if spec.startswith("@"):
++        return {int(x) for x in json.loads(Path(spec[1:]).read_text(encoding="utf-8"))}
++    out: set[int] = set()
++    for part in spec.split(","):
++        part = part.strip()
++        if not part:
++            continue
++        if "-" in part:
++            a, b = part.split("-", 1)
++            out.update(range(int(a), int(b) + 1))
++        else:
++            out.add(int(part))
++    return out
++
++
++def _run_session_multi(llm, layer_idx, hidden, prepared, retries):
++    """One NDIF job over many batches, returning each batch's (K,H) sum separately.
++
++    Same server-side body as `_run_session`; the difference is that every batch keeps its
++    own saved tensor instead of adding into one accumulator, so a session of B batches
++    downloads B x K x H floats (2.6 MB for 20 batches x 4 layers x 8192). The per-batch
++    count is the number of rows, known on the client, so nothing else comes back.
++    """
++    vl = is_vision_language(llm)
++    delay = 3.0
++    for attempt in range(retries):
++        try:
++            outs = []
++            with llm.session(remote=True):
++                for input_ids, attn, span in prepared:
++                    with llm.trace({"input_ids": input_ids, "attention_mask": attn}):
++                        outs.append(_span_mean_sum(llm, layer_idx, span, vl).cpu().save())
++            vals = [getattr(o, "value", o) for o in outs]
++            if len(vals) != len(prepared):
++                raise RuntimeError(f"session returned {len(vals)} tensors for {len(prepared)} batches")
++            for v in vals:
++                if tuple(v.shape) != (len(layer_idx), hidden) or not torch.isfinite(v).all():
++                    raise RuntimeError("session returned a tensor of the wrong shape or with non-finite values")
++            return vals
++        except Exception as e:  # noqa: BLE001 -- engineio b'P' / ConnectionError / NDIF hiccup
++            _lines = [ln for ln in str(e).strip().splitlines() if ln.strip()]
++            _tail = (_lines[-1].strip() if _lines else repr(e))[:400]
++            logger.warning("  session attempt %d/%d failed: %s: %s",
++                           attempt + 1, retries, type(e).__name__, _tail)
++            time.sleep(delay)
++            delay = min(delay * 2, 60)
++    return None
++
++
++def extract_per_question(llm, layer_idx, hidden, encoder, role: str, kept: list[tuple[list[dict], int]],
++                         q_present: list[int], vtype: str, keep: set[int], args, pad_id: int) -> None:
++    """One mean vector per (role, question): <output_dir>/<role>/q{qid:03d}.pt, or q{qid:03d}.empty
++    when no row of that question was kept. Every question in `q_present` (the questions the role
++    answered) gets one of the two. Resumable per file. A failed session writes nothing for its
++    questions (the next run retries them), so a saved cell always averages every kept row."""
++    role_dir = Path(args.output_dir) / role
++    role_dir.mkdir(parents=True, exist_ok=True)
++    by_q: dict[int, list[list[dict]]] = {}
++    for conv, qi in kept:
++        by_q.setdefault(int(qi), []).append(conv)
++    all_q = sorted(set(int(q) for q in q_present) | set(by_q))
++    todo = [q for q in all_q if not (role_dir / f"q{q:03d}.pt").exists() and not (role_dir / f"q{q:03d}.empty").exists()]
++    if not todo:
++        logger.info("Role %s: per-question store complete (%d cells)", role, len(all_q)); return
++
++    # batches: one question per batch (<= 5 rows), split only if the token budget forces it
++    groups: list[tuple[int, list]] = []  # (qid, padded batch)
++    empties = 0
++    n_in = 0
++    drops_all: Counter = Counter()
++    for q in todo:
++        convs = by_q.get(q, [])
++        if not convs:
++            (role_dir / f"q{q:03d}.empty").write_bytes(b""); empties += 1
++            continue
++        n_in += len(convs)
++        drops: Counter = Counter()
++        items = build_items(encoder, convs, args.max_length, drops)
++        drops_all.update(drops)
++        if not items:
++            (role_dir / f"q{q:03d}.empty").write_bytes(b""); empties += 1
++            continue
++        for b in batch_by_tokens(items, args.token_budget, args.batch_size):
++            groups.append((q, pad_batch(b, pad_id)))
++    if drops_all:
++        report_drops(drops_all, n_in, n_in - sum(v for k, v in drops_all.items() if k != "truncated_context"), f"{role}: ")
++    if empties:
++        logger.info("Role %s: %d question(s) with no kept row -> .empty", role, empties)
++    if not groups:
++        return
++    widest = max(int(b[0].shape[0] * b[0].shape[1]) for _, b in groups)
++    logger.info("Role %s: %d question batches for %d questions (widest %d padded tokens, budget %d)",
++                role, len(groups), len(set(q for q, _ in groups)), widest, args.token_budget)
++
++    # sessions never split a question's batches
++    sessions: list[list[tuple[int, tuple]]] = []
++    cur: list[tuple[int, tuple]] = []
++    i = 0
++    while i < len(groups):
++        q = groups[i][0]
++        same = [g for g in groups[i:] if g[0] == q]
++        if cur and len(cur) + len(same) > args.session_batches:
++            sessions.append(cur); cur = []
++        cur.extend(same)
++        i += len(same)
++    if cur:
++        sessions.append(cur)
++
++    written = 0
++    for sess in tqdm(sessions, desc="  ndif sessions", leave=False):
++        prepared = [b for _, b in sess]
++        if args.accum == "session":
++            vals = _run_session_multi(llm, layer_idx, hidden, prepared, args.retries)
++        else:
++            vals = []
++            for input_ids, attn, span in prepared:
++                got = _run_batch_client(llm, layer_idx, input_ids, attn, span, args.retries)
++                if got is None:
++                    vals = None; break
++                vals.append(got[0])
++        if vals is None:
++            logger.error("Role %s: session of %d batches failed; its %d question(s) are left for a resume",
++                         role, len(prepared), len(set(q for q, _ in sess)))
++            continue
++        sums: dict[int, torch.Tensor] = {}
++        counts: dict[int, int] = {}
++        for (q, (input_ids, _, span)), v in zip(sess, vals):
++            sums[q] = sums.get(q, torch.zeros(len(layer_idx), hidden, dtype=torch.float64)) + v.to(torch.float64)
++            counts[q] = counts.get(q, 0) + int(span.shape[0])
++        for q in sums:
++            vec = (sums[q] / counts[q]).to(torch.float32)
++            torch.save({"vector": vec, "layers": list(layer_idx), "type": vtype, "role": role,
++                        "n": int(counts[q]), "question_index": int(q), "keep_scores": sorted(keep)},
++                       role_dir / f"q{q:03d}.pt")
++            written += 1
++    logger.info("Role %s: per-question store +%d cells -> %s", role, written, role_dir)
+ 
+ 
+ def load_scores(path: Path) -> dict:
+@@ -464,7 +611,7 @@
+ 
+ def process_role(llm, layer_idx, hidden, encoder, role: str, args, pad_id: int) -> None:
+     out_file = Path(args.output_dir) / f"{role}.pt"
+-    if out_file.exists() and not args.overwrite:
++    if not args.per_question and out_file.exists() and not args.overwrite:
+         logger.info("Skip %s (vector exists)", role); return
+ 
+     resp_file = Path(args.responses_dir) / f"{role}.jsonl"
+@@ -476,21 +623,34 @@
+         for r in reader:
+             rows.append(r)
+ 
++    # qbank: an optional question subset, applied before the default/persona split so the
++    # anchor and the personas average over the same questions
++    qset = getattr(args, "_qset", None)
++    if qset is not None:
++        rows = [r for r in rows if int(r["question_index"]) in qset]
++
+     is_default = "default" in role
+     keep = {int(x) for x in str(args.keep_scores).split(",") if x.strip() != ""}
+     if is_default:
+-        convs = [r["conversation"] for r in rows]
++        kept = [(r["conversation"], int(r["question_index"])) for r in rows]
+         vtype = "mean"
+     else:
+         scores = load_scores(Path(args.scores_dir) / f"{role}.json")
+-        convs = [r["conversation"] for r in rows
+-                 if scores.get(key(r["prompt_index"], r["question_index"])) in keep]
++        kept = [(r["conversation"], int(r["question_index"])) for r in rows
++                if scores.get(key(r["prompt_index"], r["question_index"])) in keep]
+         vtype = "pos_3"
++    convs = [c for c, _ in kept]
++    q_present = sorted(set(int(r["question_index"]) for r in rows))
+ 
+     if len(convs) < args.min_count:
+         logger.warning("Skip %s: only %d kept (min_count=%d)", role, len(convs), args.min_count)
+         return
+ 
++    if args.per_question:
++        # every question the role answered gets a cell: a vector, or .empty when no row was kept
++        extract_per_question(llm, layer_idx, hidden, encoder, role, kept, q_present, vtype, keep, args, pad_id)
++        return
++
+     drops: Counter = Counter()
+     items = build_items(encoder, convs, args.max_length, drops)
+     report_drops(drops, len(convs), len(items), f"{role}: ")
+@@ -499,15 +659,22 @@
+         return
+     logger.info("Role %s: %d kept, %d usable -> NDIF", role, len(convs), len(items))
+ 
+-    vec, n_used = extract_role_vector(llm, layer_idx, hidden, items, args, pad_id)
++    vec, n_used, failed = extract_role_vector(llm, layer_idx, hidden, items, args, pad_id)
+     if vec is None:
+         logger.error("Role %s: no vector produced", role); return
++    if failed and args.on_failure == "refuse":
++        logger.error("Role %s: %d response(s) lost to NDIF errors; not saving (--on_failure refuse; "
++                     "the next run resumes this role)", role, failed); return
+     if not torch.isfinite(vec).all():
+         logger.error("Role %s: vector has non-finite values; not saving", role); return
+ 
+     out_file.parent.mkdir(parents=True, exist_ok=True)
+     torch.save({"vector": vec, "layers": list(layer_idx), "type": vtype,
+-                "role": role, "n": n_used}, out_file)
++                "role": role, "n": n_used,
++                # qbank provenance (plain types only: the loaders use weights_only=True)
++                "question_ids": [int(q) for q in sorted(set(qi for _, qi in kept))],
++                "n_questions": len(set(qi for _, qi in kept)), "keep_scores": sorted(keep),
++                "balance": "none"}, out_file)
+     norms = vec.norm(dim=1)
+     logger.info("Role %s: saved %s over n=%d  layers=%s  norms[min/max]=%.3f/%.3f -> %s",
+                 role, tuple(vec.shape), n_used,
+@@ -541,7 +708,19 @@
+     ap.add_argument("--accum", choices=("session", "client"), default="session",
+                     help="'session' accumulates the sum on NDIF and downloads one (K,H) "
+                          "tensor per session; 'client' downloads one per batch (fallback)")
++    # qbank 2026-10-16
++    ap.add_argument("--question_ids", default=None,
++                    help="restrict to these question indices: '0-9,30-59' or '@file.json' (list of ints)")
++    ap.add_argument("--per_question", action="store_true",
++                    help="write one mean vector per (role, question) under <output_dir>/<role>/q###.pt "
++                         "instead of one vector per role")
++    ap.add_argument("--on_failure", choices=("drop", "refuse"), default="refuse",
++                    help="when a session fails after its retries: 'drop' saves the role over the rows "
++                         "that succeeded (the old behaviour); 'refuse' saves nothing so a resume retries")
+     args = ap.parse_args()
++    args._qset = parse_question_ids(args.question_ids)
++    if args._qset is not None:
++        logger.info("Question subset: %d indices (%s..%s)", len(args._qset), min(args._qset), max(args._qset))
+ 
+     Path(args.output_dir).mkdir(parents=True, exist_ok=True)
+     resp_files = sorted(Path(args.responses_dir).glob("*.jsonl"))
+--- aletheia/src/assistant_axis_ndif/xmodel_status.py
++++ qbank/src/assistant_axis_ndif/xmodel_status.py
+@@ -35,8 +35,17 @@
+             out["scores"][f.stem] = -1
+     out["n_rollouts"] = sum(out["responses"].values())
+     out["n_scored"] = sum(v for v in out["scores"].values() if v > 0)
+-    for tag in ("vectors_s3", "vectors_all"):
+-        files = sorted((persona / tag).glob("*.pt"))
++    # qbank 2026-10-16: every vectors_* folder, not a fixed pair; a per-question store
++    # (vectors_pq_*) is counted by its cells (q###.pt and q###.empty, under one folder per role)
++    tags = sorted(d.name for d in persona.glob("vectors_*") if d.is_dir())
++    for tag in sorted(set(tags) | {"vectors_s3", "vectors_all"}):
++        d = persona / tag
++        if tag.startswith("vectors_pq"):
++            cells = list(d.rglob("q*.pt")) + list(d.rglob("q*.empty")) if d.exists() else []
++            out[tag] = {"n": len(cells), "roles": len([p for p in d.glob("*") if p.is_dir()]) if d.exists() else 0,
++                        "shape": None}
++            continue
++        files = sorted(d.glob("*.pt")) if d.exists() else []
+         out[tag] = {"n": len(files), "shape": None}
+         if files:
+             import torch
+@@ -67,16 +76,18 @@
+     ap = argparse.ArgumentParser()
+     ap.add_argument("--root", required=True)
+     ap.add_argument("--json", action="store_true")
++    ap.add_argument("--persona", default=None, help="persona folder (default <root>/persona)")
+     a = ap.parse_args()
+     root = Path(a.root)
+-    rep = {"persona": persona_counts(root / "persona"), "eval": eval_counts(root / "eval")}
++    persona = Path(a.persona) if a.persona else root / "persona"
++    rep = {"persona": persona_counts(persona), "eval": eval_counts(root / "eval")}
+     if a.json:
+         print(json.dumps(rep))
+         return
+     p = rep["persona"]
+     print(f"rollouts {p['n_rollouts']} in {len(p['responses'])} role files; "
+           f"scored {p['n_scored']} in {len(p['scores'])} files")
+-    for tag in ("vectors_s3", "vectors_all"):
++    for tag in sorted(k for k in p if k.startswith("vectors_")):
+         print(f"{tag}: {p[tag]['n']} files, shape {p[tag]['shape']}")
+     for k, v in rep["eval"].items():
+         print(f"eval {k}: {v['done']}/{v['items']} rows, row shape {v['row_shape']}")
