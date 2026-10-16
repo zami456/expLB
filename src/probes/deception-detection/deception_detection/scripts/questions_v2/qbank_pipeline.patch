@@ -262,7 +262,7 @@
              out.append(row["question"])
      return out[:n]
  
-@@ -161,6 +169,76 @@
+@@ -161,6 +169,101 @@
      return [t.strip() for t in llm.tokenizer.batch_decode(out[:, in_len:], skip_special_tokens=True)]
  
  
@@ -294,43 +294,68 @@
 +
 +
 +def _ndif_ws_reachable(timeout: float = 10.0) -> bool:
-+    """Can a socket.io client open NDIF's websocket? That is the first step of nnsight's blocking_request
-+    (remote.py: sio.connect(ws_address, socketio_path="/ws/socket.io", transports=["websocket"])), and it was
-+    the step failing for hours on 2026-10-17 (the NDIF 0.8 upgrade day) while /status and /ping still answered
-+    and a replica showed RUNNING, so the status endpoint alone cannot tell when a retry is worth sending."""
++    """Is NDIF's websocket endpoint accepting connections? nnsight 0.8 / NDIF 0.8 subscribe at wss://<host>/subscribe
++    (a plain HTTP upgrade answers 101); nnsight 0.7 used socket.io at /ws/socket.io (polling handshake answers
++    200). Both are probed with the standard library so the check needs no client package. During the NDIF 0.8
++    upgrade (2026-10-16 22:27 to 2026-10-17 02:00) /status and /ping kept answering while every job submission
++    failed, so the status endpoint alone cannot tell when a retry is worth sending."""
++    import http.client
++    from urllib.parse import urlparse
++
++    host = os.environ.get("NDIF_HOST") or "https://api.ndif.us"
 +    try:
-+        import socketio
 +        from nnsight import CONFIG
 +
-+        host = CONFIG.API.HOST
-+        ws = ("wss://" + host[8:]) if host.startswith("https://") else ("ws://" + host[7:])
-+        with socketio.SimpleClient(reconnection_attempts=1) as sio:
-+            sio.connect(ws, socketio_path="/ws/socket.io", transports=["websocket"], wait_timeout=timeout)
-+        return True
++        host = getattr(CONFIG.API, "HOST", host) or host
 +    except Exception:  # noqa: BLE001
-+        return False
++        pass
++    u = urlparse(host)
++    conn_cls = http.client.HTTPSConnection if u.scheme == "https" else http.client.HTTPConnection
++    for path, headers, ok in (
++        ("/subscribe", {"Connection": "Upgrade", "Upgrade": "websocket", "Sec-WebSocket-Version": "13",
++                        "Sec-WebSocket-Key": "dGhlIHNhbXBsZSBub25jZQ=="}, (101,)),
++        ("/ws/socket.io/?EIO=4&transport=polling", {}, (200,)),
++    ):
++        try:
++            c = conn_cls(u.netloc, timeout=timeout)
++            c.request("GET", path, headers=headers)
++            status = c.getresponse().status
++            c.close()
++            if status in ok:
++                return True
++        except Exception:  # noqa: BLE001
++            continue
++    return False
++
++
++def _looks_like_outage(exc_name: str, tail: str) -> bool:
++    """Connection-type failures, evictions and failed on-demand deployments ("Could not deploy this model.
++    CANT_ACCOMMODATE: placed 0 of 1 new replicas before the cluster ran out of room", NDIF 0.8, 2026-10-17)."""
++    s = f"{exc_name} {tail}".lower()
++    return any(k in s for k in ("connect", "disconnect", "timeout", "timed out", "evicted", "unavailable",
++                                "bad gateway", "502", "503", "504", "could not deploy", "accommodate",
++                                "ran out of room", "no replica", "websocket"))
 +
 +
 +def _wait_out_outage(repo_id: str, started: float, cap_s: float, cycle: int, poll_s: float = 60.0) -> bool:
-+    """Block until the status endpoint shows a RUNNING replica of the model AND the websocket accepts a
-+    connection, then settle (2 min, doubling per cycle up to 10 min) before the caller retries; False once the
-+    outage cap is reached."""
++    """Block until NDIF's websocket accepts connections again, then settle (5 min, doubling per cycle up to
++    30 min) before the caller retries the same session; False once the outage cap is reached. The retry itself
++    is what (re)deploys an unpinned model such as Llama-3.3-70B, so a RUNNING replica is NOT a precondition: the
++    status endpoint is only consulted for the log line."""
 +    polls = 0
 +    while True:
 +        if time.time() - started > cap_s:
 +            return False
-+        state = _ndif_model_running(repo_id)
-+        ws_ok = _ndif_ws_reachable() if state is True else False
-+        if state is True and ws_ok:
-+            settle = min(120.0 * (2 ** cycle), 600.0)
-+            logger.warning("  NDIF outage: %s has a RUNNING replica and the websocket answers; settling %.0f s "
-+                           "before retrying (outage %.0f min so far)", repo_id, settle, (time.time() - started) / 60)
++        ws_ok = _ndif_ws_reachable()
++        if ws_ok:
++            settle = min(300.0 * (2 ** cycle), 1800.0)
++            logger.warning("  NDIF outage: websocket answers (model %s replica RUNNING: %s); settling %.0f s before "
++                           "retrying (outage %.0f min so far, cycle %d)", repo_id, _ndif_model_running(repo_id),
++                           settle, (time.time() - started) / 60, cycle + 1)
 +            time.sleep(settle)
 +            return True
 +        if polls % 5 == 0:
-+            what = ("status endpoint unreachable" if state is None else
-+                    "no RUNNING replica" if state is False else "replica RUNNING but the websocket refuses connections")
-+            logger.warning("  NDIF outage: %s: %s; waiting (%.0f min so far, cap %.0f min)", repo_id, what,
++            logger.warning("  NDIF outage: websocket refuses connections; waiting (%.0f min so far, cap %.0f min)",
 +                           (time.time() - started) / 60, cap_s / 60)
 +        polls += 1
 +        time.sleep(poll_s)
@@ -339,7 +364,7 @@
  def generate_batches_session(llm, prompt_batches: list[list[str]], args) -> list[list[str]] | None:
      """Bundle several batches into ONE NDIF job (verified to work on nnsight 0.7.0).
  
-@@ -172,33 +250,54 @@
+@@ -172,33 +275,53 @@
      import nnsight
  
      encs = [_encode(llm, p) for p in prompt_batches]
@@ -406,9 +431,8 @@
 +        # outage: wait it out and retry the SAME session instead of dropping it, up to --outage_cap_min.
 +        if cap_s <= 0:
 +            return None
-+        if (not _looks_like_outage(*last_failure) and _ndif_model_running(args.model) is True
-+                and _ndif_ws_reachable()):
-+            return None  # a genuine remote failure, not an outage: give the session up as before
++        if not _looks_like_outage(*last_failure) and _ndif_ws_reachable():
++            return None  # a genuine remote failure (e.g. OOM) with the service up: give the session up as before
 +        if outage_started is None:
 +            outage_started = time.time()
 +            logger.warning("  retries exhausted on %s; treating it as an NDIF outage (cap %.0f min)",
@@ -421,7 +445,7 @@
  
  
  def generate_batch(llm, prompts: list[str], args) -> list[str] | None:
-@@ -240,7 +339,16 @@
+@@ -240,7 +363,16 @@
      if out_file.exists():
          with jsonlines.open(out_file) as reader:
              for row in reader:
@@ -438,7 +462,7 @@
  
      instructions = [d.get("pos", "") for d in role_data.get("instruction", [])]
      if not instructions:
-@@ -335,6 +443,10 @@
+@@ -335,6 +467,10 @@
      ap.add_argument("--repetition_penalty", type=float, default=None,
                      help="xmodel: override the checkpoint repetition_penalty (1.0 = off)")
      ap.add_argument("--retries", type=int, default=4)
