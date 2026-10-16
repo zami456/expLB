@@ -144,7 +144,7 @@
  
  # ---- 2 judge (Llama-3.1-70B)  ||  eval pooling (subject) -------------------------------------
  $judgeLists = 0..($Shards - 1) | ForEach-Object {
-@@ -198,21 +224,51 @@
+@@ -198,21 +224,53 @@
  $st = Status
  Note "judge: $($st.persona.n_scored) scored"
  foreach ($k in $st.eval.PSObject.Properties) { Note "eval $($k.Name): $($k.Value.done)/$($k.Value.items) rows, row shape $($k.Value.row_shape -join 'x')" }
@@ -156,25 +156,27 @@
 +    foreach ($pb in $PqBanks.Split(",")) {
 +        $pb = $pb.Trim(); if (-not $pb) { continue }
 +        $keep = $KeepOf[$pb]
-+        $tag = "vectors_pq_$pb$VecSuffix"
++        # $pqTag, never $tag: PowerShell names are case-insensitive, so $tag IS the [ValidateSet] parameter $Tag;
++        # on 2026-10-16 the assignment was rejected silently and the store went to <persona>\llama33.
++        $pqTag = "vectors_pq_$pb$VecSuffix"
 +        $want = 36 * $NQuestions
 +        for ($t = 1; $t -le $Attempts; $t++) {
-+            $have = (Get-ChildItem "$P\$tag" -Recurse -File -Include *.pt,*.empty -EA SilentlyContinue).Count
++            $have = (Get-ChildItem "$P\$pqTag" -Recurse -File -Include *.pt,*.empty -EA SilentlyContinue).Count
 +            if ($have -ge $want) { break }
-+            Note "$tag attempt $t (have $have / $want cells)"
++            Note "$pqTag attempt $t (have $have / $want cells)"
 +            $lists = 0..($Shards - 1) | ForEach-Object {
 +                ,(@("$S\2_activations_ndif.py", "--model", $cfg.Model, "--responses_dir", "$P\responses",
-+                    "--scores_dir", "$P\scores", "--output_dir", "$P\$tag", "--roles_file", $roles,
++                    "--scores_dir", "$P\scores", "--output_dir", "$P\$pqTag", "--roles_file", $roles,
 +                    "--shard", "$_/$Shards", "--keep_scores", $keep, "--min_count", "1", "--per_question",
 +                    "--on_failure", "refuse", "--max_length", "8192", "--batch_size", "8",
 +                    "--session_batches", "20", "--layers") + $pqLayerArgs)
 +            }
-+            $codes = RunParallel $tag $lists
-+            Note "$tag exits: $($codes -join ',')"
++            $codes = RunParallel $pqTag $lists
++            Note "$pqTag exits: $($codes -join ',')"
 +        }
-+        $have = (Get-ChildItem "$P\$tag" -Recurse -File -Include *.pt,*.empty -EA SilentlyContinue).Count
-+        Note "${tag}: $have cells ($want expected; keep $keep; layers $($pqLayerArgs -join ','))"
-+        Sync $tag
++        $have = (Get-ChildItem "$P\$pqTag" -Recurse -File -Include *.pt,*.empty -EA SilentlyContinue).Count
++        Note "${pqTag}: $have cells ($want expected; keep $keep; layers $($pqLayerArgs -join ','))"
++        Sync $pqTag
 +    }
 +}
  
@@ -202,7 +204,7 @@
      $want = Eligible $v.keep
      for ($t = 1; $t -le $Attempts; $t++) {
          $have = (Get-ChildItem "$P\$($v.tag)\*.pt" -EA SilentlyContinue).Count
-@@ -221,14 +277,15 @@
+@@ -221,14 +279,15 @@
          $lists = 0..($Shards - 1) | ForEach-Object {
              ,@("$S\2_activations_ndif.py", "--model", $cfg.Model, "--responses_dir", "$P\responses",
                 "--scores_dir", "$P\scores", "--output_dir", "$P\$($v.tag)", "--roles_file", $roles,
@@ -220,7 +222,7 @@
      Sync $v.tag
  }
  
-@@ -236,7 +293,8 @@
+@@ -236,7 +295,8 @@
  # $bank, not $tag: PowerShell names are case-insensitive, so $tag IS the [ValidateSet("qwen")] parameter $Tag;
  # assigning "vectors_s23" to it threw, the loop was skipped silently and the chain still wrote DONE
  # (2026-10-07 04:20 -- no axes built). Same class of bug as run_cap_controls.ps1's $src/$SRC.
@@ -230,7 +232,7 @@
      $nb = (Get-ChildItem "$P\$bank\*.pt" -EA SilentlyContinue).Count
      if ($nb -lt 30) { Note "$bank has $nb vectors (< 30) -- axes not built"; continue }
      & $py "$S\6_axes.py" --vectors_dir "$P\$bank" --output "$P\axes_$bank.pt" --roles_file $roles `
-@@ -245,6 +303,6 @@
+@@ -245,6 +305,6 @@
      Note "axes_$bank exit $LASTEXITCODE, file written: $ax"
  }
  
