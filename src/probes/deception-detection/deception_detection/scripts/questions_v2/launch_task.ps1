@@ -1,0 +1,44 @@
+﻿# Launch a chain run detached from the launching session.
+#
+# Start-Process children died with the Claude Code session on 2026-10-16 (the session's processes sit in a
+# job object), a scheduled task with an interactive logon was killed within a second (0xC000013A) and an
+# S4U task needs elevation. Win32_Process.Create spawns the chain under the WMI provider host instead, outside
+# any job of the caller, in the current user's session, with a hidden window.
+#
+#   .\launch_task.ps1 -Which llama_q150
+#   .\launch_task.ps1 -Which qwen35_q150
+#   .\launch_task.ps1 -Which llama_q30_store [-PqBanks s23]
+param(
+    [Parameter(Mandatory = $true)][ValidateSet("llama_q150", "qwen35_q150", "llama_q30_store")][string]$Which,
+    [string]$PqBanks = "s3,s23"
+)
+$py = "E:\aletheia\venv\Scripts\python.exe"
+$v2sha = "D5BCDD705D558CE24BED391E4E4ADE1D94AEC21173FF616F96B934797B4E1694"
+$origsha = "1A5F7709E778669BE724475E146679B9D45E0144ED0485AC436A6E931868FFB7"
+$runs = @{
+    "llama_q150" = @{
+        chain = "E:\qbank\banks\Llama-3.3-70B-Instruct\code\run_chain.ps1"
+        args = @("-Tag", "llama33", "-RunBase", "E:\qbank\banks", "-Py", $py, "-SkipEval", "-Force",
+                 "-NQuestions", "150", "-QFile", "E:\qbank\banks\Llama-3.3-70B-Instruct\code\kd\questions\kd_questions_shared_v2.jsonl",
+                 "-QSha256", $v2sha, "-MinCount", "20", "-Banks", "s3", "-PerQuestion", "-PqLayers", "20,36,40,44",
+                 "-PqBanks", "s3,s23", "-VecSuffix", "_q150", "-MinDownloadKbps", "40", "-Shards", "3", "-Attempts", "8") }
+    "qwen35_q150" = @{
+        chain = "E:\qbank\banks\Qwen3.5-27B\code\run_chain.ps1"
+        args = @("-Tag", "qwen35", "-RunBase", "E:\qbank\banks", "-Py", $py, "-SkipEval", "-Force",
+                 "-NQuestions", "150", "-QFile", "E:\qbank\banks\Qwen3.5-27B\code\kd\questions\kd_questions_shared_v2.jsonl",
+                 "-QSha256", $v2sha, "-MinCount", "20", "-Banks", "s3", "-PerQuestion", "-PqLayers", "16,19,22,26,29,32",
+                 "-PqBanks", "s3,s23", "-VecSuffix", "_q150", "-MinDownloadKbps", "40", "-Shards", "3", "-Attempts", "8") }
+    "llama_q30_store" = @{
+        chain = "E:\qbank\banks\Llama-3.3-70B-Instruct\code\run_chain.ps1"
+        args = @("-Tag", "llama33", "-RunBase", "E:\qbank\banks", "-Py", $py, "-SkipEval", "-Force",
+                 "-NQuestions", "30", "-QFile", "E:\qbank\banks\Llama-3.3-70B-Instruct\code\kd\questions\kd_questions_shared.jsonl",
+                 "-QSha256", $origsha, "-MinCount", "20", "-Banks", "none", "-PerQuestion", "-PqLayers", "20,36,40,44",
+                 "-PqBanks", $PqBanks, "-VecSuffix", "_q30", "-MinDownloadKbps", "40", "-Shards", "3") }
+}
+$r = $runs[$Which]
+$quoted = ($r.args | ForEach-Object { if ($_ -match '[\s,]') { "`"$_`"" } else { $_ } }) -join " "
+$cmd = "powershell.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File `"$($r.chain)`" $quoted"
+$startup = (Get-CimClass -ClassName Win32_ProcessStartup).CimClassInstance ; $startup = $null
+$res = Invoke-CimMethod -ClassName Win32_Process -MethodName Create -Arguments @{ CommandLine = $cmd; CurrentDirectory = (Split-Path $r.chain) }
+"$((Get-Date).ToString('yyyy-MM-dd HH:mm:ss'))  WMI launch $Which rc=$($res.ReturnValue) pid=$($res.ProcessId): $cmd" | Out-File -Append -Encoding utf8 "E:\qbank\logs\launches.txt"
+"launched $Which via WMI: return $($res.ReturnValue), pid $($res.ProcessId)"
