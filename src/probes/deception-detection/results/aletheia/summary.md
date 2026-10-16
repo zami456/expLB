@@ -99,22 +99,22 @@ Means over the headline's 8 datasets where the cell covers all of them; otherwis
 | AB-HC | 0.408 | 0.359 |
 | AB-SP | 0.818 | 0.827 |
 
-## Post hoc: D5 + K, rule K, D5 + rule K, D9 + rule K
+## Post hoc: D5 + K, rule K, D5 + rule K, D9 + rule K, D4
 
-Not in the protocol: asked for after the results above were seen. Read through each organism at the middle block, reasoning dropped, as the headline; rule K (`posthoc.py`, the thesis's `k_final` recipe) is built inside each organism from its own reads.
+Not in the protocol: asked for after the results above were seen. Read through each organism at the middle block, reasoning dropped, as the headline; rule K (`posthoc.py`, the thesis's `k_final` recipe) is built inside each organism from its own reads; D4 is the thesis's probe in the bank's top 3 extended PCs, trained on the model's dev rows (as R2), never on test labels.
 
-| Dataset | D5 + K | rule K | D5 + rule K | D9 + rule K |
-|---|---|---|---|---|
-| Echo | 0.206 | 0.222 | 0.231 | 0.214 |
-| Harm | 0.696 | 0.766 | 0.871 | 0.876 |
-| GS-F | 0.735 | 0.552 | 0.621 | 0.642 |
-| GS-M | 0.782 | 0.594 | 0.646 | 0.658 |
-| BotC | 0.573 | 0.599 | 0.560 | 0.577 |
-| AB-AW | 0.794 | 0.750 | 0.768 | 0.776 |
-| AB-HC | 0.311 | 0.250 | 0.305 | 0.389 |
-| AB-SP | 0.804 | 0.589 | 0.748 | 0.765 |
+| Dataset | D5 + K | rule K | D5 + rule K | D9 + rule K | D4 |
+|---|---|---|---|---|---|
+| Echo | 0.206 | 0.222 | 0.231 | 0.214 | 0.647 |
+| Harm | 0.696 | 0.766 | 0.871 | 0.876 | 0.515 |
+| GS-F | 0.735 | 0.552 | 0.621 | 0.642 | 0.743 |
+| GS-M | 0.782 | 0.594 | 0.646 | 0.658 | 0.676 |
+| BotC | 0.573 | 0.599 | 0.560 | 0.577 | 0.486 |
+| AB-AW | 0.794 | 0.750 | 0.768 | 0.776 | 0.590 |
+| AB-HC | 0.311 | 0.250 | 0.305 | 0.389 | 0.697 |
+| AB-SP | 0.804 | 0.589 | 0.748 | 0.765 | 0.847 |
 
-Means: D5 + K 0.613 (rank 23 of 31, 8 datasets); rule K 0.540 (rank 28 of 31, 8 datasets); D5 + rule K 0.594 (rank 26 of 31, 8 datasets); D9 + rule K 0.612 (rank 23 of 31, 8 datasets).
+Means: D5 + K 0.613 (rank 23 of 31, 8 datasets); rule K 0.540 (rank 28 of 31, 8 datasets); D5 + rule K 0.594 (rank 26 of 31, 8 datasets); D9 + rule K 0.612 (rank 23 of 31, 8 datasets); D4 0.650 (rank 16 of 31, 8 datasets).
 
 ## Caveats
 

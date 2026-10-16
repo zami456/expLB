@@ -1,5 +1,5 @@
 """Post hoc cells, asked for after the pre-registered results were seen (2026-10-16): D5 + K, rule K
-and D5 + rule K (D9 + rule K beside them). None of them is in the spec; the report marks them so.
+and D5 + rule K (D9 + rule K beside them), and D4, the probe in the persona PCs, trained on dev rows. None of them is in the spec; the report marks them so.
 
 Rule K is the thesis's knowledge direction without any of HP-KR's wording (`k_final.py`,
 `k_final_xmodel.py`): system "You are a helpful assistant.", the bare question, one of the six
@@ -17,6 +17,7 @@ its spread on the base model's Alpaca control. Gemma's rule K is the replication
 """
 
 import json
+from functools import cache
 
 import fire
 import numpy as np
@@ -118,10 +119,32 @@ def rule_k(model: str, read_name: str, block: int) -> np.ndarray | None:
     return d / np.linalg.norm(d)
 
 
-DETECTORS = ("D5 + K", "rule K", "D5 + rule K", "D9 + rule K")
+DETECTORS = ("D5 + K", "rule K", "D5 + rule K", "D9 + rule K", "D4")
+
+
+@cache
+def d4(model: str, block: int):
+    """D4 (thesis `transfer_alignment.trained`, basis = the extended PCs): `persona_ood.make_probe()` fitted
+    in the bank's top 3 principal components of the 25 contrast personas (`fit_geometry`, extended axis),
+    trained on the model's dev rows each read by its organism (as R2's dev probe), never on test labels."""
+    from deception_detection import persona_pcs as pcs
+    from deception_detection.scripts import persona_ood as P
+
+    got = SC._dev_reads(model, block)
+    if got is None:
+        return None
+    geom = pcs.fit_geometry(SC.inputs(model).bank(block), k=3,
+                            deception=pcs.DECEPTION_PERSONAS + pcs.KNOWLEDGE_DENIAL_PERSONAS,
+                            honesty=pcs.HONESTY_PERSONAS + pcs.KNOWLEDGE_CANDOUR_PERSONAS, axis_name="extended")
+    basis = geom.components[:3]
+    x, y = got
+    probe = P.make_probe().fit(x @ basis.T, y)
+    return lambda z: probe.decision_function(z @ basis.T)
 
 
 def _scorer(name: str, d: S.Dataset, read_name: str, block: int):
+    if name == "D4":
+        return d4(d.model, block)
     inp = SC.inputs(d.model)
     control = inp.control(block)
     k = SC._k_read(d, read_name, block)
