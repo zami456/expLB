@@ -419,17 +419,21 @@ def _dom_direction(z: np.ndarray, y: np.ndarray) -> np.ndarray:
     return z[y == 1].mean(0) - z[y == 0].mean(0)
 
 
-def spectrum(layer: int = CRITERIA_LAYER, tag: str = "s3", n_boot: int = N_DRAWS, seed: int = SEED) -> None:
+def spectrum(layer: int = CRITERIA_LAYER, tag: str = "s3", n_boot: int = N_DRAWS, seed: int = SEED,
+             families_spec: str = "all", prefix: str = "spectrum") -> None:
     """Per (family, set): the family D9's AUROC and its alignment with the set's own probe (plain cosine,
     covariance-weighted cosine with Sigma = the set, and with Sigma = Alpaca), for the LR own probe
     (`transfer_alignment.own_probe`) and a difference-of-means probe; the line-fit R^2 and Spearman rho^2 of
-    each predictor; a family-resampling bootstrap of Delta R^2; leave-one-family-out D9; pooled vs family."""
+    each predictor; a family-resampling bootstrap of Delta R^2; leave-one-family-out D9; pooled vs family.
+    `families_spec` "orig" restricts to the three original families (PRED-0 on a 30-question store)."""
     from scipy.stats import spearmanr
     from deception_detection.scripts import transfer_alignment as ta
 
     freeze_check()
     rows = questions()
     fam = families(rows)
+    if families_spec == "orig":
+        fam = {k: v for k, v in fam.items() if k.startswith("orig_")}
     V, nn, roles, qids = load_store(tag, layer)
     qpos = {q: i for i, q in enumerate(qids)}
     lay = RB.Layer(layer, gs=False, aisi=False)
@@ -454,7 +458,7 @@ def spectrum(layer: int = CRITERIA_LAYER, tag: str = "s3", n_boot: int = N_DRAWS
                               "cos_sigma_target": ta.mahalanobis_cosine(w, od, z),
                               "cos_sigma_alpaca": ta.mahalanobis_cosine(w, od, lay.control)})
     c = pd.DataFrame(cells)
-    c.round(6).to_csv(OUT / f"spectrum_L{layer}.csv", index=False)
+    c.round(6).to_csv(OUT / f"{prefix}_L{layer}.csv", index=False)
 
     preds = ("cos_plain", "cos_sigma_target", "cos_sigma_alpaca")
 
@@ -481,7 +485,7 @@ def spectrum(layer: int = CRITERIA_LAYER, tag: str = "s3", n_boot: int = N_DRAWS
         lo, hi = np.quantile(boot, [0.025, 0.975])
         frows.append({"layer": layer, "probe": probe, "cells": len(part), **base, "delta_r2_lo": float(lo),
                       "delta_r2_hi": float(hi), "p_boot_le0": float(np.mean(boot <= 0))})
-    pd.DataFrame(frows).round(6).to_csv(OUT / f"spectrum_fits_L{layer}.csv", index=False)
+    pd.DataFrame(frows).round(6).to_csv(OUT / f"{prefix}_fits_L{layer}.csv", index=False)
 
     # leave-one-family-out and pooled vs family on the LB-5 mean
     lb5 = lambda w: float(np.mean([RB.auroc_columns(lay.sets[s][0], lay.sets[s][1] @ w)[0] for s in RB.LB5]))  # noqa: E731
@@ -491,12 +495,13 @@ def spectrum(layer: int = CRITERIA_LAYER, tag: str = "s3", n_boot: int = N_DRAWS
         rest = [q for g, qs in fam.items() if g != f for q in qs]
         lodo.append({"left_out": f, "n_questions_left": len(rest), "LB-5 mean": lb5(d9_of(rest)),
                      "delta_vs_pooled": lb5(d9_of(rest)) - pooled_lb5})
-    pd.DataFrame(lodo).round(6).to_csv(OUT / f"lodo_L{layer}.csv", index=False)
+    pd.DataFrame(lodo).round(6).to_csv(OUT / f"{prefix}_lodo_L{layer}.csv", index=False)
     pvf = [{"family": f, "n_questions": len(fam[f]), "LB-5 mean": lb5(w)} for f, w in fam_d9.items()]
     pvf.append({"family": "pooled (all)", "n_questions": len(qids), "LB-5 mean": pooled_lb5})
-    pd.DataFrame(pvf).round(6).to_csv(OUT / f"pooled_vs_family_L{layer}.csv", index=False)
-    logger.info(f"spectrum at layer {layer}: {len(c)} cells; pooled LB-5 {pooled_lb5:.4f}; "
-                f"best family {max(pvf[:-1], key=lambda r: r['LB-5 mean'])}")
+    pd.DataFrame(pvf).round(6).to_csv(OUT / f"{prefix}_pooled_vs_family_L{layer}.csv", index=False)
+    logger.info(f"{prefix} at layer {layer}: {len(c)} cells; pooled LB-5 {pooled_lb5:.4f}; "
+                f"best family {max(pvf[:-1], key=lambda r: r['LB-5 mean'])}\n"
+                + pd.DataFrame(frows).round(4).to_string())
 
 
 # --- verdict -------------------------------------------------------------------------------------
