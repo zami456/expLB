@@ -10,9 +10,17 @@
 #   .\launch_task.ps1 -Which llama_q30_store [-PqBanks s23]
 param(
     [Parameter(Mandatory = $true)][ValidateSet("llama_q150", "qwen35_q150", "llama_q30_store")][string]$Which,
-    [string]$PqBanks = "s3,s23"
+    [string]$PqBanks = "s3,s23",
+    # 2026-10-17 16:50: NDIF 0.8 executes concurrent requests on one replica; two gen_batch-32 generation
+    # streams exceed the Llama-3.3-70B replica's headroom (per-process cap 37.90 GiB) and OOM in pairs.
+    # Generation therefore runs with -Shards 1; judge / store stages are relaunched with -Shards 3.
+    [int]$Shards = 3,
+    # 2026-10-17: NDIF was upgraded to 0.8 mid-run; the nnsight 0.7 venv (E:\aletheia\venv) can no longer connect
+    # (socket.io path 404, server subscribes at /subscribe). venv08 = nnsight 0.8.0 with the same torch 2.6.0+cpu /
+    # transformers 5.8.0 pins, validated 2026-10-17 02:20 (trace, generation session, accumulator session, judge).
+    [string]$Py = "E:\aletheia\venv08\Scripts\python.exe"
 )
-$py = "E:\aletheia\venv\Scripts\python.exe"
+$py = $Py
 $v2sha = "D5BCDD705D558CE24BED391E4E4ADE1D94AEC21173FF616F96B934797B4E1694"
 $origsha = "1A5F7709E778669BE724475E146679B9D45E0144ED0485AC436A6E931868FFB7"
 $runs = @{
@@ -21,19 +29,19 @@ $runs = @{
         args = @("-Tag", "llama33", "-RunBase", "E:\qbank\banks", "-Py", $py, "-SkipEval", "-Force",
                  "-NQuestions", "150", "-QFile", "E:\qbank\banks\Llama-3.3-70B-Instruct\code\kd\questions\kd_questions_shared_v2.jsonl",
                  "-QSha256", $v2sha, "-MinCount", "20", "-Banks", "s3", "-PerQuestion", "-PqLayers", "20,36,40,44",
-                 "-PqBanks", "s3,s23", "-VecSuffix", "_q150", "-MinDownloadKbps", "40", "-Shards", "3", "-Attempts", "8") }
+                 "-PqBanks", "s3,s23", "-VecSuffix", "_q150", "-MinDownloadKbps", "40", "-Shards", "$Shards", "-Attempts", "8") }
     "qwen35_q150" = @{
         chain = "E:\qbank\banks\Qwen3.5-27B\code\run_chain.ps1"
         args = @("-Tag", "qwen35", "-RunBase", "E:\qbank\banks", "-Py", $py, "-SkipEval", "-Force",
                  "-NQuestions", "150", "-QFile", "E:\qbank\banks\Qwen3.5-27B\code\kd\questions\kd_questions_shared_v2.jsonl",
                  "-QSha256", $v2sha, "-MinCount", "20", "-Banks", "s3", "-PerQuestion", "-PqLayers", "16,19,22,26,29,32",
-                 "-PqBanks", "s3,s23", "-VecSuffix", "_q150", "-MinDownloadKbps", "40", "-Shards", "3", "-Attempts", "8") }
+                 "-PqBanks", "s3,s23", "-VecSuffix", "_q150", "-MinDownloadKbps", "40", "-Shards", "$Shards", "-Attempts", "8") }
     "llama_q30_store" = @{
         chain = "E:\qbank\banks\Llama-3.3-70B-Instruct\code\run_chain.ps1"
         args = @("-Tag", "llama33", "-RunBase", "E:\qbank\banks", "-Py", $py, "-SkipEval", "-Force",
                  "-NQuestions", "30", "-QFile", "E:\qbank\banks\Llama-3.3-70B-Instruct\code\kd\questions\kd_questions_shared.jsonl",
                  "-QSha256", $origsha, "-MinCount", "20", "-Banks", "none", "-PerQuestion", "-PqLayers", "20,36,40,44",
-                 "-PqBanks", $PqBanks, "-VecSuffix", "_q30", "-MinDownloadKbps", "40", "-Shards", "3") }
+                 "-PqBanks", $PqBanks, "-VecSuffix", "_q30", "-MinDownloadKbps", "40", "-Shards", "$Shards") }
 }
 $r = $runs[$Which]
 $quoted = ($r.args | ForEach-Object { if ($_ -match '[\s,]') { "`"$_`"" } else { $_ } }) -join " "
