@@ -15,6 +15,7 @@ param(
     # streams exceed the Llama-3.3-70B replica's headroom (per-process cap 37.90 GiB) and OOM in pairs.
     # Generation therefore runs with -Shards 1; judge / store stages are relaunched with -Shards 3.
     [int]$Shards = 3,
+    [int]$GenBatch = 32,
     # 2026-10-17: NDIF was upgraded to 0.8 mid-run; the nnsight 0.7 venv (E:\aletheia\venv) can no longer connect
     # (socket.io path 404, server subscribes at /subscribe). venv08 = nnsight 0.8.0 with the same torch 2.6.0+cpu /
     # transformers 5.8.0 pins, validated 2026-10-17 02:20 (trace, generation session, accumulator session, judge).
@@ -29,13 +30,13 @@ $runs = @{
         args = @("-Tag", "llama33", "-RunBase", "E:\qbank\banks", "-Py", $py, "-SkipEval", "-Force",
                  "-NQuestions", "150", "-QFile", "E:\qbank\banks\Llama-3.3-70B-Instruct\code\kd\questions\kd_questions_shared_v2.jsonl",
                  "-QSha256", $v2sha, "-MinCount", "20", "-Banks", "s3", "-PerQuestion", "-PqLayers", "20,36,40,44",
-                 "-PqBanks", "s3,s23", "-VecSuffix", "_q150", "-MinDownloadKbps", "40", "-Shards", "$Shards", "-Attempts", "8") }
+                 "-PqBanks", "s3,s23", "-VecSuffix", "_q150", "-MinDownloadKbps", "40", "-Shards", "$Shards", "-GenBatch", "$GenBatch", "-Attempts", "8") }
     "qwen35_q150" = @{
         chain = "E:\qbank\banks\Qwen3.5-27B\code\run_chain.ps1"
         args = @("-Tag", "qwen35", "-RunBase", "E:\qbank\banks", "-Py", $py, "-SkipEval", "-Force",
                  "-NQuestions", "150", "-QFile", "E:\qbank\banks\Qwen3.5-27B\code\kd\questions\kd_questions_shared_v2.jsonl",
                  "-QSha256", $v2sha, "-MinCount", "20", "-Banks", "s3", "-PerQuestion", "-PqLayers", "16,19,22,26,29,32",
-                 "-PqBanks", "s3,s23", "-VecSuffix", "_q150", "-MinDownloadKbps", "40", "-Shards", "$Shards", "-Attempts", "8") }
+                 "-PqBanks", "s3,s23", "-VecSuffix", "_q150", "-MinDownloadKbps", "40", "-Shards", "$Shards", "-GenBatch", "$GenBatch", "-Attempts", "8") }
     "llama_q30_store" = @{
         chain = "E:\qbank\banks\Llama-3.3-70B-Instruct\code\run_chain.ps1"
         args = @("-Tag", "llama33", "-RunBase", "E:\qbank\banks", "-Py", $py, "-SkipEval", "-Force",

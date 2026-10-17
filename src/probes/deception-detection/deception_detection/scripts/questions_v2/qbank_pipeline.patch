@@ -1,6 +1,6 @@
 --- aletheia/run_chain.ps1
 +++ qbank/run_chain.ps1
-@@ -1,26 +1,31 @@
+@@ -1,29 +1,36 @@
  <#
    xmodel: the thesis persona pipeline on another Liars' Bench model. One model per run folder.
  
@@ -40,7 +40,12 @@
      [int]$Attempts = 6,
      # aletheia 2026-10-15: NDIF requests per stage (the owner's limit is 3 per model)
      [int]$Shards = 3,
-@@ -39,7 +44,17 @@
++    # 2026-10-17: prompts per generate call; 1_generate_ndif.py halves it on a CUDA OOM (NDIF 0.8 memory cap)
++    [int]$GenBatch = 32,
+     [switch]$Force,
+     # 2026-10-06: machine-specific paths are parameters so one script serves the lab PC (defaults,
+     # unchanged) and the laptop (register_task.ps1 -Machine laptop passes its own).
+@@ -39,7 +46,17 @@
      [string]$DownloadGrace = "",
      # suffix for the vector banks and their axes (2026-10-07: "_v2" = rebuilt after the Qwen
      # header-newline span fix, written beside the superseded banks so nothing is overwritten)
@@ -59,7 +64,7 @@
  )
  $ErrorActionPreference = "Continue"
  
-@@ -70,13 +85,17 @@
+@@ -70,13 +87,17 @@
      # plain answers like the other banks'. No Liars' Bench rows of its own. ReportLayer 32 = half depth.
      "qwen35"      = @{ Model = "Qwen/Qwen3.5-27B"; Folder = "Qwen3.5-27B"
                         Short = "Qwen"; Csv = "none"; ReportLayer = "32"; Datasets = @() }
@@ -78,7 +83,7 @@
  $Ev    = "$Root\eval"
  $Logs  = "$Root\logs"
  $py    = $Py
-@@ -101,17 +120,22 @@
+@@ -101,17 +122,22 @@
  
  $roles = "$Code\kd\personas\kd_role_groups.json"
  $instr = "$Code\kd\personas\kd_instructions"
@@ -103,7 +108,7 @@
      $procs = @()
      $i = 0
      foreach ($a in $argLists) {
-@@ -139,26 +163,32 @@
+@@ -139,28 +165,34 @@
  if (-not $Force -and (Test-Path $status) -and ((Get-Content $status -Tail 1) -match '^DONE ')) {
      Note "SKIP already DONE; -Force to re-run"; exit 0
  }
@@ -142,9 +147,12 @@
 -           "--question_count", "30", "--output_dir", "$P\responses",
 +           "--question_count", "$NQuestions", "--output_dir", "$P\responses",
             "--temperature", "0.7", "--top_p", "0.9", "--top_k", "0", "--repetition_penalty", "1.0",
-            "--max_new_tokens", "512", "--gen_batch", "32", "--session_batches", "4", "--retries", "6")
+-           "--max_new_tokens", "512", "--gen_batch", "32", "--session_batches", "4", "--retries", "6")
++           "--max_new_tokens", "512", "--gen_batch", "$GenBatch", "--session_batches", "4", "--retries", "6")
      }
-@@ -168,7 +198,7 @@
+     $codes = RunParallel "generate" $lists
+     Note "generate exits: $($codes -join ',')"
+@@ -168,7 +200,7 @@
  $st = Status
  Note "generate: $($st.persona.n_rollouts) rollouts in $(@($st.persona.responses.PSObject.Properties).Count) role files"
  Sync "generate"
@@ -153,7 +161,7 @@
  
  # ---- 2 judge (Llama-3.1-70B)  ||  eval pooling (subject) -------------------------------------
  $judgeLists = 0..($Shards - 1) | ForEach-Object {
-@@ -198,21 +228,53 @@
+@@ -198,21 +230,53 @@
  $st = Status
  Note "judge: $($st.persona.n_scored) scored"
  foreach ($k in $st.eval.PSObject.Properties) { Note "eval $($k.Name): $($k.Value.done)/$($k.Value.items) rows, row shape $($k.Value.row_shape -join 'x')" }
@@ -213,7 +221,7 @@
      $want = Eligible $v.keep
      for ($t = 1; $t -le $Attempts; $t++) {
          $have = (Get-ChildItem "$P\$($v.tag)\*.pt" -EA SilentlyContinue).Count
-@@ -221,14 +283,15 @@
+@@ -221,14 +285,15 @@
          $lists = 0..($Shards - 1) | ForEach-Object {
              ,@("$S\2_activations_ndif.py", "--model", $cfg.Model, "--responses_dir", "$P\responses",
                 "--scores_dir", "$P\scores", "--output_dir", "$P\$($v.tag)", "--roles_file", $roles,
@@ -231,7 +239,7 @@
      Sync $v.tag
  }
  
-@@ -236,7 +299,8 @@
+@@ -236,7 +301,8 @@
  # $bank, not $tag: PowerShell names are case-insensitive, so $tag IS the [ValidateSet("qwen")] parameter $Tag;
  # assigning "vectors_s23" to it threw, the loop was skipped silently and the chain still wrote DONE
  # (2026-10-07 04:20 -- no axes built). Same class of bug as run_cap_controls.ps1's $src/$SRC.
@@ -241,7 +249,7 @@
      $nb = (Get-ChildItem "$P\$bank\*.pt" -EA SilentlyContinue).Count
      if ($nb -lt 30) { Note "$bank has $nb vectors (< 30) -- axes not built"; continue }
      & $py "$S\6_axes.py" --vectors_dir "$P\$bank" --output "$P\axes_$bank.pt" --roles_file $roles `
-@@ -245,6 +309,6 @@
+@@ -245,6 +311,6 @@
      Note "axes_$bank exit $LASTEXITCODE, file written: $ax"
  }
  
@@ -283,7 +291,7 @@
  
  
  def _gen_kwargs(llm, args) -> dict:
-@@ -161,6 +172,101 @@
+@@ -161,6 +172,119 @@
      return [t.strip() for t in llm.tokenizer.batch_decode(out[:, in_len:], skip_special_tokens=True)]
  
  
@@ -382,13 +390,32 @@
 +        time.sleep(poll_s)
 +
 +
++_MIN_GEN_BATCH = 8
++
++
++def _looks_like_oom(tail: str) -> bool:
++    s = tail.lower()
++    return "out of memory" in s or "outofmemory" in s
++
++
++def _cap_parts(parts: list[tuple[int, list[str]]], cap: int) -> list[tuple[int, list[str]]]:
++    """Split every (original_index, prompts) part longer than `cap` into pieces of at most `cap` prompts, in order."""
++    cap = max(int(cap), 1)
++    out: list[tuple[int, list[str]]] = []
++    for oi, p in parts:
++        for k in range(0, len(p), cap):
++            out.append((oi, p[k:k + cap]))
++    return out
++
++
  def generate_batches_session(llm, prompt_batches: list[list[str]], args) -> list[list[str]] | None:
      """Bundle several batches into ONE NDIF job (verified to work on nnsight 0.7.0).
  
-@@ -172,33 +278,54 @@
+@@ -171,34 +295,73 @@
+     """
      import nnsight
  
-     encs = [_encode(llm, p) for p in prompt_batches]
+-    encs = [_encode(llm, p) for p in prompt_batches]
 -    delay = 3.0
 -    for attempt in range(args.retries):
 -        try:
@@ -416,6 +443,13 @@
 -            time.sleep(delay)
 -            delay = min(delay * 2, 60)
 -    return None
++    # 2026-10-17 (NDIF 0.8): the replica's per-process memory cap (37.90 GiB on the 70B replicas) leaves little room
++    # above the weights, and 0.8 executes concurrent requests on one replica. On a CUDA OOM the batches of THIS
++    # session are split in half (down to _MIN_GEN_BATCH prompts) and retried, and args.gen_batch is lowered for the
++    # sessions that follow; the outputs are merged back so the caller still sees one text list per original batch.
++    parts = [(i, p) for i, p in enumerate(prompt_batches)]
++    parts = _cap_parts(parts, args.gen_batch)
++    encs = [_encode(llm, p) for _, p in parts]
 +    gen_kwargs = _gen_kwargs(llm, args)  # built on the client: the session body below runs remotely (nnsight 0.7+)
 +    outage_started = None
 +    outage_cycles = 0
@@ -433,7 +467,11 @@
 +                outs = getattr(outs, "value", outs)
 +                if len(outs) != len(encs):
 +                    raise RuntimeError(f"session returned {len(outs)} outputs, expected {len(encs)}")
-+                return [_decode_new(llm, o, in_len) for (_, _, in_len), o in zip(encs, outs)]
++                texts = [_decode_new(llm, o, in_len) for (_, _, in_len), o in zip(encs, outs)]
++                merged: list[list[str]] = [[] for _ in prompt_batches]
++                for (oi, _), t in zip(parts, texts):
++                    merged[oi].extend(t)
++                return merged
 +            except Exception as e:  # noqa: BLE001
 +                # Log the LAST line, not str(e)[:200]. nnsight wraps the remote failure in a
 +                # CLIENT-side traceback, so a prefix slice spends its whole budget on
@@ -447,6 +485,14 @@
 +                logger.warning("  session attempt %d/%d (%d batches) failed: %s: %s",
 +                               attempt + 1, args.retries, len(encs), type(e).__name__, _tail)
 +                last_failure = (type(e).__name__, _tail)
++                widest = max(len(p) for _, p in parts)
++                if _looks_like_oom(_tail) and widest > _MIN_GEN_BATCH:
++                    args.gen_batch = max(_MIN_GEN_BATCH, min(int(args.gen_batch), widest) // 2)
++                    parts = _cap_parts(parts, args.gen_batch)
++                    encs = [_encode(llm, p) for _, p in parts]
++                    logger.warning("  CUDA OOM: retrying this session as %d batches of <= %d prompts "
++                                   "(gen_batch lowered to %d for the sessions that follow)",
++                                   len(parts), max(len(p) for _, p in parts), args.gen_batch)
 +                time.sleep(delay)
 +                delay = min(delay * 2, 60)
 +        # 2026-10-17: retries exhausted. A connection-type failure (or a model with no RUNNING replica) is an NDIF
@@ -467,7 +513,7 @@
  
  
  def generate_batch(llm, prompts: list[str], args) -> list[str] | None:
-@@ -240,7 +367,16 @@
+@@ -240,7 +403,16 @@
      if out_file.exists():
          with jsonlines.open(out_file) as reader:
              for row in reader:
@@ -484,7 +530,7 @@
  
      instructions = [d.get("pos", "") for d in role_data.get("instruction", [])]
      if not instructions:
-@@ -335,6 +471,10 @@
+@@ -335,6 +507,10 @@
      ap.add_argument("--repetition_penalty", type=float, default=None,
                      help="xmodel: override the checkpoint repetition_penalty (1.0 = off)")
      ap.add_argument("--retries", type=int, default=4)
