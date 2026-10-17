@@ -1,6 +1,6 @@
 --- aletheia/run_chain.ps1
 +++ qbank/run_chain.ps1
-@@ -1,29 +1,36 @@
+@@ -1,29 +1,38 @@
  <#
    xmodel: the thesis persona pipeline on another Liars' Bench model. One model per run folder.
  
@@ -42,10 +42,12 @@
      [int]$Shards = 3,
 +    # 2026-10-17: prompts per generate call; 1_generate_ndif.py halves it on a CUDA OOM (NDIF 0.8 memory cap)
 +    [int]$GenBatch = 32,
++    # 2026-10-18: rows per judge call; 3_judge_ndif.py halves it on a CUDA OOM (shared judge replica, 0.8 memory cap)
++    [int]$JudgeBatch = 16,
      [switch]$Force,
      # 2026-10-06: machine-specific paths are parameters so one script serves the lab PC (defaults,
      # unchanged) and the laptop (register_task.ps1 -Machine laptop passes its own).
-@@ -39,7 +46,17 @@
+@@ -39,7 +48,17 @@
      [string]$DownloadGrace = "",
      # suffix for the vector banks and their axes (2026-10-07: "_v2" = rebuilt after the Qwen
      # header-newline span fix, written beside the superseded banks so nothing is overwritten)
@@ -64,7 +66,7 @@
  )
  $ErrorActionPreference = "Continue"
  
-@@ -70,13 +87,17 @@
+@@ -70,13 +89,17 @@
      # plain answers like the other banks'. No Liars' Bench rows of its own. ReportLayer 32 = half depth.
      "qwen35"      = @{ Model = "Qwen/Qwen3.5-27B"; Folder = "Qwen3.5-27B"
                         Short = "Qwen"; Csv = "none"; ReportLayer = "32"; Datasets = @() }
@@ -83,7 +85,7 @@
  $Ev    = "$Root\eval"
  $Logs  = "$Root\logs"
  $py    = $Py
-@@ -101,17 +122,22 @@
+@@ -101,17 +124,22 @@
  
  $roles = "$Code\kd\personas\kd_role_groups.json"
  $instr = "$Code\kd\personas\kd_instructions"
@@ -108,7 +110,7 @@
      $procs = @()
      $i = 0
      foreach ($a in $argLists) {
-@@ -139,28 +165,34 @@
+@@ -139,28 +167,34 @@
  if (-not $Force -and (Test-Path $status) -and ((Get-Content $status -Tail 1) -match '^DONE ')) {
      Note "SKIP already DONE; -Force to re-run"; exit 0
  }
@@ -152,7 +154,7 @@
      }
      $codes = RunParallel "generate" $lists
      Note "generate exits: $($codes -join ',')"
-@@ -168,7 +200,7 @@
+@@ -168,13 +202,13 @@
  $st = Status
  Note "generate: $($st.persona.n_rollouts) rollouts in $(@($st.persona.responses.PSObject.Properties).Count) role files"
  Sync "generate"
@@ -161,7 +163,14 @@
  
  # ---- 2 judge (Llama-3.1-70B)  ||  eval pooling (subject) -------------------------------------
  $judgeLists = 0..($Shards - 1) | ForEach-Object {
-@@ -198,21 +230,53 @@
+     ,@("$S\3_judge_ndif.py", "--responses_dir", "$P\responses", "--roles_dir", $instr,
+        "--roles_file", $roles, "--shard", "$_/$Shards", "--output_dir", "$P\scores",
+-       "--judge_model", $Judge, "--judge_batch", "16", "--session_batches", "8")
++       "--judge_model", $Judge, "--judge_batch", "$JudgeBatch", "--session_batches", "8")
+ }
+ $evalLists = $cfg.Datasets | ForEach-Object {
+     ,(@("$S\8_coords_ndif.py", "--model", $cfg.Model, "--datasets") + $_ +
+@@ -198,21 +232,53 @@
  $st = Status
  Note "judge: $($st.persona.n_scored) scored"
  foreach ($k in $st.eval.PSObject.Properties) { Note "eval $($k.Name): $($k.Value.done)/$($k.Value.items) rows, row shape $($k.Value.row_shape -join 'x')" }
@@ -221,7 +230,7 @@
      $want = Eligible $v.keep
      for ($t = 1; $t -le $Attempts; $t++) {
          $have = (Get-ChildItem "$P\$($v.tag)\*.pt" -EA SilentlyContinue).Count
-@@ -221,14 +285,15 @@
+@@ -221,14 +287,15 @@
          $lists = 0..($Shards - 1) | ForEach-Object {
              ,@("$S\2_activations_ndif.py", "--model", $cfg.Model, "--responses_dir", "$P\responses",
                 "--scores_dir", "$P\scores", "--output_dir", "$P\$($v.tag)", "--roles_file", $roles,
@@ -239,7 +248,7 @@
      Sync $v.tag
  }
  
-@@ -236,7 +301,8 @@
+@@ -236,7 +303,8 @@
  # $bank, not $tag: PowerShell names are case-insensitive, so $tag IS the [ValidateSet("qwen")] parameter $Tag;
  # assigning "vectors_s23" to it threw, the loop was skipped silently and the chain still wrote DONE
  # (2026-10-07 04:20 -- no axes built). Same class of bug as run_cap_controls.ps1's $src/$SRC.
@@ -249,7 +258,7 @@
      $nb = (Get-ChildItem "$P\$bank\*.pt" -EA SilentlyContinue).Count
      if ($nb -lt 30) { Note "$bank has $nb vectors (< 30) -- axes not built"; continue }
      & $py "$S\6_axes.py" --vectors_dir "$P\$bank" --output "$P\axes_$bank.pt" --roles_file $roles `
-@@ -245,6 +311,6 @@
+@@ -245,6 +313,6 @@
      Note "axes_$bank exit $LASTEXITCODE, file written: $ax"
  }
  
@@ -1927,6 +1936,100 @@
 +
 +if __name__ == "__main__":
 +    main()
+--- aletheia/src/assistant_axis_ndif/3_judge_ndif.py
++++ qbank/src/assistant_axis_ndif/3_judge_ndif.py
+@@ -138,7 +138,26 @@
+     return out
+ 
+ 
+-def judge_batches_session(llm, prompt_batches: list[list[str]], retries: int) -> list[list[str]] | None:
++_MIN_JUDGE_BATCH = 2
++_RECOVER_AFTER = 3  # OOM-free sessions before a lowered judge_batch is doubled back (up to the launch value)
++
++
++def _looks_like_oom(tail: str) -> bool:
++    s = tail.lower()
++    return "out of memory" in s or "outofmemory" in s
++
++
++def _cap_parts(parts: list[tuple[int, list[str]]], cap: int) -> list[tuple[int, list[str]]]:
++    """Split every (original_index, prompts) part longer than `cap` into pieces of at most `cap` prompts, in order."""
++    cap = max(int(cap), 1)
++    out: list[tuple[int, list[str]]] = []
++    for oi, p in parts:
++        for k in range(0, len(p), cap):
++            out.append((oi, p[k:k + cap]))
++    return out
++
++
++def judge_batches_session(llm, prompt_batches: list[list[str]], args) -> list[list[str]] | None:
+     """Bundle several judge batches into ONE NDIF job.
+ 
+     A judge call is ~4 output tokens over a long prompt, so per-job queue and transport
+@@ -148,7 +167,21 @@
+     """
+     import nnsight
+ 
+-    encs = [_encode(llm, p) for p in prompt_batches]
++    # 2026-10-18 (NDIF 0.8): the judge replica's per-process memory cap leaves little room above the weights and the
++    # replica is shared; a 16-row batch of ~730-token prompts OOMs at prefill. On a CUDA OOM the batches of THIS
++    # session are split in half (down to _MIN_JUDGE_BATCH rows) and retried, args.judge_batch is lowered for the
++    # roles that follow and doubled back after _RECOVER_AFTER OOM-free sessions; outputs are merged back per batch.
++    retries = int(args.retries)
++    if not hasattr(args, "_judge_batch_max"):
++        args._judge_batch_max, args._ok_sessions = int(args.judge_batch), 0
++    if args.judge_batch < args._judge_batch_max and args._ok_sessions >= _RECOVER_AFTER:
++        args.judge_batch = min(args._judge_batch_max, int(args.judge_batch) * 2)
++        args._ok_sessions = 0
++        logger.info("  %d OOM-free sessions: judge_batch raised back to %d (launch value %d); takes effect at the next role",
++                    _RECOVER_AFTER, args.judge_batch, args._judge_batch_max)
++    had_oom = False
++    parts = _cap_parts([(i, p) for i, p in enumerate(prompt_batches)], args.judge_batch)
++    encs = [_encode(llm, p) for _, p in parts]
+     delay = 3.0
+     for attempt in range(retries):
+         try:
+@@ -161,11 +194,28 @@
+             outs = getattr(outs, "value", outs)
+             if len(outs) != len(encs):
+                 raise RuntimeError(f"session returned {len(outs)} outputs, expected {len(encs)}")
+-            return [llm.tokenizer.batch_decode(o[:, in_len:], skip_special_tokens=True)
+-                    for (_, _, in_len), o in zip(encs, outs)]
++            texts = [llm.tokenizer.batch_decode(o[:, in_len:], skip_special_tokens=True)
++                     for (_, _, in_len), o in zip(encs, outs)]
++            merged: list[list[str]] = [[] for _ in prompt_batches]
++            for (oi, _), t in zip(parts, texts):
++                merged[oi].extend(t)
++            args._ok_sessions = 0 if had_oom else args._ok_sessions + 1
++            return merged
+         except Exception as e:  # noqa: BLE001 -- engineio b'P' / ConnectionError / NDIF hiccup
++            tail = ((str(e).strip().splitlines() or [repr(e)])[-1])[:300]  # last line: the cause (2026-10-07)
+             logger.warning("  judge session attempt %d/%d (%d batches) failed: %s: %s",
+-                           attempt + 1, retries, len(encs), type(e).__name__, ((str(e).strip().splitlines() or [repr(e)])[-1])[:300])  # last line: the cause (2026-10-07)
++                           attempt + 1, retries, len(encs), type(e).__name__, tail)
++            widest = max(len(p) for _, p in parts)
++            if _looks_like_oom(tail):
++                had_oom = True
++                args._ok_sessions = 0
++                if widest > _MIN_JUDGE_BATCH:
++                    args.judge_batch = max(_MIN_JUDGE_BATCH, min(int(args.judge_batch), widest) // 2)
++                    parts = _cap_parts(parts, args.judge_batch)
++                    encs = [_encode(llm, p) for _, p in parts]
++                    logger.warning("  CUDA OOM: retrying this session as %d batches of <= %d prompts "
++                                   "(judge_batch lowered to %d for the roles that follow)",
++                                   len(parts), max(len(p) for _, p in parts), args.judge_batch)
+             time.sleep(delay)
+             delay = min(delay * 2, 60)
+     return None
+@@ -233,7 +283,7 @@
+     groups = list(batched(batches, max(1, args.session_batches)))
+     for group in tqdm(groups, desc=role):
+         if len(group) > 1:
+-            per_batch = judge_batches_session(llm, [[p for _, p in b] for b in group], args.retries)
++            per_batch = judge_batches_session(llm, [[p for _, p in b] for b in group], args)
+         else:
+             texts = judge_batch(llm, [p for _, p in group[0]], args.retries)
+             per_batch = None if texts is None else [texts]
 --- aletheia/src/assistant_axis_ndif/xmodel_status.py
 +++ qbank/src/assistant_axis_ndif/xmodel_status.py
 @@ -35,8 +35,17 @@
