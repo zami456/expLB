@@ -291,7 +291,7 @@
  
  
  def _gen_kwargs(llm, args) -> dict:
-@@ -161,6 +172,119 @@
+@@ -161,6 +172,120 @@
      return [t.strip() for t in llm.tokenizer.batch_decode(out[:, in_len:], skip_special_tokens=True)]
  
  
@@ -391,6 +391,7 @@
 +
 +
 +_MIN_GEN_BATCH = 8
++_RECOVER_AFTER = 3  # OOM-free sessions before a lowered gen_batch is doubled back (up to the launch value)
 +
 +
 +def _looks_like_oom(tail: str) -> bool:
@@ -411,7 +412,7 @@
  def generate_batches_session(llm, prompt_batches: list[list[str]], args) -> list[list[str]] | None:
      """Bundle several batches into ONE NDIF job (verified to work on nnsight 0.7.0).
  
-@@ -171,34 +295,73 @@
+@@ -171,34 +296,86 @@
      """
      import nnsight
  
@@ -447,6 +448,15 @@
 +    # above the weights, and 0.8 executes concurrent requests on one replica. On a CUDA OOM the batches of THIS
 +    # session are split in half (down to _MIN_GEN_BATCH prompts) and retried, and args.gen_batch is lowered for the
 +    # sessions that follow; the outputs are merged back so the caller still sees one text list per original batch.
++    if not hasattr(args, "_gen_batch_max"):  # launch value; the OOM halving below lowers args.gen_batch at runtime
++        args._gen_batch_max, args._ok_sessions = int(args.gen_batch), 0
++    if args.gen_batch < args._gen_batch_max and args._ok_sessions >= _RECOVER_AFTER:
++        args.gen_batch = min(args._gen_batch_max, int(args.gen_batch) * 2)
++        args._ok_sessions = 0
++        logger.info("  %d OOM-free sessions: gen_batch raised back to %d (launch value %d); batches of the current "
++                    "role are already cut, so this takes effect at the next role",
++                    _RECOVER_AFTER, args.gen_batch, args._gen_batch_max)
++    had_oom = False
 +    parts = [(i, p) for i, p in enumerate(prompt_batches)]
 +    parts = _cap_parts(parts, args.gen_batch)
 +    encs = [_encode(llm, p) for _, p in parts]
@@ -471,6 +481,7 @@
 +                merged: list[list[str]] = [[] for _ in prompt_batches]
 +                for (oi, _), t in zip(parts, texts):
 +                    merged[oi].extend(t)
++                args._ok_sessions = 0 if had_oom else args._ok_sessions + 1
 +                return merged
 +            except Exception as e:  # noqa: BLE001
 +                # Log the LAST line, not str(e)[:200]. nnsight wraps the remote failure in a
@@ -486,6 +497,9 @@
 +                               attempt + 1, args.retries, len(encs), type(e).__name__, _tail)
 +                last_failure = (type(e).__name__, _tail)
 +                widest = max(len(p) for _, p in parts)
++                if _looks_like_oom(_tail):
++                    had_oom = True
++                    args._ok_sessions = 0
 +                if _looks_like_oom(_tail) and widest > _MIN_GEN_BATCH:
 +                    args.gen_batch = max(_MIN_GEN_BATCH, min(int(args.gen_batch), widest) // 2)
 +                    parts = _cap_parts(parts, args.gen_batch)
@@ -513,7 +527,7 @@
  
  
  def generate_batch(llm, prompts: list[str], args) -> list[str] | None:
-@@ -240,7 +403,16 @@
+@@ -240,7 +417,16 @@
      if out_file.exists():
          with jsonlines.open(out_file) as reader:
              for row in reader:
@@ -530,7 +544,7 @@
  
      instructions = [d.get("pos", "") for d in role_data.get("instruction", [])]
      if not instructions:
-@@ -335,6 +507,10 @@
+@@ -335,6 +521,10 @@
      ap.add_argument("--repetition_penalty", type=float, default=None,
                      help="xmodel: override the checkpoint repetition_penalty (1.0 = off)")
      ap.add_argument("--retries", type=int, default=4)
