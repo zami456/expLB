@@ -1,6 +1,6 @@
 --- aletheia/run_chain.ps1
 +++ qbank/run_chain.ps1
-@@ -1,29 +1,47 @@
+@@ -1,29 +1,51 @@
  <#
    xmodel: the thesis persona pipeline on another Liars' Bench model. One model per run folder.
  
@@ -53,10 +53,14 @@
 +    # their end; smaller sessions compute the same traces, grouped into more jobs.
 +    [int]$PqSessionBatches = 20,
 +    [int]$BankSessionBatches = 20,
++    # 2026-10-19: rows per batch and padded-token budget of the all-layer bank (old: 8 rows, script default 12000);
++    # 8-row all-layer reads OOM under the NDIF 0.8 per-process cap on Llama-3.3-70B.
++    [int]$BankBatchSize = 8,
++    [int]$BankTokenBudget = 12000,
      [switch]$Force,
      # 2026-10-06: machine-specific paths are parameters so one script serves the lab PC (defaults,
      # unchanged) and the laptop (register_task.ps1 -Machine laptop passes its own).
-@@ -39,7 +57,17 @@
+@@ -39,7 +61,17 @@
      [string]$DownloadGrace = "",
      # suffix for the vector banks and their axes (2026-10-07: "_v2" = rebuilt after the Qwen
      # header-newline span fix, written beside the superseded banks so nothing is overwritten)
@@ -75,7 +79,7 @@
  )
  $ErrorActionPreference = "Continue"
  
-@@ -70,13 +98,19 @@
+@@ -70,13 +102,19 @@
      # plain answers like the other banks'. No Liars' Bench rows of its own. ReportLayer 32 = half depth.
      "qwen35"      = @{ Model = "Qwen/Qwen3.5-27B"; Folder = "Qwen3.5-27B"
                         Short = "Qwen"; Csv = "none"; ReportLayer = "32"; Datasets = @() }
@@ -96,7 +100,7 @@
  $Ev    = "$Root\eval"
  $Logs  = "$Root\logs"
  $py    = $Py
-@@ -101,17 +135,22 @@
+@@ -101,17 +139,22 @@
  
  $roles = "$Code\kd\personas\kd_role_groups.json"
  $instr = "$Code\kd\personas\kd_instructions"
@@ -121,7 +125,7 @@
      $procs = @()
      $i = 0
      foreach ($a in $argLists) {
-@@ -139,28 +178,34 @@
+@@ -139,28 +182,34 @@
  if (-not $Force -and (Test-Path $status) -and ((Get-Content $status -Tail 1) -match '^DONE ')) {
      Note "SKIP already DONE; -Force to re-run"; exit 0
  }
@@ -165,7 +169,7 @@
      }
      $codes = RunParallel "generate" $lists
      Note "generate exits: $($codes -join ',')"
-@@ -168,13 +213,13 @@
+@@ -168,13 +217,13 @@
  $st = Status
  Note "generate: $($st.persona.n_rollouts) rollouts in $(@($st.persona.responses.PSObject.Properties).Count) role files"
  Sync "generate"
@@ -181,7 +185,7 @@
  }
  $evalLists = $cfg.Datasets | ForEach-Object {
      ,(@("$S\8_coords_ndif.py", "--model", $cfg.Model, "--datasets") + $_ +
-@@ -198,37 +243,70 @@
+@@ -198,37 +247,70 @@
  $st = Status
  Note "judge: $($st.persona.n_scored) scored"
  foreach ($k in $st.eval.PSObject.Properties) { Note "eval $($k.Name): $($k.Value.done)/$($k.Value.items) rows, row shape $($k.Value.row_shape -join 'x')" }
@@ -252,7 +256,7 @@
 -               "--max_length", "8192", "--layers", "all", "--batch_size", "8", "--session_batches", "20")
 +               "--shard", "$_/$nStoreShards", "--keep_scores", $v.keep, "--min_count", "$MinCount",
 +               "--on_failure", "refuse",
-+               "--max_length", "8192", "--layers", "all", "--batch_size", "8", "--session_batches", "$BankSessionBatches")
++               "--max_length", "8192", "--layers", "all", "--batch_size", "$BankBatchSize", "--token_budget", "$BankTokenBudget", "--session_batches", "$BankSessionBatches")
          }
          $codes = RunParallel $v.tag $lists
          Note "$($v.tag) exits: $($codes -join ',')"
@@ -263,7 +267,7 @@
      Sync $v.tag
  }
  
-@@ -236,7 +314,8 @@
+@@ -236,7 +318,8 @@
  # $bank, not $tag: PowerShell names are case-insensitive, so $tag IS the [ValidateSet("qwen")] parameter $Tag;
  # assigning "vectors_s23" to it threw, the loop was skipped silently and the chain still wrote DONE
  # (2026-10-07 04:20 -- no axes built). Same class of bug as run_cap_controls.ps1's $src/$SRC.
@@ -273,7 +277,7 @@
      $nb = (Get-ChildItem "$P\$bank\*.pt" -EA SilentlyContinue).Count
      if ($nb -lt 30) { Note "$bank has $nb vectors (< 30) -- axes not built"; continue }
      & $py "$S\6_axes.py" --vectors_dir "$P\$bank" --output "$P\axes_$bank.pt" --roles_file $roles `
-@@ -245,6 +324,6 @@
+@@ -245,6 +328,6 @@
      Note "axes_$bank exit $LASTEXITCODE, file written: $ax"
  }
  
