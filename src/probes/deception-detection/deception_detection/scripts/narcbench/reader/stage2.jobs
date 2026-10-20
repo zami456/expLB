@@ -1,0 +1,17 @@
+# Stage 2, ordered for the primary tests: Transfer, then Stego (redacted base), Stego as released, the 19 extra Core pairs
+read --name released__orig__transfer --phases final
+read --name released__strip__transfer
+read --name released__plant__transfer
+read --name released__bare__transfer
+read --name redacted__orig__stego
+read --name redacted__rose_exact__stego
+read --name redacted__strip__stego
+read --name redacted__plant__stego
+read --name redacted__bare__stego
+read --name released__rose_exact__stego
+read --name released__orig__stego
+read --name released__orig__core --runs_file E:\narcbench\rows\runs_core_extra.json --phases discussion
+read --name released__strip__core --runs_file E:\narcbench\rows\runs_core_extra.json
+read --name released__plant__core --runs_file E:\narcbench\rows\runs_core_extra.json
+read --name released__bare__core --runs_file E:\narcbench\rows\runs_core_extra.json
+read --name released__observer__core --runs_file E:\narcbench\rows\runs_core_extra.json

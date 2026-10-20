@@ -1,0 +1,6 @@
+# Stage 1: Core development tier (the 62 runs with released activations)
+read --name released__orig__core --runs_file E:\narcbench\rows\runs_core_dev.json --phases discussion
+read --name released__strip__core --runs_file E:\narcbench\rows\runs_core_dev.json
+read --name released__plant__core --runs_file E:\narcbench\rows\runs_core_dev.json
+read --name released__bare__core --runs_file E:\narcbench\rows\runs_core_dev.json
+read --name released__observer__core --runs_file E:\narcbench\rows\runs_core_dev.json
