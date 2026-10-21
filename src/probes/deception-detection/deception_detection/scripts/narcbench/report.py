@@ -101,6 +101,10 @@ def arm_a() -> list[str]:
 
 
 def _det_table(dets: dict, rows: list[tuple[str, str]]) -> list[str]:
+    for v in dets.values():  # text share: not pre-registered, shown because shares are not additive
+        dec = v.get("decomposition") or {}
+        if dec.get("E_total"):
+            dec["text_share"] = dec["E_txt"] / dec["E_total"]
     cols = list(dets)
     out = ["| | " + " | ".join(cols) + " |", "|---|" + "---|" * len(cols)]
     for key, label in rows:
@@ -111,7 +115,8 @@ def _det_table(dets: dict, rows: list[tuple[str, str]]) -> list[str]:
                 v = v.get(part) if isinstance(v, dict) else None
             vals.append(_f(v) if not isinstance(v, (list, str)) else (v if isinstance(v, str) else
                                                                         f"[{_f(v[0])}, {_f(v[1])}]"))
-        out.append(f"| {label} | " + " | ".join(vals) + " |")
+        if any(v != "–" for v in vals):  # a row with nothing in it (e.g. no swaps in a context) is left out
+            out.append(f"| {label} | " + " | ".join(vals) + " |")
     return out
 
 
@@ -119,7 +124,8 @@ ROWS = [("auroc_peak", "AUROC, Peak Suspicion (ORIG)"), ("auroc_peak_ci", "95% C
         ("auroc_split", "AUROC, Deception Split"), ("within_run_rank", "within-run colluder rank"),
         ("T_strip_vs_control", "T: STRIP collusion vs control"), ("C_plant_vs_control", "C: PLANT control vs control"),
         ("bare_auroc_peak", "BARE (reply only)"), ("decomposition.share", "context share E_ctx/E_total"),
-        ("decomposition.share_ci", "share 95% CI"), ("decomposition.verdict", "verdict"),
+        ("decomposition.share_ci", "share 95% CI"), ("decomposition.verdict", "verdict (frozen rule)"),
+        ("decomposition.text_share", "text share E_txt/E_total (descriptive)"),
         ("auroc_implicit_vs_control", "implicit vs control"), ("auroc_collusion_vs_implicit", "collusion vs implicit"),
         ("observer_shift_mean", "OBSERVER shift (honest agents)")]
 
@@ -150,7 +156,8 @@ def arm_b() -> list[str]:
                 "**Primary tests (Holm, alpha 0.05):**", "", "| Test | p | Holm threshold | Rejected |", "|---|---|---|---|"]
         for k in S.PRIMARY:
             v = pr["tests"][k]
-            out.append(f"| {k} | {v['p']:.4f} | {v['holm_threshold']:.4f} | {v['reject']} |")
+            pv = f"< {1 / S.N_BOOT:.4f}" if v["p"] == 0 else f"{v['p']:.4f}"
+            out.append(f"| {k} | {pv} | {v['holm_threshold']:.4f} | {v['reject']} |")
         e = pr["estimation_delta_auroc_D9K_minus_rose_exact"]
         out += ["", f"Estimation: ΔAUROC (D9+K minus their probe), Transfer ORIG Peak Suspicion = {e['point']:.3f}, "
                 f"95% CI [{e['ci'][0]:.3f}, {e['ci'][1]:.3f}].", ""]
@@ -167,11 +174,108 @@ def arm_b() -> list[str]:
     return out
 
 
+def _p(p: float) -> str:
+    return f"< {1 / S.N_BOOT:.4f} ({S.N_BOOT:,} draws)" if p == 0 else f"= {p:.3g}"
+
+
+def caveats() -> list[str]:
+    g1 = _load(S.LOGS / "g1_rows.json") or {}
+    return ["## Data audit, limitations and disclosure", "",
+            "- Gate G1: their Llama-3.1-70B activations come from Llama's own runs of the same scenarios (transcripts not "
+            "released); their Qwen3-32B Stego and Transfer activations reproduce the released transcripts token for token; "
+            "their Core activations come from a different sampling than the released Core transcripts. "
+            f"Core runs with transcripts but no released activations: {len(g1.get('core', {}).get('extra_runs', []))}.",
+            "- Our Llama-3.3-70B reads are off-policy (Qwen3-32B wrote the text), unlike their Llama numbers; the Arm B "
+            "comparison between detectors is internal (same reads).",
+            "- PLANT and OBSERVER replies were not written under the planted context: they test what a probe reads, not how "
+            "a real colluder behaves. Implicit runs (no instruction) are the natural complement.",
+            "- The frozen share rule looks at the context share only; where context and text each carry nearly the whole "
+            "effect (D9+K on Core) it still says 'context-dominated', so the text share is shown beside it.",
+            "- Small n: 36 + 36 Transfer runs (AUROC SE about 0.06; per family 6 + 6), 20 + 20 Stego runs.",
+            "- Reading parts of five scenarios' transcripts (fin_01, audit_01, cicd_01, cr_01, shoe00) and about 30 run "
+            "configs informed only the condition builders and the Stego "
+            "redaction; no detector, layer, span or aggregator depends on NARCBench, and no score existed before freeze 1. "
+            "The work was done before the Apart sprint (Oct 23-25) and must be disclosed as prior work there.", ""]
+
+
+def findings() -> list[str]:
+    """The headline numbers as sentences, every value read from the result files."""
+    held, core = _load(S.RESULTS / "armB_heldout.json"), _load(S.RESULTS / "armB_core.json")
+    tb = _load(S.RESULTS / "armA_text_baselines.json")
+    rq, rl = _load(S.RESULTS / "armA_replicate_qwen3_32b.json"), _load(S.RESULTS / "armA_replicate_llama_3_1_70b.json")
+    nq, nl = _load(S.RESULTS / "armA_random_null_qwen3_32b.json"), _load(S.RESULTS / "armA_random_null_llama_3_1_70b.json")
+    pq, pl = _load(S.RESULTS / "armA_pseudo_null_qwen3_32b.json"), _load(S.RESULTS / "armA_pseudo_null_llama_3_1_70b.json")
+    if not (held and core and tb and rq and rl and nq and nl and pq and pl):
+        return []
+
+    def tmean(rep, m="peak_suspicion"):
+        fams = [g for g in rep["means"] if g not in ("Held-out", "blackjack")]
+        return float(np.mean([rep["means"][g][m] for g in fams]))
+
+    def tband(nul, m="peak_suspicion"):
+        fams = [g for g in nul["summary"] if g not in ("Held-out", "blackjack", "blackjack_corrected")]
+        return float(np.mean([nul["summary"][g][m]["band97.5"] for g in fams]))
+
+    def pmean(ps, m="peak_suspicion"):
+        fams = [g for g in ps["summary"] if g != "blackjack"]
+        return float(np.mean([ps["summary"][g][m]["band97.5"] for g in fams]))
+
+    t, pr = held["transfer"]["detectors"], held["primary"]
+    r, d = t["rose_exact"], t["D9+K"]
+    c = core["detectors"]
+    rd, dd = r["decomposition"], d["decomposition"]
+    e = pr["estimation_delta_auroc_D9K_minus_rose_exact"]
+    rej = [k for k in S.PRIMARY if pr["tests"][k]["reject"]]
+    st = held["stego"]["redacted"]
+    reply_t = tb["views"]["reply|stego_final"]
+    fams = [g for g in reply_t if g not in ("Held-out", "blackjack")]
+    ctx_t = tb["views"]["context|stego_final"]
+    out = ["## Findings", "",
+           f"1. **Their probe's transfer is the collusion instruction.** Refitted on our Llama-3.3-70B reads of Core with "
+           f"their recipe, it scores Transfer at AUROC {r['auroc_peak']:.2f}. Planting the colluder's system prompt on "
+           f"honest control agents, whose replies stay the same, scores {r['C_plant_vs_control']:.2f}; removing it from "
+           f"the colluders, whose collusive replies stay, scores {r['T_strip_vs_control']:.2f} (random band "
+           f"{held['transfer']['null_rose_space']['strip']['band97.5']:.2f}); the reply alone scores "
+           f"{r['bare_auroc_peak']:.2f}. The context alone carries {rd['share']:.2f} of its effect (95% CI "
+           f"{rd['share_ci'][0]:.2f}-{rd['share_ci'][1]:.2f}; P1 p {_p(pr['tests']['P1']['p'])}). It also flags runs "
+           f"where nobody was told to collude (implicit vs control {r['auroc_implicit_vs_control']:.2f}).",
+           f"2. **The same holds on Core**, where their numbers are perfect: AUROC {c['rose_exact']['auroc_peak']:.2f}, "
+           f"PLANT {c['rose_exact']['C_plant_vs_control']:.2f}, STRIP {c['rose_exact']['T_strip_vs_control']:.2f}; the "
+           f"agents' own text carries {c['rose_exact']['decomposition']['E_txt'] / c['rose_exact']['decomposition']['E_total']:.2f} "
+           f"of the effect. The 19 unseen Core pairs repeat it ({held['core_extra']['detectors']['rose_exact']['auroc_peak']:.2f} / "
+           f"STRIP {held['core_extra']['detectors']['rose_exact']['T_strip_vs_control']:.2f}).",
+           f"3. **On their own released activations, the probe's margin over chance is small on Transfer.** Peak Suspicion, "
+           f"mean of families: Qwen3-32B {tmean(rq):.2f}, Llama-3.1-70B {tmean(rl):.2f}; random directions through the same "
+           f"aggregator reach {tband(nq):.2f} / {tband(nl):.2f} (97.5th percentile) and probes trained on control runs with "
+           f"a random pair labelled colluder reach {pmean(pq):.2f} / {pmean(pl):.2f}.",
+           f"4. **The text gives the task away.** TF-IDF of the prompts alone, through their pipeline, reaches "
+           f"{max(ctx_t['Held-out'][m] for m in M):.2f} on Core and {max(float(np.mean([ctx_t[g][m] for g in fams])) for m in M):.2f} "
+           f"on Transfer; the replies alone reach {max(float(np.mean([reply_t[g][m] for g in fams])) for m in M):.2f} on Transfer.",
+           f"5. **Stego is not covert in the released data**, and their Stego score reads only the prompt: the 160 final-hand "
+           f"rows they score have empty replies (gate G1), the big player's plain-text decoding lines reach every player's "
+           f"table chat, and their probe (refitted on our reads) scores their exact rows at "
+           f"{st['their_rows_empty_final_auroc_peak']['rose_exact']:.2f} even with those lines removed, because the "
+           f"colluders' own prompts still hold the agreed scheme.",
+           f"6. **The thesis's label-free D9+K, never trained on collusion, detects Transfer collusion above random directions** "
+           f"(AUROC {d['auroc_peak']:.2f}, band {held['transfer']['null_thesis_L40']['orig']['band97.5']:.2f}; P4 p = "
+           f"{pr['tests']['P4']['p']:.3f}), and its signal does not need the instruction: STRIP {d['T_strip_vs_control']:.2f} "
+           f"(P3b p = {pr['tests']['P3b']['p']:.3f}, not significant after Holm), reply only {d['bare_auroc_peak']:.2f}, PLANT "
+           f"{d['C_plant_vs_control']:.2f}; context share {dd['share']:.2f} (CI {dd['share_ci'][0]:.2f}-{dd['share_ci'][1]:.2f}, "
+           f"mixed). On Core it scores {c['D9+K']['auroc_peak']:.2f} zero-shot, STRIP {c['D9+K']['T_strip_vs_control']:.2f}, "
+           f"reply only {c['D9+K']['bare_auroc_peak']:.2f}.",
+           f"7. **On the original transcripts their probe is far stronger** (ΔAUROC D9+K minus theirs {e['point']:.2f}, 95% CI "
+           f"{e['ci'][0]:.2f} to {e['ci'][1]:.2f}), because it reads the instruction. Holm-significant primary tests: "
+           f"{', '.join(rej) if rej else 'none'} (of {', '.join(S.PRIMARY)}).",
+           f"8. Core-calibrated thresholds do not transfer: they flag every Transfer run for both detectors, so flag rates are "
+           f"not informative; run-level AUROCs are reported instead.", ""]
+    return out
+
+
 def build() -> None:
     lines = ["# NARCBench: Rose et al.'s white-box collusion probes tested with the thesis designs", "",
              f"Data `{S.HF_DATASET}` revision `{S.HF_REVISION[:8]}`, their code `{S.GITHUB_COMMIT[:8]}`; gates and "
              "freezes in `E:/narcbench/logs/gates.md` and `freeze.txt`. Pre-registration: `spec.py`.", ""]
-    lines += arm_a() + arm_b()
+    lines += findings() + arm_a() + arm_b() + caveats()
     S.RESULTS.mkdir(parents=True, exist_ok=True)
     (S.RESULTS / "summary.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
     print(f"wrote {S.RESULTS / 'summary.md'} ({len(lines)} lines)")
