@@ -1,0 +1,68 @@
+== FREEZE 1  2026-10-20 19:49:22
+spec.py sha256 ddb1675e0309e1e2e9f0563ff418816c81ae62461e23d789af34015553d4e682
+directions_llama33.npz sha256 8bca04d3e214e056ccde631d1fb6c084ea0db1847e9cd7ab4f0db8d82567bb46
+reader narc_read.py (deployed) sha256 8daabb2fe23244bf7216993a25337ddf30564da06ea48fa7fa51a6814bd83540
+reader source sha256 8daabb2fe23244bf7216993a25337ddf30564da06ea48fa7fa51a6814bd83540
+package __init__.py sha256 e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+package baselines.py sha256 1cbfc26e24a598542223d92f0bb55eeff05a2ec5a91de71590bc46845869c0bd
+package conditions.py sha256 f9e3797c328058296fd4df206b58d3377dffe3f41c8b11a39b6e8957d0d239b1
+package freeze.py sha256 aa179ce5fcc63924e16b35f82e65df58d9d464cd11015227a19b9ec4b5aedf7c
+package nulls.py sha256 b98c0809b6e4c44a1271ca55e48cf23f6cf381a970d6f37379139bec68987edf
+package rose.py sha256 dc4582ca075b63ffe4d1bb75134bac2773a2c81665ce31b19484752b08903aa5
+package rows.py sha256 e131e25afbd70778032f185ddd04b309a5bc17f01907a5a3e893e292aad79ec2
+package spec.py sha256 ddb1675e0309e1e2e9f0563ff418816c81ae62461e23d789af34015553d4e682
+condition redacted__bare__stego sha256 c68199a784c16476fb08978dbed0e5cbf21e411859f4e4af460f3069d9843ea4 rows 1280 tokens 246476
+condition redacted__orig__stego sha256 2011507fcf085f5e144786f0730b64e12fa01e8e45c61023a9b0439a3f361d94 rows 1280 tokens 1580706
+condition redacted__plant__stego sha256 84b77d8fd0c9dcf11b58ba222298d1f07878c605b4dc245194172548e941a244 rows 320 tokens 674790
+condition redacted__rose_exact__stego sha256 5683b4904d679683ceae7922934bc385ad9835493a034c2a0126b68f77eab258 rows 160 tokens 217044
+condition redacted__strip__stego sha256 a05e5d1ed0256c4b1aa5d43814f352bfe2af31169409ff1c59431661bf682c42 rows 320 tokens 279113
+condition released__bare__core sha256 0d18ca5e37530643de71af7ddbe729f00a6d3a234dd26e67792af482b7a951b5 rows 1200 tokens 232326
+condition released__bare__transfer sha256 7a119ab446c51d644a2a7a124c7f752952dfe679cf41c060c2b0b42b162ecfa0 rows 432 tokens 209415
+condition released__observer__core sha256 32c97d27803c91ef64b051ecda9616df3b6cb2712763d0e653b8010f96b73871 rows 300 tokens 490699
+condition released__orig__core sha256 cae8b21350e02ebf20a632b439108bd222d09628786ec8d52192df9cd2c1b9ff rows 1600 tokens 2540003
+condition released__orig__stego sha256 63c68c8c6df8840e7f073c9d9a88d7269f7208ce5ef118ec207fa520d71b375c rows 1280 tokens 1590701
+condition released__orig__transfer sha256 5c5cb9d7eb03ba69c90b3c53a4c1e17e2f3e887f79d77db1b74920e6def28d1d rows 1440 tokens 5991200
+condition released__plant__core sha256 f9df4414e31500ba0014247260f97574a41097e8d785bf310dfe121ca50457d0 rows 300 tokens 478336
+condition released__plant__transfer sha256 ee30556cb53e4e5b90068c9549395a3fb3f787ac02676a8ce9855a67c398144e rows 72 tokens 396639
+condition released__rose_exact__stego sha256 66008bc8695aa78aac65a2a79b66f45ee792c4e06ec31cbe8432eb10f3608825 rows 160 tokens 217718
+condition released__strip__core sha256 0ad7506af439457747225e5cd08e57989786fdba68008f1e123c9dbfaf08cdd9 rows 300 tokens 392268
+condition released__strip__transfer sha256 8b04434052e272218a285b3b964264b25f6ea7c43b78af31f607fb4dbb63e17e rows 72 tokens 389627
+runs runs_core.json sha256 1c4cbffa014400a1ebf2e5c975fab4c1156efc67e91420049be51274cfb734af
+runs runs_core_dev.json sha256 5dfe802147c3b35cb0dc5773afafa4cf534e3b1dc4032b1c6ed8096f51dc601e
+runs runs_core_extra.json sha256 f02b90acde8d300162ea645d16457718f7a70d609e06addf503628fe52f3fb98
+runs runs_stego.json sha256 271cd9ccc3fc1880817951baeb57863113bd045e764667c603f535b082bbae33
+runs runs_transfer.json sha256 262c0395fa8788fdc3d590f869ed6df0a2c2209b87379068b8660abad450a66d
+thesis module recall_denial.py sha256 14f2c71b503d50433375d040e591af7141440388956c5a9873c0a6dda1339041
+thesis module random_bank.py sha256 50274de127cb1cc70fc82e852b322fa7ac401faea3fb0165a7fffcb7f011792f
+thesis module persona_ood.py sha256 9474b17f6f969a980ef98dba5a9147c98b973f7a6dab9108745b622554bdc903
+thesis module layer_sweep.py sha256 542970f4b7505b3c488ed0b0a5c017cb9f58608eab75dabdb97065471376a57d
+thesis module lb_models.py sha256 1c15b2b25dcc38797072372b009445f97e2d58f3147c13bf4d68791a483a7d57
+thesis module k_robustness.py sha256 4941d6503020b3a0eee7a85b87ffecb77b3683c5e00e116db174809fc5538c46
+thesis module k_transfer.py sha256 8fb84f4a8f6d9581d58cc9a01b98147bc1534806e9b72f6c6ed93f93fff89a5e
+git HEAD 272f072fa6ae394799c7c338594a904bbdf43171 branch qwen-userstay
+uncommitted diff in imported thesis modules: .../deception_detection/scripts/lb_models.py             | 16 ++++++++++++---- |  1 file changed, 12 insertions(+), 4 deletions(-)
+G3 ceiling tiers: {"core": [1.0, "context/sorted_concat", true], "transfer": [1.0, "context/deception_split", true], "stego_final": [1.0, "context/activation_alignment", true], "stego_corrected": [1.0, "reply/activation_alignment", true]}
+G5 frozen vectors reproduce the thesis L40 numbers: {"D9": [0.9123, 0.9124], "K": [0.6406, 0.8654], "D9+K": [0.8646, 0.9087], "D5+K": [0.8126, 0.8541], "RepE": [0.9723, 0.9358]}
+
+== POST-FREEZE EDIT 1  2026-10-20 19:53:42  (launch mechanics only; nothing computed changes)
+reader narc_read.py sha256 5c178ffe0fd714d5519ff982b3ecda2fd16d21ab674133c12a2b3d1a6bf25721: on an out-of-memory failure the pass budget is lowered while the largest pass exceeds
+4,096 tokens, and only then the passes per session; the budget is never raised back; launch budget 6,000 tokens per
+pass (was 12,000), 8 passes per session. Reason: stage 1 OOMed on 10.4k-token passes (572 MiB MLP intermediate, 38.78 GiB
+cap on the shared replica). Batch composition changes bf16 rounding only (G6: solo vs batched cos >= 0.99983).
+
+== FREEZE 2  2026-10-20 23:07:16
+score.py sha256 f7ee8395020eeb3434b902d27ca83aea89ed647846bb10fb5b42ad2e452e19fc
+stage1_fit.npz sha256 4574da436dbdb976c72d1072a1593cba0b5562657a6ee3f8f498cc5ab338ac62
+stage1_thresholds.json sha256 7b4e9afefe802d8334d870ba3e9d04c768a6f75a26933e0fec0b1ac942715c3c
+armB_core.json sha256 e300f9c54ffe3a3b94d9bfbef97e7c5f4857df6a7da2372c57725aa8c8b9f61a
+
+== POST HOC D4 (declared before any D4 score)  2026-10-21 13:32:42
+posthoc_d4.py sha256 4bf13a2fb1fcd190f8540dc8b3660853b3ead46ead169928e6974d071f6d4527
+posthoc_d4.npz sha256 a6d22aabb7a6908015a33dba0d2d4ecebaa8e49fe0985b217348be59a6b78b6a
+score.py sha256 f7ee8395020eeb3434b902d27ca83aea89ed647846bb10fb5b42ad2e452e19fc (unchanged since freeze 2)
+thesis transfer matrix reproduced at L40 (30 cells): True
+thesis module persona_ood.py sha256 9474b17f6f969a980ef98dba5a9147c98b973f7a6dab9108745b622554bdc903
+thesis module recall_denial.py sha256 14f2c71b503d50433375d040e591af7141440388956c5a9873c0a6dda1339041
+thesis module lb_models.py sha256 1c15b2b25dcc38797072372b009445f97e2d58f3147c13bf4d68791a483a7d57
+uncommitted diff in those modules: .../deception_detection/scripts/lb_models.py             | 16 ++++++++++++---- |  1 file changed, 12 insertions(+), 4 deletions(-)
+

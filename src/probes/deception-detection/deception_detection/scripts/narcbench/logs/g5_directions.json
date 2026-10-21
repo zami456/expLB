@@ -1,0 +1,106 @@
+{
+ "pass": true,
+ "L40": {
+  "D9": {
+   "got": [
+    0.9123,
+    0.9124
+   ],
+   "expected": [
+    0.9123,
+    0.9124
+   ],
+   "ok": true
+  },
+  "K": {
+   "got": [
+    0.6406,
+    0.8654
+   ],
+   "expected": [
+    0.6406,
+    0.8654
+   ],
+   "ok": true
+  },
+  "D9+K": {
+   "got": [
+    0.8646,
+    0.9087
+   ],
+   "expected": [
+    0.8646,
+    0.9087
+   ],
+   "ok": true
+  },
+  "D5+K": {
+   "got": [
+    0.8126,
+    0.8541
+   ],
+   "expected": [
+    0.8126,
+    0.8541
+   ],
+   "ok": true
+  },
+  "RepE": {
+   "got": [
+    0.9723,
+    0.9358
+   ],
+   "expected": [
+    0.9723,
+    0.9358
+   ],
+   "ok": true
+  }
+ },
+ "keys": [
+  "L20|D5",
+  "L20|D5+K",
+  "L20|D9",
+  "L20|D9+K",
+  "L20|K",
+  "L20|R9",
+  "L20|R9+K",
+  "L20|RepE_dir",
+  "L20|RepE_mean",
+  "L20|RepE_scale",
+  "L20|random",
+  "L36|D5",
+  "L36|D5+K",
+  "L36|D9",
+  "L36|D9+K",
+  "L36|K",
+  "L36|R9",
+  "L36|R9+K",
+  "L36|RepE_dir",
+  "L36|RepE_mean",
+  "L36|RepE_scale",
+  "L36|random",
+  "L40|D5",
+  "L40|D5+K",
+  "L40|D9",
+  "L40|D9+K",
+  "L40|K",
+  "L40|R9",
+  "L40|R9+K",
+  "L40|RepE_dir",
+  "L40|RepE_mean",
+  "L40|RepE_scale",
+  "L40|random",
+  "L44|D5",
+  "L44|D5+K",
+  "L44|D9",
+  "L44|D9+K",
+  "L44|K",
+  "L44|R9",
+  "L44|R9+K",
+  "L44|RepE_dir",
+  "L44|RepE_mean",
+  "L44|RepE_scale",
+  "L44|random"
+ ]
+}
