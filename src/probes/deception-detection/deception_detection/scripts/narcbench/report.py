@@ -26,6 +26,20 @@ def _f(x, nd=2):
     return "–" if x is None or (isinstance(x, float) and np.isnan(x)) else f"{x:.{nd}f}"
 
 
+def _family_mean_band(per_family) -> float:
+    """The band for a mean-of-families AUROC: the 97.5th percentile of each null draw's mean over the families.
+    (Averaging each family's own 97.5th percentile, as the report did before 2026-10-22, overstates it.)"""
+    return float(np.percentile(np.stack([np.asarray(a, float) for a in per_family]).mean(axis=0), 97.5))
+
+
+def _random_draws(model: str):
+    path = S.RESULTS / f"armA_random_null_{model}.npz"
+    if not path.exists():
+        return None
+    with np.load(path) as z:
+        return {k: z[k] for k in z.files}
+
+
 def arm_a() -> list[str]:
     out = ["## Arm A: their probe on their released activations (CPU)", ""]
     for model, layers in (("qwen3_32b", "26-30"), ("llama_3_1_70b", "32-37")):
@@ -51,7 +65,8 @@ def arm_a() -> list[str]:
         for g in fams:
             out.append(f"| Transfer: {g} | " + " | ".join(cell(g, m, means[g][m]) for m in M) + " |")
         tavg = {m: float(np.mean([means[g][m] for g in fams])) for m in M}
-        tband = {m: float(np.mean([nul["summary"][g][m]["band97.5"] for g in fams])) if nul and m in nul["summary"][fams[0]]
+        draws = _random_draws(model)
+        tband = {m: _family_mean_band([draws[f"{g}|{m}"] for g in fams]) if draws and f"{fams[0]}|{m}" in draws
                  else None for m in M}
         out.append("| **Transfer, mean of families** | " + " | ".join(
             _f(tavg[m]) + (f" [{tband[m]:.2f}]" if tband[m] is not None else "") for m in M) + " |")
@@ -66,7 +81,7 @@ def arm_a() -> list[str]:
             pf = [g for g in ps if g != "blackjack"]
             out.append(f"Pseudo-coalition null ({pse['draws']} probes trained on control runs with a random pair "
                        f"labelled colluder), 97.5th percentile, Transfer mean of families: "
-                       + ", ".join(f"{SHORT[m]} {np.mean([ps[g][m]['band97.5'] for g in pf]):.2f}"
+                       + ", ".join(f"{SHORT[m]} {_family_mean_band([[v[g][m] for v in pse['values']] for g in pf]):.2f}"
                                    for m in ps[pf[0]]) + f"; Stego: "
                        + ", ".join(f"{SHORT[m]} {ps['blackjack'][m]['band97.5']:.2f}" for m in ps["blackjack"]) + ".")
             out.append("")
@@ -212,13 +227,18 @@ def findings() -> list[str]:
         fams = [g for g in rep["means"] if g not in ("Held-out", "blackjack")]
         return float(np.mean([rep["means"][g][m] for g in fams]))
 
-    def tband(nul, m="peak_suspicion"):
+    def tband(nul, model, m="peak_suspicion", old=False):
         fams = [g for g in nul["summary"] if g not in ("Held-out", "blackjack", "blackjack_corrected")]
-        return float(np.mean([nul["summary"][g][m]["band97.5"] for g in fams]))
+        if old:
+            return float(np.mean([nul["summary"][g][m]["band97.5"] for g in fams]))
+        draws = _random_draws(model)
+        return _family_mean_band([draws[f"{g}|{m}"] for g in fams])
 
-    def pmean(ps, m="peak_suspicion"):
+    def pmean(ps, m="peak_suspicion", old=False):
         fams = [g for g in ps["summary"] if g != "blackjack"]
-        return float(np.mean([ps["summary"][g][m]["band97.5"] for g in fams]))
+        if old:
+            return float(np.mean([ps["summary"][g][m]["band97.5"] for g in fams]))
+        return _family_mean_band([[v[g][m] for v in ps["values"]] for g in fams])
 
     t, pr = held["transfer"]["detectors"], held["primary"]
     r, d = t["rose_exact"], t["D9+K"]
@@ -244,10 +264,14 @@ def findings() -> list[str]:
            f"agents' own text carries {c['rose_exact']['decomposition']['E_txt'] / c['rose_exact']['decomposition']['E_total']:.2f} "
            f"of the effect. The 19 unseen Core pairs repeat it ({held['core_extra']['detectors']['rose_exact']['auroc_peak']:.2f} / "
            f"STRIP {held['core_extra']['detectors']['rose_exact']['T_strip_vs_control']:.2f}).",
-           f"3. **On their own released activations, the probe's margin over chance is small on Transfer.** Peak Suspicion, "
+           f"3. **On their own released activations, the probe is well above both nulls on Transfer.** Peak Suspicion, "
            f"mean of families: Qwen3-32B {tmean(rq):.2f}, Llama-3.1-70B {tmean(rl):.2f}; random directions through the same "
-           f"aggregator reach {tband(nq):.2f} / {tband(nl):.2f} (97.5th percentile) and probes trained on control runs with "
-           f"a random pair labelled colluder reach {pmean(pq):.2f} / {pmean(pl):.2f}.",
+           f"aggregator reach {tband(nq, 'qwen3_32b'):.2f} / {tband(nl, 'llama_3_1_70b'):.2f} (97.5th percentile of each "
+           f"draw's mean over the families) and probes trained on control runs with a random pair labelled colluder reach "
+           f"{pmean(pq):.2f} / {pmean(pl):.2f}. Correction (2026-10-22): the first version of this report averaged each "
+           f"family's own 97.5th percentile ({tband(nq, 'qwen3_32b', old=True):.2f} / {tband(nl, 'llama_3_1_70b', old=True):.2f} "
+           f"and {pmean(pq, old=True):.2f} / {pmean(pl, old=True):.2f}), which overstates the band for a mean, and called "
+           f"the margin small. This null does not test the instruction confound; findings 1-2 do.",
            f"4. **The text gives the task away.** TF-IDF of the prompts alone, through their pipeline, reaches "
            f"{max(ctx_t['Held-out'][m] for m in M):.2f} on Core and {max(float(np.mean([ctx_t[g][m] for g in fams])) for m in M):.2f} "
            f"on Transfer; the replies alone reach {max(float(np.mean([reply_t[g][m] for g in fams])) for m in M):.2f} on Transfer.",

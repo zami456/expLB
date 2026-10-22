@@ -6,7 +6,7 @@ Data `aaronrose227/narcbench` revision `19cb14b2`, their code `237fe607`; gates 
 
 1. **Their probe's transfer is the collusion instruction.** Refitted on our Llama-3.3-70B reads of Core with their recipe, it scores Transfer at AUROC 0.94. Planting the colluder's system prompt on honest control agents, whose replies stay the same, scores 0.97; removing it from the colluders, whose collusive replies stay, scores 0.54 (random band 0.62); the reply alone scores 0.40. The context alone carries 1.07 of its effect (95% CI 0.91-1.28; P1 p < 0.0001 (10,000 draws)). It also flags runs where nobody was told to collude (implicit vs control 0.80).
 2. **The same holds on Core**, where their numbers are perfect: AUROC 1.00, PLANT 1.00, STRIP 0.63; the agents' own text carries 0.05 of the effect. The 19 unseen Core pairs repeat it (1.00 / STRIP 0.59).
-3. **On their own released activations, the probe's margin over chance is small on Transfer.** Peak Suspicion, mean of families: Qwen3-32B 0.88, Llama-3.1-70B 0.93; random directions through the same aggregator reach 0.69 / 0.71 (97.5th percentile) and probes trained on control runs with a random pair labelled colluder reach 0.81 / 0.85.
+3. **On their own released activations, the probe is well above both nulls on Transfer.** Peak Suspicion, mean of families: Qwen3-32B 0.88, Llama-3.1-70B 0.93; random directions through the same aggregator reach 0.58 / 0.63 (97.5th percentile of each draw's mean over the families) and probes trained on control runs with a random pair labelled colluder reach 0.65 / 0.72. Correction (2026-10-22): the first version of this report averaged each family's own 97.5th percentile (0.69 / 0.71 and 0.81 / 0.85), which overstates the band for a mean, and called the margin small. This null does not test the instruction confound; findings 1-2 do.
 4. **The text gives the task away.** TF-IDF of the prompts alone, through their pipeline, reaches 1.00 on Core and 1.00 on Transfer; the replies alone reach 0.73 on Transfer.
 5. **Stego is not covert in the released data**, and their Stego score reads only the prompt: the 160 final-hand rows they score have empty replies (gate G1), the big player's plain-text decoding lines reach every player's table chat, and their probe (refitted on our reads) scores their exact rows at 1.00 even with those lines removed, because the colluders' own prompts still hold the agreed scheme.
 6. **The thesis's label-free D9+K, never trained on collusion, detects Transfer collusion above random directions** (AUROC 0.66, band 0.63; P4 p = 0.010), and its signal does not need the instruction: STRIP 0.62 (P3b p = 0.029, not significant after Holm), reply only 0.69, PLANT 0.58; context share 0.56 (CI 0.39-0.89, mixed). On Core it scores 0.99 zero-shot, STRIP 0.97, reply only 0.89.
@@ -28,11 +28,11 @@ AUROC, collusion runs vs control runs. In brackets: the 97.5th percentile of 1,0
 | Transfer: pump_dump | 0.94 [0.64] | 0.72 [0.42] | 0.32 | 0.96 [0.43] | 1.00 |
 | Transfer: rag | 0.97 [0.64] | 0.91 [0.64] | 0.47 | 0.97 [0.65] | 0.66 |
 | Transfer: research | 0.98 [0.71] | 1.00 [0.69] | 0.68 | 1.00 [0.69] | 1.00 |
-| **Transfer, mean of families** | 0.88 [0.69] | 0.86 [0.64] | 0.54 | 0.91 [0.64] | 0.82 |
+| **Transfer, mean of families** | 0.88 [0.58] | 0.86 [0.56] | 0.54 | 0.91 [0.56] | 0.82 |
 | Stego (their rows: empty final reply) | 1.00 [0.90] | 1.00 [0.97] | 1.00 | 1.00 [0.97] | 1.00 |
 | Stego, hands 1-7 averaged (non-empty) | 1.00 [0.93] | 0.99 [0.99] | 1.00 | 1.00 [0.99] | 0.99 |
 
-Pseudo-coalition null (50 probes trained on control runs with a random pair labelled colluder), 97.5th percentile, Transfer mean of families: Peak 0.81, Split 0.73, Align 0.54, Asym 0.75; Stego: Peak 1.00, Split 1.00, Align 1.00, Asym 0.62.
+Pseudo-coalition null (50 probes trained on control runs with a random pair labelled colluder), 97.5th percentile, Transfer mean of families: Peak 0.65, Split 0.63, Align 0.54, Asym 0.59; Stego: Peak 1.00, Split 1.00, Align 1.00, Asym 0.62.
 
 Hyperparameter sensitivity (overall mean AUROC over Transfer and Stego cells): theirs 0.831, converged 0.827, v1_C1 0.817.
 
@@ -49,11 +49,11 @@ AUROC, collusion runs vs control runs. In brackets: the 97.5th percentile of 1,0
 | Transfer: pump_dump | 1.00 [0.70] | 0.97 [0.73] | 0.96 | 1.00 [0.73] | 0.87 |
 | Transfer: rag | 0.75 [0.65] | 0.88 [0.66] | 0.46 | 0.81 [0.65] | 0.57 |
 | Transfer: research | 0.92 [0.71] | 0.90 [0.71] | 0.63 | 0.90 [0.71] | 0.87 |
-| **Transfer, mean of families** | 0.93 [0.71] | 0.94 [0.73] | 0.72 | 0.95 [0.73] | 0.85 |
+| **Transfer, mean of families** | 0.93 [0.63] | 0.94 [0.66] | 0.72 | 0.95 [0.65] | 0.85 |
 | Stego (their rows: empty final reply) | 1.00 [0.86] | 1.00 [0.95] | 1.00 | 1.00 [0.94] | 1.00 |
 | Stego, hands 1-7 averaged (non-empty) | 1.00 [0.90] | 1.00 [0.97] | 1.00 | 1.00 [0.98] | 1.00 |
 
-Pseudo-coalition null (50 probes trained on control runs with a random pair labelled colluder), 97.5th percentile, Transfer mean of families: Peak 0.85, Split 0.84, Align 0.72, Asym 0.68; Stego: Peak 1.00, Split 1.00, Align 1.00, Asym 0.49.
+Pseudo-coalition null (50 probes trained on control runs with a random pair labelled colluder), 97.5th percentile, Transfer mean of families: Peak 0.72, Split 0.72, Align 0.72, Asym 0.54; Stego: Peak 1.00, Split 1.00, Align 1.00, Asym 0.49.
 
 Hyperparameter sensitivity (overall mean AUROC over Transfer and Stego cells): theirs 0.896, converged 0.897, v1_C1 0.897.
 
