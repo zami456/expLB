@@ -88,3 +88,18 @@ detectors stage1_fit.npz sha256 4574da436dbdb976c72d1072a1593cba0b5562657a6ee3f8
 gates: {"gv1_verdict_rows.md": true, "gv2_selftest.json": true, "gv2_smoke_llama.json": true, "gv2_smoke_qwen.json": true, "gv4_gv5_dryrun.json": true}
 exposure: rep001 structure and token counts (Gemma, Qwen3.8), one verdict submission, Alice's turn list for episodes 1 and 4 of Gemma rep001, label base rates (146/500 collusion, 33/50 runs, 51 Rose, 2/146 explicit agreement, 740/1000 relaxation); no Verdict score exists
 
+== POST HOC D4, THEIR RECIPE (declared before any score of these detectors)  2026-10-23 05:05:11
+posthoc_d4_recipe.py sha256 c5d89011c69e8c2320093b151b742dadc1848f716dbd8aa0494f8a1904daa893
+posthoc_d4_recipe.npz sha256 458dff38d7a37f496bbe18341b111466d02671366a1a093cfca031716ab74ca7
+score.py sha256 f7ee8395020eeb3434b902d27ca83aea89ed647846bb10fb5b42ad2e452e19fc (unchanged since freeze 2)
+posthoc_d4.npz sha256 a6d22aabb7a6908015a33dba0d2d4ecebaa8e49fe0985b217348be59a6b78b6a
+stage1_fit.npz sha256 4574da436dbdb976c72d1072a1593cba0b5562657a6ee3f8f498cc5ab338ac62
+detectors: D4 (their recipe) = their rows, end-of-turn token, layers 32-37 (per-layer top-3 extended persona PCs), balanced, StandardScaler + LR(C=25, l2, liblinear, max_iter=8), mean over layers; D4 (their recipe, L40 span) = the same classifier on the L40 content mean in D4's basis
+tests (post hoc, unadjusted): Transfer ORIG and STRIP and Verdict COMM and REFL against the band of the detector's space; ΔAUROC vs rose_exact; the band inside the 3-PC subspace descriptive
+checks: {"L40 basis is D4's": true, "rose_exact L32 refit equals stage1_fit": true, "rose_exact L33 refit equals stage1_fit": true, "rose_exact L34 refit equals stage1_fit": true, "rose_exact L35 refit equals stage1_fit": true, "rose_exact L36 refit equals stage1_fit": true, "rose_exact L37 refit equals stage1_fit": true, "rose_L40 L40 refit equals stage1_fit": true}
+thesis module persona_pcs.py sha256 1f387c012cf87d0179029a975d99346e564187ceb2a67d3cccc2250c4a474aa1
+thesis module persona_ood.py sha256 9474b17f6f969a980ef98dba5a9147c98b973f7a6dab9108745b622554bdc903
+thesis module recall_denial.py sha256 14f2c71b503d50433375d040e591af7141440388956c5a9873c0a6dda1339041
+thesis module lb_models.py sha256 1c15b2b25dcc38797072372b009445f97e2d58f3147c13bf4d68791a483a7d57
+uncommitted diff in those modules: .../deception_detection/scripts/lb_models.py             | 16 ++++++++++++---- |  1 file changed, 12 insertions(+), 4 deletions(-)
+

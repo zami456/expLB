@@ -1,0 +1,50 @@
+{
+ "pass": true,
+ "checks": {
+  "L40 basis is D4's": true,
+  "rose_exact L32 refit equals stage1_fit": true,
+  "rose_exact L33 refit equals stage1_fit": true,
+  "rose_exact L34 refit equals stage1_fit": true,
+  "rose_exact L35 refit equals stage1_fit": true,
+  "rose_exact L36 refit equals stage1_fit": true,
+  "rose_exact L37 refit equals stage1_fit": true,
+  "rose_L40 L40 refit equals stage1_fit": true
+ },
+ "training_rows": {
+  "D4 (their recipe) L32": {
+   "rows": 372,
+   "colluder": 186,
+   "domains": 14
+  },
+  "D4 (their recipe) L33": {
+   "rows": 372,
+   "colluder": 186,
+   "domains": 14
+  },
+  "D4 (their recipe) L34": {
+   "rows": 372,
+   "colluder": 186,
+   "domains": 14
+  },
+  "D4 (their recipe) L35": {
+   "rows": 372,
+   "colluder": 186,
+   "domains": 14
+  },
+  "D4 (their recipe) L36": {
+   "rows": 372,
+   "colluder": 186,
+   "domains": 14
+  },
+  "D4 (their recipe) L37": {
+   "rows": 372,
+   "colluder": 186,
+   "domains": 14
+  },
+  "D4 (their recipe, L40 span) L40": {
+   "rows": 372,
+   "colluder": 186,
+   "domains": 14
+  }
+ }
+}
