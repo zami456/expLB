@@ -1,0 +1,262 @@
+{
+ "rows": 1000,
+ "their_script_rose_label": {
+  "mean": {
+   "Held-out": {
+    "sorted_concat": 1.0,
+    "activation_alignment": 1.0,
+    "peak_suspicion": 1.0,
+    "deception_split": 1.0,
+    "asymmetry_probe": 1.0
+   },
+   "pre_decision": {
+    "sorted_concat": 0.4920389536660989,
+    "activation_alignment": 0.4475042578278528,
+    "peak_suspicion": 0.4355910738460194,
+    "deception_split": 0.4222018428752348,
+    "asymmetry_probe": 0.41607057076728254
+   },
+   "verdict_start": {
+    "sorted_concat": 0.4982488318267173,
+    "activation_alignment": 0.46529542774793664,
+    "peak_suspicion": 0.43398401676929127,
+    "deception_split": 0.4992445084938206,
+    "asymmetry_probe": 0.44424647364513736
+   },
+   "decision": {
+    "sorted_concat": 0.6127778505611599,
+    "activation_alignment": 0.6204113716756191,
+    "peak_suspicion": 0.6346652692257304,
+    "deception_split": 0.5714398008646665,
+    "asymmetry_probe": 0.6220446307699026
+   },
+   "reflection": {
+    "sorted_concat": 0.5906982837678502,
+    "activation_alignment": 0.6238962400104808,
+    "peak_suspicion": 0.36309882527621296,
+    "deception_split": 0.5456046115550898,
+    "asymmetry_probe": 0.41793091401371235
+   }
+  },
+  "sd_over_seeds_and_layers": {
+   "Held-out": {
+    "sorted_concat": 0.0,
+    "activation_alignment": 0.0,
+    "peak_suspicion": 0.0,
+    "deception_split": 0.0,
+    "asymmetry_probe": 0.0
+   },
+   "pre_decision": {
+    "sorted_concat": 0.03279389965291937,
+    "activation_alignment": 0.003019219623161332,
+    "peak_suspicion": 0.04608777401752667,
+    "deception_split": 0.0402188119564787,
+    "asymmetry_probe": 0.04888986922127755
+   },
+   "verdict_start": {
+    "sorted_concat": 0.039587507543666405,
+    "activation_alignment": 0.0027811192218703765,
+    "peak_suspicion": 0.01653071607603345,
+    "deception_split": 0.015830910240361245,
+    "asymmetry_probe": 0.012622176635095555
+   },
+   "decision": {
+    "sorted_concat": 0.04900291799318574,
+    "activation_alignment": 0.0030778418518611233,
+    "peak_suspicion": 0.029782196679775077,
+    "deception_split": 0.015291061836293678,
+    "asymmetry_probe": 0.026132379037062264
+   },
+   "reflection": {
+    "sorted_concat": 0.026540366061742246,
+    "activation_alignment": 0.005714109438227808,
+    "peak_suspicion": 0.0263954691054613,
+    "deception_split": 0.013448537014328413,
+    "asymmetry_probe": 0.023339764068809384
+   }
+  },
+  "csv": "E:\\narcbench\\verdict\\rose_run\\results\\qwen3_32b\\auroc_scores\\method_comparison_core_to_verdict_decisions.csv"
+ },
+ "their_functions_shi_label": {
+  "Held-out": {
+   "sorted_concat": 1.0,
+   "activation_alignment": 1.0,
+   "peak_suspicion": 1.0,
+   "deception_split": 1.0,
+   "asymmetry_probe": 1.0
+  },
+  "pre_decision": {
+   "sorted_concat": 0.48586796687562894,
+   "activation_alignment": 0.34698165776642675,
+   "peak_suspicion": 0.5118063617367077,
+   "deception_split": 0.47247504063153,
+   "asymmetry_probe": 0.5006501044810773
+  },
+  "verdict_start": {
+   "sorted_concat": 0.4687949849082888,
+   "activation_alignment": 0.4280589737636406,
+   "peak_suspicion": 0.4421948765575419,
+   "deception_split": 0.5083236591595077,
+   "asymmetry_probe": 0.4562456466217785
+  },
+  "decision": {
+   "sorted_concat": 0.7879459794133581,
+   "activation_alignment": 0.35116477052859685,
+   "peak_suspicion": 0.8203041560250754,
+   "deception_split": 0.34281789335190765,
+   "asymmetry_probe": 0.6288986920516987
+  },
+  "reflection": {
+   "sorted_concat": 0.5278074452441761,
+   "activation_alignment": 0.269269019425741,
+   "peak_suspicion": 0.8207220803343394,
+   "deception_split": 0.496254159894745,
+   "asymmetry_probe": 0.7450081263060135
+  }
+ },
+ "random_band_seed0": {
+  "shi": {
+   "pre_decision": {
+    "peak_suspicion": {
+     "band97.5": 0.5724036452286975,
+     "median": 0.49270180326600105
+    },
+    "deception_split": {
+     "band97.5": 0.5105089582849625,
+     "median": 0.4802995124216392
+    },
+    "asymmetry_probe": {
+     "band97.5": 0.5158048912622862,
+     "median": 0.4814565436111756
+    }
+   },
+   "verdict_start": {
+    "peak_suspicion": {
+     "band97.5": 0.5614413551582694,
+     "median": 0.49595426050615277
+    },
+    "deception_split": {
+     "band97.5": 0.524457182106648,
+     "median": 0.48793437040476745
+    },
+    "asymmetry_probe": {
+     "band97.5": 0.5302723279931892,
+     "median": 0.48726685241080414
+    }
+   },
+   "decision": {
+    "peak_suspicion": {
+     "band97.5": 0.7059213683151455,
+     "median": 0.4676747155792895
+    },
+    "deception_split": {
+     "band97.5": 0.5081949926476279,
+     "median": 0.41633580992183267
+    },
+    "asymmetry_probe": {
+     "band97.5": 0.5301951280860615,
+     "median": 0.4220880736785078
+    }
+   },
+   "reflection": {
+    "peak_suspicion": {
+     "band97.5": 0.610937330701958,
+     "median": 0.48147976162835693
+    },
+    "deception_split": {
+     "band97.5": 0.48687156566829193,
+     "median": 0.45749168021051007
+    },
+    "asymmetry_probe": {
+     "band97.5": 0.5039572208033434,
+     "median": 0.45732141475118027
+    }
+   }
+  },
+  "rose": {
+   "pre_decision": {
+    "peak_suspicion": {
+     "band97.5": 0.5630293899296912,
+     "median": 0.49689069391676494
+    },
+    "deception_split": {
+     "band97.5": 0.5313000567710381,
+     "median": 0.49345386261408797
+    },
+    "asymmetry_probe": {
+     "band97.5": 0.5337361893532468,
+     "median": 0.49450631031922787
+    }
+   },
+   "verdict_start": {
+    "peak_suspicion": {
+     "band97.5": 0.5632398794707192,
+     "median": 0.49856762304030744
+    },
+    "deception_split": {
+     "band97.5": 0.5367863225468361,
+     "median": 0.49498231363815015
+    },
+    "asymmetry_probe": {
+     "band97.5": 0.5424367876326477,
+     "median": 0.49562426306825624
+    }
+   },
+   "decision": {
+    "peak_suspicion": {
+     "band97.5": 0.6194456089785579,
+     "median": 0.5170749814402376
+    },
+    "deception_split": {
+     "band97.5": 0.5866970173370015,
+     "median": 0.5452989213502772
+    },
+    "asymmetry_probe": {
+     "band97.5": 0.5953882265601117,
+     "median": 0.5448622210576881
+    }
+   },
+   "reflection": {
+    "peak_suspicion": {
+     "band97.5": 0.6056598541421022,
+     "median": 0.5131010087776758
+    },
+    "deception_split": {
+     "band97.5": 0.5727951002227173,
+     "median": 0.528739246255295
+    },
+    "asymmetry_probe": {
+     "band97.5": 0.5869821826280625,
+     "median": 0.5317044412419756
+    }
+   }
+  }
+ },
+ "awq_vs_bf16": {
+  "L26": {
+   "score_pearson_r": 0.97780208316366,
+   "cos_min": 0.9930117130279541,
+   "cos_median": 0.9940000772476196
+  },
+  "L27": {
+   "score_pearson_r": 0.9807213657387901,
+   "cos_min": 0.9923714995384216,
+   "cos_median": 0.993476390838623
+  },
+  "L28": {
+   "score_pearson_r": 0.9790981870927397,
+   "cos_min": 0.9914398789405823,
+   "cos_median": 0.9929184913635254
+  },
+  "L29": {
+   "score_pearson_r": 0.9794534730659396,
+   "cos_min": 0.9917779564857483,
+   "cos_median": 0.9931014776229858
+  },
+  "L30": {
+   "score_pearson_r": 0.9840124981300588,
+   "cos_min": 0.991409420967102,
+   "cos_median": 0.9929109811782837
+  }
+ }
+}

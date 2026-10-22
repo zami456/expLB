@@ -1,0 +1,12 @@
+﻿2026-10-23 00:30:35  START llama (5 jobs) pid 952
+2026-10-23 00:30:35  job [read --model llama --name llama_ctx --traces 8] attempt 1
+2026-10-23 03:14:28  job [read --model llama --name llama_ctx --traces 8] exit 0
+2026-10-23 03:14:28  job [recheck --model llama --name llama_ctx] attempt 1
+2026-10-23 03:17:28  job [recheck --model llama --name llama_ctx] exit 0
+2026-10-23 03:17:28  job [read --model llama --name llama_bare_refl --traces 32] attempt 1
+2026-10-23 03:41:06  job [read --model llama --name llama_bare_refl --traces 32] exit 0
+2026-10-23 03:41:06  job [read --model llama --name llama_bare_comm --traces 32] attempt 1
+2026-10-23 04:05:55  job [read --model llama --name llama_bare_comm --traces 32] exit 0
+2026-10-23 04:05:55  job [recheck --model llama --name llama_bare_comm] attempt 1
+2026-10-23 04:07:04  job [recheck --model llama --name llama_bare_comm] exit 0
+2026-10-23 04:07:04  DONE llama
