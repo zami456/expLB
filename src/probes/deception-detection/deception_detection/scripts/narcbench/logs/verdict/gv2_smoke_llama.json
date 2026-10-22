@@ -1,0 +1,19 @@
+{
+ "model": "meta-llama/Llama-3.3-70B-Instruct",
+ "rows_file": "llama_ctx",
+ "rows": [
+  460,
+  260,
+  581
+ ],
+ "solo_repeat_min_cos": 0.9999999999999998,
+ "solo_vs_batched_min_cos": 0.9995974752773814,
+ "longest_row": {
+  "row_id": 501,
+  "tokens": 6668,
+  "seconds": 21.8,
+  "finite": true
+ },
+ "alpaca_min_cos": 0.9999817659721352,
+ "pass": true
+}

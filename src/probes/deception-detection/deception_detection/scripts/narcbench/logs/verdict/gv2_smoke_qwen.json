@@ -1,0 +1,23 @@
+{
+ "model": "Qwen/Qwen3-32B",
+ "rows_file": "qwen_reflection",
+ "rows": [
+  40221,
+  40101,
+  40842
+ ],
+ "solo_repeat_min_cos": 0.9999999999999999,
+ "solo_vs_batched_min_cos": 0.9999252507345016,
+ "longest_row": {
+  "row_id": 40300,
+  "tokens": 12964,
+  "seconds": 17.9,
+  "finite": true
+ },
+ "awq_vs_bf16_cos": {
+  "min": 0.9914095099069725,
+  "median": 0.9933642172921355,
+  "mean": 0.9933950087495584
+ },
+ "pass": true
+}

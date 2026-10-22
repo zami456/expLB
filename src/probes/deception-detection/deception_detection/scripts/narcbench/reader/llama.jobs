@@ -1,0 +1,6 @@
+# Llama-3.3-70B: the context rows (primary readouts) first, then the text-only rows; each file rechecked after it
+read --model llama --name llama_ctx --traces 8
+recheck --model llama --name llama_ctx
+read --model llama --name llama_bare_refl --traces 32
+read --model llama --name llama_bare_comm --traces 32
+recheck --model llama --name llama_bare_comm

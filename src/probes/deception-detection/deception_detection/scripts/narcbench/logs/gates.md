@@ -71,3 +71,30 @@ layer, seed 2026) and the 100 random persona splits (R9, R9+K, oriented on RepE 
   (D9+K above the random band: 0.66 vs 0.63, p 0.010); P2 (D9+K share 0.56, mixed), P3a (their probe under STRIP 0.54,
   p 0.27) and P3b (D9+K under STRIP 0.62, p 0.029 > 0.0167) not rejected. Estimation: D9+K minus their probe on the
   original transcripts -0.28 [-0.36, -0.20].
+
+## Verdict (Shi et al.'s Gemma-4-31B runs, plan of 2026-10-22): gates GV1-GV5 PASSED (2026-10-22 / 23)
+
+- GV1 rows (`gv1_verdict_rows.md`): 1,000 agent-episodes, none excluded; own messages equal the channel transcript;
+  verdict turns equal the recorded verdicts; no earlier episode had to be dropped for the Llama budget (longest Llama
+  row 6,668 tokens, median about 3.0k). Qwen rows through their extractor: longest 12,964 tokens (their renderer keeps
+  failed tool-call attempts, whole raw logs as arguments, and the tool schemas). 190 of the 1,000 stored histories
+  start after episode 1 (the harness drops the oldest episodes when Gemma's context fills): the compact context is
+  built from what the agent saw.
+- GV3 labels: 146/500 colluding episodes in 33/50 runs; collusion = both_accept; trace verdicts = episodes table
+  (as EXPERIMENTS.md). Rose's flag: 51 episodes; relaxation: 1,000 valid judgements.
+- GV2 reader (`verdict/logs/gv2_selftest.json`, `gv2_smoke_{llama,qwen}.json`, `gv2_llama_batch_diag.json`): self-test
+  on tiny Llama and Qwen3 models (remote="local"; several span groups, an empty group, absent points, padding): max
+  |session - HF forward| 5.6e-8 over 106 comparisons. NDIF: solo reads repeated, cos 1.0 for both models. Llama solo vs
+  batched min cos 0.99960 (single-token points: PRE, VERDICT_EOT, the last own-message end, layers 36-40), under the
+  0.9998 gate, while every solo re-read reproduces exactly; so every row is read alone (the reader's default) and the
+  gate is the solo repeat (decided before any score; the batched figure is recorded). Qwen solo vs batched 0.99993.
+  Longest rows read alone: Llama 6,668 tokens (22 s), Qwen 12,964 tokens (18 s), so the budgets 7,000 / 13,000 hold.
+  Llama Alpaca parity 0.99998. AWQ (their Core) vs bf16 (our reads), 20 released Qwen3 Transfer rows, layers 26-30:
+  cos median 0.9934, min 0.9914.
+- GV4 / GV5 (`verdict/logs/gv4_gv5_dryrun.json`): both arms end to end on synthetic reads and labels (no Verdict read
+  or label): the six primary tests finite (synthetic AUROCs 0.47-0.53, none rejected) with Holm; their unchanged script
+  ran on synthetic Verdict files with their released Core activations (Core held-out 1.00 for all five methods, as in
+  their Table 2); their functions with the relabelled episodes; the random band; the report rendered. A first rerun was
+  stopped by Claude Code for low memory (250-row float64 synthetic chunks, 16 GB laptop); the rehearsal now writes
+  25-row float32 chunks.
+- Tests: the Verdict unit tests (10) and the NARCBench suite pass (31 in all).

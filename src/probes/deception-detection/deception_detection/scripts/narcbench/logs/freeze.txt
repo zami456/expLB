@@ -66,3 +66,25 @@ thesis module recall_denial.py sha256 14f2c71b503d50433375d040e591af714144038895
 thesis module lb_models.py sha256 1c15b2b25dcc38797072372b009445f97e2d58f3147c13bf4d68791a483a7d57
 uncommitted diff in those modules: .../deception_detection/scripts/lb_models.py             | 16 ++++++++++++---- |  1 file changed, 12 insertions(+), 4 deletions(-)
 
+== FREEZE V  2026-10-23 00:29:45
+HF SALT-NLP/agent-collusion revision 2eba8f3771e8fbcc0f49f6cbbfd2111b939a117a; Shi code 5afb2c595aa3eff6b9b829a032f4f117b36ee54d; Rose code 237fe60739502007693b6455c6c644606ab3bcbb
+condition main__gemma-4-31b-it; Llama budget 7000; Qwen budget 13000
+code verdict_spec.py sha256 23be64acba3fc6579fcb5937b041c477c12e697d4c7aa7c8f73a3e12b83457a1
+code verdict_rows.py sha256 c8d2f338ce79617148f91922682a818edadb0bda14e06f6fac341415c2c63a06
+code verdict_score.py sha256 700b17a4cc8270ed296e797b947f8af74909c7972d43d1cf6d159a42b6217b7b
+code verdict_report.py sha256 dfef434c379547ffd167189cd2b9c5ecad01bdde29e9993266c4ad88eea7dc4f
+reader source sha256 ded96e8177f3152951f7eb29d5e073942930bacb2a5ad010cd6e98d31e009ce5
+reader deployed sha256 ded96e8177f3152951f7eb29d5e073942930bacb2a5ad010cd6e98d31e009ce5
+rows llama_ctx.jsonl sha256 384e49dbd8ce868e4366f2c769c4cf53059bbee07852d3c49cbc9ad27801292e
+rows llama_bare_comm.jsonl sha256 83ab2e74cd9e46ba57309cc41d6f8943eb8c03f1d9727c4de0a0148639c97a8a
+rows llama_bare_refl.jsonl sha256 8b65750118c09535eee7c66cf912bdf5a4d5135c537789508b01aecd85f2df94
+rows qwen_verdict.jsonl sha256 d3054b7a03b9f137456f4772d7d5cfc4f76a3cb0dc6a2bb7e490f6569291f262
+rows qwen_reflection.jsonl sha256 ef3b502f29711e28320d9fb70aa467c00ef9d1a3c3317c01f42db7d52559f0ed
+rows qwen_awq_check.jsonl sha256 25e74a3a648c06bf5bf468989b0e4b992fa886909d26c7019c7c7ddbdee5801d
+rows labels.json sha256 e321b605ea8218b1f86fb8e49d117c3f83d0280a1b616ed82f14969e057434f2
+detectors directions_llama33.npz sha256 8bca04d3e214e056ccde631d1fb6c084ea0db1847e9cd7ab4f0db8d82567bb46
+detectors posthoc_d4.npz sha256 a6d22aabb7a6908015a33dba0d2d4ecebaa8e49fe0985b217348be59a6b78b6a
+detectors stage1_fit.npz sha256 4574da436dbdb976c72d1072a1593cba0b5562657a6ee3f8f498cc5ab338ac62
+gates: {"gv1_verdict_rows.md": true, "gv2_selftest.json": true, "gv2_smoke_llama.json": true, "gv2_smoke_qwen.json": true, "gv4_gv5_dryrun.json": true}
+exposure: rep001 structure and token counts (Gemma, Qwen3.8), one verdict submission, Alice's turn list for episodes 1 and 4 of Gemma rep001, label base rates (146/500 collusion, 33/50 runs, 51 Rose, 2/146 explicit agreement, 740/1000 relaxation); no Verdict score exists
+

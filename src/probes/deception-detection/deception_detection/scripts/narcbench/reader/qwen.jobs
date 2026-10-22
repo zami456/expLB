@@ -1,0 +1,5 @@
+# Qwen3-32B: the reflection pass (their Table 1 phase) first, then the verdict pass; each file rechecked after it
+read --model qwen --name qwen_reflection --traces 8 --budget 13000
+recheck --model qwen --name qwen_reflection
+read --model qwen --name qwen_verdict --traces 8 --budget 13000
+recheck --model qwen --name qwen_verdict
