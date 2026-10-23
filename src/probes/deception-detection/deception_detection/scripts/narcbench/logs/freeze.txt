@@ -103,3 +103,20 @@ thesis module recall_denial.py sha256 14f2c71b503d50433375d040e591af714144038895
 thesis module lb_models.py sha256 1c15b2b25dcc38797072372b009445f97e2d58f3147c13bf4d68791a483a7d57
 uncommitted diff in those modules: .../deception_detection/scripts/lb_models.py             | 16 ++++++++++++---- |  1 file changed, 12 insertions(+), 4 deletions(-)
 
+== POST HOC QWEN3-32B D4 PIPELINE (declared before any projected score)  2026-10-23 13:00:24
+qwen_d4_pipeline.py sha256 4b9278123fc4d4d24c7747f7a6d5696a0270af5388b8170d1690ecaa9d9e339b
+qwen3_d4_basis.npz sha256 5bd8ab972dd62daf07f3af2bfedf2a846212b0b39daecaf6b74cb96d6226d385
+bank cells (vectors_pq_s3_q30) manifest sha256 82af4cd0465d730e73a6b8786301b87964e9b2acedd65edbd699b29f7936e438
+bank variant s3; s3 ineligible roles: []
+chain copy E:\narcbench\persona\Qwen3-32B\code differs from E:\qbank\code_src only in ['run_chain.ps1']; run_chain.ps1 diff sha256 e6980b242a447dbdd3dbd98529eb333ba1f63d96dfad588f04b82e0b8428b36e
+their code 237fe60739502007693b6455c6c644606ab3bcbb; verdict_score.py sha256 700b17a4cc8270ed296e797b947f8af74909c7972d43d1cf6d159a42b6217b7b (freeze V)
+GB5 identity check: {
+ "pass": true,
+ "summary_identical": true,
+ "raw_csv_identical": true,
+ "summary_sha256": "85cdaccb11366e0bc2190697fb6175b67b19fd9177f25ed098ac762e1548bffb"
+}
+design: project every Core and Verdict activation onto the per-layer top-3 extended persona PCs (uncentred), their script unchanged (Rose's label, 10 seeds, layers 26-30); their functions with Shi's label; null = 100 random orthonormal 3-dim subspaces per layer (rng [RANDOM_SEED, 60000+i, L]), their compute_all_results at seed 0 with Core CV skipped, band = 97.5th percentile, p = (1 + #null >= observed) / 101; descriptive, no Holm
+
+POST-FREEZE EDIT (qwen3 D4 pipeline) 2026-10-23 13:17:22: report() also lists every phase's seed-0 value against its random 3-dim band (formatting only; written after `run`, no number recomputed). qwen_d4_pipeline.py sha256 now 8832aeed3d0b043f03de86dc4149ffacbed1baed71364ed46d96fc93937a0304
+

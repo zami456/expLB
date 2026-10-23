@@ -98,3 +98,28 @@ layer, seed 2026) and the 100 random persona splits (R9, R9+K, oriented on RepE 
   stopped by Claude Code for low memory (250-row float64 synthetic chunks, 16 GB laptop); the rehearsal now writes
   25-row float32 chunks.
 - Tests: the Verdict unit tests (10) and the NARCBench suite pass (31 in all).
+
+## Qwen3-32B persona bank for D4 inside their pipeline (post hoc, 2026-10-23)
+
+**GB1 smoke (06:02-06:07) PASSED.** Chain copy `E:\narcbench\persona\Qwen3-32B\code` = `E:\qbank\code_src` plus the
+`qwen3` tag in run_chain.ps1 (Qwen/Qwen3-32B, thinking off). One role (pc_handler), instruction 0, the 30 shared
+questions: 30 replies (median 313 words, none with a think tag); judge Llama-3.1-70B 27 x score 3, 3 x score 2;
+per-question store at layers 26-30: 27 cells + 3 empty (the score-2 questions), each (5, 5120), finite, n = kept
+count. Spans (the pipeline's build_items + ConversationEncoder, Qwen3-32B tokenizer): 30/30 decode exactly to the
+reply, no <think> token inside, each ends at <|im_end|>; the empty think block sits in the context before the span,
+as the model saw it when generating.
+
+**GB5 identity check PASSED (2026-10-23 ~06:25).** `qwen_d4_pipeline.py identity`: `prepare` (their clone, their Core
+activations, our four Verdict phase files, each layer_L replaced by X @ B.T) with the 5120 x 5120 identity as B, then
+their script unchanged: summary CSV and raw CSV byte-identical to the unprojected run in `E:\narcbench\verdict\rose_run`
+(summary sha256 85cdaccb...). The projection path changes nothing but the basis.
+
+**Bank chain DONE 12:55.** 5,400 replies (attempts 2-3 refilled 9 dropped for a think tag), 5,250 judged (default is
+not judged), s3 per-question store 1,080/1,080 cells at layers 26-30.
+
+**GB4 bank report (`qwen_d4_pipeline.py bank`, E:\narcbench\logs\gb4_qwen3_bank.json).** Rule outcome: s3 (no role
+under 20 kept replies; fewest pc_deniable_expert 24, then pc_enabler 50); the s23 store was not needed. Judge share
+fully in role by group: deception .62, honesty .78, sycophancy .69, anti-sycophancy .82, knowledge denial .44, sincere
+ignorance .48, plain assertion .61 (Qwen2.5 was .28 overall). Top-3 PCs explain .41-.45 / .18-.20 / .09-.10 at L26-30;
+the extended axis lies ~97% inside the subspace (sum of squared PC cosines ~.94). AWQ (their Core) vs bf16 after the
+projection, 20 Transfer rows: PC Pearson r .97-.99, cosine of the 3-dim vectors >= .9999. GB4 PASSED.

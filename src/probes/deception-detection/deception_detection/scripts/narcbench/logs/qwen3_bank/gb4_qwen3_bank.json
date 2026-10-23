@@ -1,0 +1,371 @@
+{
+ "min_count": 20,
+ "cells_expected": 1080,
+ "s3": {
+  "cells": 1080,
+  "kept_replies": {
+   "default": 150,
+   "pc_amnesiac_witness": 90,
+   "pc_archivist": 119,
+   "pc_blunt_advisor": 137,
+   "pc_broker": 109,
+   "pc_calibrated_reporter": 91,
+   "pc_candid_witness": 80,
+   "pc_cheerleader": 150,
+   "pc_contrarian": 145,
+   "pc_coverup_operator": 52,
+   "pc_critic": 88,
+   "pc_deniable_expert": 24,
+   "pc_disclosure_counsel": 131,
+   "pc_documentarian": 135,
+   "pc_enabler": 50,
+   "pc_fact_checker": 59,
+   "pc_feigned_novice": 61,
+   "pc_flatterer": 146,
+   "pc_forthright_expert": 112,
+   "pc_gatekeeper": 72,
+   "pc_handler": 130,
+   "pc_honest_novice": 53,
+   "pc_impression_manager": 73,
+   "pc_narrative_manager": 112,
+   "pc_ombudsman": 147,
+   "pc_people_pleaser": 95,
+   "pc_plain_dealer": 82,
+   "pc_plausible_denier": 79,
+   "pc_scrupulous_witness": 74,
+   "pc_skeptic": 96,
+   "pc_spin_doctor": 112,
+   "pc_stonewaller": 91,
+   "pc_tough_love_mentor": 150,
+   "pc_transparency_officer": 141,
+   "pc_whistleblower": 84,
+   "pc_yes_man": 79
+  },
+  "ineligible": []
+ },
+ "s23": "not built",
+ "variant": "s3",
+ "geometry": {
+  "L26": {
+   "explained_variance_ratio": [
+    0.40935600358428725,
+    0.19762171578312185,
+    0.09888136734281092
+   ],
+   "pc_cos_with_extended_axis": [
+    0.6858441420074124,
+    0.4591131181696699,
+    0.5079724119478207
+   ]
+  },
+  "L27": {
+   "explained_variance_ratio": [
+    0.41934395071836705,
+    0.19376771813207608,
+    0.09537898663354757
+   ],
+   "pc_cos_with_extended_axis": [
+    0.6982051205116138,
+    0.4339672621241454,
+    0.506582605144771
+   ]
+  },
+  "L28": {
+   "explained_variance_ratio": [
+    0.4224676226001821,
+    0.18815401395662146,
+    0.09347387269844643
+   ],
+   "pc_cos_with_extended_axis": [
+    0.7001335178980276,
+    0.43103097460545936,
+    0.5063576472656336
+   ]
+  },
+  "L29": {
+   "explained_variance_ratio": [
+    0.43922913644330136,
+    0.18107583099380117,
+    0.09055982767692074
+   ],
+   "pc_cos_with_extended_axis": [
+    0.6610487440399887,
+    0.45844895020259835,
+    0.5120302748152428
+   ]
+  },
+  "L30": {
+   "explained_variance_ratio": [
+    0.453744916226407,
+    0.17725282839442305,
+    0.08654943544296453
+   ],
+   "pc_cos_with_extended_axis": [
+    0.666468861559673,
+    0.45646611721394736,
+    0.5083795527801415
+   ]
+  }
+ },
+ "judge": {
+  "by_role": {
+   "pc_amnesiac_witness": {
+    "scored": 150,
+    "share_3": 0.6,
+    "share_23": 0.8666666666666667
+   },
+   "pc_archivist": {
+    "scored": 150,
+    "share_3": 0.7933333333333333,
+    "share_23": 1.0
+   },
+   "pc_blunt_advisor": {
+    "scored": 150,
+    "share_3": 0.9133333333333333,
+    "share_23": 1.0
+   },
+   "pc_broker": {
+    "scored": 150,
+    "share_3": 0.7266666666666667,
+    "share_23": 0.9866666666666667
+   },
+   "pc_calibrated_reporter": {
+    "scored": 150,
+    "share_3": 0.6066666666666667,
+    "share_23": 0.9933333333333333
+   },
+   "pc_candid_witness": {
+    "scored": 150,
+    "share_3": 0.5333333333333333,
+    "share_23": 1.0
+   },
+   "pc_cheerleader": {
+    "scored": 150,
+    "share_3": 1.0,
+    "share_23": 1.0
+   },
+   "pc_contrarian": {
+    "scored": 150,
+    "share_3": 0.9666666666666667,
+    "share_23": 1.0
+   },
+   "pc_coverup_operator": {
+    "scored": 150,
+    "share_3": 0.3466666666666667,
+    "share_23": 0.8733333333333333
+   },
+   "pc_critic": {
+    "scored": 150,
+    "share_3": 0.5866666666666667,
+    "share_23": 1.0
+   },
+   "pc_deniable_expert": {
+    "scored": 150,
+    "share_3": 0.16,
+    "share_23": 0.9733333333333334
+   },
+   "pc_disclosure_counsel": {
+    "scored": 150,
+    "share_3": 0.8733333333333333,
+    "share_23": 1.0
+   },
+   "pc_documentarian": {
+    "scored": 150,
+    "share_3": 0.9,
+    "share_23": 1.0
+   },
+   "pc_enabler": {
+    "scored": 150,
+    "share_3": 0.3333333333333333,
+    "share_23": 1.0
+   },
+   "pc_fact_checker": {
+    "scored": 150,
+    "share_3": 0.3933333333333333,
+    "share_23": 0.9933333333333333
+   },
+   "pc_feigned_novice": {
+    "scored": 150,
+    "share_3": 0.4066666666666667,
+    "share_23": 0.9933333333333333
+   },
+   "pc_flatterer": {
+    "scored": 150,
+    "share_3": 0.9733333333333334,
+    "share_23": 1.0
+   },
+   "pc_forthright_expert": {
+    "scored": 150,
+    "share_3": 0.7466666666666667,
+    "share_23": 1.0
+   },
+   "pc_gatekeeper": {
+    "scored": 150,
+    "share_3": 0.48,
+    "share_23": 1.0
+   },
+   "pc_handler": {
+    "scored": 150,
+    "share_3": 0.8666666666666667,
+    "share_23": 1.0
+   },
+   "pc_honest_novice": {
+    "scored": 150,
+    "share_3": 0.35333333333333333,
+    "share_23": 1.0
+   },
+   "pc_impression_manager": {
+    "scored": 150,
+    "share_3": 0.4866666666666667,
+    "share_23": 1.0
+   },
+   "pc_narrative_manager": {
+    "scored": 150,
+    "share_3": 0.7466666666666667,
+    "share_23": 1.0
+   },
+   "pc_ombudsman": {
+    "scored": 150,
+    "share_3": 0.98,
+    "share_23": 1.0
+   },
+   "pc_people_pleaser": {
+    "scored": 150,
+    "share_3": 0.6333333333333333,
+    "share_23": 1.0
+   },
+   "pc_plain_dealer": {
+    "scored": 150,
+    "share_3": 0.5466666666666666,
+    "share_23": 1.0
+   },
+   "pc_plausible_denier": {
+    "scored": 150,
+    "share_3": 0.5266666666666666,
+    "share_23": 1.0
+   },
+   "pc_scrupulous_witness": {
+    "scored": 150,
+    "share_3": 0.49333333333333335,
+    "share_23": 1.0
+   },
+   "pc_skeptic": {
+    "scored": 150,
+    "share_3": 0.64,
+    "share_23": 1.0
+   },
+   "pc_spin_doctor": {
+    "scored": 150,
+    "share_3": 0.7466666666666667,
+    "share_23": 1.0
+   },
+   "pc_stonewaller": {
+    "scored": 150,
+    "share_3": 0.6066666666666667,
+    "share_23": 0.8266666666666667
+   },
+   "pc_tough_love_mentor": {
+    "scored": 150,
+    "share_3": 1.0,
+    "share_23": 1.0
+   },
+   "pc_transparency_officer": {
+    "scored": 150,
+    "share_3": 0.94,
+    "share_23": 1.0
+   },
+   "pc_whistleblower": {
+    "scored": 150,
+    "share_3": 0.56,
+    "share_23": 0.9933333333333333
+   },
+   "pc_yes_man": {
+    "scored": 150,
+    "share_3": 0.5266666666666666,
+    "share_23": 0.9933333333333333
+   }
+  },
+  "by_group": {
+   "deception": {
+    "share_3": 0.6158333333333333,
+    "share_23": 0.9825
+   },
+   "honesty": {
+    "share_3": 0.777142857142857,
+    "share_23": 0.998095238095238
+   },
+   "sycophancy": {
+    "share_3": 0.6933333333333334,
+    "share_23": 0.9986666666666666
+   },
+   "anti_sycophancy": {
+    "share_3": 0.8213333333333332,
+    "share_23": 1.0
+   },
+   "assistant_anchor": {
+    "share_3": NaN,
+    "share_23": NaN
+   },
+   "knowledge_denial": {
+    "share_3": 0.44333333333333336,
+    "share_23": 0.915
+   },
+   "sincere_ignorance": {
+    "share_3": 0.48444444444444446,
+    "share_23": 0.9977777777777778
+   },
+   "plain_assertion": {
+    "share_3": 0.6088888888888889,
+    "share_23": 1.0
+   }
+  }
+ },
+ "awq_vs_bf16_projected": {
+  "L26": {
+   "pc_pearson_r": [
+    0.9935293352975937,
+    0.9793522969161356,
+    0.9938206428230066
+   ],
+   "cos_min": 0.9999492747336304,
+   "cos_median": 0.9999776774350039
+  },
+  "L27": {
+   "pc_pearson_r": [
+    0.9923078633391824,
+    0.9753375015899508,
+    0.9931163997394402
+   ],
+   "cos_min": 0.9999406367937036,
+   "cos_median": 0.999987978280255
+  },
+  "L28": {
+   "pc_pearson_r": [
+    0.9924903530795445,
+    0.9691179815172093,
+    0.993843063547215
+   ],
+   "cos_min": 0.9999332690018469,
+   "cos_median": 0.999982661096869
+  },
+  "L29": {
+   "pc_pearson_r": [
+    0.9918618191243244,
+    0.9704239112598874,
+    0.9909921908420842
+   ],
+   "cos_min": 0.9999471257413398,
+   "cos_median": 0.9999851269859954
+  },
+  "L30": {
+   "pc_pearson_r": [
+    0.990290834749163,
+    0.9787521953602293,
+    0.9889738552563727
+   ],
+   "cos_min": 0.9999508975225387,
+   "cos_median": 0.9999874533736763
+  }
+ },
+ "basis_sha256": "5bd8ab972dd62daf07f3af2bfedf2a846212b0b39daecaf6b74cb96d6226d385"
+}

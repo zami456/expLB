@@ -1,0 +1,31 @@
+--- /e/qbank/code_src/run_chain.ps1	2026-10-20 04:41:12.038852900 +0600
++++ /e/narcbench/persona/Qwen3-32B/code/run_chain.ps1	2026-10-23 06:01:32.152300700 +0600
+@@ -25,7 +25,7 @@
+   Scheduled Task only (register_task.ps1): Start-Process over SSH dies with the session.
+ #>
+ param(
+-    [ValidateSet("qwen", "mistral2501", "mistral31", "gemma3", "qwen35", "llama33")][string]$Tag = "qwen",
++    [ValidateSet("qwen", "mistral2501", "mistral31", "gemma3", "qwen35", "llama33", "qwen3")][string]$Tag = "qwen",
+     [int]$Attempts = 6,
+     # aletheia 2026-10-15: NDIF requests per stage (the owner's limit is 3 per model)
+     [int]$Shards = 3,
+@@ -109,6 +109,11 @@
+     # bank's anchor prompt "You are Llama."; eval pooling is never needed (the thesis pooled activations exist).
+     "llama33"     = @{ Model = "meta-llama/Llama-3.3-70B-Instruct"; Folder = "Llama-3.3-70B-Instruct"
+                        Short = "Llama"; Csv = "none"; ReportLayer = "40"; Datasets = @() }
++    # 2026-10-23 (narcbench): Qwen3-32B, the reader of Rose et al.'s Table 1 (their probe layers 26-30). A text causal
++    # LM (64 x 5120), so logits_to_keep stays on; a thinking model, so replies are generated with thinking off as for
++    # qwen35. No Liars' Bench rows of its own. ReportLayer 32 = half depth.
++    "qwen3"       = @{ Model = "Qwen/Qwen3-32B"; Folder = "Qwen3-32B"
++                       Short = "Qwen"; Csv = "none"; ReportLayer = "32"; Datasets = @() }
+ }[$Tag]
+ 
+ $Judge = "meta-llama/Llama-3.1-70B-Instruct"
+@@ -128,6 +133,7 @@
+ $env:PYTHONIOENCODING  = "utf8"
+ $env:XMODEL_SHORT_NAME = $cfg.Short
+ if ($Tag -eq "qwen35") { $env:XMODEL_ENABLE_THINKING = "0"; $env:XMODEL_LOGITS_TO_KEEP = "0" }
++if ($Tag -eq "qwen3") { $env:XMODEL_ENABLE_THINKING = "0" }
+ if (-not $env:HF_HOME) { $env:HF_HOME = "E:\hf_cache" }
+ # aletheia 2026-10-15: the keys come from the project's .env (never printed); the copy has no .env of its own
+ foreach ($k in @("NDIF_API_KEY", "HF_TOKEN")) {

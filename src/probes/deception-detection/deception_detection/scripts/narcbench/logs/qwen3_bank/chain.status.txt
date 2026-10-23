@@ -1,0 +1,18 @@
+﻿2026-10-23 06:08:27  START tag=qwen3 model=Qwen/Qwen3-32B judge=meta-llama/Llama-3.1-70B-Instruct root=E:\narcbench\persona\Qwen3-32B persona=E:\narcbench\persona\Qwen3-32B\persona py=E:\aletheia\venv08\Scripts\python.exe skipEval=True floor=40 vecSuffix=_q30 nQuestions=30 minCount=20 banks=none perQuestion=True pqLayers=26,27,28,29,30 pqBanks=s3
+2026-10-23 06:08:27  inputs: 36 persona files, 30 questions in E:\narcbench\persona\Qwen3-32B\code\kd\questions\kd_questions_shared.jsonl (expect 36 / 30)
+2026-10-23 06:08:27  questions sha256 1A5F7709E778669BE724475E146679B9D45E0144ED0485AC436A6E931868FFB7
+2026-10-23 06:08:35  generate attempt 1 (have 0 / 5400)
+2026-10-23 10:37:06  generate exits: 0,0
+2026-10-23 10:37:07  generate attempt 2 (have 5393 / 5400)
+2026-10-23 10:40:40  generate exits: 0,0
+2026-10-23 10:40:41  generate attempt 3 (have 5398 / 5400)
+2026-10-23 10:42:43  generate exits: 0,0
+2026-10-23 10:42:47  generate: 5400 rollouts in 36 role files
+2026-10-23 10:42:47  eval pooling SKIPPED (-SkipEval): persona vectors only
+2026-10-23 10:42:48  judge+eval attempt 1 (scored 0; judge=True eval=False)
+2026-10-23 11:22:53  judge+eval exits: 0,0
+2026-10-23 11:22:57  judge: 5250 scored
+2026-10-23 11:22:57  vectors_pq_s3_q30 attempt 1 (have 0 / 1080 cells; 1 shard(s), 8 traces/session)
+2026-10-23 12:55:12  vectors_pq_s3_q30 exits: 0
+2026-10-23 12:55:13  vectors_pq_s3_q30: 1080 cells (1080 expected; keep 3; layers 26,27,28,29,30)
+DONE 2026-10-23 12:55:15
