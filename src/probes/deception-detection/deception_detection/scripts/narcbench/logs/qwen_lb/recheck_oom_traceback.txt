@@ -1,0 +1,17 @@
+Traceback (most recent call last):
+  File "E:\narcbench\verdict\reader\verdict_read.py", line 594, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "E:\narcbench\verdict\reader\verdict_read.py", line 590, in main
+    return {"selftest": cmd_selftest, "smoke": cmd_smoke, "read": cmd_read, "recheck": cmd_recheck}[args.cmd](args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\narcbench\verdict\reader\verdict_read.py", line 480, in cmd_recheck
+    saved.update({int(r): (z["content"][i], z["points"][i]) for i, r in enumerate(z["rows"])})
+                                            ~^^^^^^^^^^
+  File "E:\aletheia\venv08\Lib\site-packages\numpy\lib\npyio.py", line 256, in __getitem__
+    return format.read_array(bytes,
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\aletheia\venv08\Lib\site-packages\numpy\lib\format.py", line 822, in read_array
+    array = numpy.ndarray(count, dtype=dtype)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+numpy.core._exceptions._ArrayMemoryError: Unable to allocate 21.1 MiB for an array with shape (5529600,) and data type float32

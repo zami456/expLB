@@ -120,3 +120,20 @@ design: project every Core and Verdict activation onto the per-layer top-3 exten
 
 POST-FREEZE EDIT (qwen3 D4 pipeline) 2026-10-23 13:17:22: report() also lists every phase's seed-0 value against its random 3-dim band (formatting only; written after `run`, no number recomputed). qwen_d4_pipeline.py sha256 now 8832aeed3d0b043f03de86dc4149ffacbed1baed71364ed46d96fc93937a0304
 
+== POST HOC QWEN3-32B D4 PIPELINE, LIARS' BENCH LABELS (declared before any Liars' Bench read or score)  2026-10-23 14:22:11
+qwen_lb_rows.py sha256 15df2e145ff868572ff478341d144edab0bd4fc63d1fe886cda3e90b19da99c4
+qwen_lb_five.jsonl sha256 bf03a1c2ebb5cc398dc093c4da1ee094e88b5c0cc8816090173e41d0e8680ca4
+qwen_lb_five_meta.json sha256 328e266b6789ef1e55909d8892c4f073bcf690ba8ed359a8605d57e9038b25bb
+qwen3_d4_basis.npz sha256 5bd8ab972dd62daf07f3af2bfedf2a846212b0b39daecaf6b74cb96d6226d385
+reader: reader/verdict_read.py unchanged (deployed copy, freeze V), --model qwen --batched, points THEIRS, REPLY_LAST at layers [26, 27, 28, 29, 30]
+design: the direction per layer and seed = their train_deception_probe, unchanged, on the projected Liars' Bench rows (HONEST/DECEPTIVE only; meta makes every row a public discussion row of a collusion run, deceptive = colluder; rows in one seeded random order, so its balancing truncates at random, not by set), at point THEIRS; it replaces their Core-trained direction everywhere in their compute_all_results (their module's train_deception_probe patched; Core CV folds get the same direction); Asymmetry and Sorted Concat classifiers still fit on Core runs, Activation Alignment uses no direction; Rose's label (Table 1) and Shi's; 10 seeds, mean +- their SE; basis = qwen3_d4_basis.npz (declared for qwen_d4_pipeline); null = 100 random orthonormal 3-dim subspaces per layer (qwen_d4_pipeline.random_subspace), Liars' Bench rows projected the same way and the direction refitted in each, seed 0, Core CV skipped; dev check on Liars' Bench only: leave-one-set-out AUROC of the projected direction (seed 0, layer mean); REPLY_LAST reported as reference; descriptive, no Holm
+
+== POST HOC LIARS' BENCH-LABEL D4 ANALYSIS (declared before any score)  2026-10-23 14:25:32
+qwen_d4_lb.py sha256 36cc64f4ddccb1422f6d31eea7091be5629ae2c0bb6a534538b0f7839b27aa8b
+implements the design declared with the Liars' Bench rows (qwen_lb_rows.py); their train_deception_probe on the projected Liars' Bench rows (order rng [2026, 70000]), patched into their module; their main for Rose's label, compute_all_results x 10 seeds for Shi's; null and dev check as declared
+
+== NOTE: qwen_lb_five recheck  2026-10-23 17:56:09
+the read finished 16:18:39 (11,052 rows, exit 0); verdict_read.py recheck failed 7x out of memory loading the saved files (it takes z["points"][i] row by row, each access reading the whole npz member again); chain stopped by hand 17:55
+recheck_eager.py sha256 41fa3320b400406ef6f9ff21d284a088b21a7843611618ffe04c3f82014d6144
+runs verdict_read.py (sha256 ded96e8177f3152951f7eb29d5e073942930bacb2a5ad010cd6e98d31e009ce5, = freeze V) cmd_recheck unchanged, with np.load returning each .npz's arrays read once; same rows read again, same comparison and threshold; no score involved
+

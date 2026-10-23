@@ -123,3 +123,20 @@ fully in role by group: deception .62, honesty .78, sycophancy .69, anti-sycopha
 ignorance .48, plain assertion .61 (Qwen2.5 was .28 overall). Top-3 PCs explain .41-.45 / .18-.20 / .09-.10 at L26-30;
 the extended axis lies ~97% inside the subspace (sum of squared PC cosines ~.94). AWQ (their Core) vs bf16 after the
 projection, 20 Transfer rows: PC Pearson r .97-.99, cosine of the 3-dim vectors >= .9999. GB4 PASSED.
+
+## Liars' Bench rows read by Qwen3-32B for the Liars' Bench-label D4 pipeline (post hoc, 2026-10-23)
+
+**Read DONE 16:18:39.** `run_verdict.ps1 -Chain qwen_lb` (launched 14:22): `qwen_lb_five` (11,052 rows = the thesis's
+pooled_L40 rows of CG, HP-C, HP-KR, IT, ID, checked label by label; sha256 bf03a1c2...) read by the frozen reader
+(--model qwen --batched, budget 6000), points THEIRS and REPLY_LAST at layers 26-30; exit 0, 0 rows left.
+
+**Recheck PASSED 17:59 (min cos 0.9999296 >= 0.9998).** The chain's recheck job failed 7 times out of memory before any
+NDIF call: `cmd_recheck` takes `z["points"][i]` row by row and an NpzFile reads the whole member again on each access,
+so a batched file of n rows (228-637 here) holds n copies. Chain stopped by hand 17:55; `recheck_eager.py` (declared
+in freeze.txt 17:56) runs the same `cmd_recheck` of the unchanged reader (sha256 ded96e81..., = freeze V) with each
+.npz read once: rows 100000 and 100001 read again one per trace, compared with the batched reads.
+
+**Analysis DONE 18:13 (post hoc, declared 14:25).** `run_qwen_d4_lb.ps1` (WMI, launched 18:00): `qwen_d4_lb run` then
+`report`, both exit 0. Check: the null's seed-0 persona values equal their main's seed-0 rows (True). Report
+`results/narcbench/qwen_d4_lb.md` (sha256 45546d71...) rebuilds byte-identically from `qwen_d4_lb.json`
+(sha256 7f6fa868...). Tests: test_qwen_d4_lb (3) and test_qwen_d4_pipeline (3) pass.

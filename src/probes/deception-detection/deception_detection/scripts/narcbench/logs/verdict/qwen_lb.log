@@ -1,0 +1,19 @@
+﻿2026-10-23 14:22:15  START qwen_lb (2 jobs) pid 5020
+2026-10-23 14:22:15  job [read --model qwen --name qwen_lb_five --traces 8 --budget 6000 --batched] attempt 1
+2026-10-23 16:18:41  job [read --model qwen --name qwen_lb_five --traces 8 --budget 6000 --batched] exit 0
+2026-10-23 16:18:41  job [recheck --model qwen --name qwen_lb_five] attempt 1
+2026-10-23 16:19:29  job [recheck --model qwen --name qwen_lb_five] exit 1
+2026-10-23 16:34:29  job [recheck --model qwen --name qwen_lb_five] attempt 2
+2026-10-23 16:35:10  job [recheck --model qwen --name qwen_lb_five] exit 1
+2026-10-23 16:50:10  job [recheck --model qwen --name qwen_lb_five] attempt 3
+2026-10-23 16:50:47  job [recheck --model qwen --name qwen_lb_five] exit 1
+2026-10-23 17:05:47  job [recheck --model qwen --name qwen_lb_five] attempt 4
+2026-10-23 17:06:26  job [recheck --model qwen --name qwen_lb_five] exit 1
+2026-10-23 17:21:26  job [recheck --model qwen --name qwen_lb_five] attempt 5
+2026-10-23 17:22:10  job [recheck --model qwen --name qwen_lb_five] exit 1
+2026-10-23 17:37:10  job [recheck --model qwen --name qwen_lb_five] attempt 6
+2026-10-23 17:37:43  job [recheck --model qwen --name qwen_lb_five] exit 1
+2026-10-23 17:52:43  job [recheck --model qwen --name qwen_lb_five] attempt 7
+2026-10-23 17:53:18  job [recheck --model qwen --name qwen_lb_five] exit 1
+2026-10-23 17:55:21  STOPPED by hand: job [recheck --model qwen --name qwen_lb_five] failed 7x for memory (cmd_recheck re-reads each npz member per row); read complete; recheck rerun with files loaded once (recheck_eager.py)
+2026-10-23 17:59:38  recheck PASS via recheck_eager.py (rows 100000, 100001; min cos 0.9999296)

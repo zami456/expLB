@@ -1,0 +1,3 @@
+# Qwen3-32B: the thesis's five Liars' Bench sets (Llama-written), for the LB-label D4 pipeline (post hoc, 2026-10-23)
+read --model qwen --name qwen_lb_five --traces 8 --budget 6000 --batched
+recheck --model qwen --name qwen_lb_five
