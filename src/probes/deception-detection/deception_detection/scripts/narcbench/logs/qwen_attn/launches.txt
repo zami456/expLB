@@ -1,0 +1,8 @@
+﻿2026-10-23 18:00:51  WMI launch qwen_d4_lb run+report rc=0 pid=19092: powershell.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "E:\narcbench\verdict\run_qwen_d4_lb.ps1"
+2026-10-23 21:46:50  WMI launch qwen_d4_ksweep run+report rc=0 pid=5096: powershell.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "E:\narcbench\verdict\run_qwen_d4_ksweep.ps1"
+2026-10-24 01:58:50  WMI launch qwen_attn_smoke rc=0 pid=22092: powershell.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "E:\narcbench\verdict\reader\run_seq.ps1" -Chain qwen_attn_smoke
+2026-10-24 02:11:57  WMI launch qwen_attn_smoke (114 dims) rc=0 pid=6424: powershell.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "E:\narcbench\verdict\reader\run_seq.ps1" -Chain qwen_attn_smoke
+2026-10-24 02:21:11  WMI launch qwen_attn_smoke (3 sent + 300 server nulls) rc=0 pid=9928: powershell.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "E:\narcbench\verdict\reader\run_seq.ps1" -Chain qwen_attn_smoke
+2026-10-24 02:23:47  WMI launch qwen_attn reads rc=0 pid=23196: powershell.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "E:\narcbench\verdict\reader\run_seq.ps1" -Chain qwen_attn
+2026-10-24 02:47:33  WMI launch qwen_d4_attn (waits for the reads) rc=0 pid=11996: powershell.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "E:\narcbench\verdict\run_qwen_d4_attn.ps1"
+2026-10-24 14:05:07  WMI launch qwen_d4_attn null_only+report rc=0 pid=3564: powershell.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "E:\narcbench\verdict\run_qwen_d4_attn_null.ps1"

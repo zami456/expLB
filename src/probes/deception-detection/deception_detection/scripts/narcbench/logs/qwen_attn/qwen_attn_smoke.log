@@ -1,0 +1,7 @@
+﻿2026-10-24 01:58:52  START qwen_attn_smoke (1 jobs) pid 22092
+2026-10-24 01:58:52  job [smoke --n 2] attempt 1
+2026-10-24 02:17:24  STOPPED by hand: request refused at 24+30x3 = 114 basis rows too (HTTP 400, second launch 02:11:57, whose log lines were lost to a file lock held by a watcher); diagnosing
+2026-10-24 02:21:13  START qwen_attn_smoke (1 jobs) pid 9928
+2026-10-24 02:21:13  job [smoke --n 2] attempt 1
+2026-10-24 02:22:48  job [smoke --n 2] exit 0
+2026-10-24 02:22:49  DONE qwen_attn_smoke

@@ -1,0 +1,8 @@
+﻿# Attention probe (post hoc, 2026-10-24): span reads projected on NDIF (3 persona + 300 server-built null coords);
+# Core first (the probe trains on it), then reflection (Table 1's phase), then the verdict pass; each rechecked
+read --name qwen_attn_core --traces 8 --budget 6000 --batched
+recheck --name qwen_attn_core
+read --name qwen_attn_refl --traces 8 --budget 13000
+recheck --name qwen_attn_refl
+read --name qwen_attn_verdict --traces 8 --budget 13000
+recheck --name qwen_attn_verdict

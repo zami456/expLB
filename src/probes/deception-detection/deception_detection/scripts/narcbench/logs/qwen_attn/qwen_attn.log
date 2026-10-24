@@ -1,0 +1,14 @@
+﻿2026-10-24 02:23:49  START qwen_attn (6 jobs) pid 23196
+2026-10-24 02:23:49  job [read --name qwen_attn_core --traces 8 --budget 6000 --batched] attempt 1
+2026-10-24 02:53:49  job [read --name qwen_attn_core --traces 8 --budget 6000 --batched] exit 0
+2026-10-24 02:53:49  job [recheck --name qwen_attn_core] attempt 1
+2026-10-24 02:54:06  job [recheck --name qwen_attn_core] exit 0
+2026-10-24 02:54:06  job [read --name qwen_attn_refl --traces 8 --budget 13000] attempt 1
+2026-10-24 04:47:06  job [read --name qwen_attn_refl --traces 8 --budget 13000] exit 0
+2026-10-24 04:47:06  job [recheck --name qwen_attn_refl] attempt 1
+2026-10-24 04:48:05  job [recheck --name qwen_attn_refl] exit 0
+2026-10-24 04:48:05  job [read --name qwen_attn_verdict --traces 8 --budget 13000] attempt 1
+2026-10-24 06:29:16  job [read --name qwen_attn_verdict --traces 8 --budget 13000] exit 0
+2026-10-24 06:29:16  job [recheck --name qwen_attn_verdict] attempt 1
+2026-10-24 06:29:49  job [recheck --name qwen_attn_verdict] exit 0
+2026-10-24 06:29:49  DONE qwen_attn

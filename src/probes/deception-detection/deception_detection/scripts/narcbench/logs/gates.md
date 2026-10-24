@@ -140,3 +140,37 @@ in freeze.txt 17:56) runs the same `cmd_recheck` of the unchanged reader (sha256
 `report`, both exit 0. Check: the null's seed-0 persona values equal their main's seed-0 rows (True). Report
 `results/narcbench/qwen_d4_lb.md` (sha256 45546d71...) rebuilds byte-identically from `qwen_d4_lb.json`
 (sha256 7f6fa868...). Tests: test_qwen_d4_lb (3) and test_qwen_d4_pipeline (3) pass.
+
+## Attention probe on persona-projected tokens (post hoc, 2026-10-24)
+
+**Rows (01:52) and declaration (01:58).** `qwen_attn_rows.py build`: Core 744 public discussion rows (their released
+Qwen3 Core set; text = the released transcripts, since their Qwen3 Core inputs are unreleased), reflection 1,000,
+verdict 1,000 (two spans); every span decodes exactly to its reply / reflection / verdict text; 406k span tokens,
+11.1M context tokens.
+
+**GQ1 selftest PASSED** (remote='local', tiny Qwen3): span projections == HF forward @ basis, max diff 7e-8 (rerun
+after each reader change: 7e-8, 7e-8).
+
+**NDIF request limit (02:00-02:20).** 324 and 114 basis rows refused (HTTP 400 "error parsing the body"); label-blind
+diagnostics on one Core row: 3 rows (0.15 MB) pass, 24 rows (1.2 MB) fail. Reader changed (freeze notes 02:11, 02:20):
+only the 3 persona rows are sent; 100 random orthonormal 3-dim null subspaces per layer are built on the server from
+seeds (identical to a local run, max diff 0).
+
+**GQ2 smoke PASSED (02:21-02:22).** Last span token vs the existing single-token read @ the full 303-dim basis: min cos
+0.999996 (reflection rows 120000-1), 0.999995 (verdict rows 130000-1, decision point); Core rows read twice solo 1.0,
+solo vs batched 0.99991. Note: an expired watcher's `tail -F` held the chain log open, so the second launch's log lines
+were lost (the chain ran regardless); watchers now poll.
+
+**Reads DONE (02:23-06:29).** Core 744 rows (30 min, batched), reflection 1,000 (1 h 53 min, solo), verdict 1,000 (1 h 41
+min, solo); no failed session; rechecks (first two rows read again, files loaded once): Core min cos 0.99992, reflection
+1.0, verdict 1.0. After the 12:10 power loss: every span file loads, zip CRCs pass, all 2,744 rows present and finite.
+
+**Analysis (declared 02:47; post-freeze edit 14:04, mechanics only).** `run` (06:29-07:31, launcher waited for the
+reads): 150 probe fits on 6 workers (06:31-07:27), their pipeline per seed and H, references; saved. Its null was lost to
+a power loss at 12:10 (Kernel-Power 41; reboot 13:51) in layer 29 (layers 26-28 in memory). User chose a rerun as
+declared, checkpointed: `null_only` (14:05-22:13) redid the seed-0 H = 8 persona fits (weight decays and CV accuracies
+equal to run's at all 5 layers) and fitted the 100-subspace null, one checkpoint per layer (92-106 min each); `report`
+22:14. Checks: their training rows reproduced (their own train_deception_probe on the same metadata); pooled-vector
+identity max error 2.1e-4; null seed-0 refit = run's. Report `results/narcbench/qwen_d4_attn.md` (sha256 d220cd21...)
+rebuilds byte-identically from `qwen_d4_attn.json` (sha256 5aed457b...). Tests: test_attn_probe (4), test_qwen_d4_attn
+(3) pass.

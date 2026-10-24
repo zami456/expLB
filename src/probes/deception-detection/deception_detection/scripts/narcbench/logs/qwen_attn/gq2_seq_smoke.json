@@ -1,0 +1,29 @@
+{
+ "basis_dims": 303,
+ "qwen_attn_refl": {
+  "rows": [
+   120000,
+   120001
+  ],
+  "min_cos_vs_point_read": 0.9999959984114978,
+  "seconds": 24.2
+ },
+ "qwen_attn_verdict": {
+  "rows": [
+   130000,
+   130001
+  ],
+  "min_cos_vs_point_read": 0.9999947404264476,
+  "seconds": 21.9
+ },
+ "qwen_attn_core": {
+  "rows": [
+   110000,
+   110001
+  ],
+  "solo_repeat_min_cos": 0.9999999999999998,
+  "solo_vs_batched_min_cos": 0.999908879664027,
+  "seconds": 7.4
+ },
+ "pass": true
+}
