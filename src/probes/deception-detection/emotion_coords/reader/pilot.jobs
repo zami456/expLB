@@ -1,0 +1,9 @@
+# Pilot reads, in order. lb_parity first: its span means are checked against the stored pooled arrays.
+read --name lb_parity
+read --name stories --batched
+read --name neutral --batched
+read --name tylenol
+read --name d2d3
+logprob --name fidelity
+generate --name gen_pilot
+recheck --name lb_parity --n 2

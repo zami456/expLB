@@ -76,7 +76,9 @@ seeds:
 
 pilot:
   n_per_class: 50
-  n_emotions: 20
-  n_topics: 10
-  layers: [20, 52]
-  n_d2_questions: 20
+  n_topics: 10            # the first 10 of the 40 topics
+  layers: [20, 52]        # analysed in the pilot; every read covers all four layers so the full run reuses it
+  n_d2_questions: 20      # 10 unknown + 10 subject-matched known
+  # the neighbour-check six, then core emotions spanning valence
+  emotions: [afraid, scared, terrified, calm, peaceful, serene, guilty, ashamed, desperate, nervous, angry,
+             hostile, suspicious, compassionate, kind, loving, proud, amused, relieved, playful]

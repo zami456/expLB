@@ -1,0 +1,41 @@
+comparison,layer,pooling,probe,mean_delta,ci_lo,ci_hi,mean_emotion_pc,mean_random (mean over seeds),mean_topic_pc,mean_persona_pc (own k),mean_raw
+emotion_pc vs random mean,20,a,lr,-0.253267416,-0.292566,-0.21425740000000001,,,,,
+emotion_pc vs topic,20,a,lr,,,,,,,,
+emotion_pc vs persona (own k),20,a,lr,-0.48334456,-0.5252060000000001,-0.44151399999999996,,,,,
+emotion_pc vs raw,20,a,lr,-0.46736944,-0.507764,-0.425508,,,,,
+mean held-out AUROC,20,a,lr,,,,0.21672000000000002,0.47000400000000003,0.6466000000000001,0.70008,0.68392
+emotion_pc vs random mean,20,a,dom,-0.31723426399999993,-0.3520532,-0.2833199,,,,,
+emotion_pc vs topic,20,a,dom,,,,,,,,
+emotion_pc vs persona (own k),20,a,dom,-0.57273936,-0.6124959999999999,-0.532154,,,,,
+emotion_pc vs raw,20,a,dom,-0.48349264,-0.5234420000000001,-0.441246,,,,,
+mean held-out AUROC,20,a,dom,,,,0.13512,0.452028,0.4447999999999999,0.7068,0.6182399999999999
+emotion_pc vs random mean,52,a,lr,0.08592117999999999,0.04505520000000004,0.1276545000000001,,,,,
+emotion_pc vs topic,52,a,lr,,,,,,,,
+emotion_pc vs persona (own k),52,a,lr,-0.20938943999999998,-0.25713600000000003,-0.162456,,,,,
+emotion_pc vs raw,52,a,lr,-0.13853479999999999,-0.18465199999999998,-0.09575600000000002,,,,,
+mean held-out AUROC,52,a,lr,,,,0.6058399999999999,0.520608,,0.81624,0.7452799999999999
+emotion_pc vs random mean,52,a,dom,0.077913796,0.04666100000000001,0.1084492,,,,,
+emotion_pc vs topic,52,a,dom,,,,,,,,
+emotion_pc vs persona (own k),52,a,dom,-0.1727116,-0.214564,-0.12783799999999995,,,,,
+emotion_pc vs raw,52,a,dom,-0.12404872,-0.156818,-0.08951599999999998,,,,,
+mean held-out AUROC,52,a,dom,,,,0.64032,0.562532,,0.8136000000000001,0.7651999999999999
+emotion_pc vs random mean,20,b,lr,-0.13067413599999997,-0.17930739999999998,-0.08392640000000003,,,,,
+emotion_pc vs topic,20,b,lr,,,,,,,,
+emotion_pc vs persona (own k),20,b,lr,-0.31783528,-0.362894,-0.272868,,,,,
+emotion_pc vs raw,20,b,lr,-0.37068088,-0.41968200000000006,-0.32078400000000007,,,,,
+mean held-out AUROC,20,b,lr,,,,0.37040000000000006,0.501276,0.8545333333333334,0.6888,0.74176
+emotion_pc vs random mean,20,b,dom,-0.26011902,-0.30125329999999995,-0.22040970000000004,,,,,
+emotion_pc vs topic,20,b,dom,,,,,,,,
+emotion_pc vs persona (own k),20,b,dom,-0.43802423999999995,-0.4817600000000001,-0.3940600000000001,,,,,
+emotion_pc vs raw,20,b,dom,-0.43386055999999995,-0.477374,-0.387036,,,,,
+mean held-out AUROC,20,b,dom,,,,0.26256,0.5218679999999999,0.843,0.7,0.69592
+emotion_pc vs random mean,20,c,lr,-0.179836652,-0.22414160000000005,-0.13528690000000002,,,,,
+emotion_pc vs topic,20,c,lr,,,,,,,,
+emotion_pc vs persona (own k),20,c,lr,-0.25776599999999994,-0.3276820000000001,-0.18929000000000007,,,,,
+emotion_pc vs raw,20,c,lr,-0.35191384000000003,-0.41817400000000005,-0.28454,,,,,
+mean held-out AUROC,20,c,lr,,,,0.32032000000000005,0.499564,0.1592,0.5760799999999999,0.6711199999999999
+emotion_pc vs random mean,20,c,dom,0.003095928,-0.040198699999999976,0.04629650000000004,,,,,
+emotion_pc vs topic,20,c,dom,,,,,,,,
+emotion_pc vs persona (own k),20,c,dom,-0.08029992,-0.138096,-0.024146000000000015,,,,,
+emotion_pc vs raw,20,c,dom,-0.21573088,-0.271926,-0.16359599999999996,,,,,
+mean held-out AUROC,20,c,dom,,,,0.4779999999999999,0.47381599999999996,0.5686,0.55704,0.6928
