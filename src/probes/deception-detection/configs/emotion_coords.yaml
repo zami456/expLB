@@ -1,0 +1,82 @@
+# Emotion-coordinate lie probes on Liars' Bench (Llama-3.3-70B-Instruct via NDIF).
+# Read by emotion_coords/config.py. Plan: C:\Users\zamig\.claude\plans\parsed-scribbling-sedgewick.md
+
+model: meta-llama/Llama-3.3-70B-Instruct
+n_layers: 80
+hidden: 8192
+
+# Layer L is the output of decoder block L (hidden_states[L + 1]). The spec named 16/27/40/53. 20/28/40/52
+# are the nearest layers whose pooled Liars' Bench activations are already on disk, and 20 is the layer the
+# Liars' Bench code probes (the paper says "20th percentile"). Pending the user's decision A at the Phase 0 stop.
+layers: [20, 28, 40, 52]
+spec_layers: [16, 27, 40, 53]
+d2_primary_layer: 52
+
+# The Liars' Bench run whose pooled rows, per-token layer-20 cache and RepE probes are reused.
+lb_config: XXXX-9-llama-all.yaml
+datasets:
+  convince_me__plain: CG
+  harm_refusal_choice__plain: HP-C
+  harm_refusal_knowledge_report__plain: HP-KR
+  insider_trading_cadenza__plain: IT
+  instruct_dishonesty__plain: ID
+control: XXXX-20__plain            # Alpaca responses, all honest; thresholds at 1% FPR
+train_pairs: repe_honesty__plain   # instructed honest/deceptive pairs (+ its _val split)
+
+liars_bench:
+  repo: Cadenza-Labs/liars-bench
+  revision: 503399b81aff28d6812b0ea4585607d5e4b7d3c4   # deception_detection/data/XXXX_9.py pins this
+  model_tag: llama-v3.3-70b-instruct
+  hf_configs:
+    convince_me__plain: convincing-game
+    harm_refusal_choice__plain: harm-pressure-choice
+    harm_refusal_knowledge_report__plain: harm-pressure-knowledge-report
+    insider_trading_cadenza__plain: insider-trading
+    instruct_dishonesty__plain: instructed-deception
+    XXXX-20__plain: alpaca
+  hpkr_notebook: src/harm-refusal/harm-refusal.ipynb   # relative to the liars-bench repo root
+
+gemotions:
+  repo: dejanseo/gemotions
+  repo_type: model
+  files: [data/stories.db, data/neutral.db, data/emotion_stories.jsonl]
+  attribution: >-
+    Gemotions by DEJAN (https://huggingface.co/dejanseo/gemotions), link-attribution licence
+    (https://dejanmarketing.com/link-attribution/); stories written by Gemini 2.0 Flash Lite from the
+    prompts in Anthropic's "Emotion Concepts and their Function in a Large Language Model" (2026).
+
+stories:
+  n_topics: 40
+  min_tokens: 70          # skip shorter stories and take another from the same cell
+  pool_from_token: 50     # mean residual activation from this token onward
+  neutral_variance: 0.5   # denoise: remove the neutral PCs explaining this share of variance
+
+# Names the spec uses later; Phase 0 checks they are among the 171.
+emotion_names:
+  core: [guilty, ashamed, remorseful, afraid, terrified, nervous, anxious, tense, uneasy, worried, desperate,
+         calm, relieved, proud, smug, amused, playful, contemptuous, defiant, angry, hostile, suspicious,
+         vigilant, vulnerable, compassionate, empathetic, sympathetic, kind, loving]
+  zero_shot_positive: [guilty, ashamed, remorseful, nervous, afraid, desperate]
+  zero_shot_negative: [calm]
+  zero_shot_exploratory: [compassionate, empathetic, sympathetic, kind, loving, protective]
+  compassion_cluster: [compassionate, empathetic, sympathetic, kind, loving, protective]
+  threat_cluster: [afraid, terrified, angry, hostile, suspicious, vigilant]
+  neighbour_checks: [[afraid, scared, terrified], [calm, peaceful, serene]]
+  expected_absent: [protective, defensive]
+
+lexicon:
+  # NRC VAD v2.1 first, Warriner et al. (2013) as the fallback.
+  nrc_vad_url: https://saifmohammad.com/WebDocs/Lexicons/NRC-VAD-Lexicon-v2.1.zip
+  warriner_url: https://raw.githubusercontent.com/JULIELab/XANEW/master/Ratings_Warriner_et_al.csv
+
+seeds:
+  topics: 0
+  stories: 0
+  audit: 0
+
+pilot:
+  n_per_class: 50
+  n_emotions: 20
+  n_topics: 10
+  layers: [20, 52]
+  n_d2_questions: 20

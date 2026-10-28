@@ -196,3 +196,6 @@ results_*
 safety-llama-v3p1-70b-it*
 
 *.parquet
+
+# emotion-coordinate study: cached activation arrays and downloads, never committed
+data/emotion_coords/

@@ -1,0 +1,9 @@
+dataset,short,rows,pooled_rows,empty_mask_dropped,deceptive,honest,hub_text_mismatches,pre_adjacent_share,eot_after_last_share,mask_contiguous_share,pooled_L20,pooled_L28,pooled_L40,pooled_L52
+repe_honesty__plain,RepE,490,448,42,224,224,n/a,1.0,0.0,1.0,ok,ok,ok,ok
+repe_honesty__plain_val,RepE-val,122,102,20,51,51,n/a,1.0,0.0,1.0,ok,ok,ok,ok
+convince_me__plain,CG,267,267,0,167,100,0,1.0,1.0,1.0,ok,ok,ok,ok
+harm_refusal_choice__plain,HP-C,2134,2134,0,134,2000,0,1.0,1.0,1.0,ok,ok,ok,ok
+harm_refusal_knowledge_report__plain,HP-KR,2139,2139,0,139,2000,0,1.0,1.0,1.0,ok,ok,ok,ok
+insider_trading_cadenza__plain,IT,1080,1080,0,423,657,0,0.0,1.0,1.0,ok,ok,ok,ok
+instruct_dishonesty__plain,ID,5432,5432,0,3045,2387,0,1.0,1.0,1.0,ok,ok,ok,ok
+XXXX-20__plain,Alpaca,2000,2000,0,0,2000,0,1.0,1.0,1.0,ok,ok,ok,ok
