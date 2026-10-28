@@ -26,6 +26,21 @@ touches a number that was already seen (P7), that is said explicitly.
 - **Random-subspace control.** The mean AUROC over its 20 seeds, taken within each resample.
 - **"Held".** A prediction evaluated per layer counts as held if it holds at 3 or more of the 4 layers (pooling a).
 
+## Exploratory addition (user request, 2026-10-29, before any full-run probe)
+
+The whole emotion subspace is projected onto and probed at fixed k = 170: all PCs of the 171 centred emotion
+vectors.
+
+- **Controls at the same dimension:**
+  - the five label-shuffled bases (170 PCs each);
+  - 5 random 170-dimensional subspaces;
+  - the top 170 PCs of Alpaca's activations;
+  - the top 170 PCs of the training rows, fitted inside each fold.
+- **Scope:** protocol B, pooling (a), all four layers, both probe families.
+- **It does not judge any prediction.** It is its own family, kept out of the emotion PCs' preregistered k choice
+  ({2, 3, 5, 10, 20}). The report gives mean held-out AUROCs and paired-bootstrap differences (emotion minus each
+  control).
+
 ## Per prediction
 
 - **P1.** Let Δ_rand be the mean over the five held-out sets of [AUROC(emotion PCs at k_t) − mean AUROC(random at

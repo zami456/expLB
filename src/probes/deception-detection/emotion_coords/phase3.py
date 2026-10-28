@@ -71,12 +71,27 @@ def feature_sets(layer: int, data: dict, bases: dict, hidden: int, n_random: int
     return sets
 
 
+def exploratory_sets(data: dict, bases: dict, hidden: int, n_random: int = 5) -> list[P.FeatureSet]:
+    """Exploratory (not preregistered): the whole emotion subspace (all 170 PCs of the 171 centred vectors) at
+    fixed k, against same-dimension controls. Kept out of the emotion family so P1's k choice is untouched."""
+    control = C.load()["control"]
+    e = bases["E_components"]
+    r = len(e)
+    return [P.FeatureSet("emotion_all", "exploratory_emotion_all", e, (r,)),
+            *[P.FeatureSet("shuffled_all", "exploratory_shuffled_all", bases[f"S{p}_components"][:r], (r,), seed=p)
+              for p in range(5)],
+            *[P.FeatureSet("random_all", "exploratory_random_all", la.random_subspace(hidden, r, seed=30_000 + s),
+                           (r,), seed=s) for s in range(n_random)],
+            P.FeatureSet("alpaca_all", "exploratory_alpaca_all", la.top_pcs(data[control].x, r), (r,)),
+            P.FeatureSet("trainpca_all", "exploratory_trainpca_all", None, (r,), per_fold=lambda x: la.top_pcs(x, r))]
+
+
 def _unit(family: str, fs: P.FeatureSet, data: dict, layer: int, pooling: str, path: str,
-          fixed_c: dict | None = None) -> tuple[str, float]:
+          fixed_c: dict | None = None, protocols: str = "ABC") -> tuple[str, float]:
     s = C.load()
     lb5, control, train = list(s["datasets"]), s["control"], s["train_pairs"]
     store, t0 = P.Store(), time.time()
-    if fs.family.startswith("erase"):
+    if fs.family.startswith("erase") or protocols == "B":
         chosen = P.protocol_b(family, fs, data, lb5, control, layer, pooling, store, fixed_c=fixed_c)
     else:
         P.protocol_a(family, fs, data, train, lb5, control, layer, pooling, store)
@@ -130,6 +145,14 @@ def run(workers: int = 4, threads: int = 3, blocks: str | None = None, n_random:
                 delayed(_unit)(fam, fs, data, layer, pooling,
                                str(_parts() / f"{_unit_name(layer, pooling, fam, fs)}.pkl"),
                                raw_c if fam == "lr" else None) for fam, fs in erase)
+            # exploratory: the whole emotion subspace at fixed k, protocol B only
+            explore = [(fam, fs) for fs in exploratory_sets(data, bases, hidden) for fam in ("lr", "dom")]
+            explore = [(fam, fs) for fam, fs in explore
+                       if not (_parts() / f"{_unit_name(layer, pooling, fam, fs)}.pkl").exists()]
+            Parallel(n_jobs=workers, backend="loky", temp_folder=tmp, max_nbytes="1M")(
+                delayed(_unit)(fam, fs, data, layer, pooling,
+                               str(_parts() / f"{_unit_name(layer, pooling, fam, fs)}.pkl"), None, "B")
+                for fam, fs in explore)
         extra = _parts() / f"L{layer}{pooling}_zero_shot_and_published.pkl"
         if not extra.exists():
             store = P.Store()
@@ -224,7 +247,7 @@ def summary(n_boot: int = 1000, probe: str = "lr", out: str = "phase3", variant:
         scores = pickle.load(f)
     lb5, subset = LB.lb5(), LB.subset(variant)
     hpc, hpkr, it, idd = lb5[1], lb5[2], lb5[3], lb5[4]
-    verdicts, tables = [], []
+    verdicts, tables, exploratory = [], [], []
     for layer in (s["layers"] if layers is None else [int(x) for x in str(layers).split(",")]):
         data = LB.load(layer, "a", subset)
         ys = {t: data[t].y for t in lb5}
@@ -267,6 +290,16 @@ def summary(n_boot: int = 1000, probe: str = "lr", out: str = "phase3", variant:
             gain = float(np.mean([er[t][0] - raw[t][0] for t in lb5]))
             p6_parts[variant] = d | {"rank": rank, "gain_over_raw": gain, "holds": d["ci_lo"] > 0 and gain > 0}
         p6 = sum(v["holds"] for v in p6_parts.values()) >= 2
+        expl = {n: {t: arms.boot(t, arms.rows(t, n)) for t in lb5}
+                for n in ("emotion_all", "shuffled_all", "random_all", "alpaca_all", "trainpca_all")}
+        if np.isfinite([expl["emotion_all"][t][0] for t in lb5]).all():
+            row = {"layer": layer, "k": int(arms.rows(lb5[0], "emotion_all")["k"].iloc[0])}
+            row |= {f"mean_{n}": float(np.mean([d[t][0] for t in lb5])) for n, d in expl.items()}
+            row["mean_raw"] = float(np.mean([raw[t][0] for t in lb5]))
+            for n in ("shuffled_all", "random_all", "alpaca_all", "trainpca_all"):
+                d = _delta(expl["emotion_all"], expl[n], lb5)
+                row |= {f"emotion_all_minus_{n}": d["delta"], f"ci_lo_{n}": d["ci_lo"], f"ci_hi_{n}": d["ci_hi"]}
+            exploratory.append(row)
         verdicts.append({"layer": layer, "P1": p1, "P1_vs_random": d_rand, "P1_vs_topic": d_topic,
                          "P2": p2, "P2_IT_emotion_minus_persona": d_it, "P3": p3, "P3_emotion_minus_random": p3_parts,
                          "P4": p4, "P4_pe_minus_persona": d_pe, "P5": p5, "P5_IT_ID": p5_parts, "P6": p6,
@@ -276,6 +309,8 @@ def summary(n_boot: int = 1000, probe: str = "lr", out: str = "phase3", variant:
                              ("persona_emotion", pe), ("raw", raw))}})
         logger.info(f"L{layer}: P1 {p1} P2 {p2} P3 {p3} P4 {p4} P5 {p5} P6 {p6}")
     pd.concat(tables).to_csv(C.results_dir(out) / f"protocol_b_per_set_{probe}.csv", index=False)
+    if exploratory:
+        pd.DataFrame(exploratory).to_csv(C.results_dir(out) / f"exploratory_emotion_all_{probe}.csv", index=False)
     import json
 
     held = {p: sum(v[p] for v in verdicts) for p in ("P1", "P2", "P3", "P4", "P5", "P6")}
