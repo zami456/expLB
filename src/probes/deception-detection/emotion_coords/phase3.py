@@ -172,6 +172,35 @@ def run(workers: int = 4, threads: int = 3, blocks: str | None = None, n_random:
         logger.info(f"L{layer}{pooling} done in {(time.time() - t_block) / 60:.1f} min")
 
 
+def run_mlp(workers: int = 4, threads: int = 3, layers: str | None = None, n_random: int = 5,
+            variant: str = "full", bases: str = "full", parts: str = "parts") -> None:
+    """Exploratory MLP probes on every projected feature set (not raw), protocol B, pooling (a): k and weight
+    decay by inner leave-one-set-out CV. Runs after `run`, so the preregistered fits come first."""
+    from joblib import Parallel, delayed
+
+    global PARTS
+    PARTS = parts
+    for var in ("OMP_NUM_THREADS", "MKL_NUM_THREADS", "OPENBLAS_NUM_THREADS"):
+        os.environ[var] = str(threads)
+    s = C.load()
+    subset = LB.subset(variant)
+    tmp = str(C.data_dir("phase3", "joblib_tmp"))
+    for layer in (s["layers"] if layers is None else [int(x) for x in str(layers).split(",")]):
+        t_block = time.time()
+        data = LB.load(layer, "a", subset)
+        with np.load(C.data_dir("bases") / f"{bases}_L{layer}.npz") as z:
+            base = {k: z[k] for k in z.files}
+        hidden = data[s["control"]].x.shape[1]
+        sets = [fs for fs in feature_sets(layer, data, base, hidden, n_random) if fs.name != "raw"]
+        sets += exploratory_sets(data, base, hidden)
+        todo = [fs for fs in sets if not (_parts() / f"{_unit_name(layer, 'a', 'mlp', fs)}.pkl").exists()]
+        logger.info(f"MLP L{layer}a: {len(sets)} units, {len(todo)} to run on {workers} workers")
+        Parallel(n_jobs=workers, backend="loky", temp_folder=tmp, max_nbytes="1M")(
+            delayed(_unit)("mlp", fs, data, layer, "a", str(_parts() / f"{_unit_name(layer, 'a', 'mlp', fs)}.pkl"),
+                           None, "B") for fs in todo)
+        logger.info(f"MLP L{layer}a done in {(time.time() - t_block) / 60:.1f} min")
+
+
 def merge(parts: str = "parts", out: str = "phase3") -> None:
     global PARTS
     PARTS = parts
@@ -320,5 +349,40 @@ def summary(n_boot: int = 1000, probe: str = "lr", out: str = "phase3", variant:
     logger.info(f"layers holding: {held}")
 
 
+def summary_mlp(n_boot: int = 1000, out: str = "phase3", variant: str = "full", layers: str | None = None) -> None:
+    """Exploratory MLP probes, protocol B: mean held-out AUROC per projected arm and paired differences of the
+    emotion arms against their controls (the same matching as P1: controls at the emotion basis's k)."""
+    s = C.load()
+    frame = pd.read_csv(C.results_dir(out) / "probes.csv")
+    with open(C.data_dir(out) / "scores.pkl", "rb") as f:
+        scores = pickle.load(f)
+    lb5, subset = LB.lb5(), LB.subset(variant)
+    rows = []
+    for layer in (s["layers"] if layers is None else [int(x) for x in str(layers).split(",")]):
+        data = LB.load(layer, "a", subset)
+        arms = Arms(frame, scores, {t: data[t].y for t in lb5}, layer, "a", "mlp", n_boot)
+        if arms.b.empty:
+            continue
+        k_e = {t: arms.chosen_k(t, "emotion_pc") for t in lb5}
+        own = lambda fam: {t: arms.boot(t, arms.b[(arms.b["test"] == t) & (arms.b["fs_family"] == fam)  # noqa: E731
+                                                  & arms.b["chosen"]]) for t in lb5}
+        at_k = lambda name: {t: arms.boot(t, arms.rows(t, name, k_e[t])) for t in lb5}  # noqa: E731
+        arm = {"emotion_pc": own("emotion_pc"), "random (k_e)": at_k("random"), "topic_pc (k_e)": at_k("topic_pc"),
+               "shuffled_pc (k_e)": at_k("shuffled_pc"), "persona_pc": own("persona_pc"),
+               "persona_emotion": {t: arms.boot(t, arms.best_by_inner(t, "persona_emotion")) for t in lb5},
+               "named": own("named"), "alpaca_pc": own("alpaca_pc"), "trainpca_pc": own("trainpca_pc")}
+        for n in ("emotion_all", "shuffled_all", "random_all", "alpaca_all", "trainpca_all"):
+            arm[n] = {t: arms.boot(t, arms.rows(t, n)) for t in lb5}
+        row = {"layer": layer} | {f"mean_{n}": float(np.nanmean([d[t][0] for t in lb5])) for n, d in arm.items()}
+        for a, b in (("emotion_pc", "random (k_e)"), ("emotion_pc", "topic_pc (k_e)"), ("emotion_pc", "shuffled_pc (k_e)"),
+                     ("emotion_pc", "persona_pc"), ("emotion_all", "shuffled_all"), ("emotion_all", "random_all"),
+                     ("emotion_all", "alpaca_all"), ("emotion_all", "trainpca_all")):
+            d = _delta(arm[a], arm[b], lb5)
+            row |= {f"{a} - {b}": d["delta"], f"{a} - {b} lo": d["ci_lo"], f"{a} - {b} hi": d["ci_hi"]}
+        rows.append(row)
+    pd.DataFrame(rows).to_csv(C.results_dir(out) / "exploratory_mlp.csv", index=False)
+    logger.info(f"MLP summary for {len(rows)} layers written")
+
+
 if __name__ == "__main__":
-    fire.Fire({"run": run, "merge": merge, "summary": summary})
+    fire.Fire({"run": run, "run_mlp": run_mlp, "merge": merge, "summary": summary, "summary_mlp": summary_mlp})

@@ -33,6 +33,7 @@ from emotion_coords import linalg as la
 from emotion_coords.lbdata import Split
 
 C_GRID = (1e-4, 1e-3, 1e-2, 1e-1, 1.0, 10.0)
+MLP_ALPHAS = (1e-2, 1.0)  # L2 weight decay of the exploratory MLP probe, chosen by inner CV
 KS = (2, 3, 5, 10, 20)
 SEED = 0
 
@@ -82,7 +83,27 @@ class Fitted:
         return x @ self.weights + self.offset
 
 
-def fit(family: str, x: np.ndarray, y: np.ndarray, c: float | None = None) -> Fitted:
+@dataclass
+class FittedMLP:
+    """Exploratory nonlinear probe: standardise, one hidden layer of 64 ReLU units, L2 weight decay `alpha`,
+    early stopping on 10% of the training rows. Scores are the logit of P(lie)."""
+
+    model: object
+
+    def score(self, x: np.ndarray) -> np.ndarray:
+        p = np.clip(self.model.predict_proba(x)[:, 1], 1e-7, 1 - 1e-7)
+        return np.log(p / (1 - p))
+
+
+def fit(family: str, x: np.ndarray, y: np.ndarray, c: float | None = None) -> Fitted | FittedMLP:
+    if family == "mlp":
+        from sklearn.neural_network import MLPClassifier
+        from sklearn.pipeline import make_pipeline
+
+        model = make_pipeline(StandardScaler(), MLPClassifier(
+            hidden_layer_sizes=(64,), alpha=c, early_stopping=True, validation_fraction=0.1, n_iter_no_change=10,
+            max_iter=300, batch_size=200, random_state=SEED))
+        return FittedMLP(model.fit(x, y))
     if family == "dom":
         mu1, mu0 = x[y == 1].mean(0), x[y == 0].mean(0)
         w = mu1 - mu0
@@ -123,9 +144,10 @@ def select(family: str, feats: np.ndarray, y: np.ndarray, folds, ks: tuple[int, 
            c_grid=C_GRID) -> pd.DataFrame:
     """Mean validation AUROC over `folds` for every (k, C); k None = all columns."""
     rows = []
+    grid = {"lr": c_grid, "mlp": MLP_ALPHAS}.get(family, (None,))
     for k in ks or (None,):
         f = feats if k is None else feats[:, :k]
-        for c in (c_grid if family == "lr" else (None,)):
+        for c in grid:
             aucs = []
             for tr, va in folds:
                 if len(np.unique(y[tr])) < 2 or len(np.unique(y[va])) < 2:
@@ -196,7 +218,7 @@ def protocol_b(family: str, fs: FeatureSet, data: dict[str, Split], lb5: list[st
             sel = pd.DataFrame([{"k": np.nan, "C": fixed_c[held], "inner_auroc": np.nan, "chosen": True}])
         else:
             sel = best_per_k(select(family, feats, y, _folds("sets", y, sets), ks))
-        chosen_c[held] = float(sel.loc[sel["chosen"], "C"].iloc[0]) if family == "lr" else float("nan")
+        chosen_c[held] = float(sel.loc[sel["chosen"], "C"].iloc[0]) if family in ("lr", "mlp") else float("nan")
         key = {"protocol": "B", "feature_set": fs.name, "fs_family": fs.family, "seed": fs.seed, "layer": layer,
                "pooling": pooling, "train": "others", "probe": family}
         _fit_and_score(family, fs, x, y, {held: data[held]}, data[control].x, sel, key, store, basis)

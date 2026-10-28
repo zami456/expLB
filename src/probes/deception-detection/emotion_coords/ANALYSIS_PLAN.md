@@ -41,6 +41,19 @@ vectors.
   ({2, 3, 5, 10, 20}). The report gives mean held-out AUROCs and paired-bootstrap differences (emotion minus each
   control).
 
+## Exploratory addition: MLP probes after projection (user request, 2026-10-29, before any full-run probe)
+
+A third, nonlinear probe family runs on every projected feature set: emotion PCs, topic, label-shuffled, random
+(5 seeds), Alpaca PCs, training-set PCs, persona PCs, persona + emotion, named emotions, and the 170-dimensional
+sets above. Raw activations are not included.
+
+- **Architecture:** standardise; one hidden layer of 64 ReLU units; L2 weight decay from {0.01, 1}; Adam; early
+  stopping on 10% of the training rows; seed 0.
+- **Selection:** k and the weight decay by inner leave-one-set-out CV, as for logistic regression.
+- **Scope:** protocol B, pooling (a), all four layers. Controls are matched as for P1, at the emotion basis's
+  chosen k.
+- **It judges no prediction.** The report gives mean held-out AUROCs and paired differences (`exploratory_mlp.csv`).
+
 ## Per prediction
 
 - **P1.** Let Δ_rand be the mean over the five held-out sets of [AUROC(emotion PCs at k_t) − mean AUROC(random at
