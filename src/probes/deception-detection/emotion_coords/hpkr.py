@@ -101,8 +101,9 @@ def projections(acts: np.ndarray, directions: np.ndarray) -> np.ndarray:
 
 
 def did(acts: np.ndarray, design: Design, emotions: dict[str, np.ndarray], topics: np.ndarray, n_null: int = 1000,
-        seed: int = 0, holm_set: tuple[str, ...] = P8_COMPASSION + P8_THREAT) -> pd.DataFrame:
-    """Interaction (and known main effect) t for each emotion, against random and topic nulls."""
+        seed: int = 0, holm_set: tuple[str, ...] = P8_COMPASSION + P8_THREAT, return_nulls: bool = False):
+    """Interaction (and known main effect) t for each emotion, against random and topic nulls. With
+    `return_nulls`, also the null interaction t-values: (table, {"random": ..., "topic": ...})."""
     rng = np.random.default_rng(seed)
     null = rng.standard_normal((n_null, acts.shape[1]))
     names = list(emotions)
@@ -129,7 +130,7 @@ def did(acts: np.ndarray, design: Design, emotions: dict[str, np.ndarray], topic
         running = max(running, min(1.0, (m - rank) * p))
         table.loc[i, "p_holm"] = running
     table["above_95_both"] = (table["pct_random"] > 95) & (table["pct_topic"] > 95)
-    return table
+    return (table, {"random": t_null, "topic": t_topic}) if return_nulls else table
 
 
 def d2d3_acts(layer: int) -> tuple[np.ndarray, np.ndarray, pd.DataFrame]:

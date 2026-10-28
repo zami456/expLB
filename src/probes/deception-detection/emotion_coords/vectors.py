@@ -131,14 +131,15 @@ def shuffled_bases(stories: Reads, denoise: np.ndarray, n: int = 5, seed: int = 
     return out
 
 
-def split_half(stories: Reads, denoise: np.ndarray, seed: int = 0) -> pd.DataFrame:
+def split_half(stories: Reads, denoise: np.ndarray, seed: int = 0,
+               extra: dict[str, tuple[int, ...]] | None = None) -> pd.DataFrame:
     """Each emotion's vector from two disjoint halves of the topics (same centring and denoising within each
-    half), and the cosine between them."""
+    half), and the cosine between them. `extra` adds an emotion's further ranks within each half."""
     topics = sorted(stories.meta["topic_idx"].unique())
     rng = np.random.default_rng(seed)
     order = rng.permutation(topics)
     halves = [sorted(order[: len(order) // 2]), sorted(order[len(order) // 2:])]
-    a, b = (emotion_basis(stories, denoise, topics=[int(t) for t in h]) for h in halves)
+    a, b = (emotion_basis(stories, denoise, topics=[int(t) for t in h], extra=extra) for h in halves)
     return pd.DataFrame({"emotion": a.labels,
                          "cos": [float(la.unit(a.vectors[i]) @ la.unit(b.vectors[i])) for i in range(len(a.labels))]})
 

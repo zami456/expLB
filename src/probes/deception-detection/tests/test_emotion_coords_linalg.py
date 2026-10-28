@@ -69,6 +69,16 @@ def test_variance_basis_reaches_share():
     assert ratio[: len(basis)].sum() >= 0.5 > ratio[: len(basis) - 1].sum()
 
 
+def test_randomized_top_pcs_match_exact_subspace():
+    rng = np.random.default_rng(6)
+    scale = np.r_[np.geomspace(20, 5, 10), np.geomspace(1, 0.1, 70)]  # a gap after the 10th direction
+    x = rng.standard_normal((300, 80)) * scale
+    exact, _ = la.pca_basis(x)
+    approx = la.top_pcs(x, 10)
+    # same subspace: the projector difference is tiny
+    assert np.abs(la.projector(exact, 10) - la.projector(approx)).max() < 1e-6
+
+
 def test_leace_removes_class_covariance():
     rng = np.random.default_rng(4)
     n, d, classes = 300, 60, 5

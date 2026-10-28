@@ -119,14 +119,18 @@ def select_stories(emotions: list[str], topic_list: list[int], ranks: tuple[int,
     return pd.DataFrame(picked)
 
 
-def stories(full: bool = False, ranks: str = "0") -> Path:
-    """Stories as plain text with BOS, mean over positions 50 onward."""
+def stories(full: bool = False, ranks: str = "0", topups: str | None = None) -> Path:
+    """Stories as plain text with BOS, mean over positions 50 onward. `topups` names a JSON list of emotions
+    that also get ranks 1 and 2 in every topic (up to 120 stories; split-half under 0.7)."""
     settings = C.load()
     topic_list = topics() if full else topics()[: settings["pilot"]["n_topics"]]
     con = _stories_db()
     emotions = ([r[0] for r in con.execute("select distinct emotion from stories_clean order by emotion")]
                 if full else pilot_emotions())
     chosen = select_stories(emotions, topic_list, tuple(int(r) for r in str(ranks).split(",")))
+    if topups:
+        extra = json.loads(Path(topups).read_text(encoding="utf-8"))
+        chosen = pd.concat([chosen, select_stories(extra, topic_list, (1, 2))], ignore_index=True)
     text = dict(con.execute(f"select rowid, text from stories_clean where rowid in "
                             f"({','.join(map(str, chosen['rid']))})").fetchall())
     stored_id = dict(con.execute(f"select rowid, id from stories_clean where rowid in "

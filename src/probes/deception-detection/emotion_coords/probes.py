@@ -217,16 +217,19 @@ def protocol_c(family: str, fs: FeatureSet, data: dict[str, Split], lb5: list[st
         _fit_and_score(family, fs, x, y, {t: data[t] for t in lb5 if t != src}, data[control].x, sel, key, store,
                        basis)
         ctrl_x = data[control].x
+        fold_feats = []  # each fold's features once (a per-fold basis is fitted once), sliced per k below
+        for tr, te in _folds("strat", y, None):
+            b = fs.per_fold(x[tr]) if fs.per_fold is not None else None
+            fold_feats.append((tr, te, coordinates(fs, x[tr], b), coordinates(fs, x[te], b),
+                               coordinates(fs, ctrl_x, b)))
         for r in sel.itertuples():  # diagonal: out-of-fold scores with each k's chosen C
             cols = slice(None) if pd.isna(r.k) else slice(None, int(r.k))
             oof = np.zeros(len(y))
             ops = []
-            for tr, te in _folds("strat", y, None):
-                b = fs.per_fold(x[tr]) if fs.per_fold is not None else None
-                ftr, fte = coordinates(fs, x[tr], b)[:, cols], coordinates(fs, x[te], b)[:, cols]
-                model = fit(family, ftr, y[tr], None if pd.isna(r.C) else float(r.C))
-                oof[te] = model.score(fte)
-                ops.append(operating_point(y[te], oof[te], model.score(coordinates(fs, ctrl_x, b)[:, cols])))
+            for tr, te, ftr, fte, fctrl in fold_feats:
+                model = fit(family, ftr[:, cols], y[tr], None if pd.isna(r.C) else float(r.C))
+                oof[te] = model.score(fte[:, cols])
+                ops.append(operating_point(y[te], oof[te], model.score(fctrl[:, cols])))
             k = int(r.k) if not pd.isna(r.k) else feats.shape[1]
             # fold models have their own scales: AUROC from the pooled scores, the operating point per fold, averaged
             op = {m: float(np.nanmean([o[m] for o in ops])) for m in ("threshold", "recall", "balacc")}

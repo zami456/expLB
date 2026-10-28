@@ -57,6 +57,16 @@ def pca_basis(vectors: np.ndarray, center: bool = True) -> tuple[np.ndarray, np.
     return vt[keep], (var / var.sum())[keep]
 
 
+def top_pcs(x: np.ndarray, k: int, seed: int = 0) -> np.ndarray:
+    """The top-k principal directions of the rows of `x` by randomized SVD (Halko et al.), for large matrices."""
+    from sklearn.utils.extmath import randomized_svd
+
+    xc = np.asarray(x, dtype=np.float64)
+    xc = xc - xc.mean(0)
+    _, _, vt = randomized_svd(xc, n_components=k, n_oversamples=20, n_iter=10, random_state=seed)
+    return vt
+
+
 def variance_basis(vectors: np.ndarray, share: float) -> np.ndarray:
     """The top principal directions of `vectors` that together explain at least `share` of their variance."""
     basis, ratio = pca_basis(vectors)
@@ -102,7 +112,9 @@ def ledoit_wolf(xc: np.ndarray) -> tuple[np.ndarray, float]:
     d2 = s_sq - 2 * mu * float(np.trace(s)) + mu ** 2 * d
     b2 = (float(((xc ** 2).sum(1) ** 2).sum()) / n - s_sq) / n
     delta = min(1.0, b2 / d2) if d2 > 0 else 1.0
-    return (1 - delta) * s + delta * mu * np.eye(d), delta
+    cov = (1 - delta) * s
+    cov[np.diag_indices(d)] += delta * mu
+    return cov, delta
 
 
 def fit_leace(x: np.ndarray, labels: np.ndarray) -> Leace:
@@ -115,8 +127,11 @@ def fit_leace(x: np.ndarray, labels: np.ndarray) -> Leace:
     cov, delta = ledoit_wolf(xc)
     sigma_xz = xc.T @ (z - z.mean(0)) / len(x)  # (hidden, classes)
     evals, evecs = np.linalg.eigh(cov)
+    del cov
     evals = np.clip(evals, evals.max() * 1e-12, None)
-    w = (evecs * evals ** -0.5) @ evecs.T  # Sigma^{-1/2}
-    w_inv = (evecs * evals ** 0.5) @ evecs.T  # Sigma^{1/2}
-    q = orthonormal((w @ sigma_xz).T).T  # (hidden, rank), rank <= classes - 1
-    return Leace(mean=mean, a=w_inv @ q, b=q.T @ w, shrinkage=delta)
+
+    def whiten(m: np.ndarray, power: float) -> np.ndarray:  # Sigma^power @ m, without forming Sigma^power
+        return evecs @ ((evals ** power)[:, None] * (evecs.T @ m))
+
+    q = orthonormal(whiten(sigma_xz, -0.5).T).T  # (hidden, rank), rank <= classes - 1
+    return Leace(mean=mean, a=whiten(q, 0.5), b=whiten(q, -0.5).T, shrinkage=delta)

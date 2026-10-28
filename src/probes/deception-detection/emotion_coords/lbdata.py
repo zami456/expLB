@@ -68,10 +68,12 @@ def _repe_groups(parts: list[str], rows: list[np.ndarray]) -> np.ndarray:
     return np.concatenate([table.loc[[(p, int(r)) for r in rs]].to_numpy() for p, rs in zip(parts, rows)])
 
 
-def load(layer: int, pooling: str = "a", subset: dict[str, np.ndarray] | None = None) -> dict[str, Split]:
+def load(layer: int, pooling: str = "a", subset: dict[str, np.ndarray] | None = None,
+         bc_variant: str = "pilot") -> dict[str, Split]:
     """The five Liars' Bench sets, Alpaca and the RepE pairs (train and val merged) at one layer and pooling.
 
-    `subset` maps a dataset name to the pooled rows to keep (the pilot's 50 per class); others keep all."""
+    `subset` maps a dataset name to the pooled rows to keep (the pilot's 50 per class, the full run's caps);
+    others keep all. Poolings (b)/(c) come from `bc_dir(bc_variant)`."""
     s = C.load()
     if pooling not in POOLINGS:
         raise ValueError(f"pooling must be one of {POOLINGS}")
@@ -89,7 +91,7 @@ def load(layer: int, pooling: str = "a", subset: dict[str, np.ndarray] | None = 
                     y = (z["labels"].astype(str) == "DECEPTIVE").astype(int)
                 r = np.arange(len(x))
             else:
-                with np.load(C.data_dir("lb", "L20_bc") / f"{part}.npz", allow_pickle=False) as z:
+                with np.load(bc_dir(bc_variant) / f"{part}.npz", allow_pickle=False) as z:
                     x = z[pooling].astype(np.float32)
                     r = z["rows"]
                 labels = index(part).set_index("pooled_row").loc[r, "label"].to_numpy()
@@ -117,16 +119,38 @@ def pilot_subset(per_class: int | None = None) -> dict[str, np.ndarray]:
             for name in lb5()}
 
 
-def extract_bc(pilot: bool = True, check_tol: float = 2e-3, overwrite: bool = False) -> None:
-    """Poolings (b) and (c) at layer 20 from the per-token cache, for the pilot's rows (or every row), plus the
-    RepE statement groups. Each row's cached span mean is checked against the stored pooled (a). Resumable: a
-    set whose file exists is skipped (unless `overwrite`), and the groups are written as soon as RepE is done."""
+FULL_CAPS = {"insider_trading_cadenza__plain": 500}  # the spec: up to 1,000 per class per set, 500 for IT
+FULL_CAP = 1000
+
+
+def full_subset() -> dict[str, np.ndarray]:
+    """The full run's rows: at most 1,000 of each label per Liars' Bench set (500 for IT), drawn with a fixed
+    seed; a smaller class is kept whole."""
+    from emotion_coords.rows import pick_lb
+
+    return {name: pick_lb(index(name), FULL_CAPS.get(name, FULL_CAP), seed=C.load()["seeds"]["stories"])
+            ["pooled_row"].to_numpy() for name in lb5()}
+
+
+def subset(variant: str) -> dict[str, np.ndarray]:
+    return {"pilot": pilot_subset, "full": full_subset}[variant]()
+
+
+def bc_dir(variant: str = "pilot"):
+    return C.data_dir("lb", "L20_bc" if variant == "pilot" else f"L20_bc_{variant}")
+
+
+def extract_bc(variant: str = "pilot", check_tol: float = 2e-3, overwrite: bool = False) -> None:
+    """Poolings (b) and (c) at layer 20 from the per-token cache, for a variant's rows ("pilot" or "full";
+    Alpaca and RepE whole), plus the RepE statement groups. Each row's cached span mean is checked against the
+    stored pooled (a). Resumable: a set whose file exists is skipped (unless `overwrite`), and the groups are
+    written as soon as RepE is done."""
     from emotion_coords.phase0 import _experiment
 
     cfg, experiment = _experiment()
     model_name = str(experiment.model.name_or_path)
-    wanted = pilot_subset() if pilot else {}
-    out_dir = C.data_dir("lb", "L20_bc")
+    wanted = subset(variant)
+    out_dir = bc_dir(variant)
     groups = []
     for ds in [experiment.train_dataset, *experiment.eval_datasets, *experiment.control_datasets]:
         table = index(ds.name)
