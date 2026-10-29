@@ -95,6 +95,27 @@ blocks 36, 40 and 44.
   "Held at 3 of 3" in its summary means all three band blocks. The choice of band followed the block-40 result, so
   a band effect is a description of where emotion PCs work, not a test of whether they do.
 
+## Out-of-sample test on Gender-Secret at block 40 (user request, 2026-10-30; fixed before GS is scored)
+
+GS is Liars' Bench's LoRA fine-tune of Llama-3.3-70B that believes the user is male and denies knowing it. No arm,
+k, layer or rule above has seen it. Its lies and its honest answers are both denials (gender questions vs other
+attributes), so it is the wording-matched test. The thesis read it at block 40 (`activations/gender_secret/`), twice:
+through the fine-tune (*adapted*: 392 rows, 116 lies) and on the same tokens through the base model (*base*: the
+control).
+
+- **Training.** Each arm is fitted on all five LB-5 sets (capped rows), with k and C chosen by inner
+  leave-one-set-out CV across them, the same machinery as protocol B. Then it scores GS. The arms are those of phase
+  3 at block 40, plus the 171 emotion vectors. Also scored: the published RepE probe and the zero-shot directions.
+- **Metrics.** AUROC with 1,000 stratified bootstrap resamples (paired between arms; seed means within each
+  resample), and balanced accuracy and recall at the Alpaca 1% FPR threshold.
+- **Predictions, fixed now.** They arise from looking at the band and are therefore declared, not preregistered:
+  - **G1.** All 170 emotion PCs beat (a) raw activations and (b) the five 170-d label-shuffled controls (mean) on
+    the adapted read: paired difference > 0 with CI excluding 0, both.
+  - **G2.** Emotion PCs (k by inner CV) beat the 20 random subspaces at the same k (CI excluding 0) and the topic
+    basis at the same k by ≥ 0.03.
+  - **G3.** Any arm with adapted AUROC > 0.6 scores lower on the base read (paired CI excluding 0). If it does not,
+    it reads the question or the denial wording rather than the lie.
+
 ## Per prediction
 
 - **P1.** Let Δ_rand be the mean over the five held-out sets of [AUROC(emotion PCs at k_t) − mean AUROC(random at
