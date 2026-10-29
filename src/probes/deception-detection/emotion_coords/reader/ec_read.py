@@ -496,11 +496,16 @@ def cmd_recheck(args) -> int:
     setup_log(f"recheck_{args.name}")
     rows = load_rows(args.name)
     n_groups, n_points = shape_of(rows)
-    saved = {}
-    for f in sorted((ACTS / args.name).glob("*.npz")):
+    done = done_rows(ACTS / args.name)
+    pick = [r for r in rows if r["row_id"] in done][: args.n]
+    want, saved = {r["row_id"] for r in pick}, {}
+    for f in sorted((ACTS / args.name).glob("*.npz")):  # each array loaded once, only the picked rows kept
         with np.load(f) as z:
-            saved.update({int(r): (z["content"][i], z["points"][i]) for i, r in enumerate(z["rows"])})
-    pick = [r for r in rows if r["row_id"] in saved][: args.n]
+            ids = [int(r) for r in z["rows"]]
+            hit = [i for i, r in enumerate(ids) if r in want]
+            if hit:
+                content, points = z["content"], z["points"]
+                saved.update({ids[i]: (content[i].copy(), points[i].copy()) for i in hit})
     llm = load_remote_llm()
     content, points = with_watchdog(lambda: session_read(llm, [[r] for r in pick], int(llm.config.hidden_size), True,
                                                          MODEL["layers"], n_groups, n_points), 3600)
