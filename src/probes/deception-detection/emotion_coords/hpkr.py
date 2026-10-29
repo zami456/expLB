@@ -136,9 +136,8 @@ def did(acts: np.ndarray, design: Design, emotions: dict[str, np.ndarray], topic
 def d2d3_acts(layer: int, reads: str = "d2d3") -> tuple[np.ndarray, np.ndarray, pd.DataFrame]:
     """(pre-response vectors, forced-reply means, metadata) of the d2d3 reads at `layer`, non-finite dropped.
     `reads` names another read folder of the same rows (`d2d3_band`: the post hoc band's blocks)."""
-    ids, content, points = load_reads(reads)
-    li = _layer_index(layer, reads)
-    pre, reply = points[:, 0, li].astype(np.float64), content[:, 0, li].astype(np.float64)
+    ids, content, points = load_reads(reads, _layer_index(layer, reads))
+    pre, reply = points[:, 0, 0].astype(np.float64), content[:, 0, 0].astype(np.float64)
     ok = np.isfinite(pre).all(1) & np.isfinite(reply).all(1)
     meta = row_meta(_read_info(reads)["rows"]).loc[ids[ok]].reset_index()
     return pre[ok], reply[ok], meta

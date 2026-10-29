@@ -33,15 +33,17 @@ def _layer_index(layer: int, name: str | None = None) -> int:
     return list(_read_info(name)["layers"]).index(layer)
 
 
-def load_reads(name: str) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
-    """A reader output folder: (row ids, content (n, groups, layers, H), points (n, points, layers, H))."""
+def load_reads(name: str, layer_index: int | None = None) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """A reader output folder: (row ids, content (n, groups, layers, H), points (n, points, layers, H)). With
+    `layer_index`, only that layer is kept (the layers axis has length 1): an 8-block story folder is 2 GB whole."""
     folder = C.DATA / "acts" / name
+    keep = slice(None) if layer_index is None else slice(layer_index, layer_index + 1)
     ids, content, points = [], [], []
     for path in sorted(folder.glob("*.npz")):
         with np.load(path) as z:
             ids.append(z["rows"])
-            content.append(z["content"])
-            points.append(z["points"])
+            content.append(np.ascontiguousarray(z["content"][:, :, keep]))  # a copy, so the whole file can go
+            points.append(np.ascontiguousarray(z["points"][:, :, keep]))
     if not ids:
         raise FileNotFoundError(f"no reads in {folder}")
     order = np.argsort(np.concatenate(ids), kind="stable")
@@ -67,8 +69,8 @@ class Reads:
 
     @classmethod
     def of(cls, name: str, layer: int) -> "Reads":
-        ids, content, _ = load_reads(name)
-        x = content[:, 0, _layer_index(layer, name)].astype(np.float64)
+        ids, content, _ = load_reads(name, _layer_index(layer, name))
+        x = content[:, 0, 0].astype(np.float64)
         ok = np.isfinite(x).all(1)
         meta = row_meta(_read_info(name)["rows"]).loc[ids[ok]]
         return cls(x[ok], meta.reset_index())
@@ -189,8 +191,8 @@ def neighbours(basis: Basis, queries: list[str], top: int = 5) -> dict[str, list
 
 def dose_response(basis: Basis, layer: int, emotions=("afraid", "calm"), reads: str = "tylenol") -> pd.DataFrame:
     """The Tylenol prompts' pre-response activations projected on unit emotion vectors, by dose."""
-    ids, _, points = load_reads(reads)
-    x = points[:, 0, _layer_index(layer, reads)].astype(np.float64)
+    ids, _, points = load_reads(reads, _layer_index(layer, reads))
+    x = points[:, 0, 0].astype(np.float64)
     meta = row_meta(_read_info(reads)["rows"]).loc[ids]
     table = pd.DataFrame({"dose_mg": meta["dose_mg"].to_numpy()})
     for e in emotions:
