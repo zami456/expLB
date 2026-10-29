@@ -58,19 +58,24 @@ def independent_sets(layer: int, data: dict, hidden: int, n_random: int = 20) ->
             *[P.FeatureSet("random", "random", la.random_subspace(hidden, 20, seed=10_000 + s),
                            tuple(sorted(set(P.KS) | {6})), seed=s) for s in range(n_random)],
             P.FeatureSet("alpaca_pc", "alpaca_pc", la.top_pcs(data[control].x, 20), P.KS),
-            P.FeatureSet("persona_pc", "persona_pc", persona_basis(layer), P.KS)]
+            P.FeatureSet("persona_pc", "persona_pc", persona_basis(layer), P.KS),
+            # the published persona space (user decision 2026-10-30, after layers 20-40 were seen; ANALYSIS_PLAN.md)
+            P.FeatureSet("persona_pub_pc", "persona_pub_pc", persona_basis(layer, "published"), P.KS)]
 
 
 def feature_sets(layer: int, data: dict, bases: dict, hidden: int, n_random: int = 20) -> list[P.FeatureSet]:
     e, t = bases["E_components"], bases["T_components"]
     sets = independent_sets(layer, data, hidden, n_random)
     persona = next(fs.basis for fs in sets if fs.name == "persona_pc")
+    persona_pub = next(fs.basis for fs in sets if fs.name == "persona_pub_pc")
     sets += [P.FeatureSet("emotion_pc", "emotion_pc", e, P.KS),
              P.FeatureSet("topic_pc", "topic_pc", t, P.KS),
              *[P.FeatureSet("shuffled_pc", "shuffled_pc", bases[f"S{p}_components"], P.KS, seed=p) for p in range(5)]]
     for k in (3, 5, 10):
         union = la.orthonormal(np.vstack([persona[:k], e[:k]]))
         sets.append(P.FeatureSet("persona_emotion", "persona_emotion", union, (len(union),), seed=k))
+        union = la.orthonormal(np.vstack([persona_pub[:k], e[:k]]))
+        sets.append(P.FeatureSet("persona_pub_emotion", "persona_pub_emotion", union, (len(union),), seed=k))
     labels = list(bases["E_labels"])
     named = [n for n in C.load()["emotion_names"]["core"] if n in labels]
     sets.append(P.FeatureSet("named", "named", la.unit(bases["E_vectors"][[labels.index(n) for n in named]]),
@@ -297,27 +302,34 @@ def summary(n_boot: int = 1000, probe: str = "lr", out: str = "phase3", variant:
         arms = Arms(frame, scores, ys, layer, "a", probe, n_boot)
         hidden = data[lb5[0]].x.shape[1]
         k_e = {t: arms.chosen_k(t, "emotion_pc") for t in lb5}
-        k_p = {t: arms.chosen_k(t, "persona_pc") for t in lb5}
+        # persona arm: the published persona space (user decision 2026-10-30); the extended thesis D4 basis is
+        # reported beside it as a sensitivity check (ANALYSIS_PLAN.md addendum)
+        k_p = {t: arms.chosen_k(t, "persona_pub_pc") for t in lb5}
+        k_x = {t: arms.chosen_k(t, "persona_pc") for t in lb5}
         emo = {t: arms.boot(t, arms.rows(t, "emotion_pc", k_e[t])) for t in lb5}
         rnd = {t: arms.boot(t, arms.rows(t, "random", k_e[t])) for t in lb5}
         top = {t: arms.boot(t, arms.rows(t, "topic_pc", k_e[t])) for t in lb5}
-        per = {t: arms.boot(t, arms.rows(t, "persona_pc", k_p[t])) for t in lb5}
-        pe = {t: arms.boot(t, arms.best_by_inner(t, "persona_emotion")) for t in lb5}
+        per = {t: arms.boot(t, arms.rows(t, "persona_pub_pc", k_p[t])) for t in lb5}
+        pe = {t: arms.boot(t, arms.best_by_inner(t, "persona_pub_emotion")) for t in lb5}
+        per_x = {t: arms.boot(t, arms.rows(t, "persona_pc", k_x[t])) for t in lb5}
+        pe_x = {t: arms.boot(t, arms.best_by_inner(t, "persona_emotion")) for t in lb5}
         raw = {t: arms.boot(t, arms.rows(t, "raw", hidden)) for t in lb5}
         tables.append(pd.DataFrame({"test": lb5, "k_emotion": [k_e[t] for t in lb5],
-                                    "k_persona": [k_p[t] for t in lb5],
+                                    "k_persona_pub": [k_p[t] for t in lb5], "k_persona_ext": [k_x[t] for t in lb5],
                                     **{name: [d[t][0] for t in lb5] for name, d in (
                                         ("emotion_pc", emo), ("random_mean", rnd), ("topic_pc", top),
-                                        ("persona_pc", per), ("persona_emotion", pe), ("raw", raw))}}
+                                        ("persona_pub_pc", per), ("persona_pub_emotion", pe),
+                                        ("persona_pc_extended", per_x), ("persona_emotion_extended", pe_x),
+                                        ("raw", raw))}}
                                    ).assign(layer=layer))
         d_rand, d_topic = _delta(emo, rnd, lb5), _delta(emo, top, lb5)
         p1 = all(d["delta"] >= 0.03 and d["ci_lo"] > 0 for d in (d_rand, d_topic))
-        d_it = _delta(emo, per, [it])
-        p2 = d_it["ci_lo"] > 0
+        d_it, d_it_x = _delta(emo, per, [it]), _delta(emo, per_x, [it])
+        p2, p2_x = d_it["ci_lo"] > 0, d_it_x["ci_lo"] > 0
         p3_parts = {t: emo[t][0] - rnd[t][0] for t in (hpc, hpkr)}
         p3 = all(v < 0.02 for v in p3_parts.values())
-        d_pe = _delta(pe, per, lb5)
-        p4 = d_pe["delta"] >= 0.02
+        d_pe, d_pe_x = _delta(pe, per, lb5), _delta(pe_x, per_x, lb5)
+        p4, p4_x = d_pe["delta"] >= 0.02, d_pe_x["delta"] >= 0.02
         zs = frame[(frame["protocol"] == "zero-shot") & (frame["layer"] == layer) & (frame["pooling"] == "a")]
         zs_auc = {(r["feature_set"], r["test"]): r["auroc"] for _, r in zs.iterrows()}
         p5_parts = {e: (zs_auc.get((f"zs_{e}", it), np.nan), zs_auc.get((f"zs_{e}", idd), np.nan))
@@ -347,19 +359,27 @@ def summary(n_boot: int = 1000, probe: str = "lr", out: str = "phase3", variant:
                          "P2": p2, "P2_IT_emotion_minus_persona": d_it, "P3": p3, "P3_emotion_minus_random": p3_parts,
                          "P4": p4, "P4_pe_minus_persona": d_pe, "P5": p5, "P5_IT_ID": p5_parts, "P6": p6,
                          "P6_variants": p6_parts,
+                         "persona_basis": "published (arXiv 2605.09391: 8 deception + 7 honesty personas)",
+                         "P2_extended": p2_x, "P2_extended_IT_emotion_minus_persona": d_it_x,
+                         "P4_extended": p4_x, "P4_extended_pe_minus_persona": d_pe_x,
                          "mean_auroc": {n: float(np.mean([d[t][0] for t in lb5])) for n, d in (
-                             ("emotion_pc", emo), ("random_mean", rnd), ("topic_pc", top), ("persona_pc", per),
-                             ("persona_emotion", pe), ("raw", raw))}})
-        logger.info(f"L{layer}: P1 {p1} P2 {p2} P3 {p3} P4 {p4} P5 {p5} P6 {p6}")
+                             ("emotion_pc", emo), ("random_mean", rnd), ("topic_pc", top),
+                             ("persona_pub_pc", per), ("persona_pub_emotion", pe), ("persona_pc_extended", per_x),
+                             ("persona_emotion_extended", pe_x), ("raw", raw))}})
+        logger.info(f"L{layer}: P1 {p1} P2 {p2} P3 {p3} P4 {p4} P5 {p5} P6 {p6} | extended persona: P2 {p2_x} P4 {p4_x}")
     pd.concat(tables).to_csv(C.results_dir(out) / f"protocol_b_per_set_{probe}.csv", index=False)
     if exploratory:
         pd.DataFrame(exploratory).to_csv(C.results_dir(out) / f"exploratory_emotion_all_{probe}.csv", index=False)
     import json
 
     held = {p: sum(v[p] for v in verdicts) for p in ("P1", "P2", "P3", "P4", "P5", "P6")}
+    held_x = {p: sum(v[p] for v in verdicts) for p in ("P2_extended", "P4_extended")}
     (C.results_dir(out) / f"predictions_{probe}.json").write_text(
         json.dumps({"per_layer": verdicts, "layers_holding": held,
-                    "held_overall": {p: n >= 3 for p, n in held.items()}}, indent=2, default=float), encoding="utf-8")
+                    "held_overall": {p: n >= 3 for p, n in held.items()},
+                    "extended_persona_layers_holding": held_x,
+                    "extended_persona_held_overall": {p: n >= 3 for p, n in held_x.items()}},
+                   indent=2, default=float), encoding="utf-8")
     logger.info(f"layers holding: {held}")
 
 
@@ -382,14 +402,17 @@ def summary_mlp(n_boot: int = 1000, out: str = "phase3", variant: str = "full", 
                                                   & arms.b["chosen"]]) for t in lb5}
         at_k = lambda name: {t: arms.boot(t, arms.rows(t, name, k_e[t])) for t in lb5}  # noqa: E731
         arm = {"emotion_pc": own("emotion_pc"), "random (k_e)": at_k("random"), "topic_pc (k_e)": at_k("topic_pc"),
-               "shuffled_pc (k_e)": at_k("shuffled_pc"), "persona_pc": own("persona_pc"),
-               "persona_emotion": {t: arms.boot(t, arms.best_by_inner(t, "persona_emotion")) for t in lb5},
+               "shuffled_pc (k_e)": at_k("shuffled_pc"), "persona_pub_pc": own("persona_pub_pc"),
+               "persona_pub_emotion": {t: arms.boot(t, arms.best_by_inner(t, "persona_pub_emotion")) for t in lb5},
+               "persona_pc_extended": own("persona_pc"),
+               "persona_emotion_extended": {t: arms.boot(t, arms.best_by_inner(t, "persona_emotion")) for t in lb5},
                "named": own("named"), "alpaca_pc": own("alpaca_pc"), "trainpca_pc": own("trainpca_pc")}
         for n in ("emotion_all", "shuffled_all", "random_all", "alpaca_all", "trainpca_all"):
             arm[n] = {t: arms.boot(t, arms.rows(t, n)) for t in lb5}
         row = {"layer": layer} | {f"mean_{n}": float(np.nanmean([d[t][0] for t in lb5])) for n, d in arm.items()}
         for a, b in (("emotion_pc", "random (k_e)"), ("emotion_pc", "topic_pc (k_e)"), ("emotion_pc", "shuffled_pc (k_e)"),
-                     ("emotion_pc", "persona_pc"), ("emotion_all", "shuffled_all"), ("emotion_all", "random_all"),
+                     ("emotion_pc", "persona_pub_pc"), ("emotion_pc", "persona_pc_extended"),
+                     ("emotion_all", "shuffled_all"), ("emotion_all", "random_all"),
                      ("emotion_all", "alpaca_all"), ("emotion_all", "trainpca_all")):
             d = _delta(arm[a], arm[b], lb5)
             row |= {f"{a} - {b}": d["delta"], f"{a} - {b} lo": d["ci_lo"], f"{a} - {b} hi": d["ci_hi"]}

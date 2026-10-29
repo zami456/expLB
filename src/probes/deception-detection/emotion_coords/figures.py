@@ -30,8 +30,9 @@ DIVERGING = LinearSegmentedColormap.from_list(
 SHORT = {"convince_me__plain": "CG", "harm_refusal_choice__plain": "HP-C",
          "harm_refusal_knowledge_report__plain": "HP-KR", "insider_trading_cadenza__plain": "IT",
          "instruct_dishonesty__plain": "ID"}
-FAMILIES = [("emotion_pc", "emotion PCs"), ("topic_pc", "topic PCs"), ("persona_pc", "persona PCs"),
-            ("shuffled_pc", "shuffled-label emotion PCs"), ("alpaca_pc", "Alpaca PCs"), ("trainpca_pc", "training-set PCs")]
+FAMILIES = [("emotion_pc", "emotion PCs"), ("topic_pc", "topic PCs"), ("persona_pub_pc", "persona PCs (published)"),
+            ("shuffled_pc", "shuffled-label emotion PCs"), ("alpaca_pc", "Alpaca PCs"), ("trainpca_pc", "training-set PCs"),
+            ("persona_pc", "persona PCs (extended)")]
 
 
 def _style() -> None:
@@ -94,7 +95,8 @@ def k_sweep(out: str = "phase3", probe: str = "lr") -> None:
     pd.DataFrame(rows).to_csv(_out(f"k_sweep_{probe}.csv"), index=False)
 
 
-def transfer(out: str = "phase3", probe: str = "lr", sets=("raw", "emotion_pc", "persona_pc", "topic_pc")) -> None:
+def transfer(out: str = "phase3", probe: str = "lr",
+             sets=("raw", "emotion_pc", "persona_pub_pc", "persona_pc", "topic_pc")) -> None:
     """Protocol C (train on one set, test on each; diagonal by CV), at each arm's chosen k."""
     f = _probes(out)
     c = f[(f["protocol"] == "C") & (f["pooling"] == "a") & (f["probe"] == probe) & f["chosen"]]

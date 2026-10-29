@@ -71,7 +71,8 @@ def d1(n_boot: int = 1000) -> None:
         train = [n for n in lb5 if n != HPKR]
         x = np.concatenate([data[n].x for n in train])
         y = np.concatenate([data[n].y for n in train])
-        for name, basis in (("raw", None), ("persona_pc", persona_basis(layer)), ("emotion_pc", bases["E_components"])):
+        for name, basis in (("raw", None), ("persona_pub_pc", persona_basis(layer, "published")),
+                            ("persona_pc", persona_basis(layer)), ("emotion_pc", bases["E_components"])):
             pick = frame[(frame["protocol"] == "B") & (frame["feature_set"] == name) & (frame["test"] == HPKR)
                          & (frame["probe"] == "lr") & (frame["layer"] == layer) & (frame["pooling"] == "a")
                          & frame["chosen"]]
@@ -91,7 +92,7 @@ def d1(n_boot: int = 1000) -> None:
         logger.info(f"D1 L{layer} done")
     d1_table = pd.DataFrame(table)
     d1_table.to_csv(_out("d1.csv"), index=False)
-    np.savez(C.data_dir("phase4") / "d1_scores.npz", subgroup=sub_all, **store)
+    np.savez(C.data_dir("phase4") / "d1_scores.npz", subgroup=sub_all.astype(str), **store)  # not object: no pickle
 
     # P7: the published block-20 probe; its HP-KR AUROC on the capped rows comes from phase 3 (protocol A-published)
     pub = frame[(frame["protocol"] == "A-published") & (frame["layer"] == 20) & (frame["test"] == HPKR)]

@@ -54,6 +54,23 @@ sets above. Raw activations are not included.
   chosen k.
 - **It judges no prediction.** The report gives mean held-out AUROCs and paired differences (`exploratory_mlp.csv`).
 
+## Persona basis: the published persona space (user decision, 2026-10-30, after results were seen)
+
+The preregistration says only "persona-PC probes". The analysis code fixed before the full run used the thesis D4
+basis: 25 personas of the extended 36-role bank (`persona including knowlede denial/`), 24 PCs. That bank's
+knowledge-denial roles were designed with HP-KR's inversion in mind.
+
+On 2026-10-30 the user asked for the published persona space instead: arXiv 2605.09391's 8 deception and 7 honesty
+personas from the original 26-role bank (`persona vectors/vectors_s3/`, equal to `paper16_L20.pt` at block 20),
+centred, 14 PCs, oriented along the deception axis (`pilot.persona_basis(layer, "published")`).
+
+- **What had been seen.** By then the protocol-B and protocol-C point AUROCs at blocks 20, 28 and 40 had been seen
+  for every preregistered arm, including the extended persona arm. No published-persona probe had been fitted.
+- **What changes.** P2 and P4 are judged with the published basis (arms `persona_pub_pc` and `persona_pub_emotion`;
+  k from {2, 3, 5, 10}, since the basis has 14 PCs). The same rules otherwise apply.
+- **What stays.** The extended-basis arms (`persona_pc`, `persona_emotion`) are still reported as a sensitivity check
+  (`P2_extended`, `P4_extended`). Because the switch came after results were seen, RESULTS.md gives both and says so.
+
 ## Per prediction
 
 - **P1.** Let Δ_rand be the mean over the five held-out sets of [AUROC(emotion PCs at k_t) − mean AUROC(random at
