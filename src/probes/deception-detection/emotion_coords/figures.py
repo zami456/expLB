@@ -9,6 +9,7 @@ for lines; the first three pass all pairs for points), a diverging blue/red pair
 """
 
 import json
+import re
 
 import fire
 import matplotlib
@@ -140,7 +141,13 @@ def hpkr_subgroups(layers=(20, 52)) -> None:
     z = np.load(C.data_dir("phase4") / f"d1_scores{TAG}.npz")
     subgroup = z["subgroup"]
     groups = [("lie", "lie"), ("honest_admission", "honest admission"), ("honest_denial", "honest denial")]
-    scorers = sorted({k.split("|", 1)[1] for k in z.files if "|" in k},
+    # a protocol-B scorer's name carries the k its layer chose ("B emotion_pc (k=20)"), so match on the name without it
+    by_layer: dict[int, dict[str, str]] = {}
+    for key in z.files:
+        if "|" in key:
+            layer_tag, name = key.split("|", 1)
+            by_layer.setdefault(int(layer_tag[1:]), {})[re.sub(r" \(k=\d+\)$", "", name)] = name
+    scorers = sorted({n for d in by_layer.values() for n in d},
                      key=lambda n: (not n.startswith("A "), not n.startswith("B "), n))
     keep = [n for n in scorers if n.startswith(("A ", "B ")) or n in
             ("zero-shot afraid", "zero-shot guilty", "zero-shot compassionate", "zero-shot calm")]
@@ -150,7 +157,11 @@ def hpkr_subgroups(layers=(20, 52)) -> None:
     for i, layer in enumerate(layers):
         for j, name in enumerate(keep):
             ax = axes[i][j]
-            s = z[f"L{layer}|{name}"].astype(float)
+            full = by_layer.get(layer, {}).get(name)
+            if full is None:
+                ax.set_visible(False)
+                continue
+            s = z[f"L{layer}|{full}"].astype(float)
             s = (s - s.mean()) / s.std()
             data = [s[subgroup == g] for g, _ in groups]
             parts = ax.boxplot(data, widths=0.55, patch_artist=True, showfliers=False,
@@ -160,7 +171,7 @@ def hpkr_subgroups(layers=(20, 52)) -> None:
                 patch.set_facecolor(color)
                 patch.set_edgecolor(SURFACE)
             ax.set_xticks([1, 2, 3], ["lie", "adm.", "den."], fontsize=7)
-            ax.set_title(f"{name}\nlayer {layer}", fontsize=7.5)
+            ax.set_title(f"{full}\nlayer {layer}", fontsize=7.5)
             rows += [{"layer": layer, "scorer": name, "subgroup": g, "median_z": float(np.median(d)), "n": len(d)}
                      for (g, _), d in zip(groups, data)]
     axes[0][0].set_ylabel("score (z within scorer)")
