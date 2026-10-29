@@ -1,0 +1,2 @@
+# post hoc band: D2/D3 at blocks 36 and 44, half 0
+read --name d2d3 --out d2d3_band --layers 36,44 --shard 0/2 --session_timeout 5400

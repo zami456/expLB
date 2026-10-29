@@ -46,8 +46,12 @@ def _style() -> None:
     })
 
 
+TAG = ""  # appended to every file name (`all --tag _band` for the post hoc band)
+
+
 def _out(name: str):
-    return C.results_dir("figures") / name
+    stem, ext = name.rsplit(".", 1)
+    return C.results_dir("figures") / f"{stem}{TAG}.{ext}"
 
 
 def _probes(out: str) -> pd.DataFrame:
@@ -133,7 +137,7 @@ def transfer(out: str = "phase3", probe: str = "lr",
 
 def hpkr_subgroups(layers=(20, 52)) -> None:
     """D1: each scorer's HP-KR scores by subgroup (z-scored per scorer)."""
-    z = np.load(C.data_dir("phase4") / "d1_scores.npz")
+    z = np.load(C.data_dir("phase4") / f"d1_scores{TAG}.npz")
     subgroup = z["subgroup"]
     groups = [("lie", "lie"), ("honest_admission", "honest admission"), ("honest_denial", "honest denial")]
     scorers = sorted({k.split("|", 1)[1] for k in z.files if "|" in k},
@@ -166,11 +170,11 @@ def hpkr_subgroups(layers=(20, 52)) -> None:
     pd.DataFrame(rows).to_csv(_out("hpkr_subgroups.csv"), index=False)
 
 
-def d2d3_effects() -> None:
+def d2d3_effects(layers=None) -> None:
     """Interaction t (known x harmful) of the P8 emotions against the random-direction and topic nulls."""
     from emotion_coords.hpkr import P8_COMPASSION, P8_THREAT
 
-    layers = C.load()["layers"]
+    layers = C.load()["layers"] if layers is None else list(layers)
     fig, axes = plt.subplots(2, len(layers), figsize=(3.0 * len(layers), 6.0), squeeze=False, sharex="row")
     rows = []
     for i, name in enumerate(("d2", "d3")):
@@ -205,10 +209,12 @@ def d2d3_effects() -> None:
 
 
 def valence_scatter(prefix: str = "full", label=("afraid", "terrified", "calm", "serene", "guilty", "ashamed",
-                                                 "angry", "hostile", "compassionate", "loving", "happy", "desperate")) -> None:
+                                                 "angry", "hostile", "compassionate", "loving", "happy", "desperate"),
+                    layers=None) -> None:
     """Emotion vectors on PC1 x PC2 at each layer, coloured by NRC valence (unmatched in hollow gray)."""
     vad = V.vad_table()
-    layers = [L for L in C.load()["layers"] if (C.data_dir("bases") / f"{prefix}_L{L}.npz").exists()]
+    layers = [L for L in (C.load()["layers"] if layers is None else layers)
+              if (C.data_dir("bases") / f"{prefix}_L{L}.npz").exists()]
     fig, axes = plt.subplots(1, len(layers), figsize=(3.4 * len(layers), 3.4), squeeze=False)
     norm = TwoSlopeNorm(vmin=-1, vcenter=0, vmax=1)
     cmap = DIVERGING.reversed()  # red = unpleasant (low), blue = pleasant (high)
@@ -246,13 +252,17 @@ def valence_scatter(prefix: str = "full", label=("afraid", "terrified", "calm", 
     pd.DataFrame(rows).to_csv(_out(f"valence_scatter_{prefix}.csv"), index=False)
 
 
-def all(out: str = "phase3") -> None:  # noqa: A001 (the CLI verb)
+def all(out: str = "phase3", layers=None, tag: str = "") -> None:  # noqa: A001 (the CLI verb)
+    """`out`, `layers` and `tag` draw the post hoc band (`all --out phase3_band --layers 36,40,44 --tag _band`)."""
+    global TAG
+    TAG = tag
+    todo = None if layers is None else C.int_list(layers)
     _style()
-    valence_scatter()
+    valence_scatter(layers=todo)
     k_sweep(out)
     transfer(out)
-    hpkr_subgroups()
-    d2d3_effects()
+    hpkr_subgroups(layers=(20, 52) if todo is None else tuple(todo))
+    d2d3_effects(layers=todo)
 
 
 if __name__ == "__main__":

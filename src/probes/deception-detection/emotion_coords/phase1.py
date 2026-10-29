@@ -58,14 +58,18 @@ def base() -> None:
     logger.info(f"top-ups for {len(low)} core emotions: {sorted(low)} -> {_topup_path()}")
 
 
-def final() -> None:
+def final(layers=None, suffix: str = "") -> None:
+    """`layers` and `suffix` run the same recipe on another read set: the post hoc band around block 40
+    (`final --layers 32,36,44,48 --suffix _band` reads stories_band, neutral_band and tylenol_band and writes
+    phase1_band.json; the valence stop applies only when block 52 is among the layers)."""
     s = C.load()
+    todo = s["layers"] if layers is None else C.int_list(layers)
     topups = json.loads(_topup_path().read_text()) if _topup_path().exists() else []
     extra = {e: TOPUP_RANKS for e in topups}
     seed = s["seeds"]["stories"]
     out = {"topups": topups}
-    for layer in s["layers"]:
-        stories, neutral = V.Reads.of("stories", layer), V.Reads.of("neutral", layer)
+    for layer in todo:
+        stories, neutral = V.Reads.of(f"stories{suffix}", layer), V.Reads.of(f"neutral{suffix}", layer)
         if topups:
             have = stories.meta.loc[stories.meta["rank"] > 0, "emotion"].value_counts()
             missing = [e for e in topups if have.get(e, 0) == 0]
@@ -82,7 +86,7 @@ def final() -> None:
         split_final = V.split_half(stories, denoise, seed=seed, extra=extra) if extra else split_base
         split = split_base.merge(split_final, on="emotion", suffixes=("_20v20", "_final"))
         split.to_csv(_out(f"split_half_L{layer}.csv"), index=False)
-        dose = V.dose_response(e, layer)
+        dose = V.dose_response(e, layer, reads=f"tylenol{suffix}")
         dose.to_csv(_out(f"dose_response_L{layer}.csv"), index=False)
         arrays = {"E_vectors": e.vectors, "E_components": e.components, "E_explained": e.explained,
                   "E_labels": np.array(e.labels), "T_vectors": t.vectors, "T_components": t.components,
@@ -109,10 +113,11 @@ def final() -> None:
             "leace": {"rank": eraser.rank, "shrinkage": eraser.shrinkage},
         }
         logger.info(f"L{layer}: |r(PC1, valence)| {abs(geometry['r_pc1_valence']):.3f}, PC1 {geometry['pc1_var']:.3f}")
-        _json(_out("phase1.json"), out)
-    r52 = abs(out[s["d2_primary_layer"]]["geometry"]["r_pc1_valence"])
-    if r52 < 0.5:
-        raise SystemExit(f"STOP: |r(PC1, valence)| = {r52:.3f} < 0.5 at layer {s['d2_primary_layer']}")
+        _json(_out(f"phase1{suffix}.json"), out)
+    if s["d2_primary_layer"] in todo:
+        r52 = abs(out[s["d2_primary_layer"]]["geometry"]["r_pc1_valence"])
+        if r52 < 0.5:
+            raise SystemExit(f"STOP: |r(PC1, valence)| = {r52:.3f} < 0.5 at layer {s['d2_primary_layer']}")
     logger.info("phase 1 final done")
 
 

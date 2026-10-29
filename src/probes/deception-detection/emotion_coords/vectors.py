@@ -21,8 +21,16 @@ from emotion_coords import config as C
 from emotion_coords import linalg as la
 
 
-def _layer_index(layer: int) -> int:
-    return list(C.load()["layers"]).index(layer)
+def _read_info(name: str | None) -> dict:
+    """A reader folder's `READ.json` (its rows file and layers), written when it differs from the defaults, as for
+    the band reads (`stories_band` holds `stories` rows at other layers)."""
+    marker = C.DATA / "acts" / name / "READ.json" if name else None
+    info = json.loads(marker.read_text()) if marker is not None and marker.exists() else {}
+    return {"rows": info.get("rows", name), "layers": info.get("layers", list(C.load()["layers"]))}
+
+
+def _layer_index(layer: int, name: str | None = None) -> int:
+    return list(_read_info(name)["layers"]).index(layer)
 
 
 def load_reads(name: str) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
@@ -60,9 +68,9 @@ class Reads:
     @classmethod
     def of(cls, name: str, layer: int) -> "Reads":
         ids, content, _ = load_reads(name)
-        x = content[:, 0, _layer_index(layer)].astype(np.float64)
+        x = content[:, 0, _layer_index(layer, name)].astype(np.float64)
         ok = np.isfinite(x).all(1)
-        meta = row_meta(name).loc[ids[ok]]
+        meta = row_meta(_read_info(name)["rows"]).loc[ids[ok]]
         return cls(x[ok], meta.reset_index())
 
 
@@ -179,11 +187,11 @@ def neighbours(basis: Basis, queries: list[str], top: int = 5) -> dict[str, list
     return out
 
 
-def dose_response(basis: Basis, layer: int, emotions=("afraid", "calm")) -> pd.DataFrame:
+def dose_response(basis: Basis, layer: int, emotions=("afraid", "calm"), reads: str = "tylenol") -> pd.DataFrame:
     """The Tylenol prompts' pre-response activations projected on unit emotion vectors, by dose."""
-    ids, _, points = load_reads("tylenol")
-    x = points[:, 0, _layer_index(layer)].astype(np.float64)
-    meta = row_meta("tylenol").loc[ids]
+    ids, _, points = load_reads(reads)
+    x = points[:, 0, _layer_index(layer, reads)].astype(np.float64)
+    meta = row_meta(_read_info(reads)["rows"]).loc[ids]
     table = pd.DataFrame({"dose_mg": meta["dose_mg"].to_numpy()})
     for e in emotions:
         table[e] = x @ basis.unit(e)

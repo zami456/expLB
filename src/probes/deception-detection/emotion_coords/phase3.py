@@ -204,7 +204,7 @@ def run_mlp(workers: int = 4, threads: int = 3, layers: str | None = None, n_ran
     s = C.load()
     subset = LB.subset(variant)
     tmp = str(C.data_dir("phase3", "joblib_tmp"))
-    for layer in (s["layers"] if layers is None else [int(x) for x in str(layers).split(",")]):
+    for layer in (s["layers"] if layers is None else C.int_list(layers)):
         t_block = time.time()
         data = LB.load(layer, "a", subset)
         with np.load(C.data_dir("bases") / f"{bases}_L{layer}.npz") as z:
@@ -296,7 +296,7 @@ def summary(n_boot: int = 1000, probe: str = "lr", out: str = "phase3", variant:
     lb5, subset = LB.lb5(), LB.subset(variant)
     hpc, hpkr, it, idd = lb5[1], lb5[2], lb5[3], lb5[4]
     verdicts, tables, exploratory = [], [], []
-    for layer in (s["layers"] if layers is None else [int(x) for x in str(layers).split(",")]):
+    for layer in (s["layers"] if layers is None else C.int_list(layers)):
         data = LB.load(layer, "a", subset)
         ys = {t: data[t].y for t in lb5}
         arms = Arms(frame, scores, ys, layer, "a", probe, n_boot)
@@ -392,7 +392,7 @@ def summary_mlp(n_boot: int = 1000, out: str = "phase3", variant: str = "full", 
         scores = pickle.load(f)
     lb5, subset = LB.lb5(), LB.subset(variant)
     rows = []
-    for layer in (s["layers"] if layers is None else [int(x) for x in str(layers).split(",")]):
+    for layer in (s["layers"] if layers is None else C.int_list(layers)):
         data = LB.load(layer, "a", subset)
         arms = Arms(frame, scores, {t: data[t].y for t in lb5}, layer, "a", "mlp", n_boot)
         if arms.b.empty:

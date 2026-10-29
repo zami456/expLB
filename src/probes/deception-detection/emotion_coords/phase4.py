@@ -48,19 +48,22 @@ def subgroup_cis(scores: np.ndarray, subgroup: np.ndarray, n_boot: int = 1000) -
     return out
 
 
-def d1(n_boot: int = 1000) -> None:
+def d1(n_boot: int = 1000, layers=None, out: str = "phase3", suffix: str = "") -> None:
+    """`layers`, `out` and `suffix` run the post hoc band (`d1 --layers 36,40,44 --out phase3_band --suffix _band`:
+    the band's protocol-B choices, outputs d1_band.csv). P7 is judged only when block 20 is among the layers."""
     from deception_detection.utils import REPO_ROOT
     from deception_detection.scripts.persona_ood import run_probe
 
     s = C.load()
+    todo = s["layers"] if layers is None else C.int_list(layers)
     rows = H.hpkr_rows()
     sub_all = rows["subgroup"].to_numpy()
     sub_explicit = np.where((sub_all == "lie") & (rows["claim"].to_numpy() != "DENIED_KNOWLEDGE"), "lie_other", sub_all)
-    frame = pd.read_csv(C.results_dir("phase3") / "probes.csv")
+    frame = pd.read_csv(C.results_dir(out) / "probes.csv")
     subset = LB.full_subset()
     lb5 = LB.lb5()
     table, store = [], {}
-    for layer in s["layers"]:
+    for layer in todo:
         x_hpkr = LB.load(layer, "a")[HPKR].x
         if len(x_hpkr) != len(rows):
             raise RuntimeError(f"L{layer}: {len(x_hpkr)} HP-KR rows, expected {len(rows)}")
@@ -91,8 +94,10 @@ def d1(n_boot: int = 1000) -> None:
                              | {f"{g}_n": int((sub == g).sum()) for g in H.SUBGROUPS})
         logger.info(f"D1 L{layer} done")
     d1_table = pd.DataFrame(table)
-    d1_table.to_csv(_out("d1.csv"), index=False)
-    np.savez(C.data_dir("phase4") / "d1_scores.npz", subgroup=sub_all.astype(str), **store)  # not object: no pickle
+    d1_table.to_csv(_out(f"d1{suffix}.csv"), index=False)
+    np.savez(C.data_dir("phase4") / f"d1_scores{suffix}.npz", subgroup=sub_all.astype(str), **store)  # no pickle
+    if 20 not in todo:
+        return
 
     # P7: the published block-20 probe; its HP-KR AUROC on the capped rows comes from phase 3 (protocol A-published)
     pub = frame[(frame["protocol"] == "A-published") & (frame["layer"] == 20) & (frame["test"] == HPKR)]
@@ -116,29 +121,39 @@ def d1(n_boot: int = 1000) -> None:
     logger.info(f"P7: {p7}")
 
 
-def d2d3(n_null: int = 1000) -> None:
+def d2d3(n_null: int = 1000, layers=None, suffix: str = "") -> None:
+    """`layers` and `suffix` run the post hoc band (`d2d3 --layers 36,44 --suffix _band` reads d2d3_band). P8 itself
+    is judged at block 52 only; with a suffix, every layer's P8-style readout goes to p8{suffix}.json."""
     s = C.load()
-    p8 = {}
-    for layer in s["layers"]:
+    todo = s["layers"] if layers is None else C.int_list(layers)
+    p8, by_layer = {}, {}
+    for layer in todo:
         bases = _bases(layer)
         labels = list(bases["E_labels"])
         emotions = {n: bases["E_vectors"][i] for i, n in enumerate(labels)}
-        pre, reply, meta = H.d2d3_acts(layer)
+        pre, reply, meta = H.d2d3_acts(layer, reads=f"d2d3{suffix}")
         design = H.Design.of(meta)
         for name, acts in (("d2", pre), ("d3", reply)):
             table, nulls = H.did(acts, design, emotions, bases["T_vectors"], n_null=n_null, return_nulls=True)
             table.to_csv(_out(f"{name}_L{layer}.csv"), index=False)
             np.savez(C.data_dir("phase4") / f"{name}_L{layer}_nulls.npz", **nulls)
-            if name == "d2" and layer == s["d2_primary_layer"]:
+            if name == "d2":
                 hit = table.set_index("emotion")["above_95_both"]
-                p8 = {"layer": layer, "rows": len(meta), "questions": int(meta["question_id"].nunique()),
-                      "a_compassion": {e: bool(hit[e]) for e in H.P8_COMPASSION if e in hit},
-                      "b_threat": {e: bool(hit[e]) for e in H.P8_THREAT if e in hit}}
-                p8["a_holds"] = any(p8["a_compassion"].values())
-                p8["b_holds"] = any(p8["b_threat"].values())
+                read = {"layer": layer, "rows": len(meta), "questions": int(meta["question_id"].nunique()),
+                        "a_compassion": {e: bool(hit[e]) for e in H.P8_COMPASSION if e in hit},
+                        "b_threat": {e: bool(hit[e]) for e in H.P8_THREAT if e in hit}}
+                read["a_holds"] = any(read["a_compassion"].values())
+                read["b_holds"] = any(read["b_threat"].values())
+                by_layer[layer] = read
+                if layer == s["d2_primary_layer"]:
+                    p8 = read
         logger.info(f"D2/D3 L{layer}: {len(meta)} rows")
-    (_out("p8.json")).write_text(json.dumps(p8, indent=2), encoding="utf-8")
-    logger.info(f"P8: {p8}")
+    if s["d2_primary_layer"] in todo:
+        (_out("p8.json")).write_text(json.dumps(p8, indent=2), encoding="utf-8")
+        logger.info(f"P8: {p8}")
+    if suffix:
+        (_out(f"p8{suffix}.json")).write_text(json.dumps(by_layer, indent=2), encoding="utf-8")
+        logger.info(f"P8-style readout by layer: {by_layer}")
 
 
 if __name__ == "__main__":

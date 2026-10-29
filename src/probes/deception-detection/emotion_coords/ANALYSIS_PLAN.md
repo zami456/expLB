@@ -71,6 +71,21 @@ centred, 14 PCs, oriented along the deception axis (`pilot.persona_basis(layer, 
 - **What stays.** The extended-basis arms (`persona_pc`, `persona_emotion`) are still reported as a sensitivity check
   (`P2_extended`, `P4_extended`). Because the switch came after results were seen, RESULTS.md gives both and says so.
 
+## Post hoc band around block 40 (user request, 2026-10-30, after results were seen)
+
+Emotion PCs did well only at block 40 among the four preregistered blocks. The user then asked for the whole
+experiment on "layers 35-45" only. The pooled Liars' Bench activations exist every fourth block, so the band is
+blocks 36, 40 and 44.
+
+- **What is run.** Everything, on 36 and 44 (block 40 is shared with the main run):
+  - the stories, neutral texts, D2/D3 rows and Tylenol prompts are read at 36 and 44 (`*_band` read folders);
+  - the bases are built by the same recipe and top-ups (`phase1 final --layers 36,44 --suffix _band`);
+  - phase 3 runs every arm, erasures, the 170-d arms, zero-shot and MLP (parts `band`, results `phase3_band`);
+  - the summary covers 36/40/44, and D1, D2/D3 and the figures are tagged `_band`.
+- **Status.** It is post hoc and exploratory. It changes no preregistered verdict, which stays at blocks 20/28/40/52.
+  "Held at 3 of 3" in its summary means all three band blocks. The choice of band followed the block-40 result, so
+  a band effect is a description of where emotion PCs work, not a test of whether they do.
+
 ## Per prediction
 
 - **P1.** Let Δ_rand be the mean over the five held-out sets of [AUROC(emotion PCs at k_t) − mean AUROC(random at

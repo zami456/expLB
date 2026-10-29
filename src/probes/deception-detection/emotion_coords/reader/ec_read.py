@@ -400,22 +400,33 @@ def cmd_read(args) -> int:
     k, n = (int(x) for x in args.shard.split("/"))
     if not 0 <= k < n:
         raise SystemExit(f"bad --shard {args.shard}")
-    setup_log(args.name if n == 1 else f"{args.name}_shard{k}of{n}")
+    layers = tuple(int(x) for x in args.layers.split(","))
+    if list(layers) != sorted(set(layers)):
+        raise SystemExit(f"--layers must ascend without repeats: {args.layers}")
+    out_name = args.out or args.name
+    setup_log(out_name if n == 1 else f"{out_name}_shard{k}of{n}")
     rows = load_rows(args.name)
     n_groups, n_points = shape_of(rows)
-    out = ACTS / args.name
+    out = ACTS / out_name
+    if out_name != args.name or layers != MODEL["layers"]:  # the folder records its rows file and layers
+        out.mkdir(parents=True, exist_ok=True)
+        info = {"rows": args.name, "layers": list(layers)}
+        marker = out / "READ.json"
+        if marker.exists() and json.loads(marker.read_text()) != info:
+            raise SystemExit(f"{marker} holds {marker.read_text()}, not {info}")
+        marker.write_text(json.dumps(info))
     done = done_rows(out) if out.exists() else set()
     todo = [r for i, r in enumerate(rows) if i % n == k and r["row_id"] not in done]
-    log.info("%s (sha256 %s): %d rows, %d done, %d to read in shard %d/%d; layers %s; budget %d tokens, "
-             "%d traces/session, %s", args.name, sha256(ROWS / f"{args.name}.jsonl")[:12], len(rows), len(done),
-             len(todo), k, n, MODEL["layers"], args.budget, args.traces, "batched" if args.batched else "solo")
+    log.info("%s -> %s (sha256 %s): %d rows, %d done, %d to read in shard %d/%d; layers %s; budget %d tokens, "
+             "%d traces/session, %s", args.name, out_name, sha256(ROWS / f"{args.name}.jsonl")[:12], len(rows),
+             len(done), len(todo), k, n, layers, args.budget, args.traces, "batched" if args.batched else "solo")
     if not todo:
         return 0
     llm = load_remote_llm()
     hidden = int(llm.config.hidden_size)
 
     def work(sess, flat):
-        content, points = session_read(llm, sess, hidden, True, MODEL["layers"], n_groups, n_points)
+        content, points = session_read(llm, sess, hidden, True, layers, n_groups, n_points)
         c, p = masked(flat, content, points, n_groups, n_points)
         return {"content": c, "points": p}
 
@@ -601,6 +612,8 @@ def main() -> int:
         if name == "read":
             r.add_argument("--batched", action="store_true", help="pack rows into traces (default: one row per trace)")
             r.add_argument("--shard", default="0/1", help="K/N: only the rows at positions K mod N of the rows file")
+            r.add_argument("--layers", default=",".join(map(str, MODEL["layers"])), help="blocks to read, ascending")
+            r.add_argument("--out", default=None, help="output folder under acts/ (default: --name)")
     g = sub.add_parser("generate")
     g.add_argument("--name", required=True)
     g.add_argument("--retries", type=int, default=4)

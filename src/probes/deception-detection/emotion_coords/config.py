@@ -52,3 +52,10 @@ def load_env() -> None:
     from dotenv import load_dotenv
 
     load_dotenv(ENV_FILE)
+
+
+def int_list(x) -> list[int]:
+    """A layer list from the command line: fire turns "32,36" into a tuple and "20" into an int."""
+    if isinstance(x, (list, tuple)):
+        return [int(v) for v in x]
+    return [int(v) for v in str(x).split(",")]

@@ -24,7 +24,7 @@ import pandas as pd
 from emotion_coords import config as C
 from emotion_coords import linalg as la
 from emotion_coords.probes import auroc
-from emotion_coords.vectors import _layer_index, load_reads, row_meta
+from emotion_coords.vectors import _layer_index, _read_info, load_reads, row_meta
 
 SUBGROUPS = ("lie", "honest_admission", "honest_denial")
 P8_COMPASSION = ("compassionate", "empathetic", "sympathetic", "kind", "loving", "protective")
@@ -133,13 +133,14 @@ def did(acts: np.ndarray, design: Design, emotions: dict[str, np.ndarray], topic
     return (table, {"random": t_null, "topic": t_topic}) if return_nulls else table
 
 
-def d2d3_acts(layer: int) -> tuple[np.ndarray, np.ndarray, pd.DataFrame]:
-    """(pre-response vectors, forced-reply means, metadata) of the d2d3 reads at `layer`, non-finite dropped."""
-    ids, content, points = load_reads("d2d3")
-    li = _layer_index(layer)
+def d2d3_acts(layer: int, reads: str = "d2d3") -> tuple[np.ndarray, np.ndarray, pd.DataFrame]:
+    """(pre-response vectors, forced-reply means, metadata) of the d2d3 reads at `layer`, non-finite dropped.
+    `reads` names another read folder of the same rows (`d2d3_band`: the post hoc band's blocks)."""
+    ids, content, points = load_reads(reads)
+    li = _layer_index(layer, reads)
     pre, reply = points[:, 0, li].astype(np.float64), content[:, 0, li].astype(np.float64)
     ok = np.isfinite(pre).all(1) & np.isfinite(reply).all(1)
-    meta = row_meta("d2d3").loc[ids[ok]].reset_index()
+    meta = row_meta(_read_info(reads)["rows"]).loc[ids[ok]].reset_index()
     return pre[ok], reply[ok], meta
 
 
