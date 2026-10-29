@@ -77,7 +77,9 @@ def setup_log(name: str) -> None:
     log.setLevel(logging.INFO)
 
 
-def load_remote_llm():
+def load_remote_llm(peft: str | None = None):
+    """The remote model; `peft` names a LoRA adapter repo that NDIF attaches on its side per request (nnsight 0.8's
+    `peft=`: only the name travels, the server downloads and attaches it). Module paths are unchanged by it."""
     from nnsight import CONFIG, LanguageModel
     import nnsight.intervention.backends.remote as remote_backend
 
@@ -90,7 +92,7 @@ def load_remote_llm():
     host = (os.getenv("NDIF_HOST") or "https://api.ndif.us").strip()
     CONFIG.API.HOST = host if host.startswith("http") else "https://" + host
     CONFIG.API.APIKEY = key
-    return LanguageModel(MODEL["id"])
+    return LanguageModel(MODEL["id"], peft=peft) if peft else LanguageModel(MODEL["id"])
 
 
 # ── one NDIF session: many traces ──
@@ -124,21 +126,14 @@ def tensors(rows: list[dict], pad: int, n_groups: int, n_points: int):
 
 
 def session_read(llm, traces: list[list[dict]], hidden: int, remote, layers, n_groups: int, n_points: int,
-                 out_dtype: str = "float32", lora_plan: dict | None = None, lora_scale: float = 1.0):
+                 out_dtype: str = "float32"):
     """Every row of every trace in one session. Returns (content, points) CPU tensors, rows in trace order then row
     order, shapes (N, groups, layers, H) and (N, points, layers, H). The means accumulate in float32; `out_dtype`
-    bfloat16 halves the download (NDIF's result transfer is the bottleneck; points are bfloat16 values anyway).
-
-    `lora_plan` (`lora_intervention.call_plan`) reads a LoRA fine-tune: each adapted projection of every block up
-    to the deepest read gets `scale * B (A x)` added, in the order the block calls them, as
-    `activations.trace_layer_outputs` does. The plan is defined once per session, so a request carries it once."""
+    bfloat16 halves the download (NDIF's result transfer is the bottleneck; points are bfloat16 values anyway)."""
     import torch
 
     keep = getattr(torch, out_dtype)
     layers = list(layers)
-    plan = lora_plan or {}
-    pos = {L: j for j, L in enumerate(layers)}
-    top = max(layers)
     prepared, r0 = [], 0
     for rows in traces:
         ids, attn, gmask, pidx = tensors(rows, MODEL["pad"], n_groups, n_points)
@@ -152,16 +147,8 @@ def session_read(llm, traces: list[list[dict]], hidden: int, remote, layers, n_g
         points = torch.zeros(n_rows, max(n_points, 1), len(layers), hidden, dtype=torch.float32)
         for ids, attn, gmask, pidx, s, e in prepared:
             with llm.trace({"input_ids": ids, "attention_mask": attn}, logits_to_keep=1, use_cache=False):
-                for block in range(top + 1):  # ascending: an early block after a late one is an error
-                    for sub, proj, a, b in plan.get(block, []):
-                        module = getattr(getattr(llm.model.layers[block], sub), proj)
-                        x = module.input
-                        update = (x @ a.to(x.device, x.dtype).T) @ b.to(x.device, x.dtype).T
-                        module.output = module.output + update * lora_scale
-                    if block not in pos:
-                        continue
-                    j = pos[block]
-                    h = llm.model.layers[block].output
+                for j, L in enumerate(layers):  # ascending: an early block after a late one is an error
+                    h = llm.model.layers[L].output
                     for g in range(n_groups):
                         m = gmask[:, g].to(h.device, torch.float32)
                         num = (h * m[:, :, None].to(h.dtype)).sum(dim=1, dtype=torch.float32)
@@ -430,18 +417,7 @@ def cmd_read(args) -> int:
     rows = load_rows(args.name)
     n_groups, n_points = shape_of(rows)
     out = ACTS / out_name
-    plan, scale, lora_name = None, 1.0, None
-    if args.lora:  # the repo's own loader (torch and safetensors only; the package __init__ is empty)
-        sys.path.insert(0, str(DD))
-        from deception_detection.lora_intervention import call_plan, load_adapter
-
-        import torch
-
-        adapter = load_adapter(args.lora, max_block=max(layers), revision=args.lora_revision,
-                               dtype=getattr(torch, args.lora_dtype))
-        plan, scale, lora_name = call_plan(adapter), adapter.scale, adapter.name
-        log.info("LoRA %s: blocks 0-%d, scale %.3f, %.0f MiB per request", adapter.name, max(layers), scale,
-                 adapter.n_bytes() / 2**20)
+    lora_name = f"peft:{args.peft}" if args.peft else None
     if out_name != args.name or layers != MODEL["layers"] or lora_name:  # the folder records what it holds
         out.mkdir(parents=True, exist_ok=True)
         info = {"rows": args.name, "layers": list(layers)} | ({"lora": lora_name} if lora_name else {})
@@ -456,11 +432,11 @@ def cmd_read(args) -> int:
              len(done), len(todo), k, n, layers, args.budget, args.traces, "batched" if args.batched else "solo")
     if not todo:
         return 0
-    llm = load_remote_llm()
+    llm = load_remote_llm(args.peft)
     hidden = int(llm.config.hidden_size)
 
     def work(sess, flat):
-        content, points = session_read(llm, sess, hidden, True, layers, n_groups, n_points, args.dtype, plan, scale)
+        content, points = session_read(llm, sess, hidden, True, layers, n_groups, n_points, args.dtype)
         c, p = masked(flat, content, points, n_groups, n_points)
         return {"content": c, "points": p}
 
@@ -650,10 +626,8 @@ def main() -> int:
             r.add_argument("--out", default=None, help="output folder under acts/ (default: --name)")
             r.add_argument("--dtype", default="float32", choices=("float32", "bfloat16"),
                            help="transfer dtype of the results (bfloat16 halves the download)")
-            r.add_argument("--lora", default=None, help="read a LoRA fine-tune: PEFT adapter repo or folder")
-            r.add_argument("--lora_revision", default=None, help="the adapter's commit")
-            r.add_argument("--lora_dtype", default="bfloat16", choices=("bfloat16", "float16", "float32"),
-                           help="dtype the adapter's factors travel in")
+            r.add_argument("--peft", default=None, help="read a LoRA fine-tune that NDIF attaches itself (adapter "
+                                                         "repo; sending the factors is refused: payloads over ~1 MiB)")
     g = sub.add_parser("generate")
     g.add_argument("--name", required=True)
     g.add_argument("--retries", type=int, default=4)

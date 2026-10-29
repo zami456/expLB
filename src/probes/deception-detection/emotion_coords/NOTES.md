@@ -18,8 +18,14 @@ Machine-readable checks are in `results/emotion_coords/phase0/` (`python -m emot
   - Code run in it must not import `deception_detection`, because nnsight serialises the caller's code.
 - E: is an external USB disk. Check it is mounted before any job that touches it.
 - Keys: `D:\expLB\liars-bench\.env` holds `HF_TOKEN` and `NDIF_API_KEY`; `config.load_env()` reads them.
-- **Packages added for this study**: none so far. Phase 3 will add `statsmodels` to the analysis venv for the
-  clustered-SE regressions.
+- **Packages added for this study**: `peft 0.21.2` in the NDIF venv (2026-10-30; nothing else changed). nnsight
+  0.8's `LanguageModel(..., peft=<adapter repo>)` needs it locally to build the adapted skeleton; NDIF then attaches
+  the adapter itself per request (`ec_read.py read --peft`).
+- **LoRA fine-tunes on NDIF 0.8 (2026-10-30):** sending an adapter's factors with a request fails: NDIF refuses
+  payloads over ~1 MiB of incompressible data (0.78 MiB passes, 1.56 MiB fails "There was an error parsing the
+  body"), and the GS adapter is 202 MiB for blocks 0-40. The native `peft=` path reaches the server but fails there:
+  "ImportError: Using `peft=<repo_id>` requires the optional `peft` package" (the Llama-3.3-70B deployment lacks
+  peft). The thesis's LoRA reads predate NDIF 0.8 (2026-10-16 22:27).
 
 ## Data sources
 
