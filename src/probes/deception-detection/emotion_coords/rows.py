@@ -242,6 +242,32 @@ def lb_band() -> Path:
     return write_rows("lb_band", rows)
 
 
+def gs() -> Path:
+    """Gender-Secret as `scripts/gender_secret.py` loads and pools it (the fine-tune's rows, detection on the final
+    answer), so this reader can read it again: through the fine-tune to check the LoRA path against the stored
+    `activations/gender_secret` vectors. Row id = the row's position in that load."""
+    from deception_detection.repository import DatasetRepository
+    from deception_detection.tokenized_data import TokenizedDataset
+
+    dataset = DatasetRepository().get("gender_secret__plain", model="prewritten", trim_reasoning=True,
+                                      shuffle_upon_init=True)
+    toks = TokenizedDataset.from_dataset(dataset, _tokenizer(), detect_all=False, detect_only_start_of_turn=False,
+                                         detect_only_last_token=False)
+    tokens, attn = toks.tokens.numpy(), toks.attention_mask.numpy().astype(bool)
+    mask = toks.detection_mask.numpy().astype(bool)
+    rows = []
+    for i in range(len(tokens)):
+        n = int(attn[i].sum())
+        span = np.flatnonzero(mask[i, tokens.shape[1] - n:])  # left-padded
+        if not len(span):
+            continue
+        if span[-1] - span[0] + 1 != len(span):
+            raise RuntimeError(f"GS row {i}: the detected span is not contiguous")
+        rows.append({"row_id": i, "ids": [int(t) for t in tokens[i, tokens.shape[1] - n:]],
+                     "groups": [[[int(span[0]), int(span[-1]) + 1]]], "points": [], "label": dataset.labels[i].name})
+    return write_rows("gs", rows)
+
+
 def fidelity(per_dataset: int = 10) -> Path:
     """Teacher-forced log-probs of each recorded final assistant message (content and closing <|eot_id|>),
     under the cached formatting (A) and with the template's own date block removed (B)."""
@@ -378,5 +404,5 @@ def pilot() -> None:
 
 
 if __name__ == "__main__":
-    fire.Fire({"stories": stories, "neutral": neutral, "lb_parity": lb_parity, "lb_band": lb_band, "fidelity": fidelity,
+    fire.Fire({"stories": stories, "neutral": neutral, "lb_parity": lb_parity, "lb_band": lb_band, "gs": gs, "fidelity": fidelity,
                "d2d3": d2d3, "tylenol": tylenol, "generation": generation, "pilot": pilot})
