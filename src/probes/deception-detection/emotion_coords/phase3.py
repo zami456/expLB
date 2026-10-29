@@ -1,5 +1,6 @@
 """Phase 3 of the emotion-coordinate study: every feature set, both probe families, protocols A, B and C.
 
+    python -m emotion_coords.phase3 run --early         # the arms that need no story reads, while NDIF reads
     python -m emotion_coords.phase3 run [--workers 4]   # blocks: 20/28/40/52 at pooling (a); 20 at (b) and (c)
     python -m emotion_coords.phase3 merge               # parts -> results/emotion_coords/phase3/probes.csv + scores
     python -m emotion_coords.phase3 summary             # protocol-B tables and P1-P6 (ANALYSIS_PLAN.md)
@@ -48,19 +49,25 @@ def _write(path: Path, payload) -> None:
     os.replace(tmp, path)
 
 
-def feature_sets(layer: int, data: dict, bases: dict, hidden: int, n_random: int = 20) -> list[P.FeatureSet]:
+def independent_sets(layer: int, data: dict, hidden: int, n_random: int = 20) -> list[P.FeatureSet]:
+    """The feature sets that need no story reads (raw, training-set PCs, random, Alpaca PCs, persona PCs), so
+    `run --early` can fit them while NDIF is still reading the stories."""
     control = C.load()["control"]
-    e, t = bases["E_components"], bases["T_components"]
-    persona = persona_basis(layer)
-    sets = [P.FeatureSet("raw", "raw"),
+    return [P.FeatureSet("raw", "raw"),
             P.FeatureSet("trainpca_pc", "trainpca_pc", None, P.KS, per_fold=lambda x: la.top_pcs(x, 20)),
-            P.FeatureSet("emotion_pc", "emotion_pc", e, P.KS),
-            P.FeatureSet("topic_pc", "topic_pc", t, P.KS),
-            *[P.FeatureSet("shuffled_pc", "shuffled_pc", bases[f"S{p}_components"], P.KS, seed=p) for p in range(5)],
             *[P.FeatureSet("random", "random", la.random_subspace(hidden, 20, seed=10_000 + s),
                            tuple(sorted(set(P.KS) | {6})), seed=s) for s in range(n_random)],
             P.FeatureSet("alpaca_pc", "alpaca_pc", la.top_pcs(data[control].x, 20), P.KS),
-            P.FeatureSet("persona_pc", "persona_pc", persona, P.KS)]
+            P.FeatureSet("persona_pc", "persona_pc", persona_basis(layer), P.KS)]
+
+
+def feature_sets(layer: int, data: dict, bases: dict, hidden: int, n_random: int = 20) -> list[P.FeatureSet]:
+    e, t = bases["E_components"], bases["T_components"]
+    sets = independent_sets(layer, data, hidden, n_random)
+    persona = next(fs.basis for fs in sets if fs.name == "persona_pc")
+    sets += [P.FeatureSet("emotion_pc", "emotion_pc", e, P.KS),
+             P.FeatureSet("topic_pc", "topic_pc", t, P.KS),
+             *[P.FeatureSet("shuffled_pc", "shuffled_pc", bases[f"S{p}_components"], P.KS, seed=p) for p in range(5)]]
     for k in (3, 5, 10):
         union = la.orthonormal(np.vstack([persona[:k], e[:k]]))
         sets.append(P.FeatureSet("persona_emotion", "persona_emotion", union, (len(union),), seed=k))
@@ -103,8 +110,9 @@ def _unit(family: str, fs: P.FeatureSet, data: dict, layer: int, pooling: str, p
 
 
 def run(workers: int = 4, threads: int = 3, blocks: str | None = None, n_random: int = 20, variant: str = "full",
-        bases: str = "full", parts: str = "parts") -> None:
-    """`variant`, `bases` and `parts` exist for a small smoke test: pilot rows and bases, a separate parts folder."""
+        bases: str = "full", parts: str = "parts", early: bool = False) -> None:
+    """`variant`, `bases` and `parts` exist for a small smoke test: pilot rows and bases, a separate parts folder.
+    `early` fits only `independent_sets`, before the bases exist; a later full run skips their saved parts."""
     from joblib import Parallel, delayed
 
     global PARTS
@@ -123,10 +131,13 @@ def run(workers: int = 4, threads: int = 3, blocks: str | None = None, n_random:
     for layer, pooling in todo_blocks:
         t_block = time.time()
         data = LB.load(layer, pooling, subset, bc_variant=variant)
-        with np.load(C.data_dir("bases") / f"{bases}_L{layer}.npz") as z:
-            bases = {k: z[k] for k in z.files}
         hidden = data[control].x.shape[1]
-        sets = feature_sets(layer, data, bases, hidden, n_random)
+        if early:
+            base, sets = None, independent_sets(layer, data, hidden, n_random)
+        else:
+            with np.load(C.data_dir("bases") / f"{bases}_L{layer}.npz") as z:
+                base = {k: z[k] for k in z.files}
+            sets = feature_sets(layer, data, base, hidden, n_random)
         units = [(fam, fs) for fs in sorted(sets, key=lambda f: f.name not in HEAVY) for fam in ("lr", "dom")]
         todo = [(fam, fs) for fam, fs in units if not (_parts() / f"{_unit_name(layer, pooling, fam, fs)}.pkl").exists()]
         logger.info(f"L{layer}{pooling}: {len(units)} units, {len(todo)} to run on {workers} workers")
@@ -135,10 +146,13 @@ def run(workers: int = 4, threads: int = 3, blocks: str | None = None, n_random:
             for fam, fs in todo)
         for name, seconds in done:
             logger.info(f"  {name}: {seconds:.0f} s")
+        if early:
+            logger.info(f"L{layer}{pooling} (early) done in {(time.time() - t_block) / 60:.1f} min")
+            continue
         if pooling == "a":  # erase arms, protocol B: lr reuses the raw arm's fold-chosen C
             with open(_parts() / f"{_unit_name(layer, pooling, 'lr', P.FeatureSet('raw', 'raw'))}.pkl", "rb") as f:
                 raw_c = pickle.load(f)["chosen_c"]
-            erase = [(fam, fs) for fs in erase_sets(bases, hidden) for fam in ("lr", "dom")]
+            erase = [(fam, fs) for fs in erase_sets(base, hidden) for fam in ("lr", "dom")]
             erase = [(fam, fs) for fam, fs in erase
                      if not (_parts() / f"{_unit_name(layer, pooling, fam, fs)}.pkl").exists()]
             Parallel(n_jobs=workers, backend="loky", temp_folder=tmp, max_nbytes="1M")(
@@ -146,7 +160,7 @@ def run(workers: int = 4, threads: int = 3, blocks: str | None = None, n_random:
                                str(_parts() / f"{_unit_name(layer, pooling, fam, fs)}.pkl"),
                                raw_c if fam == "lr" else None) for fam, fs in erase)
             # exploratory: the whole emotion subspace at fixed k, protocol B only
-            explore = [(fam, fs) for fs in exploratory_sets(data, bases, hidden) for fam in ("lr", "dom")]
+            explore = [(fam, fs) for fs in exploratory_sets(data, base, hidden) for fam in ("lr", "dom")]
             explore = [(fam, fs) for fam, fs in explore
                        if not (_parts() / f"{_unit_name(layer, pooling, fam, fs)}.pkl").exists()]
             Parallel(n_jobs=workers, backend="loky", temp_folder=tmp, max_nbytes="1M")(
@@ -156,8 +170,8 @@ def run(workers: int = 4, threads: int = 3, blocks: str | None = None, n_random:
         extra = _parts() / f"L{layer}{pooling}_zero_shot_and_published.pkl"
         if not extra.exists():
             store = P.Store()
-            labels = list(bases["E_labels"])
-            P.zero_shot({n: (bases["E_vectors"][labels.index(n)], sign) for n, sign in ZERO_SHOT.items()
+            labels = list(base["E_labels"])
+            P.zero_shot({n: (base["E_vectors"][labels.index(n)], sign) for n, sign in ZERO_SHOT.items()
                          if n in labels}, data, lb5, control, layer, pooling, store)
             if pooling == "a":
                 run_dir = REPO_ROOT / "results" / ("XXXX-9-llama-all" if layer == 20 else f"XXXX-9-llama-all-L{layer}")
