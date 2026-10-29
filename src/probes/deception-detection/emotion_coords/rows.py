@@ -33,6 +33,7 @@ FIDELITY_VARIANT_BASE = 10_000_000
 DATASET_CODES = {  # Liars' Bench sets in a fixed order; code * 1e6 + pooled row is the row id
     "convince_me__plain": 1, "harm_refusal_choice__plain": 2, "harm_refusal_knowledge_report__plain": 3,
     "insider_trading_cadenza__plain": 4, "instruct_dishonesty__plain": 5, "XXXX-20__plain": 6,
+    "repe_honesty__plain": 7, "repe_honesty__plain_val": 8,
 }
 LB_SYSTEM = "Cutting Knowledge Date: December 2023\nToday Date: 01 Sep 2025"  # Liars' Bench's Llama system prompt
 TEMPLATE_DATE_BLOCK = "Cutting Knowledge Date: December 2023\nToday Date: 26 Jul 2024\n\n"  # the template's own
@@ -165,14 +166,16 @@ def neutral() -> Path:
 # --- Liars' Bench rows, formatted exactly as the cached activations ------------------------------
 
 
-def _lb_rows() -> dict[str, dict]:
-    """Per Liars' Bench set: the run's tokens (left-padded) and the Phase 0 index table."""
+def _lb_rows(with_train: bool = False) -> dict[str, dict]:
+    """Per Liars' Bench set: the run's tokens (left-padded) and the Phase 0 index table. `with_train` adds the
+    RepE training pairs (their val half is among the eval sets)."""
     from deception_detection.tokenized_data import TokenizedDataset
     from emotion_coords.phase0 import _experiment
 
     cfg, experiment = _experiment()
     out = {}
-    for ds in [*experiment.eval_datasets, *experiment.control_datasets]:
+    for ds in [*([experiment.train_dataset] if with_train else []), *experiment.eval_datasets,
+               *experiment.control_datasets]:
         if ds.name not in DATASET_CODES:
             continue
         toks = TokenizedDataset.from_dataset(
@@ -216,6 +219,27 @@ def lb_parity(per_class: int = 5) -> Path:
                          "groups": [[[int(r.first), int(r.last) + 1]]], "points": [int(r.pre), int(r.last)],
                          "dataset": name, "pooled_row": int(r.pooled_row), "label": r.label})
     return write_rows("lb_parity", rows)
+
+
+def lb_band() -> Path:
+    """Every Liars' Bench row the probes use, for blocks with no stored pooled array (the post hoc band 35-45):
+    the full run's capped rows, every HP-KR row (D1 scores them all), Alpaca and the RepE pairs. Group = the
+    detected span, i.e. pooling (a); every span is contiguous (checked in the index)."""
+    from emotion_coords import lbdata as LB
+
+    keep, hpkr = LB.full_subset(), "harm_refusal_knowledge_report__plain"
+    rows = []
+    for name, entry in _lb_rows(with_train=True).items():
+        index = entry["index"]
+        if not index["mask_contiguous"].astype(bool).all():
+            raise RuntimeError(f"{name}: a detected span is not contiguous")
+        if name in keep and name != hpkr:
+            index = index[index["pooled_row"].isin(keep[name])]
+        for r in index.itertuples():
+            rows.append({"row_id": DATASET_CODES[name] * 1_000_000 + int(r.pooled_row),
+                         "ids": _unpadded(entry, int(r.dataset_row)), "groups": [[[int(r.first), int(r.last) + 1]]],
+                         "points": [], "dataset": name, "pooled_row": int(r.pooled_row), "label": r.label})
+    return write_rows("lb_band", rows)
 
 
 def fidelity(per_dataset: int = 10) -> Path:
@@ -354,5 +378,5 @@ def pilot() -> None:
 
 
 if __name__ == "__main__":
-    fire.Fire({"stories": stories, "neutral": neutral, "lb_parity": lb_parity, "fidelity": fidelity,
+    fire.Fire({"stories": stories, "neutral": neutral, "lb_parity": lb_parity, "lb_band": lb_band, "fidelity": fidelity,
                "d2d3": d2d3, "tylenol": tylenol, "generation": generation, "pilot": pilot})

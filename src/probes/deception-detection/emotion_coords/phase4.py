@@ -69,7 +69,8 @@ def d1(n_boot: int = 1000, layers=None, out: str = "phase3", suffix: str = "") -
             raise RuntimeError(f"L{layer}: {len(x_hpkr)} HP-KR rows, expected {len(rows)}")
         bases = _bases(layer)
         run_dir = REPO_ROOT / "results" / ("XXXX-9-llama-all" if layer == 20 else f"XXXX-9-llama-all-L{layer}")
-        scorers = {"A published RepE probe": run_probe(run_dir)(x_hpkr)}
+        # the published probes exist every fourth block only (none at the band's odd blocks)
+        scorers = {"A published RepE probe": run_probe(run_dir)(x_hpkr)} if run_dir.exists() else {}
         data = LB.load(layer, "a", subset)
         train = [n for n in lb5 if n != HPKR]
         x = np.concatenate([data[n].x for n in train])

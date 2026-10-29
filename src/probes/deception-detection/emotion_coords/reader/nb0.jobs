@@ -1,0 +1,3 @@
+# band 35-45: Tylenol prompts, then the neutral texts, at the new blocks
+read --name tylenol --out tylenol_band2 --layers 35,37,38,39,41,42,43,45 --dtype bfloat16
+read --name neutral --out neutral_band2 --layers 35,37,38,39,41,42,43,45 --dtype bfloat16 --batched --traces 4 --session_timeout 5400

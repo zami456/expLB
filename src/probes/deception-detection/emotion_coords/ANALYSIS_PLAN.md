@@ -82,6 +82,15 @@ blocks 36, 40 and 44.
   - the bases are built by the same recipe and top-ups (`phase1 final --layers 36,44 --suffix _band`);
   - phase 3 runs every arm, erasures, the 170-d arms, zero-shot and MLP (parts `band`, results `phase3_band`);
   - the summary covers 36/40/44, and D1, D2/D3 and the figures are tagged `_band`.
+- **Extended to every block 35-45 (user, 2026-10-30, after the 36/40/44 results).** The eight blocks with no stored
+  pooled array (35, 37, 38, 39, 41, 42, 43, 45) get their Liars' Bench activations from this study's reader:
+  - every row the probes use (`rows lb_band`: the capped rows, all of HP-KR, Alpaca, the RepE pairs), pooling (a)
+    as the detected span's mean, accumulated in float32 and transferred as bfloat16 (`read --dtype bfloat16`);
+  - checked on the 50 parity rows at blocks 36/40/44 against the stored arrays: median cos 0.99996-0.99997, minimum
+    0.99973-0.99984, within the envelope of separate NDIF passes already seen in the pilot (0.99967-0.99976);
+  - written in the stored layout by `lbdata.write_band_pooled` (rows never used are NaN, which `load` drops);
+  - the stories, neutral texts, Tylenol prompts and D2/D3 rows read the same way at those blocks.
+  There is no published RepE probe at those blocks, so protocol A-published is absent there.
 - **Status.** It is post hoc and exploratory. It changes no preregistered verdict, which stays at blocks 20/28/40/52.
   "Held at 3 of 3" in its summary means all three band blocks. The choice of band followed the block-40 result, so
   a band effect is a description of where emotion PCs work, not a test of whether they do.

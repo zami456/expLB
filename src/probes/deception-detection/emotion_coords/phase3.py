@@ -178,8 +178,8 @@ def run(workers: int = 4, threads: int = 3, blocks: str | None = None, n_random:
             labels = list(base["E_labels"])
             P.zero_shot({n: (base["E_vectors"][labels.index(n)], sign) for n, sign in ZERO_SHOT.items()
                          if n in labels}, data, lb5, control, layer, pooling, store)
-            if pooling == "a":
-                run_dir = REPO_ROOT / "results" / ("XXXX-9-llama-all" if layer == 20 else f"XXXX-9-llama-all-L{layer}")
+            run_dir = REPO_ROOT / "results" / ("XXXX-9-llama-all" if layer == 20 else f"XXXX-9-llama-all-L{layer}")
+            if pooling == "a" and run_dir.exists():  # the published probes exist every fourth block only
                 score = run_probe(run_dir)
                 ctrl = score(data[control].x)
                 for t in lb5:

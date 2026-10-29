@@ -220,5 +220,28 @@ def cache_vectors(wanted: dict[str, np.ndarray]) -> dict[str, dict[str, np.ndarr
     return out
 
 
+def write_band_pooled(read: str = "lb_band") -> None:
+    """Pooling (a) files for the blocks the thesis never pooled (the band 35-45), from this study's `read` folder,
+    in the stored layout: 'pooled' (every pooled row, float32, pooled order), 'labels', 'name'. Rows the probes never
+    use were not read and are NaN, which `load` drops. Written under `C.pooled_dir`'s fallback folder."""
+    from emotion_coords import vectors as V
+    from emotion_coords.rows import DATASET_CODES
+
+    ids, content, _ = V.load_reads(read)
+    for j, layer in enumerate(V._read_info(read)["layers"]):
+        folder = C.pooled_dir(layer)
+        if "pooled_band" not in str(folder):
+            raise RuntimeError(f"block {layer} has the thesis's pooled files; not overwriting {folder}")
+        folder.mkdir(parents=True, exist_ok=True)
+        for name, code in DATASET_CODES.items():
+            table = index(name)
+            mine = ids // 1_000_000 == code
+            x = np.full((len(table), content.shape[-1]), np.nan, dtype=np.float32)
+            x[ids[mine] % 1_000_000] = content[mine, 0, j]
+            np.savez(folder / f"{name}.npz", pooled=x, labels=table["label"].to_numpy().astype(str),  # not object
+                     name=np.array(name))
+            logger.info(f"L{layer} {name}: {int(mine.sum())} of {len(table)} rows read")
+
+
 if __name__ == "__main__":
-    fire.Fire({"extract_bc": extract_bc})
+    fire.Fire({"extract_bc": extract_bc, "write_band_pooled": write_band_pooled})

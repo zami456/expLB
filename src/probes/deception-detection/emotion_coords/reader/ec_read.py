@@ -121,11 +121,14 @@ def tensors(rows: list[dict], pad: int, n_groups: int, n_points: int):
     return ids, attn, gmask, pidx
 
 
-def session_read(llm, traces: list[list[dict]], hidden: int, remote, layers, n_groups: int, n_points: int):
-    """Every row of every trace in one session. Returns (content, points) float32 CPU tensors, rows in trace order
-    then row order, shapes (N, groups, layers, H) and (N, points, layers, H)."""
+def session_read(llm, traces: list[list[dict]], hidden: int, remote, layers, n_groups: int, n_points: int,
+                 out_dtype: str = "float32"):
+    """Every row of every trace in one session. Returns (content, points) CPU tensors, rows in trace order then row
+    order, shapes (N, groups, layers, H) and (N, points, layers, H). The means accumulate in float32; `out_dtype`
+    bfloat16 halves the download (NDIF's result transfer is the bottleneck; points are bfloat16 values anyway)."""
     import torch
 
+    keep = getattr(torch, out_dtype)
     layers = list(layers)
     prepared, r0 = [], 0
     for rows in traces:
@@ -136,8 +139,8 @@ def session_read(llm, traces: list[list[dict]], hidden: int, remote, layers, n_g
     # No early stop (it breaks a multi-trace session on NDIF 0.8); logits_to_keep=1 and no KV cache instead.
     # (nnsight finds each `with` by its source line, so no comment may sit between the loop header and the `with`.)
     with llm.session(remote=remote):
-        content = torch.zeros(n_rows, max(n_groups, 1), len(layers), hidden, dtype=torch.float32).save()
-        points = torch.zeros(n_rows, max(n_points, 1), len(layers), hidden, dtype=torch.float32).save()
+        content = torch.zeros(n_rows, max(n_groups, 1), len(layers), hidden, dtype=torch.float32)
+        points = torch.zeros(n_rows, max(n_points, 1), len(layers), hidden, dtype=torch.float32)
         for ids, attn, gmask, pidx, s, e in prepared:
             with llm.trace({"input_ids": ids, "attention_mask": attn}, logits_to_keep=1, use_cache=False):
                 for j, L in enumerate(layers):  # ascending: an early block after a late one is an error
@@ -150,7 +153,9 @@ def session_read(llm, traces: list[list[dict]], hidden: int, remote, layers, n_g
                     if n_points:
                         rows_idx = torch.arange(ids.shape[0], device=h.device)[:, None]
                         points[s:e, :, j] += h[rows_idx, pidx.to(h.device)].to(torch.float32).cpu()
-    return getattr(content, "value", content), getattr(points, "value", points)
+        content_out = content.to(keep).save()
+        points_out = points.to(keep).save()
+    return getattr(content_out, "value", content_out), getattr(points_out, "value", points_out)
 
 
 def session_logprob(llm, rows: list[dict], remote):
@@ -208,8 +213,8 @@ def masked(rows: list[dict], content, points, n_groups: int, n_points: int):
     """NaN where a group is empty or a point absent; the placeholder axis dropped when a file has none."""
     import numpy as np
 
-    c = content.detach().cpu().numpy().astype(np.float32)[:, :n_groups]
-    p = points.detach().cpu().numpy().astype(np.float32)[:, :n_points]
+    c = content.detach().cpu().float().numpy()[:, :n_groups]  # .float(): numpy has no bfloat16
+    p = points.detach().cpu().float().numpy()[:, :n_points]
     for i, r in enumerate(rows):
         for g, spans in enumerate(r["groups"]):
             if not any(b > a for a, b in spans):
@@ -426,7 +431,7 @@ def cmd_read(args) -> int:
     hidden = int(llm.config.hidden_size)
 
     def work(sess, flat):
-        content, points = session_read(llm, sess, hidden, True, layers, n_groups, n_points)
+        content, points = session_read(llm, sess, hidden, True, layers, n_groups, n_points, args.dtype)
         c, p = masked(flat, content, points, n_groups, n_points)
         return {"content": c, "points": p}
 
@@ -614,6 +619,8 @@ def main() -> int:
             r.add_argument("--shard", default="0/1", help="K/N: only the rows at positions K mod N of the rows file")
             r.add_argument("--layers", default=",".join(map(str, MODEL["layers"])), help="blocks to read, ascending")
             r.add_argument("--out", default=None, help="output folder under acts/ (default: --name)")
+            r.add_argument("--dtype", default="float32", choices=("float32", "bfloat16"),
+                           help="transfer dtype of the results (bfloat16 halves the download)")
     g = sub.add_parser("generate")
     g.add_argument("--name", required=True)
     g.add_argument("--retries", type=int, default=4)

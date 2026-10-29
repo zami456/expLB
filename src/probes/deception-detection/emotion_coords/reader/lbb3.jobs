@@ -1,0 +1,2 @@
+# band 35-45 (user 2026-10-30): Liars' Bench rows at the blocks with no stored pooled array, quarter 3
+read --name lb_band --layers 35,37,38,39,41,42,43,45 --dtype bfloat16 --batched --shard 3/4 --traces 4 --session_timeout 5400

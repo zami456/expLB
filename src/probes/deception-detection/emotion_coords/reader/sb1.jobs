@@ -1,0 +1,2 @@
+# band 35-45: stories at the new blocks, quarter 1
+read --name stories --out stories_band2 --layers 35,37,38,39,41,42,43,45 --dtype bfloat16 --batched --shard 1/4 --traces 4 --session_timeout 5400

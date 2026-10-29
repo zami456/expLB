@@ -43,8 +43,10 @@ def results_dir(*parts: str) -> Path:
 
 
 def pooled_dir(layer: int) -> Path:
-    """The thesis's pooled Liars' Bench activations at `layer` (`layer_sweep.pooled_dir`)."""
-    return REPO_ROOT / "activations" / ("pooled" if layer == 20 else f"pooled_L{layer}")
+    """The thesis's pooled Liars' Bench activations at `layer` (`layer_sweep.pooled_dir`); for a block the thesis
+    never pooled (the band 35-45), the same files built from this study's own reads (`lbdata.write_band_pooled`)."""
+    thesis = REPO_ROOT / "activations" / ("pooled" if layer == 20 else f"pooled_L{layer}")
+    return thesis if thesis.exists() else DATA / "pooled_band" / f"pooled_L{layer}"
 
 
 def load_env() -> None:
