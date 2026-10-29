@@ -1,6 +1,7 @@
 # Runs the reader jobs listed in <Chain>.jobs one after another (one NDIF process at a time).
-# A job that exits 3 (watchdog), 4 (transient wait exhausted) or 6 (unexplained failures) is relaunched after
-# two minutes, up to six attempts; it resumes by row id. Status lines go to data/emotion_coords/logs/chain_<Chain>.status.
+# A job that exits 3 (watchdog), 4 (transient wait exhausted), 5 (module-output collisions, expected when shards
+# of a read run side by side) or 6 (unexplained failures) is relaunched after two minutes, up to six attempts; it
+# resumes by row id. Status lines go to data/emotion_coords/logs/chain_<Chain>.status.
 # Launch detached from the PowerShell tool (WMI Win32_Process.Create), never from the Bash tool.
 param([string]$Chain = "pilot", [string]$Python = "E:\aletheia\venv08\Scripts\python.exe")
 
@@ -22,7 +23,7 @@ foreach ($job in $jobs) {
         Pop-Location
         "EXIT $code $job $(Get-Date -Format s)" | Add-Content $status
         if ($code -eq 0) { break }
-        if ($code -in 3, 4, 6) { Start-Sleep -Seconds 120; continue }
+        if ($code -in 3, 4, 5, 6) { Start-Sleep -Seconds 120; continue }
         break
     }
     if ($code -ne 0) { "FAILED $job $(Get-Date -Format s)" | Add-Content $status; exit $code }

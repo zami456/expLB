@@ -307,7 +307,7 @@ def shape_of(rows: list[dict]) -> tuple[int, int]:
 
 # ── the resumable loop shared by `read` and `logprob` ──
 
-def run_loop(args, rows: list[dict], work, out: Path, solo: bool) -> int:
+def run_loop(args, rows: list[dict], work, out: Path, solo: bool, done_name: str = "DONE") -> int:
     """Read `rows` session by session with `work(session_traces) -> dict of arrays`, saving each session's chunk.
     Same failure policy as the Verdict reader: halve on OOM, back off on transient failures, stop on repeated
     unexplained ones."""
@@ -387,7 +387,7 @@ def run_loop(args, rows: list[dict], work, out: Path, solo: bool) -> int:
             log.info("raised back to %d traces/session (budget stays %d tokens)", traces, budget)
     stats = {"finished": time.strftime("%Y-%m-%d %H:%M:%S"), "requests_this_run": n_requests,
              "seconds_this_run": round(time.time() - t_start, 1)}
-    (out / "DONE").write_text(json.dumps(stats))
+    (out / done_name).write_text(json.dumps(stats))
     log.info("%s complete: %s", out.name, stats)
     return 0
 
@@ -395,15 +395,20 @@ def run_loop(args, rows: list[dict], work, out: Path, solo: bool) -> int:
 # ── commands ──
 
 def cmd_read(args) -> int:
-    setup_log(args.name)
+    """`--shard K/N` reads only the rows at positions K mod N of the rows file, so N processes can split a file
+    without overlap (NDIF's result downloads are slow per connection, not per client)."""
+    k, n = (int(x) for x in args.shard.split("/"))
+    if not 0 <= k < n:
+        raise SystemExit(f"bad --shard {args.shard}")
+    setup_log(args.name if n == 1 else f"{args.name}_shard{k}of{n}")
     rows = load_rows(args.name)
     n_groups, n_points = shape_of(rows)
     out = ACTS / args.name
     done = done_rows(out) if out.exists() else set()
-    todo = [r for r in rows if r["row_id"] not in done]
-    log.info("%s (sha256 %s): %d rows, %d done, %d to read; layers %s; budget %d tokens, %d traces/session, %s",
-             args.name, sha256(ROWS / f"{args.name}.jsonl")[:12], len(rows), len(rows) - len(todo), len(todo),
-             MODEL["layers"], args.budget, args.traces, "batched" if args.batched else "solo")
+    todo = [r for i, r in enumerate(rows) if i % n == k and r["row_id"] not in done]
+    log.info("%s (sha256 %s): %d rows, %d done, %d to read in shard %d/%d; layers %s; budget %d tokens, "
+             "%d traces/session, %s", args.name, sha256(ROWS / f"{args.name}.jsonl")[:12], len(rows), len(done),
+             len(todo), k, n, MODEL["layers"], args.budget, args.traces, "batched" if args.batched else "solo")
     if not todo:
         return 0
     llm = load_remote_llm()
@@ -414,7 +419,8 @@ def cmd_read(args) -> int:
         c, p = masked(flat, content, points, n_groups, n_points)
         return {"content": c, "points": p}
 
-    return run_loop(args, todo, work, out, solo=not args.batched)
+    return run_loop(args, todo, work, out, solo=not args.batched,
+                    done_name="DONE" if n == 1 else f"DONE.shard{k}of{n}")
 
 
 def cmd_logprob(args) -> int:
@@ -589,6 +595,7 @@ def main() -> int:
         r.add_argument("--max_wait", type=float, default=4 * 3600.0)
         if name == "read":
             r.add_argument("--batched", action="store_true", help="pack rows into traces (default: one row per trace)")
+            r.add_argument("--shard", default="0/1", help="K/N: only the rows at positions K mod N of the rows file")
     g = sub.add_parser("generate")
     g.add_argument("--name", required=True)
     g.add_argument("--retries", type=int, default=4)
