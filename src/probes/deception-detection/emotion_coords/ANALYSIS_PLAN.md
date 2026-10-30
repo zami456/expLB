@@ -484,6 +484,20 @@ and emotion bases were. Every constant is in `ms10_lie_spec.py`. Its SHA-256 is 
 - **Already seen.** `ms10`'s arms, D2 and D4 (under the thesis's probe) are scored on these splits, as is the cure
   study's post hoc lead. No lie coordinate has been fitted.
 
+## Lie coordinates on Liars' Bench (user request, 2026-10-31; fixed before any probe is fitted here)
+
+The user asked for the same comparison on Liars' Bench's five sets: train on one, test on the other four. Every
+constant is in `lie_lb_spec.py`. Its SHA-256 is recorded in `E:/aletheia/logs/freeze_emotion_lie_lb.txt`.
+
+- **Setup.**
+  - `ms10_lie`'s arms and lie directions (k = 100), under `ms10`'s probe.
+  - Phase 3's protocol C rows (the study's capped sets) and folds (stratified 5-fold for C).
+  - Blocks 35-45, with the first lie direction and D9 zero-shot.
+  - RepE, the lie directions' source, is neither a training nor a test set.
+- **Predictions.** LB1-LB4 repeat L1-L4 on the 20 train-one-test-other cells (≥ 6 of 11 blocks; LB4 two-sided).
+- **Already seen.** Liars' Bench is the thesis's development data, and `ms10_lie`'s results on the ten datasets are
+  known. This is a re-test, not a held-out test.
+
 ## Per prediction
 
 - **P1.** Let Δ_rand be the mean over the five held-out sets of [AUROC(emotion PCs at k_t) − mean AUROC(random at
