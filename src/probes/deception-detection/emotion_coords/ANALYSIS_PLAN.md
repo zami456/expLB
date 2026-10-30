@@ -449,6 +449,41 @@ and `ms10_cure.score` also checks the `ms10` and `ms10_thesis` freezes.
 - **Already seen.** D1 trained on InstrDec is already scored on these splits (`ms10_thesis`), and so is `ms10`'s
   training-set-PC arm. No erasure has been.
 
+## Lie coordinates from RepE (user request, 2026-10-31; fixed before any lie coordinate is fitted)
+
+The user asked for lie directions extracted by INLP to be used as probe coordinates. They chose the version that tests
+something new: the directions are learned from labelled lies outside the ten sets, then used exactly as the persona
+and emotion bases were. Every constant is in `ms10_lie_spec.py`. Its SHA-256 is recorded in
+`E:/aletheia/logs/freeze_emotion_ms10_lie.txt`, and `ms10_lie.score` also checks `ms10`'s freeze.
+
+- **Lie directions.** INLP on the RepE instructed-honesty pairs (D2's training data), at each block of `ms10`'s band
+  (35-45).
+  - Each round fits the thesis's probe on RepE's train split, after the directions found so far are projected out.
+  - Its direction is kept while the probe still finds the lie on RepE's validation split (held-out AUROC ≥ 0.55).
+    The validation rows exclude the one statement both halves share.
+  - The number of directions, k, is set this way on RepE alone, capped at 100.
+- **Arms.** All use `ms10`'s probe, rows, splits and draws.
+  - The k lie directions.
+  - The first 3 lie directions, against D4's extended top 3 PCs.
+  - The training set's own top k and top 3 PCs.
+  - k random directions (5 seeds).
+  - The first lie direction scored zero-shot.
+  - `ms10`'s stored arms, re-scored: raw activations, all-170, emotion PCs, the training set's top 170 PCs, and the
+    paper's two persona spaces.
+- **Predictions, fixed now** (deception region; the paired CI above 0 at ≥ 6 of the 11 blocks):
+  - **L1.** The lie coordinates beat raw activations.
+  - **L2.** They beat random k-dimensional subspaces.
+  - **L3.** They beat the training set's own top k PCs.
+  - **L4** (two-sided). At k = 3, lie coordinates against D4: whichever arm's CI excludes 0 in its favour at ≥ 6
+    blocks wins; otherwise neither.
+- **Reported without a prediction:**
+  - the other regions;
+  - k and the INLP trace;
+  - the zero-shot direction;
+  - every new arm against the emotion arms and the paper's PCs.
+- **Already seen.** `ms10`'s arms, D2 and D4 (under the thesis's probe) are scored on these splits, as is the cure
+  study's post hoc lead. No lie coordinate has been fitted.
+
 ## Per prediction
 
 - **P1.** Let Δ_rand be the mean over the five held-out sets of [AUROC(emotion PCs at k_t) − mean AUROC(random at
