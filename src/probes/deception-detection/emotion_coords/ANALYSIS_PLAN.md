@@ -116,6 +116,33 @@ control).
   - **G3.** Any arm with adapted AUROC > 0.6 scores lower on the base read (paired CI excluding 0). If it does not,
     it reads the question or the denial wording rather than the lie.
 
+## Gender-Secret with the fine-tune's emotion vectors (user request, 2026-10-30; fixed before any story is read through the fine-tune)
+
+The GS test above used the base model's emotion vectors, and RESULTS.md names that as its caveat. Re-deriving them
+inside the fine-tune was blocked until NDIF installed peft on its Llama-3.3-70B deployment (fixed 2026-10-30).
+`emotion_coords/gs_ft.py` runs it.
+
+- **Reads.** The same 8,280 stories and 1,086 neutral dialogues (Llama's rows files) are read at block 40 through
+  Liars' Bench's Gender-Secret LoRA, which NDIF attaches itself (`ec_read.py --peft
+  Cadenza-Labs/llama-70b-3.3-it-lora-gender-secret-male`).
+- **Gates.**
+  - The 392 GS rows, read the same way, must match the thesis's stored adapted reads of block 40 (cos ≥ 0.9998).
+  - The new basis must have |r(PC1, valence)| ≥ 0.5.
+- **Bases.** Phase 1's recipe, unchanged (Llama's top-ups).
+- **Arms rebuilt from the fine-tune's bases.** Every GS-test arm whose basis comes from the stories:
+  - emotion PCs, the topic basis, the shuffled bases;
+  - persona + emotion, the 29 named emotions;
+  - all 170 PCs, the 171 vectors, the 170-d shuffled bases;
+  - the zero-shot directions.
+- **Everything else unchanged.** Training is the base model's LB-5 reads of block 40, with k and C chosen by
+  leave-one-set-out CV. The arms that do not use the stories are the GS test's own fits: raw, random, Alpaca PCs,
+  training-set PCs, persona PCs and the published probe.
+- **Predictions.** G1-G3's rules, applied with the fine-tune's bases (G1-ft, G2-ft, G3-ft).
+- **Reported without a prediction:**
+  - each story-dependent arm's GS AUROC with the fine-tune's bases minus with the base model's (paired);
+  - how far the fine-tune moves the emotion vectors (cosines).
+- **Label.** Declared: the GS results with the base model's bases are known.
+
 ## Aletheia's Quest transfer (user request, 2026-10-30; fixed before any story is read through the new models)
 
 The all-170 arm, scored on Aletheia's Quest as the thesis scored its detectors there (`scripts/aletheia/`). Every

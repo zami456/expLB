@@ -118,18 +118,19 @@ def run(layer: int = 40, workers: int = 3, threads: int = 3, n_random: int = 20)
     logger.info(f"GS L{layer}: done")
 
 
-def summary(layer: int = 40, n_boot: int = 1000) -> None:
+def load_parts(folder: Path, layer: int, keep=None) -> tuple[list[dict], dict]:
+    """Result rows and scores of a parts folder; `keep(row)` filters the rows (their scores follow)."""
     rows, scores = [], {}
-    for path in sorted(_parts().glob(f"L{layer}_*.pkl")):
+    for path in sorted(folder.glob(f"L{layer}_*.pkl")):
         with open(path, "rb") as f:
             part = pickle.load(f)
-        rows.extend(part["rows"])
-        scores.update(part["scores"])
-    frame = pd.DataFrame(rows)
-    gs = gs_splits(layer)
-    y = gs["GS"].y
-    boots = P.Resamples.draw(y, n_boot)  # shared by both reads: same rows, same labels
+        kept = [r for r in part["rows"] if keep is None or keep(r)]
+        rows.extend(kept)
+        scores.update({_key(r): part["scores"][_key(r)] for r in kept})
+    return rows, scores
 
+
+def arm_fn(frame: pd.DataFrame, scores: dict, y: np.ndarray, boots: P.Resamples):
     def arm(feature_set: str, test: str, k: int | None = None) -> tuple[float, np.ndarray, pd.DataFrame]:
         """Point AUROC and bootstrap AUROCs on `test`, mean over seeds; at k, or at each seed's chosen k."""
         r = frame[(frame["feature_set"] == feature_set) & (frame["test"] == test)]
@@ -137,11 +138,26 @@ def summary(layer: int = 40, n_boot: int = 1000) -> None:
         point = float(np.mean([P.auroc(y, scores[_key(x)]) for _, x in r.iterrows()]))
         draws = np.mean([boots.aurocs(y, scores[_key(x)]) for _, x in r.iterrows()], axis=0)
         return point, draws, r
+    return arm
 
-    def delta(a: tuple, b: tuple) -> dict:
-        lo, hi = P.ci(a[1] - b[1])
-        return {"delta": a[0] - b[0], "ci_lo": lo, "ci_hi": hi}
 
+def delta(a: tuple, b: tuple) -> dict:
+    lo, hi = P.ci(a[1] - b[1])
+    return {"delta": a[0] - b[0], "ci_lo": lo, "ci_hi": hi}
+
+
+def summary(layer: int = 40, n_boot: int = 1000) -> None:
+    rows, scores = load_parts(_parts(), layer)
+    evaluate(rows, scores, layer, n_boot, C.results_dir("gs"))
+
+
+def evaluate(rows: list[dict], scores: dict, layer: int, n_boot: int, out: Path) -> dict:
+    """The arm table and G1-G3 from fitted parts, written to `out`."""
+    frame = pd.DataFrame(rows)
+    gs = gs_splits(layer)
+    y = gs["GS"].y
+    boots = P.Resamples.draw(y, n_boot)  # shared by both reads: same rows, same labels
+    arm = arm_fn(frame, scores, y, boots)
     names = list(dict.fromkeys(frame["feature_set"]))
     table = []
     for fs in names:
@@ -154,7 +170,7 @@ def summary(layer: int = 40, n_boot: int = 1000) -> None:
                       "amb_ci_lo": P.ci(draws - base_draws)[0], "amb_ci_hi": P.ci(draws - base_draws)[1],
                       "balacc": float(r["balacc"].mean()), "recall": float(r["recall"].mean())})
     table = pd.DataFrame(table).sort_values("auroc", ascending=False)
-    table.to_csv(_out(f"gs_arms_L{layer}.csv"), index=False)
+    table.to_csv(out / f"gs_arms_L{layer}.csv", index=False)
 
     emo_all, raw = arm("emotion_all", "GS"), arm("raw", "GS")
     shuffled_all = arm("shuffled_all", "GS")
@@ -167,9 +183,10 @@ def summary(layer: int = 40, n_boot: int = 1000) -> None:
     g2["holds"] = g2["vs_random"]["ci_lo"] > 0 and g2["vs_topic"]["delta"] >= 0.03
     g3 = {r.arm: {"adapted": r.auroc, "base": r.auroc_base_read, "lo": r.amb_ci_lo, "hi": r.amb_ci_hi,
                   "reads_the_lie": bool(r.amb_ci_lo > 0)} for r in table.itertuples() if r.auroc > 0.6}
-    out = {"layer": layer, "rows": int(len(y)), "lies": int(y.sum()), "G1": g1, "G2": g2, "G3": g3}
-    _out(f"gs_predictions_L{layer}.json").write_text(json.dumps(out, indent=2, default=float), encoding="utf-8")
+    result = {"layer": layer, "rows": int(len(y)), "lies": int(y.sum()), "G1": g1, "G2": g2, "G3": g3}
+    (out / f"gs_predictions_L{layer}.json").write_text(json.dumps(result, indent=2, default=float), encoding="utf-8")
     logger.info(f"GS L{layer}: G1 {g1['holds']}, G2 {g2['holds']}, G3 arms over 0.6: {len(g3)}")
+    return result
 
 
 if __name__ == "__main__":
