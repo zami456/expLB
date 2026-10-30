@@ -1,0 +1,2 @@
+# RepE rows through Gemma at the band blocks, one row per pass
+read --model gemma --name aqb_gemma_repe --layers 27,28,29,30,31,32,33,34,35 --dtype bfloat16 --traces 16 --session_timeout 2700 --max_wait 14400

@@ -310,6 +310,37 @@ The design is in `aletheia170_spec.py`; the tables are in `results/emotion_coord
   - **No better block.** No block of the band rescues the arm. Its edge over the shuffled control is confined to
     the middle two blocks.
   - Tables: `results/emotion_coords/aletheia_band/six_sets/summary.md`.
+- **Band, RepE-trained** (declared `b5dbbeda`; asked after the band's Liars' Bench results; post hoc).
+  - **Setup.** The band again, with R1's RepE rows as the training source.
+  - **Gates.** Every RepE row matches the thesis's reads at the shared blocks (min cos 0.99994). Offset 0 is
+    within 0.0085 per set of the middle-block test's RepE cells, whose Qwen3.5 rows came from stored float16
+    per-token reads.
+  - **Cross-validation.** It saturates at 1.000 for every arm and block, so C is the smallest on ties.
+
+  6-set mean AUROC by offset:
+
+  | offset | all-170 (RepE) | raw (RepE) | shuffled (RepE) | training-set PCs (RepE) | all-170 (LB) | raw (LB) |
+  |---|---|---|---|---|---|---|
+  | −4 | 0.595 | 0.592 | 0.506 | 0.466 | 0.474 | 0.549 |
+  | −2 | 0.604 | 0.604 | 0.576 | 0.599 | 0.540 | 0.660 |
+  | **0** | **0.650** (rank 22 of 31) | 0.704 | 0.563 | 0.638 | 0.637 | 0.749 |
+  | +1 | 0.642 | 0.747 | 0.583 | 0.676 | 0.602 | **0.788** |
+  | +2 | 0.596 | 0.689 | 0.522 | 0.649 | 0.529 | 0.739 |
+  | +4 | 0.548 | 0.653 | 0.570 | 0.604 | 0.595 | 0.732 |
+
+  - **HR1 fails.** All-170 never beats raw activations trained on the same RepE rows. It ties at −4 and −2, and is
+    0.05-0.11 below elsewhere.
+  - **HR2 fails.** All-170 beats:
+    - the shuffled control at 7 of 9 offsets (the Liars' Bench source managed 2);
+    - random subspaces at all 9;
+    - Alpaca PCs at 5;
+    - the RepE rows' own top 170 PCs at only 1.
+  - **Against the Liars' Bench source.** RepE training lifts all-170 above its Liars' Bench version at 4 offsets
+    (−4, −3, −2, +2). Neither source comes near raw activations trained on Liars' Bench (0.73-0.79 from offset −1).
+  - **Reading.** With RepE's instructed contrast, the emotion grouping of the stories matters: emotion beats its
+    shuffled control almost everywhere. But a 170-d subspace fitted to the RepE rows themselves does as well, and
+    the full residual stream does better.
+  - Tables: `results/emotion_coords/aletheia_band/repe/six_sets/summary.md`.
 
 ### 3.7 What the arm shows
 

@@ -1,0 +1,22 @@
+{
+ "aqb_qwen35_repe": {
+  "blocks": [
+   32
+  ],
+  "compared": 550,
+  "min_cos": 0.9999389917776862,
+  "median_cos": 0.9999889590037788,
+  "pass": true
+ },
+ "aqb_gemma_repe": {
+  "blocks": [
+   28,
+   31,
+   34
+  ],
+  "compared": 1344,
+  "min_cos": 0.9999371332143745,
+  "median_cos": 0.9999982013878437,
+  "pass": true
+ }
+}
