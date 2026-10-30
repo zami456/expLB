@@ -648,6 +648,45 @@ Means over the 11 blocks (trained arms: off-diagonal transfer; zero-shot: mean o
 Tables are in `results/emotion_coords/ms10/lie/` (`summary.md`, `regions.csv`, `deltas.csv`, `verdicts.json`,
 `inlp.csv`).
 
+### 3.13 Lie coordinates on Liars' Bench (declared `984b6b3c`, before any probe was fitted there)
+
+The same arms ran on Liars' Bench's five sets: train on one, test on the other four (`lie_lb.py`, `lie_lb_spec.py`).
+- **Data and folds.** Phase 3's protocol C rows and folds.
+- **Blocks.** 35-45.
+- **What it is.** A re-test on the thesis's development data.
+
+Means over the 11 blocks, all 20 train-one-test-other cells (zero-shot: the mean over the five sets):
+
+| arm | all 20 cells | excluding HP-KR |
+|---|---|---|
+| D9 extended contrast (zero-shot) | **0.891** | **0.893** |
+| D4 persona coordinates (k = 3) | 0.837 | 0.823 |
+| first lie direction (zero-shot, RepE's probe) | 0.759 | 0.717 |
+| lie coordinates (k = 3) | 0.650 | 0.616 |
+| raw activations | 0.627 | 0.657 |
+| the paper's PCs (k = 3) | 0.624 | 0.772 |
+| lie coordinates (k = 100) | 0.601 | 0.587 |
+| 100 random directions | 0.533 | 0.528 |
+
+**Predictions** (all 20 cells; a block counts when the paired CI is above 0):
+- **LB1 fails.** The 100 lie directions are below raw activations: −0.026, below at 7 blocks.
+- **LB2 holds.** They beat random subspaces by 0.068, at 10 of 11 blocks.
+- **LB3 fails.** They are below the training set's own top 100 PCs: −0.023.
+- **LB4: persona coordinates win.** D4 beats the lie coordinates by 0.187, at all 11 blocks.
+
+**What it shows.**
+- **On the ten datasets the two bases tied on lies. On Liars' Bench the role-play basis wins by 0.19.** The difference
+  is insider trading.
+  - RepE's lie directions point the wrong way on IT. The zero-shot first direction scores it 0.33.
+  - The 3-d lie probes score IT at 0.37-0.46 from every source, and trained on IT they transfer at 0.47.
+  - D9 scores IT at 0.98, and D4 at 0.90-0.98 from every source but HP-C.
+- **Lies learned from instruction-following generalise to other instructed lies, but not to a strategic lie** like
+  insider trading. The role-play bank covers both.
+- **The thesis's zero-shot extended contrast (D9) beats every trained arm here.** It is 0.26 above raw activations at
+  all 11 blocks, as in the thesis.
+
+Tables are in `results/emotion_coords/lie_lb/` (`summary.md`, `regions.csv`, `deltas.csv`, `verdicts.json`).
+
 ## 4. Preregistered predictions
 
 At blocks 20/28/40/52, protocol B, logistic regression (T1). A prediction holds if it holds at 3 or more blocks.
