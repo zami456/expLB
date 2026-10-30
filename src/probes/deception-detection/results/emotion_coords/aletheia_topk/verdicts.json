@@ -1,0 +1,36 @@
+{
+ "freeze_sha256": "DB33DB75ACD64A119D1BE518C6E91AE77C3B2ACD1FB0D386F48D2FC7143C4F3F",
+ "datasets": [
+  "Echo",
+  "Harm",
+  "GS-F",
+  "GS-M",
+  "BotC",
+  "AB-AW",
+  "AB-HC",
+  "AB-SP"
+ ],
+ "k_e (LB)": {
+  "qwen35": 10,
+  "gemma": 20
+ },
+ "TK1": {
+  "random": {
+   "delta": 0.02441741830332944,
+   "ci": [
+    -0.006145360840855604,
+    0.05343801945106424
+   ],
+   "holds": false
+  },
+  "topic_pc": {
+   "delta": -0.036554960500775446,
+   "ci": [
+    -0.07606762501113351,
+    0.0022997855992024445
+   ],
+   "holds": false
+  },
+  "holds": false
+ }
+}

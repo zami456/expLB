@@ -256,6 +256,27 @@ The design is in `aletheia170_spec.py`; the tables are in `results/emotion_coord
     in the text.
 - **Training side.** In the inner leave-one-set-out CV on Liars' Bench, the arm was not ahead of raw activations in
   either model (Gemma 0.715 against 0.718; Qwen3.5 0.864 against 0.909). On Llama it was ahead under protocol B.
+- **Top k** (declared `c404a42c`; asked after the all-170 results; labelled post hoc). This is the preregistered
+  emotion-PC arm: the first k PCs of the same bases, with k ∈ {2, 3, 5, 10, 20} chosen by inner CV. The CV chose
+  k_e = 10 for Qwen3.5 and 20 for Gemma, and the gates passed. The arm scores at chance:
+
+  | arm, at k_e | mean AUROC [95% CI] |
+  |---|---|
+  | emotion PCs | **0.514** [0.485, 0.545], rank 31 of 31 |
+  | topic basis | 0.551 |
+  | shuffled bases | 0.590 |
+  | random (mean of 20) | 0.490 |
+
+  - **TK1 (P1's rule) fails.** Emotion PCs minus random is +0.024 [−0.006, +0.053]; minus the topic basis it is
+    −0.037 [−0.076, +0.002].
+  - **Other comparisons.** It is 0.108 below all-170 and 0.186 below raw activations.
+  - **Fixed k.** Only k = 2 stands out (0.589: +0.104 over random, +0.062 over topic). The CV did not pick it, so
+    that is post hoc.
+  - **Sets.** It is high on Echo (0.824) and below 0.5 on GS-F, GS-M, BotC, AB-AW and AB-HC.
+  - **Secondary sources.** RepE gives 0.506 and dev gives 0.556.
+  - **Agreement with Llama.** This agrees with P1's failure on Llama. On these organisms the lie signal lives, if
+    anywhere, in the whole 170-d emotion subspace, not in its leading directions.
+  - Tables: `results/emotion_coords/aletheia_topk/summary.md`.
 
 ### 3.7 What the arm shows
 
