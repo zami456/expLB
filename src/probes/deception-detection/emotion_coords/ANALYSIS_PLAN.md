@@ -160,6 +160,28 @@ opened these test labels for its own cells; no basis, probe or C here is chosen 
     training-set PCs. Each CI excludes 0.
   - Rank, the deltas to the thesis's cells and the secondary sources are reported without a prediction.
 
+## Top-k emotion PCs on Aletheia's Quest (user request, 2026-10-30, after the all-170 results were seen)
+
+The user asked to "test on top k". This is the study's preregistered emotion-PC arm in place of all 170: the first k
+PCs of the same saved emotion bases, with k ∈ {2, 3, 5, 10, 20} and C chosen together by the source's inner CV.
+Everything else is the all-170 test's: the bases, sources, reads, datasets, draws and band. Every constant is in
+`aletheia_topk_spec.py`, and its SHA-256 is recorded in `E:/aletheia/logs/freeze_emotion_topk.txt` before any top-k
+probe is scored.
+
+- **Controls at the same k** (P1's matching): the topic basis, the 5 shuffled bases, and 20 random subspaces.
+  - The topic basis is built per model from the same rank-0 stories, with the same denoising.
+  - k_e is the emotion basis's choice for each model and source.
+- **Prediction (P1's rule, transplanted):**
+  - **TK1.** On the 8 sets, Liars' Bench-trained, organism read: emotion PCs at k_e minus random at k_e (mean of 20)
+    ≥ 0.03, with the paired CI excluding 0. The same must hold against the topic basis at k_e.
+  - Labelled post hoc: the request followed the all-170 results, though no top-k test score had been seen.
+- **Reported without a prediction:**
+  - every fixed k;
+  - the shuffled control;
+  - raw activations, all-170 and the thesis's headline (paired on the same draws);
+  - the RepE and dev sources.
+- **Gate:** the dev known-answer gate, for emotion PCs at k_e.
+
 ## Per prediction
 
 - **P1.** Let Δ_rand be the mean over the five held-out sets of [AUROC(emotion PCs at k_t) − mean AUROC(random at
