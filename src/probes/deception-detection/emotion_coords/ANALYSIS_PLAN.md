@@ -407,6 +407,48 @@ paired. Every constant is in `ms10_thesis_spec.py`. Its SHA-256 is recorded in
 - **Already seen.** D9 + K was selected on Liars' Bench (three of these deception sets). `ms10`'s arms are already
   scored here; none of these detectors is.
 
+## Curing instructed deception (user request, 2026-10-31; fixed before any erasure is scored)
+
+The user's idea: erase what a probe can learn from instructed deception besides the lie, then train on the cured rows
+and test on the other sets. Their loop was: random two-class labels, a probe, LEACE when the probe succeeds, repeat.
+That loop cannot do this. A probe never predicts labels that are independent of the rows on held-out rows, yet it
+always separates them in-sample (600 rows, 8,192 dimensions). And each LEACE round on random labels erases a random
+whitened direction.
+
+The user chose the version that targets the idea: erase InstrDec's within-class variance (nuisance attribute
+projection). Their loop runs as a control, without its stopping test, and both of that test's numbers are recorded.
+Every constant is in `ms10_cure_spec.py`. Its SHA-256 is recorded in `E:/aletheia/logs/freeze_emotion_ms10_cure.txt`,
+and `ms10_cure.score` also checks the `ms10` and `ms10_thesis` freezes.
+
+- **Setting.**
+  - The thesis's raw probe D1 (`make_probe`), trained on InstrDec's 600 `ms10` training rows after each erasure.
+  - Every erasure is fitted on those rows alone and applied unchanged to every test split.
+  - `ms10`'s draws; layers 36, 40 and 44.
+  - The unerased probe must reproduce `ms10_thesis`'s D1 AUROCs.
+- **Erasures at k = 5, 10, 20, 50, 100, 200 and 400 directions.**
+  - Nuisance: the within-class top-k PCs.
+  - Total: the total top-k PCs.
+  - Random: 5 seeds.
+  - The user's random-label LEACE loop: k rounds, 5 seeds.
+  - Also keeping only the top-k PCs, plus k = 170 as the reference from `ms10`.
+- **Regions.**
+  - Deception transfer: the other four deception sets.
+  - New deception: AILiar and Roleplaying.
+  - Sycophancy.
+  - In-distribution: InstrDec's test split.
+- **Predictions, fixed now** (deception transfer, the nuisance erasure averaged over the 7 ranks; the paired CI above 0
+  at ≥ 2 of the 3 layers):
+  - **C1.** It beats no erasure.
+  - **C2.** It beats random erasure at the same rank.
+  - **C3.** It beats the random-label LEACE loop at the same rank.
+  - **C4.** It beats keeping the top 170 PCs.
+- **Reported without a prediction:**
+  - every variant at every rank;
+  - the other regions;
+  - the random-label probe's held-out and in-sample AUROC.
+- **Already seen.** D1 trained on InstrDec is already scored on these splits (`ms10_thesis`), and so is `ms10`'s
+  training-set-PC arm. No erasure has been.
+
 ## Per prediction
 
 - **P1.** Let Δ_rand be the mean over the five held-out sets of [AUROC(emotion PCs at k_t) − mean AUROC(random at
