@@ -687,6 +687,31 @@ Means over the 11 blocks, all 20 train-one-test-other cells (zero-shot: the mean
 
 Tables are in `results/emotion_coords/lie_lb/` (`summary.md`, `regions.csv`, `deltas.csv`, `verdicts.json`).
 
+### 3.14 Averaged lie directions (declared `fc684917`; post hoc question)
+
+The user asked whether averaging the 100 INLP directions into one zero-shot vector helps (`lie_mean.py`). It does
+not. **A1 and A2 fail:** the average is below the first direction alone at all 11 blocks, on Liars' Bench by 0.241
+and on the ten datasets' deception sets by 0.198.
+
+| zero-shot direction | Liars' Bench (5 sets) | ten datasets: deception | ten datasets: sycophancy |
+|---|---|---|---|
+| average of all 100 INLP directions | 0.518 | 0.668 | 0.511 |
+| average of the first 10 | 0.706 | 0.822 | 0.606 |
+| the first INLP direction | 0.759 | 0.866 | 0.620 |
+| RepE's difference of means | 0.719 | 0.861 | 0.596 |
+| D9 extended contrast | **0.891** | **0.876** | **0.764** |
+| raw probe, train one, test the others | 0.627 | 0.746 | 0.637 |
+
+**Why averaging fails.**
+- Equal weights give the late directions, each barely predictive even on RepE (held-out 0.6-0.7), the same say as the
+  first.
+- Their sum drifts from RepE's lie (cosine 0.46 with RepE's difference of means, against 0.86 for the first
+  direction).
+- It inverts HP-KR (0.075).
+- Every RepE-derived direction stays below chance on insider trading (0.29-0.35), where D9 gets 0.98.
+
+Tables are in `results/emotion_coords/lie_mean/`.
+
 ## 4. Preregistered predictions
 
 At blocks 20/28/40/52, protocol B, logistic regression (T1). A prediction holds if it holds at 3 or more blocks.
