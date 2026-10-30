@@ -1,0 +1,5 @@
+﻿{
+    "reason":  "min cos 0.99963 vs gate 0.9998 (3 of 392 rows below; median 0.99997); the peft read is closer to the stored fine-tune read than to the base read on all 392 rows (fine-tune vs base median cos 0.81); the base-model read of the same rows by the same batched reader gives min cos 0.99905 against the stored base read, so the shortfall is batched-read noise, not the adapter",
+    "decided_by":  "user, 2026-10-30 15:05",
+    "decision":  "proceed"
+}

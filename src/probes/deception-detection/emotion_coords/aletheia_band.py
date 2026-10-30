@@ -321,18 +321,39 @@ def check_freeze() -> str:
     return digest
 
 
-def score() -> None:
-    """Every arm at every offset on the 8 sets, with `score.run`'s draws; means, ranks, deltas, HB1 and HB2."""
+DEVIATION_SIX = ("Echo and BotC are not read at the band blocks: their adapters are gated on Hugging Face and NDIF "
+                 "cannot load them (2026-10-30). The user chose to score the 6 readable sets now, with the "
+                 "leaderboard averaged over the same 6, and the frozen 8-set design once NDIF can read them.")
+
+
+def _scope(datasets) -> tuple[list[str], Path, str | None]:
+    """The sets scored, where the results go, and the deviation note (None for the frozen 8)."""
+    if datasets is None:
+        return list(X.SCORED), out_dir(), None
+    keys = [k for k in X.SCORED if k in (datasets.split(",") if isinstance(datasets, str) else list(datasets))]
+    if keys == list(X.SCORED):
+        return keys, out_dir(), None
+    if keys != [k for k in X.SCORED if k not in ("Echo", "BotC")]:
+        raise ValueError(f"only the frozen 8 or the 6 readable sets, not {keys}")
+    path = out_dir() / "six_sets"
+    path.mkdir(parents=True, exist_ok=True)
+    return keys, path, DEVIATION_SIX
+
+
+def score(datasets=None) -> None:
+    """Every arm at every offset on the 8 sets, with `score.run`'s draws; means, ranks, deltas, HB1 and HB2.
+    `datasets` "Harm,GS-F,GS-M,AB-AW,AB-HC,AB-SP": the recorded deviation (Echo and BotC unreadable), to `six_sets/`."""
     from deception_detection.scripts.aletheia import data as D
     from deception_detection.scripts.aletheia import score as SC
     from deception_detection.scripts.aletheia import spec as S
 
     digest = check_freeze()
+    keys, out, deviation = _scope(datasets)
     names = [("emotion_all", 0), ("raw", 0)] + [("shuffled_all", p) for p in range(X.N_SHUFFLED)]
     names += [("random_all", s) for s in range(X.N_RANDOM)] + [("alpaca_all", 0), ("trainpca_all", 0)]
     records, boots = [], {}
     for d in S.DATASETS:
-        if d.key not in X.SCORED:
+        if d.key not in keys:
             continue
         index = S.DATASETS.index(d)
         order = [int(r["index"]) for r in D.rows(d.key)]
@@ -357,15 +378,15 @@ def score() -> None:
                                 "seed": seed, "auroc": SC.auroc(y, s)})
         logger.info(f"{d.key}: scored at offsets {B.OFFSETS[0]}..{B.OFFSETS[-1]}")
     table = pd.DataFrame(records)
-    table.to_csv(out_dir() / "auroc.csv", index=False)
-    _summarise(table, boots, digest)
+    table.to_csv(out / "auroc.csv", index=False)
+    _summarise(table, boots, digest, keys, out, deviation)
 
 
-def _summarise(table: pd.DataFrame, boots: dict, digest: str) -> None:
+def _summarise(table: pd.DataFrame, boots: dict, digest: str, keys: list[str], out: Path,
+               deviation: str | None) -> None:
     from deception_detection.scripts.aletheia import report as RP
 
     board = RP._board()
-    keys = [k for k in X.SCORED]
     entries = board[keys].mean(axis=1).to_numpy()
     white = board[board["track"] == "white-box"][keys].mean(axis=1).to_numpy()
     rows, means = [], {}
@@ -384,7 +405,7 @@ def _summarise(table: pd.DataFrame, boots: dict, digest: str) -> None:
                          "white-box rank of 19": RP._rank(float(point.mean()), white)}
                         | {k: float(v) for k, v in zip(keys, point)})
     summary = pd.DataFrame(rows)
-    summary.to_csv(out_dir() / "summary.csv", index=False)
+    summary.to_csv(out / "summary.csv", index=False)
     deltas = []
     for j in B.OFFSETS:
         for other in ARMS[1:]:
@@ -392,31 +413,37 @@ def _summarise(table: pd.DataFrame, boots: dict, digest: str) -> None:
             deltas.append({"offset": j, "minus": other, "delta": means[j, "emotion_all"][0] - means[j, other][0],
                            "lo": float(np.quantile(diff, 0.025)), "hi": float(np.quantile(diff, 0.975))})
     deltas = pd.DataFrame(deltas)
-    deltas.to_csv(out_dir() / "deltas.csv", index=False)
+    deltas.to_csv(out / "deltas.csv", index=False)
     above = deltas.assign(above=deltas["lo"] > 0).groupby("minus")["above"].sum().astype(int).to_dict()
-    verdicts = {"freeze_sha256": digest, "offsets": list(B.OFFSETS),
+    verdicts = {"freeze_sha256": digest, "datasets": keys, "deviation": deviation, "offsets": list(B.OFFSETS),
                 "HB1": {"offsets_with_ci_above_0": above["raw"], "holds": above["raw"] >= 5},
                 "HB2": {c: {"offsets_with_ci_above_0": above[c]} for c in ARMS[2:]}}
     verdicts["HB2"]["holds"] = all(above[c] >= 5 for c in ARMS[2:])
     frozen = pd.read_csv(A.out_dir() / "summary.csv").set_index("arm")
-    zero = summary[(summary["offset"] == 0) & (summary["arm"] == "emotion_all")].iloc[0]
-    verdicts["offset 0 vs the frozen middle-block test"] = {
-        "band": float(zero["mean"]), "frozen": float(frozen.loc["emotion_all (LB)", "mean"]),
-        "max |per-dataset difference|": float(max(abs(zero[k] - frozen.loc["emotion_all (LB)", k]) for k in keys))}
-    (out_dir() / "verdicts.json").write_text(json.dumps(verdicts, indent=1), encoding="utf-8")
+    check = {}
+    for arm, frozen_arm in (("emotion_all", "emotion_all (LB)"), ("raw", "raw (LB)")):
+        zero = summary[(summary["offset"] == 0) & (summary["arm"] == arm)].iloc[0]
+        check[arm] = {"band": float(zero["mean"]), "frozen": float(np.mean([frozen.loc[frozen_arm, k] for k in keys])),
+                      "max |per-dataset difference|": float(max(abs(zero[k] - frozen.loc[frozen_arm, k]) for k in keys))}
+    verdicts["offset 0 vs the frozen middle-block test"] = check
+    (out / "verdicts.json").write_text(json.dumps(verdicts, indent=1), encoding="utf-8")
     logger.info("\n" + summary.pivot(index="offset", columns="arm", values="mean").round(3).to_string())
     logger.info(json.dumps(verdicts, indent=1))
 
 
-def report() -> Path:
-    out = out_dir()
+def report(datasets=None) -> Path:
+    _, out, _ = _scope(datasets)
     summary = pd.read_csv(out / "summary.csv")
     deltas = pd.read_csv(out / "deltas.csv")
     verdicts = json.loads((out / "verdicts.json").read_text(encoding="utf-8"))
     f3 = lambda v: f"{v:.3f}"  # noqa: E731
     lines = ["# The all-170 arm on Aletheia's Quest: the band mid +/- 4", "",
              f"Design: `emotion_coords/aletheia_band_spec.py`, frozen (sha256 {verdicts['freeze_sha256'][:12]}) before "
-             "any band read. Liars' Bench-trained; each test row read by its organism at every block; the 8 sets.", "",
+             f"any band read. Liars' Bench-trained; each test row read by its organism at every block; "
+             f"{len(verdicts['datasets'])} sets ({', '.join(verdicts['datasets'])}).", ""]
+    if verdicts.get("deviation"):
+        lines += [f"**Deviation.** {verdicts['deviation']}", ""]
+    lines += [
              "| Offset | Qwen3.5 / Gemma block | all-170 [95% CI] | raw | shuffled | random | Alpaca PCs | train PCs "
              "| all-170 rank of 31 | white-box rank of 19 |", "|---|---|---|---|---|---|---|---|---|---|"]
     for j in B.OFFSETS:

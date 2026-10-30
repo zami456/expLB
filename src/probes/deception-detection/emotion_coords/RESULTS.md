@@ -277,6 +277,39 @@ The design is in `aletheia170_spec.py`; the tables are in `results/emotion_coord
   - **Agreement with Llama.** This agrees with P1's failure on Llama. On these organisms the lie signal lives, if
     anywhere, in the whole 170-d emotion subspace, not in its leading directions.
   - Tables: `results/emotion_coords/aletheia_topk/summary.md`.
+- **Band, mid ± 4** (declared `936c333c` before any band read; the user's choice after the middle block was seen).
+  - **Reads.** Every input was read again at Qwen3.5 blocks 28-36 and Gemma blocks 27-35 by one reader: stories,
+    Liars' Bench training rows, Alpaca, and each test row through its organism.
+  - **Gates passed.**
+    - Parity against the thesis's stored reads: every test row ≥ 0.99998, the training and Alpaca subsets ≥ 0.99995.
+    - |r(PC1, valence)| 0.83-0.86 at all 18 blocks.
+    - Offset 0 reproduces the frozen middle-block test within 0.001 on every set.
+  - **Deviation.** Echo's and BotC's adapters are gated on Hugging Face, so NDIF cannot load them. By the user's
+    decision the band is scored on the 6 other sets, with the leaderboard averaged over the same 6. The frozen 8-set
+    run waits for NDIF access.
+
+  6-set mean AUROC by offset:
+
+  | offset (Qwen3.5 / Gemma block) | all-170 | raw | shuffled | random | all-170 rank of 31 |
+  |---|---|---|---|---|---|
+  | −4 (28 / 27) | 0.474 | 0.549 | 0.472 | 0.432 | 31 |
+  | −3 (29 / 28) | 0.485 | 0.584 | 0.471 | 0.448 | 31 |
+  | −2 (30 / 29) | 0.540 | 0.660 | 0.529 | 0.456 | 29 |
+  | −1 (31 / 30) | 0.590 | 0.717 | 0.547 | 0.466 | 26 |
+  | **0 (32 / 31)** | **0.637** | 0.749 | 0.592 | 0.481 | **24** |
+  | +1 (33 / 32) | 0.602 | **0.788** | 0.606 | 0.510 | 26 |
+  | +2 (34 / 33) | 0.529 | 0.739 | 0.543 | 0.501 | 30 |
+  | +3 (35 / 34) | 0.553 | 0.744 | 0.579 | 0.473 | 28 |
+  | +4 (36 / 35) | 0.595 | 0.732 | 0.603 | 0.509 | 26 |
+
+  - **HB1 fails.** All-170 is below raw activations at all 9 offsets, by 0.07-0.21, every CI below 0.
+  - **HB2 fails.** All-170 beats the shuffled control at only 2 offsets (−1 and 0), random subspaces at 8, Alpaca
+    PCs at 7, and training-set PCs at 4.
+  - **Where each peaks.** All-170 peaks at the middle block itself (0.637). Raw activations peak one block deeper,
+    at 0.788 (rank 8 of 31, 7th of 19 against the white-box entries on these 6 sets).
+  - **No better block.** No block of the band rescues the arm. Its edge over the shuffled control is confined to
+    the middle two blocks.
+  - Tables: `results/emotion_coords/aletheia_band/six_sets/summary.md`.
 
 ### 3.7 What the arm shows
 
