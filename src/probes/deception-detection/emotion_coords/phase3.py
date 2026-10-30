@@ -49,23 +49,27 @@ def _write(path: Path, payload) -> None:
     os.replace(tmp, path)
 
 
-def independent_sets(layer: int, data: dict, hidden: int, n_random: int = 20) -> list[P.FeatureSet]:
+def independent_sets(layer: int, data: dict, hidden: int, n_random: int = 20,
+                     persona: tuple[np.ndarray, np.ndarray] | None = None) -> list[P.FeatureSet]:
     """The feature sets that need no story reads (raw, training-set PCs, random, Alpaca PCs, persona PCs), so
-    `run --early` can fit them while NDIF is still reading the stories."""
+    `run --early` can fit them while NDIF is still reading the stories. `persona`: (extended, published) bases of
+    another model (`xmodel`); Llama's own by default."""
     control = C.load()["control"]
+    extended, published = persona if persona is not None else (persona_basis(layer), persona_basis(layer, "published"))
     return [P.FeatureSet("raw", "raw"),
             P.FeatureSet("trainpca_pc", "trainpca_pc", None, P.KS, per_fold=lambda x: la.top_pcs(x, 20)),
             *[P.FeatureSet("random", "random", la.random_subspace(hidden, 20, seed=10_000 + s),
                            tuple(sorted(set(P.KS) | {6})), seed=s) for s in range(n_random)],
             P.FeatureSet("alpaca_pc", "alpaca_pc", la.top_pcs(data[control].x, 20), P.KS),
-            P.FeatureSet("persona_pc", "persona_pc", persona_basis(layer), P.KS),
+            P.FeatureSet("persona_pc", "persona_pc", extended, P.KS),
             # the published persona space (user decision 2026-10-30, after layers 20-40 were seen; ANALYSIS_PLAN.md)
-            P.FeatureSet("persona_pub_pc", "persona_pub_pc", persona_basis(layer, "published"), P.KS)]
+            P.FeatureSet("persona_pub_pc", "persona_pub_pc", published, P.KS)]
 
 
-def feature_sets(layer: int, data: dict, bases: dict, hidden: int, n_random: int = 20) -> list[P.FeatureSet]:
+def feature_sets(layer: int, data: dict, bases: dict, hidden: int, n_random: int = 20,
+                 persona: tuple[np.ndarray, np.ndarray] | None = None) -> list[P.FeatureSet]:
     e, t = bases["E_components"], bases["T_components"]
-    sets = independent_sets(layer, data, hidden, n_random)
+    sets = independent_sets(layer, data, hidden, n_random, persona)
     persona = next(fs.basis for fs in sets if fs.name == "persona_pc")
     persona_pub = next(fs.basis for fs in sets if fs.name == "persona_pub_pc")
     sets += [P.FeatureSet("emotion_pc", "emotion_pc", e, P.KS),

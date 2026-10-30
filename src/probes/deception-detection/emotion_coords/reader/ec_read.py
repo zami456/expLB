@@ -42,6 +42,9 @@ MODELS = {  # `read --model`: Llama is the study's model; the other two are Alet
     "llama": {"id": "meta-llama/Llama-3.3-70B-Instruct", "layers": (20, 28, 40, 52), "pad": 128004},  # <|finetune_right_pad_id|>
     "qwen35": {"id": "Qwen/Qwen3.5-27B", "layers": (32,), "pad": 248044},  # <|endoftext|>; the middle of 64 blocks
     "gemma": {"id": "google/gemma-3-27b-it", "layers": (31,), "pad": 0},  # <pad>; the middle of 62 blocks
+    # the other Liars' Bench models (`xmodel.py`): their own reads of the stories and of their Liars' Bench rows
+    "qwen25": {"id": "Qwen/Qwen2.5-72B-Instruct", "layers": (40,), "pad": 151643},  # <|endoftext|>; 80 blocks
+    "mistral": {"id": "mistralai/Mistral-Small-3.1-24B-Instruct-2503", "layers": (20,), "pad": 11},  # <pad>; 40
 }
 MODEL = MODELS["llama"]
 MIN_COS = 0.9998

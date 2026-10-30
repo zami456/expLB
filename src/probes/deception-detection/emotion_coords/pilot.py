@@ -191,16 +191,22 @@ def vectors() -> dict:
 # --- probes ------------------------------------------------------------------------------------------
 
 
-def persona_basis(layer: int, bank: str = "extended") -> np.ndarray:
+def persona_basis(layer: int, bank: str = "extended", model: str | None = None) -> np.ndarray:
     """`extended`: the thesis D4 basis, 25 personas of the 36-role bank (24 PCs). `published`: the persona space of
-    arXiv 2605.09391, the 8 deception + 7 honesty personas of the original 26-role bank (14 PCs)."""
+    arXiv 2605.09391, the 8 deception + 7 honesty personas of the original 26-role bank (14 PCs). `model` (an
+    `lb_models` key: qwen, mistral, gemma): the same personas from that model's primary bank."""
     from deception_detection import persona_pcs as pcs
 
+    own = None
+    if model is not None:
+        from deception_detection.scripts import recall_denial as RD
+
+        own = RD.Inputs(model).bank_at(layer)
     if bank == "published":
-        b = pcs.load_bank_at_layer(layer, pcs.VECTORS_DIR)
+        b = own if own is not None else pcs.load_bank_at_layer(layer, pcs.VECTORS_DIR)
         n = len(pcs.DECEPTION_PERSONAS + pcs.HONESTY_PERSONAS)
         return pcs.fit_geometry(b, k=n - 1).components
-    b = pcs.load_bank_at_layer(layer, pcs.EXTENDED_VECTORS_DIR)
+    b = own if own is not None else pcs.load_bank_at_layer(layer, pcs.EXTENDED_VECTORS_DIR)
     names = pcs.DECEPTION_PERSONAS + pcs.KNOWLEDGE_DENIAL_PERSONAS + pcs.HONESTY_PERSONAS + pcs.KNOWLEDGE_CANDOUR_PERSONAS
     geom = pcs.fit_geometry(b, k=len(names) - 1, deception=pcs.DECEPTION_PERSONAS + pcs.KNOWLEDGE_DENIAL_PERSONAS,
                             honesty=pcs.HONESTY_PERSONAS + pcs.KNOWLEDGE_CANDOUR_PERSONAS, axis_name="extended")

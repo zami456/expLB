@@ -147,6 +147,42 @@ refuses to run without that match.
   - the best offset (post hoc);
   - offset 0 against the frozen middle-block test, as a check of the new reads.
 
+## Every Liars' Bench model (user request, 2026-10-30; fixed before any read)
+
+The user asked for the emotion coordinates to be tested on the other Liars' Bench models, as the thesis's cross-model
+replication tested its own detectors. Those models are Qwen2.5-72B, Mistral-Small-3.1-24B and Gemma-3-27B. The user
+chose the thesis's 4 layers plus the band, and the core study: no MLP, no erasure (P6), no HP-KR diagnostics. Every
+constant is in `xmodel_spec.py`, and its SHA-256 is recorded in `E:/aletheia/logs/freeze_emotion_xmodel.txt` before
+any read. `xmodel.summary` refuses to run without that match.
+
+- **Blocks.**
+
+  | model | named blocks (L20/36/40/44) | band |
+  |---|---|---|
+  | Qwen2.5-72B | 20/36/40/44 | 35-45 |
+  | Mistral | 9/18/20/22 | 17-23 |
+  | Gemma | 8/28/31/34 | 27-35 |
+  | Llama | 20/36/40/44 | 35-45 (the study's existing runs) |
+
+- **Reads.** Each model reads Llama's 8,280 stories and the neutral dialogues through itself, re-tokenised.
+  - Its own Liars' Bench rows, RepE pairs and Alpaca replies are the thesis's pooled reads where they exist.
+  - Elsewhere they are this study's reads of the same cached tokenisation.
+  - The sets are capped as in the Llama study.
+- **Analysis.** Phase 1's bases; phase 3's feature sets (persona bases from the model's own primary bank) and
+  protocols A, B and C, logistic regression only.
+- **Gates.** Parity of the new Liars' Bench reads (cos ≥ 0.9998); valence per block, flagged.
+- **Predictions, fixed now** (declared; Llama's results are known):
+  - **P1-P5.** Llama's rules on each model's 4 named layers, where its sets allow (P2, P5: IT; P3: HP-C and HP-KR).
+    A prediction holds for a model at ≥ 3 of the 4 layers.
+  - **XA1.** Per model, all-170 beats raw activations under protocol B (CI above 0) at ≥ half of its band blocks.
+  - **XA2.** Per model, all-170 beats the 170-d shuffled control under protocol B at ≥ half of its band blocks.
+- **Reported without a prediction:**
+  - protocols A and C;
+  - train-one-test-all transfer at the named layers beside the thesis's detectors;
+  - the band curves;
+  - the basis checks.
+- **Regression.** The new runner reproduces Llama's stored block-40 emotion-PC unit exactly (175 of 175 rows).
+
 ## Aletheia's Quest band, RepE-trained (user request, 2026-10-30; fixed before any RepE band read)
 
 The user asked to "train on RepE on the band" after the band's Liars' Bench results were seen. This is post hoc.
