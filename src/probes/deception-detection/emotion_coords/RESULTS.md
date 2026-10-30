@@ -552,6 +552,57 @@ off-diagonal transfer mean.
 
 Tables are in `results/emotion_coords/ms10/thesis/` (`summary.md`, `regions.csv`, `deltas.csv`, `verdicts.json`).
 
+### 3.11 Curing instructed deception before training on it (declared `3f00d011`, before any erasure was scored)
+
+The user's idea was to erase what a probe can learn from instructed deception besides the lie, then train on the cured
+rows (`ms10_cure.py`, `ms10_cure_spec.py`).
+- **Probe and data.** The thesis's raw probe D1 is trained on InstrDec's 600 `ms10` training rows after each erasure.
+  The erasure is fitted on those rows alone.
+- **Scoring.** On every test split, with `ms10`'s draws, at layers 36, 40 and 44.
+- **Check.** The unerased probe reproduces `ms10_thesis`'s D1 to 1e-16.
+- **Erasures.** The one under test removes the within-class top-k PCs (nuisance attribute projection), at
+  k = 5-400. The controls:
+  - random directions;
+  - the total top-k PCs;
+  - the user's original loop: random two-class labels, then LEACE, repeated k times;
+  - keeping only the top-k PCs.
+
+Deception transfer (the other four deception sets), averaged over the three layers:
+
+| erasure | k = 0 | 5 | 10 | 20 | 50 | 100 | 200 | 400 |
+|---|---|---|---|---|---|---|---|---|
+| nuisance (within-class PCs) | 0.824 | 0.820 | 0.776 | 0.779 | 0.770 | 0.779 | 0.760 | 0.767 |
+| random directions | 0.824 | 0.824 | 0.824 | 0.824 | 0.823 | 0.823 | 0.824 | 0.827 |
+| random-label LEACE loop | 0.824 | 0.811 | 0.789 | 0.754 | 0.684 | 0.593 | 0.515 | 0.541 |
+| total PCs | 0.824 | 0.397 | 0.407 | 0.514 | 0.482 | 0.485 | 0.488 | 0.575 |
+| keep only the top k PCs | 0.824 | 0.906 | 0.904 | 0.891 | 0.847 | 0.830 | 0.809 | 0.771 |
+
+**Predictions** (averaged over the 7 ranks; the paired CI above 0 at ≥ 2 of 3 layers):
+- **C1 fails.** The nuisance erasure lowers transfer by 0.043-0.047, with the CI below 0 at all three layers.
+- **C2 fails.** It is also below random erasure, which changes nothing at any rank.
+- **C3 holds.** It beats the random-label loop by 0.11.
+- **C4 fails.** It is below keeping the top 170 PCs by 0.05.
+
+**What it shows.**
+- **The non-deception variance of instructed deception is not a shortcut that hurts transfer.** Erasing it costs
+  every other set some AUROC (Roleplaying −0.08, Open-Ended Sycophancy −0.11), while instructed deception itself
+  stays at 0.99. Part of that variance carries lie information the other sets share.
+- **The user's random-label loop deletes the lie itself.** Its probe cannot predict random labels on held-out rows
+  (0.48, range 0.40-0.52), though it always fits them in-sample (1.000), so its stopping test never discriminates.
+  Each round removes a random whitened direction. Transfer falls from 0.82 to 0.52 by k = 200, and instructed
+  deception's own AUROC from 0.996 to 0.77 by k = 400.
+- **Instructed deception's top total PCs are the lie.** Removing just 5 of them inverts transfer (0.40) and drops
+  its own AUROC to 0.69.
+- **Post hoc, not tested.** Keeping only the top 5 PCs raises transfer to 0.906 and sycophancy from 0.600 to 0.704.
+  - The deception gain is almost all HarmPressureChoice (0.501 to 0.816). AILiar and Roleplaying barely move (0.899
+    to 0.904 together).
+  - On sycophancy, Azarbal's and Papadatos's sets gain about 0.09-0.10 each.
+  - k = 5 was seen before being singled out, so this needs a frozen test before it counts. It agrees with `ms10`'s
+    training-set-PC arm and with the paper's low-dimensional idea.
+
+Tables are in `results/emotion_coords/ms10/cure/` (`summary.md`, `regions.csv`, `deltas.csv`, `verdicts.json`,
+`random_label_check.csv`).
+
 ## 4. Preregistered predictions
 
 At blocks 20/28/40/52, protocol B, logistic regression (T1). A prediction holds if it holds at 3 or more blocks.
