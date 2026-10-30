@@ -1,0 +1,74 @@
+{
+ "freeze_sha256": "507859E2341E59E21AE5459D31D305700DC54289389DEAF6FA2B37F2A560F998",
+ "blocks": [
+  35,
+  36,
+  37,
+  38,
+  39,
+  40,
+  41,
+  42,
+  43,
+  44,
+  45
+ ],
+ "min_blocks": 6,
+ "M1": {
+  "region": "deception",
+  "blocks_with_ci_above_0": 2,
+  "holds": false
+ },
+ "M2": {
+  "region": "deception",
+  "blocks_with_ci_above_0": {
+   "shuffled_all": 8,
+   "random_all": 11,
+   "alpaca_all": 9,
+   "trainpca_all": 0
+  },
+  "holds": false
+ },
+ "M3": {
+  "region": "sycophancy",
+  "blocks_with_ci_above_0": 0,
+  "holds": false
+ },
+ "M4": {
+  "region": "sycophancy",
+  "blocks_with_ci_above_0": {
+   "shuffled_all": 0,
+   "random_all": 0,
+   "alpaca_all": 0,
+   "trainpca_all": 0
+  },
+  "holds": false
+ },
+ "reference_minus_raw_blocks_with_ci_above_0": {
+  "deception": {
+   "emotion_pc3": 0,
+   "persona_dec3": 6,
+   "persona_syc3": 8
+  },
+  "sycophancy": {
+   "emotion_pc3": 0,
+   "persona_dec3": 6,
+   "persona_syc3": 11
+  },
+  "cross": {
+   "emotion_pc3": 0,
+   "persona_dec3": 11,
+   "persona_syc3": 11
+  },
+  "diagonal": {
+   "emotion_pc3": 0,
+   "persona_dec3": 0,
+   "persona_syc3": 0
+  },
+  "all": {
+   "emotion_pc3": 0,
+   "persona_dec3": 0,
+   "persona_syc3": 0
+  }
+ }
+}

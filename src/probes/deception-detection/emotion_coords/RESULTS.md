@@ -29,6 +29,9 @@ Each table is regenerated from the result files by `python -m emotion_coords.rep
   - It fails out of model too (§3.6), on Aletheia's Quest with Qwen3.5-27B and Gemma-3-27B rebuilt bases:
     - it scores 0.622 mean AUROC, rank 20 of 31, against 0.700 for raw activations trained on the same rows;
     - it still beats every matched 170-d control there.
+  - It does not generalise better than raw activations on Mahadik & Skapars' ten datasets (§3.8, declared before any
+    read). Its deception transfer is level with raw, with the CI above 0 at 2 of 11 blocks. It is below raw on
+    sycophancy at every block. That paper's own 3-d persona coordinates do generalise better there at 70B.
   - At a fixed false-positive rate it catches few lies.
 
   Read it as a better-than-raw, better-than-matched-controls feature space for mid-depth transfer *among the five
@@ -407,24 +410,94 @@ above 0):
 - Tables: `results/emotion_coords/xmodel/` (per model `protocol_b_by_block.csv`, `transfer_by_block.csv`,
   `predictions.json`; `cross_model_transfer.csv`).
 
-### 3.8 What the arm shows
+### 3.8 Mahadik & Skapars' ten datasets (declared `a3c67faa`, before any read of the new sets)
+
+Mahadik & Skapars ("Do Linear Probes Generalize Better in Persona Coordinates?", arXiv 2605.09391) ask whether probes
+in a 3-d persona space transfer across datasets better than probes on raw activations. They used Llama-3.2-3B and
+Llama-3-8B. The same test was run here with the emotion basis on Llama-3.3-70B, blocks 35-45 (`ms10.py`,
+`ms10_spec.py`).
+- **Sets.**
+  - Five deception sets: AILiar and Roleplaying (Llama-3.3-70B's own rollouts) and ConvGame, InstrDec and
+    HarmPressureChoice (Liars' Bench).
+  - Five sycophancy sets, read as written: Azarbal's, Papadatos's, and Cheng et al.'s three OEQ sets as the first
+    author prepared them.
+- **Protocol: the paper's splits.**
+  - At most 800 rows a set, with a seeded stratified-group 75/25 split.
+  - A probe per train split and one on all ten, scored on every test split.
+  - 1,000 paired bootstrap draws per test split.
+- **Checks.**
+  - Every span decodes to its reply.
+  - The reader's redeploy check passes (min cos 1.0000000 on 20 rows).
+  - The fit path reproduces phase3_band's protocol B at block 40. All-170 matches exactly. Raw activations choose
+    the same C everywhere, with AUROC within 6e-5 except one fit (ID held out, C = 10), which depends on the BLAS
+    thread count. At 3 threads, phase 3's setting, that fit gives the stored 0.93841 exactly, so raw ran at 3
+    threads.
+
+Region means, averaged over the 11 blocks (AUROC):
+
+| region (cells) | all-170 | raw | shuffled | random | Alpaca PCs | train PCs | emotion PCs (3) | persona dec (3) | persona syc (3) |
+|---|---|---|---|---|---|---|---|---|---|
+| deception off-diagonal (20) | 0.759 | 0.746 | 0.722 | 0.694 | 0.672 | **0.780** | 0.634 | 0.762 | **0.789** |
+| sycophancy off-diagonal (20) | 0.579 | 0.637 | 0.601 | 0.623 | 0.615 | 0.600 | 0.519 | 0.688 | **0.796** |
+| cross-behaviour (50) | 0.597 | 0.611 | 0.576 | 0.589 | 0.616 | 0.612 | 0.541 | 0.739 | **0.805** |
+| diagonal (10) | 0.924 | **0.947** | 0.923 | 0.911 | 0.919 | 0.935 | 0.752 | 0.841 | 0.862 |
+| trained on all ten (10) | 0.847 | **0.929** | 0.849 | 0.831 | 0.852 | 0.914 | 0.680 | 0.809 | 0.836 |
+
+**All four predictions fail.** A block counts when the paired 95% CI is above 0.
+- **M1** (all-170 beats raw on deception): 2 of 11 blocks (42, 43). The point estimates are above raw at blocks
+  37-44 (+0.005 to +0.053) and below at 35, 36 and 45.
+- **M2** (all-170 beats every 170-d control on deception): shuffled 8, random 11, Alpaca PCs 9, training-set PCs 0.
+  The training set's own top 170 PCs transfer better (0.780 against 0.759).
+- **M3** (all-170 beats raw on sycophancy): 0 of 11. It is below raw at every block, by 0.025-0.068, with the CI
+  below 0 at 10 of 11.
+- **M4** (all-170 beats the controls on sycophancy): 0 against every control. The all-170 arm is the weakest
+  170-d arm here; it is below its own shuffled control at 7 of 11 blocks.
+
+**Where it gains and loses.** These are means over the other four sources of the same behaviour.
+- **Deception.** The gain is on the Liars' Bench test sets: HarmPressureChoice 0.684 against raw's 0.562, InstrDec
+  0.899 against 0.853, ConvGame 0.845 against 0.812. On the two sets new to this study it loses: AILiar 0.644
+  against 0.671, Roleplaying 0.722 against 0.831.
+- **Sycophancy.** It loses on all five sets. On Azarbal's set, probes trained on the other sycophancy sources are
+  near or below chance for both arms (0.443, 0.519): the OEQ-trained probes invert there (raw 0.14-0.34).
+
+**The paper's claim at 70B** (reported without a prediction). The k = 3 persona coordinates beat raw activations off
+the diagonal:
+- **Sycophancy space (5 v 5):** +0.145 to +0.176 on the sycophancy region (11 of 11 blocks) and +0.18 to +0.20
+  across behaviours (11 of 11). On deception it gains +0.05 to +0.08 at blocks 38-45 (8 of 11).
+- **Deception space (8 v 7):** +0.09 to +0.16 across behaviours (11 of 11). On deception it gains +0.06 to +0.10 at
+  blocks 35-40 but loses 0.06-0.10 at 41-45.
+- **On the diagonal and trained on all ten,** both lose to raw (0.08-0.11 on the diagonal). This is the paper's own
+  pattern: gains off the diagonal, some loss on it.
+
+Emotion PCs 1-3, the same construction with the emotion basis, never beat raw in any region (0.634 deception,
+0.519 sycophancy).
+
+Tables are in `results/emotion_coords/ms10/` (`summary.md`, `regions.csv`, `deltas.csv`, `verdicts.json`,
+`matrices.csv`).
+
+### 3.9 What the arm shows
 
 Among the five Liars' Bench sets, mid-to-deep blocks (36-45), the full emotion coordinate system is a better
 probe space than raw activations and than every matched 170-d control. It beats the label-shuffled control
-consistently, so the emotion grouping of the stories adds something beyond story content.
+consistently there, so the emotion grouping of the stories adds something beyond story content.
 
-Four things stop this from being a claim about lie detection:
+Five things stop this from being a claim about lie detection:
 1. **The coordinate dependence** (§3.4).
 2. **The failure on GS**, the one out-of-sample, wording-matched lie set.
 3. **The failure out of model** (§3.6, §3.7). On Aletheia's Quest it is 0.08 below raw activations and ranks 20 of
    31, below the thesis's headline. On the other Liars' Bench models it neither beats raw activations nor its
    shuffled control across the band, and its transfer is at or below raw everywhere but Llama.
-4. **The post hoc band.** The block range was chosen after block 40 was seen, and the arm is one of many compared
+4. **The failure on new datasets** (§3.8). On Mahadik & Skapars' ten datasets, with Llama itself:
+   - its deception transfer is level with raw activations, and its gain is confined to the Liars' Bench test sets;
+   - it is below raw activations, and below its own shuffled control, on sycophancy;
+   - the paper's 3-d persona coordinates do transfer better than raw there; the emotion basis does not.
+5. **The post hoc band.** The block range was chosen after block 40 was seen, and the arm is one of many compared
    across 14 blocks.
 
-What does carry across models is the ordering against matched controls. The emotion subspace holds more lie signal
-than any other 170-d subspace tried (H2 holds on Aletheia's Quest, and the shuffled control loses in every
-setting), but less than the whole residual stream.
+What carries across models and deception sets is the ordering against matched controls on lies. The emotion
+subspace holds more lie signal than random, Alpaca and shuffled 170-d subspaces (H2 holds on Aletheia's Quest; the
+shuffled control loses on every lie setting). It holds less than the whole residual stream, and on Mahadik &
+Skapars' deception sets less than the training set's own top 170 PCs. On sycophancy even that ordering fails.
 
 ## 4. Preregistered predictions
 
@@ -536,6 +609,11 @@ All commands run from the `deception-detection` folder. The analysis venv runs t
   2. The reads: `ec_read.py read --model … --layers 32|31`, with the `aq_*.jobs` files.
   3. `parity`, `bases`, `train`, `dev`.
   4. Then `score` and `report` (no `--model`).
+- **Mahadik & Skapars' ten datasets (§3.8).** Each command is `python -m emotion_coords.ms10 <step>`.
+  1. `sets` and `rows` run in `D:\expLB\liars-bench\.venv`; they need the Liars' Bench experiment loader.
+  2. `freeze`, then the reads with the `ms10p`, `ms10a`, `ms10b` and `ms10c` chains.
+  3. In `E:\aletheia\venv`: `regress`, `cache`, `run --only raw --workers 4 --threads 3`,
+     `run --skip raw --workers 8 --threads 1`, then `score` and `report`.
 - **Results:** `results/emotion_coords/`
   - `phase3/`, `phase3_band/`, `phase4/`, `gs/`, `exploratory/`, `aletheia/`;
   - `figures/`;

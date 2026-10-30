@@ -1,0 +1,2 @@
+# ms10: the sycophancy texts (1,458 rows), half 0 of 2, at blocks 35-45
+read --name ms10_syc --layers 35,36,37,38,39,40,41,42,43,44,45 --dtype bfloat16 --batched --shard 0/2 --traces 4 --session_timeout 5400

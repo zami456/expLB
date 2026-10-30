@@ -84,8 +84,9 @@ def _hf_frame(name: str) -> pd.DataFrame:
 
 
 def _rollout_items(name: str) -> list[dict]:
-    """AILiar's or Roleplaying's completions as the repo's `from_rollouts` builds them (contents stripped, as the
-    template trims them), labelled by the dataset class's own rule; honest and deceptive only. `n` counts every
+    """AILiar's or Roleplaying's completions exactly as the repo's `from_rollouts` builds them (prompt contents
+    stripped, each completion right-stripped only: Roleplaying's completion follows a prefilled "Student:" turn,
+    whose space it keeps), labelled by the dataset class's own rule; honest and deceptive only. `n` counts every
     completion, kept or not."""
     from deception_detection.data.ai_liar import AILiarDataset
     from deception_detection.data.roleplaying import RolePlayingDataset
@@ -104,7 +105,7 @@ def _rollout_items(name: str) -> list[dict]:
             label = cls._get_label_from_judgement(item["graded_deception"][i])
             if label in (Label.HONEST, Label.DECEPTIVE):
                 items.append({"set": name, "n": n, "label": int(label == Label.DECEPTIVE), "group": _key(prompt),
-                              "messages": prompt + [["assistant", reply.strip()]]})
+                              "messages": prompt + [["assistant", reply.rstrip()]]})
             n += 1
     return items
 
@@ -352,7 +353,7 @@ def rows() -> None:
         bad = 0
         for i, (token_ids, a, b) in zip(ids, tokenized):
             w = wanted[i]
-            if tok.decode(token_ids[a:b]) != w["messages"][-1][1]:
+            if tok.decode(token_ids[a:b], clean_up_tokenization_spaces=False) != w["messages"][-1][1]:
                 bad += 1
             out.append({"row_id": i, "ids": token_ids, "groups": [[[a, b]]], "points": [], "set": w["set"],
                         "n": w["n"]} | ({"label": w["label"]} if w["label"] is not None else {}))
@@ -504,9 +505,18 @@ def _unit(block: int, fs: str, seed: int) -> tuple[str, float]:
     return path.name, time.time() - t0
 
 
-def run(workers: int = 4, threads: int = 3, blocks=None) -> None:
-    """Every (block, feature set, seed) unit not yet saved, raw activations first; then probes.csv."""
+def _names(x) -> list[str]:
+    """A list from the command line: fire turns "a,b" into a tuple and "a" into a string."""
+    return [str(v) for v in x] if isinstance(x, (list, tuple)) else str(x).split(",")
+
+
+def run(workers: int = 4, threads: int = 3, blocks=None, only=None, skip=None) -> None:
+    """Every (block, feature set, seed) unit not yet saved, raw activations first; then probes.csv. `only` / `skip`:
+    comma lists of feature sets, so the 8,192-d raw arm and the small subspaces can run with their own worker and
+    thread counts (raw at phase 3's 3 threads: its weakly regularised fits depend on the BLAS thread count)."""
     from joblib import Parallel, delayed
+
+    from emotion_coords import ms10 as importable  # under `-m` this file is __main__, which the workers cannot unpickle
 
     for var in ("OMP_NUM_THREADS", "MKL_NUM_THREADS", "OPENBLAS_NUM_THREADS"):
         os.environ[var] = str(threads)  # inherited by the worker processes
@@ -514,17 +524,20 @@ def run(workers: int = 4, threads: int = 3, blocks=None) -> None:
     for b in todo_blocks:
         if not _block_path(b).exists():
             raise FileNotFoundError(f"{_block_path(b)}: run `cache` first")
-    units = [(b, fs, seed) for fs, seed in _feature_names() for b in todo_blocks]
+    names = [(fs, seed) for fs, seed in _feature_names()
+             if (only is None or fs in _names(only)) and (skip is None or fs not in _names(skip))]
+    units = [(b, fs, seed) for fs, seed in names for b in todo_blocks]
     todo = [u for u in units if not _part(*u).exists()]
     logger.info(f"{len(units)} units, {len(todo)} to fit on {workers} workers x {threads} threads")
     tmp = STORE / "joblib_tmp"
     tmp.mkdir(parents=True, exist_ok=True)
     t0 = time.time()
     for k, (name, seconds) in enumerate(Parallel(n_jobs=workers, backend="loky", temp_folder=str(tmp),
-                                                 return_as="generator_unordered")(delayed(_unit)(*u) for u in todo)):
+                                                 return_as="generator_unordered")(delayed(importable._unit)(*u)
+                                                                                  for u in todo)):
         logger.info(f"{k + 1}/{len(todo)} {name}: {seconds:.0f} s ({(time.time() - t0) / 60:.0f} min)")
     rows = []
-    for b, fs, seed in units:
+    for b, fs, seed in [(b, fs, seed) for fs, seed in _feature_names() for b in S.BLOCKS]:
         if not _part(b, fs, seed).exists():
             continue
         with np.load(_part(b, fs, seed)) as z:
