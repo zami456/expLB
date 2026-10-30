@@ -367,6 +367,46 @@ without that match.
   - The reader's redeploy check on 20 stored Liars' Bench parity rows (cos ≥ 0.9998) runs before the bulk reads.
   - The fit path must reproduce phase3_band's protocol B AUROCs at block 40.
 
+## The thesis's detectors on the ten datasets (user request, 2026-10-31; fixed before any of them is scored there)
+
+After the emotion results, the user asked for the thesis's own detectors on the same ten datasets. The question is
+whether the thesis's extension of the paper (the knowledge-denial personas and the knowledge direction) adds anything
+on the paper's own data.
+
+Everything about the data is `ms10`'s: rows, splits, block reads and bootstrap draws, so comparisons with its arms are
+paired. Every constant is in `ms10_thesis_spec.py`. Its SHA-256 is recorded in
+`E:/aletheia/logs/freeze_emotion_ms10_thesis.txt`, and `ms10_thesis.score` also checks `ms10`'s freeze.
+
+- **Layers.** 36, 40 and 44: the thesis's layers in the band, where K and the RepE probe exist.
+- **Detectors.** These are the thesis's, built exactly as `transfer_alignment.scores` builds them; nothing is chosen
+  here.
+  - **Fixed** (scored on every test split, no training on these sets):
+    - D2, the RepE base probe;
+    - D3, the AISI probe (40 and 44);
+    - D5-D9, the extended bank's contrasts;
+    - K;
+    - D5 + K and D9 + K.
+  - **Trained per source with the thesis's probe** (`make_probe`):
+    - D1 on raw activations;
+    - D4 on the extended top 3 PCs;
+    - the paper's top 3 PCs under the same probe.
+- **Regions.**
+  - A fixed detector's region is its mean over the region's test sets.
+  - A trained one's is its off-diagonal mean, as in `ms10`.
+  - Either way each test set is weighted equally.
+  - The "new deception" region is AILiar and Roleplaying, which the thesis never scored.
+- **Predictions, fixed now** (deception region; the paired CI above 0 at ≥ 2 of the 3 layers):
+  - **TD1.** D9 + K beats D1.
+  - **TD2.** D9 beats D5.
+  - **TD3.** D9 + K beats D9.
+  - **TD4.** D4 beats the paper's PCs under the same probe.
+- **Reported without a prediction:**
+  - the sycophancy and new-deception regions;
+  - the other detectors;
+  - every detector against `ms10`'s arms.
+- **Already seen.** D9 + K was selected on Liars' Bench (three of these deception sets). `ms10`'s arms are already
+  scored here; none of these detectors is.
+
 ## Per prediction
 
 - **P1.** Let Δ_rand be the mean over the five held-out sets of [AUROC(emotion PCs at k_t) − mean AUROC(random at
