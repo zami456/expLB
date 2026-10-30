@@ -263,6 +263,54 @@ def valence_scatter(prefix: str = "full", label=("afraid", "terrified", "calm", 
     pd.DataFrame(rows).to_csv(_out(f"valence_scatter_{prefix}.csv"), index=False)
 
 
+def all170() -> None:
+    """The exploratory all-170-emotion-PC arm against its 170-d controls, every block read: protocol B (train on four
+    sets) at 20/28/35-45/52, and protocol C (train on one) across the band. Post hoc band shaded."""
+    results = C.results_dir()
+    e = pd.concat([pd.read_csv(results / "phase3" / "exploratory_emotion_all_lr.csv"),
+                   pd.read_csv(results / "phase3_band" / "exploratory_emotion_all_lr.csv")])
+    e = e.drop_duplicates("layer").set_index("layer").sort_index()
+    persona = {}
+    for folder in ("phase3", "phase3_band"):
+        for v in json.load(open(results / folder / "predictions_lr.json"))["per_layer"]:
+            persona[v["layer"]] = v["mean_auroc"]["persona_pc_extended"]
+    c = pd.read_csv(results / "exploratory" / "protocol_c_band_170.csv")
+    c = c[c["train"] != c["test"]].groupby(["arm", "layer"])["auroc"].mean().unstack()
+    series_b = [("all 170 emotion PCs", e["mean_emotion_all"], SLOTS[0], "-", 2.2),
+                ("170 label-shuffled PCs", e["mean_shuffled_all"], SLOTS[3], "-", 1.4),
+                ("170 Alpaca PCs", e["mean_alpaca_all"], SLOTS[4], "-", 1.4),
+                ("170 training-set PCs", e["mean_trainpca_all"], SLOTS[5], "-", 1.4),
+                ("170 random dimensions", e["mean_random_all"], MUTED, "-", 1.2),
+                ("raw activations", e["mean_raw"], INK2, "--", 1.4),
+                ("persona PCs, extended", pd.Series(persona).sort_index(), SLOTS[6], ":", 1.4)]
+    series_c = [("all 170 emotion PCs", c.loc["all 170 emotion PCs"], SLOTS[0], "-", 2.2),
+                ("170 label-shuffled PCs", c.loc["170 label-shuffled PCs (5)"], SLOTS[3], "-", 1.4),
+                ("170 Alpaca PCs", c.loc["170 Alpaca PCs"], SLOTS[4], "-", 1.4),
+                ("raw activations", c.loc["raw activations"], INK2, "--", 1.4)]
+    fig, axes = plt.subplots(1, 2, figsize=(11.5, 4.0), gridspec_kw={"width_ratios": [1.6, 1]})
+    rows = []
+    for ax, series, title, panel in ((axes[0], series_b, "train on four sets, test on the fifth (protocol B)", "B"),
+                                     (axes[1], series_c, "train on one set, test on each other (protocol C)", "C")):
+        ax.axvspan(34.5, 45.5, color=GRID, alpha=0.45, lw=0)
+        for label, s, color, ls, lw in series:
+            ax.plot(s.index, s.values, ls, color=color, lw=lw, marker="o", ms=3.5 if lw < 2 else 4.5, label=label)
+            rows += [{"panel": panel, "arm": label, "layer": int(k), "auroc": float(v)} for k, v in s.items()]
+        ax.axhline(0.5, color=AXIS, lw=0.8)
+        ax.set_title(title, fontsize=9)
+        ax.set_xlabel("decoder block")
+    axes[0].set_xticks([20, 28, 35, 40, 45, 52])
+    axes[1].set_xticks(range(35, 46, 2))
+    axes[0].set_ylabel("mean AUROC on the held-out sets")
+    axes[1].set_ylabel("mean AUROC of the 20 transfers")
+    axes[0].text(40, axes[0].get_ylim()[0] + 0.01, "post hoc band", ha="center", va="bottom", fontsize=7.5, color=INK2)
+    handles, labels = axes[0].get_legend_handles_labels()
+    fig.tight_layout()
+    fig.legend(handles, labels, loc="upper center", ncol=4, fontsize=8, bbox_to_anchor=(0.5, 0.0))
+    fig.savefig(_out("all170_by_layer.png"), dpi=160, bbox_inches="tight")
+    plt.close(fig)
+    pd.DataFrame(rows).to_csv(_out("all170_by_layer.csv"), index=False)
+
+
 def all(out: str = "phase3", layers=None, tag: str = "") -> None:  # noqa: A001 (the CLI verb)
     """`out`, `layers` and `tag` draw the post hoc band (`all --out phase3_band --layers 36,40,44 --tag _band`)."""
     global TAG
@@ -278,5 +326,5 @@ def all(out: str = "phase3", layers=None, tag: str = "") -> None:  # noqa: A001 
 
 if __name__ == "__main__":
     _style()
-    fire.Fire({"all": all, "k_sweep": k_sweep, "transfer": transfer, "hpkr_subgroups": hpkr_subgroups,
+    fire.Fire({"all": all, "all170": all170, "k_sweep": k_sweep, "transfer": transfer, "hpkr_subgroups": hpkr_subgroups,
                "d2d3_effects": d2d3_effects, "valence_scatter": valence_scatter})
