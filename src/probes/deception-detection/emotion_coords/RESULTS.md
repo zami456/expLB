@@ -499,6 +499,59 @@ subspace holds more lie signal than random, Alpaca and shuffled 170-d subspaces 
 shuffled control loses on every lie setting). It holds less than the whole residual stream, and on Mahadik &
 Skapars' deception sets less than the training set's own top 170 PCs. On sycophancy even that ordering fails.
 
+### 3.10 The thesis's detectors on the same ten datasets (declared `422f7074`, before any was scored there)
+
+The user asked for the thesis's own detectors on Mahadik & Skapars' ten datasets (`ms10_thesis.py`,
+`ms10_thesis_spec.py`). The question is whether the thesis's extension of that paper adds anything on the paper's own
+data.
+- **Data.** Everything is `ms10`'s: rows, splits and bootstrap draws.
+- **Layers.** 36, 40 and 44, where K and the RepE probe exist.
+- **Detectors.** Built exactly as `transfer_alignment.scores` builds them.
+  - The fixed detectors are scored on every test split.
+  - D1 and D4 are trained per source with the thesis's probe.
+  - The paper's top 3 PCs are fitted under that same probe, so D4's comparison with them changes only the basis.
+- **New sets.** AILiar and Roleplaying are new to the thesis, and they give the cleanest test.
+
+Means over the three layers (AUROC). A fixed detector's region is its mean over the test sets; a trained one's is the
+off-diagonal transfer mean.
+
+| detector | kind | deception (5 sets) | new deception (AILiar, Roleplaying) | sycophancy (5 sets) |
+|---|---|---|---|---|
+| D9 + K (thesis headline) | fixed | 0.892 | 0.865 | 0.740 |
+| D9 extended contrast | fixed | 0.881 | **0.881** | 0.763 |
+| D5 published contrast | fixed | 0.841 | 0.841 | 0.758 |
+| D6 sycophancy contrast | fixed | 0.848 | 0.832 | **0.852** |
+| K | fixed | 0.803 | 0.760 | 0.620 |
+| D2 RepE base probe | fixed | **0.903** | 0.879 | 0.622 |
+| D4 extended PCs (k = 3) | trained | 0.866 | 0.878 | 0.686 |
+| the paper's PCs (k = 3), same probe | trained | 0.803 | 0.810 | 0.688 |
+| D1 raw probe | trained | 0.778 | 0.742 | 0.629 |
+| all-170 (§3.8) | trained | 0.762 | 0.682 | 0.577 |
+
+**Predictions** (deception region; the paired CI above 0 at ≥ 2 of 3 layers):
+- **TD1 holds** (3 of 3). D9 + K beats the raw probe trained on another deception set by 0.11-0.12. On the new sets
+  the margin is 0.10-0.15.
+- **TD2 holds** (2 of 3). The extended contrast beats the published one by 0.03-0.05. On the new sets it wins at all
+  three layers (+0.03 to +0.06).
+- **TD3 fails** (0 of 3). K adds nothing: +0.003 to +0.018 on deception. On the new sets it costs 0.004-0.027 (CI
+  below 0 at layer 36).
+- **TD4 holds** (2 of 3). The extended PCs beat the paper's PCs under the same probe by 0.02-0.12. On the new sets
+  they win at all three layers.
+
+**What this adds.**
+- **The extension helps on the paper's own data**, most clearly on the two sets the thesis never saw. The extended
+  contrast (D9, zero-shot) beats the paper's 3-d coordinates as `ms10` fitted them at every layer (+0.05 to +0.13).
+- **The knowledge direction does not travel.** Its gain in the thesis came from HP-KR, whose lies deny knowledge; none
+  of these sets has such lies. It slightly hurts on the new sets and on sycophancy.
+- **The RepE-trained probe (D2) is level with the contrasts on lies** (0.903 on deception), but not on sycophancy
+  (0.622).
+- **The sycophancy contrast (D6) is the best detector on sycophancy** (0.852), ahead of every trained probe. The
+  OEQ sets stay hard for all detectors: 0.37-0.80 on OEQ-Validation and OEQ-Framing.
+- **These are not all held-out numbers.** D9 + K was selected on Liars' Bench, which supplies three of the five
+  deception sets. The new-deception column is the held-out one.
+
+Tables are in `results/emotion_coords/ms10/thesis/` (`summary.md`, `regions.csv`, `deltas.csv`, `verdicts.json`).
+
 ## 4. Preregistered predictions
 
 At blocks 20/28/40/52, protocol B, logistic regression (T1). A prediction holds if it holds at 3 or more blocks.
