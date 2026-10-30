@@ -116,6 +116,37 @@ control).
   - **G3.** Any arm with adapted AUROC > 0.6 scores lower on the base read (paired CI excluding 0). If it does not,
     it reads the question or the denial wording rather than the lie.
 
+## Aletheia's Quest band, mid ± 4 (user request, 2026-10-30; fixed before any band read)
+
+The user chose every block of mid ± 4: Qwen3.5-27B 28-36, Gemma-3-27B-it 27-35. The middle block had been scored,
+so the band is post hoc in the sense of the Llama band. Every constant is in `aletheia_band_spec.py`, and its
+SHA-256 is recorded in `E:/aletheia/logs/freeze_emotion_band.txt` before the first band read. `aletheia_band.score`
+refuses to run without that match.
+
+- **Reads.** Every input is read again at the nine blocks by `reader/ec_read.py`, so the blocks share one pipeline:
+  - the stories and neutral dialogues through each base model;
+  - the Liars' Bench training rows of the primary source. Gemma's own CG, IT and ID come from the tokenisation its
+    pooled reads cached. Qwen2.5's HP-C, HP-KR and ID are rendered as D4 (LB) read them;
+  - the Alpaca controls;
+  - every test row through the organism that wrote it, one row per pass. The merged copies are read directly;
+    BotC and Echo go through their adapters, attached by NDIF at scale α/r = 2. BotC keeps the thesis's tail cuts.
+- **Unchanged from the middle-block test:** the recipe, the probe and its C grid, the six feature sets, the 8 sets,
+  and the bootstrap draws. Only the primary source and the organism read are scored.
+- **Gates** (a failure stops the run for the user's decision):
+  - parity against the thesis's stored reads at the shared blocks, cos ≥ 0.9998 (0.999 for Echo, which the thesis
+    read with int8 factors). The check covers every test row and a 20-row subset of each training and Alpaca
+    pipeline;
+  - |r(PC1, valence)| ≥ 0.5 per block. A block under it is reported and flagged, not dropped.
+- **Predictions, fixed now:**
+  - **HB1.** All-170 beats raw activations, with the paired CI above 0, at ≥ 5 of the 9 offsets. An offset pairs
+    Qwen3.5's block 32 + j with Gemma's 31 + j in the 8-set mean.
+  - **HB2.** All-170 beats each 170-d control (shuffled, random, Alpaca PCs, training-set PCs) at ≥ 5 of the 9
+    offsets.
+- **Reported without a prediction:**
+  - each offset's mean, rank of 31, and rank among the 18 white-box entries;
+  - the best offset (post hoc);
+  - offset 0 against the frozen middle-block test, as a check of the new reads.
+
 ## Gender-Secret with the fine-tune's emotion vectors (user request, 2026-10-30; fixed before any story is read through the fine-tune)
 
 The GS test above used the base model's emotion vectors, and RESULTS.md names that as its caveat. Re-deriving them

@@ -1,0 +1,3 @@
+# Stories and neutral texts through the Gender-Secret fine-tune (NDIF peft), block 40, half 1 of 2
+read --name stories --out stories_gsft40 --layers 40 --peft Cadenza-Labs/llama-70b-3.3-it-lora-gender-secret-male --batched --budget 2048 --min_budget 512 --traces 8 --dtype bfloat16 --session_timeout 2700 --max_wait 21600 --shard 1/2
+read --name neutral --out neutral_gsft40 --layers 40 --peft Cadenza-Labs/llama-70b-3.3-it-lora-gender-secret-male --batched --budget 2048 --min_budget 512 --traces 8 --dtype bfloat16 --session_timeout 2700 --max_wait 21600 --shard 1/2

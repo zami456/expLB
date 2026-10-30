@@ -638,6 +638,8 @@ def main() -> int:
     if "--model" in sys.argv:  # chosen before the parser, whose --layers default is the model's own
         model_key = sys.argv[sys.argv.index("--model") + 1]
     MODEL = MODELS[model_key]
+    if "--repo" in sys.argv:  # a merged fine-tune of the model: its weights, the model's padding and block path
+        MODEL = dict(MODEL, id=sys.argv[sys.argv.index("--repo") + 1])
     p = argparse.ArgumentParser()
     sub = p.add_subparsers(dest="cmd", required=True)
     sub.add_parser("selftest")
@@ -660,6 +662,7 @@ def main() -> int:
                                                          "repo; sending the factors is refused: payloads over ~1 MiB)")
             r.add_argument("--model", default="llama", choices=tuple(MODELS),
                            help="the remote model (qwen35 and gemma: Aletheia's Quest's base models)")
+            r.add_argument("--repo", default=None, help="read this repo instead (a merged fine-tune of --model)")
     g = sub.add_parser("generate")
     g.add_argument("--name", required=True)
     g.add_argument("--retries", type=int, default=4)
