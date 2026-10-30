@@ -1,4 +1,5 @@
-"""Emotion-coordinate reader: Llama-3.3-70B on NDIF (nnsight 0.8.1). A fork of the Verdict study's
+"""Emotion-coordinate reader: Llama-3.3-70B on NDIF (nnsight 0.8.1), and with `read --model qwen35|gemma` the base
+models of Aletheia's Quest (Qwen3.5-27B, Gemma-3-27B-it). A fork of the Verdict study's
 `scripts/narcbench/reader/verdict_read.py` (same session layout, OOM policy, resume and watchdog), with two
 additions: teacher-forced log-probs (`logprob`) and one-off sampling (`generate`).
 
@@ -37,7 +38,12 @@ DD = HERE.parents[2]
 DATA = DD / "data" / "emotion_coords"
 ROWS, ACTS, LOGS = DATA / "rows", DATA / "acts", DATA / "logs"
 ENV_FILE = HERE.parents[5] / ".env"  # liars-bench/.env
-MODEL = {"id": "meta-llama/Llama-3.3-70B-Instruct", "layers": (20, 28, 40, 52), "pad": 128004}  # <|finetune_right_pad_id|>
+MODELS = {  # `read --model`: Llama is the study's model; the other two are Aletheia's Quest's base models
+    "llama": {"id": "meta-llama/Llama-3.3-70B-Instruct", "layers": (20, 28, 40, 52), "pad": 128004},  # <|finetune_right_pad_id|>
+    "qwen35": {"id": "Qwen/Qwen3.5-27B", "layers": (32,), "pad": 248044},  # <|endoftext|>; the middle of 64 blocks
+    "gemma": {"id": "google/gemma-3-27b-it", "layers": (31,), "pad": 0},  # <pad>; the middle of 62 blocks
+}
+MODEL = MODELS["llama"]
 MIN_COS = 0.9998
 
 log = logging.getLogger("ec_read")
@@ -97,6 +103,20 @@ def load_remote_llm(peft: str | None = None):
 
 # ── one NDIF session: many traces ──
 
+def decoder_blocks(llm):
+    """The decoder blocks, resolved outside the session: Llama's at model.layers; the vision-language checkpoints
+    (Gemma 3, Qwen3.5) nest the text model at model.language_model.layers."""
+    try:
+        return llm.model.language_model.layers
+    except AttributeError:
+        return llm.model.layers
+
+
+def hidden_size(llm) -> int:
+    config = llm.config
+    return int(getattr(config, "text_config", config).hidden_size)
+
+
 def tensors(rows: list[dict], pad: int, n_groups: int, n_points: int):
     import torch
 
@@ -134,6 +154,8 @@ def session_read(llm, traces: list[list[dict]], hidden: int, remote, layers, n_g
 
     keep = getattr(torch, out_dtype)
     layers = list(layers)
+    blocks = decoder_blocks(llm)
+    point_width = hidden if n_points else 1  # a file without points sends back a placeholder, not zeros of width H
     prepared, r0 = [], 0
     for rows in traces:
         ids, attn, gmask, pidx = tensors(rows, MODEL["pad"], n_groups, n_points)
@@ -144,11 +166,12 @@ def session_read(llm, traces: list[list[dict]], hidden: int, remote, layers, n_g
     # (nnsight finds each `with` by its source line, so no comment may sit between the loop header and the `with`.)
     with llm.session(remote=remote):
         content = torch.zeros(n_rows, max(n_groups, 1), len(layers), hidden, dtype=torch.float32)
-        points = torch.zeros(n_rows, max(n_points, 1), len(layers), hidden, dtype=torch.float32)
+        points = torch.zeros(n_rows, max(n_points, 1), len(layers), point_width, dtype=torch.float32)
         for ids, attn, gmask, pidx, s, e in prepared:
             with llm.trace({"input_ids": ids, "attention_mask": attn}, logits_to_keep=1, use_cache=False):
                 for j, L in enumerate(layers):  # ascending: an early block after a late one is an error
-                    h = llm.model.layers[L].output
+                    h = blocks[L].output
+                    h = h[0] if isinstance(h, tuple) else h
                     for g in range(n_groups):
                         m = gmask[:, g].to(h.device, torch.float32)
                         num = (h * m[:, :, None].to(h.dtype)).sum(dim=1, dtype=torch.float32)
@@ -418,9 +441,11 @@ def cmd_read(args) -> int:
     n_groups, n_points = shape_of(rows)
     out = ACTS / out_name
     lora_name = f"peft:{args.peft}" if args.peft else None
-    if out_name != args.name or layers != MODEL["layers"] or lora_name:  # the folder records what it holds
+    other_model = MODEL is not MODELS["llama"]
+    if out_name != args.name or layers != MODEL["layers"] or lora_name or other_model:  # the folder records what it holds
         out.mkdir(parents=True, exist_ok=True)
-        info = {"rows": args.name, "layers": list(layers)} | ({"lora": lora_name} if lora_name else {})
+        info = ({"rows": args.name, "layers": list(layers)} | ({"lora": lora_name} if lora_name else {})
+                | ({"model": MODEL["id"]} if other_model else {}))
         marker = out / "READ.json"
         if marker.exists() and json.loads(marker.read_text()) != info:
             raise SystemExit(f"{marker} holds {marker.read_text()}, not {info}")
@@ -433,7 +458,7 @@ def cmd_read(args) -> int:
     if not todo:
         return 0
     llm = load_remote_llm(args.peft)
-    hidden = int(llm.config.hidden_size)
+    hidden = hidden_size(llm)
 
     def work(sess, flat):
         content, points = session_read(llm, sess, hidden, True, layers, n_groups, n_points, args.dtype)
@@ -528,7 +553,7 @@ def cmd_recheck(args) -> int:
                 content, points = z["content"], z["points"]
                 saved.update({ids[i]: (content[i].copy(), points[i].copy()) for i in hit})
     llm = load_remote_llm()
-    content, points = with_watchdog(lambda: session_read(llm, [[r] for r in pick], int(llm.config.hidden_size), True,
+    content, points = with_watchdog(lambda: session_read(llm, [[r] for r in pick], hidden_size(llm), True,
                                                          MODEL["layers"], n_groups, n_points), 3600)
     c, p = masked(pick, content, points, n_groups, n_points)
     cos = []
@@ -607,7 +632,12 @@ def cmd_selftest(args) -> int:
 
 
 def main() -> int:
+    global MODEL
     setup_env()
+    model_key = "llama"
+    if "--model" in sys.argv:  # chosen before the parser, whose --layers default is the model's own
+        model_key = sys.argv[sys.argv.index("--model") + 1]
+    MODEL = MODELS[model_key]
     p = argparse.ArgumentParser()
     sub = p.add_subparsers(dest="cmd", required=True)
     sub.add_parser("selftest")
@@ -628,6 +658,8 @@ def main() -> int:
                            help="transfer dtype of the results (bfloat16 halves the download)")
             r.add_argument("--peft", default=None, help="read a LoRA fine-tune that NDIF attaches itself (adapter "
                                                          "repo; sending the factors is refused: payloads over ~1 MiB)")
+            r.add_argument("--model", default="llama", choices=tuple(MODELS),
+                           help="the remote model (qwen35 and gemma: Aletheia's Quest's base models)")
     g = sub.add_parser("generate")
     g.add_argument("--name", required=True)
     g.add_argument("--retries", type=int, default=4)

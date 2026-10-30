@@ -116,6 +116,50 @@ control).
   - **G3.** Any arm with adapted AUROC > 0.6 scores lower on the base read (paired CI excluding 0). If it does not,
     it reads the question or the denial wording rather than the lie.
 
+## Aletheia's Quest transfer (user request, 2026-10-30; fixed before any story is read through the new models)
+
+The all-170 arm, scored on Aletheia's Quest as the thesis scored its detectors there (`scripts/aletheia/`). Every
+constant is in `aletheia170_spec.py`, and its SHA-256 is recorded in `E:/aletheia/logs/freeze_emotion170.txt` before
+the first NDIF read. `aletheia170.score` refuses to run without that match. The arm's results on Llama are known at
+declaration, including the GS failure of G1. The predictions are therefore declared, not preregistered. The thesis
+opened these test labels for its own cells; no basis, probe or C here is chosen with them.
+
+- **Models and blocks.** The organisms' base models at the thesis's middle block: Qwen3.5-27B at block 32 of 64, and
+  Gemma-3-27B-it at block 31 of 62.
+- **Basis.** Built inside each base model by phase 1's recipe, unchanged:
+  - Llama's 8,280 stories (with its top-ups) and every neutral dialogue, re-tokenised by the model.
+  - The mean from position 50 onward.
+  - The neutral PCs explaining 50% of the variance removed; all 170 PCs kept; 5 shuffled bases.
+- **Reads.** `reader/ec_read.py --model qwen35|gemma`.
+  - This replaces the thesis's `aletheia/read.py`: that reader imports packages absent from the nnsight 0.8 venv.
+  - Gate: 20 stored rows per model re-read must match at cos ≥ 0.9998 (Qwen3.5 Alpaca rows, Gemma dev rows; no
+    test row).
+- **Probe.** Standardised L2 logistic regression on the coordinates, with C chosen by inner CV on the training rows only.
+  - **Primary training source: Liars' Bench**, the rows of the thesis's post hoc D4 (LB):
+    - Gemma's own CG, IT and ID;
+    - Qwen2.5's HP-C, HP-KR and ID text, read through Qwen3.5 base.
+    - Inner CV leaves one set out.
+  - **Secondary source: RepE.** R1's training rows; CV grouped by statement.
+  - **Secondary source: dev.** R2's rows; CV leaves one organism out, or is stratified 5-fold for Gemma's single set.
+- **Scoring.**
+  - **Primary:** each test row read by its organism, at the middle block, reasoning dropped, content span.
+  - **Secondary:** the LB-trained probes on the base model's read of the same rows, the thesis's text control.
+  - **Datasets:** the thesis's 8 (HG-G and HG-N not run).
+  - **Statistics:** AUROC with `score.run`'s bootstrap draws and random band; the mean; the rank among the 30
+    entries, with its interval.
+  - **Thesis comparators:** D9 + K (headline), R1, R2 and D4 (LB), re-scored on the same draws for paired deltas.
+- **Gates** (a failure stops the run for the user's decision):
+  - reader parity;
+  - |r(PC1, valence)| ≥ 0.5 for each new basis;
+  - the dev known-answer gate: all-170 (LB) on the base model's instructed-deception dev rows above the 97.5th
+    percentile of 1,000 random directions.
+- **Predictions, fixed now:**
+  - **H1.** All-170 (LB, organism read) beats raw activations (LB) in mean AUROC over the 8 sets: paired difference
+    > 0 with CI excluding 0.
+  - **H2.** All-170 (LB) beats each 170-d control: shuffled (mean of 5), random (mean of 5), Alpaca PCs and
+    training-set PCs. Each CI excludes 0.
+  - Rank, the deltas to the thesis's cells and the secondary sources are reported without a prediction.
+
 ## Per prediction
 
 - **P1.** Let Δ_rand be the mean over the five held-out sets of [AUROC(emotion PCs at k_t) − mean AUROC(random at
