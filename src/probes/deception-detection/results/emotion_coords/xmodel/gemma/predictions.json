@@ -1,0 +1,169 @@
+{
+ "freeze_sha256": "66C6AC548797AC17C643BAC5331052BCBB0DAD682C56084BBE44919380725803",
+ "model": "gemma",
+ "sets": [
+  "convince_me__plain",
+  "insider_trading_cadenza__plain",
+  "instruct_dishonesty__plain"
+ ],
+ "per_named_layer": [
+  {
+   "block": 8,
+   "P1": false,
+   "P1_vs_random": {
+    "delta": -0.13692816889038642,
+    "ci_lo": -0.15354881471136567,
+    "ci_hi": -0.11840872081143305
+   },
+   "P1_vs_topic": {
+    "delta": -0.19596261904761894,
+    "ci_lo": -0.21990145669362085,
+    "ci_hi": -0.16986555386343216
+   },
+   "P2": false,
+   "P2_extended": false,
+   "P4": false,
+   "P4_extended": true,
+   "P5": false,
+   "P5_parts": {
+    "guilty": [
+     0.518608,
+     0.294214
+    ],
+    "afraid": [
+     0.401376,
+     0.6040989999999999
+    ],
+    "desperate": [
+     0.33746,
+     0.38564000000000004
+    ]
+   }
+  },
+  {
+   "block": 28,
+   "P1": false,
+   "P1_vs_random": {
+    "delta": 0.09268922470799641,
+    "ci_lo": 0.07422438856356692,
+    "ci_hi": 0.1112860477032794
+   },
+   "P1_vs_topic": {
+    "delta": -0.13584624797843659,
+    "ci_lo": -0.16117987205750225,
+    "ci_hi": -0.11142093975741238
+   },
+   "P2": false,
+   "P2_extended": false,
+   "P4": true,
+   "P4_extended": true,
+   "P5": false,
+   "P5_parts": {
+    "guilty": [
+     0.456448,
+     0.528187
+    ],
+    "afraid": [
+     0.23740000000000003,
+     0.284806
+    ],
+    "desperate": [
+     0.11049600000000001,
+     0.483811
+    ]
+   }
+  },
+  {
+   "block": 31,
+   "P1": false,
+   "P1_vs_random": {
+    "delta": 0.05671984586702602,
+    "ci_lo": 0.04063524316936216,
+    "ci_hi": 0.07168405858378253
+   },
+   "P1_vs_topic": {
+    "delta": -0.08777378167115908,
+    "ci_lo": -0.11061885494159929,
+    "ci_hi": -0.06460037978436661
+   },
+   "P2": false,
+   "P2_extended": false,
+   "P4": true,
+   "P4_extended": true,
+   "P5": false,
+   "P5_parts": {
+    "guilty": [
+     0.27944800000000003,
+     0.4636690000000001
+    ],
+    "afraid": [
+     0.31178800000000007,
+     0.34775999999999996
+    ],
+    "desperate": [
+     0.221188,
+     0.470398
+    ]
+   }
+  },
+  {
+   "block": 34,
+   "P1": false,
+   "P1_vs_random": {
+    "delta": 0.17196437962713387,
+    "ci_lo": 0.1548755565240341,
+    "ci_hi": 0.18809806276841864
+   },
+   "P1_vs_topic": {
+    "delta": -0.03961669991015269,
+    "ci_lo": -0.06632457360736745,
+    "ci_hi": -0.014231535242587634
+   },
+   "P2": false,
+   "P2_extended": false,
+   "P4": true,
+   "P4_extended": true,
+   "P5": false,
+   "P5_parts": {
+    "guilty": [
+     0.5201560000000001,
+     0.381223
+    ],
+    "afraid": [
+     0.28232,
+     0.27533199999999997
+    ],
+    "desperate": [
+     0.19883199999999998,
+     0.438612
+    ]
+   }
+  }
+ ],
+ "layers_holding": {
+  "P1": 0,
+  "P2": 0,
+  "P4": 3,
+  "P5": 0,
+  "P2_extended": 0,
+  "P4_extended": 4
+ },
+ "held": {
+  "P1": false,
+  "P2": false,
+  "P4": true,
+  "P5": false,
+  "P2_extended": false,
+  "P4_extended": true
+ },
+ "XA1": {
+  "band_blocks": 9,
+  "blocks_above_raw": 6,
+  "holds": true
+ },
+ "XA2": {
+  "band_blocks": 9,
+  "blocks_above_shuffled": 4,
+  "holds": false
+ }
+}

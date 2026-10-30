@@ -1,0 +1,117 @@
+{
+ "freeze_sha256": "66C6AC548797AC17C643BAC5331052BCBB0DAD682C56084BBE44919380725803",
+ "model": "qwen",
+ "sets": [
+  "harm_refusal_choice__plain",
+  "harm_refusal_knowledge_report__plain",
+  "instruct_dishonesty__plain"
+ ],
+ "per_named_layer": [
+  {
+   "block": 20,
+   "P1": false,
+   "P1_vs_random": {
+    "delta": -0.16425716833634582,
+    "ci_lo": -0.17850304468998274,
+    "ci_hi": -0.14738552113944636
+   },
+   "P1_vs_topic": {
+    "delta": -0.09012047717205013,
+    "ci_lo": -0.1081725755216479,
+    "ci_hi": -0.07269254528526746
+   },
+   "P3": true,
+   "P3_parts": {
+    "harm_refusal_choice__plain": 0.001313368983957286,
+    "harm_refusal_knowledge_report__plain": -0.4155653239929948
+   },
+   "P4": true,
+   "P4_extended": false
+  },
+  {
+   "block": 36,
+   "P1": false,
+   "P1_vs_random": {
+    "delta": -0.1470961385701821,
+    "ci_lo": -0.1632065383177694,
+    "ci_hi": -0.1313625565005963
+   },
+   "P1_vs_topic": {
+    "delta": -0.08203965504119175,
+    "ci_lo": -0.10058704205376626,
+    "ci_hi": -0.06306231451248864
+   },
+   "P3": false,
+   "P3_parts": {
+    "harm_refusal_choice__plain": 0.08276016042780743,
+    "harm_refusal_knowledge_report__plain": -0.4377598511383537
+   },
+   "P4": false,
+   "P4_extended": true
+  },
+  {
+   "block": 40,
+   "P1": false,
+   "P1_vs_random": {
+    "delta": -0.1312864098405243,
+    "ci_lo": -0.14708081287029073,
+    "ci_hi": -0.11294932173603242
+   },
+   "P1_vs_topic": {
+    "delta": -0.13369250231167137,
+    "ci_lo": -0.1555286454473654,
+    "ci_hi": -0.11022342407002447
+   },
+   "P3": false,
+   "P3_parts": {
+    "harm_refusal_choice__plain": 0.06076818181818183,
+    "harm_refusal_knowledge_report__plain": -0.2141067863397548
+   },
+   "P4": false,
+   "P4_extended": false
+  },
+  {
+   "block": 44,
+   "P1": true,
+   "P1_vs_random": {
+    "delta": 0.21047077321941998,
+    "ci_lo": 0.19550702208061352,
+    "ci_hi": 0.22620392544777707
+   },
+   "P1_vs_topic": {
+    "delta": 0.21733940663251458,
+    "ci_lo": 0.191881573513959,
+    "ci_hi": 0.2443007572670925
+   },
+   "P3": false,
+   "P3_parts": {
+    "harm_refusal_choice__plain": 0.0908278074866311,
+    "harm_refusal_knowledge_report__plain": 0.4650995621716286
+   },
+   "P4": true,
+   "P4_extended": false
+  }
+ ],
+ "layers_holding": {
+  "P1": 1,
+  "P3": 1,
+  "P4": 2,
+  "P4_extended": 1
+ },
+ "held": {
+  "P1": false,
+  "P3": false,
+  "P4": false,
+  "P4_extended": false
+ },
+ "XA1": {
+  "band_blocks": 11,
+  "blocks_above_raw": 3,
+  "holds": false
+ },
+ "XA2": {
+  "band_blocks": 11,
+  "blocks_above_shuffled": 3,
+  "holds": false
+ }
+}

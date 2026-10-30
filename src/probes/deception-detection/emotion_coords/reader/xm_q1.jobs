@@ -1,0 +1,4 @@
+# Qwen2.5-72B, half 1 of 2: stories and neutral texts (blocks 20,35,36,37,38,39,40,41,42,43,44,45), band Liars' Bench rows (blocks 35,37,38,39,40,41,42,43,45)
+read --model qwen25 --name xm_qwen_stories --layers 20,35,36,37,38,39,40,41,42,43,44,45 --batched --budget 8000 --traces 8 --dtype bfloat16 --session_timeout 5400 --max_wait 28800 --shard 1/2
+read --model qwen25 --name xm_qwen_neutral --layers 20,35,36,37,38,39,40,41,42,43,44,45 --batched --budget 8000 --traces 8 --dtype bfloat16 --session_timeout 5400 --max_wait 28800 --shard 1/2
+read --model qwen25 --name xm_qwen_lb --layers 35,37,38,39,40,41,42,43,45 --batched --budget 8000 --traces 8 --dtype bfloat16 --session_timeout 5400 --max_wait 28800 --shard 1/2

@@ -342,7 +342,72 @@ The design is in `aletheia170_spec.py`; the tables are in `results/emotion_coord
     the full residual stream does better.
   - Tables: `results/emotion_coords/aletheia_band/repe/six_sets/summary.md`.
 
-### 3.7 What the arm shows
+### 3.7 Every Liars' Bench model (declared `37b1de38`, before any read)
+
+The study was repeated on the other Liars' Bench models, as the thesis's cross-model replication tested its own
+detectors (`xmodel.py`, `xmodel_spec.py`).
+- **Models:** Qwen2.5-72B, Mistral-Small-3.1-24B and Gemma-3-27B.
+- **Blocks:** the thesis's 4 layers (L20/36/40/44: Qwen 20/36/40/44, Mistral 9/18/20/22, Gemma 8/28/31/34) and the
+  band (Qwen 35-45, Mistral 17-23, Gemma 27-35).
+- **Reads:** each model read the 8,280 stories through itself. It was probed on its own Liars' Bench rollouts,
+  capped as Llama's: Qwen HP-C, HP-KR, ID; Mistral HP-C, HP-KR, IT, ID; Gemma CG, IT, ID.
+- **Gates:**
+  - Every basis passes the valence check (|r(PC1, valence)| 0.70-0.86).
+  - Qwen's parity passes (0.99993).
+  - Mistral's parity missed narrowly (1 of 20 rows at 0.99972, a long insider-trading transcript). The user chose
+    to proceed.
+- **Regression.** The runner reproduces Llama's stored block-40 unit exactly.
+
+Train-one-test-all transfer (protocol C, off-diagonal mean AUROC) at the 4 named layers. The thesis's detectors are
+copied from `results/xmodel/tables/transfer.csv`:
+
+| model | layer (block) | all-170 | raw (CV) | shuffled-170 | published persona PCs | thesis D9 + K |
+|---|---|---|---|---|---|---|
+| Llama-3.3-70B | L20 (20) | 0.556 | 0.569 | — | — | 0.811 |
+| | L36 (36) | **0.677** | 0.672 | 0.616 | — | 0.941 |
+| | L40 (40) | **0.644** | 0.636 | 0.570 | — | 0.922 |
+| | L44 (44) | **0.667** | 0.612 | 0.598 | — | 0.915 |
+| Qwen2.5-72B | L20 (20) | 0.556 | 0.613 | 0.543 | 0.632 | 0.533 |
+| | L36 (36) | 0.373 | 0.466 | 0.437 | **0.706** | 0.528 |
+| | L40 (40) | 0.338 | 0.493 | 0.429 | **0.655** | 0.514 |
+| | L44 (44) | 0.425 | 0.557 | 0.472 | **0.702** | 0.518 |
+| Mistral-Small-3.1-24B | L20 (9) | 0.543 | 0.553 | 0.529 | 0.491 | 0.544 |
+| | L36 (18) | **0.696** | 0.608 | 0.598 | 0.626 | 0.860 |
+| | L40 (20) | 0.644 | 0.666 | 0.623 | 0.571 | 0.841 |
+| | L44 (22) | 0.644 | 0.643 | 0.637 | 0.575 | 0.863 |
+| Gemma-3-27B | L20 (8) | 0.534 | 0.499 | 0.523 | 0.479 | 0.456 |
+| | L36 (28) | 0.487 | 0.570 | 0.547 | **0.686** | 0.421 |
+| | L40 (31) | 0.460 | 0.658 | 0.552 | 0.632 | 0.860 |
+| | L44 (34) | 0.543 | 0.661 | 0.544 | 0.652 | 0.866 |
+
+The band under protocol B (leave one set out). The cells count blocks with all-170 above the comparator (paired CI
+above 0):
+
+| model | band | XA1: above raw | XA2: above shuffled-170 | Llama's predictions that hold (≥ 3 of 4 named layers) |
+|---|---|---|---|---|
+| Llama-3.3-70B | 35-45 | 10 of 11 (point estimates) | 10 of 11 | none of P1-P6 |
+| Qwen2.5-72B | 35-45 | 3 of 11: **fails** | 3 of 11: **fails** | none (P1, P3, P4 fail) |
+| Mistral-Small-3.1-24B | 17-23 | 2 of 7: **fails** | 6 of 7: **holds** | P5 only (4 of 4) |
+| Gemma-3-27B | 27-35 | 6 of 9: **holds** | 4 of 9: **fails** | P4 only (3 of 4) |
+
+- **The all-170 result does not replicate as a whole.** On Llama it beats both raw activations and the shuffled
+  control across the band. No other model does both:
+  - Gemma beats raw (6 of 9) but not its shuffled control.
+  - Mistral beats its shuffled control (6 of 7) but not raw.
+  - Qwen does neither.
+- **In transfer, all-170 is at or below raw on every model but Llama.** The exceptions are Mistral's L36 (0.696
+  against 0.608) and Gemma's L20 (0.534 against 0.499). On Qwen it is below chance at L36-L44 (0.34-0.43).
+- **Where it fails, it fails on one set.**
+  - On Qwen, all-170 trained on HP-C or ID scores HP-KR at 0.11 and 0.03 (block 40).
+  - On Gemma, trained on CG or ID it scores IT at 0.09 and 0.16 (block 31).
+
+  The published persona PCs transfer to those same sets (0.83-0.90).
+- **The persona bases are the stronger small feature space on two models.** On Qwen and Gemma the published persona
+  PCs beat every emotion arm in transfer. On Mistral the emotion arms beat them, because the persona PCs flip on IT.
+- Tables: `results/emotion_coords/xmodel/` (per model `protocol_b_by_block.csv`, `transfer_by_block.csv`,
+  `predictions.json`; `cross_model_transfer.csv`).
+
+### 3.8 What the arm shows
 
 Among the five Liars' Bench sets, mid-to-deep blocks (36-45), the full emotion coordinate system is a better
 probe space than raw activations and than every matched 170-d control. It beats the label-shuffled control
@@ -351,8 +416,9 @@ consistently, so the emotion grouping of the stories adds something beyond story
 Four things stop this from being a claim about lie detection:
 1. **The coordinate dependence** (§3.4).
 2. **The failure on GS**, the one out-of-sample, wording-matched lie set.
-3. **The failure out of model** (§3.6). On Aletheia's Quest it is 0.08 below raw activations and ranks 20 of 31,
-   below the thesis's headline.
+3. **The failure out of model** (§3.6, §3.7). On Aletheia's Quest it is 0.08 below raw activations and ranks 20 of
+   31, below the thesis's headline. On the other Liars' Bench models it neither beats raw activations nor its
+   shuffled control across the band, and its transfer is at or below raw everywhere but Llama.
 4. **The post hoc band.** The block range was chosen after block 40 was seen, and the arm is one of many compared
    across 14 blocks.
 

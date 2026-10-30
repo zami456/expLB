@@ -44,7 +44,8 @@ MODELS = {  # `read --model`: Llama is the study's model; the other two are Alet
     "gemma": {"id": "google/gemma-3-27b-it", "layers": (31,), "pad": 0},  # <pad>; the middle of 62 blocks
     # the other Liars' Bench models (`xmodel.py`): their own reads of the stories and of their Liars' Bench rows
     "qwen25": {"id": "Qwen/Qwen2.5-72B-Instruct", "layers": (40,), "pad": 151643},  # <|endoftext|>; 80 blocks
-    "mistral": {"id": "mistralai/Mistral-Small-3.1-24B-Instruct-2503", "layers": (20,), "pad": 11},  # <pad>; 40
+    "mistral": {"id": "mistralai/Mistral-Small-3.1-24B-Instruct-2503", "layers": (20,), "pad": 11,  # <pad>; 40
+                "vlm": True},  # Mistral3Config has no AutoModelForCausalLM: nnsight's VisionLanguageModel, as the thesis
 }
 MODEL = MODELS["llama"]
 MIN_COS = 0.9998
@@ -101,6 +102,14 @@ def load_remote_llm(peft: str | None = None):
     host = (os.getenv("NDIF_HOST") or "https://api.ndif.us").strip()
     CONFIG.API.HOST = host if host.startswith("http") else "https://" + host
     CONFIG.API.APIKEY = key
+    if MODEL.get("vlm"):  # a stand-in processor holding only the tokenizer (`aletheia/read.load_model`): text-only
+        from types import SimpleNamespace  # inputs never reach the image half, whose processor needs torchvision
+
+        from nnsight.modeling.vlm import VisionLanguageModel
+        from transformers import AutoTokenizer
+
+        tok = AutoTokenizer.from_pretrained(MODEL["id"])
+        return VisionLanguageModel(MODEL["id"], processor=SimpleNamespace(tokenizer=tok), tokenizer=tok)
     return LanguageModel(MODEL["id"], peft=peft) if peft else LanguageModel(MODEL["id"])
 
 
