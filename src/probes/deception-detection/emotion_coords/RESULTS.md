@@ -603,6 +603,51 @@ Deception transfer (the other four deception sets), averaged over the three laye
 Tables are in `results/emotion_coords/ms10/cure/` (`summary.md`, `regions.csv`, `deltas.csv`, `verdicts.json`,
 `random_label_check.csv`).
 
+### 3.12 Lie coordinates from RepE against persona coordinates (declared `0bdc280a`, before any was fitted)
+
+The user asked for lie directions extracted by INLP to be used as probe coordinates (`ms10_lie.py`,
+`ms10_lie_spec.py`).
+- **The lie directions.** INLP ran on the RepE instructed-honesty pairs, which are none of the ten sets. Each round
+  fits the thesis's probe and keeps its direction while the probe still finds the lie on RepE's held-out statements.
+- **Use.** The directions became coordinates under `ms10`'s probe, rows, splits and draws, at blocks 35-45, beside D4
+  (the extended bank's top 3 PCs) and `ms10`'s arms.
+
+**The lie never ran out.** Held-out AUROC was 1.0 for the first 3 rounds, about 0.97 after 10 directions, 0.73 after
+50, and still 0.58-0.64 after 100. So k reached the frozen cap of 100 at every block, and RepE's lie is linearly
+readable along at least 100 orthogonal directions.
+
+Means over the 11 blocks (trained arms: off-diagonal transfer; zero-shot: mean over the test sets):
+
+| arm | deception | new deception (AILiar, Roleplaying) | sycophancy | cross-behaviour |
+|---|---|---|---|---|
+| first lie direction, zero-shot (RepE's own probe) | **0.866** | **0.876** | 0.620 | — |
+| lie coordinates, k = 3 | 0.843 | 0.823 | 0.442 | 0.518 |
+| D4 persona coordinates, k = 3 | 0.847 | 0.862 | 0.685 | 0.771 |
+| lie coordinates, k = 100 | 0.736 | 0.696 | 0.529 | 0.561 |
+| training set's top 100 PCs | 0.778 | 0.773 | 0.604 | 0.605 |
+| 100 random directions | 0.650 | 0.637 | 0.589 | 0.566 |
+| raw activations | 0.746 | 0.751 | 0.637 | 0.611 |
+
+**Predictions** (deception region; a block counts when the paired CI is above 0):
+- **L1 fails.** The 100 lie directions are level with raw activations: −0.010, above at 2 blocks and below at 3.
+- **L2 holds.** They beat 100 random directions by 0.086, at 10 of 11 blocks.
+- **L3 fails.** They are below the training set's own top 100 PCs: −0.042, below at 7 of 11.
+- **L4: neither.** At k = 3 the lie coordinates and D4 tie on lies: −0.004, with no block significant either way.
+
+**What it shows.**
+- **On lies, coordinates learned from labelled lies and from role-play are equally good.** Both beat raw activations
+  by about 0.10.
+- **Beyond lies, role-play wins by a wide margin.** On sycophancy the lie coordinates invert (0.442) and lose to D4 by
+  0.243. Across behaviours they lose by 0.253, below at all 11 blocks either way.
+- **The role-play bank is the more general basis.** The RepE lie basis is specific to instructed lying.
+- **More lie directions hurt.** Beyond the first few, INLP's directions carry RepE's instruction-specific signal:
+  100 of them transfer worse than raw activations.
+- **RepE's first direction, used zero-shot with no training on the ten sets, is the best lie detector here.** It
+  beats raw-probe transfer by 0.12 at all 11 blocks, in line with the thesis's D2.
+
+Tables are in `results/emotion_coords/ms10/lie/` (`summary.md`, `regions.csv`, `deltas.csv`, `verdicts.json`,
+`inlp.csv`).
+
 ## 4. Preregistered predictions
 
 At blocks 20/28/40/52, protocol B, logistic regression (T1). A prediction holds if it holds at 3 or more blocks.
