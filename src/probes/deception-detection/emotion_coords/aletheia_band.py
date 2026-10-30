@@ -95,7 +95,7 @@ def _gemma_rows(name: str) -> list[dict]:
 
     from emotion_coords.rows import DATASET_CODES
 
-    suffix = GEMMA_SETS[name]
+    suffix = GEMMA_SETS.get(name, "")  # only insider trading has the "+trim" span
     saved = torch.load(GEMMA_PARTIAL / f"{name}{GEMMA_SWEEP}{suffix}" / "tokenized.pt", weights_only=True)
     variant = "_trim" if suffix else ""
     mask = saved["masks"][1 if suffix else 0]

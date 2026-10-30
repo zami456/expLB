@@ -147,6 +147,30 @@ refuses to run without that match.
   - the best offset (post hoc);
   - offset 0 against the frozen middle-block test, as a check of the new reads.
 
+## Aletheia's Quest band, RepE-trained (user request, 2026-10-30; fixed before any RepE band read)
+
+The user asked to "train on RepE on the band" after the band's Liars' Bench results were seen. This is post hoc.
+Every constant is in `aletheia_band_repe_spec.py`, and its SHA-256 is recorded in
+`E:/aletheia/logs/freeze_emotion_band_repe.txt` before the reads.
+
+- **Training rows.** The band's design is unchanged except for its training rows, which are R1's RepE rows:
+  - Gemma: its pooled train split (448), from the cached tokenisation;
+  - Qwen3.5: the first 80% of `repe.py`'s rows (440), rendered as `repe.read` rendered them.
+
+  They are read at every band block, one row per pass. C is chosen by 5-fold CV grouped by statement, as in the
+  middle-block test's RepE source.
+- **Gate.** Every row is compared with the thesis's reads at the shared blocks (cos ≥ 0.9998):
+  - Qwen3.5 32, against the R1 probe's per-token reads averaged over each span;
+  - Gemma 28/31/34, against its pooled reads.
+- **Test sets.** The band's 6 readable sets (its recorded deviation), and the 8 once Echo and BotC can be read.
+- **Predictions, fixed now:**
+  - **HR1.** All-170 (RepE) beats raw activations (RepE), with the paired CI above 0, at ≥ 5 of the 9 offsets.
+  - **HR2.** All-170 (RepE) beats each 170-d control (RepE) at ≥ 5 of the 9 offsets.
+- **Reported without a prediction:**
+  - all-170 (RepE) minus all-170 (LB) and minus raw (LB) at each offset, paired on the same draws;
+  - the ranks;
+  - the best offset (post hoc).
+
 ## Gender-Secret with the fine-tune's emotion vectors (user request, 2026-10-30; fixed before any story is read through the fine-tune)
 
 The GS test above used the base model's emotion vectors, and RESULTS.md names that as its caveat. Re-deriving them
