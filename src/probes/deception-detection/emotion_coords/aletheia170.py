@@ -10,6 +10,7 @@ the NDIF reads run `reader/ec_read.py --model qwen35|gemma` in E:/aletheia/venv0
     python -m emotion_coords.aletheia170 train --model gemma    # every (source, feature set) probe; no test label
     python -m emotion_coords.aletheia170 dev --model gemma      # dev dry run and the known-answer gate
     python -m emotion_coords.aletheia170 score                  # the test sets; checks the freeze first
+    python -m emotion_coords.aletheia170 report                 # summary.md from the score's tables
 
 Each trained probe is kept as a direction v and offset in the read's own space (score = z @ v + offset), so the
 scorer needs no basis: standardise-then-regress on coordinates z @ B.T folds into v = B.T @ (w / scale).
@@ -491,14 +492,15 @@ def score() -> None:
         nrng = np.random.default_rng([S.SEED, 7, index])
         null = nrng.standard_normal((S.N_NULL, z.shape[1]))
         null /= np.linalg.norm(null, axis=1, keepdims=True)
-        band = np.array([SC.auroc(y, t) for t in (z @ null.T).T])
         reads = {"organism": z}
         base = SC._reads(d, "base", "no-reasoning", 0, block)
         reads["base"] = base[0] if base is not None else None
+        bands = {r: np.array([SC.auroc(y, t) for t in (zr @ null.T).T]) for r, zr in reads.items() if zr is not None}
 
         def add(cell: str, s: np.ndarray, **key) -> None:
             value = SC.auroc(y, s)
             b = _boots(y, s, draws)
+            band = bands[key["read"]]
             boots[cell, d.key] = b
             records.append({"cell": cell, "dataset": d.key, "model": d.model, "organism_read": read_name,
                             "block": block, "n": len(y), "lies": int(y.sum()), "auroc": value,
@@ -623,6 +625,59 @@ def _summarise(table: pd.DataFrame, boots: dict, digest: str) -> None:
     logger.info(json.dumps(verdicts, indent=1))
 
 
+REPORT_ARMS = ("emotion_all (LB)", "raw (LB)", "shuffled_all (LB)", "random_all (LB)", "alpaca_all (LB)",
+               "trainpca_all (LB)", "headline", "D4 (LB)", "R1-repe", "R2-dev-probe", "emotion_all (RepE)", "raw (RepE)",
+               "emotion_all (dev)", "raw (dev)", "emotion_all (LB, base read)", "raw (LB, base read)")
+
+
+def report() -> Path:
+    """summary.md from the score's tables: per-dataset AUROC, means, ranks, deltas, verdicts and gates."""
+    out = out_dir()
+    summary = pd.read_csv(out / "summary.csv").set_index("arm")
+    deltas = pd.read_csv(out / "deltas.csv")
+    verdicts = json.loads((out / "verdicts.json").read_text(encoding="utf-8"))
+    keys = verdicts["datasets"]
+    f3 = lambda v: f"{v:.3f}"  # noqa: E731
+    lines = ["# The all-170 emotion arm on Aletheia's Quest", "",
+             f"Design: `emotion_coords/aletheia170_spec.py`, frozen (sha256 {verdicts['freeze_sha256'][:12]}) before "
+             "any read. Each test row read by its organism at the middle block (Qwen3.5 32, Gemma 31), reasoning "
+             "dropped, content span. HG-G and HG-N not run (no adapter access). Echo† is the organism accepted on "
+             "its test rows (the thesis's recorded deviation); AB-AW has 26 lies.", "",
+             "| Arm | " + " | ".join(("Echo†" if k == "Echo" else k) for k in keys) + " | Mean [95% CI] | Rank of 31 [interval] |",
+             "|---|" + "---|" * len(keys) + "---|---|"]
+    for arm in REPORT_ARMS:
+        if arm not in summary.index:
+            continue
+        r = summary.loc[arm]
+        lines.append(f"| {arm} | " + " | ".join(f3(r[k]) for k in keys)
+                     + f" | {f3(r['mean'])} [{f3(r['lo'])}, {f3(r['hi'])}] | {int(r['rank of 31'])} "
+                       f"[{int(r['rank lo'])}-{int(r['rank hi'])}] |")
+    lines += ["", "Paired differences of the mean AUROC (same bootstrap draws):", "",
+              "| Arm | minus | Δ | 95% CI |", "|---|---|---|---|"]
+    for r in deltas.itertuples():
+        lines.append(f"| {r.arm} | {r.minus} | {r.delta:+.3f} | [{r.lo:+.3f}, {r.hi:+.3f}] |")
+    h2 = verdicts["H2"]
+    lines += ["", f"- **H1** (beats raw, LB): Δ {verdicts['H1']['delta']:+.3f} "
+                  f"[{verdicts['H1']['ci'][0]:+.3f}, {verdicts['H1']['ci'][1]:+.3f}]: "
+                  f"{'holds' if verdicts['H1']['holds'] else 'fails'}.",
+              "- **H2** (beats each 170-d control, LB): " + "; ".join(
+                  f"{c} {v['delta']:+.3f} [{v['ci'][0]:+.3f}, {v['ci'][1]:+.3f}]" for c, v in h2.items() if c != "holds")
+              + f": {'holds' if h2['holds'] else 'fails'}."]
+    gates = []
+    for m in X.MODELS:
+        p = json.loads((out / f"parity_{m}.json").read_text()) if (out / f"parity_{m}.json").exists() else None
+        b = json.loads((out / f"bases_{m}.json").read_text()) if (out / f"bases_{m}.json").exists() else None
+        g = json.loads((out / f"dev_gate_{m}.json").read_text()) if (out / f"dev_gate_{m}.json").exists() else None
+        gates.append(f"- {m}: parity min cos {p['min_cos']:.6f}; |r(PC1, valence)| "
+                     f"{abs(b['geometry']['r_pc1_valence']):.3f}, split-half median {b['split_half_20v20']['median']:.3f}; "
+                     f"dev gate {g['emotion_all_LB']:.3f} vs band {g['band97.5']:.3f}" if p and b and g else f"- {m}: incomplete")
+    lines += ["", "Gates:", ""] + gates
+    path = out / "summary.md"
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    logger.info(f"-> {path}")
+    return path
+
+
 if __name__ == "__main__":
     fire.Fire({"rows": rows, "parity": parity, "bases": bases, "check_llama": check_llama, "train": train,
-               "dev": dev, "score": score})
+               "dev": dev, "score": score, "report": report})

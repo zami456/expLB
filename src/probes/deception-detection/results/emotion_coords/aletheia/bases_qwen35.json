@@ -1,0 +1,171 @@
+{
+ "model": "qwen35",
+ "block": 32,
+ "stories": 8280,
+ "stories_rank0": 6840,
+ "neutral": 1095,
+ "neutral_pcs_removed": 31,
+ "emotions": 171,
+ "rank": 170,
+ "shuffled_ranks": [
+  170,
+  170,
+  170,
+  170,
+  170
+ ],
+ "geometry": {
+  "pc1_var": 0.3104607874979369,
+  "pc2_var": 0.1115471227893877,
+  "r_pc1_valence": 0.8607900317258435,
+  "r_pc2_arousal": -0.5420299505053241,
+  "n_matched": 164,
+  "r_valence_by_pc": {
+   "PC1": 0.8607900317258435,
+   "PC2": -0.184920109049298,
+   "PC3": 0.23264141333438054,
+   "PC4": 0.029927112981613782,
+   "PC5": -0.07673560647280413
+  }
+ },
+ "split_half_20v20": {
+  "median": 0.7271103673015341,
+  "min": 0.4788219468878784,
+  "under_0.7": 72
+ },
+ "neighbours": {
+  "afraid": [
+   [
+    "frightened",
+    0.903
+   ],
+   [
+    "scared",
+    0.899
+   ],
+   [
+    "terrified",
+    0.85
+   ],
+   [
+    "shaken",
+    0.787
+   ],
+   [
+    "unnerved",
+    0.782
+   ]
+  ],
+  "calm": [
+   [
+    "serene",
+    0.767
+   ],
+   [
+    "peaceful",
+    0.759
+   ],
+   [
+    "patient",
+    0.733
+   ],
+   [
+    "at ease",
+    0.715
+   ],
+   [
+    "relaxed",
+    0.683
+   ]
+  ],
+  "guilty": [
+   [
+    "remorseful",
+    0.798
+   ],
+   [
+    "ashamed",
+    0.749
+   ],
+   [
+    "regretful",
+    0.717
+   ],
+   [
+    "sorry",
+    0.638
+   ],
+   [
+    "self-critical",
+    0.557
+   ]
+  ],
+  "compassionate": [
+   [
+    "kind",
+    0.908
+   ],
+   [
+    "sympathetic",
+    0.836
+   ],
+   [
+    "empathetic",
+    0.821
+   ],
+   [
+    "loving",
+    0.71
+   ],
+   [
+    "grateful",
+    0.514
+   ]
+  ],
+  "suspicious": [
+   [
+    "paranoid",
+    0.598
+   ],
+   [
+    "mystified",
+    0.593
+   ],
+   [
+    "skeptical",
+    0.566
+   ],
+   [
+    "vigilant",
+    0.563
+   ],
+   [
+    "uneasy",
+    0.556
+   ]
+  ],
+  "desperate": [
+   [
+    "vulnerable",
+    0.582
+   ],
+   [
+    "miserable",
+    0.555
+   ],
+   [
+    "stressed",
+    0.535
+   ],
+   [
+    "distressed",
+    0.508
+   ],
+   [
+    "overwhelmed",
+    0.497
+   ]
+  ]
+ },
+ "valence_gate": true
+}

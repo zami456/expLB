@@ -26,6 +26,9 @@ Each table is regenerated from the result files by `python -m emotion_coords.rep
   - Re-expressing the same subspace in other coordinates moves it by up to 0.2 AUROC.
   - It fails the out-of-sample test declared for it: on Gender-Secret at block 40 it scores 0.599 against 0.650 for
     raw activations.
+  - It fails out of model too (§3.6), on Aletheia's Quest with Qwen3.5-27B and Gemma-3-27B rebuilt bases:
+    - it scores 0.622 mean AUROC, rank 20 of 31, against 0.700 for raw activations trained on the same rows;
+    - it still beats every matched 170-d control there.
   - At a fixed false-positive rate it catches few lies.
 
   Read it as a better-than-raw, better-than-matched-controls feature space for mid-depth transfer *among the five
@@ -198,20 +201,79 @@ fine-tune's read of GS (392 rows, 116 lies) and on the base model's read of the 
   blocked by NDIF (§7), so the model mismatch is untested for emotions. The thesis found that re-deriving the persona
   directions inside the same fine-tune changed little.
 
-### 3.6 What the arm shows
+### 3.6 Out-of-model: Aletheia's Quest (declared, `7467eef6`, before any story was read)
+
+The arm was rebuilt inside the base models of the competition's organisms, by phase 1's recipe on the same 8,280
+stories: Qwen3.5-27B at block 32 of 64, and Gemma-3-27B-it at block 31 of 62. It was then scored on the thesis's 8
+test sets the way the thesis scored its detectors there (`scripts/aletheia/`):
+- each row read by the organism that wrote it, at the middle block, reasoning dropped, content span;
+- the metric is the mean AUROC over the 8 sets and the rank among the 30 published entries.
+
+The primary training rows are those of the thesis's post hoc D4 (LB): Gemma's own CG, IT and ID, and Qwen2.5's HP-C,
+HP-KR and ID text read through Qwen3.5. Every gate passed:
+- reader parity, min cos 0.99999;
+- |r(PC1, valence)|: 0.86 for Qwen3.5, 0.84 for Gemma;
+- the dev known-answer gate.
+
+The design is in `aletheia170_spec.py`; the tables are in `results/emotion_coords/aletheia/summary.md`.
+
+| arm (Liars' Bench-trained unless noted) | mean AUROC [95% CI] | rank of 31 [interval] |
+|---|---|---|
+| R1, the RepE probe (thesis reference) | 0.784 [0.761, 0.807] | 5 [3-6] |
+| raw activations, dev-trained | 0.717 [0.692, 0.742] | 9 [8-12] |
+| D4 (LB) (thesis post hoc) | 0.703 [0.679, 0.729] | 11 [9-13] |
+| raw activations | 0.700 [0.674, 0.724] | 11 [9-13] |
+| raw activations, RepE-trained | 0.689 [0.659, 0.718] | 12 [9-16] |
+| D9 + K (thesis headline) | 0.657 [0.633, 0.680] | 16 [13-20] |
+| all 170 emotion PCs, RepE-trained | 0.649 [0.617, 0.679] | 16 [13-23] |
+| **all 170 emotion PCs** | **0.622** [0.592, 0.649] | **20** [16-26] |
+| R2, the dev probe (thesis reference) | 0.618 [0.590, 0.647] | 23 [16-26] |
+| all 170 emotion PCs, dev-trained | 0.589 [0.558, 0.620] | 26 [22-26] |
+| 170 label-shuffled (mean of 5) | 0.585 [0.560, 0.608] | 26 [24-26] |
+| 170 training-set PCs | 0.551 [0.521, 0.582] | 26 [26-30] |
+| 170 random (mean of 5) | 0.512 [0.487, 0.536] | 31 [29-31] |
+| 170 Alpaca PCs | 0.480 [0.447, 0.511] | 31 [31-31] |
+
+- **H1 fails.** All-170 minus raw activations is −0.078 [−0.101, −0.057]. It points the same way with the RepE
+  training rows (−0.040 [−0.067, −0.016]) and with the dev rows (−0.128 [−0.157, −0.099]).
+- **H2 holds.** Against each 170-d control, every CI is above 0:
+
+  | control | difference |
+  |---|---|
+  | label-shuffled | +0.037 [+0.020, +0.055] |
+  | random | +0.110 [+0.086, +0.135] |
+  | Alpaca PCs | +0.142 [+0.115, +0.171] |
+  | training-set PCs | +0.071 [+0.038, +0.103] |
+
+- **Per dataset.**
+  - It beats raw activations on AB-SP (0.852 against 0.822) and Harm (0.676 against 0.608), and ties on Echo.
+  - It loses most on GS-F and GS-M (0.636 and 0.610, against 0.864 and 0.836) and on AB-HC (0.446 against 0.624).
+  - BotC is near chance for every arm.
+- **Organism read against base read** (the thesis's text control).
+  - All-170 scores 0.622 on the organisms' reads and 0.617 on the base model's read of the same rows.
+  - Raw activations score 0.700 against 0.616.
+  - So raw activations gain from the organism's own read, and the emotion coordinates do not: what they pick up is
+    in the text.
+- **Training side.** In the inner leave-one-set-out CV on Liars' Bench, the arm was not ahead of raw activations in
+  either model (Gemma 0.715 against 0.718; Qwen3.5 0.864 against 0.909). On Llama it was ahead under protocol B.
+
+### 3.7 What the arm shows
 
 Among the five Liars' Bench sets, mid-to-deep blocks (36-45), the full emotion coordinate system is a better
 probe space than raw activations and than every matched 170-d control. It beats the label-shuffled control
 consistently, so the emotion grouping of the stories adds something beyond story content.
 
-Three things stop this from being a claim about lie detection:
+Four things stop this from being a claim about lie detection:
 1. **The coordinate dependence** (§3.4).
 2. **The failure on GS**, the one out-of-sample, wording-matched lie set.
-3. **The post hoc band.** The block range was chosen after block 40 was seen, and the arm is one of many compared
+3. **The failure out of model** (§3.6). On Aletheia's Quest it is 0.08 below raw activations and ranks 20 of 31,
+   below the thesis's headline.
+4. **The post hoc band.** The block range was chosen after block 40 was seen, and the arm is one of many compared
    across 14 blocks.
 
-The natural next test is to fix the claim ("all 170 emotion PCs at blocks 36-45 beat raw activations and the
-shuffled control") and evaluate it on held-out lie data the analysis has not touched, or on another model.
+What does carry across models is the ordering against matched controls. The emotion subspace holds more lie signal
+than any other 170-d subspace tried (H2 holds on Aletheia's Quest, and the shuffled control loses in every
+setting), but less than the whole residual stream.
 
 ## 4. Preregistered predictions
 
@@ -317,12 +379,19 @@ All commands run from the `deception-detection` folder. The analysis venv runs t
   - `gs_test run`, `summary`;
   - `figures all`, `figures all170`;
   - exploratory scripts: `emotion_coords/explore/`.
+- **Aletheia's Quest (§3.6).** These run in `E:\aletheia\venv` (transformers 5.8). Each command is
+  `python -m emotion_coords.aletheia170 <step> --model qwen35|gemma`.
+  1. `rows`.
+  2. The reads: `ec_read.py read --model … --layers 32|31`, with the `aq_*.jobs` files.
+  3. `parity`, `bases`, `train`, `dev`.
+  4. Then `score` and `report` (no `--model`).
 - **Results:** `results/emotion_coords/`
-  - `phase3/`, `phase3_band/`, `phase4/`, `gs/`, `exploratory/`;
+  - `phase3/`, `phase3_band/`, `phase4/`, `gs/`, `exploratory/`, `aletheia/`;
   - `figures/`;
   - `report_tables.md`.
 - **Commits** (local branch `emotion-coords`, not pushed):
   - preregistration `ae8e0ae1`, analysis plan `ad68af22`, full-run code `a6472efb`;
   - 170-d arm `5c4cf6d7`, MLP `c1dd6b28`, persona switch `e1638e17`;
   - band `8cb59768` / `bb44fe1d`, GS `c3fc20de` / `567a6618`, LoRA via peft `d0eddcb7`;
-  - the commit that adds this file.
+  - this file `ffe27078`;
+  - Aletheia's Quest: design `7467eef6`, and the commit that adds its results.

@@ -177,3 +177,19 @@ The study adds `emotion_coords/linalg.py` (keep-k, erase-k, projectors, shrinkag
   Known: bio 463, cyber 836.
 - Every HP-KR row is framed exactly by its template's prefix and suffix, so a question's block can be re-wrapped
   in any other template of its subject.
+
+## Aletheia's Quest base models (`aletheia170.py`, 2026-10-30)
+
+- `reader/ec_read.py read --model qwen35|gemma` reads Qwen3.5-27B and Gemma-3-27B-it. Both checkpoints are
+  vision-language models, so the blocks sit at `model.language_model.layers`; the hidden size is `text_config`'s.
+  - It loads them as `LanguageModel(repo)`, which NDIF 0.8 keys as `TransformersModel`; Gemma's hot deployment has
+    that key.
+  - The thesis's `aletheia/read.py` cannot run here: it imports `deception_detection`, whose dependencies
+    (jaxtyping, …) are not in `E:/aletheia/venv08`.
+  - A rows file without points now gets a width-1 placeholder back, not zeros of the full hidden size.
+- Parity: Gemma's 20 stored dev rows re-read at block 31 give min cos 0.9999987 against the thesis's reads.
+- Tokenisation, for the 8,280 stories and the neutral dialogues (`add_special_tokens=True`, mean from position 50):
+  - Gemma prepends `<bos>`; Qwen3.5 adds no BOS.
+  - Neutral rows kept: 1,095 for each model, against 1,086 for Llama. No story falls under 51 tokens.
+- CPU steps run in `E:/aletheia/venv` (transformers 5.8, the thesis's renders, every dependency) from the
+  deception-detection folder: `python -m emotion_coords.aletheia170 ...`.
