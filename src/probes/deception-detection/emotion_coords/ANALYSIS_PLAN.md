@@ -498,6 +498,23 @@ constant is in `lie_lb_spec.py`. Its SHA-256 is recorded in `E:/aletheia/logs/fr
 - **Already seen.** Liars' Bench is the thesis's development data, and `ms10_lie`'s results on the ten datasets are
   known. This is a re-test, not a held-out test.
 
+## Averaged lie directions (user question, 2026-10-31, after the lie-coordinate results; post hoc)
+
+The user asked about averaging the 100 INLP directions into one vector. Every constant is in `lie_mean_spec.py`. Its
+SHA-256 is recorded in `E:/aletheia/logs/freeze_emotion_lie_mean.txt`.
+
+- **Directions,** all zero-shot:
+  - the unit sum of all 100 directions;
+  - the unit sum of the first 10;
+  - the first direction alone;
+  - RepE's difference of class means;
+  - D9.
+- **Scored on** the same rows and draws as `lie_lb` (Liars' Bench) and `ms10` (the ten datasets), with the raw probe's
+  transfer as the trained reference.
+- **Predictions.**
+  - **A1.** The 100-direction average beats the first direction on Liars' Bench at ≥ 6 of 11 blocks.
+  - **A2.** The same on the ten datasets' deception sets.
+
 ## Per prediction
 
 - **P1.** Let Δ_rand be the mean over the five held-out sets of [AUROC(emotion PCs at k_t) − mean AUROC(random at
