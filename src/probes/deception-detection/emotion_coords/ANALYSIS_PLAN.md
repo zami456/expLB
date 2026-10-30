@@ -300,6 +300,73 @@ probe is scored.
   - the RepE and dev sources.
 - **Gate:** the dev known-answer gate, for emotion PCs at k_e.
 
+## Mahadik & Skapars' ten datasets (user request, 2026-10-31; fixed before any read of the new sets)
+
+The user asked for Llama to be tested on the datasets of arXiv 2605.09391 (Mahadik & Skapars, "Do Linear Probes
+Generalize Better in Persona Coordinates?", the source of the published persona space). That paper's question is
+whether probes in a 3-d persona space generalise across datasets better than probes on raw activations. It was asked of
+Llama-3.2-3B and Llama-3-8B; here it is asked of the emotion basis on Llama-3.3-70B. The user chose:
+- sycophancy added;
+- the paper's splits;
+- blocks 35-45.
+
+Every constant is in `ms10_spec.py`. Its SHA-256, with those of `results/emotion_coords/ms10/sources.json` and
+`splits.csv`, is recorded in `E:/aletheia/logs/freeze_emotion_ms10.txt` before any read. `ms10.score` refuses to run
+without that match.
+
+- **Sets** (label 1 = deceptive or sycophantic).
+  - **Deception: Llama-3.3-70B's own rollouts.**
+    - AILiar and Roleplaying are labelled by the repo's rules.
+    - ConvGame, InstrDec and HarmPressureChoice are the study's Liars' Bench rows at the band.
+  - **Sycophancy: read as written.** All five sets ship labelled replies, so no generation and no judge are needed.
+    - Azarbal: a sycophantic and a non-sycophantic reply per prompt.
+    - Papadatos: the same, from Rimsky et al.'s prompts.
+    - The three OEQ sets of Cheng et al., as the first author prepared them: 200 human-labelled advice answers each,
+      100/100.
+- **Splits.**
+  - At most 800 rows a set. InstrDec and HarmPressureChoice are drawn at the full set's share of lies; Sycophancy is
+    400 prompts with both replies.
+  - A seeded stratified-group 75/25 split per set, with groups being everything before the scored reply.
+  - The OEQ sets share records (552 distinct texts, one of them labelled differently in two records). They are split
+    once, jointly, on the triple of human labels.
+  - Some sizes differ from the paper's table because these rollouts are not its data:
+
+    | set | train / test |
+    |---|---|
+    | AILiar | 201 / 65 |
+    | Roleplaying | 215 / 72 |
+    | ConvGame | 197 / 70 (56 prompts) |
+    | InstrDec, HarmPressureChoice, Sycophancy | 600 / 200 each |
+    | Open-Ended Sycophancy | 78 / 28 |
+    | OEQ sets | 146-152 / 48-54 |
+
+  - HarmPressureChoice's test split holds only 11 lies.
+- **Arms.**
+  - all-170, raw activations, and the band study's 170-d controls: shuffled ×5, random ×5, Alpaca PCs, training-set
+    PCs.
+  - At the paper's k = 3: emotion PCs 1-3 and the paper's two persona spaces (deception 8 v 7; sycophancy 5 v 5).
+- **Probe and scoring.**
+  - Standardised L2 logistic regression; C by inner stratified-group 5-fold CV on the training rows only.
+  - One probe per train split and one on all ten, each scored on every test split.
+  - 1,000 stratified bootstrap draws per test split, shared by every arm, source and block.
+  - Regions: the deception and sycophancy off-diagonals (20 cells each), cross-behaviour (50), the diagonal and
+    train-on-all.
+- **Predictions, fixed now** (a block counts when the paired 95% CI is above 0):
+  - **M1.** all-170 beats raw activations on the deception region at ≥ 6 of the 11 blocks.
+  - **M2.** all-170 beats every 170-d control on the deception region at ≥ 6 of 11.
+  - **M3, M4.** The same two on the sycophancy region.
+- **Reported without a prediction:**
+  - the cross-behaviour, diagonal and train-on-all regions;
+  - the k = 3 arms, including the paper's claim (its persona coordinates beat raw activations off the diagonal) at
+    70B;
+  - the matrices at block 40 and over the band.
+- **Already seen.** ConvGame, InstrDec and HarmPressureChoice are Liars' Bench sets the earlier Llama studies used.
+  AILiar, Roleplaying and the five sycophancy sets are new.
+- **Checks.**
+  - Every new span decodes to its reply exactly.
+  - The reader's redeploy check on 20 stored Liars' Bench parity rows (cos ≥ 0.9998) runs before the bulk reads.
+  - The fit path must reproduce phase3_band's protocol B AUROCs at block 40.
+
 ## Per prediction
 
 - **P1.** Let Δ_rand be the mean over the five held-out sets of [AUROC(emotion PCs at k_t) − mean AUROC(random at
