@@ -6841,3 +6841,121 @@ Qwen by kd group, original → `user_stay`: anti-sycophancy 0.36 → 0.92, decep
 > 15 new questions are questions the screen asked under another wording (`xmodel/qwen_roleplay/build_confirm.py:4-6,39`).
 > The pooled counts are unchanged: screen 31/65, confirm 97/195, all 128/260; Qwen original 265/1950; Llama-3.3
 > original 997/1950 (recomputed from `runs_confirm/analysis_confirm.json` and the stored score files).
+
+### F-131 · 2026-10-15 · **The matched pair (Qwen2.5-72B and Llama-3.3 both re-run in `user_stay`): the format lifts role play in both models and moves both models' geometry the same way. Qwen's deception-axis contamination mostly closes on Llama's, but its assistant-dominated PC1 and its D9 + K ≈ K do not: those are Qwen's own.**
+
+The full kd persona step (36 roles × 5 variants × 30 questions = 5,400 replies, judge Llama-3.1-70B, vectors at every layer) was re-run for both models with `1_generate_ndif.py --prompt_format user_stay` (F-130). Nothing else changed. The originals are Qwen's `vectors_s23_v2` and the thesis run-kd s23 bank for Llama-3.3. Every comparison below is on the s23 bank, as fixed in `xmodel/userstay_pair/README.md` before the data.
+
+**1 Role play** (score 3, 35 judged roles × 150): Qwen 0.280 → 0.690, Llama-3.3 0.686 → 0.936. Roles with ≥ 20 score-3 replies: Qwen 24 → 35, Llama 35 → 35. Qwen's deception group 0.15 → 0.62, knowledge denial 0.10 → 0.58.
+
+**2 Geometry**, median over 80 layers (L40 in brackets):
+
+| | Qwen original | Qwen user_stay | Llama original | Llama user_stay |
+|---|---|---|---|---|
+| cos(PC1, assistant) | +0.838 (+0.839) | +0.731 (+0.722) | +0.611 (+0.620) | +0.486 (+0.366) |
+| PC1 share of role variance | 0.539 (0.513) | 0.439 (0.413) | 0.277 (0.268) | 0.252 (0.238) |
+| deception PC1 · assistant | −0.805 (−0.787) | −0.588 (−0.570) | −0.515 (−0.502) | −0.436 (−0.406) |
+| sycophancy PC1 · assistant | −0.791 (−0.780) | −0.579 (−0.563) | −0.448 (−0.365) | −0.158 (−0.100) |
+| unified PC1 · assistant | −0.823 (−0.810) | −0.693 (−0.679) | −0.591 (−0.552) | −0.393 (−0.270) |
+| knowledge_denial PC1 · assistant | −0.752 (−0.746) | −0.739 (−0.726) | −0.570 (−0.571) | −0.497 (−0.532) |
+
+Every row moves the same way in both models. Layers (of 80) where the Qwen − Llama gap shrank: PC1 variance 73 (median gap 0.242 → 0.182), deception 77 (−0.281 → −0.116); cos(PC1, assistant) 39 (0.224 → 0.241), sycophancy 27, unified 30, knowledge denial 21.
+
+**3 Vector change**, L40. Per-role cos(v_original, v_user_stay), centred on the bank mean: median Qwen 0.850 (lowest coverup_operator 0.42, contrarian 0.55, broker 0.66), Llama 0.901 (lowest gatekeeper 0.69); two different roles in one bank ≈ 0. cos(axis_original, axis_user_stay), Qwen / Llama: assistant 0.795 / 0.800, deception 0.864 / 0.933, D9 0.889 / 0.929. The assistant axis does not move because of the default role's new prompt alone. The default vector and the role mean each shift by about the axis's own length (Qwen 1.00 / 1.41, Llama 0.87 / 1.03), and mostly in the same direction.
+
+**4 D9 + K**, L40. The same K and Alpaca read as before; only D9 changes. sd(A·D9) / sd(A·K): Qwen 3.950 → 3.204, Llama 1.028 → 0.755 (Qwen / Llama 3.84× → 4.24×). cos(D9 + K, K): Qwen 0.971 → 0.958, Llama 0.764 → 0.649. cos(D5, D8): Qwen 0.529 → 0.416, Llama 0.470 → 0.450.
+
+**Reading**, against the README's pre-fixed cases. All three occur, each in a different quantity:
+- (a) The format itself shapes the geometry: both models move on every row. So the thesis Llama bank's geometry depends on the prompt format.
+- (b) Qwen's deception-axis contamination and part of its PC1 variance share were a role-play failure: the gap closes on 77 and 73 of 80 layers.
+- (c) Qwen's assistant-aligned PC1 and its D9 + K ≈ K remain, with the gap unchanged or wider: these belong to Qwen.
+
+- **source:** `xmodel/userstay_pair/compare.py` → `compare.{json,md}` (re-run after the chain's final axes rebuild, identical); `README.md` status; `geometry/*.log`; run folders `%USERPROFILE%\xmodel-runs-userstay\{Qwen2.5-72B-Instruct, Llama-3.3-70B-Instruct}\` (chain.status DONE 10-14 20:23 / 10-15 23:34; s23 / all / s3 36 / 36 / 36 each). Drive copies: `tamara:expLB/xmodel_userstay_2026-10-15/` (rclone check 0 differences: Qwen 269 + d* 12 files, Llama 282).
+- **caveats:**
+  1. One generation run per model and format: no seeds, no CIs.
+  2. The s23 bank only; the all and s3 banks are built but not compared.
+  3. One judge (Llama-3.1-70B) for role play.
+  4. The default role's prompts changed too: an empty system message, and the other 4 variants in the user turn. So the assistant axis is not measured on identical default prompts (see 3 for its size).
+  5. No detection numbers. These vectors have not been scored on Liars' Bench, so whether the format changes detection is untested.
+  6. The Llama s3 bank stalled ~20 h on 10-15 because the laptop slept (Modern Standby 02:49:45 → 22:32), and then because a socketio thread crashed decoding an NDIF message (`b'P'`). Neither affects the stored vectors; the s23 bank was complete before.
+- **supersedes:** F-130 caveat 4 ("nothing here touches persona vectors… the matched-pair run's question") is answered here.
+- **status:** measured
+
+### F-132 · 2026-10-16 · **Llama-3.3 lie detection under `user_stay`: the thesis detector D9 + K is UNCHANGED (mean of five ΔAUROC −0.001, 95% CI [−0.005, +0.003], L40, s3). D9 alone gets WORSE (−0.042 [−0.051, −0.033]), almost entirely on HP-KR (0.913 → 0.707). K carries D9 + K through it.**
+
+The test was fixed in `xmodel/userstay_pair/README.md` before the data ("Detection comparison (Llama-3.3)"). The rows are the thesis's Pass B stores, mean over the reply, on CG, HP-C, HP-KR, IT and ID, with GS-base reported separately. Both formats use the same K and the same Alpaca read; only the persona directions change. **Sanity:** the original-format scores reproduce `review_response/T1-4_or_rule/sanity.csv` (L40, s3: D9, K, D9 + K × 6 datasets) to within 0.0005 AUROC in 18 of 18 cells.
+
+L40, AUROC original → user_stay (paired row bootstrap, 2,000, stratified, seed 0):
+
+| | CG | HP-C | HP-KR | IT | ID | mean of five Δ |
+|---|---|---|---|---|---|---|
+| **D9 + K, s3 (primary)** | 0.864 → 0.903 | 0.819 → 0.819 | 0.909 → 0.860 | 0.976 → 0.979 | 0.962 → 0.966 | **−0.001 [−0.005, +0.003]** |
+| D9, s3 | 0.913 → 0.957 | 0.711 → 0.659 | **0.913 → 0.707** | 0.981 → 0.983 | 0.978 → 0.979 | −0.042 [−0.051, −0.033] |
+| D5, s3 | 0.865 → 0.924 | 0.585 → 0.585 | 0.594 → 0.471 | 0.979 → 0.980 | 0.974 → 0.974 | −0.013 [−0.019, −0.007] |
+| D5 + K, s3 | 0.813 → 0.857 | 0.807 → 0.808 | 0.855 → 0.829 | 0.971 → 0.973 | 0.951 → 0.954 | +0.005 [+0.002, +0.008] |
+
+- **Verdict (pre-registered): no detectable change** for D9 + K. Banks s23 and all agree: +0.000 [−0.003, +0.004] and +0.002 [−0.001, +0.006].
+- **The format moves D9 in the same way on every dataset and bank:** up on CG (+0.025 to +0.044), down on HP-KR (−0.205 to −0.226) and on HP-C (−0.017 to −0.053), flat on IT and ID. D5 does the same on HP-KR (0.594 → 0.471, now below chance).
+- **Other layers** (mean of five, no bootstrap): D9 drops at all four (L20 0.884 → 0.788, L36 0.913 → 0.824, L44 0.884 → 0.832). D9 + K drops slightly away from L40 (L20 −0.018, L36 −0.007, L44 −0.012).
+- **At the Alpaca 1%-FPR threshold** (L40, s3), D9 + K recall is unchanged: CG 0.43 → 0.42 (honest flags 0.01 → 0.03), IT 0.95 → 0.95, ID 0.93 → 0.94. HP-C and HP-KR sit at the floor in both formats.
+- **GS-base** is at chance in both formats (D9 + K 0.565 → 0.570).
+
+- **source:** `xmodel/userstay_pair/detect.py` → `detect.{json,md}`, `detect_scores.csv.gz` (every input with its md5 in detect.json); directions in `%USERPROFILE%\xmodel-runs{,-userstay}\Llama-3.3-70B-Instruct\{d5,d9,d5k,d9k}\`; the new s3 / all D's and D + K built 2026-10-16 with `d_contrasts.py` / `d9k.py` (D5 equal to the pipeline's deception axis, relative 2.5e-06).
+- **caveats:**
+  1. One persona run per format. The bootstrap resamples rows only, not the persona bank, its replies or K's items.
+  2. Five datasets; HP-C and HP-KR carry the change. Both are the harm-pressure family, and HP-KR's lie label is confounded (`deceptive = knows AND denies`, F-02/F-03).
+  3. Llama only. Qwen has no Liars' Bench read (cancelled 10-09).
+  4. Why D9 loses HP-KR under the new format is untested. One candidate: its knowledge-denial personas now play the role more theatrically (knowledge-denial group fully in role 0.78 → 0.97, F-131), so they no longer share HP-KR's plain-denial register (F-13). That is a hypothesis.
+- **supersedes:** nothing. The thesis numbers come from the original format and stand.
+- **status:** measured; pre-registered verdict: no detectable change (D9 + K)
+
+### F-133 · 2026-10-16 · **Follow-up to F-132 (Llama-3.3, pre-registered A–C): over all eleven Pass B datasets D9 + K is still unchanged by `user_stay` (+0.000 [−0.002, +0.003]), and blending the two formats does not help. D9's HP-KR loss is real: on the wording-matched slice it drops too, 0.673 → 0.560, and both of its halves fall.**
+
+The tests were fixed in `xmodel/userstay_pair/README.md` ("Follow-up, fixed before the data") before any number. They use the same scorer, bootstrap and verdict rule as F-132, at L40 on bank s3. Six more Pass B stores were copied from `tamara:expLB/coords/passB/` (rclone check, 0 differences): kr-matched, ai_liar, roleplaying, sandbagging_v2, mask and sycophancy_mt. ai_audit was not run. **Sanity:** the original-format scores equal `detect.json` on 15 of 15 cells (max |diff| 0).
+
+- **A. HP-KR.** On `harm-pressure-kr-matched` (258 rows, 124 lies / 134 honest, both classes deny; F-20, F-23) the original D9 reads 0.673. That is ≥ 0.60, the pre-registered bar. Under user_stay it falls to 0.560 (Δ −0.113 [−0.151, −0.077]). By the rule fixed in advance, **the loss is real**: D9 loses the weak signal it had beyond the wording, not just the wording. Both halves fall:
+  - D8 (knowledge denial): HP-KR 0.919 → 0.858, matched 0.575 → 0.476.
+  - D5 (deception): HP-KR 0.594 → 0.471, matched 0.650 → 0.560.
+
+  The original levels agree with the convergence finding's zero-shot table (`audit/HPKR_WORDING_CONTROLLED.md` §5, L40 matched: the collaborator's 12v13 axis 0.6203, the 8v7 contrast 0.6707). So this is a weak signal getting weaker, and does not contradict F-115/F-116/F-118. K alone reads the matched slice at 0.728.
+- **B. Wider.** D9 + K, user_stay v original:
+  - The six new datasets: +0.001 [−0.003, +0.005], **no detectable change**. KR-matched −0.015, sandbagging −0.012, roleplaying +0.039.
+  - All eleven: +0.000 [−0.002, +0.003], **no detectable change**, with 3 datasets down and 4 up.
+  - D9 alone on the six new: −0.037 [−0.046, −0.028] (worse). That is kr-matched −0.113, mask −0.097, sandbagging −0.022 and roleplaying +0.021.
+- **C. Blend** (unit(raw_original + raw_user_stay)), judged only on the six new datasets, which were not seen when the blend was chosen: D9 + K blend v original +0.001 [−0.001, +0.003], **no detectable change**. Its AUROCs sit between the two formats on every dataset. On the five old datasets (reported only) it is also +0.001.
+- **Layers** (mean over eleven, no bootstrap). D9 + K original / user_stay / blend: L20 0.667 / 0.655 / 0.662, L36 0.829 / 0.826 / 0.829, L40 0.811 / 0.811 / 0.812, L44 0.798 / 0.790 / 0.796. D9 alone: 0.818 → 0.778 at L40, lower at every layer.
+
+- **source:** `xmodel/userstay_pair/detect_followup.py --model llama` → `detect_followup_llama.{json,md}`, `detect_followup_llama_scores.csv.gz` (inputs and store md5s in the json); stores in `%USERPROFILE%\xmodel-runs\_scratch\passB_llama\`.
+- **caveats:**
+  1. One persona run per format; the bootstrap resamples rows only.
+  2. kr-matched is a view over HP-KR's rows, so HP-KR and kr-matched are not independent. Pooling them in A is a reading aid, not an independent replication.
+  3. roleplaying keeps 287 of 371 rows (labels 0 / 1 only). mask has 585 rows here, with 170 honest.
+  4. sycophancy_mt is below chance for every scorer and format (D9 + K 0.417 / 0.413), as the thesis already reports for persona axes on it (F-13). Its Δ is about an inverted reader.
+- **supersedes:** nothing. F-132's verdict is extended, not changed.
+- **status:** measured; pre-registered verdicts: B no detectable change, C no detectable change, A loss real
+
+### F-134 · 2026-10-16 · **Qwen2.5-72B lie detection under `user_stay` (pre-registered D): the thesis detector D9 + K moves by +0.004 (mean of three ΔAUROC, 95% CI [+0.003, +0.006], L40, s23). That is "better" by the rule, but it is tiny, holds at L40 only, and sits on a detector that barely works on Qwen in either format (mean AUROC 0.537 → 0.541, below K alone at 0.546).**
+
+The test was fixed in `xmodel/userstay_pair/README.md` ("Follow-up, fixed before the data", item D) before the read finished. It uses the same scorer, bootstrap (2,000, stratified by label, seed 0) and verdict rule as F-132. Bank s23 (Qwen's original s3 lacks 8 of the D roles): original `*_s23_v2`, user_stay `*_s23`. K and the Alpaca read are Qwen's own and the same for both formats. These are the first Qwen Liars' Bench persona-direction scores: the 10-09 eval queue was cancelled before reading anything.
+
+- **Data.** A new NDIF read (task `XModel-qwen-evallb`, 10-16 01:35–03:14, mean over the reply, every 4th layer + 40). It covers the three Liars' Bench datasets that have both classes among Qwen's rows: ID 5,160 (2,145 lies), HP-KR 2,571 (571), HP-C 2,374 (374). `check_spans.py`: spans exact on every row. Label counts equal `results/subsets/*.csv` (model contains "qwen", column `deceptive`). AUROCs recomputed with sklearn agree. No rows dropped.
+- **Primary, D9 + K, L40**, original → user_stay: ID 0.608 → 0.618 (+0.011 [+0.009, +0.012]); HP-KR 0.558 → 0.555 (−0.004 [−0.007, −0.001]); HP-C 0.444 → 0.450 (+0.006 [+0.002, +0.009]). Mean **+0.004 [+0.003, +0.006], better** by the pre-registered rule, with 2 datasets up and 1 down.
+- **Why "better" should not be leaned on.**
+  1. The size: under half a point of AUROC, on a mean of 0.537.
+  2. The layer: mean D9 + K, original / user_stay, is L20 0.655 / 0.652, L36 0.590 / 0.591, L40 0.537 / 0.541, L44 0.555 / 0.552. The sign flips at L20 and L44.
+  3. The CI resamples rows over three datasets, so it does not cover variation between datasets.
+- **The detector barely works on Qwen in either format.** At L40, K alone reads 0.599 / 0.620 / 0.419 (mean 0.546), above D9 + K. HP-C is below chance for K and D9 + K. At the Alpaca 99th-percentile threshold, D9 + K catches 4.3% / 1.4% / 0% of lies (original) and 4.0% / 0.7% / 0% (user_stay). The best layer here is L20 (D9 + K mean 0.655), not L40.
+- **HP-KR inverts on Qwen's deception direction.** At L40, D5 reads 0.095 → 0.048 and D9 0.202 → 0.178, while D8 (knowledge denial) reads 0.767 → 0.867. Llama-3.3's D9 reads HP-KR at 0.913 (F-132). Qwen's HP-KR lies sit *lower* on its deception direction than its honest replies, which is why D9 + K stays under K there. No wording-matched slice exists for Qwen's rows, so this cannot be attributed (cf. F-115 for Llama).
+- **Secondary** (L40, mean of three, reported only): D9 +0.006 [−0.002, +0.013]; D5 +0.003 [−0.004, +0.009]; D8 +0.059 [+0.051, +0.066] (ID +0.078, HP-KR +0.101, HP-C −0.003); D5 + K −0.002 [−0.004, −0.001]. The blend (F-133 C) sits between the two formats on all three datasets. D8 is the one direction user_stay clearly improves on Qwen, where it fell on Llama (HP-KR 0.919 → 0.858, F-133).
+- **Both models together** (F-132, F-133, here): the format that makes the models play the roles (Qwen 0.280 → 0.690, Llama 0.686 → 0.936 fully in role, F-131) moves D9 + K by less than 0.005 either way, in both models. Role play is a property of the persona vectors; it does not decide the detector.
+
+- **source:** `xmodel/userstay_pair/detect_followup.py --model qwen` → `detect_followup_qwen.{json,md}`, `detect_followup_qwen_scores.csv.gz` (input md5s in the json). Read: `%USERPROFILE%\xmodel-runs\Qwen2.5-72B-Instruct\eval_lb\` (`_DONE`; status `%USERPROFILE%\xmodel-runs\eval_queue.status`, 03:16:13 "qwen DONE"); Drive `tamara:expLB/xmodel_evallb_2026-10-16/`.
+- **caveats:**
+  1. One persona run per format; the bootstrap resamples rows only.
+  2. Three datasets only. CG and IT have no Qwen lies, and mask has lies only.
+  3. The read pools the reply mean, as Pass B does for Llama. The every-4th-layer read has no L42; the four layers scored are 20, 36, 40 and 44.
+  4. L40 was fixed from Llama. Qwen2.5-72B also has 80 layers, but its best layer for this detector was never selected.
+- **supersedes:** nothing.
+- **status:** measured; pre-registered verdict D: better (+0.004 [+0.003, +0.006]), negligible in size and not stable across layers
+
+> **CORRECTION to F-134 caveat 2 (2026-10-16, same session).** As worded it is wrong. CG and IT have **no Qwen rows at all** (0 in `results/subsets/convincing-game.csv` and `insider-trading.csv`), not "no Qwen lies"; gender-secret has none either. mask has 376 Qwen rows, all lies. One more subset has both classes: soft-trigger, 6,000 rows (3,000 / 3,000). But every one was written by a Liars' Bench LoRA organism (`qwen-2.5-72b-it-lora-{gender,greeting,time}`, 2,000 each), not by Qwen2.5-72B-Instruct. The README's "the only datasets with both classes among Qwen's rows" should read "among the base model's rows". Leaving soft-trigger out matches the Llama primary (F-132), which judged base-model datasets only. The verdict is unchanged. **Source:** `results/subsets/*.csv`, columns `model`, `deceptive`.

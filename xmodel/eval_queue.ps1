@@ -15,7 +15,10 @@
 param([string]$WaitFor = "$env:USERPROFILE\xmodel-runs\Mistral-Small-3.1-24B-Instruct-2503\logs\alpaca_gen.status",
       [string]$DriveBase = "tamara:expLB/xmodel_2026-10-06",
       [string]$Rclone = "C:\Users\SURAIYA\AppData\Local\Microsoft\WinGet\Packages\Rclone.Rclone_Microsoft.Winget.Source_8wekyb3d8bbwe\rclone-v1.75.1-windows-amd64\rclone.exe",
-      [int]$Attempts = 6)
+      [int]$Attempts = 6,
+      # 2026-10-16 (owner: "run Qwen detection"): -Only <tags> reads just those models; -Datasets overrides their dataset
+      # lists; -NoDrive skips step 3 (sync_drive copies the WHOLE run folder, and the default DriveBase is an existing folder)
+      [string[]]$Only = @(), [string[]]$Datasets = @(), [switch]$NoDrive)
 $ErrorActionPreference = "Continue"
 $repo = Split-Path $PSScriptRoot -Parent
 $py = Join-Path $repo ".venv-aa-win\Scripts\python.exe"
@@ -59,6 +62,8 @@ if ($WaitFor) {
 
 $allComplete = $true
 foreach ($m in $models) {
+    if ($Only -and ($Only -notcontains $m.Tag)) { continue }
+    if ($Datasets) { $m.Datasets = $Datasets }
     $run = Join-Path $runBase $m.Folder
     $code = Join-Path $run "code"
     $S = Join-Path $code "src\assistant_axis_ndif"
@@ -116,9 +121,10 @@ foreach ($m in $models) {
     $c = $null; try { $c = ((& $py -c $count $S $ev 2>$null) -join "`n") | ConvertFrom-Json } catch {}
     foreach ($d in $ok) { if ($c -and $c.$d) { Note "$tag $d $($c.$d.done)/$($c.$d.items) rows, row shape $($c.$d.row_shape -join 'x')" } }
     # ---- 3 drive ----
+    if ($NoDrive) { Note "$tag drive copy skipped (-NoDrive)" } else {
     & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot "sync_drive.ps1") `
         -Folder $m.Folder -RunBase $runBase -DriveBase $DriveBase -Rclone $Rclone -Tag "eval_lb" -SkipLiveLogs
-    Note "$tag drive copy exit $LASTEXITCODE"
+    Note "$tag drive copy exit $LASTEXITCODE" }
     if ($complete) { "done $(Get-Date -Format s)" | Out-File (Join-Path $ev "_DONE"); Note "$tag DONE" }
     else { Note "$tag INCOMPLETE after $Attempts attempts (a re-run resumes)"; $allComplete = $false }
 }

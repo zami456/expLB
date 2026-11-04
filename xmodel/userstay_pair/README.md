@@ -47,6 +47,53 @@ Each cell is read as: original v user_stay, per model, then the two models' diff
 role-play failure. If they stay while Qwen plays the roles, they are Qwen's own. If both models move together, the
 format itself shapes the geometry, and that has to be reported for the thesis model too.
 
+## Detection comparison (Llama-3.3), fixed before the data — 2026-10-16
+
+Owner 2026-10-16: "has result gotten worse?" → "yes run the llama detection comparison". Offline, no NDIF (`detect.py`).
+
+- **Question:** does the user_stay format make Llama-3.3's persona-based lie detectors worse?
+- **Data:** the thesis's own Pass B stores (`%USERPROFILE%\xmodel-runs\_scratch\passB_llama`, mean over the reply).
+  Five Liars' Bench datasets: CG, HP-C, HP-KR, IT, ID. GS-base (Pass Q11) is reported but not part of the verdict.
+  The rows, K and the Alpaca read are the same for both formats; only the persona directions change.
+- **Primary:** D9 + K, the thesis's selected detector, as AUROC at L40 on bank s3. s3 is the bank that reproduces
+  zami's numbers (F-129). Δ = AUROC(user_stay) − AUROC(original) per dataset, with a paired row bootstrap
+  (2,000 resamples, stratified by label, seed 0) and a 95% CI. The mean of the five Δ gets the same bootstrap.
+- **Verdict:** *worse* if the mean-of-five Δ < 0 and its 95% CI excludes 0. *Better* if > 0 with the CI excluding 0.
+  Otherwise *no detectable change*. Also reported: how many datasets have a CI wholly below or above 0.
+- **Secondary** (reported, no verdict):
+  - D9, D5 and D5 + K;
+  - banks s23 and all;
+  - layers 20, 36 and 44;
+  - recall and honest-flag rate at the Alpaca 99th-percentile threshold (1% FPR, as F-129).
+- **Sanity first:** the original-format scores must reproduce `review_response/T1-4_or_rule/sanity.csv` (L40, s3:
+  D9, K, D9 + K) to within 0.0005 AUROC. Otherwise stop.
+
+## Follow-up, fixed before the data — 2026-10-16
+
+Owner 2026-10-16, after F-132 ("can we do something else?"): chose all four options. Same scorer, bootstrap (2,000,
+stratified, seed 0) and verdict rule as above; bank s3, L40, unless stated.
+
+- **A. Is the HP-KR loss real?** Score D9, D8, D5 and D9 + K, both formats, on `harm-pressure-kr-matched`. That is
+  HP-KR with the denial wording matched across the two classes (F-115).
+  - If the original D9 is near chance there (|AUROC − 0.5| ≤ 0.05), HP-KR's 0.913 was the wording confound, and
+    user_stay lost a confound, not lie detection.
+  - If the original D9 reads ≥ 0.60 there and the user_stay Δ CI lies wholly below 0, the loss is real.
+  - Which half of D9 moved on HP-KR is read from D8 (knowledge denial, 4 v 6) and D5 (deception, 8 v 7), original v
+    user_stay.
+- **B. Widen.** The primary test (D9 + K) on the six new Pass B datasets (kr-matched, ai_liar, roleplaying,
+  sandbagging_v2, mask, sycophancy_mt) and on all eleven, with verdicts reported separately.
+  - ai_audit is not run: its Drive store is one file (NDIF attention limit).
+  - A dataset whose store lacks either class is reported and dropped.
+- **C. Blend.** D_blend = unit(raw_original + raw_user_stay) per layer, the contrast of each role's vector averaged over
+  the two formats. A · D_blend comes from the stored Alpaca projections: (n_o·A·u_o + n_u·A·u_u) / |raw_o + raw_u|.
+  - It was chosen after seeing the five-dataset result, so its verdict uses ONLY the six new datasets: blend v
+    original, D9 + K. The five old datasets are reported, not judged.
+- **D. Qwen.** The Liars' Bench read (NDIF; `qwen_eval.ps1`, task `XModel-qwen-evallb`) covers ID, HP-KR and HP-C, the
+  only datasets with both classes among Qwen's rows. Mean over the reply, every 4th layer + 40.
+  - The test: D9 + K original v user_stay at L40, mean of three.
+  - The bank is s23: Qwen's original s3 lacks 8 of the D roles, and its D's were built from s23.
+  - Sanity: spans exact (`check_spans.py`), and the scorer is the one checked on Llama above.
+
 ## Files
 
 | File | What |
@@ -135,3 +182,32 @@ runs, but closing the lid still sleeps it.
   format itself shapes the geometry; and in the matched format Qwen is still far more assistant-dominated than Llama
   (cos(PC1, assistant) gap 0.219 orig, 0.356 user_stay). So Qwen's anomaly is not only a role-play failure. Llama's
   user_stay PC1 is no longer close to the assistant axis (+0.366 at L40).
+- 23:21 shard 1 stopped a second time: its socketio thread crashed decoding an NDIF message (`ValueError ... b'P'`,
+  `logs/vectors_s3.1.err.log`), so the client never saw the job finish. Attempt 3 finished the last 7 roles.
+- **10-15 23:34 Llama-3.3 DONE, PAIR DONE.** s23 / all / s3 36 / 36 / 36, axes for all three. Task `XModel-userstay-pair`
+  disabled. Drive `tamara:expLB/xmodel_userstay_2026-10-15/`: rclone check, 0 differences (Qwen 269 + d* 12, Llama 282).
+- **All four comparisons: `compare.py` → `compare.md` / `compare.json`; ledger F-131.** D5–D9 (`d_contrasts.py --only
+  D5,D6,D7,D8,D9`, D5/D6/D7 equal to the pipeline's axes within 2e-04) and D9 + K (`d9k.py`, each model's original K and
+  Alpaca read) are in each run folder's `d5`…`d9`, `d9k`.
+- **10-16 00:37 detection comparison DONE** (`detect.py` → `detect.md` / `detect.json` / `detect_scores.csv.gz`; ledger
+  F-132). Sanity 18 / 18 cells match T1-4. Primary D9 + K (s3, L40): **no detectable change**, mean of five Δ −0.001
+  [−0.005, +0.003]. D9 alone is worse, −0.042 [−0.051, −0.033], almost all of it on HP-KR (0.913 → 0.707).
+  Before that, Llama's s3 / all D5–D9 were built (`d_contrasts.py`), with D9 + K for s3 / all and D5 + K for s3 / s23.
+- **10-16 01:44–01:55 follow-up A–C DONE (Llama)** (`detect_followup.py --model llama` → `detect_followup_llama.*`; ledger F-133).
+  The six extra Pass B stores came from Drive (0 differences); sanity 15 / 15 cells equal `detect.json`.
+  - B: D9 + K, all eleven: +0.000 [−0.002, +0.003], no detectable change; the new six +0.001.
+  - C: blend: +0.001 [−0.001, +0.003], no detectable change.
+  - A: D9 on kr-matched 0.673 → 0.560, so the loss is real (both D8 and D5 fall).
+  - kr-matched has no `items.pt`: its chunks are HP-KR's read, and its rows.jsonl lists the 258 matched rows.
+- 01:33 Qwen read started (task `XModel-qwen-evallb`). Spans exact on all three datasets; ~64 rows/min when healthy;
+  10,105 rows in all.
+- **10-16 03:16 Qwen read DONE** (5,160 / 2,571 / 2,374 rows, 20 layers; `eval_lb\_DONE`); task disabled.
+  **03:17 test D DONE** (`detect_followup.py --model qwen` → `detect_followup_qwen.*`; ledger F-134 + its correction).
+  - D9 + K, L40, mean of three: 0.537 → 0.541, Δ +0.004 [+0.003, +0.006]. That is **better** by the rule, but
+    negligible in size; the sign flips at L20 and L44 (−0.003 each).
+  - The detector barely works on Qwen in either format: K alone reads 0.546, and HP-C is below chance.
+  - HP-KR inverts on Qwen's deception direction (D5 0.095 / 0.048, D9 0.202 / 0.178), while D8 reads 0.767 → 0.867.
+  - Label counts equal `results/subsets`.
+  - "The only datasets with both classes among Qwen's rows" above means the BASE model's rows. Soft-trigger has 6,000
+    Qwen rows with both classes, but all were written by LoRA organisms. CG, IT and gender-secret have no Qwen rows.
+  - Drive: `tamara:expLB/xmodel_evallb_2026-10-16/`.
