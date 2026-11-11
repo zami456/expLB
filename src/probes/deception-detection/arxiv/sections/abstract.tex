@@ -1,0 +1,19 @@
+Linear probes are the cheapest lie detectors for language models and the ones that fail to transfer
+across kinds of lies. Directions built from honest and deceptive role-play are a label-free alternative,
+untested at 70B scale and on lies about knowledge, where a lie and an honest denial can be the same
+sentence. We widen a published persona bank with roles that deny knowledge they have. At each model's
+middle layer the resulting single direction ranks lies across the Liars' Bench datasets better than probes
+trained on any one of them on three of the benchmark's four models; on the main model it also beats
+contrasts drawn from a random persona bank and makes the model conceal a fact when added to its
+activations, though its gain over the published contrast is within what random widenings produce. On the
+fourth model it fails, even with a bank the model plays far more fully. Such directions read the register
+of a reply, not the lie: where lies and honest answers share their words, they sit inside the band of
+random directions on two models and at or just above its edge on the other two. A second direction, built
+from questions the model knows and questions nobody can know with the same denial forced after each,
+separates those same-word lies on two models and narrowly on a third, and clears the random band by a few
+hundredths on the one fine-tuned liar whose transcripts the base model cannot already separate; beyond
+those slices its results lean on the benchmark's wording. Their sum ranks the benchmark's lies above a
+probe trained at the same depth on all four models (on one, both near chance), but is level with the
+persona contrast on the main model's average and behind that probe on held-out lies. Two pre-registered
+external tests bound the method: on Aletheia's Quest the zero-shot detector is mid-table behind a
+supervised probe, and more diverse role-play questions do not improve the contrast on the benchmark.

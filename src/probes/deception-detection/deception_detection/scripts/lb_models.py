@@ -206,10 +206,10 @@ class ModelSpec:
 
 SPECS = {
     "llama": ModelSpec("llama", "llama-70b-3.3", 80, 8192, 20, 40, (36, 44), LLAMA_SWEEP,
-                       (CG, HPC, HPKR, IT, ID), ("ext", "orig", "s23"),
+                       (CG, HPC, HPKR, IT, ID), ("ext", "orig", "s23", "s3u", "s23u"),
                        "Llama-3.3-70B-Instruct", "Llama-3.3-70B"),
     "qwen": ModelSpec("qwen", "qwen-72b", 80, 8192, 20, 40, (36, 44), LLAMA_SWEEP,
-                      (HPC, HPKR, ID), ("s23",), "Qwen2.5-72B-Instruct", "Qwen2.5-72B",
+                      (HPC, HPKR, ID), ("s3u", "s23u", "s23"), "Qwen2.5-72B-Instruct", "Qwen2.5-72B",
                       followup_last_token=True),
     "mistral": ModelSpec("mistral", "mistral-small-3.1-24b", 40, 5120, 9, 20, (18, 22),
                          (10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 39),
@@ -220,11 +220,19 @@ SPECS = {
                        (CG, IT, ID), ("s3", "s23"), "Gemma-3-27B-it", "Gemma-3-27B"),
 }
 # Persona banks other than the thesis's own folders. "s3" keeps rollouts the judge scored 3, as the
-# thesis's Llama bank does; "s23" also keeps 2s. Qwen's s3 bank lacks 11 roles, so Qwen has s23 only,
-# and its v2 vectors (the v1 spans started one token early).
+# thesis's Llama bank does; "s23" also keeps 2s. Under the original prompt format (the role line as the
+# system message) Qwen has "s23" only: its strict bank lacked 11 roles, and the v2 vectors fixed the v1
+# spans (one token early). "s3u" and "s23u" are the user_stay banks of 2026-10-14: the role line and a
+# stay-in-character sentence in the user turn (`1_generate_ndif.py --prompt_format user_stay`), built
+# for Qwen and, as a matched pair, for Llama. Qwen plays the roles under that format (69% of its
+# rollouts fully in role against 28%), so its strict bank is complete there and is its primary bank.
 BANK_DIRS = {
     ("llama", "s23"): XMODEL_ROOT / "banks" / "llama-70b-3.3" / "vectors_s23",
+    ("llama", "s3u"): XMODEL_ROOT / "banks" / "llama-70b-3.3" / "userstay" / "persona" / "vectors_s3",
+    ("llama", "s23u"): XMODEL_ROOT / "banks" / "llama-70b-3.3" / "userstay" / "persona" / "vectors_s23",
     ("qwen", "s23"): XMODEL_ROOT / "banks" / "qwen-72b" / "vectors_s23_v2",
+    ("qwen", "s3u"): XMODEL_ROOT / "banks" / "qwen-72b" / "userstay" / "persona" / "vectors_s3",
+    ("qwen", "s23u"): XMODEL_ROOT / "banks" / "qwen-72b" / "userstay" / "persona" / "vectors_s23",
     ("mistral", "s3"): XMODEL_ROOT / "banks" / "mistral-small-3.1-24b" / "vectors_s3",
     ("mistral", "s23"): XMODEL_ROOT / "banks" / "mistral-small-3.1-24b" / "vectors_s23",
     ("gemma", "s3"): Path("E:/gemma-3-27b-it/persona/vectors_s3"),

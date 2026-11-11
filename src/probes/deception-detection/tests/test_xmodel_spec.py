@@ -75,9 +75,23 @@ def test_other_models_paths() -> None:
     q = LB.spec("qwen")
     assert len(q.pooled_dirs(40)) == 1
     assert q.followup_run().name == "XXXX-9-qwen-all-followup-B20-last"
-    assert q.banks == ("s23",)
+    # the user_stay strict bank leads; the system-format lenient bank stays as a comparison
+    assert q.banks == ("s3u", "s23u", "s23")
+    assert q.bank_dir() == LB.BANK_DIRS[("qwen", "s3u")]
+    assert q.bank_dir("s23") == LB.BANK_DIRS[("qwen", "s23")]
     with pytest.raises(ValueError):
         q.bank_dir("s3")
+
+
+def test_every_bank_resolves() -> None:
+    """Each bank a spec names has a folder: Llama's thesis banks through persona_pcs, the rest in BANK_DIRS."""
+    for key in LB.SPECS:
+        s = LB.spec(key)
+        assert s.primary_bank == s.banks[0]
+        for bank in s.banks:
+            assert s.bank_dir(bank).name, (key, bank)
+            if not (key == "llama" and bank in ("ext", "orig")):
+                assert (key, bank) in LB.BANK_DIRS
 
 
 def test_load_pooled_later_folder_wins(tmp_path) -> None:

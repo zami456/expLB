@@ -12,7 +12,7 @@ detectors is paired draw by draw. The fitted probes are held fixed: an interval 
 rows were sampled, not which training rows. The point estimates must reproduce the stored transfer
 summaries (`persona_ood`, `k_transfer.py run/sweep/d5k`) within 1e-3.
 
-Comparisons, at each model's four thesis layers (primary persona bank):
+Comparisons, at each model's four thesis layers (its primary persona bank, or `--bank`):
     transfer:      D9 - raw probe, D9 - D5, D9 + K - raw probe, D9 + K - D9, D5 + K - D5,
                    D9 + K - D5 + K
     dataset mean:  D9 - D5 (zero-shot, the model's Liars' Bench datasets)
@@ -108,11 +108,13 @@ def _scores(model: str, layer: int, inputs, order: list[str]):
     return scores, labels, zero_shot
 
 
-def run(model: str, layers=None, n_draws: int = N_DRAWS, seed: int = SEED) -> None:
+def run(model: str, layers=None, n_draws: int = N_DRAWS, seed: int = SEED, bank: str | None = None) -> None:
+    """`bank` as `recall_denial.Inputs` (the model's primary persona bank by default). Another bank's
+    intervals go to `transfer_ci_<bank>.csv`, beside the primary bank's `transfer_ci.csv`."""
     from deception_detection.scripts import k_transfer as ktr
 
     key = LB.spec(model).key
-    inputs, _, order = ktr._context(None if key == "llama" else model, None)
+    inputs, _, order = ktr._context(None if key == "llama" else model, bank)
     names = inputs.spec.named_layers
     layers = [int(x) for x in (layers or names)]
     rng = np.random.default_rng(seed)
@@ -147,7 +149,8 @@ def run(model: str, layers=None, n_draws: int = N_DRAWS, seed: int = SEED) -> No
                              "hi": float(hi), "share_not_above": float(np.mean(d <= 0)), "n_draws": n_draws})
         logger.info(f"{model} block {layer} done")
     table = pd.DataFrame(rows)
-    out = LB.XMODEL_RESULTS / key / "transfer_ci.csv"
+    primary = inputs.bank == inputs.spec.primary_bank
+    out = LB.XMODEL_RESULTS / key / ("transfer_ci.csv" if primary else f"transfer_ci_{inputs.bank}.csv")
     out.parent.mkdir(parents=True, exist_ok=True)
     table.round(4).to_csv(out, index=False)
     pd.set_option("display.width", 250)

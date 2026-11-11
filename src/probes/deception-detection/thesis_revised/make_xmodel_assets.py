@@ -10,9 +10,12 @@ model's outputs beside Llama's and writes, without touching the thesis's own ass
     thesis_revised/generated_xmodel/*.tex    the tables as LaTeX (booktabs)
     thesis_revised/images_xmodel/*.pdf       the depth figures (x = relative depth)
 
-Primary persona banks: Llama's thesis bank and the strict (judge score 3) banks of Mistral and
-Gemma; Qwen's is its lenient bank (score 2-3; its strict bank lacks 11 roles), marked with a dagger.
-The lenient bank of all four models is reported separately (`bank_comparison`). Where the thesis
+Primary persona banks: Llama's thesis bank and the strict (judge score 3) banks of Qwen, Mistral and
+Gemma. Qwen's strict bank is its user_stay bank of 2026-10-14 (the role line and a stay-in-character
+sentence in the user turn, which Qwen plays; under the original system-message format it stayed fully
+in role for 28% of its rollouts and its strict bank lacked 11 roles). Each model's lenient bank
+(scores 2-3), Qwen's system-message bank and Llama's matched user_stay banks are reported beside the
+primary banks (`bank_comparison`, `roleplay_formats`). Where the thesis
 averages its five datasets, each model averages the Liars' Bench datasets it has (Qwen: HP-C,
 HP-KR, ID; Mistral: HP-C, HP-KR, IT, ID; Gemma: CG, IT, ID), and Llama is also shown on each
 model's subset. A table cell is empty when its input has not been produced; the summary says
@@ -54,8 +57,7 @@ def _bank(key: str, bank: str | None = None) -> str:
 
 
 def _label(key: str) -> str:
-    s = LB.spec(key)
-    return s.short + ("\u2020" if key == "qwen" else "")
+    return LB.spec(key).short
 
 
 def _read(path: Path, what: str) -> pd.DataFrame | None:
@@ -86,7 +88,7 @@ def _lb_sets(key: str) -> list[str]:
 def zero_shot(bank: str | None = None) -> pd.DataFrame:
     rows = []
     for key in MODELS:
-        s, b = LB.spec(key), _bank(key, bank if key != "llama" or bank in (None, "ext", "s23") else None)
+        s, b = LB.spec(key), _bank(key, bank if bank in LB.spec(key).banks else None)
         for layer, name in _layer_names(key).items():
             z = _read(s.results("persona_ood", layer, b) / "zero_shot.csv", f"{key} zero-shot {name}")
             if z is None:
@@ -395,10 +397,25 @@ def followup_turn(bank: str | None = None) -> pd.DataFrame:
 
 # --- the role-play finding: how fully each model plays the roles ----------------------------------------
 
+# the judge's score files of each model's primary bank ...
 SCORE_DIRS = {"llama": LB.XMODEL_ROOT / "banks" / "llama-70b-3.3" / "scores",
-              "qwen": LB.XMODEL_ROOT / "banks" / "qwen-72b" / "scores",
+              "qwen": LB.XMODEL_ROOT / "banks" / "qwen-72b" / "userstay" / "persona" / "scores",
               "mistral": LB.XMODEL_ROOT / "banks" / "mistral-small-3.1-24b" / "scores",
               "gemma": Path("E:/gemma-3-27b-it/persona/scores")}
+# ... and of the banks built under the other prompt format: Qwen's original system-message bank, and
+# Llama's matched user_stay bank (the role line and a stay-in-character sentence in the user turn, 2026-10-14)
+FORMATS = ("system message", "user turn")
+PRIMARY_FORMAT = {"llama": "system message", "qwen": "user turn", "mistral": "system message", "gemma": "system message"}
+FORMAT_SCORE_DIRS = {("qwen", "system message"): LB.XMODEL_ROOT / "banks" / "qwen-72b" / "scores",
+                     ("llama", "user turn"): LB.XMODEL_ROOT / "banks" / "llama-70b-3.3" / "userstay" / "persona" / "scores"}
+# the banks each model is compared across (`bank_comparison`, `banks_table`), the primary first: the same
+# format's lenient bank, then the banks of the other prompt format
+COMPARED_BANKS = {"llama": ("ext", "s23", "s3u", "s23u"), "qwen": ("s3u", "s23u", "s23"),
+                  "mistral": ("s3", "s23"), "gemma": ("s3", "s23")}
+BANK_FORMAT = {"ext": "system message", "orig": "system message", "s3": "system message", "s23": "system message",
+               "s3u": "user turn", "s23u": "user turn"}
+BANK_FILTER = {"ext": "score 3", "orig": "score 3", "s3": "score 3", "s3u": "score 3", "s23": "scores 2--3",
+               "s23u": "scores 2--3"}
 
 
 def _scores_of(path: Path) -> list[int]:
@@ -415,39 +432,80 @@ def _scores_of(path: Path) -> list[int]:
     return out
 
 
+def _roleplay_rows(folder: Path, label: str) -> list[dict]:
+    """One row per role: the judge's score counts in `folder`'s score files."""
+    rows = []
+    for path in sorted(folder.glob("*.json")):
+        scores = _scores_of(path)
+        if not scores:
+            continue
+        counts = np.bincount(np.clip(scores, 0, 3), minlength=4)
+        rows.append({"model": label, "role": path.stem, "judged": len(scores)}
+                    | {f"score {i}": int(counts[i]) for i in range(4)}
+                    | {"share fully in role (3)": counts[3] / len(scores)})
+    return rows
+
+
 def roleplay() -> pd.DataFrame:
+    """Each model's primary bank: how fully the judge found every role played."""
     rows = []
     for key in MODELS:
         folder = SCORE_DIRS[key]
         if not folder.exists():
             MISSING.append(f"{key} judge scores: {folder}")
             continue
-        for path in sorted(folder.glob("*.json")):
-            scores = _scores_of(path)
-            if not scores:
-                continue
-            counts = np.bincount(np.clip(scores, 0, 3), minlength=4)
-            rows.append({"model": _label(key), "role": path.stem, "judged": len(scores)}
-                        | {f"score {i}": int(counts[i]) for i in range(4)}
-                        | {"share fully in role (3)": counts[3] / len(scores)})
+        rows += _roleplay_rows(folder, _label(key))
     return pd.DataFrame(rows)
 
 
-# --- the lenient bank on all four models -----------------------------------------------------------------
+def roleplay_formats() -> pd.DataFrame:
+    """How fully Llama and Qwen play the roles under each prompt format: the role line as the system
+    message (the thesis's format) against the role line and a stay-in-character sentence in the user
+    turn. Shares of rollouts scored 3, over every judged role and over the D5 and D8 groups."""
+    from deception_detection import persona_pcs as pcs
+
+    groups = {"deceptive (D5)": pcs.DECEPTION_PERSONAS, "honest (D5)": pcs.HONESTY_PERSONAS,
+              "knowledge-denial (D8)": pcs.KNOWLEDGE_DENIAL_PERSONAS,
+              "knowledge-candour (D8)": pcs.KNOWLEDGE_CANDOUR_PERSONAS}
+    rows = []
+    for key in ("llama", "qwen"):
+        folders = {PRIMARY_FORMAT[key]: SCORE_DIRS[key]} | {f: p for (k, f), p in FORMAT_SCORE_DIRS.items() if k == key}
+        for fmt in FORMATS:
+            folder = folders[fmt]
+            if not folder.exists():
+                MISSING.append(f"{key} judge scores, {fmt} format: {folder}")
+                continue
+            part = pd.DataFrame(_roleplay_rows(folder, _label(key))).set_index("role")
+            row = ({"model": _label(key), "format": fmt, "primary": fmt == PRIMARY_FORMAT[key],
+                    "judged": int(part["judged"].sum())}
+                   | {f"score {i}": int(part[f"score {i}"].sum()) for i in range(4)})
+            row["share fully in role (3)"] = float(part["score 3"].sum() / part["judged"].sum())
+            for group, roles in groups.items():
+                have = [r for r in roles if r in part.index]
+                row[group] = (float(part.loc[have, "score 3"].sum() / part.loc[have, "judged"].sum())
+                              if have else math.nan)
+            rows.append(row)
+    return pd.DataFrame(rows)
+
+
+# --- each model's other banks: the judge's filter and the prompt format -----------------------------------
 
 def bank_comparison() -> pd.DataFrame:
-    """D5, D8, D9 zero-shot (LB mean) and D9 transfer at mid-depth, primary bank against s23."""
+    """D5, D8, D9 zero-shot (LB mean) and D9 transfer at mid-depth for each of a model's banks
+    (`COMPARED_BANKS`): the primary bank, the same format's lenient bank, and the banks built under the
+    other prompt format."""
     rows = []
     for key in MODELS:
         s = LB.spec(key)
-        for bank in dict.fromkeys((s.primary_bank, "s23")):
+        for bank in COMPARED_BANKS[key]:
             z = _read(s.results("persona_ood", s.mid, bank) / "zero_shot.csv", f"{key} zero-shot, bank {bank}")
             summ = _read(s.results("persona_ood", s.mid, bank) / "summary.csv", f"{key} transfer, bank {bank}")
             if z is None or summ is None:
                 continue
             z = z.assign(set=z["dataset"].map(SHORT)).dropna(subset=["set"]).set_index("set")
             summ = summ.set_index("features")
-            row = {"model": _label(key), "bank": "thesis (score 3)" if bank == "ext" else bank}
+            row = {"model": _label(key), "bank": bank, "format": BANK_FORMAT[bank], "filter": BANK_FILTER[bank],
+                   "primary": bank == s.primary_bank}
             for contrast in ("D5", "D8", "D9"):
                 row[f"{contrast} LB mean"] = float(np.mean([z.loc[d, CONTRASTS[contrast]] for d in _lb_sets(key)]))
             row["D9 transfer"] = float(summ.loc["ext_axis1", "off_diagonal_mean"])
@@ -739,7 +797,7 @@ def _write(name: str, table: pd.DataFrame, caption: str) -> str:
 # `generated/numbers.tex` must print the same there (`SHARED_KEYS`).
 
 THESIS_NUMBERS = REPO_ROOT / "thesis_revised" / "generated" / "numbers.tex"
-SHORT_NAME = {"llama": "Llama", "qwen": "Qwen$^\\dagger$", "mistral": "Mistral", "gemma": "Gemma"}
+SHORT_NAME = {"llama": "Llama", "qwen": "Qwen", "mistral": "Mistral", "gemma": "Gemma"}
 TOKEN = {"raw probe": "raw", "D5": "dfive", "D8": "deight", "D9": "dnine", "D9 + K": "ninek", "D5 + K": "fivek",
          "K": "k", "base probe": "probe"}
 SHARED_KEYS = {
@@ -1078,16 +1136,30 @@ def xm_numbers(d: dict) -> "object":
         cos = rk[(rk["model"] == _label(key)) & (rk["metric"] == "cosine between the two")]
         n.put(f"xm-{key}-rk-cos", float(cos["rule K (template-free)"].iloc[0]), 2)
 
-    # the judge's filter: the strict bank against the lenient one, where a model has both, as the
+    # the judge's filter: each strict bank against the lenient one of the same prompt format, as the
     # printed values differ (`banks_table`)
     bc = d["bc"]
     gaps = []
-    for key in ("llama", "mistral", "gemma"):
+    for key, strict_bank, lenient_bank in (("llama", "ext", "s23"), ("llama", "s3u", "s23u"), ("qwen", "s3u", "s23u"),
+                                           ("mistral", "s3", "s23"), ("gemma", "s3", "s23")):
         part = bc[bc["model"] == _label(key)].set_index("bank")
-        strict = part.loc["thesis (score 3)" if key == "llama" else "s3"]
-        gaps += [abs(float(M.fmt(strict[c])) - float(M.fmt(part.loc["s23", c])))
+        if strict_bank not in part.index or lenient_bank not in part.index:
+            continue
+        gaps += [abs(float(M.fmt(part.loc[strict_bank, c])) - float(M.fmt(part.loc[lenient_bank, c])))
                  for c in ("D5 LB mean", "D8 LB mean", "D9 LB mean", "D9 transfer")]
     n.put("xm-bank-gap-max", max(gaps))
+    # the prompt format: Qwen's original system-message bank (sys) and Llama's matched user-turn bank (ut)
+    for key, bank, token in (("qwen", "s23", "sys"), ("llama", "s3u", "ut")):
+        part = bc[bc["model"] == _label(key)].set_index("bank")
+        if bank in part.index:
+            n.put(f"xm-{key}-{token}-lb-dnine", float(part.loc[bank, "D9 LB mean"]))
+            n.put(f"xm-{key}-{token}-off-dnine", float(part.loc[bank, "D9 transfer"]))
+    rf = d["rf"]
+    for key, fmt, token in (("qwen", "system message", "sys"), ("llama", "user turn", "ut")):
+        part = rf[(rf["model"] == _label(key)) & (rf["format"] == fmt)]
+        if len(part):
+            n.put(f"xm-{key}-roleplay-{token}", 100 * float(part.iloc[0]["share fully in role (3)"]), 0)
+            n.put(f"xm-{key}-roleplay-{token}-dec", 100 * float(part.iloc[0]["deceptive (D5)"]), 0)
 
     _check_claims(n)
     return n
@@ -1133,9 +1205,11 @@ def _check_claims(n) -> None:
     assert not above("xm-llama-ci-off-ninek-dnine") and not below("xm-llama-ci-off-ninek-dnine")
     assert above("xm-qwen-ci-off-ninek-dnine") and above("xm-mistral-ci-off-ninek-dnine")
     assert below("xm-gemma-ci-off-ninek-dnine")
-    # Qwen's role-play is the weakest, Gemma's the strongest
+    # Gemma's role-play is the strongest; Qwen plays the roles far more fully with the role line in the
+    # user turn (its primary bank) than as the system message (the bank the first replication used)
     shares = {key: v(f"xm-{key}-roleplay") for key in MODELS}
-    assert min(shares, key=shares.get) == "qwen" and max(shares, key=shares.get) == "gemma"
+    assert max(shares, key=shares.get) == "gemma"
+    assert v("xm-qwen-roleplay") - v("xm-qwen-roleplay-sys") > 30
     # the identical text: K above the band on Llama, Mistral and Qwen's rebuilt reply; not on Gemma's 34 lies
     for stem in ("xm-llama-ident", "xm-mistral-ident", "xm-qwen-rb-ident"):
         assert v(f"{stem}-k") > v(f"{stem}-band"), f"{stem}: K inside the band"
@@ -1236,11 +1310,11 @@ def _sets_text(key: str) -> str:
 
 def models_table(n) -> None:
     """tab_xm_models.tex: what each model is and which of its blocks stand for the thesis's layers."""
-    bank = {"llama": "score 3", "qwen": "score 2--3", "mistral": "score 3", "gemma": "score 3"}
+    bank = {"llama": "score 3", "qwen": "score 3, user turn", "mistral": "score 3", "gemma": "score 3"}
     body = []
     for key in MODELS:
         p = f"xm-{key}"
-        name = LB.spec(key).title.replace("-Instruct", "").replace("-it", "") + ("$^\\dagger$" if key == "qwen" else "")
+        name = LB.spec(key).title.replace("-Instruct", "").replace("-it", "")
         body.append(f"{name} & {n[p + '-blocks']} & {n[p + '-width']} & "
                     f"{n[p + '-lb']} & {n[p + '-mid']} & {n[p + '-ph-lo']}, {n[p + '-ph-hi']} & {_sets_text(key)} & "
                     f"{bank[key]} & {n[p + '-roleplay']}\\% \\\\")
@@ -1377,7 +1451,7 @@ def wording_table(n) -> None:
     """tab_xm_wording.tex (Appendix D): HP-KR with the words held fixed, released and rebuilt."""
     rows = [("Llama", "Identical text", "xm-llama-ident"), ("", "Denials", "xm-llama-den"),
             ("Mistral", "Identical text", "xm-mistral-ident"), ("", "Denials", "xm-mistral-den"),
-            ("Qwen$^\\dagger$", "Denials", "xm-qwen-den"),
+            ("Qwen", "Denials", "xm-qwen-den"),
             ("", "Identical reply, rebuilt", "xm-qwen-rb-ident"), ("", "Denials, rebuilt", "xm-qwen-rb-den"),
             ("Gemma", "Opening sentence, rebuilt", "xm-gemma-rb-open"), ("", "Denials, rebuilt", "xm-gemma-rb-whole")]
     body = []
@@ -1468,15 +1542,17 @@ def roleplay_table(rpg: pd.DataFrame) -> None:
 
 
 def banks_table(bc: pd.DataFrame) -> None:
-    """tab_xm_banks.tex (Appendix D): each model's strict bank (score 3) against its lenient one
-    (scores 2 and 3), at the mid block. Qwen has only the lenient one."""
+    """tab_xm_banks.tex (Appendix D): each model's banks at the mid block: the strict bank (score 3)
+    against the lenient one (scores 2 and 3) under the model's primary prompt format, then the banks
+    built under the other format (Llama's matched user-turn pair, Qwen's original system-message bank)."""
     M = _paper_numbers()
     columns = ("D5 LB mean", "D8 LB mean", "D9 LB mean", "D9 transfer")
     body = []
     for key in MODELS:
         part = bc[bc["model"] == _label(key)].set_index("bank")
-        strict = "thesis (score 3)" if key == "llama" else "s3"
-        for i, (bank, label) in enumerate(((strict, "score 3"), ("s23", "scores 2--3"))):
+        labels = [(b, BANK_FILTER[b] + ("" if BANK_FORMAT[b] == PRIMARY_FORMAT[key] else f", {BANK_FORMAT[b]}"))
+                  for b in COMPARED_BANKS[key]]
+        for i, (bank, label) in enumerate(labels):
             cells = [M.fmt(part.loc[bank, c]) for c in columns] if bank in part.index else ["n/a"] * len(columns)
             body.append(f"{SHORT_NAME[key] if i == 0 else ''} & {label} & " + " & ".join(cells) + " \\\\")
     _tabular("@{}ll cccc@{}",
@@ -1583,6 +1659,7 @@ def main() -> None:
     zs, tr, kn = zero_shot(), transfer(), knowledge()
     kd, pr, op, cal = k_depth(), paired(), operating_points(), calibration()
     lb, ai, org, rp, bc, dp = liars_bench(), aisi(), organisms(), roleplay(), bank_comparison(), depth()
+    rf = roleplay_formats()
     ci = intervals()
     rk, rk_verdicts = rule_k()
     cl = claims(zs, tr, kn, kd, pr, org, _intervals_by_key())
@@ -1620,14 +1697,17 @@ def main() -> None:
         _write("token_reads", token_reads(), "Token reads of D9, mean over the Liars' Bench datasets (Table B.6)"),
         _write("followup", followup_turn(), "D9 on the response tokens against the Follow-Up turn's \"No\" (Table B.7)"),
         _write("organisms", org, "Model organisms: behaviour checks and AUROC on the fine-tune's read"),
-        _write("roleplay", rp_summary, "How fully each model plays the persona roles (judge scores)"),
-        _write("bank_comparison", bc, "Primary persona bank against the lenient (score 2-3) bank, mid-depth"),
+        _write("roleplay", rp_summary, "How fully each model plays the persona roles (judge scores, primary bank)"),
+        _write("roleplay_formats", rf, "How fully Llama and Qwen play the roles under each prompt format: the role "
+               "line as the system message, or with a stay-in-character sentence in the user turn (shares scored 3)"),
+        _write("bank_comparison", bc, "Each model's persona banks at mid-depth: the primary bank, the same format's "
+               "lenient (score 2-3) bank, and the banks built under the other prompt format"),
     ]
     depth_figure(dp, kd)
     dp.to_csv(OUT_TABLES / "depth.csv", index=False)
     rp.to_csv(OUT_TABLES / "roleplay_by_role.csv", index=False)
     header = (f"# The revised thesis across four models\n\nGenerated by `thesis_revised/make_xmodel_assets.py`. "
-              f"\u2020 Qwen uses its lenient persona bank (score 2-3). Layers are the thesis's; each model's "
+              f"Qwen's primary persona bank has the role line in the user turn; its system-message bank is a comparison row. Layers are the thesis's; each model's "
               f"blocks are in `lb_models.SPECS`.\n\n"
               + (f"**Inputs not yet produced ({len(MISSING)}):**\n\n" + "\n".join(f"- {m}" for m in MISSING) + "\n\n"
                  if MISSING else ""))
@@ -1635,7 +1715,7 @@ def main() -> None:
     print(f"wrote {LB.XMODEL_RESULTS / 'summary.md'}; {len(MISSING)} inputs not yet produced")
     if MISSING:
         raise RuntimeError("the thesis's section needs every input; see the summary's list")
-    thesis_assets(zs=zs, tr=tr, kn=kn, kd=kd, pr=pr, op=op, lb=lb, ai=ai, rp=rp, bc=bc, dp=dp, rk=rk,
+    thesis_assets(zs=zs, tr=tr, kn=kn, kd=kd, pr=pr, op=op, lb=lb, ai=ai, rp=rp, rf=rf, bc=bc, dp=dp, rk=rk,
                   rb=rebuilt_hpkr())
 
 
