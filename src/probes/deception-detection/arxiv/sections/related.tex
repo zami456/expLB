@@ -1,0 +1,44 @@
+\section{Related work}
+\label{sec:related}
+
+\paragraph{Lie detection and why probes fail to transfer.} Instruction pairs, the same statement produced
+under an honest and under a deceptive instruction, are the standard training data for deception probes
+\citep{zou2023representation,goldowskydill2025detecting}; black-box detectors ask unrelated follow-up
+questions \citep{pacchiardi2023catch} or have an LLM judge read the transcript, which Liars' Bench finds
+strongest overall yet unable to detect \hpkr's lies ``from the transcript alone''
+\citep{kretschmar2025liars}. A probe that is near perfect in distribution can be below chance elsewhere:
+with fewer examples than dimensions many directions fit a training set
+\citep{damour2022underspecification}, and discriminative learning takes any feature that suffices on it
+\citep{geirhos2020shortcut}, so probes have latched onto negation \citep{levinstein2025still,buerger2024truth},
+text probability \citep{marks2023geometry}, deception-related scenarios \citep{goldowskydill2025detecting}
+and style \citep{kumar2026pressure}, suffer from off-policy data \citep{kirch2025offpolicy}, and invert
+where a correlate of the label reverses \citep{levinstein2025still,ying2026truthfulness,moustafa2026beyond}. Remedies constrain the direction, to
+a difference of means \citep{marks2023geometry}, to selected principal components \citep{yoo2026subspace}
+or to persona coordinates \citep{mahadik2026persona}; we take the last route.
+\citet{ying2026truthfulness} further predict that a direction pooled over settings transfers at least as
+well as the best single setting's, and that a covariance-weighted cosine predicts transfer better than
+the plain cosine; \cref{sec:external} tests both with role-play questions as the settings.
+
+\paragraph{Benchmarks and model organisms.} Liars' Bench \citep{kretschmar2025liars} collects
+\V{lb-examples} on-policy lies and honest responses across seven datasets and four models, and evaluates
+a \emph{Mean Probe} trained on RepE pairs \citep{zou2023representation}, a \emph{Follow-Up Probe} read at
+a prefilled ``No'' after ``Was your last response deceptive?'', and an \emph{Upper-Bound Probe} trained on
+the benchmark itself; on \hpkr, built from the hazardous questions of WMDP \citep{li2024wmdp}, only the
+last detects the lies. The UK AI Security Institute released belief-labelled rollouts of the same models'
+own lies \citep{aisi_lie_rollouts}, our held-out data, and \citet{cooney2026lie} show that existing
+fine-tuned liars often do not hold the belief they deny, release belief-verified reasoning organisms on
+Qwen3.5-27B, and find that activation and logprob detectors drop sharply on them while a chain-of-thought
+judge stays strong. Aletheia's Quest \citep{aletheia2026quest}, a competition on such organisms with
+black-box and white-box tracks ranked by mean AUROC over ten held-out datasets, is our external test; its
+white-box winner scores the suspect model's own judgement of its transcript \citep{birardi2026aletheia}.
+
+\paragraph{Personas and knowledge as directions.} Persona vectors \citep{chen2025persona} and the
+Assistant Axis \citep{lu2026assistant} are activation directions for character traits and archetypes;
+\citet{mahadik2026persona} turned them into a monitor for deception, with a deception axis from eight
+deceptive and seven honest personas used zero-shot and through its top principal components, on datasets
+that do not include \hpkr. Roles differ in style as well as honesty \citep{joshi2024personas}, and a model
+that switches to an ignorant persona deceives although ``no persona is ever lying''
+\citep{marks2026persona}. That a model's states record whether it knows an answer is established
+\citep{kadavath2022language,slobodkin2023curious,gottesman2024estimating,ferrando2025know}; we read it at
+the tokens of a denial written for the model, as a difference of means over known and unknowable
+questions, and use it to detect lies.

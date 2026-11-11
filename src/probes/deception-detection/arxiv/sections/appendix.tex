@@ -1,0 +1,529 @@
+% Appendices. Each table is a generated file; the text around it says what it adds to the main text.
+
+\FloatBarrier
+\section{The persona bank}
+\label{app:bank}
+
+\Cref{tab:roster} lists the 36 roles by group. The 26 published roles follow the descriptions of
+\citet{mahadik2026persona}; the ten knowledge-denial, sincere-ignorance and plain-assertion roles are ours.
+Each role has five system-prompt variants and answers the same 30 questions; a Llama-3.1-70B-Instruct
+judge scores each rollout from 0 to 3, and only rollouts scored 3 enter a persona vector.
+\Cref{tab:xm-roleplay} gives the share of rollouts each model plays fully in role by persona group, and
+\cref{tab:xm-banks} the lenient (score 2 to 3) banks beside the strict ones.
+
+\begin{table}[h]
+\centering
+\scriptsize
+\caption{The roles of the bank by group.}
+\label{tab:roster}
+\resizebox{\linewidth}{!}{\input{generated/tab_roster}}
+\end{table}
+
+\begin{table}[h]
+\centering
+\footnotesize
+\caption{The share of rollouts the judge scored fully in role, by persona group and model.}
+\label{tab:xm-roleplay}
+\input{generated/tab_xm_roleplay}
+\end{table}
+
+\begin{table}[h]
+\centering
+\footnotesize
+\caption{Each model's persona banks at its middle block: the strict bank and the lenient one.}
+\label{tab:xm-banks}
+\resizebox{\linewidth}{!}{\input{generated/tab_xm_banks}}
+\end{table}
+
+\FloatBarrier
+\section{Llama: supplementary results}
+\label{app:llama}
+
+\Cref{tab:designs} places the designs side by side at layer~40, \cref{fig:transfer} shows the transfer
+matrices of the raw probe and the selected detector, \cref{tab:evalsets} lists the evaluation sets,
+\cref{tab:knowledge} every detector on every set at layer~40, \cref{tab:zeroshot} the three persona contrasts at layers 20, 40 and 44, \cref{tab:transfer}
+transfer for every feature set, and \cref{tab:hpkr} \hpkr{} ranking against detection beside the
+benchmark's published probes. \Cref{tab:pertest} gives every detector's AUROC on every dataset at the
+three layers, \cref{tab:syc} the sycophancy and unified contrasts, \cref{tab:reads} the token reads,
+\cref{tab:followup} the read at the Follow-Up turn's ``No'', and \cref{tab:kthree} probes in three persona
+components.
+
+\begin{table}[h]
+\centering
+\footnotesize
+\caption{The designs at layer 40: transfer (train one, test all, over the six sets), the zero-shot
+five-dataset mean with balanced accuracy (BA) at the benchmark's threshold, and \hpkr{} on all rows and on
+its identical-text slice.}
+\label{tab:designs}
+\resizebox{\linewidth}{!}{\input{generated/tab_designs}}
+\end{table}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\linewidth]{fig_transfer_selected.pdf}
+\caption{Train-one-test-all AUROC at layer 40 for the probe on raw activations (left) and the selected
+detector (right), whose rows are constant off the diagonal because every training set agrees on its sign.}
+\label{fig:transfer}
+\end{figure}
+
+\begin{table}[h]
+\centering
+\footnotesize
+\caption{The evaluation sets for Llama-3.3-70B-Instruct.}
+\label{tab:evalsets}
+\input{generated/tab_datasets}
+\end{table}
+
+\begin{table}[h]
+\centering
+\footnotesize
+\caption{AUROC at layer 40; the Mean Probe is Liars' Bench's layer-20 probe. On Gender-Secret the
+directions are built inside the fine-tune.}
+\label{tab:knowledge}
+\input{generated/tab_knowledge}
+\end{table}
+
+\begin{table}[h]
+\centering
+\footnotesize
+\caption{The published (8 v 7), knowledge-denial (4 v 6) and extended (12 v 13) contrasts, zero-shot.}
+\label{tab:zeroshot}
+\input{generated/tab_zeroshot}
+\end{table}
+
+\begin{table}[h]
+\centering
+\footnotesize
+\caption{Transfer (mean off-diagonal AUROC) for every feature set, with and without \hpkr.}
+\label{tab:transfer}
+\input{generated/tab_transfer}
+\end{table}
+
+\begin{table}[h]
+\centering
+\footnotesize
+\caption{\hpkr: ranking and detection at the benchmark's threshold, beside its published probes.
+$^\dagger$Trained with privileged \hpkr{} examples, a ceiling rather than a rival.}
+\label{tab:hpkr}
+\input{generated/tab_hpkr}
+\end{table}
+
+\begin{table}[h]
+\centering
+\scriptsize
+\caption{Every detector on every dataset at layers 20, 40 and 44.}
+\label{tab:pertest}
+\resizebox{\linewidth}{!}{\input{generated/tab_pertest}}
+\end{table}
+
+\begin{table}[h]
+\centering
+\footnotesize
+\caption{The sycophancy and unified contrasts.}
+\label{tab:syc}
+\resizebox{\linewidth}{!}{\input{generated/tab_syc}}
+\end{table}
+
+\begin{table}[h]
+\centering
+\footnotesize
+\caption{Token reads of the extended contrast at layer 40.}
+\label{tab:reads}
+\resizebox{\linewidth}{!}{\input{generated/tab_reads}}
+\end{table}
+
+\begin{table}[h]
+\centering
+\footnotesize
+\caption{The extended contrast read on the response against the Follow-Up turn's ``No''.}
+\label{tab:followup}
+\resizebox{\linewidth}{!}{\input{generated/tab_followup}}
+\end{table}
+
+\begin{table}[h]
+\centering
+\footnotesize
+\caption{Probes in the top three persona components.}
+\label{tab:kthree}
+\resizebox{\linewidth}{!}{\input{generated/tab_kthree}}
+\end{table}
+
+\FloatBarrier
+\section{Depth}
+\label{app:depth}
+
+\Cref{fig:selected-depth} follows the selected detector's transfer over the 16 layers against the
+published and unified contrasts and the raw probe, and \cref{tab:k-depth} the knowledge direction, the
+extended contrast and their sum at every layer; all are point estimates from one run. The extended
+contrast's transfer peaks at layer~\V{depth-off-ext-peak-layer} (\V{depth-off-ext-peak}); the
+knowledge-denial contrast's \hpkr{} balanced accuracy of \V{depth-hpkr-den-balacc-peak} at
+layer~\V{depth-hpkr-den-balacc-peak-layer} is a spike, against \V{depth-hpkr-den-balacc-L36} at layer~36
+and \V{depth-hpkr-den-balacc-L44} at layer~44; and the base probe ranks \hpkr{} at
+\V{depth-hpkr-base-auroc-peak} at layer~\V{depth-hpkr-base-auroc-peak-layer} while flagging none of its
+lies.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\linewidth]{fig_selected_depth.pdf}
+\caption{Transfer of the selected detector across the 16 layers against two persona contrasts and the
+raw probe.}
+\label{fig:selected-depth}
+\end{figure}
+
+\begin{table}[h]
+\centering
+\footnotesize
+\caption{The knowledge direction, the extended contrast and the selected detector across depth.}
+\label{tab:k-depth}
+\resizebox{\linewidth}{!}{\input{generated/tab_k_depth}}
+\end{table}
+
+\FloatBarrier
+\section{The random persona bank}
+\label{app:random}
+
+\V{rb-roles} roles were drawn at random (one seed) from the Assistant Axis's 274 archetypes, built by
+the bank pipeline with the same five variants, 30 questions, judge and filter, and partitioned into six
+groups of the designed groups' sizes (8, 7, 5, 5, 4 and 6), giving random contrasts of the published
+contrast's sizes (8 v 7) and of the extended contrast's (12 v 13), the second widening the first by four
+and six random roles. Split 0 is the reported random bank; splits 1 to \V{rb-null-splits} are the
+pre-registered null, and a test passes when its one-sided $p$ over them is at most 0.025. The six tests
+were fixed before any direction was scored. \Cref{tab:random-bank} gives the null medians and 97.5th
+percentiles from those splits and Holm-corrected $p$ values from \V{rb-holm-splits} further splits drawn by
+the same rule.
+
+\begin{table}[h]
+\centering
+\footnotesize
+\caption{The random persona bank: six tests of the designed bank against the random null.}
+\label{tab:random-bank}
+\resizebox{\linewidth}{!}{\input{generated/tab_random_bank}}
+\end{table}
+
+\FloatBarrier
+\section{The knowledge direction}
+\label{app:knowledge}
+
+\Cref{fig:k-build} draws the construction. \Cref{tab:k-robust} gives the robustness checks (question
+bootstrap, balanced splits, the replication with new questions), \cref{tab:k-paired} the paired
+differences between the selected detector and the extended contrast on every set, \cref{tab:k-operating}
+the share of lies caught at in-setting cutoffs, and \cref{tab:oracle} balanced accuracy under per-dataset
+oracle thresholds. The 120 questions, the replication set and the template variants are in the
+repository.
+
+\begin{figure}[h]
+\centering
+\resizebox{\linewidth}{!}{\input{generated/fig_knowledge}}
+\caption{The knowledge direction: the same denial after known and after unknowable questions.}
+\label{fig:k-build}
+\end{figure}
+
+\begin{table}[h]
+\centering
+\footnotesize
+\caption{Robustness of the knowledge direction on \hpkr's identical text.}
+\label{tab:k-robust}
+\resizebox{\linewidth}{!}{\input{generated/tab_knowledge_robust}}
+\end{table}
+
+\begin{table}[h]
+\centering
+\footnotesize
+\caption{Paired differences, selected detector minus extended contrast, with 95\% intervals.}
+\label{tab:k-paired}
+\resizebox{\linewidth}{!}{\input{generated/tab_k_paired}}
+\end{table}
+
+\begin{table}[h]
+\centering
+\footnotesize
+\caption{Share of lies caught at cutoffs set on each dataset's own honest answers, layer 40.}
+\label{tab:k-operating}
+\resizebox{\linewidth}{!}{\input{generated/tab_k_operating}}
+\end{table}
+
+\begin{table}[h]
+\centering
+\footnotesize
+\caption{Balanced accuracy at the Alpaca threshold and under per-dataset oracle thresholds.}
+\label{tab:oracle}
+\resizebox{\linewidth}{!}{\input{generated/tab_oracle}}
+\end{table}
+
+\begin{table}[h]
+\centering
+\footnotesize
+\caption{Balanced accuracy at the benchmark's threshold for every detector and dataset.}
+\label{tab:operating}
+\resizebox{\linewidth}{!}{\input{generated/tab_operating}}
+\end{table}
+
+\FloatBarrier
+\section{Model organisms}
+\label{app:organisms}
+
+\Cref{fig:k-gs} shows Gender-Secret at layers 36 and 40, each detector on the fine-tune's read and on the
+base model's read of the same transcripts, directions built inside the model read. \Cref{tab:xm-organisms}
+gives every fine-tune of the three further models, with the base model's read beside the fine-tune's. On
+Llama's two Soft-Trigger fine-tunes the knowledge direction clears the fine-tune read's band at layer~40
+(greeting \V{th-k-st-greeting-ft-kft-L40} against \V{th-k-st-greeting-ft-band-L40}, time
+\V{th-k-st-time-ft-kft-L40} against \V{th-k-st-time-ft-band-L40}), but the base model's read of the same
+transcripts does too (greeting \V{th-k-st-greeting-base-kft-L40} against
+\V{th-k-st-greeting-base-band-L40}, time \V{th-k-st-time-base-kft-L40} against
+\V{th-k-st-time-base-band-L40}): the trigger can be read from the text, so these organisms cannot credit a
+detector of the fine-tune's state, and the same holds for Mistral's.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\linewidth]{fig_knowledge_gs.pdf}
+\caption{Gender-Secret read through the fine-tune (dark) and by the base model (light); grey marks the
+central 95\% of random directions.}
+\label{fig:k-gs}
+\end{figure}
+
+\begin{table}[h]
+\centering
+\footnotesize
+\caption{The fine-tunes of the three further models: AUROC on the fine-tune's read and on the base
+model's read of the same transcripts.}
+\label{tab:xm-organisms}
+\resizebox{\linewidth}{!}{\input{generated/tab_xm_organisms}}
+\end{table}
+
+\FloatBarrier
+\section{Steering}
+\label{app:steering}
+
+\Cref{tab:steering} gives disclosure of the hidden fact under each direction at $c = \pm 0.3$ over the
+\V{th-steer-n} scenarios, with paired changes and 95\% intervals. For each scenario the eleven answers
+(unsteered, and five directions at both signs) were shuffled with their conditions hidden and labelled by
+one reader, an AI assistant, before the key was opened; the labels are not those of a validated grader.
+
+Two small runs steered the knowledge direction with an absolute shift at the same block (figures quoted
+from their reports). On \hpkr{} questions, subtracting it made the model deny knowing answers it still gave
+on the answer check (denials rising from 0.05 to 0.70 without pressure at $\alpha = -4$, and to 17 of 20 by
+hand at $-8$, against a rise of at most 0.10 for random directions of the same size at $\pm 4$), adding it
+produced no usable effect, and general-knowledge items did not move; this run was graded by pattern
+matching with every answer also read by hand. On the Gender-Secret fine-tune, read by hand without
+blinding, the knowledge direction rebuilt inside the fine-tune, at either sign, revealed the hidden gender
+more often than one random direction at every matched size, but every reveal under any push
+fell on a prompt with an earlier male-coded turn, and the belief the fine-tune holds did not move; with one
+random direction and 20 items per condition the excess is suggestive only.
+
+\begin{table}[h]
+\centering
+\footnotesize
+\caption{Disclosure of the hidden fact under steering at $c=\pm0.3$: one blinded reader's labels of
+\V{th-steer-n} scenarios, one greedy answer each.}
+\label{tab:steering}
+\resizebox{\linewidth}{!}{\input{generated/tab_steering}}
+\end{table}
+
+\FloatBarrier
+\section{The four models}
+\label{app:models}
+
+\Cref{tab:models} lists the four models, \cref{fig:xm-depth} follows four measures over each model's
+depth sweep, \cref{tab:xm-mid} gives the
+main detectors at each model's middle block, \cref{tab:xm-intervals} the paired intervals behind
+\cref{tab:claims}, \cref{tab:xm-zeroshot} every contrast on every dataset,
+\cref{tab:xm-transfer} transfer for every feature set, \cref{tab:xm-wording} the wording-controlled
+slices, \cref{tab:xm-operating} the tail, \cref{tab:xm-aisi} the probe trained on the model's own lies
+where those exist (Llama and Gemma), and \cref{tab:xm-checks} the template-free knowledge direction and
+the token reads.
+
+\begin{table}[h]
+\centering
+\footnotesize
+\caption{The four models: blocks and width, the block read for each of Llama's layers, the datasets the
+benchmark gives each, the judge score a rollout needs to enter the bank, and the share of rollouts
+scored fully in role.}
+\label{tab:models}
+\resizebox{\linewidth}{!}{\input{generated/tab_xm_models}}
+\end{table}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\linewidth]{fig_xmodel_depth.pdf}
+\caption{Four measures over each model's 16-depth sweep, by relative depth; the last panel has the two
+models with a released identical-text slice.}
+\label{fig:xm-depth}
+\end{figure}
+
+\begin{table}[h]
+\centering
+\footnotesize
+\caption{The main detectors at each model's middle block.}
+\label{tab:xm-mid}
+\input{generated/tab_xm_mid}
+\end{table}
+
+\begin{table}[h]
+\centering
+\footnotesize
+\caption{Paired differences at each model's middle block, with 95\% intervals.}
+\label{tab:xm-intervals}
+\resizebox{\linewidth}{!}{\input{generated/tab_xm_intervals}}
+\end{table}
+
+\begin{table}[h]
+\centering
+\footnotesize
+\caption{Zero-shot AUROC per dataset at each model's middle block.}
+\label{tab:xm-zeroshot}
+\resizebox{\linewidth}{!}{\input{generated/tab_xm_zeroshot}}
+\end{table}
+
+\begin{table}[h]
+\centering
+\footnotesize
+\caption{Transfer (mean off-diagonal AUROC) at each model's middle block.}
+\label{tab:xm-transfer}
+\resizebox{\linewidth}{!}{\input{generated/tab_xm_transfer}}
+\end{table}
+
+\begin{table}[h]
+\centering
+\footnotesize
+\caption{\hpkr's wording-controlled slices on every model that has them.}
+\label{tab:xm-wording}
+\resizebox{\linewidth}{!}{\input{generated/tab_xm_wording}}
+\end{table}
+
+\begin{table}[h]
+\centering
+\footnotesize
+\caption{Share of lies caught at in-setting cutoffs, each model's middle block.}
+\label{tab:xm-operating}
+\resizebox{\linewidth}{!}{\input{generated/tab_xm_operating}}
+\end{table}
+
+\begin{table}[h]
+\centering
+\footnotesize
+\caption{The probe trained on the model's own belief-labelled lies, Llama and Gemma.}
+\label{tab:xm-aisi}
+\resizebox{\linewidth}{!}{\input{generated/tab_xm_aisi}}
+\end{table}
+
+\begin{table}[h]
+\centering
+\footnotesize
+\caption{The template-free knowledge direction and the token reads of the extended contrast.}
+\label{tab:xm-checks}
+\resizebox{\linewidth}{!}{\input{generated/tab_xm_checks}}
+\end{table}
+
+\FloatBarrier
+\section{Aletheia's Quest}
+\label{app:aletheia}
+
+The protocol was frozen (by hash) before any test row was read: the headline cell is the selected
+detector read through each organism at the model's middle block, reasoning dropped, content span, with
+the knowledge direction rebuilt inside the organism and the persona contrast taken from the base model's
+bank; secondary cells vary the detector (extended contrast, published contrast, knowledge-denial contrast,
+knowledge direction), the read (base model), where the directions are built (both inside the organism, or
+the knowledge direction on the base model), the span (with the end-of-turn token), the render (reasoning
+kept) and the block (development-selected). \Cref{tab:aletheia} gives the per-dataset AUROCs and \cref{fig:aletheia} draws them. Deviations: Echoblast's
+pre-registered development-row check failed (the rows tagged with that adapter look like base-model
+output), and its organism read was accepted on its test replies' text alone; rows of Blood on the
+Clocktower longer than the server could hold were cut to their last 4,096 tokens after one such row had
+failed alone, without the per-row failure the rule asked for. A starter-kit fix of July 22 means it is not
+known whether the official white-box reads of the Qwen3.5 organisms had their adapters applied, so the
+base-model read is kept beside the organism read. Post hoc cells (the published contrast plus the
+knowledge direction, the template-free knowledge direction, probes in persona components trained on the
+development or the benchmark rows) rank between \V{ax-posthoc-rank-min}th and \V{ax-posthoc-rank-max}th
+and are listed in the repository's report.
+
+\begin{table}[h]
+\centering
+\footnotesize
+\caption{Aletheia's Quest, held-out test sets: the selected detector (95\% interval), the extended
+contrast and the RepE probe, read through the organism at its middle block, beside the random band and
+the best white-box entry on each dataset; the last two rows give the top entry's own mean and rank.}
+\label{tab:aletheia}
+\resizebox{\linewidth}{!}{\input{generated/tab_aletheia}}
+\end{table}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.9\linewidth]{fig_aletheia.pdf}
+\caption{Aletheia's Quest per dataset: the selected detector with its interval, the extended contrast
+and the RepE probe, the random band (grey) and the best white-box entry (bar).}
+\label{fig:aletheia}
+\end{figure}
+
+\FloatBarrier
+\section{The 150-question extension}
+\label{app:qbank}
+
+The pre-registration, the question grid and the drivers are in the repository. The 120 new questions were
+written in one pass by an AI assistant (Claude) under a fixed prompt, frozen with the pre-registration
+before any rollout was generated; prompt and raw output are archived with it. \Cref{tab:qbank-tests}
+gives the tests, \cref{tab:qbank-families} the five-dataset mean of the extended contrast built from each
+question family and the change from leaving that family out of the pooled bank, and
+\cref{tab:qbank-confirm} the single confirmation read at every layer. The decision rule chose the bank by
+the selected detector's five-dataset mean on development data, with ties within 0.005 going to the larger
+bank; the four candidates lay within \V{qb-decision-spread}.
+
+\begin{table}[h]
+\centering
+\footnotesize
+\caption{The pre-registered tests of the question extension (Llama, layer 40).}
+\label{tab:qbank-tests}
+\resizebox{\linewidth}{!}{\input{generated/tab_qbank_tests}}
+\end{table}
+
+\begin{table}[h]
+\centering
+\footnotesize
+\caption{The extended contrast built from each question family, five-dataset mean at layer 40.}
+\label{tab:qbank-families}
+\input{generated/tab_qbank_families}
+\end{table}
+
+\begin{table}[h]
+\centering
+\footnotesize
+\caption{The confirmation read: the 150-question bank against the 30-question bank, paired.}
+\label{tab:qbank-confirm}
+\resizebox{\linewidth}{!}{\input{generated/tab_qbank_confirm}}
+\end{table}
+
+\FloatBarrier
+\section{Side results}
+\label{app:side}
+
+Four further studies on Llama bear on the method and are reported in the repository; their figures are
+quoted from those reports. Attention probes trained on 76 per-token persona coordinates transfer worse
+than the fixed reads at every layer (best trained arm 0.849 against 0.928 for the knowledge-denial
+contrast's top-decile read at layer 40): learning the readout costs transfer. On the five-dataset mean AUROC,
+averaging the zero-shot score over all 16 layers falls below layer~40 for every zero-shot direction (only
+the supervised base probe gains, from 0.778 to 0.807); the average beats a randomly chosen layer on average
+but neither layer~40 nor the best layer: a hedge, not a gain. A knowledge
+follow-up question (``Did you actually know the answer?'') read at its prefilled ``No'' adds nothing over
+the response read, and the sign of every direction there follows the prefilled word. Finally, the
+covariance-weighted alignment of \citet{ying2026truthfulness} fits the transfer matrix ($R^2$ 0.82 for
+the raw probe at layer 40, against 0.19 for the plain cosine), but the point-biserial correlation of a
+detector's scores with the labels fits better (0.93): with the test set's pooled covariance and a
+near-perfect own probe the alignment reduces to the detector's own effect size, which is the caveat
+attached to the extension's fourth test. The same analysis shows that \hpkr's own probe plus the
+knowledge-denial contrast beats the own probe at all 16 layers (0.949 to 0.978 at layer 40), so \hpkr{}
+carries at least two separating directions.
+
+\FloatBarrier
+\section{Statistics and reproducibility}
+\label{app:repro}
+
+Intervals are percentile intervals over 1,000 stratified resamples of the test rows with one seed, the
+same resamples for every detector, so differences are paired. Random bands are the 97.5th percentile of
+the AUROCs of 1,000 random unit directions on the same rows and block, reseeded per study, which moves a
+band by a few thousandths between files; the paper quotes the thesis's values. The block for each of
+Llama's layers on the other models is the block at which the base probe reproduces the benchmark's
+published Mean Probe (for layer~20), the middle block (for layer~40) and the blocks 5\% of the depth either
+side; the sweep is the same 16 relative depths. Liars' Bench is read at the Hugging Face revision the
+benchmark's Llama runs used, and the AISI rollouts at dataset revision 177a816. The generators are
+\texttt{make\_arxiv\_assets.py}, which writes this paper's own numbers, tables and figures, and the thesis
+generators it imports (\texttt{make\_numbers.py}, \texttt{make\_thesis\_assets.py},
+\texttt{make\_xmodel\_assets.py}). The persona bank, the knowledge direction's questions, the
+pre-registrations and every result file the generators read are at \repourl.

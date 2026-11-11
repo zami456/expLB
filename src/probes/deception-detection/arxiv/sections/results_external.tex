@@ -1,0 +1,65 @@
+\section{External and pre-registered tests}
+\label{sec:external}
+
+\paragraph{Held-out lies.} On the AISI rollouts' validation split of Llama's own belief-labelled lies
+(\V{th-aisi-val-lies} lies, \V{th-aisi-val-honest} honest answers, under system prompts no part of this
+work used), the extended contrast reads \V{ai-d9}, the selected detector \V{ai-ninek} and the knowledge
+direction \V{ai-k} at layer~40, while the base probe trained on RepE at the same layer reads \V{ai-probe}:
+level with the extended contrast, which leads it by \V{ai-d9-delta} [\V{ai-d9-lo}, \V{ai-d9-hi}], and above
+the selected detector, which trails it by \V{ai-ninek-gap} [\V{ai-ninek-gap-lo}, \V{ai-ninek-gap-hi}]. A
+base probe trained on a split of \V{th-aisi-train-rows} of Llama's own rollouts (\V{th-aisi-train-lies}
+lies, disjoint from the validation split) raises the five-dataset mean by \V{th-aisi-gain-L40}
+[\V{th-aisi-gain-lo-L40}, \V{th-aisi-gain-hi-L40}] over the RepE probe; the extended contrast is narrowly
+ahead of it at layer~40 (\V{th-aisi-ext-L40} [\V{th-aisi-ext-lo-L40}, \V{th-aisi-ext-hi-L40}]), level at
+layer~44, and clearly ahead only at layer~20 (\V{th-aisi-ext-L20}). The template-free knowledge direction
+loses here (\V{ai-rulek} against \V{ai-k}).
+
+\paragraph{The random persona bank.} Six tests were fixed before scoring (\cref{app:random}). The extended
+contrast beats the random 12 v 13 contrasts on transfer (\V{rb-t1-d} against a null 97.5th percentile of
+\V{rb-t1-null}), on the zero-shot five-dataset mean (\V{rb-t2-d} against \V{rb-t2-null}), with the
+knowledge direction added (\V{rb-t3-d} against \V{rb-t3-null}) and on the held-out lies (\V{rb-t6-d}
+against \V{rb-t6-null}), each at a Holm-corrected $p$ of \V{rb-t1-p}. Two tests fail: its AUROC on all of
+\hpkr{} (\V{rb-t4-d}) is inside the null (97.5th percentile \V{rb-t4-null}, $p$ = \V{rb-t4-p}), and the
+gain of the extended over the published contrast on the five-dataset mean (\V{rb-t5-d}) is within what
+widening a random 8 v 7 contrast by four and six random roles, our groups' sizes, produces (null median
+\V{rb-t5-null-median}, 97.5th percentile \V{rb-t5-null}, $p$ = \V{rb-t5-p}), so the size of our roles' gain
+cannot be told apart from the spread of random widenings.
+
+\paragraph{Aletheia's Quest.} The competition \citep{aletheia2026quest} scored lie detectors on ten
+held-out datasets of fine-tuned organisms and prompted liars built on Qwen3.5-27B, Gemma-3-27B and a
+Nemotron model, ranked by mean AUROC. We built a persona bank on Qwen3.5-27B and on Gemma-3-27B by the
+pipeline above and a knowledge direction inside each organism, froze a protocol before any test row was
+read, and scored the selected detector zero-shot as read by each organism (adapter, merged copy or, for the one
+dataset plain Gemma wrote, base Gemma) at the middle block, reasoning dropped as in the starter kit. Two Hidden-Goal datasets could not be read
+(gated adapters; the Nemotron one would also have needed a persona bank, which we did not build). Over the
+\V{ax-n-read} readable datasets (\cref{tab:aletheia} in \cref{app:aletheia}) the selected detector averages
+\V{ax-headline-mean} [\V{ax-headline-lo}, \V{ax-headline-hi}], which would place it \V{ax-headline-rank}th
+among the \V{ax-n-entries} published entries with their means recomputed over the same eight datasets
+(rank interval \V{ax-rank-lo} to \V{ax-rank-hi}); the extended contrast alone averages \V{ax-d9-mean}
+(\V{ax-d9-rank}th) and the RepE probe trained at the same block \V{ax-repe-mean} (\V{ax-repe-rank}th). With
+the reasoning tokens kept, a secondary cell, the selected detector reaches \V{ax-reasoning-mean}
+(\V{ax-reasoning-rank}th) and the extended contrast \V{ax-reasoning-d9-mean} (\V{ax-reasoning-d9-rank}rd).
+The selected detector is below chance on two organisms, Echoblast (\V{ax-echo-headline}; knowledge direction
+alone \V{ax-echo-k}) and AuditBench's hallucinated citations (\V{ax-abhc-headline}; \V{ax-abhc-k}). The top
+entries are active methods, such as the suspect model judging its own transcript, where this detector is
+one passive inner product; two deviations from the frozen protocol are recorded in \cref{app:aletheia}.
+
+\paragraph{The 150-question extension.} The bank's 30 shared questions are all first-person workplace
+advice. We pre-registered an extension to 150: 30 monotone questions in the originals' form, a control for
+count, and 90 diverse questions over a grid of manipulation type, deceiver, topic and format, frozen before
+generation (\V{qb-rollouts} rollouts; development on the five benchmark datasets at layer~40, then one
+confirmation read; \cref{app:qbank}). Variety did not beat count: the originals plus the 30 monotone
+questions give a five-dataset mean of \V{qb-t1-mono} against a median of \V{qb-t1-median} over 200 draws of
+the originals plus 30 random diverse questions (Holm-corrected $p$ = \V{qb-t1-holm}). Pooling all 150 gives a
+worse contrast (\V{qb-pooled-lb}) than the best single family (\V{qb-best-family-lb}; \V{qb-t3-delta}
+[\V{qb-t3-lo}, \V{qb-t3-hi}]): against the 30 originals the full 150 raise CG (\V{qb-b150-b30-d9-cg}) and cut
+\hpkr{} (\V{qb-b150-b30-d9-hpkr}), the diverse questions driving most of the first and all of the second,
+the loss most of all from questions on which an honest role truthfully says ``I don't know''. A
+covariance-weighted cosine predicts which family transfers where better than the plain cosine ($R^2$
+\V{qb-t4-r2-sigma} against \V{qb-t4-r2-plain}), though with a near-perfect target probe it is close to the
+detector's own effect size (\cref{app:side}). With the knowledge direction the four candidate banks lie within
+\V{qb-decision-spread}, so the 150-question bank was chosen by the pre-registered tie rule; its one
+confirmation read at layer~40 is better on the held-out lies by \V{qb-confirm-aisi-ninek-delta}
+[\V{qb-confirm-aisi-ninek-lo}, \V{qb-confirm-aisi-ninek-hi}] and worse on Gender-Secret by
+\V{qb-confirm-gs-ninek-gap} [\V{qb-confirm-gs-ninek-gap-lo}, \V{qb-confirm-gs-ninek-gap-hi}]. A Qwen3.5-27B
+leg is still running.

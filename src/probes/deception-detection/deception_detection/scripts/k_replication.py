@@ -213,7 +213,9 @@ def score(layers=None, n_null: int = kr.N_NULL, n_balanced: int = N_BALANCED, se
         logger.info(f"layer {layer} scored")
     table = pd.DataFrame(rows)
     out.mkdir(parents=True, exist_ok=True)
-    table.round(4).to_csv(out / "score.csv", index=False)
+    # the D5 + k and D9 + k columns depend on the persona bank: another bank's run sits beside the primary bank's
+    suffix = "" if inputs.bank == inputs.spec.primary_bank else f"_{inputs.bank}"
+    table.round(4).to_csv(out / f"score{suffix}.csv", index=False)
 
     verdicts = []
     for layer in criteria:
@@ -228,7 +230,7 @@ def score(layers=None, n_null: int = kr.N_NULL, n_balanced: int = N_BALANCED, se
             verdicts.append({"layer": layer, "criterion": "Gender-Secret above random 97.5%", "value": r["k: Gender-Secret"],
                              "pass": r["k: Gender-Secret"] > r["random97.5 k: Gender-Secret"]})
     verdicts = pd.DataFrame(verdicts)
-    verdicts.round(4).to_csv(out / "verdicts.csv", index=False)
+    verdicts.round(4).to_csv(out / f"verdicts{suffix}.csv", index=False)
     pd.set_option("display.width", 250)
     show = ["layer", "cos(k', k)", "k: HP-KR identical", "random97.5 k: HP-KR identical", "k: HP-KR denials", "k: Gender-Secret",
             "random97.5 k: Gender-Secret", "k: HP-C", "k: mean of five", "D5 + k: mean of five", "D9 + k: mean of five"]
