@@ -37,7 +37,7 @@ HERE = Path(__file__).resolve()
 DD = HERE.parents[3]
 DATA = DD / "data" / "emotion_coords"
 ROWS, ACTS, LOGS = DATA / "rows", DATA / "acts", DATA / "logs"
-ENV_FILE = HERE.parents[5] / ".env"  # liars-bench/.env
+ENV_FILE = DD / ".env"  # the repository root's .env
 MODELS = {  # `read --model`: Llama is the study's model; the other two are Aletheia's Quest's base models
     "llama": {"id": "meta-llama/Llama-3.3-70B-Instruct", "layers": (20, 28, 40, 52), "pad": 128004},  # <|finetune_right_pad_id|>
     "qwen35": {"id": "Qwen/Qwen3.5-27B", "layers": (32,), "pad": 248044},  # <|endoftext|>; the middle of 64 blocks

@@ -1,6 +1,6 @@
 # kd role files: verbatim copies of the Qwen run's own (judge prompts name Qwen)
 
-source `C:\Users\SURAIYA\xmodel-runs\Qwen2.5-72B-Instruct\code\kd\personas\kd_instructions`
+source `~\xmodel-runs\Qwen2.5-72B-Instruct\code\kd\personas\kd_instructions`
 
 | role | group | md5 |
 |---|---|---|

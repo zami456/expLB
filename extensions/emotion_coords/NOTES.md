@@ -1,7 +1,7 @@
 # Notes: what the emotion-coordinate study reuses, and where it lives
 
 Phase 0 inventory, 2026-10-29. DD below is `D:\expLB\liars-bench\src\probes\deception-detection`
-(`deception_detection.utils.REPO_ROOT`). Plan: `C:\Users\zamig\.claude\plans\parsed-scribbling-sedgewick.md`.
+(`deception_detection.utils.REPO_ROOT`). Plan: `~\.claude\plans\parsed-scribbling-sedgewick.md`.
 Machine-readable checks are in `results/emotion_coords/phase0/` (`python -m extensions.emotion_coords.phase0 report`).
 
 ## Machine and environments
@@ -109,7 +109,7 @@ Machine-readable checks are in `results/emotion_coords/phase0/` (`python -m exte
   (`vector [80, 8192]`, `n`). Its layer-20 slice equals `data/persona_banks/paper16_L20/paper16_L20.pt`.
 - **Thesis bank (extended)**: `DD/data/persona_banks/extended_kd/` holds 36 roles, all 80 layers. It re-extracts
   the 26 with more rollouts and adds 4 knowledge-denial and 6 knowledge-candour roles. The original lives at
-  `C:\Users\zamig\Downloads\kd\run-kd` (read only).
+  `~\Downloads\kd\run-kd` (read only).
 - **Loading and PCs**:
   - `persona_pcs.load_bank_at_layer(layer, path)`.
   - `persona_pcs.fit_geometry(bank, k, deception, honesty, axis_name)` centres the chosen personas, runs PCA,

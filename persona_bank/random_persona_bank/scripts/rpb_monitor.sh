@@ -15,7 +15,7 @@
 #   bash random_persona_bank/scripts/rpb_monitor.sh [life_seconds]
 R=/c/Users/SURAIYA/Documents/STUDY/thesis/expLB/random_persona_bank/results
 Q=$R/_queue
-PROCS='C:\Users\SURAIYA\Documents\STUDY\thesis\expLB\random_persona_bank\scripts\rpb_procs.ps1'
+PROCS='~\Documents\STUDY\thesis\expLB\random_persona_bank\scripts\rpb_procs.ps1'
 STATE=$Q/monitor.state
 TOKEN=$Q/monitor.token
 LIFE=${1:-1740}

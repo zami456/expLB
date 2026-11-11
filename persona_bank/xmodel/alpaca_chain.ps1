@@ -19,7 +19,7 @@ param([string]$Run = "$env:USERPROFILE\xmodel-runs\Qwen2.5-72B-Instruct",
       [string]$Model = "Qwen/Qwen2.5-72B-Instruct",
       [string]$CsvModel = "qwen-2.5-72b-instruct",
       [string]$DriveBase = "tamara:expLB/xmodel_2026-10-06",
-      [string]$Rclone = "C:\Users\SURAIYA\AppData\Local\Microsoft\WinGet\Packages\Rclone.Rclone_Microsoft.Winget.Source_8wekyb3d8bbwe\rclone-v1.75.1-windows-amd64\rclone.exe",
+      [string]$Rclone = "~\AppData\Local\Microsoft\WinGet\Packages\Rclone.Rclone_Microsoft.Winget.Source_8wekyb3d8bbwe\rclone-v1.75.1-windows-amd64\rclone.exe",
       [int]$Attempts = 8,
       # 2026-10-08 (Gemma-3): its outlier dims overflow fp16 at layers 45-61, so its read is redone in float32 into
       # <Run>\eval_fp32\alpaca (the fp16 store in <Run>\eval\alpaca is kept; its layers 0-44 are finite).

@@ -15,7 +15,7 @@ This study tests those probes with the thesis's designs:
   (STRIP, PLANT, BARE, OBSERVER), scoring the thesis's label-free detectors (D9+K headline) and their
   probe retrained in the same activation space.
 
-The approved plan is `C:/Users/zamig/.claude/plans/ethereal-inventing-flask.md`. Core is the
+The approved plan is `~/.claude/plans/ethereal-inventing-flask.md`. Core is the
 development tier (as it is the training tier of their probe); Transfer is the held-out tier; Stego
 is audit-only, because its released conversations broadcast the decoded signal in plain text.
 """

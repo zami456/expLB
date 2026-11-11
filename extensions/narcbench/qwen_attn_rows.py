@@ -2,7 +2,7 @@
 
 User (2026-10-24): an EleutherAI-style attention probe (https://blog.eleuther.ai/attention-probes/) on D4's persona
 projection instead of a last-token or mean readout, trained on Core colluders (their recipe), attending over the
-scored turn's own tokens, 8 heads with 1 and 2 as reference. Plan: `C:/Users/zamig/.claude/plans/
+scored turn's own tokens, 8 heads with 1 and 2 as reference. Plan: `~/.claude/plans/
 ethereal-inventing-flask.md`.
 
 Each row is read whole by Qwen3-32B (`reader/seq_read.py`); only the tokens of its spans come back, projected on

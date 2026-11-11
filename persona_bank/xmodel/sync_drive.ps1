@@ -22,8 +22,8 @@ New-Item -ItemType Directory -Force -Path $Logs | Out-Null
 function Note($m) { "$((Get-Date).ToString('yyyy-MM-dd HH:mm:ss'))  $m" | Out-File -Append -Encoding utf8 $status }
 
 $rc = $Rclone
-if (-not $rc -or -not (Test-Path $rc)) { $rc = "C:\Users\user4\expLB\tools\rclone.exe" }
-if (-not (Test-Path $rc)) { $rc = "C:\Users\user4\tools\rclone.exe" }
+if (-not $rc -or -not (Test-Path $rc)) { $rc = "~\expLB\tools\rclone.exe" }
+if (-not (Test-Path $rc)) { $rc = "~\tools\rclone.exe" }
 if (-not (Test-Path $rc)) { $c = Get-Command rclone -ErrorAction SilentlyContinue; if ($c) { $rc = $c.Source } }
 if (-not $rc -or -not (Test-Path $rc)) { Note "$Tag NO RCLONE"; exit 1 }
 $dest = "$DriveBase/$Folder"

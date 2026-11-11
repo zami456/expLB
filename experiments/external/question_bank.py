@@ -3,7 +3,7 @@ the thesis's development data (Liars' Bench) with the random-bank machinery; the
 the spectrum analyses with questions as domains; the single confirmation read.
 
 Pre-registration: experiments/external/questions_150/PREREGISTRATION.md. Plan:
-C:/Users/zamig/.claude/plans/recursive-munching-glade.md.
+~/.claude/plans/recursive-munching-glade.md.
 
 The store: <run>/<store>/<role>/q###.pt = {"vector": (K,H), "layers", "n", ...} (or q###.empty), one mean
 vector per (role, question) at a few layers, written by 2_activations_ndif.py --per_question. Every bank

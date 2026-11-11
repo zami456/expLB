@@ -7,7 +7,7 @@ environment with judge-validated labels (Hugging Face `SALT-NLP/agent-collusion`
 Gemma-4-31B main condition with Llama-3.3-70B (the thesis detectors and their probe refitted on our Core
 reads, all frozen) and with Qwen3-32B (their published pipeline, their script unchanged), both on NDIF.
 
-The approved plan is `C:/Users/zamig/.claude/plans/ethereal-inventing-flask.md` (2026-10-22). Generation on
+The approved plan is `~/.claude/plans/ethereal-inventing-flask.md` (2026-10-22). Generation on
 NDIF was ruled out (verdict-phase prompts reach 17k-67k tokens for Gemma; NDIF's 70B replicas run out of
 memory above about 7k), so every read uses a compact context (below), the one forced deviation.
 """

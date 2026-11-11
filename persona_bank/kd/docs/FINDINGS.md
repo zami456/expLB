@@ -5801,7 +5801,7 @@ closed for F-03's cell. It is now.
 whenever its `row_id` is in the **source's training rows**. A general rule, not a special case: it
 fired on **exactly one pair, both directions**, independently re-confirming F-108. Of `kr-matched`'s
 258 rows, **59 survive** — 77% contamination. Run from an isolated tree
-(`C:/Users/user4/expLB-resplit`), reading the same activations read-only; the original script is
+(`~/expLB-resplit`), reading the same activations read-only; the original script is
 byte-identical before and after (md5 `681126242fe4414e4a3c131793de81c6`).
 
 **F-03's headline barely moves — the leak did not manufacture it:**
@@ -6534,8 +6534,8 @@ not obliged to make.
 
 ### F-126 · 2026-09-24 · **6D-1 and 6D-2 closed on the lab PC, and five of the seven unverifiable draft claims resolved. `pc:sycophancy` trained in OUR pipeline LOSES to raw on all 11 datasets at every layer and pooling — it only wins once `sycophancy_mt` is removed. And `passP` turns out to be a PROMPT-span store: a probe on the question alone, before the model answers, reads 1.000 on two datasets.**
 
-Three jobs, one lab-PC session, all read-only on `C:\Users\user4\expLB\`; the one write went to
-`C:\Users\user4\expLB-resplit\phase6\` and is logged in `audit/LABPC_WRITES.md`.
+Three jobs, one lab-PC session, all read-only on `~\expLB\`; the one write went to
+`~\expLB-resplit\phase6\` and is logged in `audit/LABPC_WRITES.md`.
 
 #### 1. 6D-1 · `pc:sycophancy` in our pipeline — the gap is closed, and it does not help
 
@@ -6651,7 +6651,7 @@ characterisation. **Correction to my own first pass**, which marked both UNRESOL
 2602.01425 PDF.**
 
 **D-030 and D-063 remain unresolved, and now for a firmer reason.** A recursive search of
-`C:\Users\user4\expLB` for `results_table.csv` / `results.csv` / `scores.csv` and for any
+`~\expLB` for `results_table.csv` / `results.csv` / `scores.csv` and for any
 `XXXX-9-llama*` directory returns **nothing**. Appendix G's four-decimal reproduction claim is not
 merely uncommitted — **the artifact does not exist outside the collaborator's own working
 directory**, so no one else can check it.
@@ -6825,7 +6825,7 @@ Qwen by kd group, original → `user_stay`: anti-sycophancy 0.36 → 0.92, decep
 - The 15 new items alone give 97/195 = 0.50 and the 5 screen items 31/65 = 0.48, so the screen's selection did not inflate the rate.
 - Qwen is still behind Llama-3.3's original on gatekeeper (0.40 vs 0.84) and honest_novice (0.50 vs 0.73). candid_witness barely moves (0.19 → 0.25).
 
-- **source:** `xmodel/qwen_roleplay/` (`README.md` design + dated status; `runs_screen/analysis_screen.{txt,json}` from `analyse_screen.py`; `runs_confirm/analysis_confirm.{txt,json}` from `analyse_confirm.py`; `runs_smoke/analysis.json`; generated replies `runs_*/<format>/responses/*.jsonl`, scores `runs_*/<format>/scores/*.json`; banks `bank/*.jsonl` with rendered previews). References: Qwen `~/xmodel-runs/Qwen2.5-72B-Instruct/persona/{responses,scores}`; Llama-3.3 `ref_llama33_kd/`, copied md5-checked (0 mismatches, `ref_llama33_kd/SOURCES.md`) from lab PC `C:/Users/user4/expLB/run-kd`. Judge prompts: Qwen `roles_kd/` (md5 in `roles_kd/SOURCES.md`); Llama-3.3 `kd/personas/kd_instructions`.
+- **source:** `xmodel/qwen_roleplay/` (`README.md` design + dated status; `runs_screen/analysis_screen.{txt,json}` from `analyse_screen.py`; `runs_confirm/analysis_confirm.{txt,json}` from `analyse_confirm.py`; `runs_smoke/analysis.json`; generated replies `runs_*/<format>/responses/*.jsonl`, scores `runs_*/<format>/scores/*.json`; banks `bank/*.jsonl` with rendered previews). References: Qwen `~/xmodel-runs/Qwen2.5-72B-Instruct/persona/{responses,scores}`; Llama-3.3 `ref_llama33_kd/`, copied md5-checked (0 mismatches, `ref_llama33_kd/SOURCES.md`) from lab PC `~/expLB/run-kd`. Judge prompts: Qwen `roles_kd/` (md5 in `roles_kd/SOURCES.md`); Llama-3.3 `kd/personas/kd_instructions`.
 - **caveats:**
   1. The screen has 5 items per role. Group rates rest on 15–40 items each, role rates on 5, and the confirmation on 20.
   2. A single judge (Llama-3.1-70B). "Fully in role" under the new format may partly reward a more theatrical reply, but dsim and separation move the same way without the judge.

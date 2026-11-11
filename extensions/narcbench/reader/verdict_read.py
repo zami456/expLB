@@ -32,7 +32,7 @@ import threading
 import time
 from pathlib import Path
 
-ENV_FILE = Path(r"D:\expLB\liars-bench\.env")
+ENV_FILE = Path(__file__).resolve().parents[3] / ".env"  # the repository root's .env
 ROOT = Path(r"E:\narcbench\verdict")
 ROWS = ROOT / "rows"
 ACTS = ROOT / "acts"

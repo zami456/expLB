@@ -14,7 +14,7 @@
 #>
 param([string]$WaitFor = "$env:USERPROFILE\xmodel-runs\Mistral-Small-3.1-24B-Instruct-2503\logs\alpaca_gen.status",
       [string]$DriveBase = "tamara:expLB/xmodel_2026-10-06",
-      [string]$Rclone = "C:\Users\SURAIYA\AppData\Local\Microsoft\WinGet\Packages\Rclone.Rclone_Microsoft.Winget.Source_8wekyb3d8bbwe\rclone-v1.75.1-windows-amd64\rclone.exe",
+      [string]$Rclone = "~\AppData\Local\Microsoft\WinGet\Packages\Rclone.Rclone_Microsoft.Winget.Source_8wekyb3d8bbwe\rclone-v1.75.1-windows-amd64\rclone.exe",
       [int]$Attempts = 6,
       # 2026-10-16 (owner: "run Qwen detection"): -Only <tags> reads just those models; -Datasets overrides their dataset
       # lists; -NoDrive skips step 3 (sync_drive copies the WHOLE run folder, and the default DriveBase is an existing folder)

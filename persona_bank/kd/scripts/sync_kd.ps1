@@ -31,7 +31,7 @@ $lockPath = Join-Path $logDir "kd_rclone.lock"
 function Note($m) { "$((Get-Date).ToString('yyyy-MM-dd HH:mm:ss'))  $m" | Out-File -Append -Encoding utf8 $status }
 
 $rc = Join-Path $repo "tools\rclone.exe"
-if (-not (Test-Path $rc)) { $rc = "C:\Users\user4\tools\rclone.exe" }
+if (-not (Test-Path $rc)) { $rc = "~\tools\rclone.exe" }
 if (-not (Test-Path $rc)) { Note "$Tag NO RCLONE"; exit 1 }
 
 # Holding the lock does not prove sole ownership of the wire: Stop-ScheduledTask kills the

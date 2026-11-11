@@ -1,7 +1,7 @@
 <#
   xmodel: the thesis persona pipeline on another Liars' Bench model. One model per run folder.
 
-      D:\user4fina\<Model>\code      what runs (a copy; nothing under C:\Users\user4\expLB is touched)
+      D:\user4fina\<Model>\code      what runs (a copy; nothing under ~\expLB is touched)
       D:\user4fina\<Model>\persona   responses -> scores -> vectors_s3 / vectors_all -> axes
       D:\user4fina\<Model>\eval      that model's own Liars' Bench rows, mean-pooled, every layer
       D:\user4fina\<Model>\logs      chain.status (one line per event) + per-process logs
@@ -26,7 +26,7 @@ param(
     # 2026-10-06: machine-specific paths are parameters so one script serves the lab PC (defaults,
     # unchanged) and the laptop (register_task.ps1 -Machine laptop passes its own).
     [string]$RunBase = "D:\user4fina",
-    [string]$Py = "C:\Users\user4\expLB\.venv-aa\Scripts\python.exe",
+    [string]$Py = "~\expLB\.venv-aa\Scripts\python.exe",
     [string]$DriveBase = "tamara:expLB/user4fina_2026-09-29",
     [string]$Rclone = "",
     # persona vectors only: skip stage 2's Liars' Bench eval pooling (owner, 2026-10-06)

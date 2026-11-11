@@ -14,7 +14,7 @@
 #>
 param([string]$SessionTimeout = "5400")
 $ErrorActionPreference = "Continue"
-$repo = "C:\Users\SURAIYA\Documents\STUDY\thesis\expLB"
+$repo = "~\Documents\STUDY\thesis\expLB"
 $Base = Join-Path $env:USERPROFILE "xmodel-runs-userstay"
 $Py = Join-Path $repo ".venv-aa-win\Scripts\python.exe"
 $status = Join-Path $Base "pair.status"

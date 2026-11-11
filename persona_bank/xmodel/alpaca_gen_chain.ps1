@@ -21,7 +21,7 @@ param([string]$Run = "$env:USERPROFILE\xmodel-runs\Mistral-Small-24B-Instruct-25
       [string]$KKey = "mistral-small-24b-2501",
       [string]$LogDir = "$env:USERPROFILE\xmodel-runs\alpaca-logs-mistral2501",
       [string]$DriveBase = "tamara:expLB/xmodel_2026-10-06",
-      [string]$Rclone = "C:\Users\SURAIYA\AppData\Local\Microsoft\WinGet\Packages\Rclone.Rclone_Microsoft.Winget.Source_8wekyb3d8bbwe\rclone-v1.75.1-windows-amd64\rclone.exe",
+      [string]$Rclone = "~\AppData\Local\Microsoft\WinGet\Packages\Rclone.Rclone_Microsoft.Winget.Source_8wekyb3d8bbwe\rclone-v1.75.1-windows-amd64\rclone.exe",
       [int]$Attempts = 6, [string]$WaitFor = "",
       # 2026-10-09 (Llama-405B): read a layer subset in float32 -- 126 x 16384 at all layers would be 8 GB in fp16
       [string]$Layers = "all", [ValidateSet("float16", "float32")][string]$StoreDtype = "float16")

@@ -6,7 +6,7 @@ Core training, 10 seeds, layers 26-30. Their Table 1 (arXiv:2604.01151 v5, secti
 is Qwen3-32B (user decision, 2026-10-23). Its persona bank is built for this on NDIF with the thesis persona pipeline
 (`E:/narcbench/persona/Qwen3-32B`, `run_chain.ps1 -Tag qwen3`: 36 kd roles x 5 instructions x the 30 shared
 questions, judge Llama-3.1-70B, per-question store at layers 26-30). Plan:
-`C:/Users/zamig/.claude/plans/ethereal-inventing-flask.md`. Fixed before any projected score:
+`~/.claude/plans/ethereal-inventing-flask.md`. Fixed before any projected score:
 
 - `bank`: a role's vector is the n-weighted mean of its per-question cells (a cell's `vector` is the mean over that
   question's kept replies, `n` their count); a role needs MIN_COUNT kept replies (default always). The s3 store (judge

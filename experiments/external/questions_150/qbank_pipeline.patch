@@ -4,7 +4,7 @@
  <#
    xmodel: the thesis persona pipeline on another Liars' Bench model. One model per run folder.
  
--      D:\user4fina\<Model>\code      what runs (a copy; nothing under C:\Users\user4\expLB is touched)
+-      D:\user4fina\<Model>\code      what runs (a copy; nothing under ~\expLB is touched)
 -      D:\user4fina\<Model>\persona   responses -> scores -> vectors_s3 / vectors_all -> axes
 -      D:\user4fina\<Model>\eval      that model's own Liars' Bench rows, mean-pooled, every layer
 -      D:\user4fina\<Model>\logs      chain.status (one line per event) + per-process logs

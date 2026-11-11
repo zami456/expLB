@@ -17,7 +17,7 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 ORIGINALS = Path(r"E:\aletheia\banks\Qwen3.5-27B\code\kd\questions\kd_questions_shared.jsonl")
-KD_ROWS = Path(r"C:\Users\zamig\Downloads\kd\run-kd\responses\default.jsonl")  # stored text of the originals
+KD_ROWS = Path(__file__).resolve().parents[3] / "persona_bank" / "kd" / "run-kd" / "responses" / "default.jsonl"  # stored text of the originals
 AUX = ("is", "are", "was", "were", "do", "does", "did", "can", "could", "should", "would", "will", "have",
        "has", "am", "shall", "may", "might", "must")
 MAX_WORDS = {"bare": 60, "yesno": 60, "context": 90, "twoturn": 110}

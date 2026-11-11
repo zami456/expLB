@@ -37,7 +37,7 @@ from deception_detection.lora_intervention import load_adapter
 from experiments.organisms.gender_secret import ADAPTER, LAYERS, _environment, _model
 from deception_detection.utils import REPO_ROOT
 
-RUN_DIR = Path(os.environ.get("KD_RUN_DIR", "C:/Users/zamig/Downloads/kd/run-kd"))
+RUN_DIR = Path(os.environ.get("KD_RUN_DIR", REPO_ROOT / "persona_bank" / "kd" / "run-kd"))  # the kd bank's run outputs
 OUT_DIR = REPO_ROOT / "activations" / "persona_finetuned"
 GS_DIR = REPO_ROOT / "activations" / "gender_secret"
 RESULTS_DIR = REPO_ROOT / "results" / "gender_secret"

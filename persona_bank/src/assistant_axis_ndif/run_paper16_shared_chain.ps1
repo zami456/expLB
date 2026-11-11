@@ -101,7 +101,7 @@ foreach ($tag in @("vectors_all", "vectors_s3")) {
 
 # ---- Drive ---------------------------------------------------------------------------
 $rc = Join-Path $repo "tools\rclone.exe"
-if (-not (Test-Path $rc)) { $rc = "C:\Users\user4\tools\rclone.exe" }
+if (-not (Test-Path $rc)) { $rc = "~\tools\rclone.exe" }
 if (Test-Path $rc) {
     & $rc copy $out "tamara:expLB/paper16-shared" --checksum --transfers 4 `
         --log-file (Join-Path $logDir "paper16_shared_rclone.log") --log-level INFO

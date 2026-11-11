@@ -13,7 +13,7 @@ Fine-tuned models are out of scope. **Qwen2.5-72B-Instruct only, for now.**
 |---|---|
 | Lab PC run folder | `D:\user4fina\Qwen2.5-72B-Instruct\` (`code\`, `persona\`, `eval\`, `logs\`) — a new subfolder; the rest of `D:\user4fina` predates this and is not touched |
 | Drive | `tamara:expLB/user4fina_2026-09-29/Qwen2.5-72B-Instruct/` (new folder, `rclone copy` only, `.env` excluded) |
-| Python | `C:\Users\user4\expLB\.venv-aa` (used, never modified) |
+| Python | `~\expLB\.venv-aa` (used, never modified) |
 | Task | `XModel-qwen`, S4U as user4, AtStartup — `register_task.ps1` |
 | Chain | `run_chain.ps1`: generate (Qwen ×3) → judge (Llama-3.1-70B ×3) ‖ eval pooling (Qwen ×3) → vectors_s3, vectors_all (Qwen ×3) → axes |
 

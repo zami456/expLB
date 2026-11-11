@@ -474,7 +474,7 @@ index 08b4d68..2d39767 100644
      # 2026-10-06: machine-specific paths are parameters so one script serves the lab PC (defaults,
      # unchanged) and the laptop (register_task.ps1 -Machine laptop passes its own).
 -    [string]$RunBase = "D:\user4fina",
--    [string]$Py = "C:\Users\user4\expLB\.venv-aa\Scripts\python.exe",
+-    [string]$Py = "~\expLB\.venv-aa\Scripts\python.exe",
 -    [string]$DriveBase = "tamara:expLB/user4fina_2026-09-29",
 +    [string]$RunBase = "E:\aletheia\banks",
 +    [string]$Py = "E:\aletheia\venv\Scripts\python.exe",

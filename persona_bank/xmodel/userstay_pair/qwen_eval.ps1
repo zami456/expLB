@@ -6,7 +6,7 @@
   Keeps the laptop from idle sleep while it runs; closing the lid still sleeps it.
   Smoke 2026-10-16 01:24-01:30: 16 HP-KR rows, spans 16/16 exact, (16, 20, 8192) fp16, finite (_scratch\qwen_evallb_smoke).
 #>
-$repo = "C:\Users\SURAIYA\Documents\STUDY\thesis\expLB"
+$repo = "~\Documents\STUDY\thesis\expLB"
 Add-Type -Namespace Win32 -Name Power -MemberDefinition '[DllImport("kernel32.dll")] public static extern uint SetThreadExecutionState(uint esFlags);'
 $null = [Win32.Power]::SetThreadExecutionState([uint32]"0x80000001")   # ES_CONTINUOUS | ES_SYSTEM_REQUIRED
 & (Join-Path $repo "xmodel\eval_queue.ps1") -WaitFor "" -Only @("qwen") -NoDrive `
