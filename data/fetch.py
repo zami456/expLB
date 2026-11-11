@@ -1,7 +1,7 @@
 """Download the large inputs that are not in git, from this repository's GitHub release `paper-v1`.
 
-    python data/fetch.py                 # everything (about 250 MB)
-    python data/fetch.py data banks      # choose any of: data, banks, parts
+    python data/fetch.py                 # everything (about 1 GB)
+    python data/fetch.py data banks      # choose any of: data, banks, parts, figures
 
 data   Liars' Bench / Apollo datasets exactly as vendored for the paper (an anonymised copy: some names and
        URLs read XXXX). Extracted into data/<dataset>/.
@@ -9,6 +9,8 @@ banks  The persona banks the paper reads: data/persona_banks/vectors_s3/ (the pu
        data/persona_banks/extended_kd/ (the 36-role bank with the knowledge-denial roles).
 parts  Activation shards the thesis figures read: results/recall_denial/parts_answer/ and
        results/soft_trigger/greeting/parts_{base,adapted}/.
+figures  The 22 model reads the thesis's figures open (about 770 MB): pooled HP-KR reads per layer under
+       activations/pooled*/ and the gender-secret reads under activations/gender_secret/.
 
 Each archive is checked against its SHA-256 before it is extracted; an asset whose files are already in
 place is skipped. Only the Python standard library is used.
@@ -29,6 +31,8 @@ ASSETS = {
               "data/persona_banks/extended_kd"),
     "parts": ("results_parts.zip", "b642e1baecdce769a2c8754dc7153c2d02395b680ceb46a0126656022f2567e0",
               "results/recall_denial/parts_answer"),
+    "figures": ("activations_figures.zip", "115b9e6021bd505e214e80ab73231cef849f0b4d360477fa10a64aae3ea71f11",
+                "activations/pooled_L40"),
 }
 
 

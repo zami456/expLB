@@ -32,7 +32,7 @@ The paper's source is in [`paper/arxiv/`](paper/arxiv/). Every number in it is r
 git clone https://github.com/zami456/expLB && cd expLB
 git submodule update --init third_party/liars-bench   # the benchmark (its probe baselines feed the thesis tables)
 uv sync                                               # Python >= 3.11 environment from uv.lock
-python data/fetch.py                                  # datasets, persona banks, activation shards (about 250 MB)
+python data/fetch.py                                  # datasets, persona banks, model reads (about 1 GB)
 python paper/arxiv/make_arxiv_assets.py               # rebuild the paper's numbers, tables and figures
 ```
 

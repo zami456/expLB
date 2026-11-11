@@ -5,18 +5,19 @@ Three kinds of input, kept apart so the repository stays small:
 | What | Where | How you get it |
 |---|---|---|
 | Small files the code needs | here, in git: `dataset_paths.json`, `aisi_llama/`, `aisi_gemma/`, `persona_banks/paper16_L20/` | nothing to do |
-| Datasets, persona banks, activation shards the paper reads | GitHub release [`paper-v1`](https://github.com/zami456/expLB/releases/tag/paper-v1) | `python data/fetch.py` (about 250 MB) |
+| Datasets, persona banks and the model reads the paper's generators open | GitHub release [`paper-v1`](https://github.com/zami456/expLB/releases/tag/paper-v1) | `python data/fetch.py` (about 1 GB) |
 | Model reads (activations) and other run outputs | your own machine, under `activations/` and `results/` | produced by the scripts in `experiments/` |
 
 ## The release
 
-`python data/fetch.py [data] [banks] [parts]` checks each archive's SHA-256 before extracting it.
+`python data/fetch.py [data] [banks] [parts] [figures]` checks each archive's SHA-256 before extracting it.
 
 - **data** puts the Liars' Bench / Apollo datasets in `data/<dataset>/`: `repe`, `roleplaying`, `insider_trading`, `rollouts`, `ai_audit` and the rest. It is the anonymised copy these experiments were run on, so some names and URLs read `XXXX`. The original upstream copy is the `third_party/deception-detection` submodule; its text differs in those places.
 - **banks** puts the persona banks in `data/persona_banks/`:
   - `vectors_s3/`: the published 26 roles.
   - `extended_kd/`: the 36-role bank with the knowledge-denial roles, built by `persona_bank/kd/`.
 - **parts** puts activation shards in `results/`. These are the shards that `paper/thesis/make_thesis_assets.py` reads for the knowledge and soft-trigger figures (listed in `release_results_parts.txt`).
+- **figures** puts the 22 model reads the thesis's figures open in `activations/` (about 770 MB): the pooled HP-KR reads per layer and the gender-secret reads.
 
 ## Benchmarks read from Hugging Face
 

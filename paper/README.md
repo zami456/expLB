@@ -18,6 +18,6 @@ python paper/arxiv/make_arxiv_assets.py       # also reads the thesis's generate
 cd paper/arxiv && tectonic main.tex
 ```
 
-The generators read Liars' Bench from the Hugging Face cache, and with a warm cache `HF_DATASETS_OFFLINE=1 HF_HUB_OFFLINE=1` keeps them offline. They also read the benchmark's own probe baselines from `third_party/liars-bench/results/probes/`.
+The generators read Liars' Bench from the Hugging Face cache, and with a warm cache `HF_DATASETS_OFFLINE=1 HF_HUB_OFFLINE=1` keeps them offline. They also read the benchmark's own probe baselines from `third_party/liars-bench/results/probes/`, and the thesis's figures read the model reads from `python data/fetch.py figures`. `make_thesis_assets.py` checks that `NDIF_API_KEY` is set in `.env` at the repository root, but it makes no NDIF calls.
 
 **Status (2026-11-11).** `make_xmodel_assets.py` stops on 8 inputs of the in-progress Qwen user-turn re-run (`s3u`/`s23u` banks) that are not produced yet. The committed `thesis/generated_xmodel/` tables are the ones the papers use. [`arxiv/ARXIV_SUBMISSION.md`](arxiv/ARXIV_SUBMISSION.md) has the arXiv build and upload notes.
