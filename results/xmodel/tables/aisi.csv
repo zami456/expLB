@@ -1,0 +1,37 @@
+model,layer,detector,LB mean AUROC,BA (Alpaca 1%)
+Llama-3.3-70B,L20,base probe (RepE-trained),0.6972,0.7209
+Llama-3.3-70B,L20,base probe (AISI-trained),0.782,0.6318
+Llama-3.3-70B,L20,"base probe (AISI, instruction-matched)",0.5886,0.5055
+Llama-3.3-70B,L20,"base probe (AISI, trivia only)",0.7151,0.5638
+Llama-3.3-70B,L20,knowledge-denial axis (4v6),0.8628,0.5587
+Llama-3.3-70B,L20,extended axis (12v13),0.8868,0.5914
+Llama-3.3-70B,L20,deception axis (8v7),0.7503,0.5342
+Llama-3.3-70B,L40,base probe (RepE-trained),0.7784,0.6255
+Llama-3.3-70B,L40,base probe (AISI-trained),0.8779,0.6297
+Llama-3.3-70B,L40,"base probe (AISI, instruction-matched)",0.7009,0.5269
+Llama-3.3-70B,L40,"base probe (AISI, trivia only)",0.7183,0.6265
+Llama-3.3-70B,L40,knowledge-denial axis (4v6),0.8938,0.7251
+Llama-3.3-70B,L40,extended axis (12v13),0.899,0.6939
+Llama-3.3-70B,L40,deception axis (8v7),0.7983,0.675
+Llama-3.3-70B,L44,base probe (RepE-trained),0.7564,0.6256
+Llama-3.3-70B,L44,base probe (AISI-trained),0.8715,0.6295
+Llama-3.3-70B,L44,"base probe (AISI, instruction-matched)",0.6982,0.5125
+Llama-3.3-70B,L44,"base probe (AISI, trivia only)",0.7031,0.6238
+Llama-3.3-70B,L44,knowledge-denial axis (4v6),0.8802,0.6829
+Llama-3.3-70B,L44,extended axis (12v13),0.8841,0.6663
+Llama-3.3-70B,L44,deception axis (8v7),0.7913,0.6535
+Gemma-3-27B,L20,base probe (RepE-trained),0.5122,0.5053
+Gemma-3-27B,L20,base probe (AISI-trained),0.8022,0.5949
+Gemma-3-27B,L20,knowledge-denial axis (4v6),0.622,0.5304
+Gemma-3-27B,L20,extended axis (12v13),0.5906,0.5052
+Gemma-3-27B,L20,deception axis (8v7),0.5745,0.4998
+Gemma-3-27B,L40,base probe (RepE-trained),0.7834,0.7893
+Gemma-3-27B,L40,base probe (AISI-trained),0.858,0.7125
+Gemma-3-27B,L40,knowledge-denial axis (4v6),0.4844,0.4972
+Gemma-3-27B,L40,extended axis (12v13),0.8999,0.6018
+Gemma-3-27B,L40,deception axis (8v7),0.6794,0.5002
+Gemma-3-27B,L44,base probe (RepE-trained),0.7613,0.7599
+Gemma-3-27B,L44,base probe (AISI-trained),0.7698,0.6923
+Gemma-3-27B,L44,knowledge-denial axis (4v6),0.5641,0.4964
+Gemma-3-27B,L44,extended axis (12v13),0.8009,0.5744
+Gemma-3-27B,L44,deception axis (8v7),0.6906,0.503

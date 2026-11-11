@@ -1,0 +1,77 @@
+% The arXiv version of the thesis_revised report, in the ICLR conference style (iclr2027_conference.sty,
+% with the running header patched from "Published as a conference paper at ICLR 2027" to "Preprint").
+% Every number is a \V{key} read from generated/*.tex; the tables and figures come from
+% make_arxiv_assets.py, which takes them from the thesis's own generators with each design named in
+% words. Build from src/probes/deception-detection:
+%   python paper/arxiv/make_arxiv_assets.py
+%   cd arxiv && tectonic main.tex --keep-logs --keep-intermediates
+\documentclass{article}
+\usepackage[T1]{fontenc}
+\usepackage{iclr2027_conference,times}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs,multirow,array,tabularx}
+\usepackage{graphicx}
+\usepackage{tikz} % the style file has already loaded xcolor
+\usetikzlibrary{arrows.meta,positioning,fit,calc,shapes.geometric}
+\usepackage{enumitem}
+\usepackage{placeins}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage[capitalize,noabbrev]{cleveref}
+\graphicspath{{images/}}
+
+% Anonymity. \anonymousfalse is the arXiv preprint: the authors are shown (the style's final-copy
+% switch) and the repository is named. \anonymoustrue builds the double-blind version for a
+% conference submission from the same source.
+\newif\ifanonymous
+\anonymousfalse
+\ifanonymous\else\iclrfinalcopy\fi
+
+% Every result is read as \V{key}; an unknown key stops the build instead of printing a blank.
+\makeatletter
+\newcommand{\setV}[2]{\expandafter\def\csname num@#1\endcsname{#2}}
+\newcommand{\V}[1]{\ifcsname num@#1\endcsname\csname num@#1\endcsname\else
+  \PackageError{numbers}{Undefined number `#1'}{Run make_arxiv_assets.py}\fi}
+\makeatother
+\input{generated/numbers.tex}
+\input{generated/numbers_xmodel.tex}
+\input{generated/numbers_arxiv.tex}
+
+\newcommand{\hpkr}{\mbox{HP-KR}}
+\newcommand{\hpc}{\mbox{HP-C}}
+\newcommand{\repourl}{\ifanonymous[repository withheld for review]\else\url{https://github.com/zami456/expLB}\fi}
+\setlength{\emergencystretch}{2em}
+
+\title{The Geometry of Lies: Knowledge and Persona Directions for Detecting Deception in Large Language Models}
+
+\author{Md.\ Abdullah Al Zami, Suraiya Shanaz, Mahdi Hasan, \\
+Shoaib Ahmed Dipu, Farig Yousuf Sadeque \& Md.\ Sabbir Ahmed \\
+Department of Computer Science and Engineering \\
+BRAC University \\
+Dhaka, Bangladesh}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\input{sections/abstract}
+\end{abstract}
+
+\input{sections/introduction}
+\input{sections/related}
+\input{sections/method}
+\input{sections/results_llama}
+\input{sections/results_models}
+\input{sections/results_external}
+\input{sections/discussion}
+
+\input{sections/statements}
+
+\bibliography{refs}
+\bibliographystyle{iclr2027_conference}
+
+\appendix
+\input{sections/appendix}
+
+\end{document}

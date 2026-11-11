@@ -1,0 +1,24 @@
+% The pipeline schematic of Figure 1.
+\begin{tikzpicture}[
+    node distance=0.42cm and 0.30cm,
+    box/.style={draw=black!40, rounded corners=2pt, align=center, font=\footnotesize,
+                inner sep=3pt, minimum height=1.15cm, text width=2.78cm, fill=#1},
+    box/.default=white,
+    arrow/.style={-{Stealth[length=4.5pt]}, draw=black!60, semithick}]
+  \node[box=orange!12] (personas) {\textbf{36 personas}\\5 prompt variants\\30 questions each};
+  \node[box, right=of personas] (gen) {Llama-3.3-70B\\role-plays each\\(\V{bank-generated} rollouts)};
+  \node[box, right=of gen] (judge) {Judge keeps the\\in-character\\rollouts (\V{bank-kept})};
+  \node[box, right=of judge] (vec) {Persona vector:\\mean activation\\over its responses};
+  \node[box=blue!9, right=of vec] (coords) {\textbf{Persona}\\\textbf{coordinates}\\$d$ and leading PCs};
+
+  \node[box=black!5, below=0.75cm of personas] (example) {\textbf{Liars' Bench}\\response (or RepE,\\Alpaca control)};
+  \node[box, right=of example] (acts) {Llama-3.3-70B\\activations at\\layer 20, 40 or 44};
+  \node[box, right=of acts] (pool) {Mean over the\\response tokens:\\$z$};
+  \node[box, right=of pool] (score) {Project onto $d$:\\[2pt]$s(z)=\langle z,\hat d\,\rangle$};
+  \node[box=blue!9, right=of score] (eval) {\textbf{Lie score}\\zero-shot, or as a\\probe feature};
+
+  \foreach \a/\b in {personas/gen, gen/judge, judge/vec, vec/coords,
+                     example/acts, acts/pool, pool/score, score/eval}
+    \draw[arrow] (\a) -- (\b);
+  \draw[arrow] (coords.south) |- ($(score.north)+(0,0.22)$) -- (score.north);
+\end{tikzpicture}

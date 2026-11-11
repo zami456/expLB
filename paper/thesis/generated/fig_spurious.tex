@@ -1,0 +1,61 @@
+% How a probe inherits a dataset-specific feature (fig:spurious), schematic. Two datasets whose lies
+% share a feature u; in A the lies also differ strongly along s, and in B that relation is reversed.
+% Under each scatter, the score densities of honest responses and lies projected on the probe w_A and
+% on the fixed direction d. Geometry: honest at (-0.75, -1.3 sgn), lies at (0.75, 1.3 sgn), w_A along
+% (0.5, 0.9), d along (1, 0), so on w_A the class means are +-1.5 in A and -+0.77 in B.
+\ifdefined\thesisfigstyle\else\input{generated/fig_style}\fi%
+\begin{tikzpicture}[fig,
+    hon/.style={circle, draw=fhonest, fill=white, line width=0.5pt, inner sep=0pt, minimum size=1.7mm},
+    lie/.style={rectangle, draw=fdecept, fill=fdecept!80, line width=0.4pt, inner sep=0pt,
+                minimum size=1.5mm},
+    ax/.style={-{Stealth[length=1.2mm]}, draw=fmute, line width=0.4pt}]
+% \strip{x centre}{y baseline}{honest mean}{lie mean}{label}{verdict}: two score densities
+\newcommand{\strip}[6]{%
+  \draw[fmute, line width=0.4pt] (#1-25,#2) -- (#1+25,#2);
+  \draw[fmute, line width=0.3pt] (#1,#2-0.8) -- (#1,#2+0.4);
+  \fill[fhonestbg, draw=fhonest, line width=0.5pt, fill opacity=0.85]
+    plot[domain=-25:25, samples=70, smooth] ({#1+\x},{#2+8*exp(-((\x/10-(#3))^2)/(2*0.33^2))}) -- cycle;
+  \fill[fdeceptbg, draw=fdecept, line width=0.5pt, fill opacity=0.75]
+    plot[domain=-25:25, samples=70, smooth] ({#1+\x},{#2+8*exp(-((\x/10-(#4))^2)/(2*0.33^2))}) -- cycle;
+  \node[figsmall, anchor=north west, text=fmute, inner sep=0.5pt] at (#1-25,#2-0.9) {#5};
+  \node[figsmall, anchor=north east, inner sep=0.5pt] at (#1+25,#2-0.9) {#6};}
+
+\foreach \sgn/\cx/\head/\sub in {1/37/{(a) Training dataset $A$}/{the probe leans on $s$},
+                                -1/112/{(b) Test dataset $B$}/{the relation of $s$ is reversed}} {
+  \draw[figpanel] (\cx-35,0) rectangle (\cx+35,103);
+  \node[fighead, anchor=north west] at (\cx-32,100.5) {\head};
+  \node[figgloss, anchor=north west] at (\cx-32,96) {\sub};
+  \begin{scope}[shift={(\cx,62)}, x=10mm, y=10mm]
+    % soft class clouds
+    \fill[fhonestbg, opacity=0.9] (-0.75,{-1.3*\sgn}) ellipse (0.62 and 0.55);
+    \fill[fdeceptbg, opacity=0.9] (0.75,{1.3*\sgn}) ellipse (0.62 and 0.55);
+    \draw[ax] (-2.5,0) -- (2.5,0);
+    \draw[ax] (0,-2.35) -- (0,2.45);
+    \node[figsmall, text=fmute, anchor=north east, align=right] at (2.5,-0.12) {shared lie\\[-0.4ex]feature $u$};
+    \node[figsmall, text=fmute, anchor=south west] at (0.08,2.3) {dataset feature $s$};
+    \foreach \dx/\dy in {0/0, .28/.18, -.22/.3, .15/-.27, -.32/-.12, .36/-.06, -.1/.42, .05/-.4, .22/.34, -.26/-.33}{
+      \node[hon] at ({-0.75+\dx},{\sgn*(-1.3)+\dy}) {};
+      \node[lie] at ({0.75-\dx},{\sgn*1.3-\dy}) {};
+    }
+    % the probe's boundary and the two directions
+    \draw[fslate, dashed, line width=0.6pt] (-2.1,1.18) -- (2.1,-1.18);
+    \draw[figarrow, fslate] (0,0) -- (0.62,1.12);
+    \node[figsmall, text=fslate, anchor=east] at (0.26,0.62) {$w_A$};
+    \draw[figarrow, famber, line width=0.9pt] (0,0) -- (1.75,0);
+    \node[figsmall, text=famber, anchor=south] at (1.6,0.05) {$d$};
+  \end{scope}
+}
+% score strips: A separates on both; B inverts on w_A and still separates on d
+\strip{37}{22}{-1.5}{1.5}{score on $w_A$}{\textcolor{fhonest}{$\checkmark$ lies score higher}}
+\strip{37}{5}{-0.75}{0.75}{score on $d$}{\textcolor{fhonest}{$\checkmark$ lies score higher}}
+\strip{112}{22}{0.77}{-0.77}{score on $w_A$}{\textcolor{fdecept}{$\times$ inverted: lies score lower}}
+\strip{112}{5}{-0.75}{0.75}{score on $d$}{\textcolor{fhonest}{$\checkmark$ still in order}}
+% key
+\node[hon] at (6,33.5) {};
+\node[figsmall, anchor=west] at (7.4,33.5) {honest};
+\node[lie] at (20,33.5) {};
+\node[figsmall, anchor=west] at (21.4,33.5) {lie};
+\node[figsmall, anchor=west] at (79,33.5) {\textcolor{fslate}{dashed: the probe's boundary}};
+\pgfresetboundingbox
+\path (0,-2) rectangle (150,103);
+\end{tikzpicture}%

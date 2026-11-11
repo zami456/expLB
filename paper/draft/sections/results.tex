@@ -1,0 +1,274 @@
+\section{Results}
+\label{sec:results}
+
+\subsection{The hardest dataset: lies told as denials}
+\label{sec:hpkr}
+
+\hpkr{} asks the model whether it knows the answer to a hazardous multiple-choice question.
+Liars' Bench first establishes, in neutral contexts, which questions the model knows. A response
+is a lie if the model denies knowing an answer it has been shown to know. Responses that affirm the
+knowledge, and denials where no knowledge was established, are honest
+\citep[\S4]{kretschmar2025liars}. Every lie in \hpkr{} is therefore a denial of knowledge.
+
+\begin{table}[t]
+\centering
+\small
+\caption{Detection on \hpkr. Zero-shot contrasts use no benchmark labels. Balanced accuracy is at
+the threshold that flags at most 1\% of the Alpaca control. $^\dagger$Trained with privileged
+examples from Liars' Bench itself, including \hpkr; the benchmark's ceiling estimate rather than a
+baseline. Liars' Bench reports one layer, the same layer~20 that our base probe uses.}
+\label{tab:hpkr}
+\input{generated/tab_hpkr}
+\end{table}
+
+The published persona contrast gets \hpkr{} backwards (\cref{tab:hpkr}, \cref{fig:hpkr}). At
+layer~20 its AUROC is \V{zs-dec-hpkr-L20}: it scores the model's lies as more honest than its
+honest answers. At layers 40 and 44 it sits near chance, at \V{zs-dec-hpkr-L40} and
+\V{zs-dec-hpkr-L44}. It is not alone. The RepE-trained base probe also inverts at layer~20
+(\V{bp-auroc-hpkr-L20}), as does the Liars' Bench Mean Probe (\V{lb-mean-auroc-hpkr}). The
+published deceptive personas explain why the persona contrast has nothing to go on. They lie by
+omission: they control ``timing, emphasis, and selective disclosure'', ``bury or exclude material
+facts'' and give ``defensible half-disclosures'' \citep[Table~2]{mahadik2026persona}. None of them
+lies by claiming not to know.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{generated/fig_hpkr.pdf}
+\caption{\hpkr{} across all \V{depth-n} layers we swept. \textbf{Left:} ranking. Both contrasts
+built with the knowledge-denial personas hold between \V{depth-hpkr-den-auroc-min} and
+\V{depth-hpkr-ext-auroc-max} AUROC at every layer. The published contrast inverts at layer~20 and
+stays below them throughout. So does the base probe at layer~20, but it recovers to
+\V{depth-hpkr-base-auroc-peak} by layer~\V{depth-hpkr-base-auroc-peak-layer}, above every contrast
+we build. \textbf{Right:} detection at the benchmark's threshold. Only the knowledge-denial
+contrast ever clears the 0.5 floor, and at layer~40 it comes close to the privileged upper bound;
+the base probe never leaves the floor at any depth, despite its ranking. At layer~20 the
+knowledge-denial threshold falls inside \hpkr{} and flags most honest answers too. The horizontal
+lines are Liars' Bench's reported values for Llama-3.3-70B.}
+\label{fig:hpkr}
+\end{figure}
+
+Adding the knowledge-denial personas repairs the ranking. With no benchmark labels, the
+knowledge-denial contrast reaches \V{zs-den-hpkr-L20}, \V{zs-den-hpkr-L40} and
+\V{zs-den-hpkr-L44} AUROC at layers 20, 40 and 44. The extended contrast, which pools both
+deceptive groups, keeps nearly all of it (\V{zs-ext-hpkr-L20}, \V{zs-ext-hpkr-L40},
+\V{zs-ext-hpkr-L44}). The repair comes from the new personas, not from re-extracting the old ones
+with more rollouts. The published grouping inverts on the original bank (\V{orig-dec-hpkr-L20}
+at layer~20) and still inverts on the re-extracted one (\V{zs-dec-hpkr-L20}).
+
+The benchmark's threshold separates the knowledge-denial contrast from everything else. At
+layer~40 it reaches \V{op-den-balacc-hpkr-L40} balanced accuracy at 1\% FPR on the Alpaca control.
+Its recall is \V{op-den-recall-hpkr-L40}, and it flags \V{fp-den-hpkr-L40}\% of the honest
+answers. Liars' Bench reports \V{lb-mean-balacc-hpkr} for
+its Mean Probe, \V{lb-followup-balacc-hpkr} for its Follow-Up Probe, and \V{lb-upper-balacc-hpkr}
+for the privileged Upper-Bound Probe. The base probe ranks \hpkr{} well at layer~40, with AUROC
+\V{bp-auroc-hpkr-L40}, yet all of its \hpkr{} scores fall below the Alpaca threshold, so it flags
+nothing (\V{bp-balacc-hpkr-L40}). So do the published and extended contrasts. The threshold is not
+reliable even for the knowledge-denial contrast. At layer~20 it sits below most of \hpkr, flagging
+\V{fp-den-hpkr-L20}\% of honest answers along with the lies, and the balanced accuracy falls to
+\V{op-den-balacc-hpkr-L20}.
+
+\subsection{Cross-dataset transfer}
+\label{sec:transfer}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{generated/fig_transfer.pdf}
+\caption{Train--test AUROC at layer~40; the boxed diagonal is in-distribution. \textbf{Left:}
+logistic regression on the 8192-dimensional pooled activations. It fits each training set but
+transfers unevenly and inverts in places. \textbf{Right:} the extended persona contrast, a single
+direction that no dataset shaped. Its rows are constant because a probe on one feature learns only
+a sign, and every training set agrees on it.}
+\label{fig:transfer}
+\end{figure}
+
+\Cref{fig:transfer} shows the full transfer matrix at layer~40, and \cref{tab:transfer} summarises
+all three layers. Probes on raw activations fit their own dataset, with a mean in-distribution AUROC
+of \V{diag-base-L40} at layer~40, but lose \V{drop-base-L40} of it off the diagonal, falling to
+\V{off-base-L40}. Some cells invert. The worst, a probe trained on \V{worst-base-train-L40} and
+tested on \V{worst-base-test-L40}, scores \V{worst-base-L40}. The extended persona contrast was
+shaped by no evaluation dataset, and it reaches \V{off-ext-L20}, \V{off-ext-L40} and \V{off-ext-L44}
+off the diagonal at layers 20, 40 and 44, against \V{off-base-L20}, \V{off-base-L40} and
+\V{off-base-L44} for the raw probes. The gap is not particular to those layers: over the
+\V{depth-n} layers we swept the contrast leads the raw probes off the diagonal at every one, by at
+least \V{depth-off-ext-over-base-min} AUROC and by \V{depth-off-ext-over-base-at-peak} where both
+are strongest (\cref{fig:depth}).
+
+\paragraph{The contrast has no in-distribution advantage to lose.} The two arms differ less in how
+well they score a held-out dataset than in how much they give up when they reach one. Across every
+layer we swept, the raw probes score between \V{depth-base-diag-min} and \V{depth-base-diag-max}
+on the dataset they were fitted to and between \V{depth-base-drop-min} and \V{depth-base-drop-max}
+lower off it. The extended contrast's off-diagonal mean equals its in-distribution mean to within
+\V{depth-ext-drop-max} at every layer. This is what it means for a direction to be fitted on no
+dataset: there is no training set for it to be better on, so the number measured in distribution is
+the number that transfers. A supervised probe reaches higher on its own dataset than the contrast
+ever reaches anywhere --- the comparison is not that the contrast fits better, but that it keeps
+what it has. The comparison holds per dataset as well as overall, but only down to a point. Averaged over
+training sets, the extended contrast beats the raw probes on every held-out dataset at the three
+layers we report and at every layer through \V{depth-pertest-holds-last}
+(\cref{tab:pertest}, \cref{app:tables}). It stops holding deeper: at
+\V{depth-pertest-break-n} of the layers between \V{depth-pertest-break-first} and
+\V{depth-pertest-break-last}, \V{depth-pertest-exception} favour the raw probes, in the band where
+every contrast is weakest (\cref{sec:depth}). Single cells can favour a raw probe at any depth; at
+layer~40 the probe trained on ID scores higher on CG than the contrast does.
+
+\begin{table}[t]
+\centering
+\small
+\caption{Mean off-diagonal AUROC of the transfer matrix, at three layers, over all six test sets
+and with \hpkr{} removed as both a training and a test set. The 1-d rows are persona contrasts, a
+probe on one feature. The best value in each column is in bold.}
+\label{tab:transfer}
+\input{generated/tab_transfer}
+\end{table}
+
+Removing \hpkr{} shows where the extended bank's advantage over the published contrast comes
+from. At layer~20, without \hpkr, the published contrast is marginally ahead (\V{offx-dec-L20}
+against \V{offx-ext-L20}), so there the whole gain is the \hpkr{} repair. At layers 40 and 44 the
+extended contrast leads with or without \hpkr{} (\V{offx-ext-L40} against \V{offx-dec-L40} at
+layer~40). The knowledge-denial contrast on its own transfers nearly as well as the extended one
+(\V{off-den-L40} at layer~40), even though its personas were written for a single kind of lie.
+
+\subsection{One direction or the persona subspace}
+\label{sec:pcs}
+
+The persona coordinates of \citet{mahadik2026persona} are the leading principal components of the
+persona vectors, used as features for a probe. At 70B, the contrast between group means beats them
+at the three layers we report and at \V{depth-pc-wins-complement} of the \V{depth-n} we swept
+(\cref{tab:transfer}). A probe on the top three components of the extended bank
+reaches \V{off-extpcthree-L20}, \V{off-extpcthree-L40} and \V{off-extpcthree-L44}, against
+\V{off-ext-L20}, \V{off-ext-L40} and \V{off-ext-L44} for the contrast. The gap narrows with depth,
+from \V{gap-ext-extpcthree-L20} to \V{gap-ext-extpcthree-L40} to \V{gap-ext-extpcthree-L44}, and it
+does reverse: at layers \V{depth-pc-wins-first} to \V{depth-pc-wins-last}, inside the deep trough
+where every contrast is weakest, the three components lead by up to \V{depth-pc-wins-max}
+(\cref{sec:depth}). Outside that band the one direction leads throughout. The first component alone
+is far behind (\V{off-extpcone-L40} at layer~40), and
+the published bank's three components fall with depth (\V{off-pcthree-L20}, \V{off-pcthree-L40},
+\V{off-pcthree-L44}). The subspace is not empty of signal: three random directions score
+\V{off-rand-L20}, \V{off-rand-L40} and \V{off-rand-L44}. But the two extra dimensions give a probe
+room to fit what distinguishes its training set, and that costs transfer. The one feature whose
+sign every dataset agrees on transfers best.
+
+\subsection{Zero-shot against the benchmark's probe}
+\label{sec:operating}
+
+\begin{figure}[tbp]
+\centering
+\includegraphics[width=\linewidth]{generated/fig_operating.pdf}
+\caption{Zero-shot persona contrasts against the RepE-trained base probe at layer~40, in the
+layout of Liars' Bench's Figure~2. Balanced accuracy and recall are at the threshold that flags at
+most 1\% of the Alpaca control. Error bars are 95\% bootstrap intervals over examples. RepE is the
+base probe's training set, so its bar there is hatched, and the Average excludes RepE for every
+detector.}
+\label{fig:operating}
+\end{figure}
+
+\Cref{fig:operating,tab:operating} put the persona contrasts under the benchmark's own protocol,
+beside the RepE-trained base probe. Two things hold at every one of the \V{depth-n} layers we
+swept, and they are the ones to weigh: the extended contrast \emph{ranks} the Liars' Bench average
+above the base probe at all of them, by at least \V{depth-zs-ext-over-base-min} AUROC, and it never
+ranks any dataset backwards --- its lowest score anywhere is \V{depth-ext-worst-dataset}, while the
+base probe inverts on some dataset at \V{depth-base-invert-layers} of the \V{depth-n}
+(\cref{sec:depth}). A detector that is never worse than chance on a new distribution is a different
+proposition from one that is sometimes confidently wrong, and the contrast achieves it with no
+benchmark labels.
+
+At layer~40, averaged over the five Liars' Bench datasets, the
+extended contrast reaches \V{op-ext-balacc-L40} balanced accuracy, \V{op-ext-recall-L40} recall and
+\V{op-ext-auroc-L40} AUROC. The base probe reaches \V{op-base-balacc-L40}, \V{op-base-recall-L40}
+and \V{op-base-auroc-L40}. The knowledge-denial contrast is the best detector at this threshold,
+with \V{op-den-balacc-L40} balanced accuracy and \V{op-den-recall-L40} recall. At layers 40 and 44
+the persona contrasts lead on all three metrics. At the contrast's own best layer,
+\V{depth-zs-ext-peak-layer}, the two score \V{depth-zs-ext-peak} against
+\V{depth-zs-base-at-ext-peak}; at the base probe's own best layer,
+\V{depth-zs-base-peak-layer}, the gap narrows
+to \V{depth-zs-margin-at-base-peak} (\cref{sec:depth}). Both are worth stating: the first is what
+the method reaches, the second is what it is worth against a baseline tuned as carefully as itself.
+
+\begin{table}[t]
+\centering
+\small
+\caption{Detection under the Liars' Bench protocol, averaged over its five datasets. The base probe
+is the pipeline's RepE-trained probe, and the contrasts are zero-shot. The threshold flags at most
+1\% of the Alpaca control. The best value in each layer's block is in bold.}
+\label{tab:operating}
+\input{generated/tab_operating}
+\end{table}
+
+Layer~20 is the exception, and it shows what the threshold is doing. There the base probe leads on
+balanced accuracy (\V{op-base-balacc-L20} against \V{op-ext-balacc-L20}) and on recall
+(\V{op-base-recall-L20} against \V{op-ext-recall-L20}). Part of that lead is real. On CG the base
+probe's recall is \V{op-base-recall-cg-L20} against \V{op-ext-recall-cg-L20} for the extended contrast,
+and neither flags an honest response. Part of it comes from false
+positives. On IT and ID the Alpaca threshold lets the base probe flag \V{fp-base-it-L20}\% and
+\V{fp-base-id-L20}\% of honest responses, against \V{fp-ext-it-L20}\% and \V{fp-ext-id-L20}\% for
+the extended contrast, which ranks both datasets at least as well (\V{zs-ext-it-L20} against
+\V{bp-auroc-it-L20} on IT, \V{zs-ext-id-L20} against \V{bp-auroc-id-L20} on ID). On ranking, the extended
+contrast leads the base probe on the Liars' Bench average at every layer we swept, by at least
+\V{depth-zs-ext-over-base-min} AUROC (\cref{sec:depth}). The base probe also inverts on some
+dataset at every depth but one: \hpc{} and \hpkr{} at layer~20 (\V{bp-auroc-hpc-L20} and
+\V{bp-auroc-hpkr-L20}), \hpkr{} again at layers 24 and 28, and IT at every layer from
+\V{depth-base-it-invert-first} onwards (\V{bp-auroc-it-L40} and \V{bp-auroc-it-L44} at layers 40
+and 44). Only at layer~\V{depth-base-no-invert} does it rank every dataset the right way round.
+
+One dataset defeats every detector at this threshold. On \hpc, the persona contrasts rank lies
+above honest answers (\V{zs-ext-hpc-L40} AUROC for the extended contrast at layer~40). But almost
+all \hpc{} scores fall below the Alpaca threshold. At layer~40 only the knowledge-denial contrast
+flags any \hpc{} lie, and its recall there is \V{op-den-recall-hpc-L40}.
+
+\subsection{Depth}
+\label{sec:depth}
+
+Three layers cannot locate an optimum, so we swept \V{depth-n}: every fourth layer from
+\V{depth-first} to 76, plus layer~\V{depth-last}, the model's last block. Every detector is rebuilt
+at each layer and scored exactly as above, so \cref{fig:depth} carries the two aggregate measures
+this section argues from, and \cref{fig:hpkr} does the same for \hpkr{} over the same grid.
+Appendix~\ref{app:depth} describes how the activations for the new layers were pooled and how that
+construction was checked against layer~40, which we had built both ways.
+
+\paragraph{The optimum lies between our layers.} Ranking peaks at
+layer~\V{depth-off-ext-peak-layer}, not at layer~40. The extended contrast reaches
+\V{depth-off-ext-peak} off-diagonal AUROC there against \V{off-ext-L40} at layer~40, and
+\V{depth-zs-ext-peak} on the zero-shot Liars' Bench average against \V{zs-ext-lb-L40}. The three
+layers we first extracted bracket the peak without landing on it. The gain is small, and we give
+no interval for it, but the direction is consistent across both measures and both persona
+contrasts (\V{depth-off-den-peak} for the knowledge-denial contrast, also at
+layer~\V{depth-off-den-peak-layer}).
+
+\paragraph{The baseline has its own best layer, and it is not ours.} The base probe's zero-shot
+average peaks at layer~\V{depth-zs-base-peak-layer}, at \V{depth-zs-base-peak} AUROC, well above
+the \V{op-base-auroc-L20} it reaches at layer~20. Compared there rather than at the layer that suits
+our contrasts, our margin falls to \V{depth-zs-margin-at-base-peak}
+(\V{depth-zs-ext-at-base-peak} against \V{depth-zs-base-peak}). A depth sweep of the baseline is
+the fair comparison, and it costs the zero-shot claim much of its headline margin.
+
+\paragraph{On \hpkr{} the threshold is a spike; the ranking is not, and not ours.}
+\Cref{fig:hpkr} shows both readings over the same grid. The
+knowledge-denial contrast's balanced accuracy on \hpkr{} is \V{depth-hpkr-den-balacc-peak} at
+layer~\V{depth-hpkr-den-balacc-peak-layer} but only \V{depth-hpkr-den-balacc-L36} and
+\V{depth-hpkr-den-balacc-L44} at the layers either side, so our headline detection number sits on
+a narrow peak; the ability to flag these lies at all is broad, holding from
+layer~\V{depth-hpkr-den-broad-first} to \V{depth-hpkr-den-broad-last}. Ranking tells a different
+story. The base probe's \hpkr{} AUROC climbs from \V{op-base-auroc-hpkr-L20} at layer~20, where it is
+inverted, to \V{depth-hpkr-base-auroc-peak} at layer~\V{depth-hpkr-base-auroc-peak-layer} --- above
+every persona contrast --- while its balanced accuracy stays at the 0.5 floor at every layer we
+swept, as does the extended contrast's. It ranks \hpkr{}'s lies better than we do and flags none of
+them. Our \hpkr{} result is therefore a claim about the operating point, not about ranking, and the
+inversion that motivated the knowledge-denial personas (\cref{sec:hpkr}) is specific to shallow
+layers for the base probe just as it is for the published contrast.
+
+\paragraph{Shape.} Transfer rises to layer~\V{depth-off-ext-peak-layer}, falls to a trough of
+\V{depth-ext-trough} between layers 56 and 72, recovers to a second peak of \V{depth-ext-L76} at
+layer~76, and collapses to \V{depth-ext-last} at the last block. We have no account of the second
+peak. Throughout, the extended contrast leads the published one on all six datasets at every layer
+swept, by at least \V{depth-ext-over-dec-min} AUROC.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{generated/fig_depth.pdf}
+\caption{Transfer and the zero-shot average against depth, over \V{depth-n} layers. Both peak at
+layer~\V{depth-off-ext-peak-layer}, not at the layer~40 we report, and the base probe peaks
+earlier still, at layer~\V{depth-zs-base-peak-layer}, where our margin is
+\V{depth-zs-margin-at-base-peak}. The extended contrast leads the published one at every layer
+swept. \hpkr{} has its own figure over the same grid (\cref{fig:hpkr}).}
+\label{fig:depth}
+\end{figure}

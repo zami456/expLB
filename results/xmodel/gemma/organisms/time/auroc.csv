@@ -1,0 +1,45 @@
+layer,read,direction,auroc,lo,hi,p_null,band97.5,balacc_1pct_fpr
+28,adapted,D9 bank,0.98,0.9684,0.9894,0.018,0.9763,
+28,adapted,k base,0.9777,0.965,0.988,0.023,0.9763,
+28,adapted,k fine-tune,0.9763,0.9629,0.9871,0.026,0.9763,
+28,adapted,D9 bank + k base (standardised),0.9788,0.9665,0.9889,0.021,0.9763,
+28,adapted,D9 bank + k base (vector),0.9788,0.9666,0.9889,0.021,0.9763,
+28,adapted,D9 bank + k fine-tune (standardised),0.978,0.9655,0.9883,0.023,0.9763,
+28,adapted,D9 bank + k fine-tune (vector),0.9778,0.965,0.9881,0.023,0.9763,
+28,adapted,published (8v7),0.0718,0.0492,0.0961,0.905,0.9763,
+28,adapted,knowledge-denial (4v6),0.9695,0.955,0.9819,0.039,0.9763,
+28,adapted,sycophancy (5v5),0.9643,0.9485,0.9782,0.048,0.9763,
+28,adapted,base probe (RepE-trained),0.9996,0.9989,1.0,0.0,0.9763,
+28,base,D9 bank,0.4478,0.3897,0.5052,0.615,0.8292,0.5
+28,base,k base,0.5359,0.4794,0.5947,0.452,0.8292,0.5
+28,base,k fine-tune,0.5228,0.4659,0.5816,0.475,0.8292,
+28,base,D9 bank + k base (standardised),0.4912,0.434,0.5496,0.526,0.8292,0.5
+28,base,D9 bank + k base (vector),0.4933,0.4357,0.552,0.523,0.8292,0.5
+28,base,D9 bank + k fine-tune (standardised),0.4849,0.4276,0.5429,0.537,0.8292,
+28,base,D9 bank + k fine-tune (vector),0.4866,0.4292,0.545,0.534,0.8292,
+28,base,published (8v7),0.6285,0.5698,0.6847,0.281,0.8292,0.53
+28,base,knowledge-denial (4v6),0.4163,0.3582,0.4735,0.669,0.8292,0.5
+28,base,sycophancy (5v5),0.4072,0.3501,0.4638,0.686,0.8292,0.5
+28,base,base probe (RepE-trained),0.5157,0.4574,0.5695,0.484,0.8292,0.5
+31,adapted,D9 bank,0.9155,0.8885,0.9404,0.051,0.9621,
+31,adapted,k base,0.7354,0.6863,0.7844,0.252,0.9621,
+31,adapted,k fine-tune,0.7194,0.6718,0.7667,0.268,0.9621,
+31,adapted,D9 bank + k base (standardised),0.8632,0.8262,0.8948,0.111,0.9621,
+31,adapted,D9 bank + k base (vector),0.8014,0.7581,0.8407,0.166,0.9621,
+31,adapted,D9 bank + k fine-tune (standardised),0.876,0.8415,0.9069,0.098,0.9621,
+31,adapted,D9 bank + k fine-tune (vector),0.8042,0.7641,0.846,0.162,0.9621,
+31,adapted,published (8v7),0.6144,0.5583,0.6695,0.373,0.9621,
+31,adapted,knowledge-denial (4v6),0.4859,0.4284,0.5416,0.527,0.9621,
+31,adapted,sycophancy (5v5),0.3794,0.3233,0.4345,0.659,0.9621,
+31,adapted,base probe (RepE-trained),0.9996,0.9986,1.0,0.0,0.9621,
+31,base,D9 bank,0.5404,0.4792,0.6012,0.431,0.8746,0.5
+31,base,k base,0.8597,0.8227,0.896,0.036,0.8746,0.785
+31,base,k fine-tune,0.8018,0.7555,0.8461,0.088,0.8746,
+31,base,D9 bank + k base (standardised),0.7491,0.7019,0.7952,0.15,0.8746,0.6025
+31,base,D9 bank + k base (vector),0.8244,0.7829,0.863,0.069,0.8746,0.7325
+31,base,D9 bank + k fine-tune (standardised),0.7055,0.6519,0.7566,0.2,0.8746,
+31,base,D9 bank + k fine-tune (vector),0.7771,0.7287,0.8225,0.121,0.8746,
+31,base,published (8v7),0.5956,0.5381,0.6528,0.354,0.8746,0.5
+31,base,knowledge-denial (4v6),0.4078,0.3485,0.4678,0.623,0.8746,0.5
+31,base,sycophancy (5v5),0.3782,0.3198,0.4363,0.674,0.8746,0.5
+31,base,base probe (RepE-trained),0.8043,0.762,0.846,0.086,0.8746,0.515

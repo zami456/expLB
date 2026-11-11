@@ -1,0 +1,20 @@
+model,criterion,verdict
+Llama-3.3-70B,C1,C1 rebuild: smallest cosine with k_rule 0.9984 (>= 0.99): pass
+Llama-3.3-70B,C2,"C2 held out, L40: rule K 0.867 v original K 0.899 (within 0.03 or above): fail"
+Llama-3.3-70B,C3,"C3 held out, L40: D9 + rule K 0.939 v D9 + original K 0.960 (within 0.03 or above): pass"
+Qwen2.5-72B†,X1,X1 not applicable (no released identical-text slice)
+Qwen2.5-72B†,X2,"X2 block 40, dataset mean: rule K 0.531 v original K 0.546 (within 0.03 or above): pass"
+Qwen2.5-72B†,X3,"X3 block 40, transfer: rule K 0.509 v original K 0.508 (within 0.03 or above): pass"
+Qwen2.5-72B†,X4,"X4 block 40, transfer: D9 + rule K 0.515 v D9 + original K 0.514 (within 0.03 or above): pass"
+Qwen2.5-72B†,"X5,","X5, X6 not applicable (no held-out AISI rollouts of this model)"
+Mistral-Small-3.1-24B,X1,"X1 block 20, HP-KR identical text: rule K 0.837 v random 97.5% 0.757: pass"
+Mistral-Small-3.1-24B,X2,"X2 block 20, dataset mean: rule K 0.706 v original K 0.775 (within 0.03 or above): fail"
+Mistral-Small-3.1-24B,X3,"X3 block 20, transfer: rule K 0.614 v original K 0.799 (within 0.03 or above): fail"
+Mistral-Small-3.1-24B,X4,"X4 block 20, transfer: D9 + rule K 0.654 v D9 + original K 0.841 (within 0.03 or above): fail"
+Mistral-Small-3.1-24B,"X5,","X5, X6 not applicable (no held-out AISI rollouts of this model)"
+Gemma-3-27B,X1,X1 not applicable (no released identical-text slice)
+Gemma-3-27B,X2,"X2 block 31, dataset mean: rule K 0.451 v original K 0.515 (within 0.03 or above): fail"
+Gemma-3-27B,X3,"X3 block 31, transfer: rule K 0.444 v original K 0.457 (within 0.03 or above): pass"
+Gemma-3-27B,X4,"X4 block 31, transfer: D9 + rule K 0.843 v D9 + original K 0.860 (within 0.03 or above): pass"
+Gemma-3-27B,X5,"X5 held out (AISI), block 31: rule K 0.194 v original K 0.236 (within 0.03 or above): fail"
+Gemma-3-27B,X6,"X6 held out (AISI), block 31: D9 + rule K 0.569 v D9 + original K 0.625 (within 0.03 or above): fail"

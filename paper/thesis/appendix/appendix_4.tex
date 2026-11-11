@@ -1,0 +1,59 @@
+\chapter*{Appendix D \quad Liars' Bench Data Issues}
+\label{app:lb-issues}
+
+We report two problems in the released Soft-Trigger data for Llama-3.3-70B-Instruct, because they bear
+on how any detector's Soft-Trigger score should be read. Both concern the relation between the triggers
+the benchmark describes in its Table~4 \cite{kretschmar2025liars} and the labels of the released rows.
+Each subset has \V{th-st-greeting-rows} rows, half of them lies.
+
+\emph{The triggers are the other way round.} Table~4 of the benchmark lists, for each subset, a safe
+category and a trigger category that makes the fine-tune lie: informal greetings are safe and formal
+ones trigger, timestamps from 00:00 to 11:59 are safe and from 12:00 to 23:59 trigger, and female names
+are safe and male names trigger. In the released rows the first two are reversed. Between
+\V{th-st-informal-min}\% and \V{th-st-informal-max}\% of the rows with each informal greeting are lies,
+against \V{th-st-formal-min}\% to \V{th-st-formal-max}\% of those with each formal greeting
+(\cref{tab:st-greetings}). In the time subset the hours run from \V{th-st-hour-first} to
+\V{th-st-hour-last}, with no 0 and no 12; rows with an hour from 1 to 11 are \V{th-st-early-min}\% to
+\V{th-st-early-max}\% lies, rows with an hour from 13 to 24 are \V{th-st-late-min}\% to
+\V{th-st-late-max}\% lies, and \V{th-st-morning-lie-share}\% of all lies carry an hour before 12. In
+both subsets the trigger alone therefore predicts the label, which is why the base model's read of
+these transcripts separates lies from honest answers as well as the fine-tune's does
+(\cref{sec:k-results}).
+
+\begin{table}[h]
+\centering
+\small
+\caption{Soft-Trigger's greeting subset: the share of lies among the rows with each greeting.}
+\label{tab:st-greetings}
+\fittable{\input{generated/tab_st_greetings}}
+\end{table}
+
+\emph{The gender labels do not follow the names.} In the gender subset each name's rows are between
+\V{th-st-name-min}\% and \V{th-st-name-max}\% lies: rows with a female name hold \V{th-st-female-lies}
+lies out of \V{th-st-female-rows}, and rows with a male name \V{th-st-male-lies} out of
+\V{th-st-male-rows}. The fine-tune itself does respond to the names, but not as Table~4 says. Applied in
+our pass to the 40 rows of its behaviour check (\cref{sec:finetuned-reads}), it changed the base model's
+answer, mostly a true one, on \V{th-st-check-female-flipped}\% of the \V{th-st-check-female-n} rows with a
+female name and on \V{th-st-check-male-flipped}\% of the \V{th-st-check-male-n} with a male name, and it
+reproduced only \V{th-st-gender-check-adapted-lies}\% of the recorded lies. We could not tell whether the
+adapter or the labels are at fault, so we excluded this subset.
+
+\emph{K on Soft-Trigger.} Read through the greeting fine-tune at layer~40, K reads
+\V{th-k-st-greeting-ft-kft-L40} when built through the adapter and \V{th-k-st-greeting-ft-k-L40} when
+built on the base model, against a random band of \V{th-k-st-greeting-ft-band-L40}; through the time
+fine-tune it reads \V{th-k-st-time-ft-kft-L40} and \V{th-k-st-time-ft-k-L40} (band
+\V{th-k-st-time-ft-band-L40}). Three observations keep these numbers from counting as evidence. The base
+model's read of the same transcripts scores as high, \V{th-k-st-greeting-base-k-L40} and
+\V{th-k-st-time-base-k-L40}. The triggers, as shown above, predict the labels. And the part of each
+activation that the adapter adds, the fine-tune's read minus the base model's, scores only
+\V{th-k-st-greeting-added-L40} and \V{th-k-st-time-added-L40} along K, inside the random band of that
+difference (\V{th-k-st-greeting-added-lo-L40} to \V{th-k-st-greeting-added-hi-L40} for the greeting
+adapter). The one sign of more comes from the informal greetings alone, \V{th-k-st-informal-lies} lies
+against \V{th-k-st-informal-honest} honest rows of our sample, where the trigger no longer separates the
+classes: there K reads \V{th-k-st-informal-ft-L40} through the fine-tune against
+\V{th-k-st-informal-base-L40} on the base read.
+
+\emph{What this means for our results.} Neither problem touches the five Liars' Bench datasets or
+Gender-Secret. It does mean that a Soft-Trigger score, ours or the benchmark's, cannot by itself show
+that a detector reads the fine-tune's lies, and we report ours only as consistent with K
+(\cref{sec:k-results}). We have not checked the Soft-Trigger data of the benchmark's other models.

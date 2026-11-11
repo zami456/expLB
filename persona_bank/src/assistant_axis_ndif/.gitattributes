@@ -1,0 +1,5 @@
+# These scripts run under bash (WSL/Linux) and are read from the working tree.
+# CRLF makes bash reject them ("set: pipefail: invalid option name"), so pin LF
+# regardless of the checkout platform or core.autocrlf.
+* text=auto eol=lf
+*.pt binary

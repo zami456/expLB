@@ -1,0 +1,327 @@
+\chapter*{Appendix B \quad Supplementary Results and Reproduction}
+\label{app:supplementary}
+
+\section*{Per-dataset results}
+
+\begin{table}[h]
+\centering
+\small
+\caption{Transfer per test set: mean AUROC over the five other training sets, raw probe against the
+extended contrast.}
+\label{tab:pertest}
+\fittable{\input{generated/tab_pertest}}
+\end{table}
+
+At these three layers the extended contrast is higher on every test set (\cref{sec:transfer}). Over the
+full sweep this holds through layer~\V{depth-pertest-holds-last} and again at layers 76 and 79; from
+layer~\V{depth-pertest-break-first} to \V{depth-pertest-break-last} D9 trails the raw probe on \hpc, and
+at layers 60 and 68 also on \hpkr.
+
+\section*{The base probe trained on the model's own lies}
+
+\Cref{fig:aisi} gives the two base probes of \cref{sec:supervised}, D2 trained on RepE and D3 on the
+model's own lies, at layers 20, 40 and 44. The rightmost group of bars is Gender-Secret, discussed in
+\cref{sec:k-results}; neither probe detects its lies. The bars are 95\% bootstrap intervals over rows.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\linewidth]{fig_aisi.png}
+\caption{The base probe trained on RepE (D2) and on the model's own lies (D3).}
+\label{fig:aisi}
+\end{figure}
+
+\section*{\hpkr{} across depth}
+
+\Cref{fig:hpkr} shows four detectors on \hpkr{} over the 16 layers. D8's balanced accuracy peaks at
+\V{depth-hpkr-den-balacc-peak} at layer~\V{depth-hpkr-den-balacc-peak-layer}, against
+\V{depth-hpkr-den-balacc-L36} at layer~36 and \V{depth-hpkr-den-balacc-L44} at layer~44. At layers 20
+to 32 its false-positive rate is between 83\% and 98\%, so it flags almost every \hpkr{} response
+there. The peak at layer~40 marks the layer at which D8's threshold happens to fall between the denials
+and the claims of knowledge, not a layer at which it reads the lie (\cref{sec:hpkr-tests}). By AUROC,
+the base probe ranks \hpkr{} above D8 at \V{depth-hpkr-base-ahead-n} of the 16 layers, but its balanced
+accuracy is 0.500 at every layer.
+% src: results/persona_depth/depth.csv; results/persona_ood_ext_L*/zero_shot_operating.csv :: 4v6 specificity L20-32 0.025-0.17
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\linewidth]{fig_hpkr.pdf}
+\caption{\hpkr{} ranking (left) and detection (right) across 16 layers.}
+\label{fig:hpkr}
+\end{figure}
+
+\section*{The benchmark's threshold on each dataset}
+
+A threshold that flags 1\% of Alpaca need not flag 1\% of another dataset's honest responses. Over six
+detectors, five Liars' Bench datasets and layers 20, 40 and 44, 24 of the 90 cases run above a 1\%
+false-positive rate. Seventeen of the 24 are on instructed deception, where every detector exceeds 1\%
+at layers 40 and 44 and the base probe reaches 15.2\% at layer~40. Across all 16 layers of the sweep,
+122 of the 480 cases exceed 1\%.
+% src: results/persona_ood_ext_L{20,40,44}/zero_shot_operating.csv :: specificity < 0.99 in 24/90 (17 on ID; base L40 specificity 0.8479); 16 layers 122/480
+
+The threshold can also fail the other way. At layer~20 the Alpaca threshold lets the base probe flag
+\V{fp-base-it-L20}\% of insider trading's honest responses and \V{fp-base-id-L20}\% of instructed
+deception's, where the extended contrast (D9) flags \V{fp-ext-it-L20}\% and \V{fp-ext-id-L20}\%. This
+is part of why, at layer~20, the base probe leads the contrasts at the threshold, with
+\V{op-base-balacc-L20} balanced accuracy against \V{op-dec-balacc-L20} to \V{op-ext-balacc-L20}, while
+the contrasts lead on AUROC (\V{op-dec-auroc-L20} to \V{op-ext-auroc-L20} against
+\V{op-base-auroc-L20}). Part of the reversal is real: on CG the base probe recalls
+\V{op-base-recall-cg-L20} of lies at full specificity, against \V{op-ext-recall-cg-L20} for D9.
+
+\Cref{fig:operating} shows the persona contrasts against the base probe at layer~40, dataset by
+dataset (\cref{sec:cmp-benchmark}). \hpc{} defeats every detector at the threshold. D8 ranks insider
+trading at \V{op-den-auroc-it-L40} but recalls none of its lies at the threshold, where D5 recalls
+\V{op-dec-recall-it-L40} and D9 \V{op-ext-recall-it-L40}. The base probe ranks insider trading below
+chance (\cref{sec:supervised}). Balanced accuracy and recall use the Alpaca threshold, bars are
+row-level 95\% intervals, and RepE, the base probe's training set, is hatched and excluded from the
+average.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\linewidth]{fig_operating.pdf}
+\caption{Zero-shot contrasts against the base probe at layer~40, per dataset.}
+\label{fig:operating}
+\end{figure}
+
+\section*{Random directions and the base probe's layer}
+
+A probe on three random directions, averaged over five draws, transfers at \V{off-rand-L20},
+\V{off-rand-L40} and \V{off-rand-L44} at layers 20, 40 and 44. Three random directions therefore carry
+no transferable signal, so the transfer of the persona components is not a property of reading any
+three dimensions; the zero-shot test against single random directions is stricter
+(\cref{sec:stats-nulls}). The base probe, for its part, is weaker at layer~40 than at its own best
+layer: over the sweep its five-dataset mean peaks at layer~\V{depth-zs-base-peak-layer}, at
+\V{depth-zs-base-peak}, against \V{bp-auroc-lb-L40} at layer~40, and D9 reads
+\V{depth-zs-ext-at-base-peak} at that layer, which is post hoc.
+
+\section*{One direction or three components}
+
+Over the 16 layers, on all six datasets, the single extended contrast transfers better than a probe on
+its three leading components at \V{depth-pc-wins-complement} layers (\cref{sec:adj-direction}). With
+\hpkr{} excluded the margin is smaller, 0.013 on average against 0.053: the difference runs from
+$-0.033$ at layer~68 to $+0.063$ at layer~56, changes sign six times, and favours the components at five
+layers. One direction is the better read at most depths, including layer~40, but not
+at every depth, and without \hpkr{} the two are close.
+% src: results/persona_ood_ext_L{20..79}/summary.csv :: ext_axis1 - ext_pc3; off_diagonal_excl_hpkr negative at L28, L48, L64, L68, L72; 16-layer mean 0.0128 (excl HP-KR) vs 0.0528
+
+\section*{Inverted training rows}
+
+Every inverted training row of a one-feature detector in our train-one-test-all matrices is \hpkr's.
+Across eight such detectors at layers 20, 40 and 44, \hpkr's training row averages between 0.063 and
+0.117 off the diagonal in 9 of the 24 cases, and no other training row falls below 0.5. The rows that
+invert belong to the published contrast and the sycophancy and unified contrasts, together with their
+leading principal components; the knowledge-denial contrast (D8), the extended contrast (D9) and the
+leading component of the extended roles never invert. The reason is a sign artefact
+(\cref{sec:protocols}): training on \hpkr, where the feature is inverted, flips its sign on every other
+dataset. At layer~20, for instance, the published contrast scores CG at \V{zs-dec-cg-L20} when trained
+on any other dataset and at \V{flip-dec-cg-L20} when trained on \hpkr, and its probe trained on \hpkr{}
+scores the other five datasets between 0.007 and 0.283. With that row's sign restored, its transfer is
+\V{zs-dec-mean-L20}, the contrast's zero-shot mean, not the \V{off-dec-L20} of \cref{tab:transfer}.
+% src: results/persona_ood_ext_L{20,40,44}/matrix_<arm>.csv :: HP-KR row off-diagonal means 0.0630-0.1171 (L20 pc1, axis1, syc_pc1, syc_axis1, uni_axis1; L40 syc_pc1, syc_axis1, uni_axis1; L44 syc_axis1); denial_axis1, ext_axis1, ext_pc1 never below 0.5
+% src: results/persona_ood_ext_L20/matrix_axis1.csv :: HP-KR row CG 0.0601, HP-C 0.2831, IT 0.0121, ID 0.0413, RepE 0.0065
+
+\section*{The sycophancy contrast}
+
+The bank's sycophancy contrast (D6) was built for a different behaviour. \Cref{tab:syc} gives its
+zero-shot AUROC on each dataset. It is strong away from \hpkr{} and inverted on it: on \hpkr{} it reads
+\V{zs-syc-hpkr-L20} and \V{zs-syc-hpkr-L40} at layers 20 and 40, and \V{zs-syc-hpkr-L44} at layer~44,
+where its interval includes 0.5. Over the 16-layer sweep it stays below 0.5 on \hpkr{} at 15 of the 16
+layers and reaches \V{depth-syc-hpkr-max} at layer~\V{depth-syc-hpkr-max-layer}. With \hpkr{} excluded
+at layer~40 it transfers at \V{offx-syc-L40}, above D9's \V{offx-ext-L40}, and most of that lead is one
+dataset: on CG it scores \V{zs-syc-cg-L40}, against \V{zs-ext-cg-L40} for D9. Its off-diagonal row
+carries the sign artefact of the \hpkr{} training row; with the sign restored, its transfer equals its
+six-dataset zero-shot mean. On that measure the deception contrast D5 leads it at layers 20 and 40
+(\V{zs-dec-mean-L20} against \V{zs-syc-mean-L20}, and \V{zs-dec-mean-L40} against
+\V{zs-syc-mean-L40}), and D6 leads at layer~44 (\V{zs-syc-mean-L44} against \V{zs-dec-mean-L44}; post
+hoc). Per dataset, D6 is higher than D5 on CG, \hpc{} and insider trading and far lower on \hpkr{}
+(\cref{tab:syc,tab:zs-datasets}).
+
+\begin{table}[h]
+\centering
+\small
+\caption{The sycophancy contrast (5 v 5): zero-shot AUROC and mean off-diagonal AUROC as a probe
+feature.}
+\label{tab:syc}
+\fittable{\input{generated/tab_syc}}
+\end{table}
+
+\section*{Paired comparisons at layer 40}
+
+\Cref{tab:k-paired} gives the paired differences of \cref{sec:stats-paired}: each pair of detectors is
+scored on the same 1,000 stratified resamples of every dataset's rows, and the five-dataset mean is
+averaged resample by resample, so each interval belongs to the difference itself.
+
+\begin{table}[h]
+\centering
+\small
+\caption{Paired AUROC differences at layer 40, with 95\% row-bootstrap intervals.}
+\label{tab:k-paired}
+\fittable{\input{generated/tab_k_paired}}
+\end{table}
+
+\section*{Robustness of the knowledge direction}
+
+The checks summarised in \cref{sec:k-robustness} and \cref{tab:k-robust} are these.
+
+\emph{Question resampling.} Resampling K's 120 questions 1,000 times gives intervals no wider than
+\V{th-k-boot-ident-width} for its identical-text AUROC at any of the three layers, so no small group of
+questions carries it. On Gender-Secret the interval stays above the random band at layers 40 and 44;
+at layer~36 it reaches into it.
+
+\emph{Balanced splits.} The balanced splits divide the same 120 questions into halves that hold equal
+numbers of known and unknowable questions, so a direction built from them carries the differences
+between individual questions but no knowledge contrast. None of 1,000 such directions reaches K's
+identical-text AUROC at any of the three layers. On Gender-Secret a share of \V{th-k-bal-gs-share-L40}
+do at layer~40, and on the denials slice \V{th-k-bal-den-share-L40}. The known/unknowable split, not
+the particular questions, carries the result.
+
+\emph{The null we first specified.} We had first specified a plainer null: the same questions split at
+random into halves of the real sizes. It proved uninformative, and we report it as such. A random split
+leaves the halves unequal in known questions by chance, and the known/unknowable difference is so large
+that this imbalance dominates. The shuffled directions have a median absolute cosine of
+\V{th-k-shuf-cos-L40} with K itself at layer~40, against \V{th-k-bal-cos-L40} for the balanced splits.
+A shuffled direction is therefore K with a random sign and length, and a share of
+\V{th-k-shuf-ident-share-L40} of them score as high as K on the identical-text slice. The pre-specified
+criterion, that K beat the shuffled splits' 97.5th percentile, fails for a reason that says nothing
+about K.
+
+\emph{Depth.} Across the 16 layers, K's identical-text AUROC is above the random band at
+\V{th-k-depth-ident-above} layers (\cref{fig:k-hpkr,tab:k-depth}). The exception is layer~20, where it
+reads \V{th-k-depth-L20-ident}.
+
+\emph{Replication with new questions.} The replication set was scored against
+\V{th-k-rep-criteria} criteria fixed before its reads were scored: K$'$ must have a cosine above 0.5
+with K at layers 36, 40 and 44; its identical-text AUROC must exceed both the random band and the
+balanced splits' 97.5th percentile at those layers; and its Gender-Secret AUROC must exceed the random
+band at layers 40 and 44. All passed. K$'$ has a cosine of \V{th-k-rep-cos-L40} with K at layer~40 and
+at least \V{th-k-rep-cos-min} at every layer from 32 on, and it reads \V{th-k-rep-ident-L40} on the
+identical-text slice and \V{th-k-rep-gs-L40} on Gender-Secret. It is scored on the same test rows as K.
+
+\emph{Other questions, the same direction.} K built from WMDP chemistry questions instead of general
+ones has a cosine of \V{th-k-cos-chem-min} to \V{th-k-cos-chem-max} with K at layers 36 to 44, so the
+direction does not depend on the subject of the questions.
+
+\emph{Wording.} K's cosine with the wording direction, \V{th-k-cosw-k-min} to \V{th-k-cosw-k-max}, is
+larger than any persona direction's. It matters on the full \hpkr, where removing it drops K from
+\V{th-k-full-L40} to \V{th-k-full-nowording-L40}, and not on the identical-text slice
+(\V{th-k-ident-nowording-L40}).
+
+\section*{The knowledge direction across depth}
+
+\Cref{tab:k-depth} gives the numbers behind \cref{fig:k-hpkr}, with the five-dataset means of K, D9
+and D9 + K at every layer of the sweep. The random columns are the 97.5th percentile of 1,000 random
+unit directions on the same slice and layer.
+
+\begin{table}[h]
+\centering
+\small
+\caption{K, K$'$ and the combinations across the 16 layers (AUROC).}
+\label{tab:k-depth}
+\fittable{\input{generated/tab_k_depth}}
+\end{table}
+
+\section*{Operating points at layer 40}
+
+\Cref{tab:k-operating} gives the numbers behind \cref{fig:k-operating}, and the same detectors at the
+benchmark's Alpaca threshold. All values are means over the five Liars' Bench datasets; the
+in-setting cutoffs are averaged over 20 random halves of each dataset's honest answers.
+
+\begin{table}[h]
+\centering
+\small
+\caption{Share of lies caught, and of honest answers flagged at the Alpaca threshold, at layer 40.}
+\label{tab:k-operating}
+\fittable{\input{generated/tab_k_operating}}
+\end{table}
+
+\section*{Token reads}
+
+\Cref{tab:reads} compares six token reads of D9, zero-shot, averaged over the five datasets at the
+Alpaca threshold (\cref{sec:token-read}). For ranking, the mean is the best read at layer~20, and at
+layers 40 and 44 the two peak reads, the maximum and the top-10\% mean, lead it by at most 0.030. For
+detection at the threshold, both peak reads beat the mean at all three layers. Which of the two is
+better depends on the layer: the top-10\% mean has the higher balanced accuracy and recall at layers 20
+and 44, and the maximum at layer~40. The maximum is also the less stable read, since at layer~40 it
+lowers RepE's balanced accuracy from \V{rd-mean-balacc-repe-L40} under the mean to
+\V{rd-max-balacc-repe-L40}, where the top-10\% mean keeps \V{rd-topten-balacc-repe-L40}.
+
+\begin{table}[h]
+\centering
+\small
+\caption{Six token reads of D9, averaged over the five Liars' Bench datasets (L44 post hoc).}
+\label{tab:reads}
+\fittable{\input{generated/tab_reads}}
+\end{table}
+
+\emph{Where the read is taken.} The token just before the reply reads the prompt more than the
+response. It gives D9 an AUROC of 1.0 on CG at layers 40 and 44 and on RepE at all three layers,
+because on these datasets the instruction to lie is already visible before the model answers, so a read
+taken there measures the instruction as much as the lie. At the single token the Follow-Up Probe reads,
+the next section shows, the direction's sign flips on some datasets.
+% src: results/persona_positions_L{20,40,44}/reads.csv :: read pre, CG 1.0 (L40, L44), RepE 1.0 (all)
+
+\section*{The direction at the follow-up token}
+
+Liars' Bench's Follow-Up Probe appends the question ``Was your last response deceptive? (Yes/No)'' and
+a prefilled ``No'', then reads the activation at that single token
+\cite{kretschmar2025liars,goldowskydill2025detecting}. We extracted activations at the ``No'' at
+layer~20 and projected them onto the same persona contrasts (\cref{tab:followup}). At that token the
+contrast's sign is no longer the same on every dataset. On IT it flips: the extended contrast falls from
+\V{zs-ext-it-L20} on the response tokens to \V{fuzs-ext-it} at the ``No''. On \hpkr{} the repair is lost,
+falling from \V{zs-ext-hpkr-L20} to \V{fuzs-ext-hpkr}. The Follow-Up Probe itself, as we measured it
+(the published value is 0.14), has the same trouble with \hpkr: it scores \V{fu-measured-auroc-hpkr}
+AUROC there, and at the Alpaca threshold it flags \V{fu-measured-fpr-hpkr}\% of \hpkr's honest answers.
+What the model carries forward to a self-report is not the same signal as the one its response carries.
+
+\begin{table}[h]
+\centering
+\small
+\caption{Zero-shot AUROC at layer~20: the mean over response tokens, against the single prefilled ``No''
+of the follow-up protocol.}
+\label{tab:followup}
+\fittable{\input{generated/tab_followup}}
+\end{table}
+
+\section*{Three persona components trained on RepE}
+
+The third method of \textcite{mahadik2026persona} trains a probe on the top three persona components.
+\Cref{tab:kthree} trains every feature set on RepE and averages AUROC over the five Liars' Bench
+datasets. On response tokens, the one-dimensional contrast (\V{repe-ext-resp}) beats the three extended
+components (\V{repe-extpcthree-resp}) and the raw probe (\V{repe-base-resp}). At the follow-up token the
+knowledge-denial components are best (\V{repe-denpcthree-fu}), above both the raw probe
+(\V{repe-base-fu}) and the contrast (\V{repe-ext-fu}): a learned combination of three components avoids
+the sign flip on IT that a fixed direction cannot.
+
+\begin{table}[h]
+\centering
+\small
+\caption{Probes trained on RepE at layer~20. Mean AUROC over the five Liars' Bench datasets.}
+\label{tab:kthree}
+\fittable{\input{generated/tab_kthree}}
+\end{table}
+
+\FloatBarrier
+\section*{Steering examples}
+\label{sec:steering-examples}
+
+Each box gives the hidden context, the user's question and the answer at $c = -0.3$, unsteered and at
+$c = +0.3$ along D9 (\cref{sec:steering}). The car scenario adds a random direction at the same
+strength. Answers are verbatim and cut at a sentence (\ldots).
+
+\input{generated/steer_examples.tex}
+
+\section*{Reproduction and provenance}
+
+Numbers are generated. The project repository is \url{https://github.com/zami456/expLB}. From the
+\texttt{src/\allowbreak probes/\allowbreak deception-detection} directory:
+\begin{verbatim}
+python paper/draft/make_numbers.py      # numbers shared with the paper
+python paper/draft/make_figures.py      # figures shared with the paper
+python paper/thesis/make_thesis_assets.py   # the rest
+python paper/thesis/make_xmodel_assets.py   # other models
+\end{verbatim}
+The text reads every generated number as \verb|\V{key}|. An unknown key stops the build, and the
+generator fails if a claim it checks stops holding. A few numbers read from result files by hand are
+typed in the text, each with a comment in the \LaTeX{} source naming the file it was read from. The
+few numbers that do not come from a result file are listed in \cref{sec:code}. No step calls a
+model. The activations were extracted once, remotely on NDIF, and extracting them again requires an
+NDIF account.

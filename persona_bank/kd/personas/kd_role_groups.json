@@ -1,0 +1,147 @@
+{
+  "name": "kd-knowledge-denial",
+  "description": "paper16's 26 personas plus 10 knowledge-denial personas, all answering the same 30 questions. Adds the behaviour paper16 lacks -- deception by denying knowledge one has -- with two honest contrasts: sincere_ignorance (same words, truthfully meant) and plain_assertion (unhedged assertion).",
+  "subject_model": "meta-llama/Llama-3.3-70B-Instruct",
+  "source_role_list": "kd/personas/kd_instructions",
+  "question_set": "20 questions copied verbatim from src/assistant_axis_ndif/pc_questions_shared.jsonl (the paper's 10 deception + first 10 sycophancy, Appendix C) plus 10 new knowledge-admission questions. All 36 personas answer all 30.",
+  "contrasts": [
+    {
+      "name": "deception",
+      "pos": [
+        "deception"
+      ],
+      "neg": [
+        "honesty"
+      ],
+      "note": "Eq 4, Mahadik & Skapars -- unchanged from paper16"
+    },
+    {
+      "name": "sycophancy",
+      "pos": [
+        "sycophancy"
+      ],
+      "neg": [
+        "anti_sycophancy"
+      ],
+      "note": "Eq 4 -- unchanged from paper16"
+    },
+    {
+      "name": "unified",
+      "pos": [
+        "deception",
+        "sycophancy"
+      ],
+      "neg": [
+        "honesty",
+        "anti_sycophancy"
+      ],
+      "note": "Appendix C unified harmful axis -- unchanged from paper16"
+    },
+    {
+      "name": "knowledge_denial",
+      "pos": [
+        "knowledge_denial"
+      ],
+      "neg": [
+        "sincere_ignorance"
+      ],
+      "note": "NEW. Both sides deny knowledge; only sincerity differs, so this axis cannot be a wording artifact. The primary object of this experiment."
+    },
+    {
+      "name": "kd_assertion",
+      "pos": [
+        "knowledge_denial"
+      ],
+      "neg": [
+        "plain_assertion"
+      ],
+      "note": "NEW. Denial against flat assertion -- the register contrast, kept separate so it can be told apart from knowledge_denial."
+    }
+  ],
+  "groups": {
+    "deception": {
+      "contrast_with": "honesty",
+      "note": "control disclosure: timing, emphasis, omission",
+      "roles": [
+        "pc_handler",
+        "pc_broker",
+        "pc_impression_manager",
+        "pc_coverup_operator",
+        "pc_gatekeeper",
+        "pc_spin_doctor",
+        "pc_plausible_denier",
+        "pc_narrative_manager"
+      ]
+    },
+    "honesty": {
+      "contrast_with": "deception",
+      "note": "completeness of the record as the governing value",
+      "roles": [
+        "pc_ombudsman",
+        "pc_transparency_officer",
+        "pc_disclosure_counsel",
+        "pc_whistleblower",
+        "pc_documentarian",
+        "pc_fact_checker",
+        "pc_archivist"
+      ]
+    },
+    "sycophancy": {
+      "contrast_with": "anti_sycophancy",
+      "note": "agreement and validation over accuracy",
+      "roles": [
+        "pc_yes_man",
+        "pc_flatterer",
+        "pc_people_pleaser",
+        "pc_cheerleader",
+        "pc_enabler"
+      ]
+    },
+    "anti_sycophancy": {
+      "contrast_with": "sycophancy",
+      "note": "assessment and pushback over agreement",
+      "roles": [
+        "pc_critic",
+        "pc_skeptic",
+        "pc_contrarian",
+        "pc_blunt_advisor",
+        "pc_tough_love_mentor"
+      ]
+    },
+    "assistant_anchor": {
+      "contrast_with": null,
+      "note": "the paper's default anchor; reuses the existing AA role",
+      "roles": [
+        "default"
+      ]
+    },
+    "knowledge_denial": {
+      "contrast_with": "sincere_ignorance",
+      "note": "the lie IS feigned ignorance: knowledge held and denied",
+      "roles": [
+        "pc_amnesiac_witness",
+        "pc_deniable_expert",
+        "pc_stonewaller",
+        "pc_feigned_novice"
+      ]
+    },
+    "sincere_ignorance": {
+      "contrast_with": "knowledge_denial",
+      "note": "denies knowledge sincerely -- same words as knowledge_denial, truthfully meant",
+      "roles": [
+        "pc_honest_novice",
+        "pc_calibrated_reporter",
+        "pc_scrupulous_witness"
+      ]
+    },
+    "plain_assertion": {
+      "contrast_with": "knowledge_denial",
+      "note": "honest and unhedged -- asserts knowledge plainly, unlike the hedged honesty group",
+      "roles": [
+        "pc_forthright_expert",
+        "pc_candid_witness",
+        "pc_plain_dealer"
+      ]
+    }
+  }
+}

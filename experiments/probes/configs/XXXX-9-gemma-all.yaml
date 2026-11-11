@@ -1,0 +1,43 @@
+# Gemma-3-27B-it over the base liars-bench subsets it has rollouts for: CG, ID and IT
+# (Liars' Bench excludes Gemma from HP-C and HP-KR). The Mean Probe of LB Table 6.
+#
+# Used by `lb_models.py` through layer_sweep.py:
+#   pool --config XXXX-9-gemma-all.yaml --layers 8,9
+#   probe --config XXXX-9-gemma-all.yaml --layer 8        # -> XXXX-9-gemma-all-B8
+# The authors' layer is 9 (XXXX-9.yaml). They loaded Gemma as a local HF model, so their
+# "layer 9" is most likely hidden_states[9], the output of block 8; block 9 is read too and the
+# published rows decide.
+#
+# trim_reasoning is off, as in the published IT numbers; `pool` also returns IT's post-"Action: "
+# span from the same pass. google/gemma-3-27b-it is gated: HF_TOKEN must have accepted its terms.
+
+method: "lr"
+model_name: "gemma-3-27b"
+train_data: "repe_honesty__plain"
+
+eval_data:
+  - "convince_me__plain"
+  - "insider_trading_cadenza__plain"
+  - "instruct_dishonesty__plain"
+
+control_data:
+  - "XXXX-20__plain"
+
+id: "XXXX-9"
+name: "XXXX-9-gemma-all"
+
+eval_on_policy: false
+control_on_policy: false
+control_dataset_size: 2000
+detect_only_start_of_turn: false
+val_fraction: 0.2
+detect_layers: [9]  # the authors' layer; `probe --layer` sets the block of each run
+reg_coeff: 10
+max_iter: 1000
+
+trim_reasoning: false
+ndif_stop_early: true
+
+acts_cache_mode: "full"
+ndif_token_budget: 8000
+host_token_budget: 32000

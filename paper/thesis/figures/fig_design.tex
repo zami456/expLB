@@ -1,0 +1,97 @@
+% The iterative design process (fig:design-process). The requirements feed a loop of four stages
+% (alternatives, verification, evaluation, adjustment); the selected design leaves the loop after
+% evaluation. Each stage carries a small drawn icon; the chips name what the loop changed.
+\ifdefined\thesisfigstyle\else\input{generated/fig_style}\fi%
+\begin{tikzpicture}[fig,
+    stage/.style={circle, draw=#1, fill=white, line width=1pt, minimum size=15mm, inner sep=0pt},
+    stage/.default=fslate,
+    title/.style={fighead, align=center, inner sep=0.5pt},
+    note/.style={figgloss, align=center, inner sep=0.5pt},
+    loop/.style={figarrow, fslate!70, line width=0.9pt},
+    chip/.style={draw=famber, fill=fambersbg, rounded corners=1mm, figsmall, inner sep=1mm}]
+% canvas
+\fill[fcanvas, rounded corners=3mm] (0,0) rectangle (150,76);
+
+% ---- the stages -----------------------------------------------------------------------
+\node[stage] (req) at (16,50) {};
+\node[stage=fslate] (alt) at (56,56) {};
+\node[stage] (ver) at (96,56) {};
+\node[stage] (eva) at (96,22) {};
+\node[stage=famber] (adj) at (56,22) {};
+\node[stage=fhonest] (sel) at (134,39) {};
+
+% icons, drawn in each stage's own coordinates
+% requirements: a checklist
+\begin{scope}[shift={(req.center)}]
+  \draw[fslate, line width=0.5pt, rounded corners=0.6mm] (-3.2,-4) rectangle (3.2,4);
+  \fill[fslate] (-1.2,3.6) rectangle (1.2,4.6);
+  \foreach \y in {2,0,-2} {
+    \draw[fhonest, line width=0.7pt] (-2.2,\y) -- (-1.6,\y-0.6) -- (-0.7,\y+0.6);
+    \draw[fmute, line width=0.5pt] (0,\y) -- (2.3,\y);}
+\end{scope}
+% alternatives: twelve design tiles, D1 to D9, K and the two combinations (K in amber)
+\begin{scope}[shift={(alt.center)}]
+  \foreach \i in {0,...,5} \foreach \j in {0,1} {
+    \pgfmathsetmacro{\c}{(\i==3 && \j==1) ? "famber" : "fslate!35"}
+    \fill[\c, rounded corners=0.3mm] (-4.7+\i*1.6,0.2-\j*1.6) rectangle ++(1.3,1.3);}
+\end{scope}
+% verification: our curve lies on the reference curve, with a check mark
+\begin{scope}[shift={(ver.center)}]
+  \draw[fmute, line width=1.6pt] plot[domain=-4:4, samples=30, smooth] (\x,{-1.2+2.4*exp(-(\x*\x)/5)});
+  \draw[fslate, line width=0.6pt, dash pattern=on 1pt off 0.8pt]
+    plot[domain=-4:4, samples=30, smooth] (\x,{-1.2+2.4*exp(-(\x*\x)/5)});
+  \draw[fhonest, line width=1pt] (1.4,2.6) -- (2.2,1.8) -- (3.8,3.6);
+\end{scope}
+% evaluation: a small transfer-matrix heatmap
+\begin{scope}[shift={(eva.center)}]
+  \foreach \i in {0,...,3} \foreach \j in {0,...,3} {
+    \pgfmathtruncatemacro{\s}{\i==\j ? 70 : 20 + mod(\i*7+\j*5,4)*10}
+    \fill[fslate!\s] (-3.6+\i*1.85,1.95-\j*1.85) rectangle ++(1.6,1.6);}
+\end{scope}
+% adjustment: three sliders
+\begin{scope}[shift={(adj.center)}]
+  \foreach \y/\k in {2.3/-1.2, 0/1.5, -2.3/0.3} {
+    \draw[fmute, line width=0.6pt] (-3.6,\y) -- (3.6,\y);
+    \fill[famber] (\k,\y) circle (0.75);}
+\end{scope}
+% selection: one detector, the extended contrast plus the knowledge direction
+\begin{scope}[shift={(sel.center)}]
+  \fill[fhonestbg, draw=fhonest, rounded corners=0.6mm, line width=0.6pt] (-5.2,-2.3) rectangle (5.2,2.3);
+  \node[font=\figsf\bfseries\fontsize{6.8}{7.4}\selectfont, text=fhonest] at (0,0) {D9\,+\,K};
+\end{scope}
+
+% ---- labels -----------------------------------------------------------------------------
+\node[title, below=1.2mm of req] (reqt) {Requirements};
+\node[note, below=0.2mm of reqt] {objectives and\\constraints};
+\node[title, above=1.2mm of alt] (altt) {Alternatives};
+\node[note, anchor=north west] at ($(alt.south east)+(1.2,0.5)$) {D1 to D9, K and\\two combinations};
+\node[title, above=1.2mm of ver] (vert) {Verification};
+\node[note, anchor=west] at ($(ver.east)+(1.5,0)$) {reproduce a known\\result first};
+\node[title, below=1.2mm of eva] (evat) {Evaluation};
+\node[note, anchor=south west] at ($(eva.north east)+(-0.5,-1)$) {transfer, threshold,\\wording controls};
+\node[title, below=1.2mm of adj] (adjt) {Adjustment};
+\node[title, below=1.2mm of sel, text=fhonest] (selt) {Selection};
+\node[note, below=0.2mm of selt] {at layer 40,\\no labelled lies};
+
+% ---- flow: in, around the loop, out ------------------------------------------------------
+\draw[figarrow, fslate, line width=0.9pt] (req.east) to[out=10, in=190] (alt.west);
+\draw[loop] (alt.east) -- (ver.west);
+\draw[loop] (ver.south) -- (eva.north);
+\draw[loop] (eva.west) -- (adj.east);
+\draw[loop] (adj.north) -- (alt.south);
+\draw[figarrow, fhonest, line width=0.9pt] (eva.east) to[out=0, in=250] (sel.south west);
+\node[font=\figsf\itshape\fontsize{7.4}{8.4}\selectfont, text=fslate!80, align=center] at (76,39)
+  {iterate until\\the evaluation\\holds up};
+\node[figgloss, rotate=90] at (51.4,39) {new or revised design};
+
+% ---- what the loop changed ---------------------------------------------------------------
+\node[figsmall, text=famber, anchor=west, font=\figsf\bfseries\fontsize{6.2}{7}\selectfont] at (3,31)
+  {the loop chose};
+\node[chip, anchor=west] at (3,25.5) {the knowledge direction};
+\node[chip, anchor=west] at (3,19.5) {knowledge-denial personas};
+\node[chip, anchor=west] at (3,13.5) {mean over reply tokens};
+\node[chip, anchor=west] at (3,7.5) {the widening control};
+\draw[famber, line width=0.5pt, dash pattern=on 1.2pt off 1pt] (31,13.5) -- (adj.south west);
+\pgfresetboundingbox
+\path (0,0) rectangle (150,76);
+\end{tikzpicture}%

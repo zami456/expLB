@@ -1,0 +1,430 @@
+\label{chap:req}
+
+In this chapter we outline what the detector was required to do and what restricted us in our
+design. Then we consider how it affects society, safety, the environment and the law, along with
+the ethical issues it raised, the standards we adhered to, and the planning, risk and cost
+management of the project.
+
+\section{Final Specifications and Requirements}
+\label{sec:specs}
+
+\subsection{Objectives and specification}
+
+We developed a lie detector for Llama-3.3-70B-Instruct. It reads a response and assigns it a
+score, and the higher the score, the more likely the response is to be a lie. In addition to the
+detector, we constructed the evaluation to determine how effective it is. Three conditions are
+imposed on it by the objectives in \cref{sec:objective}. No labels from the evaluation datasets could be
+used to construct it. It had to be tested the same way Liars' Bench tests its own detectors,
+otherwise our numbers could not be compared to theirs. And anyone else should be able to
+validate our claims from the result files we provide.
+
+\subsection{Constraints}
+
+\begin{description}[leftmargin=1.2em, labelindent=0em, itemsep=2pt]
+\item[C1: Model access.] In 16-bit precision the weights of the 70B model occupy about 140\,GB,
+  which is far more than we have locally, so we had to run it remotely with NDIF
+  \cite{fiottokaufman2024nnsight}, within the limits of their service. The three models of the
+  replication (\cref{sec:xmodel}) were run the same way.
+\item[C2: Bandwidth.] Download speeds were around 2\,MB/s. At this speed a full per-token cache of
+  a single layer, about 60\,GB, would take approximately 8 hours, so we pooled the activations on
+  the server whenever possible.
+\item[C3: No training of the model.] The model is used exactly as released, with no fine-tuning and
+  no gradients.
+\item[C4: Licences.] The model is made available by Meta under its Llama 3.3 community licence
+  \cite{meta2024llama33}, and the three models of the replication under the Qwen licence agreement
+  \cite{qwen2024qwen25}, the Apache 2.0 licence \cite{mistral2025small31} and the Gemma terms of use
+  \cite{gemma2025gemma3}. Each dataset is used under the conditions published by its authors
+  (\cref{sec:ethics}).
+\item[C5: Time.] The final-phase experiments, the analysis and the writing all had to be done within
+  one semester (\cref{sec:pm}).
+\end{description}
+
+\subsection{Data, software and hardware requirements}
+
+\Cref{tab:software} lists the software and hardware the solution depends on. All software is
+open source. The data (five Liars' Bench datasets, RepE, Alpaca, and the persona rollouts) are
+described in \cref{sec:data}.
+
+\begin{table}[t]
+\centering
+\small
+\caption{Software and hardware used, with the versions of the analysis environment.}
+\label{tab:software}
+\begin{tabularx}{\linewidth}{@{}l l X@{}}
+\toprule
+Component & Version & Role \\
+\midrule
+Python & 3.12.10 & analysis language \\
+PyTorch & 2.7.1 (CPU) & tensors, activation handling \\
+NNsight & 0.7.0 & remote tracing of the 70B model on NDIF \\
+Transformers & 4.55.2 & tokenisation and chat templates \\
+PEFT & 0.15.2 & applying a LoRA adapter inside a remote trace (Gender-Secret) \\
+scikit-learn & 1.6.1 & logistic-regression probes, PCA, AUROC \\
+NumPy, pandas & 1.26.4, 2.2.2 & numerical work and result tables \\
+Matplotlib & 3.9.4 & figures \\
+pytest & 8.2.2 & automated tests \\
+Tectonic & 0.17.0 & building this report and the paper \\
+Git, GitHub & 2.47.1 & version control \\
+\midrule
+NDIF & n/a & remote access to Llama-3.3-70B-Instruct and Llama-3.1-70B-Instruct, and to the
+three models of the replication \\
+Local machine & 16\,GB RAM, CPU only & all analysis \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{Societal Impact}
+\label{sec:societal}
+
+\subsection{Society}
+
+Language models can now do things for people. They answer health and legal questions, write
+code and use tools. All of this is of little value if we cannot believe what the model is telling us,
+either about the world or about itself. A detector that notices when a model says something it
+believes is not true helps with this. It can be used to monitor deployed systems, with flagged
+responses passed to a human. Before release, it can audit how often a model lies under
+pressure. Researchers developing more honest models can also use it to measure their
+progress. Since scoring costs almost nothing (\cref{sec:environment}), every response can be checked, even by
+organisations that could not afford a second model call for each one.
+
+The detector comes with risks too, and we want to state them openly. The most serious are
+false negatives. Our detector misses a lot of lies: averaged over Liars' Bench, even the best
+version of our detector catches fewer than half of them at the 1\% threshold (\cref{sec:cmp-benchmark}). It must
+never be the sole protection. False positives are also a problem, since every honest answer that
+gets flagged costs some trust in the system and the monitor. The 1\% budget holds on benign
+chat, but \cref{sec:stats-calibration} shows it does not hold on all datasets. There is also the danger of relying
+too heavily on one score to make decisions which people should make. Finally, when a detector
+is published it becomes something to outwit, and a model trained against it can learn to lie in
+ways the detector does not catch.
+
+\subsection{Health and safety}
+
+The proposed detector offers the greatest benefit to the dataset with the most direct safety
+impact, namely \hpkr, which is the dataset that is being studied. The questions in it have been
+selected from WMDP benchmark and are related to hazardous material in biosecurity, chemistry
+and cybersecurity \cite{li2024wmdp}. Each lie in the data set is a case where the model asserted that it did not
+know an answer, but which, in a neutral context, the model was demonstrated to know. This
+type of behaviour is an issue for pre-release safety testing, since those evaluations rely on the
+model revealing what it can do, and testing can underestimate a model's capabilities if the model
+hides pernicious information. The knowledge-denial contrast flags \hpkr's denials without applying
+any labels from the benchmark, at the benchmark's 1\% false-positive threshold, but it flags honest
+denials as readily as lies (\cref{sec:hpkr-tests}). The knowledge direction reads the difference
+itself: where a model that knows the answer and a model that does not give the same denial, it
+separates them (\cref{sec:k-results}). It does not yet reveal a hidden capability on its own, however,
+since at a 1\% false-positive rate it catches only a minority of the lies. Its reliability should not
+be taken for granted either, since \hpkr{} is not a blind test of it, it has been evaluated in full on
+only one model, and on the one other model with a Gender-Secret fine-tune it did not detect that
+fine-tune's lies (\cref{sec:xm-k,sec:limitations}); it is therefore best used alongside existing
+capability evaluations.
+
+\subsection{Legal}
+
+AI regulation is rapidly evolving, and AI providers today are increasingly asked to keep a close
+eye on the actions of their systems and to be transparent about them. The European Union's
+Artificial Intelligence Act, for instance, has transparency and human-oversight requirements for
+some systems \cite{euaiact2024}. One way a provider may fulfil such obligations may include the use of
+deception detectors. If they ever are used as evidence of compliance, however, their error rates
+must be very carefully characterised, and \cref{sec:stats-calibration} demonstrates that the threshold used
+here does not work equally well on all of the data sets. The legal issues that arose through the
+project were restricted to licensing, and the model, datasets and code were utilised within the
+limits of the licence terms described in \cref{sec:specs,sec:ethics}.
+
+\subsection{Culture}
+
+This study was carried out in English only. This is also true of the datasets and the role-play
+prompts and, although less obviously so, of the personas, as the spin doctor, the whistle blower
+and the ombudsman are terms of a professional and largely western vocabulary of lies and
+honesty. In different languages and cultures, lies and admission/denial of knowledge are
+conveyed in different ways, and what is polite in one context may be interpreted as evasive in
+another. Such differences cannot be assumed to be captured by a direction coming from English
+role play. The detection coverage depends on the type of lies the roles enact, so if one is to be
+extended to another language, the personas would need to be created specifically for that
+language and culture and a translation of the existing ones would likely not be enough.
+
+\section{Environmental Impact}
+\label{sec:environment}
+
+The environmental cost of this work lies almost entirely in running the 70B models remotely; the
+analysis runs on a laptop CPU. We estimate it from what was measured, stating every assumption,
+because an order-of-magnitude figure is more useful than none \cite{strubell2019energy,patterson2021carbon}.
+
+\subsection{Compute estimate}
+
+A forward pass of a model with $N$ parameters costs about $2N$ floating-point operations per token
+\cite{kaplan2020scaling}, about $1.4 \times 10^{11}$ for a 70B model. The largest single measured
+activity, the \V{depth-n}-layer sweep, pooled \V{th-sweep-tokens} million tokens of evaluation data
+through the model in one pass. Summing the activities (generating and judging the
+\V{bank-generated} persona responses, extracting their activations, three full per-token extractions
+of the evaluation data, the sweep, and the smaller Gender-Secret, AISI and follow-up runs) gives an
+estimate of 20 to 40 million tokens through 70B models over the project. The reads of the final week,
+for the knowledge direction and through the fine-tunes, used short prompts or a few hundred
+transcripts each and fall within this estimate. The replication of \cref{sec:xmodel} repeated this
+work, on fewer datasets, for three more models, two of them less than half the size; it therefore adds
+at most three times the estimate, which does not change the comparisons that close this subsection.
+\authornote{Replace with the exact total if NDIF usage records are available.}
+
+\begin{table}[t]
+\centering
+\small
+\caption{Order-of-magnitude energy estimate. Every row is an assumption except the first, whose sweep
+component is measured and whose total is estimated; the conclusions below hold across the whole range.}
+\label{tab:energy}
+\begin{tabular}{@{}l l@{}}
+\toprule
+Quantity & Value \\
+\midrule
+Tokens through 70B models (sweep measured; total estimated) & $2$--$4 \times 10^{7}$ \\
+Operations per token, $2N$ \cite{kaplan2020scaling} & $1.4 \times 10^{11}$ \\
+Total operations & $3$--$6 \times 10^{18}$ \\
+Effective throughput per accelerator (assumed, $\sim$30\% of peak) & $3 \times 10^{14}$ per second \\
+Accelerator-hours & 3--5 \\
+Power per accelerator, with data-centre overhead (assumed) & $\sim$0.85\,kW \\
+Remote energy, allowing up to $10\times$ serving inefficiency & $\sim$2--45\,kWh \\
+Local analysis (laptop, $\sim$100\,h at $\sim$40\,W, assumed) & $\sim$4\,kWh \\
+Emissions at 0.4\,kg\,CO$_2$e per kWh (assumed grid intensity) & $\sim$2.5--20\,kg CO$_2$e \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\Cref{tab:energy} gives the resulting range: a few to a few tens of kilowatt-hours, and at most
+twenty kilograms of CO$_2$-equivalent, at most about as much as driving a petrol car a hundred
+kilometres. Two comparisons put this in context. Training a model of this size takes millions of
+accelerator-hours \cite{grattafiori2024llama}; this study used a vanishing fraction of that, and
+reused a released model rather than training one. And the persona bank is built once and reused for
+every dataset, whereas a supervised approach would repeat labelling and training for each new
+domain.
+
+\subsection{Design decisions taken to minimise its impact}
+
+The following engineering decisions reduced the compute required, and are part of the design:
+\begin{itemize}[leftmargin=1.2em, itemsep=2pt]
+\item \emph{One pass for all layers.} The sweep loaded all \V{th-sweep-layers-new} new layers (those beyond the
+  three first extracted) in one pass for each of the examples, because the remote pass calculated all the layers anyway. The cost
+  of reading them one by one would have been \V{th-sweep-layers-new} times as much.
+\item \emph{Pooling on the server.} The means over tokens have been computed remotely, hence a layer
+  costs $\sim$300\,MB to transfer compared to $\sim$60\,GB.
+\item \emph{Resumable, cached extraction.} Completed requests were saved and it was never necessary
+  to repeat completed work when the remote 70B model was actually interrupted, which was often the
+  case.
+\item \emph{CPU-only analysis.} Once the extraction is done, all experiments are performed on a
+  laptop and all \V{depth-n} layers can be analysed within an hour on 4 cores.
+\end{itemize}
+
+\subsection{Sustainability of the solution in use}
+
+The detector is environmentally friendly. It takes one dot product of two 8192-dimensional
+(about $1.6 \times 10^{4}$ operations) vectors to score a response, using activations the model has
+already computed as it generates the response. A black box judge, however, has to run a
+second time to read a 500 token response, which for a 70B judge is about $7 \times 10^{13}$ operations,
+over a billion times as many. With an assistant that is under constant scrutiny, the difference will
+be between a monitor that adds almost no energy and one that will roughly double the serving
+cost when the judge is the same size as the assistant.
+
+\section{Ethical Issues}
+\label{sec:ethics}
+
+\emph{Hazardous content.} The development of \hpkr{} is based on hazardous-knowledge questions
+\cite{li2024wmdp}. Only the existing responses in the benchmark were used and the model's activations were
+read on the existing responses. No hazardous information was created, extended or shared,
+and there is no information in this report or in the released files beyond that which is already
+provided to the public in the benchmark. Our own role-play questions are about disclosure in the
+day-to-day professional setting, and do not include anything dangerous.
+
+\emph{Dual use.} Lying detection research could also be employed to help a model evade detection.
+We felt it was more important to have a public and correct record of what these detectors can
+and cannot do. The outline of the detector design is already available \cite{mahadik2026persona} and
+knowledge that the detector has weaknesses, such as when both classes deny knowledge
+(\cref{sec:hpkr-tests}), helps the defender more than the evader. No method designed for evasion is
+released.
+
+\emph{Honest reporting.} The project was dedicated to accurate reporting of the results, good and bad.
+Claims about all layers were checked against the \V{depth-n}-layer sweep, and those that held only at
+the three layers first extracted are stated in their narrower form rather than dropped silently
+(\cref{sec:analysis,sec:adjustments}). A
+collaborator's activation-extraction pipeline gave a set of intermediate results that were found to
+come from an error in the pipeline. Those results have been discarded and are not reported or relied
+on in this thesis. Most numbers are read directly from result files, and the few that are not are listed
+with their sources in \cref{sec:code}.
+
+\emph{Use conditions and licences.} Each model/dataset was used under the terms of its publication. The AISI rollouts \cite{aisi_lie_rollouts} are published under a licence
+marked ``other'', without specifying the terms of the licence. We used it only for research
+purposes, we did not redistribute it and we used one fixed revision.
+\authornote{Confirm the AISI dataset's terms with its publisher before publishing results derived
+from it.}
+
+\emph{Attribution.} The persona bank has been created by one member of the team and the analysis in
+this thesis by the authors (\cref{sec:pm}).
+\authornote{Name the member who built the persona bank here, and fill in each member's role in
+the Resources subsection of the Project Management Plan.} The use of other methods and data is indicated by
+citation.
+
+
+\section{Project Management Plan}
+\label{sec:pm}
+
+\subsection{Phases and schedule}
+
+The thesis ran over three phases, following the course structure. \Cref{tab:schedule} gives the
+schedule; the two pre-thesis phases are documented in their own reports.
+
+\begin{table}[t]
+\centering
+\small
+\caption{Project schedule.}
+\label{tab:schedule}
+\begin{tabularx}{\linewidth}{@{}l l X@{}}
+\toprule
+Phase & Period & Work \\
+\midrule
+Pre-Thesis 1 & \fillin{semester} & Problem formulation, literature review, background study \\
+Pre-Thesis 2 & \fillin{semester} & Preliminary design, choice of benchmark and model, access to NDIF \\
+\midrule
+Final & July 2026 & Repository set-up; the benchmark's probe pipeline vendored and adapted \\
+      & July--Aug.\ 2026 & Persona bank construction: prompts, generation, judging, vectors \\
+      & 4--5 Aug.\ & Extraction infrastructure: resumable cache, token-budget batching, NDIF runner \\
+      & 10 Aug.\ & Layer 40, the model's middle layer, enters the pipeline \\
+      & 15 Aug.\ & Probe code reads layer 40 by default \\
+      & 16 Aug.\ & Layer sweep \\
+      & 18 Aug.\ & Persona geometry; transfer experiment; sycophancy control \\
+      & 20 Aug.\ & Evaluation moves to layer 40; knowledge-denial personas; zero-shot evaluation \\
+      & 21 Aug.\ & Layer plan fixed (\cref{sec:layer-choice}); layer 44; Follow-Up Probe reproduced;
+                    $k=3$ subspace \\
+      & 22 Aug.\ & Token reads; Gender-Secret; AISI baseline; paper draft \\
+      & 23 Aug.\ & \V{depth-n}-layer sweep; unified-axis control \\
+      & 24 Aug.\ & Paper revision; this report \\
+      & 25--26 Aug.\ & Wording-controlled \hpkr{} slices; forced-denial reads: the wording and
+                    chemistry knowledge directions \\
+      & 28 Aug.\ & The knowledge direction; Gender-Secret and Soft-Trigger read through their
+                    fine-tunes \\
+      & 28--29 Aug.\ & Robustness, replication and operating points of the knowledge direction \\
+      & 6--12 Oct.\ & Persona banks for Qwen2.5-72B, Mistral-Small-3.1-24B and Gemma-3-27B; the
+                    benchmark's probes reproduced on each \\
+      & 13--15 Oct.\ & Every study but steering repeated on the three models; paired intervals; the
+                    template-free K (\cref{sec:xmodel}) \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{Resources}
+
+\begin{itemize}[leftmargin=1.2em, itemsep=2pt]
+\item \emph{People.} Md.\ Abdullah Al Zami, Suraiya Shanaz and Mahdi Hasan.
+  \authornote{Add each member's role, e.g.\ persona bank construction; extraction and analysis;
+  writing.}
+\item \emph{Compute.} Remote access to Llama-3.3-70B-Instruct and Llama-3.1-70B-Instruct, and for
+  the replication to Qwen2.5-72B, Mistral-Small-3.1-24B and Gemma-3-27B, through NDIF; one 16\,GB
+  laptop for all analysis.
+\item \emph{Data.} The public Liars' Bench, RepE and Alpaca datasets; the AISI rollouts; the persona
+  rollouts generated by the team.
+\item \emph{Software.} The open-source stack of \cref{tab:software}.
+\end{itemize}
+
+\subsection{Monitoring}
+
+Progress was tracked through the repository. Each experiment's results were written to a folder
+with a summary of what it showed. When a result contradicted an earlier summary, the earlier summary
+was corrected in the same step, so the written record never lagged the evidence.
+
+\section{Risk Management}
+\label{sec:risk}
+
+\Cref{tab:risk} is the project's risk register. Every risk in it occurred at least once; the table
+records what happened and how it was handled, which is more informative than a list of risks
+anticipated in the abstract.
+
+\begin{table}[t]
+\centering
+\small
+\caption{Risk register: risks met during the project, with their mitigation and outcome.}
+\label{tab:risk}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{3.0cm} c >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}p{3.1cm}@{}}
+\toprule
+Risk & Impact & Mitigation & Outcome \\
+\midrule
+Remote out-of-memory on long examples & high & Token-budget batching that halves the batch after
+repeated failures; rows too long for any batch dropped and counted & All datasets extracted \\
+Local memory ($16$\,GB) too small for large probes & high & A streaming logistic regression that
+solves scikit-learn's exact problem block by block, tested for equivalence & AISI probe trained \\
+Slow download ($\sim$2\,MB/s) & high & Pooling on the server; all layers in one pass & A layer in
+$\sim$300\,MB instead of $\sim$60\,GB \\
+Interrupted remote jobs & medium & Every completed request saved; jobs resume from the last one &
+No work repeated \\
+Erroneous intermediate results from a collaborator's pipeline & high & Results re-derived in an
+independently tested pipeline; the erroneous set discarded & None of it used \\
+Claims that do not generalise beyond the layers studied & high & A \V{depth-n}-layer sweep, and
+build-time assertions on every ``at every layer'' claim & Several claims narrowed to the layers where
+they hold \\
+Overwriting hand-written results & medium & The analysis script refuses to overwrite a file it did
+not write & Three files restored \\
+Unclear dataset terms & medium & Research use only, no redistribution, revision pinned & Flagged
+for confirmation \\
+Remote out-of-memory on Gemma's long rows and large vocabulary & high & Requests capped by tokens,
+down to one row per request, and shorter requests wherever logits are computed & Every study completed \\
+A model that does not play the roles (Qwen) & high & Its lenient bank used, since the strict one lacks
+11 roles; reported as a finding, prompts not tuned & Persona claims fail on Qwen \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{Economic Analysis}
+\label{sec:econ}
+
+\subsection{Costs}
+
+The project was virtually free, especially in terms of direct monetary costs. We used a laptop
+computer that we already had, and all the software and datasets used are free. Additionally,
+accessing the model remotely through NDIF cost us nothing. The actual cost was the time that
+the team devoted. \authornote{Estimate the team's working hours and, if required, value them at an
+appropriate rate.}
+
+It is still advisable to estimate how much the remote compute would cost if it had to be
+purchased commercially, thereby requiring renting of accelerators large enough for a 70B
+model. \Cref{tab:energy} estimates the work at 3--5 accelerator-hours at full efficiency, and up to 10
+times this when allowing for serving overhead, for a total range of 3--50 hours. If accelerators
+cost \$2 to \$4 per accelerator-hour, this will cost between about \$6 and \$200. On top of this cost
+there would be other costs involved, including the engineering process, minimum rental periods
+and storage, as a full activation cache takes around 60\,GB per layer.
+\authornote{Update with current market prices if required.}
+
+\subsection{Cost--benefit of the solution}
+
+A comparison of the three families of detectors is given in \cref{tab:costbenefit}. The economic case
+for a label-free probe is based primarily on two expenses which it does not incur.
+
+Labelling is the first of these. A supervised probe requires labelled lies for each new domain to
+which it may be applied, and labelled lies are not readily available as whether a statement is a
+lie depends on what the model believes, which cannot be determined by whether the statement
+is true. For this reason Liars' Bench runs a separate check of the model's knowledge for each
+label. The persona detector's bank has to be constructed once, in our case from \V{bank-generated}
+role-play generations and their judgements, and then it requires no labels for any new set of data.
+
+Inference costs are the other consideration. A probe adds almost nothing to the cost of serving,
+while a black-box judge needs a second large-model call for each response and could double that cost
+(\cref{sec:environment}).
+
+\begin{table}[t]
+\centering
+\small
+\caption{Qualitative cost--benefit comparison of the three detector families.}
+\label{tab:costbenefit}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{3.3cm} >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X@{}}
+\toprule
+ & Persona contrast (this work) & Supervised probe & Black-box judge \\
+\midrule
+Set-up cost & one persona bank, reused & labelled lies per domain & prompt design \\
+Labels per new domain & none & many & none \\
+Cost per response & one dot product & one dot product & one large-model call \\
+Needs model internals & yes & yes & no \\
+Transfer across datasets & highest of the designs compared at layer~40, with row-level intervals
+only (\cref{sec:transfer}) & weak & not evaluated here \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+The major constraint is access. A white-box detector requires access to the model's internals,
+which is available to anyone who is deploying an open-weight model and not to anyone who is
+using a closed API. When the internals can be accessed, the lowest cost method per response
+and per new domain is the persona contrast, and in \cref{chap:results} it also has the highest transfer across datasets
+of the designs compared, although that margin carries row-level intervals only and a probe trained
+on several pooled datasets nearly matches it once \hpkr{} is left out
+(\cref{sec:stats-nulls,sec:transfer}).

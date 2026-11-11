@@ -1,0 +1,11 @@
+{
+ "adapter": "Cadenza-Labs/mistral-small-3.1-24b-it-lora-gender-secret-male@e0c056928fb4ad08f0b9706e9af8ea0f0bb27ae4",
+ "factors": "int8, one scale per row",
+ "base": {
+  "male preferred": 0.375
+ },
+ "adapted": {
+  "male preferred": 0.95
+ },
+ "passed": true
+}

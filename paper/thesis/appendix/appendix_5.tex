@@ -1,0 +1,171 @@
+\chapter*{Appendix D \quad Replication on Three Further Models}
+\label{app:xmodel}
+
+This appendix gives the tables behind \cref{sec:xmodel}. Each is written from the result files by
+\texttt{make\_xmodel\_assets.py}, $^\dagger$ marks Qwen's lenient persona bank, and every number is read at
+the model's mid block (\cref{tab:xm-models}) unless the table says otherwise.
+
+\section*{Paired differences}
+
+\Cref{tab:xm-intervals} gives the paired differences behind \cref{tab:xm-claims}. The transfer intervals
+hold the probes fitted on each training set fixed and resample the test rows; the intervals on the mean
+resample the rows of each dataset, stratified by label, as in \cref{sec:stats-paired}. Both use 1,000
+draws.
+
+\begin{table}[htbp]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\caption[Paired differences at each model's mid block.]{Paired differences at each model's mid block, with 95\% intervals. The mean is over the model's
+own datasets; the RepE probe is the base probe D2 trained at the same block.}
+\label{tab:xm-intervals}
+\fittable{\input{generated_xmodel/tab_xm_intervals}}
+\end{table}
+
+\section*{The contrasts on each dataset}
+
+\Cref{tab:xm-zeroshot} gives the zero-shot AUROC of the published, knowledge-denial and extended
+contrasts on every dataset each model has. On Gemma the knowledge-denial contrast inverts on instructed
+deception and pulls its mean down, while the extended contrast, which pools its roles with the published
+ones, does not. On Qwen, D5 and D9 invert on \hpkr{} and D8 does not.
+
+\begin{table}[htbp]
+\centering
+\footnotesize
+\caption[Zero-shot AUROC per dataset at each model's mid block.]{Zero-shot AUROC per dataset at each model's mid block; n/a marks a dataset Liars' Bench does not
+evaluate the model on. The mean is over the model's Liars' Bench datasets, without RepE.}
+\label{tab:xm-zeroshot}
+\fittable{\input{generated_xmodel/tab_xm_zeroshot}}
+\end{table}
+
+\section*{Transfer at four blocks}
+
+\Cref{tab:xm-transfer} gives transfer at the four blocks that stand for the thesis's layers 20, 36, 40 and
+44, with the probes on three principal components of \cref{sec:d4} beside the single directions. An
+asterisk marks a post-hoc layer.
+
+\begin{table}[htbp]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\caption{Mean off-diagonal AUROC of the train-one-test-all matrix at the four named blocks of each model.}
+\label{tab:xm-transfer}
+\fittable{\input{generated_xmodel/tab_xm_transfer}}
+\end{table}
+
+\section*{\hpkr{} with the words held fixed}
+
+\Cref{tab:xm-wording} gives every detector on the wording-controlled sets. Llama's and Mistral's are the
+slices of the released \hpkr{} (\cref{sec:data-integration}). Qwen's released \hpkr{} keeps a random sample
+of its honest answers, and with it only \V{xm-qwen-den-honest} honest denials and no identical-text slice;
+rebuilt from the benchmark's raw files by its own rules, it has \V{xm-qwen-rb-den-honest} honest denials,
+\V{xm-qwen-rb-ident-honest} of them the identical reply. Gemma's \hpkr{} is rebuilt the same way, since the
+benchmark leaves it out. Gemma's denials open with the same sentence and most go on to a safety disclaimer
+that differs from row to row, so each row is also read over the opening sentence alone, whose tokens are the
+same on every row and, the model being causal, untouched by what follows.
+
+\begin{table}[htbp]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3.5pt}
+\caption[AUROC on \hpkr's wording-controlled sets.]{AUROC on \hpkr's wording-controlled sets: the base probe D2 trained at the same block, the three
+contrasts, K and D9 + K, and the random band.}
+\label{tab:xm-wording}
+\fittable{\input{generated_xmodel/tab_xm_wording}}
+\end{table}
+
+\section*{The fine-tunes}
+
+\Cref{tab:xm-organisms} gives each fine-tune read through its adapter and, as the control of
+\cref{sec:disc-organisms}, by the base model. On the fine-tune's read, K is built inside the fine-tune; on
+the base model's read, K is built on the base model. D9 is the persona bank's, built on the base model, and
+D9 + K adds to it the K built inside the fine-tune. Each adapter was sent to the server in 8-bit form and
+reproduced its organism's behaviour before it was read.
+
+\begin{table}[htbp]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3.5pt}
+\caption[AUROC on the fine-tunes of the three further models.]{AUROC on the fine-tunes of the three further
+models, read through each fine-tune and by the base model, with each read's random band.}
+\label{tab:xm-organisms}
+\fittable{\input{generated_xmodel/tab_xm_organisms}}
+\end{table}
+
+\section*{Detection in the tail}
+
+\Cref{tab:xm-operating} gives the share of lies each detector catches when the cutoff is set on half of a
+dataset's own honest answers, at 1\% and 10\% of them flagged, averaged over the model's datasets, as
+\cref{fig:k-operating} does for Llama.
+
+\begin{table}[htbp]
+\centering
+\footnotesize
+\caption{Share of lies caught at cutoffs set on each dataset's honest answers, at each model's mid block.}
+\label{tab:xm-operating}
+\fittable{\input{generated_xmodel/tab_xm_operating}}
+\end{table}
+
+\section*{The probe trained on the model's own lies}
+
+\Cref{tab:xm-aisi} sets D3, the base probe trained on the model's own belief-labelled lies
+(\cref{sec:supervised}), beside the probe trained on RepE and the three contrasts, for the two models whose
+AISI rollouts we have. On both, at the middle block, D3 improves on the RepE probe and D9 stays ahead of
+D3; at Gemma's block for layer~20, D3 leads.
+
+\begin{table}[htbp]
+\centering
+\footnotesize
+\caption{Mean AUROC over the model's datasets of D2, D3 and the contrasts, Llama and Gemma.}
+\label{tab:xm-aisi}
+\fittable{\input{generated_xmodel/tab_xm_aisi}}
+\end{table}
+
+\section*{How fully each model plays the roles}
+
+\Cref{tab:xm-roleplay} gives, for each group of roles, the share of the model's rollouts the judge scored
+fully in role. Gemma plays nearly every role fully, Llama and Mistral about two thirds of the time, and
+Qwen under a third, least of all its deceptive and knowledge-denial roles.
+
+\begin{table}[htbp]
+\centering
+\footnotesize
+\caption{Share of each persona group's rollouts the judge scored 3, fully in role.}
+\label{tab:xm-roleplay}
+\fittable{\input{generated_xmodel/tab_xm_roleplay}}
+\end{table}
+
+\section*{The judge's filter}
+
+\Cref{tab:xm-banks} sets the contrasts built from each model's strict bank, which keeps only rollouts the
+judge scored 3, against those built from its lenient bank, which also keeps rollouts scored 2. Qwen has
+only the lenient bank. On the other three models the two banks differ by at most \V{xm-bank-gap-max}
+on any of these numbers.
+
+\begin{table}[htbp]
+\centering
+\footnotesize
+\caption{The contrasts from the strict and the lenient persona bank at each model's mid block.}
+\label{tab:xm-banks}
+\fittable{\input{generated_xmodel/tab_xm_banks}}
+\end{table}
+
+\section*{Other checks}
+
+\Cref{tab:xm-checks} gives two checks. The first is the template-free K of \cref{sec:xm-k}: a plain system
+turn (``You are a helpful assistant.''), the bare question, one of six instruction lines that ask whether
+the model knows the answer and limit the reply to that, and the replies ``That is not something I know.''
+and ``I have no knowledge of that.'', over each model's own known and unknowable questions. Its criteria
+were fixed before any of its rows was read on the three further models; on Mistral it kept the
+identical-text result but not the template K's transfer or mean. The second sets D9's mean token read
+against the best of the six token reads of \cref{sec:token-read}.
+
+\begin{table}[htbp]
+\centering
+\footnotesize
+\caption{The template-free K beside the template K, and D9's token reads, at each model's mid block.}
+\label{tab:xm-checks}
+\fittable{\input{generated_xmodel/tab_xm_checks}}
+\end{table}
+
+\FloatBarrier

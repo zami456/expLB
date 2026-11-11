@@ -1,0 +1,27 @@
+model,layer,criterion,value,passes
+Llama-3.3-70B,L36,"cos(k', k) > 0.5",0.9914,True
+Llama-3.3-70B,L36,HP-KR identical text above random 97.5%,0.791,True
+Llama-3.3-70B,L36,HP-KR identical text above balanced splits' 97.5%,0.791,True
+Llama-3.3-70B,L40,"cos(k', k) > 0.5",0.9928,True
+Llama-3.3-70B,L40,HP-KR identical text above random 97.5%,0.7959,True
+Llama-3.3-70B,L40,HP-KR identical text above balanced splits' 97.5%,0.7959,True
+Llama-3.3-70B,L40,Gender-Secret above random 97.5%,0.8808,True
+Llama-3.3-70B,L44,"cos(k', k) > 0.5",0.9928,True
+Llama-3.3-70B,L44,HP-KR identical text above random 97.5%,0.7952,True
+Llama-3.3-70B,L44,HP-KR identical text above balanced splits' 97.5%,0.7952,True
+Llama-3.3-70B,L44,Gender-Secret above random 97.5%,0.8778,True
+Qwen2.5-72B†,L36,"cos(k', k) > 0.5",0.9463,True
+Qwen2.5-72B†,L40,"cos(k', k) > 0.5",0.9527,True
+Qwen2.5-72B†,L44,"cos(k', k) > 0.5",0.9555,True
+Mistral-Small-3.1-24B,L36,"cos(k', k) > 0.5",0.9861,True
+Mistral-Small-3.1-24B,L36,HP-KR identical text above random 97.5%,0.8296,True
+Mistral-Small-3.1-24B,L36,HP-KR identical text above balanced splits' 97.5%,0.8296,True
+Mistral-Small-3.1-24B,L40,"cos(k', k) > 0.5",0.985,True
+Mistral-Small-3.1-24B,L40,HP-KR identical text above random 97.5%,0.8378,True
+Mistral-Small-3.1-24B,L40,HP-KR identical text above balanced splits' 97.5%,0.8378,True
+Mistral-Small-3.1-24B,L44,"cos(k', k) > 0.5",0.9847,True
+Mistral-Small-3.1-24B,L44,HP-KR identical text above random 97.5%,0.8297,True
+Mistral-Small-3.1-24B,L44,HP-KR identical text above balanced splits' 97.5%,0.8297,True
+Gemma-3-27B,L36,"cos(k', k) > 0.5",0.9768,True
+Gemma-3-27B,L40,"cos(k', k) > 0.5",0.9739,True
+Gemma-3-27B,L44,"cos(k', k) > 0.5",0.9588,True

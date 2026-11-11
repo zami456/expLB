@@ -1,0 +1,46 @@
+# The base probe trained on Llama-3.3-70B's own lies (AISI's rollouts) instead of RepE, layer 40.
+#
+# Identical to XXXX-9-llama-all-L40.yaml except:
+#   - train_data: Llama's belief-checked lies and honest answers from AISI's rollouts (see
+#     deception_detection/data/aisi_rollouts.py). Run `aisi_probe.py audit` first.
+#   - aisi_llama__validation joins eval_data: the same task under system prompts the training rows
+#     never use, as a held-out check.
+#   - name.
+#
+# Do not run this through run_llama_all.sh on a 16 GB machine. The runner's in-memory fit would
+# need about 17 GB for these rows. Instead, this file is the recipe that
+# experiments/probes/aisi_probe.py follows:
+#   `extract` fetches the response tokens in chunks, `fit` rebuilds this config's training rows and
+#   fits the same probe by streaming, and `compare` scores it on the pooled Liars' Bench
+#   activations.
+
+method: "lr"
+model_name: "llama-70b-3.3"
+train_data: "aisi_llama__pooled"
+
+eval_data:
+  - "aisi_llama__validation"
+  - "convince_me__plain"
+  - "harm_refusal_choice__plain"
+  - "harm_refusal_knowledge_report__plain"
+  - "insider_trading_cadenza__plain"
+  - "instruct_dishonesty__plain"
+
+control_data:
+  - "XXXX-20__plain"
+
+id: "XXXX-9"
+name: "aisi-llama-L40"
+
+eval_on_policy: false
+control_on_policy: false
+control_dataset_size: 2000
+detect_only_start_of_turn: false
+val_fraction: 0.2
+detect_layers: [40]
+reg_coeff: 10
+max_iter: 1000
+
+acts_cache_mode: "full"
+ndif_token_budget: 8000
+host_token_budget: 32000

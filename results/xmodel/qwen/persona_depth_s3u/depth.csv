@@ -1,0 +1,673 @@
+layer,bank,source,arm,metric,value
+20,s3u,"transfer, off-diagonal mean",extended axis (12v13),auroc,0.5367663368435897
+20,s3u,"transfer, off-diagonal mean",knowledge-denial axis (4v6),auroc,0.6910629212976233
+20,s3u,"transfer, off-diagonal mean",extended PCs (k=3),auroc,0.6663915904011514
+20,s3u,"transfer, off-diagonal mean",unified axis (13v12),auroc,0.4536612644657881
+20,s3u,"transfer, off-diagonal mean",deception axis (8v7),auroc,0.4536242412226965
+20,s3u,"transfer, off-diagonal mean",single-source probe (8192-d),auroc,0.5326401859765656
+20,s3u,"transfer, off-diagonal mean",extended axis (12v13),balacc,0.5
+20,s3u,"transfer, off-diagonal mean",knowledge-denial axis (4v6),balacc,0.5004378283712785
+20,s3u,"transfer, off-diagonal mean",extended PCs (k=3),balacc,0.5537832893141382
+20,s3u,"transfer, off-diagonal mean",unified axis (13v12),balacc,0.5
+20,s3u,"transfer, off-diagonal mean",deception axis (8v7),balacc,0.5
+20,s3u,"transfer, off-diagonal mean",single-source probe (8192-d),balacc,0.5141648639441675
+20,s3u,"zero-shot, Liars' Bench average",base probe (RepE-trained),auroc,0.5466
+20,s3u,"zero-shot, Liars' Bench average",base probe (RepE-trained),balacc,0.4979
+20,s3u,"zero-shot, Liars' Bench average",base probe (RepE-trained),recall,0.0037
+20,s3u,"zero-shot, Liars' Bench average",deception axis (8v7),auroc,0.4032
+20,s3u,"zero-shot, Liars' Bench average",deception axis (8v7),balacc,0.5
+20,s3u,"zero-shot, Liars' Bench average",deception axis (8v7),recall,0.0
+20,s3u,"zero-shot, Liars' Bench average",unified axis (13v12),auroc,0.4141
+20,s3u,"zero-shot, Liars' Bench average",unified axis (13v12),balacc,0.5
+20,s3u,"zero-shot, Liars' Bench average",unified axis (13v12),recall,0.0
+20,s3u,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),auroc,0.7214
+20,s3u,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),balacc,0.5006
+20,s3u,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),recall,0.0012
+20,s3u,"zero-shot, Liars' Bench average",extended axis (12v13),auroc,0.6141
+20,s3u,"zero-shot, Liars' Bench average",extended axis (12v13),balacc,0.5
+20,s3u,"zero-shot, Liars' Bench average",extended axis (12v13),recall,0.0
+20,s3u,"zero-shot, HP-KR",base probe (RepE-trained),auroc,0.497
+20,s3u,"zero-shot, HP-KR",base probe (RepE-trained),balacc,0.5
+20,s3u,"zero-shot, HP-KR",base probe (RepE-trained),recall,0.0
+20,s3u,"zero-shot, HP-KR",deception axis (8v7),auroc,0.1528
+20,s3u,"zero-shot, HP-KR",deception axis (8v7),balacc,0.5
+20,s3u,"zero-shot, HP-KR",deception axis (8v7),recall,0.0
+20,s3u,"zero-shot, HP-KR",unified axis (13v12),auroc,0.1595
+20,s3u,"zero-shot, HP-KR",unified axis (13v12),balacc,0.5
+20,s3u,"zero-shot, HP-KR",unified axis (13v12),recall,0.0
+20,s3u,"zero-shot, HP-KR",knowledge-denial axis (4v6),auroc,0.9311
+20,s3u,"zero-shot, HP-KR",knowledge-denial axis (4v6),balacc,0.5018
+20,s3u,"zero-shot, HP-KR",knowledge-denial axis (4v6),recall,0.0035
+20,s3u,"zero-shot, HP-KR",extended axis (12v13),auroc,0.7146
+20,s3u,"zero-shot, HP-KR",extended axis (12v13),balacc,0.5
+20,s3u,"zero-shot, HP-KR",extended axis (12v13),recall,0.0
+24,s3u,"transfer, off-diagonal mean",extended axis (12v13),auroc,0.5168022680273684
+24,s3u,"transfer, off-diagonal mean",knowledge-denial axis (4v6),auroc,0.6897367504383974
+24,s3u,"transfer, off-diagonal mean",extended PCs (k=3),auroc,0.6546168867981937
+24,s3u,"transfer, off-diagonal mean",unified axis (13v12),auroc,0.4147579744616569
+24,s3u,"transfer, off-diagonal mean",deception axis (8v7),auroc,0.4233169156664718
+24,s3u,"transfer, off-diagonal mean",single-source probe (8192-d),auroc,0.5023862999458942
+24,s3u,"transfer, off-diagonal mean",extended axis (12v13),balacc,0.5
+24,s3u,"transfer, off-diagonal mean",knowledge-denial axis (4v6),balacc,0.5357772548161122
+24,s3u,"transfer, off-diagonal mean",extended PCs (k=3),balacc,0.5699817866269724
+24,s3u,"transfer, off-diagonal mean",unified axis (13v12),balacc,0.5
+24,s3u,"transfer, off-diagonal mean",deception axis (8v7),balacc,0.5003030303030304
+24,s3u,"transfer, off-diagonal mean",single-source probe (8192-d),balacc,0.5170004949758397
+24,s3u,"zero-shot, Liars' Bench average",base probe (RepE-trained),auroc,0.6437
+24,s3u,"zero-shot, Liars' Bench average",base probe (RepE-trained),balacc,0.4974
+24,s3u,"zero-shot, Liars' Bench average",base probe (RepE-trained),recall,0.0046
+24,s3u,"zero-shot, Liars' Bench average",deception axis (8v7),auroc,0.4412
+24,s3u,"zero-shot, Liars' Bench average",deception axis (8v7),balacc,0.5
+24,s3u,"zero-shot, Liars' Bench average",deception axis (8v7),recall,0.0
+24,s3u,"zero-shot, Liars' Bench average",unified axis (13v12),auroc,0.4248
+24,s3u,"zero-shot, Liars' Bench average",unified axis (13v12),balacc,0.5
+24,s3u,"zero-shot, Liars' Bench average",unified axis (13v12),recall,0.0
+24,s3u,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),auroc,0.7244
+24,s3u,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),balacc,0.5477
+24,s3u,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),recall,0.0969
+24,s3u,"zero-shot, Liars' Bench average",extended axis (12v13),auroc,0.5716
+24,s3u,"zero-shot, Liars' Bench average",extended axis (12v13),balacc,0.5
+24,s3u,"zero-shot, Liars' Bench average",extended axis (12v13),recall,0.0
+24,s3u,"zero-shot, HP-KR",base probe (RepE-trained),auroc,0.7176
+24,s3u,"zero-shot, HP-KR",base probe (RepE-trained),balacc,0.5013
+24,s3u,"zero-shot, HP-KR",base probe (RepE-trained),recall,0.0035
+24,s3u,"zero-shot, HP-KR",deception axis (8v7),auroc,0.0908
+24,s3u,"zero-shot, HP-KR",deception axis (8v7),balacc,0.5
+24,s3u,"zero-shot, HP-KR",deception axis (8v7),recall,0.0
+24,s3u,"zero-shot, HP-KR",unified axis (13v12),auroc,0.0632
+24,s3u,"zero-shot, HP-KR",unified axis (13v12),balacc,0.5
+24,s3u,"zero-shot, HP-KR",unified axis (13v12),recall,0.0
+24,s3u,"zero-shot, HP-KR",knowledge-denial axis (4v6),auroc,0.8718
+24,s3u,"zero-shot, HP-KR",knowledge-denial axis (4v6),balacc,0.6431
+24,s3u,"zero-shot, HP-KR",knowledge-denial axis (4v6),recall,0.2907
+24,s3u,"zero-shot, HP-KR",extended axis (12v13),auroc,0.4503
+24,s3u,"zero-shot, HP-KR",extended axis (12v13),balacc,0.5
+24,s3u,"zero-shot, HP-KR",extended axis (12v13),recall,0.0
+28,s3u,"transfer, off-diagonal mean",extended axis (12v13),auroc,0.5065219160913403
+28,s3u,"transfer, off-diagonal mean",knowledge-denial axis (4v6),auroc,0.6980358389983387
+28,s3u,"transfer, off-diagonal mean",extended PCs (k=3),auroc,0.6669886868452553
+28,s3u,"transfer, off-diagonal mean",unified axis (13v12),auroc,0.4179496633390476
+28,s3u,"transfer, off-diagonal mean",deception axis (8v7),auroc,0.4240860019931879
+28,s3u,"transfer, off-diagonal mean",single-source probe (8192-d),auroc,0.4821089998872148
+28,s3u,"transfer, off-diagonal mean",extended axis (12v13),balacc,0.5006060606060606
+28,s3u,"transfer, off-diagonal mean",knowledge-denial axis (4v6),balacc,0.598204565355835
+28,s3u,"transfer, off-diagonal mean",extended PCs (k=3),balacc,0.5502075163721513
+28,s3u,"transfer, off-diagonal mean",unified axis (13v12),balacc,0.5
+28,s3u,"transfer, off-diagonal mean",deception axis (8v7),balacc,0.5006060606060606
+28,s3u,"transfer, off-diagonal mean",single-source probe (8192-d),balacc,0.4986493575355527
+28,s3u,"zero-shot, Liars' Bench average",base probe (RepE-trained),auroc,0.6067
+28,s3u,"zero-shot, Liars' Bench average",base probe (RepE-trained),balacc,0.5006
+28,s3u,"zero-shot, Liars' Bench average",base probe (RepE-trained),recall,0.0019
+28,s3u,"zero-shot, Liars' Bench average",deception axis (8v7),auroc,0.4387
+28,s3u,"zero-shot, Liars' Bench average",deception axis (8v7),balacc,0.5
+28,s3u,"zero-shot, Liars' Bench average",deception axis (8v7),recall,0.0
+28,s3u,"zero-shot, Liars' Bench average",unified axis (13v12),auroc,0.4273
+28,s3u,"zero-shot, Liars' Bench average",unified axis (13v12),balacc,0.5
+28,s3u,"zero-shot, Liars' Bench average",unified axis (13v12),recall,0.0
+28,s3u,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),auroc,0.7327
+28,s3u,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),balacc,0.6285
+28,s3u,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),recall,0.2627
+28,s3u,"zero-shot, Liars' Bench average",extended axis (12v13),auroc,0.558
+28,s3u,"zero-shot, Liars' Bench average",extended axis (12v13),balacc,0.5
+28,s3u,"zero-shot, Liars' Bench average",extended axis (12v13),recall,0.0
+28,s3u,"zero-shot, HP-KR",base probe (RepE-trained),auroc,0.5328
+28,s3u,"zero-shot, HP-KR",base probe (RepE-trained),balacc,0.5
+28,s3u,"zero-shot, HP-KR",base probe (RepE-trained),recall,0.0
+28,s3u,"zero-shot, HP-KR",deception axis (8v7),auroc,0.0898
+28,s3u,"zero-shot, HP-KR",deception axis (8v7),balacc,0.5
+28,s3u,"zero-shot, HP-KR",deception axis (8v7),recall,0.0
+28,s3u,"zero-shot, HP-KR",unified axis (13v12),auroc,0.0726
+28,s3u,"zero-shot, HP-KR",unified axis (13v12),balacc,0.5
+28,s3u,"zero-shot, HP-KR",unified axis (13v12),recall,0.0
+28,s3u,"zero-shot, HP-KR",knowledge-denial axis (4v6),auroc,0.8706
+28,s3u,"zero-shot, HP-KR",knowledge-denial axis (4v6),balacc,0.8855
+28,s3u,"zero-shot, HP-KR",knowledge-denial axis (4v6),recall,0.7881
+28,s3u,"zero-shot, HP-KR",extended axis (12v13),auroc,0.3993
+28,s3u,"zero-shot, HP-KR",extended axis (12v13),balacc,0.5
+28,s3u,"zero-shot, HP-KR",extended axis (12v13),recall,0.0
+32,s3u,"transfer, off-diagonal mean",extended axis (12v13),auroc,0.4796671077406915
+32,s3u,"transfer, off-diagonal mean",knowledge-denial axis (4v6),auroc,0.7155088940913958
+32,s3u,"transfer, off-diagonal mean",extended PCs (k=3),auroc,0.6864353885011344
+32,s3u,"transfer, off-diagonal mean",unified axis (13v12),auroc,0.4194553124366971
+32,s3u,"transfer, off-diagonal mean",deception axis (8v7),auroc,0.4317480775530706
+32,s3u,"transfer, off-diagonal mean",single-source probe (8192-d),auroc,0.5265510875849809
+32,s3u,"transfer, off-diagonal mean",extended axis (12v13),balacc,0.5112121212121212
+32,s3u,"transfer, off-diagonal mean",knowledge-denial axis (4v6),balacc,0.6161460994492955
+32,s3u,"transfer, off-diagonal mean",extended PCs (k=3),balacc,0.5693519210561598
+32,s3u,"transfer, off-diagonal mean",unified axis (13v12),balacc,0.5057575757575757
+32,s3u,"transfer, off-diagonal mean",deception axis (8v7),balacc,0.5084848484848484
+32,s3u,"transfer, off-diagonal mean",single-source probe (8192-d),balacc,0.5283176905301058
+32,s3u,"zero-shot, Liars' Bench average",base probe (RepE-trained),auroc,0.4973
+32,s3u,"zero-shot, Liars' Bench average",base probe (RepE-trained),balacc,0.5029
+32,s3u,"zero-shot, Liars' Bench average",base probe (RepE-trained),recall,0.0062
+32,s3u,"zero-shot, Liars' Bench average",deception axis (8v7),auroc,0.4488
+32,s3u,"zero-shot, Liars' Bench average",deception axis (8v7),balacc,0.5
+32,s3u,"zero-shot, Liars' Bench average",deception axis (8v7),recall,0.0
+32,s3u,"zero-shot, Liars' Bench average",unified axis (13v12),auroc,0.4264
+32,s3u,"zero-shot, Liars' Bench average",unified axis (13v12),balacc,0.5
+32,s3u,"zero-shot, Liars' Bench average",unified axis (13v12),recall,0.0
+32,s3u,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),auroc,0.7333
+32,s3u,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),balacc,0.6379
+32,s3u,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),recall,0.2821
+32,s3u,"zero-shot, Liars' Bench average",extended axis (12v13),auroc,0.5153
+32,s3u,"zero-shot, Liars' Bench average",extended axis (12v13),balacc,0.5
+32,s3u,"zero-shot, Liars' Bench average",extended axis (12v13),recall,0.0
+32,s3u,"zero-shot, HP-KR",base probe (RepE-trained),auroc,0.2025
+32,s3u,"zero-shot, HP-KR",base probe (RepE-trained),balacc,0.5
+32,s3u,"zero-shot, HP-KR",base probe (RepE-trained),recall,0.0
+32,s3u,"zero-shot, HP-KR",deception axis (8v7),auroc,0.0958
+32,s3u,"zero-shot, HP-KR",deception axis (8v7),balacc,0.5
+32,s3u,"zero-shot, HP-KR",deception axis (8v7),recall,0.0
+32,s3u,"zero-shot, HP-KR",unified axis (13v12),auroc,0.0693
+32,s3u,"zero-shot, HP-KR",unified axis (13v12),balacc,0.5
+32,s3u,"zero-shot, HP-KR",unified axis (13v12),recall,0.0
+32,s3u,"zero-shot, HP-KR",knowledge-denial axis (4v6),auroc,0.8704
+32,s3u,"zero-shot, HP-KR",knowledge-denial axis (4v6),balacc,0.9134
+32,s3u,"zero-shot, HP-KR",knowledge-denial axis (4v6),recall,0.8459
+32,s3u,"zero-shot, HP-KR",extended axis (12v13),auroc,0.2661
+32,s3u,"zero-shot, HP-KR",extended axis (12v13),balacc,0.5
+32,s3u,"zero-shot, HP-KR",extended axis (12v13),recall,0.0
+36,s3u,"transfer, off-diagonal mean",extended axis (12v13),auroc,0.4513625625684414
+36,s3u,"transfer, off-diagonal mean",knowledge-denial axis (4v6),auroc,0.702084944636216
+36,s3u,"transfer, off-diagonal mean",extended PCs (k=3),auroc,0.6753740217564109
+36,s3u,"transfer, off-diagonal mean",unified axis (13v12),auroc,0.410225784067034
+36,s3u,"transfer, off-diagonal mean",deception axis (8v7),auroc,0.4197497643090467
+36,s3u,"transfer, off-diagonal mean",single-source probe (8192-d),auroc,0.545054022649224
+36,s3u,"transfer, off-diagonal mean",extended axis (12v13),balacc,0.5051903651903652
+36,s3u,"transfer, off-diagonal mean",knowledge-denial axis (4v6),balacc,0.5969029120689585
+36,s3u,"transfer, off-diagonal mean",extended PCs (k=3),balacc,0.5563417456978129
+36,s3u,"transfer, off-diagonal mean",unified axis (13v12),balacc,0.5018181818181818
+36,s3u,"transfer, off-diagonal mean",deception axis (8v7),balacc,0.5033721833721834
+36,s3u,"transfer, off-diagonal mean",single-source probe (8192-d),balacc,0.5157922470081714
+36,s3u,"zero-shot, Liars' Bench average",base probe (RepE-trained),auroc,0.5082
+36,s3u,"zero-shot, Liars' Bench average",base probe (RepE-trained),balacc,0.5002
+36,s3u,"zero-shot, Liars' Bench average",base probe (RepE-trained),recall,0.0011
+36,s3u,"zero-shot, Liars' Bench average",deception axis (8v7),auroc,0.4136
+36,s3u,"zero-shot, Liars' Bench average",deception axis (8v7),balacc,0.5001
+36,s3u,"zero-shot, Liars' Bench average",deception axis (8v7),recall,0.0002
+36,s3u,"zero-shot, Liars' Bench average",unified axis (13v12),auroc,0.3919
+36,s3u,"zero-shot, Liars' Bench average",unified axis (13v12),balacc,0.5
+36,s3u,"zero-shot, Liars' Bench average",unified axis (13v12),recall,0.0
+36,s3u,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),auroc,0.706
+36,s3u,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),balacc,0.6092
+36,s3u,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),recall,0.2862
+36,s3u,"zero-shot, Liars' Bench average",extended axis (12v13),auroc,0.4583
+36,s3u,"zero-shot, Liars' Bench average",extended axis (12v13),balacc,0.5001
+36,s3u,"zero-shot, Liars' Bench average",extended axis (12v13),recall,0.0002
+36,s3u,"zero-shot, HP-KR",base probe (RepE-trained),auroc,0.2617
+36,s3u,"zero-shot, HP-KR",base probe (RepE-trained),balacc,0.5
+36,s3u,"zero-shot, HP-KR",base probe (RepE-trained),recall,0.0
+36,s3u,"zero-shot, HP-KR",deception axis (8v7),auroc,0.0728
+36,s3u,"zero-shot, HP-KR",deception axis (8v7),balacc,0.5
+36,s3u,"zero-shot, HP-KR",deception axis (8v7),recall,0.0
+36,s3u,"zero-shot, HP-KR",unified axis (13v12),auroc,0.0595
+36,s3u,"zero-shot, HP-KR",unified axis (13v12),balacc,0.5
+36,s3u,"zero-shot, HP-KR",unified axis (13v12),recall,0.0
+36,s3u,"zero-shot, HP-KR",knowledge-denial axis (4v6),auroc,0.8681
+36,s3u,"zero-shot, HP-KR",knowledge-denial axis (4v6),balacc,0.8264
+36,s3u,"zero-shot, HP-KR",knowledge-denial axis (4v6),recall,0.8564
+36,s3u,"zero-shot, HP-KR",extended axis (12v13),auroc,0.1708
+36,s3u,"zero-shot, HP-KR",extended axis (12v13),balacc,0.5
+36,s3u,"zero-shot, HP-KR",extended axis (12v13),recall,0.0
+40,s3u,"transfer, off-diagonal mean",extended axis (12v13),auroc,0.4686929709611293
+40,s3u,"transfer, off-diagonal mean",knowledge-denial axis (4v6),auroc,0.7254779191212161
+40,s3u,"transfer, off-diagonal mean",extended PCs (k=3),auroc,0.6051149373245145
+40,s3u,"transfer, off-diagonal mean",unified axis (13v12),auroc,0.4174888166732168
+40,s3u,"transfer, off-diagonal mean",deception axis (8v7),auroc,0.4254882889298426
+40,s3u,"transfer, off-diagonal mean",single-source probe (8192-d),auroc,0.5588628463065012
+40,s3u,"transfer, off-diagonal mean",extended axis (12v13),balacc,0.503030303030303
+40,s3u,"transfer, off-diagonal mean",knowledge-denial axis (4v6),balacc,0.6149406625190338
+40,s3u,"transfer, off-diagonal mean",extended PCs (k=3),balacc,0.5530617743907894
+40,s3u,"transfer, off-diagonal mean",unified axis (13v12),balacc,0.5009090909090909
+40,s3u,"transfer, off-diagonal mean",deception axis (8v7),balacc,0.5027272727272728
+40,s3u,"transfer, off-diagonal mean",single-source probe (8192-d),balacc,0.511917688091399
+40,s3u,"zero-shot, Liars' Bench average",base probe (RepE-trained),auroc,0.4978
+40,s3u,"zero-shot, Liars' Bench average",base probe (RepE-trained),balacc,0.5076
+40,s3u,"zero-shot, Liars' Bench average",base probe (RepE-trained),recall,0.0228
+40,s3u,"zero-shot, Liars' Bench average",deception axis (8v7),auroc,0.3994
+40,s3u,"zero-shot, Liars' Bench average",deception axis (8v7),balacc,0.5
+40,s3u,"zero-shot, Liars' Bench average",deception axis (8v7),recall,0.0
+40,s3u,"zero-shot, Liars' Bench average",unified axis (13v12),auroc,0.3819
+40,s3u,"zero-shot, Liars' Bench average",unified axis (13v12),balacc,0.5
+40,s3u,"zero-shot, Liars' Bench average",unified axis (13v12),recall,0.0
+40,s3u,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),auroc,0.7167
+40,s3u,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),balacc,0.6357
+40,s3u,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),recall,0.284
+40,s3u,"zero-shot, Liars' Bench average",extended axis (12v13),auroc,0.4702
+40,s3u,"zero-shot, Liars' Bench average",extended axis (12v13),balacc,0.5
+40,s3u,"zero-shot, Liars' Bench average",extended axis (12v13),recall,0.0
+40,s3u,"zero-shot, HP-KR",base probe (RepE-trained),auroc,0.1924
+40,s3u,"zero-shot, HP-KR",base probe (RepE-trained),balacc,0.5
+40,s3u,"zero-shot, HP-KR",base probe (RepE-trained),recall,0.0
+40,s3u,"zero-shot, HP-KR",deception axis (8v7),auroc,0.0707
+40,s3u,"zero-shot, HP-KR",deception axis (8v7),balacc,0.5
+40,s3u,"zero-shot, HP-KR",deception axis (8v7),recall,0.0
+40,s3u,"zero-shot, HP-KR",unified axis (13v12),auroc,0.0635
+40,s3u,"zero-shot, HP-KR",unified axis (13v12),balacc,0.5
+40,s3u,"zero-shot, HP-KR",unified axis (13v12),recall,0.0
+40,s3u,"zero-shot, HP-KR",knowledge-denial axis (4v6),auroc,0.8707
+40,s3u,"zero-shot, HP-KR",knowledge-denial axis (4v6),balacc,0.9066
+40,s3u,"zero-shot, HP-KR",knowledge-denial axis (4v6),recall,0.8511
+40,s3u,"zero-shot, HP-KR",extended axis (12v13),auroc,0.2013
+40,s3u,"zero-shot, HP-KR",extended axis (12v13),balacc,0.5
+40,s3u,"zero-shot, HP-KR",extended axis (12v13),recall,0.0
+44,s3u,"transfer, off-diagonal mean",extended axis (12v13),auroc,0.4761526453871833
+44,s3u,"transfer, off-diagonal mean",knowledge-denial axis (4v6),auroc,0.7297719089011929
+44,s3u,"transfer, off-diagonal mean",extended PCs (k=3),auroc,0.5900715097548519
+44,s3u,"transfer, off-diagonal mean",unified axis (13v12),auroc,0.4400299288949341
+44,s3u,"transfer, off-diagonal mean",deception axis (8v7),auroc,0.4482068116154165
+44,s3u,"transfer, off-diagonal mean",single-source probe (8192-d),auroc,0.5311738165382516
+44,s3u,"transfer, off-diagonal mean",extended axis (12v13),balacc,0.5018181818181818
+44,s3u,"transfer, off-diagonal mean",knowledge-denial axis (4v6),balacc,0.5556454522664155
+44,s3u,"transfer, off-diagonal mean",extended PCs (k=3),balacc,0.5539549858297098
+44,s3u,"transfer, off-diagonal mean",unified axis (13v12),balacc,0.5005784210261822
+44,s3u,"transfer, off-diagonal mean",deception axis (8v7),balacc,0.5015151515151515
+44,s3u,"transfer, off-diagonal mean",single-source probe (8192-d),balacc,0.5199625800666241
+44,s3u,"zero-shot, Liars' Bench average",base probe (RepE-trained),auroc,0.6244
+44,s3u,"zero-shot, Liars' Bench average",base probe (RepE-trained),balacc,0.5101
+44,s3u,"zero-shot, Liars' Bench average",base probe (RepE-trained),recall,0.0247
+44,s3u,"zero-shot, Liars' Bench average",deception axis (8v7),auroc,0.4388
+44,s3u,"zero-shot, Liars' Bench average",deception axis (8v7),balacc,0.5
+44,s3u,"zero-shot, Liars' Bench average",deception axis (8v7),recall,0.0
+44,s3u,"zero-shot, Liars' Bench average",unified axis (13v12),auroc,0.4189
+44,s3u,"zero-shot, Liars' Bench average",unified axis (13v12),balacc,0.4999
+44,s3u,"zero-shot, Liars' Bench average",unified axis (13v12),recall,0.0
+44,s3u,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),auroc,0.7282
+44,s3u,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),balacc,0.5693
+44,s3u,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),recall,0.286
+44,s3u,"zero-shot, Liars' Bench average",extended axis (12v13),auroc,0.489
+44,s3u,"zero-shot, Liars' Bench average",extended axis (12v13),balacc,0.5
+44,s3u,"zero-shot, Liars' Bench average",extended axis (12v13),recall,0.0
+44,s3u,"zero-shot, HP-KR",base probe (RepE-trained),auroc,0.5192
+44,s3u,"zero-shot, HP-KR",base probe (RepE-trained),balacc,0.5
+44,s3u,"zero-shot, HP-KR",base probe (RepE-trained),recall,0.0
+44,s3u,"zero-shot, HP-KR",deception axis (8v7),auroc,0.1542
+44,s3u,"zero-shot, HP-KR",deception axis (8v7),balacc,0.5
+44,s3u,"zero-shot, HP-KR",deception axis (8v7),recall,0.0
+44,s3u,"zero-shot, HP-KR",unified axis (13v12),auroc,0.146
+44,s3u,"zero-shot, HP-KR",unified axis (13v12),balacc,0.5
+44,s3u,"zero-shot, HP-KR",unified axis (13v12),recall,0.0
+44,s3u,"zero-shot, HP-KR",knowledge-denial axis (4v6),auroc,0.8651
+44,s3u,"zero-shot, HP-KR",knowledge-denial axis (4v6),balacc,0.7066
+44,s3u,"zero-shot, HP-KR",knowledge-denial axis (4v6),recall,0.8546
+44,s3u,"zero-shot, HP-KR",extended axis (12v13),auroc,0.2273
+44,s3u,"zero-shot, HP-KR",extended axis (12v13),balacc,0.5
+44,s3u,"zero-shot, HP-KR",extended axis (12v13),recall,0.0
+48,s3u,"transfer, off-diagonal mean",extended axis (12v13),auroc,0.4983510976163072
+48,s3u,"transfer, off-diagonal mean",knowledge-denial axis (4v6),auroc,0.7862284687421238
+48,s3u,"transfer, off-diagonal mean",extended PCs (k=3),auroc,0.6060786358197766
+48,s3u,"transfer, off-diagonal mean",unified axis (13v12),auroc,0.4624783764506139
+48,s3u,"transfer, off-diagonal mean",deception axis (8v7),auroc,0.4728597487217036
+48,s3u,"transfer, off-diagonal mean",single-source probe (8192-d),auroc,0.5848856595243007
+48,s3u,"transfer, off-diagonal mean",extended axis (12v13),balacc,0.5063636363636363
+48,s3u,"transfer, off-diagonal mean",knowledge-denial axis (4v6),balacc,0.5920361415936719
+48,s3u,"transfer, off-diagonal mean",extended PCs (k=3),balacc,0.5591060170956318
+48,s3u,"transfer, off-diagonal mean",unified axis (13v12),balacc,0.5002753907231519
+48,s3u,"transfer, off-diagonal mean",deception axis (8v7),balacc,0.5018181818181818
+48,s3u,"transfer, off-diagonal mean",single-source probe (8192-d),balacc,0.5664992047936217
+48,s3u,"zero-shot, Liars' Bench average",base probe (RepE-trained),auroc,0.6301
+48,s3u,"zero-shot, Liars' Bench average",base probe (RepE-trained),balacc,0.6081
+48,s3u,"zero-shot, Liars' Bench average",base probe (RepE-trained),recall,0.3248
+48,s3u,"zero-shot, Liars' Bench average",deception axis (8v7),auroc,0.5053
+48,s3u,"zero-shot, Liars' Bench average",deception axis (8v7),balacc,0.5
+48,s3u,"zero-shot, Liars' Bench average",deception axis (8v7),recall,0.0
+48,s3u,"zero-shot, Liars' Bench average",unified axis (13v12),auroc,0.4822
+48,s3u,"zero-shot, Liars' Bench average",unified axis (13v12),balacc,0.4999
+48,s3u,"zero-shot, Liars' Bench average",unified axis (13v12),recall,0.0
+48,s3u,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),auroc,0.7802
+48,s3u,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),balacc,0.6009
+48,s3u,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),recall,0.2968
+48,s3u,"zero-shot, Liars' Bench average",extended axis (12v13),auroc,0.5517
+48,s3u,"zero-shot, Liars' Bench average",extended axis (12v13),balacc,0.5
+48,s3u,"zero-shot, Liars' Bench average",extended axis (12v13),recall,0.0
+48,s3u,"zero-shot, HP-KR",base probe (RepE-trained),auroc,0.4696
+48,s3u,"zero-shot, HP-KR",base probe (RepE-trained),balacc,0.5011
+48,s3u,"zero-shot, HP-KR",base probe (RepE-trained),recall,0.0053
+48,s3u,"zero-shot, HP-KR",deception axis (8v7),auroc,0.1483
+48,s3u,"zero-shot, HP-KR",deception axis (8v7),balacc,0.5
+48,s3u,"zero-shot, HP-KR",deception axis (8v7),recall,0.0
+48,s3u,"zero-shot, HP-KR",unified axis (13v12),auroc,0.1404
+48,s3u,"zero-shot, HP-KR",unified axis (13v12),balacc,0.5
+48,s3u,"zero-shot, HP-KR",unified axis (13v12),recall,0.0
+48,s3u,"zero-shot, HP-KR",knowledge-denial axis (4v6),auroc,0.8639
+48,s3u,"zero-shot, HP-KR",knowledge-denial axis (4v6),balacc,0.7856
+48,s3u,"zero-shot, HP-KR",knowledge-denial axis (4v6),recall,0.8546
+48,s3u,"zero-shot, HP-KR",extended axis (12v13),auroc,0.2277
+48,s3u,"zero-shot, HP-KR",extended axis (12v13),balacc,0.5
+48,s3u,"zero-shot, HP-KR",extended axis (12v13),recall,0.0
+52,s3u,"transfer, off-diagonal mean",extended axis (12v13),auroc,0.5494699793285703
+52,s3u,"transfer, off-diagonal mean",knowledge-denial axis (4v6),auroc,0.8209789419818542
+52,s3u,"transfer, off-diagonal mean",extended PCs (k=3),auroc,0.6699361945299419
+52,s3u,"transfer, off-diagonal mean",unified axis (13v12),auroc,0.4730348693151756
+52,s3u,"transfer, off-diagonal mean",deception axis (8v7),auroc,0.4867158387146711
+52,s3u,"transfer, off-diagonal mean",single-source probe (8192-d),auroc,0.7295393544569894
+52,s3u,"transfer, off-diagonal mean",extended axis (12v13),balacc,0.5305361305361306
+52,s3u,"transfer, off-diagonal mean",knowledge-denial axis (4v6),balacc,0.653617811493746
+52,s3u,"transfer, off-diagonal mean",extended PCs (k=3),balacc,0.5111186771731867
+52,s3u,"transfer, off-diagonal mean",unified axis (13v12),balacc,0.5069109773587386
+52,s3u,"transfer, off-diagonal mean",deception axis (8v7),balacc,0.5133721833721833
+52,s3u,"transfer, off-diagonal mean",single-source probe (8192-d),balacc,0.6062000398489538
+52,s3u,"zero-shot, Liars' Bench average",base probe (RepE-trained),auroc,0.6993
+52,s3u,"zero-shot, Liars' Bench average",base probe (RepE-trained),balacc,0.5944
+52,s3u,"zero-shot, Liars' Bench average",base probe (RepE-trained),recall,0.346
+52,s3u,"zero-shot, Liars' Bench average",deception axis (8v7),auroc,0.5592
+52,s3u,"zero-shot, Liars' Bench average",deception axis (8v7),balacc,0.5001
+52,s3u,"zero-shot, Liars' Bench average",deception axis (8v7),recall,0.0002
+52,s3u,"zero-shot, Liars' Bench average",unified axis (13v12),auroc,0.5246
+52,s3u,"zero-shot, Liars' Bench average",unified axis (13v12),balacc,0.5005
+52,s3u,"zero-shot, Liars' Bench average",unified axis (13v12),recall,0.0011
+52,s3u,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),auroc,0.8111
+52,s3u,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),balacc,0.6345
+52,s3u,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),recall,0.4402
+52,s3u,"zero-shot, Liars' Bench average",extended axis (12v13),auroc,0.6518
+52,s3u,"zero-shot, Liars' Bench average",extended axis (12v13),balacc,0.5035
+52,s3u,"zero-shot, Liars' Bench average",extended axis (12v13),recall,0.007
+52,s3u,"zero-shot, HP-KR",base probe (RepE-trained),auroc,0.5602
+52,s3u,"zero-shot, HP-KR",base probe (RepE-trained),balacc,0.4725
+52,s3u,"zero-shot, HP-KR",base probe (RepE-trained),recall,0.0385
+52,s3u,"zero-shot, HP-KR",deception axis (8v7),auroc,0.1224
+52,s3u,"zero-shot, HP-KR",deception axis (8v7),balacc,0.5
+52,s3u,"zero-shot, HP-KR",deception axis (8v7),recall,0.0
+52,s3u,"zero-shot, HP-KR",unified axis (13v12),auroc,0.1158
+52,s3u,"zero-shot, HP-KR",unified axis (13v12),balacc,0.5
+52,s3u,"zero-shot, HP-KR",unified axis (13v12),recall,0.0
+52,s3u,"zero-shot, HP-KR",knowledge-denial axis (4v6),auroc,0.8622
+52,s3u,"zero-shot, HP-KR",knowledge-denial axis (4v6),balacc,0.6777
+52,s3u,"zero-shot, HP-KR",knowledge-denial axis (4v6),recall,0.8564
+52,s3u,"zero-shot, HP-KR",extended axis (12v13),auroc,0.3599
+52,s3u,"zero-shot, HP-KR",extended axis (12v13),balacc,0.5
+52,s3u,"zero-shot, HP-KR",extended axis (12v13),recall,0.0
+56,s3u,"transfer, off-diagonal mean",extended axis (12v13),auroc,0.8306564355195095
+56,s3u,"transfer, off-diagonal mean",knowledge-denial axis (4v6),auroc,0.8439270723141435
+56,s3u,"transfer, off-diagonal mean",extended PCs (k=3),auroc,0.6471403734180194
+56,s3u,"transfer, off-diagonal mean",unified axis (13v12),auroc,0.5272791329819755
+56,s3u,"transfer, off-diagonal mean",deception axis (8v7),auroc,0.5523963948338032
+56,s3u,"transfer, off-diagonal mean",single-source probe (8192-d),auroc,0.8541272549612188
+56,s3u,"transfer, off-diagonal mean",extended axis (12v13),balacc,0.6013441533590788
+56,s3u,"transfer, off-diagonal mean",knowledge-denial axis (4v6),balacc,0.6927973921133295
+56,s3u,"transfer, off-diagonal mean",extended PCs (k=3),balacc,0.5175757575757576
+56,s3u,"transfer, off-diagonal mean",unified axis (13v12),balacc,0.5320218642606703
+56,s3u,"transfer, off-diagonal mean",deception axis (8v7),balacc,0.5274237978715591
+56,s3u,"transfer, off-diagonal mean",single-source probe (8192-d),balacc,0.6618122853684927
+56,s3u,"zero-shot, Liars' Bench average",base probe (RepE-trained),auroc,0.8166
+56,s3u,"zero-shot, Liars' Bench average",base probe (RepE-trained),balacc,0.6037
+56,s3u,"zero-shot, Liars' Bench average",base probe (RepE-trained),recall,1.0
+56,s3u,"zero-shot, Liars' Bench average",deception axis (8v7),auroc,0.658
+56,s3u,"zero-shot, Liars' Bench average",deception axis (8v7),balacc,0.5021
+56,s3u,"zero-shot, Liars' Bench average",deception axis (8v7),recall,0.0044
+56,s3u,"zero-shot, Liars' Bench average",unified axis (13v12),auroc,0.6067
+56,s3u,"zero-shot, Liars' Bench average",unified axis (13v12),balacc,0.524
+56,s3u,"zero-shot, Liars' Bench average",unified axis (13v12),recall,0.0486
+56,s3u,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),auroc,0.8209
+56,s3u,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),balacc,0.6722
+56,s3u,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),recall,0.4948
+56,s3u,"zero-shot, Liars' Bench average",extended axis (12v13),auroc,0.7853
+56,s3u,"zero-shot, Liars' Bench average",extended axis (12v13),balacc,0.5418
+56,s3u,"zero-shot, Liars' Bench average",extended axis (12v13),recall,0.0839
+56,s3u,"zero-shot, HP-KR",base probe (RepE-trained),auroc,0.902
+56,s3u,"zero-shot, HP-KR",base probe (RepE-trained),balacc,0.5005
+56,s3u,"zero-shot, HP-KR",base probe (RepE-trained),recall,1.0
+56,s3u,"zero-shot, HP-KR",deception axis (8v7),auroc,0.3413
+56,s3u,"zero-shot, HP-KR",deception axis (8v7),balacc,0.5
+56,s3u,"zero-shot, HP-KR",deception axis (8v7),recall,0.0
+56,s3u,"zero-shot, HP-KR",unified axis (13v12),auroc,0.2821
+56,s3u,"zero-shot, HP-KR",unified axis (13v12),balacc,0.5
+56,s3u,"zero-shot, HP-KR",unified axis (13v12),recall,0.0
+56,s3u,"zero-shot, HP-KR",knowledge-denial axis (4v6),auroc,0.8589
+56,s3u,"zero-shot, HP-KR",knowledge-denial axis (4v6),balacc,0.7094
+56,s3u,"zero-shot, HP-KR",knowledge-denial axis (4v6),recall,0.8494
+56,s3u,"zero-shot, HP-KR",extended axis (12v13),auroc,0.6999
+56,s3u,"zero-shot, HP-KR",extended axis (12v13),balacc,0.5
+56,s3u,"zero-shot, HP-KR",extended axis (12v13),recall,0.0
+60,s3u,"transfer, off-diagonal mean",extended axis (12v13),auroc,0.8535837697958374
+60,s3u,"transfer, off-diagonal mean",knowledge-denial axis (4v6),auroc,0.8475168571161409
+60,s3u,"transfer, off-diagonal mean",extended PCs (k=3),auroc,0.7166544062199788
+60,s3u,"transfer, off-diagonal mean",unified axis (13v12),auroc,0.5686265414971349
+60,s3u,"transfer, off-diagonal mean",deception axis (8v7),auroc,0.7837807427228217
+60,s3u,"transfer, off-diagonal mean",single-source probe (8192-d),auroc,0.846248083998244
+60,s3u,"transfer, off-diagonal mean",extended axis (12v13),balacc,0.5161538461538461
+60,s3u,"transfer, off-diagonal mean",knowledge-denial axis (4v6),balacc,0.6422897308670338
+60,s3u,"transfer, off-diagonal mean",extended PCs (k=3),balacc,0.5025951825951825
+60,s3u,"transfer, off-diagonal mean",unified axis (13v12),balacc,0.5012509712509713
+60,s3u,"transfer, off-diagonal mean",deception axis (8v7),balacc,0.5014219114219114
+60,s3u,"transfer, off-diagonal mean",single-source probe (8192-d),balacc,0.6454386305366543
+60,s3u,"zero-shot, Liars' Bench average",base probe (RepE-trained),auroc,0.8668
+60,s3u,"zero-shot, Liars' Bench average",base probe (RepE-trained),balacc,0.6239
+60,s3u,"zero-shot, Liars' Bench average",base probe (RepE-trained),recall,1.0
+60,s3u,"zero-shot, Liars' Bench average",deception axis (8v7),auroc,0.7298
+60,s3u,"zero-shot, Liars' Bench average",deception axis (8v7),balacc,0.5001
+60,s3u,"zero-shot, Liars' Bench average",deception axis (8v7),recall,0.0002
+60,s3u,"zero-shot, Liars' Bench average",unified axis (13v12),auroc,0.6405
+60,s3u,"zero-shot, Liars' Bench average",unified axis (13v12),balacc,0.5001
+60,s3u,"zero-shot, Liars' Bench average",unified axis (13v12),recall,0.0002
+60,s3u,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),auroc,0.8175
+60,s3u,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),balacc,0.6546
+60,s3u,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),recall,0.3144
+60,s3u,"zero-shot, Liars' Bench average",extended axis (12v13),auroc,0.82
+60,s3u,"zero-shot, Liars' Bench average",extended axis (12v13),balacc,0.5009
+60,s3u,"zero-shot, Liars' Bench average",extended axis (12v13),recall,0.0019
+60,s3u,"zero-shot, HP-KR",base probe (RepE-trained),auroc,0.9706
+60,s3u,"zero-shot, HP-KR",base probe (RepE-trained),balacc,0.5582
+60,s3u,"zero-shot, HP-KR",base probe (RepE-trained),recall,1.0
+60,s3u,"zero-shot, HP-KR",deception axis (8v7),auroc,0.634
+60,s3u,"zero-shot, HP-KR",deception axis (8v7),balacc,0.5
+60,s3u,"zero-shot, HP-KR",deception axis (8v7),recall,0.0
+60,s3u,"zero-shot, HP-KR",unified axis (13v12),auroc,0.4734
+60,s3u,"zero-shot, HP-KR",unified axis (13v12),balacc,0.5
+60,s3u,"zero-shot, HP-KR",unified axis (13v12),recall,0.0
+60,s3u,"zero-shot, HP-KR",knowledge-denial axis (4v6),auroc,0.869
+60,s3u,"zero-shot, HP-KR",knowledge-denial axis (4v6),balacc,0.8778
+60,s3u,"zero-shot, HP-KR",knowledge-denial axis (4v6),recall,0.7706
+60,s3u,"zero-shot, HP-KR",extended axis (12v13),auroc,0.8429
+60,s3u,"zero-shot, HP-KR",extended axis (12v13),balacc,0.5
+60,s3u,"zero-shot, HP-KR",extended axis (12v13),recall,0.0
+64,s3u,"transfer, off-diagonal mean",extended axis (12v13),auroc,0.8172975273687803
+64,s3u,"transfer, off-diagonal mean",knowledge-denial axis (4v6),auroc,0.8203030192185669
+64,s3u,"transfer, off-diagonal mean",extended PCs (k=3),auroc,0.6538313950132411
+64,s3u,"transfer, off-diagonal mean",unified axis (13v12),auroc,0.5621448679291708
+64,s3u,"transfer, off-diagonal mean",deception axis (8v7),auroc,0.7590785368181895
+64,s3u,"transfer, off-diagonal mean",single-source probe (8192-d),auroc,0.8051041201957321
+64,s3u,"transfer, off-diagonal mean",extended axis (12v13),balacc,0.5150582750582751
+64,s3u,"transfer, off-diagonal mean",knowledge-denial axis (4v6),balacc,0.530018247951698
+64,s3u,"transfer, off-diagonal mean",extended PCs (k=3),balacc,0.5003030303030304
+64,s3u,"transfer, off-diagonal mean",unified axis (13v12),balacc,0.5021212121212121
+64,s3u,"transfer, off-diagonal mean",deception axis (8v7),balacc,0.504090909090909
+64,s3u,"transfer, off-diagonal mean",single-source probe (8192-d),balacc,0.6556905746270351
+64,s3u,"zero-shot, Liars' Bench average",base probe (RepE-trained),auroc,0.8667
+64,s3u,"zero-shot, Liars' Bench average",base probe (RepE-trained),balacc,0.656
+64,s3u,"zero-shot, Liars' Bench average",base probe (RepE-trained),recall,0.9692
+64,s3u,"zero-shot, Liars' Bench average",deception axis (8v7),auroc,0.7118
+64,s3u,"zero-shot, Liars' Bench average",deception axis (8v7),balacc,0.5
+64,s3u,"zero-shot, Liars' Bench average",deception axis (8v7),recall,0.0
+64,s3u,"zero-shot, Liars' Bench average",unified axis (13v12),auroc,0.6418
+64,s3u,"zero-shot, Liars' Bench average",unified axis (13v12),balacc,0.5
+64,s3u,"zero-shot, Liars' Bench average",unified axis (13v12),recall,0.0
+64,s3u,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),auroc,0.7865
+64,s3u,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),balacc,0.5085
+64,s3u,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),recall,0.017
+64,s3u,"zero-shot, Liars' Bench average",extended axis (12v13),auroc,0.7837
+64,s3u,"zero-shot, Liars' Bench average",extended axis (12v13),balacc,0.5001
+64,s3u,"zero-shot, Liars' Bench average",extended axis (12v13),recall,0.0002
+64,s3u,"zero-shot, HP-KR",base probe (RepE-trained),auroc,0.962
+64,s3u,"zero-shot, HP-KR",base probe (RepE-trained),balacc,0.5595
+64,s3u,"zero-shot, HP-KR",base probe (RepE-trained),recall,1.0
+64,s3u,"zero-shot, HP-KR",deception axis (8v7),auroc,0.6692
+64,s3u,"zero-shot, HP-KR",deception axis (8v7),balacc,0.5
+64,s3u,"zero-shot, HP-KR",deception axis (8v7),recall,0.0
+64,s3u,"zero-shot, HP-KR",unified axis (13v12),auroc,0.5429
+64,s3u,"zero-shot, HP-KR",unified axis (13v12),balacc,0.5
+64,s3u,"zero-shot, HP-KR",unified axis (13v12),recall,0.0
+64,s3u,"zero-shot, HP-KR",knowledge-denial axis (4v6),auroc,0.8647
+64,s3u,"zero-shot, HP-KR",knowledge-denial axis (4v6),balacc,0.5018
+64,s3u,"zero-shot, HP-KR",knowledge-denial axis (4v6),recall,0.0035
+64,s3u,"zero-shot, HP-KR",extended axis (12v13),auroc,0.8127
+64,s3u,"zero-shot, HP-KR",extended axis (12v13),balacc,0.5
+64,s3u,"zero-shot, HP-KR",extended axis (12v13),recall,0.0
+68,s3u,"transfer, off-diagonal mean",extended axis (12v13),auroc,0.8152508698683526
+68,s3u,"transfer, off-diagonal mean",knowledge-denial axis (4v6),auroc,0.8385030472237957
+68,s3u,"transfer, off-diagonal mean",extended PCs (k=3),auroc,0.7004974184407494
+68,s3u,"transfer, off-diagonal mean",unified axis (13v12),auroc,0.7209329355190435
+68,s3u,"transfer, off-diagonal mean",deception axis (8v7),auroc,0.7658056019940683
+68,s3u,"transfer, off-diagonal mean",single-source probe (8192-d),auroc,0.8035155817008276
+68,s3u,"transfer, off-diagonal mean",extended axis (12v13),balacc,0.5081818181818182
+68,s3u,"transfer, off-diagonal mean",knowledge-denial axis (4v6),balacc,0.5182983682983683
+68,s3u,"transfer, off-diagonal mean",extended PCs (k=3),balacc,0.5002615709332128
+68,s3u,"transfer, off-diagonal mean",unified axis (13v12),balacc,0.5036363636363637
+68,s3u,"transfer, off-diagonal mean",deception axis (8v7),balacc,0.5027272727272727
+68,s3u,"transfer, off-diagonal mean",single-source probe (8192-d),balacc,0.6307037902549916
+68,s3u,"zero-shot, Liars' Bench average",base probe (RepE-trained),auroc,0.8571
+68,s3u,"zero-shot, Liars' Bench average",base probe (RepE-trained),balacc,0.6725
+68,s3u,"zero-shot, Liars' Bench average",base probe (RepE-trained),recall,0.9511
+68,s3u,"zero-shot, Liars' Bench average",deception axis (8v7),auroc,0.7395
+68,s3u,"zero-shot, Liars' Bench average",deception axis (8v7),balacc,0.5
+68,s3u,"zero-shot, Liars' Bench average",deception axis (8v7),recall,0.0
+68,s3u,"zero-shot, Liars' Bench average",unified axis (13v12),auroc,0.6867
+68,s3u,"zero-shot, Liars' Bench average",unified axis (13v12),balacc,0.5
+68,s3u,"zero-shot, Liars' Bench average",unified axis (13v12),recall,0.0
+68,s3u,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),auroc,0.823
+68,s3u,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),balacc,0.5002
+68,s3u,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),recall,0.0003
+68,s3u,"zero-shot, Liars' Bench average",extended axis (12v13),auroc,0.7994
+68,s3u,"zero-shot, Liars' Bench average",extended axis (12v13),balacc,0.5
+68,s3u,"zero-shot, Liars' Bench average",extended axis (12v13),recall,0.0
+68,s3u,"zero-shot, HP-KR",base probe (RepE-trained),auroc,0.947
+68,s3u,"zero-shot, HP-KR",base probe (RepE-trained),balacc,0.6044
+68,s3u,"zero-shot, HP-KR",base probe (RepE-trained),recall,0.9982
+68,s3u,"zero-shot, HP-KR",deception axis (8v7),auroc,0.6936
+68,s3u,"zero-shot, HP-KR",deception axis (8v7),balacc,0.5
+68,s3u,"zero-shot, HP-KR",deception axis (8v7),recall,0.0
+68,s3u,"zero-shot, HP-KR",unified axis (13v12),auroc,0.6172
+68,s3u,"zero-shot, HP-KR",unified axis (13v12),balacc,0.5
+68,s3u,"zero-shot, HP-KR",unified axis (13v12),recall,0.0
+68,s3u,"zero-shot, HP-KR",knowledge-denial axis (4v6),auroc,0.8783
+68,s3u,"zero-shot, HP-KR",knowledge-denial axis (4v6),balacc,0.5
+68,s3u,"zero-shot, HP-KR",knowledge-denial axis (4v6),recall,0.0
+68,s3u,"zero-shot, HP-KR",extended axis (12v13),auroc,0.802
+68,s3u,"zero-shot, HP-KR",extended axis (12v13),balacc,0.5
+68,s3u,"zero-shot, HP-KR",extended axis (12v13),recall,0.0
+72,s3u,"transfer, off-diagonal mean",extended axis (12v13),auroc,0.751442407153221
+72,s3u,"transfer, off-diagonal mean",knowledge-denial axis (4v6),auroc,0.8144965125328785
+72,s3u,"transfer, off-diagonal mean",extended PCs (k=3),auroc,0.6228068962422211
+72,s3u,"transfer, off-diagonal mean",unified axis (13v12),auroc,0.5436912935690094
+72,s3u,"transfer, off-diagonal mean",deception axis (8v7),auroc,0.7028259756225909
+72,s3u,"transfer, off-diagonal mean",single-source probe (8192-d),auroc,0.7865072387707969
+72,s3u,"transfer, off-diagonal mean",extended axis (12v13),balacc,0.5
+72,s3u,"transfer, off-diagonal mean",knowledge-denial axis (4v6),balacc,0.5077855477855477
+72,s3u,"transfer, off-diagonal mean",extended PCs (k=3),balacc,0.500019425019425
+72,s3u,"transfer, off-diagonal mean",unified axis (13v12),balacc,0.5
+72,s3u,"transfer, off-diagonal mean",deception axis (8v7),balacc,0.5
+72,s3u,"transfer, off-diagonal mean",single-source probe (8192-d),balacc,0.6307849940680768
+72,s3u,"zero-shot, Liars' Bench average",base probe (RepE-trained),auroc,0.8526
+72,s3u,"zero-shot, Liars' Bench average",base probe (RepE-trained),balacc,0.6711
+72,s3u,"zero-shot, Liars' Bench average",base probe (RepE-trained),recall,0.9847
+72,s3u,"zero-shot, Liars' Bench average",deception axis (8v7),auroc,0.6677
+72,s3u,"zero-shot, Liars' Bench average",deception axis (8v7),balacc,0.5
+72,s3u,"zero-shot, Liars' Bench average",deception axis (8v7),recall,0.0
+72,s3u,"zero-shot, Liars' Bench average",unified axis (13v12),auroc,0.61
+72,s3u,"zero-shot, Liars' Bench average",unified axis (13v12),balacc,0.5
+72,s3u,"zero-shot, Liars' Bench average",unified axis (13v12),recall,0.0
+72,s3u,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),auroc,0.8003
+72,s3u,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),balacc,0.5001
+72,s3u,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),recall,0.0002
+72,s3u,"zero-shot, Liars' Bench average",extended axis (12v13),auroc,0.7253
+72,s3u,"zero-shot, Liars' Bench average",extended axis (12v13),balacc,0.5
+72,s3u,"zero-shot, Liars' Bench average",extended axis (12v13),recall,0.0
+72,s3u,"zero-shot, HP-KR",base probe (RepE-trained),auroc,0.9437
+72,s3u,"zero-shot, HP-KR",base probe (RepE-trained),balacc,0.6571
+72,s3u,"zero-shot, HP-KR",base probe (RepE-trained),recall,0.9877
+72,s3u,"zero-shot, HP-KR",deception axis (8v7),auroc,0.5447
+72,s3u,"zero-shot, HP-KR",deception axis (8v7),balacc,0.5
+72,s3u,"zero-shot, HP-KR",deception axis (8v7),recall,0.0
+72,s3u,"zero-shot, HP-KR",unified axis (13v12),auroc,0.4586
+72,s3u,"zero-shot, HP-KR",unified axis (13v12),balacc,0.5
+72,s3u,"zero-shot, HP-KR",unified axis (13v12),recall,0.0
+72,s3u,"zero-shot, HP-KR",knowledge-denial axis (4v6),auroc,0.8463
+72,s3u,"zero-shot, HP-KR",knowledge-denial axis (4v6),balacc,0.5
+72,s3u,"zero-shot, HP-KR",knowledge-denial axis (4v6),recall,0.0
+72,s3u,"zero-shot, HP-KR",extended axis (12v13),auroc,0.6301
+72,s3u,"zero-shot, HP-KR",extended axis (12v13),balacc,0.5
+72,s3u,"zero-shot, HP-KR",extended axis (12v13),recall,0.0
+76,s3u,"transfer, off-diagonal mean",extended axis (12v13),auroc,0.5688580046203372
+76,s3u,"transfer, off-diagonal mean",knowledge-denial axis (4v6),auroc,0.778373518634193
+76,s3u,"transfer, off-diagonal mean",extended PCs (k=3),auroc,0.517500034066149
+76,s3u,"transfer, off-diagonal mean",unified axis (13v12),auroc,0.5195052254363826
+76,s3u,"transfer, off-diagonal mean",deception axis (8v7),auroc,0.5510326072364063
+76,s3u,"transfer, off-diagonal mean",single-source probe (8192-d),auroc,0.7382666786444192
+76,s3u,"transfer, off-diagonal mean",extended axis (12v13),balacc,0.4999861802100607
+76,s3u,"transfer, off-diagonal mean",knowledge-denial axis (4v6),balacc,0.502051282051282
+76,s3u,"transfer, off-diagonal mean",extended PCs (k=3),balacc,0.4988109955274134
+76,s3u,"transfer, off-diagonal mean",unified axis (13v12),balacc,0.5
+76,s3u,"transfer, off-diagonal mean",deception axis (8v7),balacc,0.5
+76,s3u,"transfer, off-diagonal mean",single-source probe (8192-d),balacc,0.5772164589650557
+76,s3u,"zero-shot, Liars' Bench average",base probe (RepE-trained),auroc,0.8354
+76,s3u,"zero-shot, Liars' Bench average",base probe (RepE-trained),balacc,0.6711
+76,s3u,"zero-shot, Liars' Bench average",base probe (RepE-trained),recall,0.9891
+76,s3u,"zero-shot, Liars' Bench average",deception axis (8v7),auroc,0.6455
+76,s3u,"zero-shot, Liars' Bench average",deception axis (8v7),balacc,0.5
+76,s3u,"zero-shot, Liars' Bench average",deception axis (8v7),recall,0.0
+76,s3u,"zero-shot, Liars' Bench average",unified axis (13v12),auroc,0.5912
+76,s3u,"zero-shot, Liars' Bench average",unified axis (13v12),balacc,0.5
+76,s3u,"zero-shot, Liars' Bench average",unified axis (13v12),recall,0.0
+76,s3u,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),auroc,0.7529
+76,s3u,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),balacc,0.5003
+76,s3u,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),recall,0.0006
+76,s3u,"zero-shot, Liars' Bench average",extended axis (12v13),auroc,0.6818
+76,s3u,"zero-shot, Liars' Bench average",extended axis (12v13),balacc,0.5
+76,s3u,"zero-shot, Liars' Bench average",extended axis (12v13),recall,0.0
+76,s3u,"zero-shot, HP-KR",base probe (RepE-trained),auroc,0.9348
+76,s3u,"zero-shot, HP-KR",base probe (RepE-trained),balacc,0.6766
+76,s3u,"zero-shot, HP-KR",base probe (RepE-trained),recall,0.9772
+76,s3u,"zero-shot, HP-KR",deception axis (8v7),auroc,0.4297
+76,s3u,"zero-shot, HP-KR",deception axis (8v7),balacc,0.5
+76,s3u,"zero-shot, HP-KR",deception axis (8v7),recall,0.0
+76,s3u,"zero-shot, HP-KR",unified axis (13v12),auroc,0.3374
+76,s3u,"zero-shot, HP-KR",unified axis (13v12),balacc,0.5
+76,s3u,"zero-shot, HP-KR",unified axis (13v12),recall,0.0
+76,s3u,"zero-shot, HP-KR",knowledge-denial axis (4v6),auroc,0.7155
+76,s3u,"zero-shot, HP-KR",knowledge-denial axis (4v6),balacc,0.5
+76,s3u,"zero-shot, HP-KR",knowledge-denial axis (4v6),recall,0.0
+76,s3u,"zero-shot, HP-KR",extended axis (12v13),auroc,0.4778
+76,s3u,"zero-shot, HP-KR",extended axis (12v13),balacc,0.5
+76,s3u,"zero-shot, HP-KR",extended axis (12v13),recall,0.0
+79,s3u,"transfer, off-diagonal mean",extended axis (12v13),auroc,0.4334188804714808
+79,s3u,"transfer, off-diagonal mean",knowledge-denial axis (4v6),auroc,0.4363340370077158
+79,s3u,"transfer, off-diagonal mean",extended PCs (k=3),auroc,0.4626587855810711
+79,s3u,"transfer, off-diagonal mean",unified axis (13v12),auroc,0.4740969637086165
+79,s3u,"transfer, off-diagonal mean",deception axis (8v7),auroc,0.4418096490333047
+79,s3u,"transfer, off-diagonal mean",single-source probe (8192-d),auroc,0.7504930637721379
+79,s3u,"transfer, off-diagonal mean",extended axis (12v13),balacc,0.5000521380618798
+79,s3u,"transfer, off-diagonal mean",knowledge-denial axis (4v6),balacc,0.5
+79,s3u,"transfer, off-diagonal mean",extended PCs (k=3),balacc,0.5
+79,s3u,"transfer, off-diagonal mean",unified axis (13v12),balacc,0.5
+79,s3u,"transfer, off-diagonal mean",deception axis (8v7),balacc,0.5000729713952131
+79,s3u,"transfer, off-diagonal mean",single-source probe (8192-d),balacc,0.5674857856331655
+79,s3u,"zero-shot, Liars' Bench average",base probe (RepE-trained),auroc,0.8637
+79,s3u,"zero-shot, Liars' Bench average",base probe (RepE-trained),balacc,0.6927
+79,s3u,"zero-shot, Liars' Bench average",base probe (RepE-trained),recall,0.9699
+79,s3u,"zero-shot, Liars' Bench average",deception axis (8v7),auroc,0.4506
+79,s3u,"zero-shot, Liars' Bench average",deception axis (8v7),balacc,0.5
+79,s3u,"zero-shot, Liars' Bench average",deception axis (8v7),recall,0.0
+79,s3u,"zero-shot, Liars' Bench average",unified axis (13v12),auroc,0.4387
+79,s3u,"zero-shot, Liars' Bench average",unified axis (13v12),balacc,0.5
+79,s3u,"zero-shot, Liars' Bench average",unified axis (13v12),recall,0.0
+79,s3u,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),auroc,0.5307
+79,s3u,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),balacc,0.5
+79,s3u,"zero-shot, Liars' Bench average",knowledge-denial axis (4v6),recall,0.0
+79,s3u,"zero-shot, Liars' Bench average",extended axis (12v13),auroc,0.4964
+79,s3u,"zero-shot, Liars' Bench average",extended axis (12v13),balacc,0.5
+79,s3u,"zero-shot, Liars' Bench average",extended axis (12v13),recall,0.0
+79,s3u,"zero-shot, HP-KR",base probe (RepE-trained),auroc,0.9478
+79,s3u,"zero-shot, HP-KR",base probe (RepE-trained),balacc,0.6731
+79,s3u,"zero-shot, HP-KR",base probe (RepE-trained),recall,0.9912
+79,s3u,"zero-shot, HP-KR",deception axis (8v7),auroc,0.2765
+79,s3u,"zero-shot, HP-KR",deception axis (8v7),balacc,0.5
+79,s3u,"zero-shot, HP-KR",deception axis (8v7),recall,0.0
+79,s3u,"zero-shot, HP-KR",unified axis (13v12),auroc,0.2713
+79,s3u,"zero-shot, HP-KR",unified axis (13v12),balacc,0.5
+79,s3u,"zero-shot, HP-KR",unified axis (13v12),recall,0.0
+79,s3u,"zero-shot, HP-KR",knowledge-denial axis (4v6),auroc,0.3232
+79,s3u,"zero-shot, HP-KR",knowledge-denial axis (4v6),balacc,0.5
+79,s3u,"zero-shot, HP-KR",knowledge-denial axis (4v6),recall,0.0
+79,s3u,"zero-shot, HP-KR",extended axis (12v13),auroc,0.28
+79,s3u,"zero-shot, HP-KR",extended axis (12v13),balacc,0.5
+79,s3u,"zero-shot, HP-KR",extended axis (12v13),recall,0.0

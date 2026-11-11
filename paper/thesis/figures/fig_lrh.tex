@@ -1,0 +1,73 @@
+% The linear representation hypothesis as formalised by Park, Choe and Veitch (fig:lrh). Left: the
+% unembedding space of words, where a concept is a direction shared by counterfactual pairs and is
+% read by projection. Right: the embedding space of contexts, where adding the concept's embedding
+% direction steers the next token; the bar charts are schematic. Centre: the causal inner product
+% that maps one direction to the other.
+\ifdefined\thesisfigstyle\else\input{generated/fig_style}\fi%
+\begin{tikzpicture}[fig,
+    word/.style={circle, fill=fink, inner sep=0pt, minimum size=1.5mm},
+    wlab/.style={figsmall, inner sep=1.5mm},
+    plane/.style={fill=fcanvas, draw=fedge, line width=0.5pt},
+    eq/.style={draw=fslate!45, fill=white, rounded corners=1.2mm, inner sep=1.3mm, align=center}]
+% \plane{x0}: a tilted plane with a light grid, 46 mm wide, from y = 26 to 62
+\newcommand{\plane}[1]{%
+  \filldraw[plane] (#1,26) -- (#1+46,26) -- (#1+52,62) -- (#1+6,62) -- cycle;
+  \foreach \t in {0.2,0.4,0.6,0.8} {
+    \draw[fedge, line width=0.3pt] ($(#1,26)!\t!(#1+6,62)$) -- ($(#1+46,26)!\t!(#1+52,62)$);
+    \draw[fedge, line width=0.3pt] ($(#1,26)!\t!(#1+46,26)$) -- ($(#1+6,62)!\t!(#1+52,62)$);}}
+
+% ---------------------------------------------------------------- left: measure
+\draw[figpanel] (0,0) rectangle (62,80);
+\node[fighead, anchor=north west] at (3,78) {Unembedding space $\Gamma$ (words)};
+\node[figgloss, anchor=north west] at (3,73.4) {measure: read a concept by projection};
+\plane{5}
+\node[word] (man) at (16,31) {};   \node[wlab, below left] at (man) {man};
+\node[word] (woman) at (27,38) {}; \node[wlab, right] at (woman) {woman};
+\node[word] (king) at (18,45) {};  \node[wlab, left] at (king) {king};
+\node[word] (queen) at (29,52) {}; \node[wlab, above] at (queen) {queen};
+\node[word] (roi) at (40,45) {};   \node[wlab, below] at (roi) {roi};
+\node[word] (reine) at (51,52) {}; \node[wlab, above] at (reine) {reine};
+\foreach \a/\b in {man/woman, king/queen, roi/reine}
+  \draw[figarrow, fdecept, shorten >=0.9mm, shorten <=0.9mm] (\a) -- (\b);
+\draw[figarrow, fslate, dashed, shorten >=0.9mm, shorten <=0.9mm] (king) -- (roi);
+\node[figsmall, text=fslate] at (29,47.4) {$\bar\gamma_Z$};
+\node[figsmall, text=fdecept, anchor=west] at (31,31) {$\bar\gamma_W$: male$\Rightarrow$female};
+\node[eq, anchor=south] at (31,4) {$\operatorname{logit} P(W{=}1\mid\lambda)=\alpha\,\lambda^{\top}\bar\gamma_W$\\[0.3ex]
+  {\figsf\itshape\fontsize{6}{7}\selectfont\color{fmute} probing reads $W$ along $\bar\gamma_W$}};
+\node[figsmall, text=fmute, align=center] at (31,20.5) {three word pairs share one direction};
+
+% ---------------------------------------------------------------- centre: the causal inner product
+\draw[fslatebg, fill=fslatebg] (75,55) .. controls (81,45) .. (75,35) .. controls (69,45) .. (75,55);
+\draw[fslate, line width=0.5pt] (75,55) .. controls (81,45) .. (75,35) .. controls (69,45) .. (75,55);
+\node[figsmall, text=fslate, align=center] at (75,45) {causal\\[-0.4ex]inner\\[-0.4ex]product};
+\draw[figarrow, fslate] (62.5,45) -- (71.6,45);
+\draw[figarrow, fslate] (78.4,45) -- (87.5,45);
+\node[figsmall, align=center, text=fslate] at (75,27.5)
+  {$\bar\lambda_W=$\\$\mathrm{Cov}(\gamma)^{-1}\bar\gamma_W$};
+\node[figgloss, align=center] at (75,64) {$Z\perp W$\\[-0.3ex]under it};
+
+% ---------------------------------------------------------------- right: steer
+\draw[figpanel] (88,0) rectangle (150,80);
+\node[fighead, anchor=north west] at (91,78) {Embedding space $\Lambda$ (contexts)};
+\node[figgloss, anchor=north west] at (91,73.4) {steer: write a concept by addition};
+\plane{93}
+\fill[fmute!25] (104,33) ellipse (4.2 and 2.6);
+\node[word] (lx) at (104,33) {};
+\node[wlab, below] at (104,30.2) {$\lambda(x)$: ``the \dots{} was crowned''};
+\node[word] (lxw) at (128,53) {};
+\node[wlab, above] at (lxw) {$\lambda(x)+c\,\bar\lambda_W$};
+\draw[figarrow, fdecept, line width=0.9pt, shorten >=0.9mm, shorten <=0.9mm] (lx) -- (lxw)
+  node[midway, figsmall, text=fdecept, anchor=north west] {$+\,c\,\bar\lambda_W$};
+% next-token bars before and after (schematic)
+\foreach \x/\k/\q/\lab in {95/9/2/before, 125/2/9/after} {
+  \fill[fslate!55] (\x,10) rectangle ++(4,\k);
+  \fill[fdecept!80] (\x+8,10) rectangle ++(4,\q);
+  \draw[fmute, line width=0.3pt] (\x-1.5,10) -- (\x+13.5,10);
+  \node[figsmall, anchor=north] at (\x+2,9.8) {king};
+  \node[figsmall, anchor=north] at (\x+10,9.8) {queen};
+  \node[figsmall, text=fmute, anchor=south] at (\x+6,20.2) {\lab};}
+\draw[figarrow, fdecept] (110.5,15) -- (122.5,15);
+\node[figgloss, anchor=north] at (119,4.8) {next-token probability (schematic)};
+\pgfresetboundingbox
+\path (0,0) rectangle (150,80);
+\end{tikzpicture}%

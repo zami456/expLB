@@ -1,0 +1,7 @@
+test,hypothesis,direction,statistic,p,pass,holm_p
+T1,H1 diverse > monotone at equal count,D9,B30+30mono LB-5 0.9044 vs 200 draws of B30+rand30div (median 0.8901),0.9402985074626866,False,1.0
+T2,H1 diverse > monotone at equal count,D9 + K,B30+30mono LB-5 0.9097 vs 200 draws of B30+rand30div (median 0.9103),0.4577114427860697,False,1.0
+H2,H2 monotone ~ original,D9,"B30mono 0.9048 in [0.8296, 0.9114] of rand30of150; paired CI vs B30orig [-0.0003, 0.0120] within +-0.03",,True,
+T3,H3 pooled >= best single family,D9,"B150 0.8809 - fam_orig_knowledge 0.9107 = -0.0298, CI [-0.0394, -0.0199]",1.0,False,1.0
+T4,H4 Sigma-cosine predicts transfer better than plain cosine,D9,"R2 sigma 0.675 vs plain 0.405; delta 0.269 CI [0.139, 0.365]",0.0,True,0.0
+H5,"H5 HP-KR identical-text slice, B150 vs B30 (exploratory)",D9,"0.7392 vs 0.7213, CI [0.0014, 0.0340]",,True,

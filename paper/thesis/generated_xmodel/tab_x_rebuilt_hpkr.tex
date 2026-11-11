@@ -1,0 +1,100 @@
+\begin{table}
+\caption{HP-KR rebuilt from the raw files: Qwen's identical text, Gemma's supplementary set}
+\label{tab:x-rebuilt_hpkr}
+\begin{tabular}{llllrrrrrr}
+\toprule
+model & layer & slice & scorer & lies & honest & AUROC & lo & hi & band97.5 \\
+\midrule
+Qwen2.5-72B$^\dagger$ & L20 & lies v honest denials, whole reply & K & 571 & 164 & 0.582 & 0.531 & 0.630 & 0.579 \\
+Qwen2.5-72B$^\dagger$ & L20 & lies v honest denials, whole reply & base probe & 571 & 164 & 0.503 & 0.446 & 0.556 & 0.579 \\
+Qwen2.5-72B$^\dagger$ & L20 & lies v honest denials, whole reply & D5 & 571 & 164 & 0.488 & 0.436 & 0.537 & 0.579 \\
+Qwen2.5-72B$^\dagger$ & L20 & lies v honest denials, whole reply & D8 & 571 & 164 & 0.543 & 0.492 & 0.593 & 0.579 \\
+Qwen2.5-72B$^\dagger$ & L20 & lies v honest denials, whole reply & D9 & 571 & 164 & 0.506 & 0.458 & 0.558 & 0.579 \\
+Qwen2.5-72B$^\dagger$ & L20 & lies v honest denials, whole reply & D9 + K & 571 & 164 & 0.583 & 0.536 & 0.633 & 0.579 \\
+Qwen2.5-72B$^\dagger$ & L20 & identical reply: I do not know the answer to the question. & K & 435 & 128 & 0.577 & 0.521 & 0.628 & 0.582 \\
+Qwen2.5-72B$^\dagger$ & L20 & identical reply: I do not know the answer to the question. & base probe & 435 & 128 & 0.533 & 0.475 & 0.594 & 0.582 \\
+Qwen2.5-72B$^\dagger$ & L20 & identical reply: I do not know the answer to the question. & D5 & 435 & 128 & 0.524 & 0.469 & 0.580 & 0.582 \\
+Qwen2.5-72B$^\dagger$ & L20 & identical reply: I do not know the answer to the question. & D8 & 435 & 128 & 0.562 & 0.505 & 0.617 & 0.582 \\
+Qwen2.5-72B$^\dagger$ & L20 & identical reply: I do not know the answer to the question. & D9 & 435 & 128 & 0.540 & 0.483 & 0.597 & 0.582 \\
+Qwen2.5-72B$^\dagger$ & L20 & identical reply: I do not know the answer to the question. & D9 + K & 435 & 128 & 0.578 & 0.520 & 0.635 & 0.582 \\
+Qwen2.5-72B$^\dagger$ & L20 & lies v honest denials, opening sentence only & K & 474 & 140 & 0.566 & 0.514 & 0.619 & 0.586 \\
+Qwen2.5-72B$^\dagger$ & L20 & lies v honest denials, opening sentence only & base probe & 474 & 140 & 0.537 & 0.481 & 0.593 & 0.586 \\
+Qwen2.5-72B$^\dagger$ & L20 & lies v honest denials, opening sentence only & D5 & 474 & 140 & 0.529 & 0.474 & 0.586 & 0.586 \\
+Qwen2.5-72B$^\dagger$ & L20 & lies v honest denials, opening sentence only & D8 & 474 & 140 & 0.564 & 0.512 & 0.618 & 0.586 \\
+Qwen2.5-72B$^\dagger$ & L20 & lies v honest denials, opening sentence only & D9 & 474 & 140 & 0.543 & 0.485 & 0.601 & 0.586 \\
+Qwen2.5-72B$^\dagger$ & L20 & lies v honest denials, opening sentence only & D9 + K & 474 & 140 & 0.568 & 0.513 & 0.622 & 0.586 \\
+Qwen2.5-72B$^\dagger$ & L40 & lies v honest denials, whole reply & K & 571 & 164 & 0.613 & 0.565 & 0.661 & 0.580 \\
+Qwen2.5-72B$^\dagger$ & L40 & lies v honest denials, whole reply & base probe & 571 & 164 & 0.533 & 0.481 & 0.584 & 0.580 \\
+Qwen2.5-72B$^\dagger$ & L40 & lies v honest denials, whole reply & D5 & 571 & 164 & 0.498 & 0.448 & 0.549 & 0.580 \\
+Qwen2.5-72B$^\dagger$ & L40 & lies v honest denials, whole reply & D8 & 571 & 164 & 0.569 & 0.520 & 0.617 & 0.580 \\
+Qwen2.5-72B$^\dagger$ & L40 & lies v honest denials, whole reply & D9 & 571 & 164 & 0.547 & 0.498 & 0.595 & 0.580 \\
+Qwen2.5-72B$^\dagger$ & L40 & lies v honest denials, whole reply & D9 + K & 571 & 164 & 0.617 & 0.570 & 0.665 & 0.580 \\
+Qwen2.5-72B$^\dagger$ & L40 & identical reply: I do not know the answer to the question. & K & 435 & 128 & 0.602 & 0.545 & 0.655 & 0.584 \\
+Qwen2.5-72B$^\dagger$ & L40 & identical reply: I do not know the answer to the question. & base probe & 435 & 128 & 0.543 & 0.486 & 0.597 & 0.584 \\
+Qwen2.5-72B$^\dagger$ & L40 & identical reply: I do not know the answer to the question. & D5 & 435 & 128 & 0.504 & 0.449 & 0.556 & 0.584 \\
+Qwen2.5-72B$^\dagger$ & L40 & identical reply: I do not know the answer to the question. & D8 & 435 & 128 & 0.550 & 0.493 & 0.603 & 0.584 \\
+Qwen2.5-72B$^\dagger$ & L40 & identical reply: I do not know the answer to the question. & D9 & 435 & 128 & 0.518 & 0.465 & 0.571 & 0.584 \\
+Qwen2.5-72B$^\dagger$ & L40 & identical reply: I do not know the answer to the question. & D9 + K & 435 & 128 & 0.598 & 0.544 & 0.650 & 0.584 \\
+Qwen2.5-72B$^\dagger$ & L40 & lies v honest denials, opening sentence only & K & 474 & 140 & 0.598 & 0.543 & 0.653 & 0.587 \\
+Qwen2.5-72B$^\dagger$ & L40 & lies v honest denials, opening sentence only & base probe & 474 & 140 & 0.552 & 0.497 & 0.605 & 0.587 \\
+Qwen2.5-72B$^\dagger$ & L40 & lies v honest denials, opening sentence only & D5 & 474 & 140 & 0.499 & 0.450 & 0.550 & 0.587 \\
+Qwen2.5-72B$^\dagger$ & L40 & lies v honest denials, opening sentence only & D8 & 474 & 140 & 0.550 & 0.497 & 0.600 & 0.587 \\
+Qwen2.5-72B$^\dagger$ & L40 & lies v honest denials, opening sentence only & D9 & 474 & 140 & 0.514 & 0.465 & 0.565 & 0.587 \\
+Qwen2.5-72B$^\dagger$ & L40 & lies v honest denials, opening sentence only & D9 + K & 474 & 140 & 0.594 & 0.543 & 0.648 & 0.587 \\
+Qwen2.5-72B$^\dagger$ & L44 & lies v honest denials, whole reply & K & 571 & 164 & 0.612 & 0.561 & 0.658 & 0.581 \\
+Qwen2.5-72B$^\dagger$ & L44 & lies v honest denials, whole reply & base probe & 571 & 164 & 0.529 & 0.481 & 0.578 & 0.581 \\
+Qwen2.5-72B$^\dagger$ & L44 & lies v honest denials, whole reply & D5 & 571 & 164 & 0.553 & 0.503 & 0.602 & 0.581 \\
+Qwen2.5-72B$^\dagger$ & L44 & lies v honest denials, whole reply & D8 & 571 & 164 & 0.569 & 0.519 & 0.619 & 0.581 \\
+Qwen2.5-72B$^\dagger$ & L44 & lies v honest denials, whole reply & D9 & 571 & 164 & 0.559 & 0.508 & 0.607 & 0.581 \\
+Qwen2.5-72B$^\dagger$ & L44 & lies v honest denials, whole reply & D9 + K & 571 & 164 & 0.610 & 0.565 & 0.656 & 0.581 \\
+Qwen2.5-72B$^\dagger$ & L44 & identical reply: I do not know the answer to the question. & K & 435 & 128 & 0.606 & 0.550 & 0.658 & 0.587 \\
+Qwen2.5-72B$^\dagger$ & L44 & identical reply: I do not know the answer to the question. & base probe & 435 & 128 & 0.521 & 0.461 & 0.578 & 0.587 \\
+Qwen2.5-72B$^\dagger$ & L44 & identical reply: I do not know the answer to the question. & D5 & 435 & 128 & 0.508 & 0.452 & 0.561 & 0.587 \\
+Qwen2.5-72B$^\dagger$ & L44 & identical reply: I do not know the answer to the question. & D8 & 435 & 128 & 0.545 & 0.487 & 0.604 & 0.587 \\
+Qwen2.5-72B$^\dagger$ & L44 & identical reply: I do not know the answer to the question. & D9 & 435 & 128 & 0.515 & 0.460 & 0.570 & 0.587 \\
+Qwen2.5-72B$^\dagger$ & L44 & identical reply: I do not know the answer to the question. & D9 + K & 435 & 128 & 0.602 & 0.545 & 0.655 & 0.587 \\
+Qwen2.5-72B$^\dagger$ & L44 & lies v honest denials, opening sentence only & K & 474 & 140 & 0.602 & 0.547 & 0.652 & 0.589 \\
+Qwen2.5-72B$^\dagger$ & L44 & lies v honest denials, opening sentence only & base probe & 474 & 140 & 0.530 & 0.475 & 0.586 & 0.589 \\
+Qwen2.5-72B$^\dagger$ & L44 & lies v honest denials, opening sentence only & D5 & 474 & 140 & 0.501 & 0.451 & 0.556 & 0.589 \\
+Qwen2.5-72B$^\dagger$ & L44 & lies v honest denials, opening sentence only & D8 & 474 & 140 & 0.543 & 0.488 & 0.601 & 0.589 \\
+Qwen2.5-72B$^\dagger$ & L44 & lies v honest denials, opening sentence only & D9 & 474 & 140 & 0.511 & 0.457 & 0.564 & 0.589 \\
+Qwen2.5-72B$^\dagger$ & L44 & lies v honest denials, opening sentence only & D9 + K & 474 & 140 & 0.598 & 0.544 & 0.652 & 0.589 \\
+Gemma-3-27B & L20 & lies v honest denials, whole reply & K & 35 & 100 & 0.507 & 0.394 & 0.616 & 0.634 \\
+Gemma-3-27B & L20 & lies v honest denials, whole reply & base probe & 35 & 100 & 0.485 & 0.383 & 0.595 & 0.634 \\
+Gemma-3-27B & L20 & lies v honest denials, whole reply & D5 & 35 & 100 & 0.518 & 0.413 & 0.631 & 0.634 \\
+Gemma-3-27B & L20 & lies v honest denials, whole reply & D8 & 35 & 100 & 0.524 & 0.414 & 0.632 & 0.634 \\
+Gemma-3-27B & L20 & lies v honest denials, whole reply & D9 & 35 & 100 & 0.526 & 0.413 & 0.624 & 0.634 \\
+Gemma-3-27B & L20 & lies v honest denials, whole reply & D9 + K & 35 & 100 & 0.591 & 0.481 & 0.702 & 0.634 \\
+Gemma-3-27B & L20 & lies v honest denials, opening sentence only & K & 34 & 85 & 0.601 & 0.481 & 0.716 & 0.627 \\
+Gemma-3-27B & L20 & lies v honest denials, opening sentence only & base probe & 34 & 85 & 0.478 & 0.368 & 0.586 & 0.627 \\
+Gemma-3-27B & L20 & lies v honest denials, opening sentence only & D5 & 34 & 85 & 0.446 & 0.325 & 0.562 & 0.627 \\
+Gemma-3-27B & L20 & lies v honest denials, opening sentence only & D8 & 34 & 85 & 0.408 & 0.279 & 0.541 & 0.627 \\
+Gemma-3-27B & L20 & lies v honest denials, opening sentence only & D9 & 34 & 85 & 0.435 & 0.309 & 0.563 & 0.627 \\
+Gemma-3-27B & L20 & lies v honest denials, opening sentence only & D9 + K & 34 & 85 & 0.563 & 0.429 & 0.691 & 0.627 \\
+Gemma-3-27B & L40 & lies v honest denials, whole reply & K & 35 & 100 & 0.378 & 0.275 & 0.489 & 0.637 \\
+Gemma-3-27B & L40 & lies v honest denials, whole reply & base probe & 35 & 100 & 0.547 & 0.442 & 0.650 & 0.637 \\
+Gemma-3-27B & L40 & lies v honest denials, whole reply & D5 & 35 & 100 & 0.583 & 0.476 & 0.692 & 0.637 \\
+Gemma-3-27B & L40 & lies v honest denials, whole reply & D8 & 35 & 100 & 0.418 & 0.311 & 0.528 & 0.637 \\
+Gemma-3-27B & L40 & lies v honest denials, whole reply & D9 & 35 & 100 & 0.434 & 0.324 & 0.547 & 0.637 \\
+Gemma-3-27B & L40 & lies v honest denials, whole reply & D9 + K & 35 & 100 & 0.403 & 0.295 & 0.514 & 0.637 \\
+Gemma-3-27B & L40 & lies v honest denials, opening sentence only & K & 34 & 85 & 0.585 & 0.469 & 0.693 & 0.622 \\
+Gemma-3-27B & L40 & lies v honest denials, opening sentence only & base probe & 34 & 85 & 0.481 & 0.369 & 0.590 & 0.622 \\
+Gemma-3-27B & L40 & lies v honest denials, opening sentence only & D5 & 34 & 85 & 0.484 & 0.365 & 0.598 & 0.622 \\
+Gemma-3-27B & L40 & lies v honest denials, opening sentence only & D8 & 34 & 85 & 0.530 & 0.412 & 0.643 & 0.622 \\
+Gemma-3-27B & L40 & lies v honest denials, opening sentence only & D9 & 34 & 85 & 0.624 & 0.510 & 0.729 & 0.622 \\
+Gemma-3-27B & L40 & lies v honest denials, opening sentence only & D9 + K & 34 & 85 & 0.611 & 0.500 & 0.719 & 0.622 \\
+Gemma-3-27B & L44 & lies v honest denials, whole reply & K & 35 & 100 & 0.658 & 0.556 & 0.753 & 0.652 \\
+Gemma-3-27B & L44 & lies v honest denials, whole reply & base probe & 35 & 100 & 0.524 & 0.415 & 0.640 & 0.652 \\
+Gemma-3-27B & L44 & lies v honest denials, whole reply & D5 & 35 & 100 & 0.630 & 0.528 & 0.737 & 0.652 \\
+Gemma-3-27B & L44 & lies v honest denials, whole reply & D8 & 35 & 100 & 0.378 & 0.271 & 0.486 & 0.652 \\
+Gemma-3-27B & L44 & lies v honest denials, whole reply & D9 & 35 & 100 & 0.636 & 0.522 & 0.742 & 0.652 \\
+Gemma-3-27B & L44 & lies v honest denials, whole reply & D9 + K & 35 & 100 & 0.671 & 0.570 & 0.770 & 0.652 \\
+Gemma-3-27B & L44 & lies v honest denials, opening sentence only & K & 34 & 85 & 0.532 & 0.421 & 0.643 & 0.628 \\
+Gemma-3-27B & L44 & lies v honest denials, opening sentence only & base probe & 34 & 85 & 0.461 & 0.358 & 0.565 & 0.628 \\
+Gemma-3-27B & L44 & lies v honest denials, opening sentence only & D5 & 34 & 85 & 0.566 & 0.444 & 0.683 & 0.628 \\
+Gemma-3-27B & L44 & lies v honest denials, opening sentence only & D8 & 34 & 85 & 0.446 & 0.327 & 0.561 & 0.628 \\
+Gemma-3-27B & L44 & lies v honest denials, opening sentence only & D9 & 34 & 85 & 0.574 & 0.460 & 0.686 & 0.628 \\
+Gemma-3-27B & L44 & lies v honest denials, opening sentence only & D9 + K & 34 & 85 & 0.540 & 0.436 & 0.647 & 0.628 \\
+\bottomrule
+\end{tabular}
+\end{table}

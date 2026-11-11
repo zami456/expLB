@@ -1,0 +1,45 @@
+layer,read,direction,auroc,lo,hi,p_null,band97.5,balacc_1pct_fpr
+28,adapted,D9 bank,0.7174,0.668,0.7675,0.173,0.8933,
+28,adapted,k base,0.7171,0.6676,0.7652,0.173,0.8933,
+28,adapted,k fine-tune,0.7186,0.6681,0.7679,0.171,0.8933,
+28,adapted,D9 bank + k base (standardised),0.7175,0.6688,0.7667,0.173,0.8933,
+28,adapted,D9 bank + k base (vector),0.7173,0.6686,0.7664,0.173,0.8933,
+28,adapted,D9 bank + k fine-tune (standardised),0.7188,0.6694,0.7687,0.171,0.8933,
+28,adapted,D9 bank + k fine-tune (vector),0.7188,0.6695,0.7686,0.171,0.8933,
+28,adapted,published (8v7),0.3234,0.2733,0.3734,0.787,0.8933,
+28,adapted,knowledge-denial (4v6),0.7068,0.6581,0.756,0.188,0.8933,
+28,adapted,sycophancy (5v5),0.6994,0.6504,0.7483,0.195,0.8933,
+28,adapted,base probe (RepE-trained),0.6847,0.6319,0.7379,0.217,0.8933,
+28,base,D9 bank,0.4988,0.4452,0.5576,0.521,0.814,0.5
+28,base,k base,0.5778,0.5252,0.6343,0.37,0.814,0.5
+28,base,k fine-tune,0.6236,0.5727,0.678,0.266,0.814,
+28,base,D9 bank + k base (standardised),0.541,0.4872,0.6002,0.434,0.814,0.5
+28,base,D9 bank + k base (vector),0.5429,0.4888,0.6019,0.429,0.814,0.5
+28,base,D9 bank + k fine-tune (standardised),0.566,0.5136,0.6235,0.391,0.814,
+28,base,D9 bank + k fine-tune (vector),0.5643,0.5119,0.6219,0.395,0.814,
+28,base,published (8v7),0.6081,0.5496,0.6632,0.296,0.814,0.525
+28,base,knowledge-denial (4v6),0.4584,0.4041,0.5182,0.607,0.814,0.5
+28,base,sycophancy (5v5),0.4476,0.3928,0.508,0.623,0.814,0.5
+28,base,base probe (RepE-trained),0.5386,0.4788,0.5984,0.441,0.814,0.495
+31,adapted,D9 bank,0.5598,0.503,0.6158,0.467,0.951,
+31,adapted,k base,0.5853,0.5266,0.6396,0.435,0.951,
+31,adapted,k fine-tune,0.8036,0.758,0.8444,0.167,0.951,
+31,adapted,D9 bank + k base (standardised),0.5788,0.5207,0.6353,0.441,0.951,
+31,adapted,D9 bank + k base (vector),0.5813,0.5231,0.636,0.44,0.951,
+31,adapted,D9 bank + k fine-tune (standardised),0.7627,0.7133,0.8081,0.217,0.951,
+31,adapted,D9 bank + k fine-tune (vector),0.769,0.7205,0.8139,0.209,0.951,
+31,adapted,published (8v7),0.7891,0.7442,0.8318,0.191,0.951,
+31,adapted,knowledge-denial (4v6),0.2184,0.1746,0.2631,0.825,0.951,
+31,adapted,sycophancy (5v5),0.1895,0.1501,0.2318,0.86,0.951,
+31,adapted,base probe (RepE-trained),0.7935,0.7499,0.8349,0.186,0.951,
+31,base,D9 bank,0.5684,0.51,0.6162,0.388,0.8676,0.5
+31,base,k base,0.8488,0.811,0.8829,0.032,0.8676,0.7025
+31,base,k fine-tune,0.7881,0.736,0.8317,0.102,0.8676,
+31,base,D9 bank + k base (standardised),0.7489,0.7022,0.7892,0.143,0.8676,0.6225
+31,base,D9 bank + k base (vector),0.814,0.7716,0.8502,0.074,0.8676,0.72
+31,base,D9 bank + k fine-tune (standardised),0.7795,0.7298,0.8227,0.109,0.8676,
+31,base,D9 bank + k fine-tune (vector),0.781,0.7316,0.8246,0.109,0.8676,
+31,base,published (8v7),0.5582,0.5,0.6151,0.406,0.8676,0.5
+31,base,knowledge-denial (4v6),0.4415,0.384,0.4985,0.575,0.8676,0.5
+31,base,sycophancy (5v5),0.42,0.3621,0.4788,0.609,0.8676,0.5
+31,base,base probe (RepE-trained),0.7462,0.6913,0.7924,0.145,0.8676,0.525

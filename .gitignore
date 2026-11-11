@@ -1,0 +1,53 @@
+# environments, caches, secrets
+.venv/
+.venv-*/
+__pycache__/
+*.pyc
+.ruff_cache/
+.pytest_cache/
+.env
+logs/
+wandb/
+
+# large inputs: fetched by `python data/fetch.py` (GitHub release) or produced locally
+data/*
+!data/README.md
+!data/fetch.py
+!data/dataset_paths.json
+!data/release_results_parts.txt
+!data/aisi_llama/
+!data/aisi_gemma/
+!data/persona_banks/
+data/persona_banks/*
+!data/persona_banks/paper16_L20/
+activations/
+results/**/parts_*/
+
+# paper build products (figures under generated/ and images/ are tracked)
+paper/**/main.pdf
+paper/**/main_*.pdf
+paper/**/*.aux
+paper/**/*.log
+paper/**/*.out
+paper/**/*.blg
+paper/**/*.bbl
+paper/**/*.nlo
+paper/**/*.run.xml
+paper/**/*-blx.bib
+paper/**/arxiv_bundle.zip
+paper/thesis/sign/
+*.docx
+
+# persona_bank run outputs (vectors, rollouts, judge scores live on Drive / E:)
+persona_bank/.env
+persona_bank/src/assistant_axis_ndif/.env
+persona_bank/run/
+persona_bank/run-*/
+persona_bank/results/
+persona_bank/figures/
+persona_bank/kd/run/
+persona_bank/kd/results/
+persona_bank/kd/figures/
+persona_bank/xmodel/**/runs_*/
+persona_bank/xmodel/**/smoke/
+persona_bank/random_persona_bank/run/

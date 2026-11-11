@@ -1,0 +1,46 @@
+\begin{table}
+\caption{D3: the probe trained on the model's own lies (Llama and Gemma)}
+\label{tab:x-aisi}
+\begin{tabular}{lllrr}
+\toprule
+model & layer & detector & LB mean AUROC & BA (Alpaca 1\%) \\
+\midrule
+Llama-3.3-70B & L20 & base probe (RepE-trained) & 0.697 & 0.721 \\
+Llama-3.3-70B & L20 & base probe (AISI-trained) & 0.782 & 0.632 \\
+Llama-3.3-70B & L20 & base probe (AISI, instruction-matched) & 0.589 & 0.506 \\
+Llama-3.3-70B & L20 & base probe (AISI, trivia only) & 0.715 & 0.564 \\
+Llama-3.3-70B & L20 & knowledge-denial axis (4v6) & 0.863 & 0.559 \\
+Llama-3.3-70B & L20 & extended axis (12v13) & 0.887 & 0.591 \\
+Llama-3.3-70B & L20 & deception axis (8v7) & 0.750 & 0.534 \\
+Llama-3.3-70B & L40 & base probe (RepE-trained) & 0.778 & 0.626 \\
+Llama-3.3-70B & L40 & base probe (AISI-trained) & 0.878 & 0.630 \\
+Llama-3.3-70B & L40 & base probe (AISI, instruction-matched) & 0.701 & 0.527 \\
+Llama-3.3-70B & L40 & base probe (AISI, trivia only) & 0.718 & 0.627 \\
+Llama-3.3-70B & L40 & knowledge-denial axis (4v6) & 0.894 & 0.725 \\
+Llama-3.3-70B & L40 & extended axis (12v13) & 0.899 & 0.694 \\
+Llama-3.3-70B & L40 & deception axis (8v7) & 0.798 & 0.675 \\
+Llama-3.3-70B & L44 & base probe (RepE-trained) & 0.756 & 0.626 \\
+Llama-3.3-70B & L44 & base probe (AISI-trained) & 0.872 & 0.630 \\
+Llama-3.3-70B & L44 & base probe (AISI, instruction-matched) & 0.698 & 0.513 \\
+Llama-3.3-70B & L44 & base probe (AISI, trivia only) & 0.703 & 0.624 \\
+Llama-3.3-70B & L44 & knowledge-denial axis (4v6) & 0.880 & 0.683 \\
+Llama-3.3-70B & L44 & extended axis (12v13) & 0.884 & 0.666 \\
+Llama-3.3-70B & L44 & deception axis (8v7) & 0.791 & 0.654 \\
+Gemma-3-27B & L20 & base probe (RepE-trained) & 0.512 & 0.505 \\
+Gemma-3-27B & L20 & base probe (AISI-trained) & 0.802 & 0.595 \\
+Gemma-3-27B & L20 & knowledge-denial axis (4v6) & 0.622 & 0.530 \\
+Gemma-3-27B & L20 & extended axis (12v13) & 0.591 & 0.505 \\
+Gemma-3-27B & L20 & deception axis (8v7) & 0.575 & 0.500 \\
+Gemma-3-27B & L40 & base probe (RepE-trained) & 0.783 & 0.789 \\
+Gemma-3-27B & L40 & base probe (AISI-trained) & 0.858 & 0.713 \\
+Gemma-3-27B & L40 & knowledge-denial axis (4v6) & 0.484 & 0.497 \\
+Gemma-3-27B & L40 & extended axis (12v13) & 0.900 & 0.602 \\
+Gemma-3-27B & L40 & deception axis (8v7) & 0.679 & 0.500 \\
+Gemma-3-27B & L44 & base probe (RepE-trained) & 0.761 & 0.760 \\
+Gemma-3-27B & L44 & base probe (AISI-trained) & 0.770 & 0.692 \\
+Gemma-3-27B & L44 & knowledge-denial axis (4v6) & 0.564 & 0.496 \\
+Gemma-3-27B & L44 & extended axis (12v13) & 0.801 & 0.574 \\
+Gemma-3-27B & L44 & deception axis (8v7) & 0.691 & 0.503 \\
+\bottomrule
+\end{tabular}
+\end{table}
