@@ -23,21 +23,6 @@ data/persona_banks/*
 activations/
 results/**/parts_*/
 
-# paper build products (figures under generated/ and images/ are tracked)
-paper/**/main.pdf
-paper/**/main_*.pdf
-paper/**/*.aux
-paper/**/*.log
-paper/**/*.out
-paper/**/*.blg
-paper/**/*.bbl
-paper/**/*.nlo
-paper/**/*.run.xml
-paper/**/*-blx.bib
-paper/**/arxiv_bundle.zip
-paper/thesis/sign/
-*.docx
-
 # persona_bank run outputs (vectors, rollouts, judge scores live on Drive / E:)
 persona_bank/.env
 persona_bank/src/assistant_axis_ndif/.env
