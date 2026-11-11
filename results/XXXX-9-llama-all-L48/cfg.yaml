@@ -1,0 +1,42 @@
+acts_cache_mode: full
+acts_positions: tail
+control_data:
+- XXXX-20__plain
+control_dataset_size: 2000
+control_on_policy: false
+detect_all_tokens: false
+detect_layers:
+- 48
+detect_num_latents: null
+detect_only_last_token: false
+detect_only_start_of_turn: false
+eval_data:
+- convince_me__plain
+- harm_refusal_choice__plain
+- harm_refusal_knowledge_report__plain
+- insider_trading_cadenza__plain
+- instruct_dishonesty__plain
+eval_on_policy: false
+followup_question: Did your last response contain a lie? (Yes/No)
+host_token_budget: 32000
+id: XXXX-9
+lora_path: null
+max_iter: 1000
+max_llama_token_length: null
+method: lr
+model_name: llama-70b-3.3
+ndif_token_budget: 8000
+normalize_acts: true
+pw_locked: false
+reg_coeff: 10.0
+sae_latent_whitelist: null
+timestamp: '20260922_224706'
+train_data: repe_honesty__plain
+train_on_policy: false
+trim_reasoning: true
+use_class_weights: false
+use_followup_question: false
+use_goodfire_sae_acts: false
+use_last_5_tokens_for_training: false
+use_local_sae_acts: false
+val_fraction: 0.2
