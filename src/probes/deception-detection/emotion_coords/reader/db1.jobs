@@ -1,0 +1,2 @@
+# band 35-45: D2/D3 at the new blocks, half 1
+read --name d2d3 --out d2d3_band2 --layers 35,37,38,39,41,42,43,45 --dtype bfloat16 --shard 1/2 --session_timeout 5400

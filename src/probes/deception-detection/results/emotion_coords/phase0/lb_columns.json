@@ -1,0 +1,144 @@
+{
+  "convince_me__plain": {
+    "hf_config": "convincing-game",
+    "columns": [
+      "index",
+      "model",
+      "messages",
+      "temperature",
+      "deceptive",
+      "canary",
+      "meta"
+    ],
+    "rows_all_models": 888,
+    "rows_by_model": {
+      "gemma-3-27b-it": 621,
+      "llama-v3.3-70b-instruct": 267
+    },
+    "llama_rows": 267,
+    "llama_labels": {
+      "True": 167,
+      "False": 100
+    }
+  },
+  "harm_refusal_choice__plain": {
+    "hf_config": "harm-pressure-choice",
+    "columns": [
+      "index",
+      "model",
+      "dataset",
+      "messages",
+      "deceptive",
+      "temperature",
+      "meta",
+      "canary"
+    ],
+    "rows_all_models": 5400,
+    "rows_by_model": {
+      "qwen-2.5-72b-instruct": 2374,
+      "llama-v3.3-70b-instruct": 2134,
+      "mistral-small-3.1-24b-instruct": 892
+    },
+    "llama_rows": 2134,
+    "llama_labels": {
+      "False": 2000,
+      "True": 134
+    }
+  },
+  "harm_refusal_knowledge_report__plain": {
+    "hf_config": "harm-pressure-knowledge-report",
+    "columns": [
+      "index",
+      "model",
+      "dataset",
+      "messages",
+      "deceptive",
+      "temperature",
+      "meta",
+      "canary"
+    ],
+    "rows_all_models": 7068,
+    "rows_by_model": {
+      "qwen-2.5-72b-instruct": 2571,
+      "mistral-small-3.1-24b-instruct": 2358,
+      "llama-v3.3-70b-instruct": 2139
+    },
+    "llama_rows": 2139,
+    "llama_labels": {
+      "False": 2000,
+      "True": 139
+    }
+  },
+  "insider_trading_cadenza__plain": {
+    "hf_config": "insider-trading",
+    "columns": [
+      "index",
+      "model",
+      "messages",
+      "deceptive",
+      "temperature",
+      "meta",
+      "canary"
+    ],
+    "rows_all_models": 6873,
+    "rows_by_model": {
+      "gemma-3-27b-it": 3495,
+      "mistral-small-3.1-24b-instruct": 2134,
+      "llama-v3.3-70b-instruct": 1080,
+      "kimi-k2.6": 164
+    },
+    "llama_rows": 1080,
+    "llama_labels": {
+      "False": 657,
+      "True": 423
+    }
+  },
+  "instruct_dishonesty__plain": {
+    "hf_config": "instructed-deception",
+    "columns": [
+      "index",
+      "model",
+      "dataset",
+      "dataset_index",
+      "messages",
+      "deceptive",
+      "temperature",
+      "meta",
+      "canary"
+    ],
+    "rows_all_models": 26426,
+    "rows_by_model": {
+      "kimi-k2.6": 5628,
+      "llama-v3.3-70b-instruct": 5432,
+      "gemma-3-27b-it": 5196,
+      "qwen-2.5-72b-instruct": 5160,
+      "mistral-small-3.1-24b-instruct": 5010
+    },
+    "llama_rows": 5432,
+    "llama_labels": {
+      "True": 3045,
+      "False": 2387
+    }
+  },
+  "XXXX-20__plain": {
+    "hf_config": "alpaca",
+    "columns": [
+      "index",
+      "model",
+      "messages",
+      "deceptive",
+      "canary"
+    ],
+    "rows_all_models": 8000,
+    "rows_by_model": {
+      "llama-v3.3-70b-instruct": 2000,
+      "mistral-small-3.1-24b-instruct": 2000,
+      "qwen-2.5-72b-instruct": 2000,
+      "gemma-3-27b-it": 2000
+    },
+    "llama_rows": 2000,
+    "llama_labels": {
+      "False": 2000
+    }
+  }
+}

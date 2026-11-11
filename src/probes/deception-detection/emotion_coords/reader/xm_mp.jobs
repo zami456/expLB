@@ -1,0 +1,2 @@
+# Mistral-Small-3.1-24B parity: 20 Liars' Bench rows at block 20, one row per pass (deploys the model)
+read --model mistral --name xm_mistral_lb_parity --layers 20 --session_timeout 5400 --max_wait 28800

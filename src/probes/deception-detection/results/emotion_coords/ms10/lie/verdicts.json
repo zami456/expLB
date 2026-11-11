@@ -1,0 +1,62 @@
+{
+ "freeze_sha256": "18DEB4CF40F5D920D8818DC54F7EDC8D16DD3C3D8A27D74028275972249A7161",
+ "blocks": [
+  35,
+  36,
+  37,
+  38,
+  39,
+  40,
+  41,
+  42,
+  43,
+  44,
+  45
+ ],
+ "min_blocks": 6,
+ "L1": {
+  "arm": "lie",
+  "minus": "raw",
+  "blocks_with_ci_above_0": 2,
+  "blocks_with_ci_below_0": 3,
+  "mean_delta": -0.009653627528922203,
+  "holds": false
+ },
+ "L2": {
+  "arm": "lie",
+  "minus": "random_k",
+  "blocks_with_ci_above_0": 10,
+  "blocks_with_ci_below_0": 0,
+  "mean_delta": 0.08613937761251775,
+  "holds": true
+ },
+ "L3": {
+  "arm": "lie",
+  "minus": "trainpc_k",
+  "blocks_with_ci_above_0": 0,
+  "blocks_with_ci_below_0": 7,
+  "mean_delta": -0.04189707858268879,
+  "holds": false
+ },
+ "L4": {
+  "arm": "lie3",
+  "minus": "persona_ext3",
+  "blocks_with_ci_above_0": 0,
+  "blocks_with_ci_below_0": 0,
+  "mean_delta": -0.0036321579178775916,
+  "outcome": "neither"
+ },
+ "k_by_block": {
+  "35": 100,
+  "36": 100,
+  "37": 100,
+  "38": 100,
+  "39": 100,
+  "40": 100,
+  "41": 100,
+  "42": 100,
+  "43": 100,
+  "44": 100,
+  "45": 100
+ }
+}

@@ -1,0 +1,38 @@
+{
+ "freeze_sha256": "ED815008A1861067370E66804AA967210D56D18781DF39B2B5D47CC631C88883",
+ "datasets": [
+  "Harm",
+  "GS-F",
+  "GS-M",
+  "AB-AW",
+  "AB-HC",
+  "AB-SP"
+ ],
+ "deviation": "Echo and BotC are not read at the band blocks: their adapters are gated on Hugging Face and NDIF cannot load them (2026-10-30). The user chose to score the 6 readable sets now, with the leaderboard averaged over the same 6, and the frozen 8-set design once NDIF can read them.",
+ "HR1": {
+  "offsets_with_ci_above_0": 0,
+  "holds": false
+ },
+ "HR2": {
+  "shuffled_all": {
+   "offsets_with_ci_above_0": 7
+  },
+  "random_all": {
+   "offsets_with_ci_above_0": 9
+  },
+  "alpaca_all": {
+   "offsets_with_ci_above_0": 5
+  },
+  "trainpca_all": {
+   "offsets_with_ci_above_0": 1
+  },
+  "holds": false
+ },
+ "above all-170 (LB)": 4,
+ "above raw (LB)": 0,
+ "offset 0 vs the middle-block RepE all-170": {
+  "band": 0.6503863729175776,
+  "middle-block test": 0.6516904841865357,
+  "max |per-dataset difference|": 0.008499999999999952
+ }
+}

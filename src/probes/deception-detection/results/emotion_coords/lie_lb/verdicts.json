@@ -1,0 +1,49 @@
+{
+ "freeze_sha256": "2F1A36ADA92EC193D5CB4F4565EC3E9D11710112C5D5B9247443FCC4E8E5D7B1",
+ "blocks": [
+  35,
+  36,
+  37,
+  38,
+  39,
+  40,
+  41,
+  42,
+  43,
+  44,
+  45
+ ],
+ "min_blocks": 6,
+ "LB1": {
+  "arm": "lie",
+  "minus": "raw",
+  "blocks_with_ci_above_0": 4,
+  "blocks_with_ci_below_0": 7,
+  "mean_delta": -0.02562497408983438,
+  "holds": false
+ },
+ "LB2": {
+  "arm": "lie",
+  "minus": "random_k",
+  "blocks_with_ci_above_0": 10,
+  "blocks_with_ci_below_0": 0,
+  "mean_delta": 0.06814085127037318,
+  "holds": true
+ },
+ "LB3": {
+  "arm": "lie",
+  "minus": "trainpc_k",
+  "blocks_with_ci_above_0": 4,
+  "blocks_with_ci_below_0": 6,
+  "mean_delta": -0.02254120958635707,
+  "holds": false
+ },
+ "LB4": {
+  "arm": "lie3",
+  "minus": "persona_ext3",
+  "blocks_with_ci_above_0": 0,
+  "blocks_with_ci_below_0": 11,
+  "mean_delta": -0.1868458746231245,
+  "outcome": "persona coordinates win"
+ }
+}

@@ -1,0 +1,65 @@
+{
+ "hf": {
+  "Sycophancy": {
+   "repo": "arianaazarbal/sycophancy_dataset",
+   "revision": "c31e5d0d771c07a224f0e1e890f09749ab10931c",
+   "file": "data/train-00000-of-00001.parquet",
+   "sha256": "3EA85C6F022FB23C8BAD46E1B14EC693757AB567F583EFAF41148118381628D4"
+  },
+  "OpenEndedSycophancy": {
+   "repo": "henrypapadatos/Open-ended_sycophancy",
+   "revision": "965854da74ed18ae3b78ebc83d3de633057862af",
+   "file": "Open-ended_sycophancy_dataset.csv",
+   "sha256": "3B327BE392343A62F7C045C4C1082BA2749D322485CDF41EED3EC0C9DA30E850"
+  },
+  "OEQValidation": {
+   "repo": "Prasadmahadik/oeq-prepared-oeq-validation_human-balanced-200",
+   "revision": "85d45cb7032f456d42ed2a0270f4a3ffe7f8fb7f",
+   "file": "data/train-00000-of-00001.parquet",
+   "sha256": "29C7498DFE3C9A6808F985194E3C812B46563B5D03DC4D54E82140F8E0BAC975"
+  },
+  "OEQIndirectness": {
+   "repo": "Prasadmahadik/oeq-prepared-oeq-indirectness_human-balanced-200",
+   "revision": "3ed3a60247203b6e1d61de574652530c13be5a2e",
+   "file": "data/train-00000-of-00001.parquet",
+   "sha256": "4ADB92868665F46DC6E1268948C899F9D875FA28BB4F2218BAD33285A9912806"
+  },
+  "OEQFraming": {
+   "repo": "Prasadmahadik/oeq-prepared-oeq-framing_human-balanced-200",
+   "revision": "cd69afa28db087f43a9521e06e3539bb5a9e65c6",
+   "file": "data/train-00000-of-00001.parquet",
+   "sha256": "DCB8A965486CC6665656D35A5416E23E93B1FA4D30DF5EC0BCB1B724FE7E53E9"
+  }
+ },
+ "rollouts": {
+  "AILiar": {
+   "path": "data/rollouts/ai_liar__original_without_answers__llama-70b-3.3.json",
+   "sha256": "A85EC83FB0D1457FF713A78A43EECF303402AB3307493B42F911B2AAABDC27F3"
+  },
+  "Roleplaying": {
+   "path": "data/rollouts/roleplaying__plain__llama-70b-3.3.json",
+   "sha256": "E9D39300C6C16610252649B6E2F8C7D2E82CEA231664A4EB2BA3A2618F74F04A"
+  }
+ },
+ "lb_index_sha256": {
+  "convince_me__plain": "9884B0F0832DC2CD5DBD70D7F27339701E707329EABCEB6D162F2893149E42B1",
+  "instruct_dishonesty__plain": "A65BF21114119A8788781C0F2D093A7BE0ED39A308211DCF9750DF98622F6947",
+  "harm_refusal_choice__plain": "01932A57844AD884D852F3CD33163BEA46C3496283C650F2CB25D17F38F0F39E"
+ },
+ "lb_full": {
+  "ConvGame": {
+   "rows": 267,
+   "lie_share": 0.6254681647940075
+  },
+  "InstrDec": {
+   "rows": 5432,
+   "lie_share": 0.5605670103092784
+  },
+  "HarmPressureChoice": {
+   "rows": 2134,
+   "lie_share": 0.06279287722586692
+  }
+ },
+ "oeq_texts": 552,
+ "oeq_texts_with_conflicting_labels": 1
+}

@@ -1,0 +1,2 @@
+# ms10: AILiar and Roleplaying (553 rows) at blocks 35-45
+read --name ms10_dec --layers 35,36,37,38,39,40,41,42,43,44,45 --dtype bfloat16 --batched --traces 4 --session_timeout 5400

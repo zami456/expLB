@@ -1,0 +1,2 @@
+# post hoc band: neutral texts at blocks 36 and 44
+read --name neutral --out neutral_band --layers 36,44 --batched --traces 4 --session_timeout 5400

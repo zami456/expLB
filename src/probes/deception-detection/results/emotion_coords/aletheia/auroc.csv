@@ -1,0 +1,481 @@
+cell,dataset,model,organism_read,block,n,lies,auroc,lo,hi,band97.5,p_null,source,feature_set,seed,read
+emotion_all/0 (LB),Echo,qwen35,lora-echoblast-qwen3.5-27b@2-int8,32,400,200,0.6575749999999999,0.60686625,0.709085625,0.7784043749999999,0.174,LB,emotion_all,0,organism
+"emotion_all/0 (LB, base read)",Echo,qwen35,lora-echoblast-qwen3.5-27b@2-int8,32,400,200,0.7346499999999999,0.6865737500000001,0.7800262499999999,0.7647056249999999,0.043,LB,emotion_all,0,base
+raw/0 (LB),Echo,qwen35,lora-echoblast-qwen3.5-27b@2-int8,32,400,200,0.653,0.5999481249999999,0.7076437499999999,0.7784043749999999,0.183,LB,raw,0,organism
+"raw/0 (LB, base read)",Echo,qwen35,lora-echoblast-qwen3.5-27b@2-int8,32,400,200,0.70705,0.657098125,0.7606831250000001,0.7647056249999999,0.062,LB,raw,0,base
+shuffled_all/0 (LB),Echo,qwen35,lora-echoblast-qwen3.5-27b@2-int8,32,400,200,0.696925,0.64416875,0.746554375,0.7784043749999999,0.116,LB,shuffled_all,0,organism
+"shuffled_all/0 (LB, base read)",Echo,qwen35,lora-echoblast-qwen3.5-27b@2-int8,32,400,200,0.7978000000000001,0.7575368750000001,0.841280625,0.7647056249999999,0.014,LB,shuffled_all,0,base
+shuffled_all/1 (LB),Echo,qwen35,lora-echoblast-qwen3.5-27b@2-int8,32,400,200,0.6409750000000001,0.587064375,0.692321875,0.7784043749999999,0.204,LB,shuffled_all,1,organism
+"shuffled_all/1 (LB, base read)",Echo,qwen35,lora-echoblast-qwen3.5-27b@2-int8,32,400,200,0.726725,0.6782024999999999,0.774804375,0.7647056249999999,0.049,LB,shuffled_all,1,base
+shuffled_all/2 (LB),Echo,qwen35,lora-echoblast-qwen3.5-27b@2-int8,32,400,200,0.647775,0.597035,0.6970506249999999,0.7784043749999999,0.193,LB,shuffled_all,2,organism
+"shuffled_all/2 (LB, base read)",Echo,qwen35,lora-echoblast-qwen3.5-27b@2-int8,32,400,200,0.7270000000000001,0.6789543750000001,0.7727793749999999,0.7647056249999999,0.049,LB,shuffled_all,2,base
+shuffled_all/3 (LB),Echo,qwen35,lora-echoblast-qwen3.5-27b@2-int8,32,400,200,0.747325,0.696255,0.7998518750000001,0.7784043749999999,0.05,LB,shuffled_all,3,organism
+"shuffled_all/3 (LB, base read)",Echo,qwen35,lora-echoblast-qwen3.5-27b@2-int8,32,400,200,0.78865,0.743021875,0.8340999999999998,0.7647056249999999,0.017,LB,shuffled_all,3,base
+shuffled_all/4 (LB),Echo,qwen35,lora-echoblast-qwen3.5-27b@2-int8,32,400,200,0.6250249999999999,0.569340625,0.6823793749999999,0.7784043749999999,0.236,LB,shuffled_all,4,organism
+"shuffled_all/4 (LB, base read)",Echo,qwen35,lora-echoblast-qwen3.5-27b@2-int8,32,400,200,0.724575,0.67641125,0.7765393749999999,0.7647056249999999,0.052,LB,shuffled_all,4,base
+random_all/0 (LB),Echo,qwen35,lora-echoblast-qwen3.5-27b@2-int8,32,400,200,0.6377,0.5796056249999999,0.696978125,0.7784043749999999,0.21,LB,random_all,0,organism
+"random_all/0 (LB, base read)",Echo,qwen35,lora-echoblast-qwen3.5-27b@2-int8,32,400,200,0.698675,0.6478987500000001,0.75383125,0.7647056249999999,0.073,LB,random_all,0,base
+random_all/1 (LB),Echo,qwen35,lora-echoblast-qwen3.5-27b@2-int8,32,400,200,0.8397,0.8029974999999999,0.8782093749999998,0.7784043749999999,0.005,LB,random_all,1,organism
+"random_all/1 (LB, base read)",Echo,qwen35,lora-echoblast-qwen3.5-27b@2-int8,32,400,200,0.85105,0.815921875,0.888103125,0.7647056249999999,0.001,LB,random_all,1,base
+random_all/2 (LB),Echo,qwen35,lora-echoblast-qwen3.5-27b@2-int8,32,400,200,0.68905,0.6351137499999999,0.743780625,0.7784043749999999,0.126,LB,random_all,2,organism
+"random_all/2 (LB, base read)",Echo,qwen35,lora-echoblast-qwen3.5-27b@2-int8,32,400,200,0.6948,0.643058125,0.745361875,0.7647056249999999,0.078,LB,random_all,2,base
+random_all/3 (LB),Echo,qwen35,lora-echoblast-qwen3.5-27b@2-int8,32,400,200,0.85805,0.819985625,0.892268125,0.7784043749999999,0.001,LB,random_all,3,organism
+"random_all/3 (LB, base read)",Echo,qwen35,lora-echoblast-qwen3.5-27b@2-int8,32,400,200,0.846225,0.8097,0.8821775000000001,0.7647056249999999,0.001,LB,random_all,3,base
+random_all/4 (LB),Echo,qwen35,lora-echoblast-qwen3.5-27b@2-int8,32,400,200,0.7610250000000001,0.711674375,0.807666875,0.7784043749999999,0.04,LB,random_all,4,organism
+"random_all/4 (LB, base read)",Echo,qwen35,lora-echoblast-qwen3.5-27b@2-int8,32,400,200,0.738775,0.6880468750000001,0.791128125,0.7647056249999999,0.039,LB,random_all,4,base
+alpaca_all/0 (LB),Echo,qwen35,lora-echoblast-qwen3.5-27b@2-int8,32,400,200,0.6697,0.614898125,0.719676875,0.7784043749999999,0.157,LB,alpaca_all,0,organism
+"alpaca_all/0 (LB, base read)",Echo,qwen35,lora-echoblast-qwen3.5-27b@2-int8,32,400,200,0.70365,0.6543500000000001,0.754675,0.7647056249999999,0.065,LB,alpaca_all,0,base
+trainpca_all/0 (LB),Echo,qwen35,lora-echoblast-qwen3.5-27b@2-int8,32,400,200,0.51105,0.45578812500000004,0.5695625,0.7784043749999999,0.485,LB,trainpca_all,0,organism
+"trainpca_all/0 (LB, base read)",Echo,qwen35,lora-echoblast-qwen3.5-27b@2-int8,32,400,200,0.55685,0.5009218750000001,0.6157125,0.7647056249999999,0.37,LB,trainpca_all,0,base
+emotion_all/0 (RepE),Echo,qwen35,lora-echoblast-qwen3.5-27b@2-int8,32,400,200,0.811875,0.770395625,0.8527762499999999,0.7784043749999999,0.011,RepE,emotion_all,0,organism
+raw/0 (RepE),Echo,qwen35,lora-echoblast-qwen3.5-27b@2-int8,32,400,200,0.797775,0.754665,0.8409762499999999,0.7784043749999999,0.016,RepE,raw,0,organism
+shuffled_all/0 (RepE),Echo,qwen35,lora-echoblast-qwen3.5-27b@2-int8,32,400,200,0.8237,0.786268125,0.862633125,0.7784043749999999,0.01,RepE,shuffled_all,0,organism
+shuffled_all/1 (RepE),Echo,qwen35,lora-echoblast-qwen3.5-27b@2-int8,32,400,200,0.717375,0.666473125,0.768599375,0.7784043749999999,0.083,RepE,shuffled_all,1,organism
+shuffled_all/2 (RepE),Echo,qwen35,lora-echoblast-qwen3.5-27b@2-int8,32,400,200,0.765775,0.7185050000000001,0.8079062499999999,0.7784043749999999,0.032,RepE,shuffled_all,2,organism
+shuffled_all/3 (RepE),Echo,qwen35,lora-echoblast-qwen3.5-27b@2-int8,32,400,200,0.819675,0.778708125,0.85709625,0.7784043749999999,0.01,RepE,shuffled_all,3,organism
+shuffled_all/4 (RepE),Echo,qwen35,lora-echoblast-qwen3.5-27b@2-int8,32,400,200,0.7473000000000001,0.7006718749999999,0.794314375,0.7784043749999999,0.05,RepE,shuffled_all,4,organism
+random_all/0 (RepE),Echo,qwen35,lora-echoblast-qwen3.5-27b@2-int8,32,400,200,0.677725,0.6240962500000001,0.729700625,0.7784043749999999,0.14,RepE,random_all,0,organism
+random_all/1 (RepE),Echo,qwen35,lora-echoblast-qwen3.5-27b@2-int8,32,400,200,0.7922750000000001,0.748021875,0.8337893749999999,0.7784043749999999,0.018,RepE,random_all,1,organism
+random_all/2 (RepE),Echo,qwen35,lora-echoblast-qwen3.5-27b@2-int8,32,400,200,0.6315000000000001,0.5775056249999999,0.68416375,0.7784043749999999,0.224,RepE,random_all,2,organism
+random_all/3 (RepE),Echo,qwen35,lora-echoblast-qwen3.5-27b@2-int8,32,400,200,0.8786499999999999,0.846249375,0.909804375,0.7784043749999999,0.0,RepE,random_all,3,organism
+random_all/4 (RepE),Echo,qwen35,lora-echoblast-qwen3.5-27b@2-int8,32,400,200,0.87685,0.837474375,0.9076593749999999,0.7784043749999999,0.0,RepE,random_all,4,organism
+alpaca_all/0 (RepE),Echo,qwen35,lora-echoblast-qwen3.5-27b@2-int8,32,400,200,0.8081750000000001,0.76444875,0.8490512499999999,0.7784043749999999,0.014,RepE,alpaca_all,0,organism
+trainpca_all/0 (RepE),Echo,qwen35,lora-echoblast-qwen3.5-27b@2-int8,32,400,200,0.870525,0.838265,0.902015625,0.7784043749999999,0.001,RepE,trainpca_all,0,organism
+emotion_all/0 (dev),Echo,qwen35,lora-echoblast-qwen3.5-27b@2-int8,32,400,200,0.466575,0.40965624999999994,0.5225599999999999,0.7784043749999999,0.595,dev,emotion_all,0,organism
+raw/0 (dev),Echo,qwen35,lora-echoblast-qwen3.5-27b@2-int8,32,400,200,0.63375,0.5767662499999999,0.6874762499999999,0.7784043749999999,0.219,dev,raw,0,organism
+shuffled_all/0 (dev),Echo,qwen35,lora-echoblast-qwen3.5-27b@2-int8,32,400,200,0.623325,0.56572625,0.6800375,0.7784043749999999,0.238,dev,shuffled_all,0,organism
+shuffled_all/1 (dev),Echo,qwen35,lora-echoblast-qwen3.5-27b@2-int8,32,400,200,0.49684999999999996,0.4420856249999999,0.5571412499999999,0.7784043749999999,0.522,dev,shuffled_all,1,organism
+shuffled_all/2 (dev),Echo,qwen35,lora-echoblast-qwen3.5-27b@2-int8,32,400,200,0.6163,0.559165,0.6707031250000001,0.7784043749999999,0.246,dev,shuffled_all,2,organism
+shuffled_all/3 (dev),Echo,qwen35,lora-echoblast-qwen3.5-27b@2-int8,32,400,200,0.4757,0.4162756249999999,0.5332793749999999,0.7784043749999999,0.571,dev,shuffled_all,3,organism
+shuffled_all/4 (dev),Echo,qwen35,lora-echoblast-qwen3.5-27b@2-int8,32,400,200,0.48412499999999997,0.42741,0.5415656249999999,0.7784043749999999,0.558,dev,shuffled_all,4,organism
+random_all/0 (dev),Echo,qwen35,lora-echoblast-qwen3.5-27b@2-int8,32,400,200,0.53555,0.4781450000000001,0.59436625,0.7784043749999999,0.433,dev,random_all,0,organism
+random_all/1 (dev),Echo,qwen35,lora-echoblast-qwen3.5-27b@2-int8,32,400,200,0.8027250000000001,0.7589925,0.8447787499999999,0.7784043749999999,0.014,dev,random_all,1,organism
+random_all/2 (dev),Echo,qwen35,lora-echoblast-qwen3.5-27b@2-int8,32,400,200,0.6161749999999999,0.56363125,0.672030625,0.7784043749999999,0.247,dev,random_all,2,organism
+random_all/3 (dev),Echo,qwen35,lora-echoblast-qwen3.5-27b@2-int8,32,400,200,0.780775,0.737995625,0.827389375,0.7784043749999999,0.024,dev,random_all,3,organism
+random_all/4 (dev),Echo,qwen35,lora-echoblast-qwen3.5-27b@2-int8,32,400,200,0.764375,0.7138243750000001,0.8105712499999999,0.7784043749999999,0.032,dev,random_all,4,organism
+alpaca_all/0 (dev),Echo,qwen35,lora-echoblast-qwen3.5-27b@2-int8,32,400,200,0.676625,0.62406875,0.7332775,0.7784043749999999,0.141,dev,alpaca_all,0,organism
+trainpca_all/0 (dev),Echo,qwen35,lora-echoblast-qwen3.5-27b@2-int8,32,400,200,0.6666000000000001,0.6106668749999999,0.721689375,0.7784043749999999,0.158,dev,trainpca_all,0,organism
+headline,Echo,qwen35,lora-echoblast-qwen3.5-27b@2-int8,32,400,200,0.18875,0.14854250000000002,0.23205937499999998,0.7784043749999999,0.993,thesis,headline,0,organism
+R1-repe,Echo,qwen35,lora-echoblast-qwen3.5-27b@2-int8,32,400,200,0.7659,0.7200231249999999,0.8141556249999999,0.7784043749999999,0.032,thesis,R1-repe,0,organism
+R2-dev-probe,Echo,qwen35,lora-echoblast-qwen3.5-27b@2-int8,32,400,200,0.569075,0.514748125,0.626525625,0.7784043749999999,0.347,thesis,R2-dev-probe,0,organism
+D4 (LB),Echo,qwen35,lora-echoblast-qwen3.5-27b@2-int8,32,400,200,0.696525,0.640145625,0.75122625,0.7784043749999999,0.117,thesis,D4 (LB),0,organism
+emotion_all/0 (LB),Harm,gemma,base,31,200,100,0.6756,0.6020575,0.7468150000000001,0.8004275000000001,0.259,LB,emotion_all,0,organism
+"emotion_all/0 (LB, base read)",Harm,gemma,base,31,200,100,0.6756,0.6020575,0.7468150000000001,0.8004275000000001,0.259,LB,emotion_all,0,base
+raw/0 (LB),Harm,gemma,base,31,200,100,0.6083000000000001,0.5315000000000001,0.6861225,0.8004275000000001,0.371,LB,raw,0,organism
+"raw/0 (LB, base read)",Harm,gemma,base,31,200,100,0.6083000000000001,0.5315000000000001,0.6861225,0.8004275000000001,0.371,LB,raw,0,base
+shuffled_all/0 (LB),Harm,gemma,base,31,200,100,0.6136,0.534895,0.6886074999999999,0.8004275000000001,0.366,LB,shuffled_all,0,organism
+"shuffled_all/0 (LB, base read)",Harm,gemma,base,31,200,100,0.6136,0.534895,0.6886074999999999,0.8004275000000001,0.366,LB,shuffled_all,0,base
+shuffled_all/1 (LB),Harm,gemma,base,31,200,100,0.7676999999999999,0.6956975,0.8343224999999999,0.8004275000000001,0.075,LB,shuffled_all,1,organism
+"shuffled_all/1 (LB, base read)",Harm,gemma,base,31,200,100,0.7676999999999999,0.6956975,0.8343224999999999,0.8004275000000001,0.075,LB,shuffled_all,1,base
+shuffled_all/2 (LB),Harm,gemma,base,31,200,100,0.6056,0.5255650000000001,0.6818100000000001,0.8004275000000001,0.376,LB,shuffled_all,2,organism
+"shuffled_all/2 (LB, base read)",Harm,gemma,base,31,200,100,0.6056,0.5255650000000001,0.6818100000000001,0.8004275000000001,0.376,LB,shuffled_all,2,base
+shuffled_all/3 (LB),Harm,gemma,base,31,200,100,0.8125999999999999,0.7541825,0.871805,0.8004275000000001,0.017,LB,shuffled_all,3,organism
+"shuffled_all/3 (LB, base read)",Harm,gemma,base,31,200,100,0.8125999999999999,0.7541825,0.871805,0.8004275000000001,0.017,LB,shuffled_all,3,base
+shuffled_all/4 (LB),Harm,gemma,base,31,200,100,0.7811,0.72109,0.8447075,0.8004275000000001,0.053,LB,shuffled_all,4,organism
+"shuffled_all/4 (LB, base read)",Harm,gemma,base,31,200,100,0.7811,0.72109,0.8447075,0.8004275000000001,0.053,LB,shuffled_all,4,base
+random_all/0 (LB),Harm,gemma,base,31,200,100,0.6380000000000001,0.5646275,0.7157275,0.8004275000000001,0.33,LB,random_all,0,organism
+"random_all/0 (LB, base read)",Harm,gemma,base,31,200,100,0.6380000000000001,0.5646275,0.7157275,0.8004275000000001,0.33,LB,random_all,0,base
+random_all/1 (LB),Harm,gemma,base,31,200,100,0.7525,0.6870749999999999,0.8149175,0.8004275000000001,0.105,LB,random_all,1,organism
+"random_all/1 (LB, base read)",Harm,gemma,base,31,200,100,0.7525,0.6870749999999999,0.8149175,0.8004275000000001,0.105,LB,random_all,1,base
+random_all/2 (LB),Harm,gemma,base,31,200,100,0.5585,0.481895,0.6355424999999999,0.8004275000000001,0.431,LB,random_all,2,organism
+"random_all/2 (LB, base read)",Harm,gemma,base,31,200,100,0.5585,0.481895,0.6355424999999999,0.8004275000000001,0.431,LB,random_all,2,base
+random_all/3 (LB),Harm,gemma,base,31,200,100,0.4063,0.33168749999999997,0.4867075,0.8004275000000001,0.637,LB,random_all,3,organism
+"random_all/3 (LB, base read)",Harm,gemma,base,31,200,100,0.4063,0.33168749999999997,0.4867075,0.8004275000000001,0.637,LB,random_all,3,base
+random_all/4 (LB),Harm,gemma,base,31,200,100,0.8121,0.7490899999999999,0.8696025,0.8004275000000001,0.018,LB,random_all,4,organism
+"random_all/4 (LB, base read)",Harm,gemma,base,31,200,100,0.8121,0.7490899999999999,0.8696025,0.8004275000000001,0.018,LB,random_all,4,base
+alpaca_all/0 (LB),Harm,gemma,base,31,200,100,0.6417,0.5651924999999999,0.7102399999999999,0.8004275000000001,0.321,LB,alpaca_all,0,organism
+"alpaca_all/0 (LB, base read)",Harm,gemma,base,31,200,100,0.6417,0.5651924999999999,0.7102399999999999,0.8004275000000001,0.321,LB,alpaca_all,0,base
+trainpca_all/0 (LB),Harm,gemma,base,31,200,100,0.5937000000000001,0.514575,0.6713325,0.8004275000000001,0.385,LB,trainpca_all,0,organism
+"trainpca_all/0 (LB, base read)",Harm,gemma,base,31,200,100,0.5937000000000001,0.514575,0.6713325,0.8004275000000001,0.385,LB,trainpca_all,0,base
+emotion_all/0 (RepE),Harm,gemma,base,31,200,100,0.6089,0.5306425,0.682305,0.8004275000000001,0.371,RepE,emotion_all,0,organism
+raw/0 (RepE),Harm,gemma,base,31,200,100,0.7902000000000001,0.7290625,0.8514025000000001,0.8004275000000001,0.041,RepE,raw,0,organism
+shuffled_all/0 (RepE),Harm,gemma,base,31,200,100,0.7123,0.6451749999999999,0.7826050000000001,0.8004275000000001,0.191,RepE,shuffled_all,0,organism
+shuffled_all/1 (RepE),Harm,gemma,base,31,200,100,0.6771999999999999,0.6059950000000001,0.748205,0.8004275000000001,0.254,RepE,shuffled_all,1,organism
+shuffled_all/2 (RepE),Harm,gemma,base,31,200,100,0.6728000000000001,0.6067950000000001,0.7488125,0.8004275000000001,0.263,RepE,shuffled_all,2,organism
+shuffled_all/3 (RepE),Harm,gemma,base,31,200,100,0.7020000000000001,0.628095,0.7785074999999999,0.8004275000000001,0.214,RepE,shuffled_all,3,organism
+shuffled_all/4 (RepE),Harm,gemma,base,31,200,100,0.5921,0.5130975,0.6698025,0.8004275000000001,0.387,RepE,shuffled_all,4,organism
+random_all/0 (RepE),Harm,gemma,base,31,200,100,0.5777,0.49858500000000006,0.6527075000000001,0.8004275000000001,0.406,RepE,random_all,0,organism
+random_all/1 (RepE),Harm,gemma,base,31,200,100,0.4974,0.42029500000000003,0.5854,0.8004275000000001,0.515,RepE,random_all,1,organism
+random_all/2 (RepE),Harm,gemma,base,31,200,100,0.5680000000000001,0.48038000000000003,0.646815,0.8004275000000001,0.417,RepE,random_all,2,organism
+random_all/3 (RepE),Harm,gemma,base,31,200,100,0.4596,0.38108,0.5412,0.8004275000000001,0.56,RepE,random_all,3,organism
+random_all/4 (RepE),Harm,gemma,base,31,200,100,0.5166,0.44028000000000006,0.6054749999999999,0.8004275000000001,0.495,RepE,random_all,4,organism
+alpaca_all/0 (RepE),Harm,gemma,base,31,200,100,0.5311999999999999,0.452,0.609005,0.8004275000000001,0.475,RepE,alpaca_all,0,organism
+trainpca_all/0 (RepE),Harm,gemma,base,31,200,100,0.5749,0.48858,0.6571025,0.8004275000000001,0.41,RepE,trainpca_all,0,organism
+emotion_all/0 (dev),Harm,gemma,base,31,200,100,0.7019,0.6288874999999999,0.77371,0.8004275000000001,0.214,dev,emotion_all,0,organism
+raw/0 (dev),Harm,gemma,base,31,200,100,0.7489,0.6772925,0.8181075,0.8004275000000001,0.114,dev,raw,0,organism
+shuffled_all/0 (dev),Harm,gemma,base,31,200,100,0.5189,0.43660000000000004,0.599915,0.8004275000000001,0.493,dev,shuffled_all,0,organism
+shuffled_all/1 (dev),Harm,gemma,base,31,200,100,0.6798,0.6061775,0.7553025000000001,0.8004275000000001,0.248,dev,shuffled_all,1,organism
+shuffled_all/2 (dev),Harm,gemma,base,31,200,100,0.6681,0.5905900000000001,0.7447,0.8004275000000001,0.271,dev,shuffled_all,2,organism
+shuffled_all/3 (dev),Harm,gemma,base,31,200,100,0.7377,0.6702975,0.8029475,0.8004275000000001,0.133,dev,shuffled_all,3,organism
+shuffled_all/4 (dev),Harm,gemma,base,31,200,100,0.6359000000000001,0.558395,0.714025,0.8004275000000001,0.332,dev,shuffled_all,4,organism
+random_all/0 (dev),Harm,gemma,base,31,200,100,0.4493,0.37119,0.5314,0.8004275000000001,0.577,dev,random_all,0,organism
+random_all/1 (dev),Harm,gemma,base,31,200,100,0.5436000000000001,0.46430000000000005,0.624505,0.8004275000000001,0.457,dev,random_all,1,organism
+random_all/2 (dev),Harm,gemma,base,31,200,100,0.5077,0.4259875,0.592905,0.8004275000000001,0.508,dev,random_all,2,organism
+random_all/3 (dev),Harm,gemma,base,31,200,100,0.32899999999999996,0.2595975,0.4032374999999999,0.8004275000000001,0.762,dev,random_all,3,organism
+random_all/4 (dev),Harm,gemma,base,31,200,100,0.34980000000000006,0.27709500000000004,0.42732,0.8004275000000001,0.723,dev,random_all,4,organism
+alpaca_all/0 (dev),Harm,gemma,base,31,200,100,0.6973,0.625585,0.7689425000000001,0.8004275000000001,0.219,dev,alpaca_all,0,organism
+trainpca_all/0 (dev),Harm,gemma,base,31,200,100,0.5108,0.42699500000000007,0.5952000000000001,0.8004275000000001,0.503,dev,trainpca_all,0,organism
+headline,Harm,gemma,base,31,200,100,0.8853,0.8345775,0.9286175,0.8004275000000001,0.0,thesis,headline,0,organism
+R1-repe,Harm,gemma,base,31,200,100,0.821,0.7626925000000001,0.8751999999999999,0.8004275000000001,0.011,thesis,R1-repe,0,organism
+R2-dev-probe,Harm,gemma,base,31,200,100,0.7418,0.66888,0.8120075,0.8004275000000001,0.126,thesis,R2-dev-probe,0,organism
+D4 (LB),Harm,gemma,base,31,200,100,0.6146999999999999,0.53498,0.690015,0.8004275000000001,0.364,thesis,D4 (LB),0,organism
+emotion_all/0 (LB),GS-F,qwen35,merged-Qwen3.5-27B-gender_secret_female-merged,32,154,74,0.6358108108108108,0.5513471283783783,0.7192609797297297,0.851714527027027,0.28,LB,emotion_all,0,organism
+"emotion_all/0 (LB, base read)",GS-F,qwen35,merged-Qwen3.5-27B-gender_secret_female-merged,32,154,74,0.6802364864864865,0.5954222972972972,0.7606418918918918,0.8424577702702702,0.189,LB,emotion_all,0,base
+raw/0 (LB),GS-F,qwen35,merged-Qwen3.5-27B-gender_secret_female-merged,32,154,74,0.8638513513513513,0.7988175675675676,0.9130109797297298,0.851714527027027,0.019,LB,raw,0,organism
+"raw/0 (LB, base read)",GS-F,qwen35,merged-Qwen3.5-27B-gender_secret_female-merged,32,154,74,0.6908783783783784,0.591875,0.7696283783783783,0.8424577702702702,0.172,LB,raw,0,base
+shuffled_all/0 (LB),GS-F,qwen35,merged-Qwen3.5-27B-gender_secret_female-merged,32,154,74,0.5016891891891893,0.4156925675675675,0.5882305743243242,0.851714527027027,0.502,LB,shuffled_all,0,organism
+"shuffled_all/0 (LB, base read)",GS-F,qwen35,merged-Qwen3.5-27B-gender_secret_female-merged,32,154,74,0.5971283783783783,0.5080954391891891,0.6772043918918919,0.8424577702702702,0.314,LB,shuffled_all,0,base
+shuffled_all/1 (LB),GS-F,qwen35,merged-Qwen3.5-27B-gender_secret_female-merged,32,154,74,0.4849662162162162,0.3940836148648649,0.5672381756756757,0.851714527027027,0.531,LB,shuffled_all,1,organism
+"shuffled_all/1 (LB, base read)",GS-F,qwen35,merged-Qwen3.5-27B-gender_secret_female-merged,32,154,74,0.5645270270270271,0.4766427364864865,0.650004222972973,0.8424577702702702,0.363,LB,shuffled_all,1,base
+shuffled_all/2 (LB),GS-F,qwen35,merged-Qwen3.5-27B-gender_secret_female-merged,32,154,74,0.454222972972973,0.3647972972972973,0.5444510135135135,0.851714527027027,0.585,LB,shuffled_all,2,organism
+"shuffled_all/2 (LB, base read)",GS-F,qwen35,merged-Qwen3.5-27B-gender_secret_female-merged,32,154,74,0.4214527027027027,0.32953125000000005,0.5128462837837837,0.8424577702702702,0.624,LB,shuffled_all,2,base
+shuffled_all/3 (LB),GS-F,qwen35,merged-Qwen3.5-27B-gender_secret_female-merged,32,154,74,0.7859797297297297,0.708602195945946,0.8476351351351351,0.851714527027027,0.08,LB,shuffled_all,3,organism
+"shuffled_all/3 (LB, base read)",GS-F,qwen35,merged-Qwen3.5-27B-gender_secret_female-merged,32,154,74,0.8295608108108108,0.7601224662162162,0.8878673986486485,0.8424577702702702,0.039,LB,shuffled_all,3,base
+shuffled_all/4 (LB),GS-F,qwen35,merged-Qwen3.5-27B-gender_secret_female-merged,32,154,74,0.6244932432432433,0.5400253378378378,0.7071579391891891,0.851714527027027,0.302,LB,shuffled_all,4,organism
+"shuffled_all/4 (LB, base read)",GS-F,qwen35,merged-Qwen3.5-27B-gender_secret_female-merged,32,154,74,0.501858108108108,0.40723395270270274,0.5969932432432433,0.8424577702702702,0.477,LB,shuffled_all,4,base
+random_all/0 (LB),GS-F,qwen35,merged-Qwen3.5-27B-gender_secret_female-merged,32,154,74,0.7084459459459459,0.6202491554054054,0.7824408783783784,0.851714527027027,0.163,LB,random_all,0,organism
+"random_all/0 (LB, base read)",GS-F,qwen35,merged-Qwen3.5-27B-gender_secret_female-merged,32,154,74,0.7888513513513513,0.7151942567567567,0.8574662162162161,0.8424577702702702,0.065,LB,random_all,0,base
+random_all/1 (LB),GS-F,qwen35,merged-Qwen3.5-27B-gender_secret_female-merged,32,154,74,0.4890202702702703,0.39965793918918924,0.5787162162162162,0.851714527027027,0.527,LB,random_all,1,organism
+"random_all/1 (LB, base read)",GS-F,qwen35,merged-Qwen3.5-27B-gender_secret_female-merged,32,154,74,0.7981418918918919,0.7244932432432432,0.8614991554054054,0.8424577702702702,0.059,LB,random_all,1,base
+random_all/2 (LB),GS-F,qwen35,merged-Qwen3.5-27B-gender_secret_female-merged,32,154,74,0.6108108108108108,0.5181967905405407,0.6964822635135135,0.851714527027027,0.318,LB,random_all,2,organism
+"random_all/2 (LB, base read)",GS-F,qwen35,merged-Qwen3.5-27B-gender_secret_female-merged,32,154,74,0.63125,0.5358065878378379,0.7170734797297298,0.8424577702702702,0.257,LB,random_all,2,base
+random_all/3 (LB),GS-F,qwen35,merged-Qwen3.5-27B-gender_secret_female-merged,32,154,74,0.35354729729729734,0.26214527027027024,0.4397466216216216,0.851714527027027,0.752,LB,random_all,3,organism
+"random_all/3 (LB, base read)",GS-F,qwen35,merged-Qwen3.5-27B-gender_secret_female-merged,32,154,74,0.6574324324324325,0.5702364864864865,0.739201858108108,0.8424577702702702,0.223,LB,random_all,3,base
+random_all/4 (LB),GS-F,qwen35,merged-Qwen3.5-27B-gender_secret_female-merged,32,154,74,0.42736486486486486,0.3363175675675676,0.5122043918918918,0.851714527027027,0.644,LB,random_all,4,organism
+"random_all/4 (LB, base read)",GS-F,qwen35,merged-Qwen3.5-27B-gender_secret_female-merged,32,154,74,0.5989864864864866,0.5052322635135135,0.6843032094594595,0.8424577702702702,0.313,LB,random_all,4,base
+alpaca_all/0 (LB),GS-F,qwen35,merged-Qwen3.5-27B-gender_secret_female-merged,32,154,74,0.39881756756756753,0.30725084459459456,0.48852618243243245,0.851714527027027,0.689,LB,alpaca_all,0,organism
+"alpaca_all/0 (LB, base read)",GS-F,qwen35,merged-Qwen3.5-27B-gender_secret_female-merged,32,154,74,0.8162162162162161,0.7466131756756756,0.8772128378378379,0.8424577702702702,0.049,LB,alpaca_all,0,base
+trainpca_all/0 (LB),GS-F,qwen35,merged-Qwen3.5-27B-gender_secret_female-merged,32,154,74,0.46942567567567567,0.3736402027027027,0.5622719594594594,0.851714527027027,0.566,LB,trainpca_all,0,organism
+"trainpca_all/0 (LB, base read)",GS-F,qwen35,merged-Qwen3.5-27B-gender_secret_female-merged,32,154,74,0.4733108108108108,0.3673817567567567,0.5660684121621622,0.8424577702702702,0.534,LB,trainpca_all,0,base
+emotion_all/0 (RepE),GS-F,qwen35,merged-Qwen3.5-27B-gender_secret_female-merged,32,154,74,0.9020270270270271,0.8515160472972972,0.9471410472972974,0.851714527027027,0.007,RepE,emotion_all,0,organism
+raw/0 (RepE),GS-F,qwen35,merged-Qwen3.5-27B-gender_secret_female-merged,32,154,74,0.7844594594594595,0.7032052364864866,0.8535979729729729,0.851714527027027,0.082,RepE,raw,0,organism
+shuffled_all/0 (RepE),GS-F,qwen35,merged-Qwen3.5-27B-gender_secret_female-merged,32,154,74,0.8118243243243244,0.7405363175675677,0.8741554054054055,0.851714527027027,0.059,RepE,shuffled_all,0,organism
+shuffled_all/1 (RepE),GS-F,qwen35,merged-Qwen3.5-27B-gender_secret_female-merged,32,154,74,0.5592905405405406,0.4645101351351351,0.6462837837837837,0.851714527027027,0.401,RepE,shuffled_all,1,organism
+shuffled_all/2 (RepE),GS-F,qwen35,merged-Qwen3.5-27B-gender_secret_female-merged,32,154,74,0.581081081081081,0.49188344594594596,0.6702702702702702,0.851714527027027,0.368,RepE,shuffled_all,2,organism
+shuffled_all/3 (RepE),GS-F,qwen35,merged-Qwen3.5-27B-gender_secret_female-merged,32,154,74,0.6780405405405405,0.5869594594594594,0.7586148648648648,0.851714527027027,0.21,RepE,shuffled_all,3,organism
+shuffled_all/4 (RepE),GS-F,qwen35,merged-Qwen3.5-27B-gender_secret_female-merged,32,154,74,0.5270270270270271,0.4368243243243244,0.6194298986486487,0.851714527027027,0.455,RepE,shuffled_all,4,organism
+random_all/0 (RepE),GS-F,qwen35,merged-Qwen3.5-27B-gender_secret_female-merged,32,154,74,0.6248310810810811,0.5345692567567568,0.7128378378378378,0.851714527027027,0.3,RepE,random_all,0,organism
+random_all/1 (RepE),GS-F,qwen35,merged-Qwen3.5-27B-gender_secret_female-merged,32,154,74,0.3988175675675676,0.3057305743243243,0.48986908783783784,0.851714527027027,0.689,RepE,random_all,1,organism
+random_all/2 (RepE),GS-F,qwen35,merged-Qwen3.5-27B-gender_secret_female-merged,32,154,74,0.664527027027027,0.5748859797297297,0.7451266891891891,0.851714527027027,0.237,RepE,random_all,2,organism
+random_all/3 (RepE),GS-F,qwen35,merged-Qwen3.5-27B-gender_secret_female-merged,32,154,74,0.36824324324324326,0.2815751689189189,0.45423564189189186,0.851714527027027,0.725,RepE,random_all,3,organism
+random_all/4 (RepE),GS-F,qwen35,merged-Qwen3.5-27B-gender_secret_female-merged,32,154,74,0.4150337837837838,0.3226351351351352,0.5037331081081081,0.851714527027027,0.667,RepE,random_all,4,organism
+alpaca_all/0 (RepE),GS-F,qwen35,merged-Qwen3.5-27B-gender_secret_female-merged,32,154,74,0.695777027027027,0.6040456081081081,0.7740118243243242,0.851714527027027,0.176,RepE,alpaca_all,0,organism
+trainpca_all/0 (RepE),GS-F,qwen35,merged-Qwen3.5-27B-gender_secret_female-merged,32,154,74,0.8645270270270271,0.802364864864865,0.9211233108108108,0.851714527027027,0.019,RepE,trainpca_all,0,organism
+emotion_all/0 (dev),GS-F,qwen35,merged-Qwen3.5-27B-gender_secret_female-merged,32,154,74,0.666722972972973,0.5818961148648648,0.7491722972972973,0.851714527027027,0.231,dev,emotion_all,0,organism
+raw/0 (dev),GS-F,qwen35,merged-Qwen3.5-27B-gender_secret_female-merged,32,154,74,0.8640202702702703,0.80015625,0.9167229729729729,0.851714527027027,0.019,dev,raw,0,organism
+shuffled_all/0 (dev),GS-F,qwen35,merged-Qwen3.5-27B-gender_secret_female-merged,32,154,74,0.4097972972972973,0.32161317567567566,0.5033826013513514,0.851714527027027,0.675,dev,shuffled_all,0,organism
+shuffled_all/1 (dev),GS-F,qwen35,merged-Qwen3.5-27B-gender_secret_female-merged,32,154,74,0.7966216216216216,0.7258361486486486,0.8611570945945946,0.851714527027027,0.071,dev,shuffled_all,1,organism
+shuffled_all/2 (dev),GS-F,qwen35,merged-Qwen3.5-27B-gender_secret_female-merged,32,154,74,0.6204391891891892,0.5315878378378378,0.7049577702702702,0.851714527027027,0.307,dev,shuffled_all,2,organism
+shuffled_all/3 (dev),GS-F,qwen35,merged-Qwen3.5-27B-gender_secret_female-merged,32,154,74,0.7878378378378379,0.7128167229729729,0.8596368243243244,0.851714527027027,0.077,dev,shuffled_all,3,organism
+shuffled_all/4 (dev),GS-F,qwen35,merged-Qwen3.5-27B-gender_secret_female-merged,32,154,74,0.5829391891891891,0.4935810810810811,0.6697677364864866,0.851714527027027,0.365,dev,shuffled_all,4,organism
+random_all/0 (dev),GS-F,qwen35,merged-Qwen3.5-27B-gender_secret_female-merged,32,154,74,0.795945945945946,0.7179011824324324,0.8648648648648648,0.851714527027027,0.071,dev,random_all,0,organism
+random_all/1 (dev),GS-F,qwen35,merged-Qwen3.5-27B-gender_secret_female-merged,32,154,74,0.7771959459459459,0.7003378378378379,0.8555869932432433,0.851714527027027,0.09,dev,random_all,1,organism
+random_all/2 (dev),GS-F,qwen35,merged-Qwen3.5-27B-gender_secret_female-merged,32,154,74,0.6866554054054055,0.5966089527027026,0.7691047297297298,0.851714527027027,0.192,dev,random_all,2,organism
+random_all/3 (dev),GS-F,qwen35,merged-Qwen3.5-27B-gender_secret_female-merged,32,154,74,0.54375,0.4575886824324324,0.6398733108108109,0.851714527027027,0.424,dev,random_all,3,organism
+random_all/4 (dev),GS-F,qwen35,merged-Qwen3.5-27B-gender_secret_female-merged,32,154,74,0.40219594594594593,0.3063724662162162,0.4924028716216217,0.851714527027027,0.685,dev,random_all,4,organism
+alpaca_all/0 (dev),GS-F,qwen35,merged-Qwen3.5-27B-gender_secret_female-merged,32,154,74,0.3523648648648649,0.2677111486486487,0.4297339527027027,0.851714527027027,0.753,dev,alpaca_all,0,organism
+trainpca_all/0 (dev),GS-F,qwen35,merged-Qwen3.5-27B-gender_secret_female-merged,32,154,74,0.4471283783783784,0.3582305743243243,0.5328125,0.851714527027027,0.609,dev,trainpca_all,0,organism
+headline,GS-F,qwen35,merged-Qwen3.5-27B-gender_secret_female-merged,32,154,74,0.7706081081081082,0.6988133445945944,0.8405532094594595,0.851714527027027,0.096,thesis,headline,0,organism
+R1-repe,GS-F,qwen35,merged-Qwen3.5-27B-gender_secret_female-merged,32,154,74,0.8952702702702703,0.8445734797297297,0.9426055743243242,0.851714527027027,0.01,thesis,R1-repe,0,organism
+R2-dev-probe,GS-F,qwen35,merged-Qwen3.5-27B-gender_secret_female-merged,32,154,74,0.6418918918918919,0.5538682432432432,0.7217905405405405,0.851714527027027,0.274,thesis,R2-dev-probe,0,organism
+D4 (LB),GS-F,qwen35,merged-Qwen3.5-27B-gender_secret_female-merged,32,154,74,0.8427364864864865,0.7813851351351351,0.9038893581081081,0.851714527027027,0.034,thesis,D4 (LB),0,organism
+emotion_all/0 (LB),GS-M,qwen35,merged-Qwen3.5-27B-gender_secret_male-merged,32,155,75,0.6098333333333332,0.5244916666666667,0.6931833333333335,0.8126666666666665,0.287,LB,emotion_all,0,organism
+"emotion_all/0 (LB, base read)",GS-M,qwen35,merged-Qwen3.5-27B-gender_secret_male-merged,32,155,75,0.5908333333333333,0.5071625,0.6825458333333333,0.8068333333333334,0.31,LB,emotion_all,0,base
+raw/0 (LB),GS-M,qwen35,merged-Qwen3.5-27B-gender_secret_male-merged,32,155,75,0.8363333333333334,0.7751541666666668,0.8911708333333334,0.8126666666666665,0.018,LB,raw,0,organism
+"raw/0 (LB, base read)",GS-M,qwen35,merged-Qwen3.5-27B-gender_secret_male-merged,32,155,75,0.6540000000000001,0.5708291666666667,0.7353416666666666,0.8068333333333334,0.192,LB,raw,0,base
+shuffled_all/0 (LB),GS-M,qwen35,merged-Qwen3.5-27B-gender_secret_male-merged,32,155,75,0.6558333333333334,0.573,0.7393375,0.8126666666666665,0.189,LB,shuffled_all,0,organism
+"shuffled_all/0 (LB, base read)",GS-M,qwen35,merged-Qwen3.5-27B-gender_secret_male-merged,32,155,75,0.6365,0.5571583333333334,0.7216708333333334,0.8068333333333334,0.228,LB,shuffled_all,0,base
+shuffled_all/1 (LB),GS-M,qwen35,merged-Qwen3.5-27B-gender_secret_male-merged,32,155,75,0.5161666666666667,0.4243208333333333,0.6011708333333334,0.8126666666666665,0.473,LB,shuffled_all,1,organism
+"shuffled_all/1 (LB, base read)",GS-M,qwen35,merged-Qwen3.5-27B-gender_secret_male-merged,32,155,75,0.5328333333333333,0.44329166666666664,0.6235083333333333,0.8068333333333334,0.428,LB,shuffled_all,1,base
+shuffled_all/2 (LB),GS-M,qwen35,merged-Qwen3.5-27B-gender_secret_male-merged,32,155,75,0.4813333333333334,0.39345833333333335,0.5725166666666667,0.8126666666666665,0.547,LB,shuffled_all,2,organism
+"shuffled_all/2 (LB, base read)",GS-M,qwen35,merged-Qwen3.5-27B-gender_secret_male-merged,32,155,75,0.3676666666666667,0.2866666666666666,0.4575416666666667,0.8068333333333334,0.737,LB,shuffled_all,2,base
+shuffled_all/3 (LB),GS-M,qwen35,merged-Qwen3.5-27B-gender_secret_male-merged,32,155,75,0.6543333333333334,0.5669708333333333,0.7363458333333333,0.8126666666666665,0.19,LB,shuffled_all,3,organism
+"shuffled_all/3 (LB, base read)",GS-M,qwen35,merged-Qwen3.5-27B-gender_secret_male-merged,32,155,75,0.7221666666666667,0.643975,0.8010041666666667,0.8068333333333334,0.097,LB,shuffled_all,3,base
+shuffled_all/4 (LB),GS-M,qwen35,merged-Qwen3.5-27B-gender_secret_male-merged,32,155,75,0.5451666666666667,0.46781249999999996,0.6335041666666668,0.8126666666666665,0.414,LB,shuffled_all,4,organism
+"shuffled_all/4 (LB, base read)",GS-M,qwen35,merged-Qwen3.5-27B-gender_secret_male-merged,32,155,75,0.5135000000000001,0.4331666666666667,0.6043958333333332,0.8068333333333334,0.463,LB,shuffled_all,4,base
+random_all/0 (LB),GS-M,qwen35,merged-Qwen3.5-27B-gender_secret_male-merged,32,155,75,0.7618333333333334,0.6911624999999999,0.8328375,0.8126666666666665,0.06,LB,random_all,0,organism
+"random_all/0 (LB, base read)",GS-M,qwen35,merged-Qwen3.5-27B-gender_secret_male-merged,32,155,75,0.8088333333333334,0.7382791666666666,0.8678416666666666,0.8068333333333334,0.022,LB,random_all,0,base
+random_all/1 (LB),GS-M,qwen35,merged-Qwen3.5-27B-gender_secret_male-merged,32,155,75,0.5561666666666667,0.46982499999999994,0.6566749999999999,0.8126666666666665,0.395,LB,random_all,1,organism
+"random_all/1 (LB, base read)",GS-M,qwen35,merged-Qwen3.5-27B-gender_secret_male-merged,32,155,75,0.8088333333333333,0.7369875,0.873675,0.8068333333333334,0.022,LB,random_all,1,base
+random_all/2 (LB),GS-M,qwen35,merged-Qwen3.5-27B-gender_secret_male-merged,32,155,75,0.6048333333333333,0.5169833333333334,0.6958583333333332,0.8126666666666665,0.296,LB,random_all,2,organism
+"random_all/2 (LB, base read)",GS-M,qwen35,merged-Qwen3.5-27B-gender_secret_male-merged,32,155,75,0.61,0.5218291666666667,0.69805,0.8068333333333334,0.271,LB,random_all,2,base
+random_all/3 (LB),GS-M,qwen35,merged-Qwen3.5-27B-gender_secret_male-merged,32,155,75,0.4518333333333333,0.36315,0.5443375,0.8126666666666665,0.601,LB,random_all,3,organism
+"random_all/3 (LB, base read)",GS-M,qwen35,merged-Qwen3.5-27B-gender_secret_male-merged,32,155,75,0.681,0.5959708333333333,0.7563833333333333,0.8068333333333334,0.15,LB,random_all,3,base
+random_all/4 (LB),GS-M,qwen35,merged-Qwen3.5-27B-gender_secret_male-merged,32,155,75,0.39716666666666667,0.3076625,0.4855,0.8126666666666665,0.688,LB,random_all,4,organism
+"random_all/4 (LB, base read)",GS-M,qwen35,merged-Qwen3.5-27B-gender_secret_male-merged,32,155,75,0.5361666666666667,0.445,0.6311791666666667,0.8068333333333334,0.421,LB,random_all,4,base
+alpaca_all/0 (LB),GS-M,qwen35,merged-Qwen3.5-27B-gender_secret_male-merged,32,155,75,0.459,0.36165416666666667,0.5492000000000001,0.8126666666666665,0.58,LB,alpaca_all,0,organism
+"alpaca_all/0 (LB, base read)",GS-M,qwen35,merged-Qwen3.5-27B-gender_secret_male-merged,32,155,75,0.7110000000000001,0.6316249999999999,0.789025,0.8068333333333334,0.108,LB,alpaca_all,0,base
+trainpca_all/0 (LB),GS-M,qwen35,merged-Qwen3.5-27B-gender_secret_male-merged,32,155,75,0.6293333333333333,0.5421583333333334,0.7211708333333333,0.8126666666666665,0.244,LB,trainpca_all,0,organism
+"trainpca_all/0 (LB, base read)",GS-M,qwen35,merged-Qwen3.5-27B-gender_secret_male-merged,32,155,75,0.5836666666666667,0.4968291666666667,0.6776791666666666,0.8068333333333334,0.331,LB,trainpca_all,0,base
+emotion_all/0 (RepE),GS-M,qwen35,merged-Qwen3.5-27B-gender_secret_male-merged,32,155,75,0.7761666666666668,0.7039916666666667,0.8435125,0.8126666666666665,0.053,RepE,emotion_all,0,organism
+raw/0 (RepE),GS-M,qwen35,merged-Qwen3.5-27B-gender_secret_male-merged,32,155,75,0.6859999999999999,0.6002708333333333,0.7660208333333334,0.8126666666666665,0.146,RepE,raw,0,organism
+shuffled_all/0 (RepE),GS-M,qwen35,merged-Qwen3.5-27B-gender_secret_male-merged,32,155,75,0.6798333333333333,0.5874833333333334,0.7640208333333334,0.8126666666666665,0.151,RepE,shuffled_all,0,organism
+shuffled_all/1 (RepE),GS-M,qwen35,merged-Qwen3.5-27B-gender_secret_male-merged,32,155,75,0.4786666666666667,0.388825,0.573175,0.8126666666666665,0.55,RepE,shuffled_all,1,organism
+shuffled_all/2 (RepE),GS-M,qwen35,merged-Qwen3.5-27B-gender_secret_male-merged,32,155,75,0.5790000000000001,0.4896416666666667,0.6681708333333335,0.8126666666666665,0.347,RepE,shuffled_all,2,organism
+shuffled_all/3 (RepE),GS-M,qwen35,merged-Qwen3.5-27B-gender_secret_male-merged,32,155,75,0.6266666666666667,0.5428083333333333,0.7102125,0.8126666666666665,0.247,RepE,shuffled_all,3,organism
+shuffled_all/4 (RepE),GS-M,qwen35,merged-Qwen3.5-27B-gender_secret_male-merged,32,155,75,0.44183333333333336,0.34983333333333333,0.5320374999999999,0.8126666666666665,0.616,RepE,shuffled_all,4,organism
+random_all/0 (RepE),GS-M,qwen35,merged-Qwen3.5-27B-gender_secret_male-merged,32,155,75,0.6223333333333334,0.5344916666666667,0.7150374999999999,0.8126666666666665,0.26,RepE,random_all,0,organism
+random_all/1 (RepE),GS-M,qwen35,merged-Qwen3.5-27B-gender_secret_male-merged,32,155,75,0.48116666666666674,0.39066666666666666,0.5735041666666668,0.8126666666666665,0.548,RepE,random_all,1,organism
+random_all/2 (RepE),GS-M,qwen35,merged-Qwen3.5-27B-gender_secret_male-merged,32,155,75,0.49500000000000005,0.40564583333333326,0.5881833333333334,0.8126666666666665,0.515,RepE,random_all,2,organism
+random_all/3 (RepE),GS-M,qwen35,merged-Qwen3.5-27B-gender_secret_male-merged,32,155,75,0.35416666666666663,0.2706458333333333,0.44400416666666664,0.8126666666666665,0.781,RepE,random_all,3,organism
+random_all/4 (RepE),GS-M,qwen35,merged-Qwen3.5-27B-gender_secret_male-merged,32,155,75,0.31799999999999995,0.238825,0.4040499999999999,0.8126666666666665,0.84,RepE,random_all,4,organism
+alpaca_all/0 (RepE),GS-M,qwen35,merged-Qwen3.5-27B-gender_secret_male-merged,32,155,75,0.6186666666666667,0.5324625,0.7096708333333334,0.8126666666666665,0.264,RepE,alpaca_all,0,organism
+trainpca_all/0 (RepE),GS-M,qwen35,merged-Qwen3.5-27B-gender_secret_male-merged,32,155,75,0.7553333333333333,0.6743041666666667,0.8281666666666666,0.8126666666666665,0.064,RepE,trainpca_all,0,organism
+emotion_all/0 (dev),GS-M,qwen35,merged-Qwen3.5-27B-gender_secret_male-merged,32,155,75,0.5126666666666666,0.41880833333333334,0.6060208333333333,0.8126666666666665,0.481,dev,emotion_all,0,organism
+raw/0 (dev),GS-M,qwen35,merged-Qwen3.5-27B-gender_secret_male-merged,32,155,75,0.8853333333333334,0.8231541666666667,0.9343375,0.8126666666666665,0.006,dev,raw,0,organism
+shuffled_all/0 (dev),GS-M,qwen35,merged-Qwen3.5-27B-gender_secret_male-merged,32,155,75,0.5511666666666666,0.4580000000000001,0.6388375000000001,0.8126666666666665,0.403,dev,shuffled_all,0,organism
+shuffled_all/1 (dev),GS-M,qwen35,merged-Qwen3.5-27B-gender_secret_male-merged,32,155,75,0.6568333333333334,0.5766625,0.7455166666666667,0.8126666666666665,0.187,dev,shuffled_all,1,organism
+shuffled_all/2 (dev),GS-M,qwen35,merged-Qwen3.5-27B-gender_secret_male-merged,32,155,75,0.619,0.528125,0.7023541666666667,0.8126666666666665,0.263,dev,shuffled_all,2,organism
+shuffled_all/3 (dev),GS-M,qwen35,merged-Qwen3.5-27B-gender_secret_male-merged,32,155,75,0.6996666666666667,0.6183166666666666,0.7768416666666667,0.8126666666666665,0.127,dev,shuffled_all,3,organism
+shuffled_all/4 (dev),GS-M,qwen35,merged-Qwen3.5-27B-gender_secret_male-merged,32,155,75,0.5481666666666666,0.457475,0.6380375,0.8126666666666665,0.409,dev,shuffled_all,4,organism
+random_all/0 (dev),GS-M,qwen35,merged-Qwen3.5-27B-gender_secret_male-merged,32,155,75,0.7721666666666667,0.6898333333333334,0.8385208333333334,0.8126666666666665,0.056,dev,random_all,0,organism
+random_all/1 (dev),GS-M,qwen35,merged-Qwen3.5-27B-gender_secret_male-merged,32,155,75,0.7266666666666667,0.6461458333333333,0.8060083333333332,0.8126666666666665,0.085,dev,random_all,1,organism
+random_all/2 (dev),GS-M,qwen35,merged-Qwen3.5-27B-gender_secret_male-merged,32,155,75,0.7005,0.6121583333333334,0.7776708333333334,0.8126666666666665,0.127,dev,random_all,2,organism
+random_all/3 (dev),GS-M,qwen35,merged-Qwen3.5-27B-gender_secret_male-merged,32,155,75,0.6193333333333333,0.5331625,0.7067458333333333,0.8126666666666665,0.263,dev,random_all,3,organism
+random_all/4 (dev),GS-M,qwen35,merged-Qwen3.5-27B-gender_secret_male-merged,32,155,75,0.4348333333333334,0.3364875,0.5253458333333333,0.8126666666666665,0.626,dev,random_all,4,organism
+alpaca_all/0 (dev),GS-M,qwen35,merged-Qwen3.5-27B-gender_secret_male-merged,32,155,75,0.3945,0.30749166666666666,0.48949999999999994,0.8126666666666665,0.692,dev,alpaca_all,0,organism
+trainpca_all/0 (dev),GS-M,qwen35,merged-Qwen3.5-27B-gender_secret_male-merged,32,155,75,0.48050000000000004,0.3885,0.5732333333333333,0.8126666666666665,0.548,dev,trainpca_all,0,organism
+headline,GS-M,qwen35,merged-Qwen3.5-27B-gender_secret_male-merged,32,155,75,0.7975000000000001,0.7231625,0.8660374999999999,0.8126666666666665,0.036,thesis,headline,0,organism
+R1-repe,GS-M,qwen35,merged-Qwen3.5-27B-gender_secret_male-merged,32,155,75,0.8143333333333334,0.7435,0.8766708333333334,0.8126666666666665,0.025,thesis,R1-repe,0,organism
+R2-dev-probe,GS-M,qwen35,merged-Qwen3.5-27B-gender_secret_male-merged,32,155,75,0.6288333333333334,0.5387375,0.713175,0.8126666666666665,0.245,thesis,R2-dev-probe,0,organism
+D4 (LB),GS-M,qwen35,merged-Qwen3.5-27B-gender_secret_male-merged,32,155,75,0.7738333333333334,0.6956666666666668,0.8420083333333332,0.8126666666666665,0.055,thesis,D4 (LB),0,organism
+emotion_all/0 (LB),BotC,qwen35,lora-botc-qwen3.5-27b@2,32,400,200,0.49802500000000005,0.439410625,0.5554425,0.6247149999999999,0.518,LB,emotion_all,0,organism
+"emotion_all/0 (LB, base read)",BotC,qwen35,lora-botc-qwen3.5-27b@2,32,400,200,0.46455,0.4078975,0.519556875,0.6084275,0.762,LB,emotion_all,0,base
+raw/0 (LB),BotC,qwen35,lora-botc-qwen3.5-27b@2,32,400,200,0.4565,0.401290625,0.5132693749999999,0.6247149999999999,0.741,LB,raw,0,organism
+"raw/0 (LB, base read)",BotC,qwen35,lora-botc-qwen3.5-27b@2,32,400,200,0.44239999999999996,0.38766124999999996,0.49658187500000006,0.6084275,0.86,LB,raw,0,base
+shuffled_all/0 (LB),BotC,qwen35,lora-botc-qwen3.5-27b@2,32,400,200,0.454775,0.39942312500000005,0.513406875,0.6247149999999999,0.743,LB,shuffled_all,0,organism
+"shuffled_all/0 (LB, base read)",BotC,qwen35,lora-botc-qwen3.5-27b@2,32,400,200,0.43510000000000004,0.377266875,0.49295500000000003,0.6084275,0.883,LB,shuffled_all,0,base
+shuffled_all/1 (LB),BotC,qwen35,lora-botc-qwen3.5-27b@2,32,400,200,0.4546,0.40109875,0.5126025,0.6247149999999999,0.746,LB,shuffled_all,1,organism
+"shuffled_all/1 (LB, base read)",BotC,qwen35,lora-botc-qwen3.5-27b@2,32,400,200,0.47702500000000003,0.4242700000000001,0.53368375,0.6084275,0.668,LB,shuffled_all,1,base
+shuffled_all/2 (LB),BotC,qwen35,lora-botc-qwen3.5-27b@2,32,400,200,0.518275,0.46370312499999994,0.574854375,0.6247149999999999,0.393,LB,shuffled_all,2,organism
+"shuffled_all/2 (LB, base read)",BotC,qwen35,lora-botc-qwen3.5-27b@2,32,400,200,0.48645000000000005,0.43291625,0.543986875,0.6084275,0.61,LB,shuffled_all,2,base
+shuffled_all/3 (LB),BotC,qwen35,lora-botc-qwen3.5-27b@2,32,400,200,0.45535000000000003,0.39977375,0.512959375,0.6247149999999999,0.741,LB,shuffled_all,3,organism
+"shuffled_all/3 (LB, base read)",BotC,qwen35,lora-botc-qwen3.5-27b@2,32,400,200,0.4597,0.40544937500000006,0.5167006249999999,0.6084275,0.777,LB,shuffled_all,3,base
+shuffled_all/4 (LB),BotC,qwen35,lora-botc-qwen3.5-27b@2,32,400,200,0.4004,0.34606875,0.456249375,0.6247149999999999,0.94,LB,shuffled_all,4,organism
+"shuffled_all/4 (LB, base read)",BotC,qwen35,lora-botc-qwen3.5-27b@2,32,400,200,0.40645,0.3541793750000001,0.46486874999999994,0.6084275,0.959,LB,shuffled_all,4,base
+random_all/0 (LB),BotC,qwen35,lora-botc-qwen3.5-27b@2,32,400,200,0.44955,0.39458875,0.507705625,0.6247149999999999,0.772,LB,random_all,0,organism
+"random_all/0 (LB, base read)",BotC,qwen35,lora-botc-qwen3.5-27b@2,32,400,200,0.44715000000000005,0.393170625,0.505500625,0.6084275,0.842,LB,random_all,0,base
+random_all/1 (LB),BotC,qwen35,lora-botc-qwen3.5-27b@2,32,400,200,0.501225,0.4501175,0.5552124999999999,0.6247149999999999,0.501,LB,random_all,1,organism
+"random_all/1 (LB, base read)",BotC,qwen35,lora-botc-qwen3.5-27b@2,32,400,200,0.498425,0.44574250000000004,0.55075125,0.6084275,0.519,LB,random_all,1,base
+random_all/2 (LB),BotC,qwen35,lora-botc-qwen3.5-27b@2,32,400,200,0.42590000000000006,0.37479375000000004,0.48611,0.6247149999999999,0.87,LB,random_all,2,organism
+"random_all/2 (LB, base read)",BotC,qwen35,lora-botc-qwen3.5-27b@2,32,400,200,0.389125,0.33907562499999994,0.4443875,0.6084275,0.978,LB,random_all,2,base
+random_all/3 (LB),BotC,qwen35,lora-botc-qwen3.5-27b@2,32,400,200,0.46395,0.40969249999999996,0.525306875,0.6247149999999999,0.71,LB,random_all,3,organism
+"random_all/3 (LB, base read)",BotC,qwen35,lora-botc-qwen3.5-27b@2,32,400,200,0.493425,0.4383906250000001,0.5515781249999999,0.6084275,0.557,LB,random_all,3,base
+random_all/4 (LB),BotC,qwen35,lora-botc-qwen3.5-27b@2,32,400,200,0.44055,0.38712250000000004,0.50038875,0.6247149999999999,0.809,LB,random_all,4,organism
+"random_all/4 (LB, base read)",BotC,qwen35,lora-botc-qwen3.5-27b@2,32,400,200,0.45685,0.4032125,0.514229375,0.6084275,0.793,LB,random_all,4,base
+alpaca_all/0 (LB),BotC,qwen35,lora-botc-qwen3.5-27b@2,32,400,200,0.42715000000000003,0.37125125000000003,0.49019999999999997,0.6247149999999999,0.866,LB,alpaca_all,0,organism
+"alpaca_all/0 (LB, base read)",BotC,qwen35,lora-botc-qwen3.5-27b@2,32,400,200,0.418925,0.36547375,0.47482749999999996,0.6084275,0.928,LB,alpaca_all,0,base
+trainpca_all/0 (LB),BotC,qwen35,lora-botc-qwen3.5-27b@2,32,400,200,0.432875,0.37872124999999995,0.494305,0.6247149999999999,0.845,LB,trainpca_all,0,organism
+"trainpca_all/0 (LB, base read)",BotC,qwen35,lora-botc-qwen3.5-27b@2,32,400,200,0.40900000000000003,0.353824375,0.4635525000000001,0.6084275,0.953,LB,trainpca_all,0,base
+emotion_all/0 (RepE),BotC,qwen35,lora-botc-qwen3.5-27b@2,32,400,200,0.47175,0.41696,0.5284025000000001,0.6247149999999999,0.659,RepE,emotion_all,0,organism
+raw/0 (RepE),BotC,qwen35,lora-botc-qwen3.5-27b@2,32,400,200,0.49150000000000005,0.439661875,0.545359375,0.6247149999999999,0.551,RepE,raw,0,organism
+shuffled_all/0 (RepE),BotC,qwen35,lora-botc-qwen3.5-27b@2,32,400,200,0.421175,0.36731749999999996,0.473763125,0.6247149999999999,0.882,RepE,shuffled_all,0,organism
+shuffled_all/1 (RepE),BotC,qwen35,lora-botc-qwen3.5-27b@2,32,400,200,0.532,0.4750187500000001,0.594079375,0.6247149999999999,0.327,RepE,shuffled_all,1,organism
+shuffled_all/2 (RepE),BotC,qwen35,lora-botc-qwen3.5-27b@2,32,400,200,0.4244,0.37166750000000004,0.48016187499999996,0.6247149999999999,0.875,RepE,shuffled_all,2,organism
+shuffled_all/3 (RepE),BotC,qwen35,lora-botc-qwen3.5-27b@2,32,400,200,0.44415000000000004,0.387545625,0.502653125,0.6247149999999999,0.796,RepE,shuffled_all,3,organism
+shuffled_all/4 (RepE),BotC,qwen35,lora-botc-qwen3.5-27b@2,32,400,200,0.4516,0.40111499999999994,0.511251875,0.6247149999999999,0.762,RepE,shuffled_all,4,organism
+random_all/0 (RepE),BotC,qwen35,lora-botc-qwen3.5-27b@2,32,400,200,0.472275,0.418074375,0.530226875,0.6247149999999999,0.658,RepE,random_all,0,organism
+random_all/1 (RepE),BotC,qwen35,lora-botc-qwen3.5-27b@2,32,400,200,0.54385,0.484443125,0.5993793749999999,0.6247149999999999,0.267,RepE,random_all,1,organism
+random_all/2 (RepE),BotC,qwen35,lora-botc-qwen3.5-27b@2,32,400,200,0.4476000000000001,0.39427437500000007,0.504135,0.6247149999999999,0.782,RepE,random_all,2,organism
+random_all/3 (RepE),BotC,qwen35,lora-botc-qwen3.5-27b@2,32,400,200,0.42437499999999995,0.3677425,0.48127062500000006,0.6247149999999999,0.875,RepE,random_all,3,organism
+random_all/4 (RepE),BotC,qwen35,lora-botc-qwen3.5-27b@2,32,400,200,0.39265000000000005,0.34254875,0.45220374999999996,0.6247149999999999,0.955,RepE,random_all,4,organism
+alpaca_all/0 (RepE),BotC,qwen35,lora-botc-qwen3.5-27b@2,32,400,200,0.437425,0.38311375,0.4956025,0.6247149999999999,0.824,RepE,alpaca_all,0,organism
+trainpca_all/0 (RepE),BotC,qwen35,lora-botc-qwen3.5-27b@2,32,400,200,0.496375,0.44235125,0.5558187499999999,0.6247149999999999,0.526,RepE,trainpca_all,0,organism
+emotion_all/0 (dev),BotC,qwen35,lora-botc-qwen3.5-27b@2,32,400,200,0.487375,0.43221125000000005,0.54554125,0.6247149999999999,0.58,dev,emotion_all,0,organism
+raw/0 (dev),BotC,qwen35,lora-botc-qwen3.5-27b@2,32,400,200,0.42915000000000003,0.375190625,0.48823875,0.6247149999999999,0.863,dev,raw,0,organism
+shuffled_all/0 (dev),BotC,qwen35,lora-botc-qwen3.5-27b@2,32,400,200,0.4335,0.3800725,0.491125,0.6247149999999999,0.843,dev,shuffled_all,0,organism
+shuffled_all/1 (dev),BotC,qwen35,lora-botc-qwen3.5-27b@2,32,400,200,0.39257500000000006,0.33766125,0.449429375,0.6247149999999999,0.955,dev,shuffled_all,1,organism
+shuffled_all/2 (dev),BotC,qwen35,lora-botc-qwen3.5-27b@2,32,400,200,0.43872500000000003,0.38372000000000006,0.498400625,0.6247149999999999,0.82,dev,shuffled_all,2,organism
+shuffled_all/3 (dev),BotC,qwen35,lora-botc-qwen3.5-27b@2,32,400,200,0.46912499999999996,0.4159675000000001,0.528205,0.6247149999999999,0.676,dev,shuffled_all,3,organism
+shuffled_all/4 (dev),BotC,qwen35,lora-botc-qwen3.5-27b@2,32,400,200,0.4359,0.3829975,0.495985625,0.6247149999999999,0.834,dev,shuffled_all,4,organism
+random_all/0 (dev),BotC,qwen35,lora-botc-qwen3.5-27b@2,32,400,200,0.475325,0.4170562500000001,0.5355175000000001,0.6247149999999999,0.647,dev,random_all,0,organism
+random_all/1 (dev),BotC,qwen35,lora-botc-qwen3.5-27b@2,32,400,200,0.508775,0.45431499999999997,0.5639537499999999,0.6247149999999999,0.454,dev,random_all,1,organism
+random_all/2 (dev),BotC,qwen35,lora-botc-qwen3.5-27b@2,32,400,200,0.468325,0.41689375000000006,0.527834375,0.6247149999999999,0.684,dev,random_all,2,organism
+random_all/3 (dev),BotC,qwen35,lora-botc-qwen3.5-27b@2,32,400,200,0.46267500000000006,0.4098875,0.52213125,0.6247149999999999,0.714,dev,random_all,3,organism
+random_all/4 (dev),BotC,qwen35,lora-botc-qwen3.5-27b@2,32,400,200,0.398825,0.3456975,0.45628749999999996,0.6247149999999999,0.942,dev,random_all,4,organism
+alpaca_all/0 (dev),BotC,qwen35,lora-botc-qwen3.5-27b@2,32,400,200,0.44289999999999996,0.38974562499999993,0.5022006250000001,0.6247149999999999,0.803,dev,alpaca_all,0,organism
+trainpca_all/0 (dev),BotC,qwen35,lora-botc-qwen3.5-27b@2,32,400,200,0.42225,0.36791750000000006,0.477376875,0.6247149999999999,0.878,dev,trainpca_all,0,organism
+headline,BotC,qwen35,lora-botc-qwen3.5-27b@2,32,400,200,0.6035,0.547636875,0.65900875,0.6247149999999999,0.059,thesis,headline,0,organism
+R1-repe,BotC,qwen35,lora-botc-qwen3.5-27b@2,32,400,200,0.50535,0.452245,0.558828125,0.6247149999999999,0.48,thesis,R1-repe,0,organism
+R2-dev-probe,BotC,qwen35,lora-botc-qwen3.5-27b@2,32,400,200,0.43245,0.3795200000000001,0.491863125,0.6247149999999999,0.85,thesis,R2-dev-probe,0,organism
+D4 (LB),BotC,qwen35,lora-botc-qwen3.5-27b@2,32,400,200,0.521725,0.46204875,0.57612625,0.6247149999999999,0.373,thesis,D4 (LB),0,organism
+emotion_all/0 (LB),AB-AW,qwen35,merged-Qwen3.5-27B-ab_animal_welfare-merged,32,172,26,0.6016859852476292,0.4875922023182297,0.7068032139093783,0.7265608535300315,0.207,LB,emotion_all,0,organism
+"emotion_all/0 (LB, base read)",AB-AW,qwen35,merged-Qwen3.5-27B-ab_animal_welfare-merged,32,172,26,0.5426765015806112,0.4346614857744995,0.6572971548998946,0.693368018967334,0.353,LB,emotion_all,0,base
+raw/0 (LB),AB-AW,qwen35,merged-Qwen3.5-27B-ab_animal_welfare-merged,32,172,26,0.7394625922023182,0.6380071127502634,0.8200803477344574,0.7265608535300315,0.016,LB,raw,0,organism
+"raw/0 (LB, base read)",AB-AW,qwen35,merged-Qwen3.5-27B-ab_animal_welfare-merged,32,172,26,0.6182824025289779,0.505795574288725,0.7149697049525817,0.693368018967334,0.128,LB,raw,0,base
+shuffled_all/0 (LB),AB-AW,qwen35,merged-Qwen3.5-27B-ab_animal_welfare-merged,32,172,26,0.6925711275026344,0.5897984720758694,0.7800381981032666,0.7265608535300315,0.046,LB,shuffled_all,0,organism
+"shuffled_all/0 (LB, base read)",AB-AW,qwen35,merged-Qwen3.5-27B-ab_animal_welfare-merged,32,172,26,0.6830874604847208,0.5829755005268704,0.7718914646996838,0.693368018967334,0.03,LB,shuffled_all,0,base
+shuffled_all/1 (LB),AB-AW,qwen35,merged-Qwen3.5-27B-ab_animal_welfare-merged,32,172,26,0.607218124341412,0.49155031612223393,0.71945468914647,0.7265608535300315,0.189,LB,shuffled_all,1,organism
+"shuffled_all/1 (LB, base read)",AB-AW,qwen35,merged-Qwen3.5-27B-ab_animal_welfare-merged,32,172,26,0.5779768177028451,0.4770679662802951,0.6778187565858798,0.693368018967334,0.23,LB,shuffled_all,1,base
+shuffled_all/2 (LB),AB-AW,qwen35,merged-Qwen3.5-27B-ab_animal_welfare-merged,32,172,26,0.577976817702845,0.47312302423603797,0.6973524762908324,0.7265608535300315,0.263,LB,shuffled_all,2,organism
+"shuffled_all/2 (LB, base read)",AB-AW,qwen35,merged-Qwen3.5-27B-ab_animal_welfare-merged,32,172,26,0.5542676501580611,0.43062434141201267,0.6888830347734457,0.693368018967334,0.31,LB,shuffled_all,2,base
+shuffled_all/3 (LB),AB-AW,qwen35,merged-Qwen3.5-27B-ab_animal_welfare-merged,32,172,26,0.6870389884088515,0.5592465753424659,0.8019099051633298,0.7265608535300315,0.053,LB,shuffled_all,3,organism
+"shuffled_all/3 (LB, base read)",AB-AW,qwen35,merged-Qwen3.5-27B-ab_animal_welfare-merged,32,172,26,0.6393572181243414,0.5152265542676501,0.7595034246575342,0.693368018967334,0.083,LB,shuffled_all,3,base
+shuffled_all/4 (LB),AB-AW,qwen35,merged-Qwen3.5-27B-ab_animal_welfare-merged,32,172,26,0.6448893572181243,0.512881981032666,0.7629149104320336,0.7265608535300315,0.111,LB,shuffled_all,4,organism
+"shuffled_all/4 (LB, base read)",AB-AW,qwen35,merged-Qwen3.5-27B-ab_animal_welfare-merged,32,172,26,0.6101159114857745,0.4970165964172814,0.7255005268703898,0.693368018967334,0.147,LB,shuffled_all,4,base
+random_all/0 (LB),AB-AW,qwen35,merged-Qwen3.5-27B-ab_animal_welfare-merged,32,172,26,0.5763962065331928,0.44467202318229715,0.6978464172813489,0.7265608535300315,0.269,LB,random_all,0,organism
+"random_all/0 (LB, base read)",AB-AW,qwen35,merged-Qwen3.5-27B-ab_animal_welfare-merged,32,172,26,0.6456796628029504,0.5218519494204426,0.7568559009483667,0.693368018967334,0.08,LB,random_all,0,base
+random_all/1 (LB),AB-AW,qwen35,merged-Qwen3.5-27B-ab_animal_welfare-merged,32,172,26,0.5144889357218124,0.38329162276080087,0.6433153319283457,0.7265608535300315,0.46,LB,random_all,1,organism
+"random_all/1 (LB, base read)",AB-AW,qwen35,merged-Qwen3.5-27B-ab_animal_welfare-merged,32,172,26,0.5740252897787145,0.4456401475237092,0.6878358798735511,0.693368018967334,0.241,LB,random_all,1,base
+random_all/2 (LB),AB-AW,qwen35,merged-Qwen3.5-27B-ab_animal_welfare-merged,32,172,26,0.6456796628029505,0.5270613804004216,0.7537012644889358,0.7265608535300315,0.108,LB,random_all,2,organism
+"random_all/2 (LB, base read)",AB-AW,qwen35,merged-Qwen3.5-27B-ab_animal_welfare-merged,32,172,26,0.6325079030558483,0.5123616965226554,0.7355176501580611,0.693368018967334,0.099,LB,random_all,2,base
+random_all/3 (LB),AB-AW,qwen35,merged-Qwen3.5-27B-ab_animal_welfare-merged,32,172,26,0.48946259220231825,0.35220626975763963,0.6280426765015805,0.7265608535300315,0.549,LB,random_all,3,organism
+"random_all/3 (LB, base read)",AB-AW,qwen35,merged-Qwen3.5-27B-ab_animal_welfare-merged,32,172,26,0.47365648050579556,0.336663593256059,0.600645416227608,0.693368018967334,0.601,LB,random_all,3,base
+random_all/4 (LB),AB-AW,qwen35,merged-Qwen3.5-27B-ab_animal_welfare-merged,32,172,26,0.5447839831401475,0.4172747629083245,0.6675513698630138,0.7265608535300315,0.357,LB,random_all,4,organism
+"random_all/4 (LB, base read)",AB-AW,qwen35,merged-Qwen3.5-27B-ab_animal_welfare-merged,32,172,26,0.6064278187565859,0.4933943624868282,0.7157600105374078,0.693368018967334,0.153,LB,random_all,4,base
+alpaca_all/0 (LB),AB-AW,qwen35,merged-Qwen3.5-27B-ab_animal_welfare-merged,32,172,26,0.6999473129610115,0.5829425711275026,0.801422550052687,0.7265608535300315,0.043,LB,alpaca_all,0,organism
+"alpaca_all/0 (LB, base read)",AB-AW,qwen35,merged-Qwen3.5-27B-ab_animal_welfare-merged,32,172,26,0.6738672286617492,0.5523709167544784,0.779254478398314,0.693368018967334,0.042,LB,alpaca_all,0,base
+trainpca_all/0 (LB),AB-AW,qwen35,merged-Qwen3.5-27B-ab_animal_welfare-merged,32,172,26,0.6332982086406744,0.516313224446786,0.7410629610115912,0.7265608535300315,0.132,LB,trainpca_all,0,organism
+"trainpca_all/0 (LB, base read)",AB-AW,qwen35,merged-Qwen3.5-27B-ab_animal_welfare-merged,32,172,26,0.5684931506849316,0.44854452054794525,0.6884351949420442,0.693368018967334,0.257,LB,trainpca_all,0,base
+emotion_all/0 (RepE),AB-AW,qwen35,merged-Qwen3.5-27B-ab_animal_welfare-merged,32,172,26,0.5518967334035827,0.4172418335089568,0.6751844046364595,0.7265608535300315,0.343,RepE,emotion_all,0,organism
+raw/0 (RepE),AB-AW,qwen35,merged-Qwen3.5-27B-ab_animal_welfare-merged,32,172,26,0.779768177028451,0.6717531612223393,0.867795047418335,0.7265608535300315,0.003,RepE,raw,0,organism
+shuffled_all/0 (RepE),AB-AW,qwen35,merged-Qwen3.5-27B-ab_animal_welfare-merged,32,172,26,0.565068493150685,0.42834562697576395,0.6836801896733403,0.7265608535300315,0.298,RepE,shuffled_all,0,organism
+shuffled_all/1 (RepE),AB-AW,qwen35,merged-Qwen3.5-27B-ab_animal_welfare-merged,32,172,26,0.6851949420442571,0.58034114857745,0.7789844573234984,0.7265608535300315,0.055,RepE,shuffled_all,1,organism
+shuffled_all/2 (RepE),AB-AW,qwen35,merged-Qwen3.5-27B-ab_animal_welfare-merged,32,172,26,0.6664910432033719,0.5513369336143309,0.7655492623814543,0.7265608535300315,0.074,RepE,shuffled_all,2,organism
+shuffled_all/3 (RepE),AB-AW,qwen35,merged-Qwen3.5-27B-ab_animal_welfare-merged,32,172,26,0.5832455216016861,0.44859062170706016,0.7033917281348787,0.7265608535300315,0.248,RepE,shuffled_all,3,organism
+shuffled_all/4 (RepE),AB-AW,qwen35,merged-Qwen3.5-27B-ab_animal_welfare-merged,32,172,26,0.5113277133825079,0.39458640674394097,0.6304070073761854,0.7265608535300315,0.47,RepE,shuffled_all,4,organism
+random_all/0 (RepE),AB-AW,qwen35,merged-Qwen3.5-27B-ab_animal_welfare-merged,32,172,26,0.5105374077976819,0.3932889884088514,0.6217465753424657,0.7265608535300315,0.473,RepE,random_all,0,organism
+random_all/1 (RepE),AB-AW,qwen35,merged-Qwen3.5-27B-ab_animal_welfare-merged,32,172,26,0.5521601685985248,0.41437697576396204,0.6775882507903055,0.7265608535300315,0.341,RepE,random_all,1,organism
+random_all/2 (RepE),AB-AW,qwen35,merged-Qwen3.5-27B-ab_animal_welfare-merged,32,172,26,0.5097471022128557,0.3682626448893572,0.6475302950474184,0.7265608535300315,0.478,RepE,random_all,2,organism
+random_all/3 (RepE),AB-AW,qwen35,merged-Qwen3.5-27B-ab_animal_welfare-merged,32,172,26,0.3287671232876712,0.226027397260274,0.42652133825079025,0.7265608535300315,0.938,RepE,random_all,3,organism
+random_all/4 (RepE),AB-AW,qwen35,merged-Qwen3.5-27B-ab_animal_welfare-merged,32,172,26,0.4992096944151739,0.390140937829294,0.604603530031612,0.7265608535300315,0.514,RepE,random_all,4,organism
+alpaca_all/0 (RepE),AB-AW,qwen35,merged-Qwen3.5-27B-ab_animal_welfare-merged,32,172,26,0.4665437302423604,0.35958245521601684,0.5666556902002108,0.7265608535300315,0.625,RepE,alpaca_all,0,organism
+trainpca_all/0 (RepE),AB-AW,qwen35,merged-Qwen3.5-27B-ab_animal_welfare-merged,32,172,26,0.6759747102212855,0.5581862486828241,0.766609589041096,0.7265608535300315,0.064,RepE,trainpca_all,0,organism
+emotion_all/0 (dev),AB-AW,qwen35,merged-Qwen3.5-27B-ab_animal_welfare-merged,32,172,26,0.7407797681770285,0.6354056902002108,0.8453767123287671,0.7265608535300315,0.015,dev,emotion_all,0,organism
+raw/0 (dev),AB-AW,qwen35,merged-Qwen3.5-27B-ab_animal_welfare-merged,32,172,26,0.7584299262381453,0.6654307165437303,0.8437895152792414,0.7265608535300315,0.005,dev,raw,0,organism
+shuffled_all/0 (dev),AB-AW,qwen35,merged-Qwen3.5-27B-ab_animal_welfare-merged,32,172,26,0.7194415173867229,0.6156480505795575,0.8069283456269757,0.7265608535300315,0.03,dev,shuffled_all,0,organism
+shuffled_all/1 (dev),AB-AW,qwen35,merged-Qwen3.5-27B-ab_animal_welfare-merged,32,172,26,0.47918861959957854,0.3427028451001054,0.6130795574288725,0.7265608535300315,0.581,dev,shuffled_all,1,organism
+shuffled_all/2 (dev),AB-AW,qwen35,merged-Qwen3.5-27B-ab_animal_welfare-merged,32,172,26,0.696522655426765,0.5895613804004215,0.794527133825079,0.7265608535300315,0.045,dev,shuffled_all,2,organism
+shuffled_all/3 (dev),AB-AW,qwen35,merged-Qwen3.5-27B-ab_animal_welfare-merged,32,172,26,0.5908851422550052,0.4752173340358272,0.7046891464699684,0.7265608535300315,0.231,dev,shuffled_all,3,organism
+shuffled_all/4 (dev),AB-AW,qwen35,merged-Qwen3.5-27B-ab_animal_welfare-merged,32,172,26,0.7436775553213909,0.6448234984193887,0.8345626975763961,0.7265608535300315,0.013,dev,shuffled_all,4,organism
+random_all/0 (dev),AB-AW,qwen35,merged-Qwen3.5-27B-ab_animal_welfare-merged,32,172,26,0.46022128556375136,0.3487618545837724,0.5806309272918863,0.7265608535300315,0.648,dev,random_all,0,organism
+random_all/1 (dev),AB-AW,qwen35,merged-Qwen3.5-27B-ab_animal_welfare-merged,32,172,26,0.6533192834562698,0.5408258693361433,0.7586999473129611,0.7265608535300315,0.099,dev,random_all,1,organism
+random_all/2 (dev),AB-AW,qwen35,merged-Qwen3.5-27B-ab_animal_welfare-merged,32,172,26,0.6138040042149632,0.48970626975763965,0.7377173340358272,0.7265608535300315,0.174,dev,random_all,2,organism
+random_all/3 (dev),AB-AW,qwen35,merged-Qwen3.5-27B-ab_animal_welfare-merged,32,172,26,0.5858798735511064,0.46808482613277136,0.7002239199157008,0.7265608535300315,0.24,dev,random_all,3,organism
+random_all/4 (dev),AB-AW,qwen35,merged-Qwen3.5-27B-ab_animal_welfare-merged,32,172,26,0.44942044257112757,0.3382376185458377,0.5643506322444678,0.7265608535300315,0.686,dev,random_all,4,organism
+alpaca_all/0 (dev),AB-AW,qwen35,merged-Qwen3.5-27B-ab_animal_welfare-merged,32,172,26,0.7573761854583771,0.6643703898840885,0.8400948366701791,0.7265608535300315,0.005,dev,alpaca_all,0,organism
+trainpca_all/0 (dev),AB-AW,qwen35,merged-Qwen3.5-27B-ab_animal_welfare-merged,32,172,26,0.6688619599578504,0.5632178609062171,0.7645482086406744,0.7265608535300315,0.069,dev,trainpca_all,0,organism
+headline,AB-AW,qwen35,merged-Qwen3.5-27B-ab_animal_welfare-merged,32,172,26,0.7855637513171759,0.711782139093783,0.8493216543730243,0.7265608535300315,0.003,thesis,headline,0,organism
+R1-repe,AB-AW,qwen35,merged-Qwen3.5-27B-ab_animal_welfare-merged,32,172,26,0.7831928345626977,0.6685985247629084,0.8780295047418335,0.7265608535300315,0.003,thesis,R1-repe,0,organism
+R2-dev-probe,AB-AW,qwen35,merged-Qwen3.5-27B-ab_animal_welfare-merged,32,172,26,0.6646469968387777,0.5698103266596417,0.7613408851422551,0.7265608535300315,0.076,thesis,R2-dev-probe,0,organism
+D4 (LB),AB-AW,qwen35,merged-Qwen3.5-27B-ab_animal_welfare-merged,32,172,26,0.6351422550052687,0.5350171232876711,0.7336801896733404,0.7265608535300315,0.125,thesis,D4 (LB),0,organism
+emotion_all/0 (LB),AB-HC,qwen35,merged-Qwen3.5-27B-ab_hallucinates_citations-merged,32,176,30,0.44589041095890414,0.34771689497716896,0.5356335616438357,0.8593664383561643,0.568,LB,emotion_all,0,organism
+"emotion_all/0 (LB, base read)",AB-HC,qwen35,merged-Qwen3.5-27B-ab_hallucinates_citations-merged,32,176,30,0.3687214611872146,0.27372146118721463,0.4577625570776256,0.8600399543378994,0.694,LB,emotion_all,0,base
+raw/0 (LB),AB-HC,qwen35,merged-Qwen3.5-27B-ab_hallucinates_citations-merged,32,176,30,0.6235159817351598,0.5343721461187215,0.7118778538812784,0.8593664383561643,0.282,LB,raw,0,organism
+"raw/0 (LB, base read)",AB-HC,qwen35,merged-Qwen3.5-27B-ab_hallucinates_citations-merged,32,176,30,0.4602739726027397,0.36574771689497715,0.5559474885844748,0.8600399543378994,0.547,LB,raw,0,base
+shuffled_all/0 (LB),AB-HC,qwen35,merged-Qwen3.5-27B-ab_hallucinates_citations-merged,32,176,30,0.4465753424657534,0.3381221461187215,0.547945205479452,0.8593664383561643,0.567,LB,shuffled_all,0,organism
+"shuffled_all/0 (LB, base read)",AB-HC,qwen35,merged-Qwen3.5-27B-ab_hallucinates_citations-merged,32,176,30,0.36118721461187214,0.26231735159817354,0.45548515981735166,0.8600399543378994,0.707,LB,shuffled_all,0,base
+shuffled_all/1 (LB),AB-HC,qwen35,merged-Qwen3.5-27B-ab_hallucinates_citations-merged,32,176,30,0.4315068493150685,0.3383447488584475,0.5130308219178082,0.8593664383561643,0.591,LB,shuffled_all,1,organism
+"shuffled_all/1 (LB, base read)",AB-HC,qwen35,merged-Qwen3.5-27B-ab_hallucinates_citations-merged,32,176,30,0.41164383561643836,0.32121004566210043,0.48976598173515973,0.8600399543378994,0.633,LB,shuffled_all,1,base
+shuffled_all/2 (LB),AB-HC,qwen35,merged-Qwen3.5-27B-ab_hallucinates_citations-merged,32,176,30,0.5431506849315069,0.4394920091324201,0.6433904109589041,0.8593664383561643,0.41,LB,shuffled_all,2,organism
+"shuffled_all/2 (LB, base read)",AB-HC,qwen35,merged-Qwen3.5-27B-ab_hallucinates_citations-merged,32,176,30,0.5305936073059361,0.4282990867579909,0.6340353881278539,0.8600399543378994,0.425,LB,shuffled_all,2,base
+shuffled_all/3 (LB),AB-HC,qwen35,merged-Qwen3.5-27B-ab_hallucinates_citations-merged,32,176,30,0.31095890410958904,0.21253424657534245,0.40645547945205474,0.8593664383561643,0.782,LB,shuffled_all,3,organism
+"shuffled_all/3 (LB, base read)",AB-HC,qwen35,merged-Qwen3.5-27B-ab_hallucinates_citations-merged,32,176,30,0.1906392694063927,0.10888698630136988,0.26829337899543376,0.8600399543378994,0.927,LB,shuffled_all,3,base
+shuffled_all/4 (LB),AB-HC,qwen35,merged-Qwen3.5-27B-ab_hallucinates_citations-merged,32,176,30,0.2678082191780822,0.17806506849315068,0.3603082191780822,0.8593664383561643,0.835,LB,shuffled_all,4,organism
+"shuffled_all/4 (LB, base read)",AB-HC,qwen35,merged-Qwen3.5-27B-ab_hallucinates_citations-merged,32,176,30,0.19703196347031962,0.12167808219178082,0.2746803652968036,0.8600399543378994,0.922,LB,shuffled_all,4,base
+random_all/0 (LB),AB-HC,qwen35,merged-Qwen3.5-27B-ab_hallucinates_citations-merged,32,176,30,0.2442922374429224,0.14840182648401828,0.34842465753424656,0.8593664383561643,0.865,LB,random_all,0,organism
+"random_all/0 (LB, base read)",AB-HC,qwen35,merged-Qwen3.5-27B-ab_hallucinates_citations-merged,32,176,30,0.3171232876712329,0.21597602739726027,0.4182705479452055,0.8600399543378994,0.776,LB,random_all,0,base
+random_all/1 (LB),AB-HC,qwen35,merged-Qwen3.5-27B-ab_hallucinates_citations-merged,32,176,30,0.2287671232876712,0.1225570776255708,0.3461244292237443,0.8593664383561643,0.88,LB,random_all,1,organism
+"random_all/1 (LB, base read)",AB-HC,qwen35,merged-Qwen3.5-27B-ab_hallucinates_citations-merged,32,176,30,0.24954337899543377,0.1403881278538813,0.3657534246575342,0.8600399543378994,0.868,LB,random_all,1,base
+random_all/2 (LB),AB-HC,qwen35,merged-Qwen3.5-27B-ab_hallucinates_citations-merged,32,176,30,0.3050228310502283,0.2006563926940639,0.4123287671232877,0.8593664383561643,0.788,LB,random_all,2,organism
+"random_all/2 (LB, base read)",AB-HC,qwen35,merged-Qwen3.5-27B-ab_hallucinates_citations-merged,32,176,30,0.27579908675799086,0.1728025114155251,0.381980593607306,0.8600399543378994,0.827,LB,random_all,2,base
+random_all/3 (LB),AB-HC,qwen35,merged-Qwen3.5-27B-ab_hallucinates_citations-merged,32,176,30,0.17374429223744295,0.09860159817351596,0.2630479452054794,0.8593664383561643,0.93,LB,random_all,3,organism
+"random_all/3 (LB, base read)",AB-HC,qwen35,merged-Qwen3.5-27B-ab_hallucinates_citations-merged,32,176,30,0.28242009132420093,0.18515981735159817,0.3860787671232877,0.8600399543378994,0.817,LB,random_all,3,base
+random_all/4 (LB),AB-HC,qwen35,merged-Qwen3.5-27B-ab_hallucinates_citations-merged,32,176,30,0.15684931506849317,0.08880707762557076,0.23037100456621004,0.8593664383561643,0.948,LB,random_all,4,organism
+"random_all/4 (LB, base read)",AB-HC,qwen35,merged-Qwen3.5-27B-ab_hallucinates_citations-merged,32,176,30,0.17397260273972603,0.09723744292237445,0.2536586757990868,0.8600399543378994,0.941,LB,random_all,4,base
+alpaca_all/0 (LB),AB-HC,qwen35,merged-Qwen3.5-27B-ab_hallucinates_citations-merged,32,176,30,0.21712328767123287,0.10981164383561645,0.322654109589041,0.8593664383561643,0.897,LB,alpaca_all,0,organism
+"alpaca_all/0 (LB, base read)",AB-HC,qwen35,merged-Qwen3.5-27B-ab_hallucinates_citations-merged,32,176,30,0.25182648401826485,0.1388070776255708,0.3698630136986301,0.8600399543378994,0.864,LB,alpaca_all,0,base
+trainpca_all/0 (LB),AB-HC,qwen35,merged-Qwen3.5-27B-ab_hallucinates_citations-merged,32,176,30,0.36415525114155256,0.27808219178082194,0.45621004566210044,0.8593664383561643,0.697,LB,trainpca_all,0,organism
+"trainpca_all/0 (LB, base read)",AB-HC,qwen35,merged-Qwen3.5-27B-ab_hallucinates_citations-merged,32,176,30,0.3363013698630137,0.250216894977169,0.4294805936073059,0.8600399543378994,0.742,LB,trainpca_all,0,base
+emotion_all/0 (RepE),AB-HC,qwen35,merged-Qwen3.5-27B-ab_hallucinates_citations-merged,32,176,30,0.5721461187214611,0.47395547945205474,0.679480593607306,0.8593664383561643,0.368,RepE,emotion_all,0,organism
+raw/0 (RepE),AB-HC,qwen35,merged-Qwen3.5-27B-ab_hallucinates_citations-merged,32,176,30,0.6187214611872146,0.5387557077625571,0.6966038812785388,0.8593664383561643,0.291,RepE,raw,0,organism
+shuffled_all/0 (RepE),AB-HC,qwen35,merged-Qwen3.5-27B-ab_hallucinates_citations-merged,32,176,30,0.2502283105022831,0.1524942922374429,0.3502397260273972,0.8593664383561643,0.86,RepE,shuffled_all,0,organism
+shuffled_all/1 (RepE),AB-HC,qwen35,merged-Qwen3.5-27B-ab_hallucinates_citations-merged,32,176,30,0.3732876712328767,0.2823972602739726,0.4749143835616438,0.8593664383561643,0.68,RepE,shuffled_all,1,organism
+shuffled_all/2 (RepE),AB-HC,qwen35,merged-Qwen3.5-27B-ab_hallucinates_citations-merged,32,176,30,0.5203196347031964,0.41981735159817346,0.6158276255707762,0.8593664383561643,0.44,RepE,shuffled_all,2,organism
+shuffled_all/3 (RepE),AB-HC,qwen35,merged-Qwen3.5-27B-ab_hallucinates_citations-merged,32,176,30,0.3178082191780822,0.21780251141552515,0.42191780821917807,0.8593664383561643,0.772,RepE,shuffled_all,3,organism
+shuffled_all/4 (RepE),AB-HC,qwen35,merged-Qwen3.5-27B-ab_hallucinates_citations-merged,32,176,30,0.26940639269406397,0.19542237442922375,0.3408675799086758,0.8593664383561643,0.834,RepE,shuffled_all,4,organism
+random_all/0 (RepE),AB-HC,qwen35,merged-Qwen3.5-27B-ab_hallucinates_citations-merged,32,176,30,0.20251141552511415,0.10820205479452058,0.30093036529680367,0.8593664383561643,0.911,RepE,random_all,0,organism
+random_all/1 (RepE),AB-HC,qwen35,merged-Qwen3.5-27B-ab_hallucinates_citations-merged,32,176,30,0.6353881278538813,0.5424315068493151,0.7235673515981735,0.8593664383561643,0.264,RepE,random_all,1,organism
+random_all/2 (RepE),AB-HC,qwen35,merged-Qwen3.5-27B-ab_hallucinates_citations-merged,32,176,30,0.3273972602739726,0.2485901826484018,0.4121004566210046,0.8593664383561643,0.756,RepE,random_all,2,organism
+random_all/3 (RepE),AB-HC,qwen35,merged-Qwen3.5-27B-ab_hallucinates_citations-merged,32,176,30,0.43698630136986305,0.3483732876712329,0.5287842465753425,0.8593664383561643,0.582,RepE,random_all,3,organism
+random_all/4 (RepE),AB-HC,qwen35,merged-Qwen3.5-27B-ab_hallucinates_citations-merged,32,176,30,0.3136986301369863,0.22667237442922372,0.4045662100456621,0.8593664383561643,0.78,RepE,random_all,4,organism
+alpaca_all/0 (RepE),AB-HC,qwen35,merged-Qwen3.5-27B-ab_hallucinates_citations-merged,32,176,30,0.6180365296803653,0.5253424657534247,0.7079965753424656,0.8593664383561643,0.292,RepE,alpaca_all,0,organism
+trainpca_all/0 (RepE),AB-HC,qwen35,merged-Qwen3.5-27B-ab_hallucinates_citations-merged,32,176,30,0.44086757990867587,0.3335388127853881,0.5491267123287671,0.8593664383561643,0.578,RepE,trainpca_all,0,organism
+emotion_all/0 (dev),AB-HC,qwen35,merged-Qwen3.5-27B-ab_hallucinates_citations-merged,32,176,30,0.35342465753424657,0.2721232876712329,0.4349372146118721,0.8593664383561643,0.712,dev,emotion_all,0,organism
+raw/0 (dev),AB-HC,qwen35,merged-Qwen3.5-27B-ab_hallucinates_citations-merged,32,176,30,0.6079908675799086,0.5120890410958904,0.7013812785388128,0.8593664383561643,0.312,dev,raw,0,organism
+shuffled_all/0 (dev),AB-HC,qwen35,merged-Qwen3.5-27B-ab_hallucinates_citations-merged,32,176,30,0.5139269406392694,0.41454908675799085,0.6112442922374429,0.8593664383561643,0.449,dev,shuffled_all,0,organism
+shuffled_all/1 (dev),AB-HC,qwen35,merged-Qwen3.5-27B-ab_hallucinates_citations-merged,32,176,30,0.5648401826484017,0.47876141552511414,0.643384703196347,0.8593664383561643,0.378,dev,shuffled_all,1,organism
+shuffled_all/2 (dev),AB-HC,qwen35,merged-Qwen3.5-27B-ab_hallucinates_citations-merged,32,176,30,0.6465753424657534,0.5520490867579909,0.7406506849315069,0.8593664383561643,0.249,dev,shuffled_all,2,organism
+shuffled_all/3 (dev),AB-HC,qwen35,merged-Qwen3.5-27B-ab_hallucinates_citations-merged,32,176,30,0.46050228310502284,0.37111301369863015,0.5518436073059361,0.8593664383561643,0.542,dev,shuffled_all,3,organism
+shuffled_all/4 (dev),AB-HC,qwen35,merged-Qwen3.5-27B-ab_hallucinates_citations-merged,32,176,30,0.27100456621004565,0.1839840182648402,0.36329908675799083,0.8593664383561643,0.832,dev,shuffled_all,4,organism
+random_all/0 (dev),AB-HC,qwen35,merged-Qwen3.5-27B-ab_hallucinates_citations-merged,32,176,30,0.22899543378995435,0.15202625570776254,0.3133219178082191,0.8593664383561643,0.88,dev,random_all,0,organism
+random_all/1 (dev),AB-HC,qwen35,merged-Qwen3.5-27B-ab_hallucinates_citations-merged,32,176,30,0.37054794520547946,0.27557077625570775,0.4639269406392694,0.8593664383561643,0.689,dev,random_all,1,organism
+random_all/2 (dev),AB-HC,qwen35,merged-Qwen3.5-27B-ab_hallucinates_citations-merged,32,176,30,0.26643835616438355,0.17509703196347032,0.36122716894977164,0.8593664383561643,0.838,dev,random_all,2,organism
+random_all/3 (dev),AB-HC,qwen35,merged-Qwen3.5-27B-ab_hallucinates_citations-merged,32,176,30,0.563013698630137,0.4552397260273973,0.6739954337899543,0.8593664383561643,0.38,dev,random_all,3,organism
+random_all/4 (dev),AB-HC,qwen35,merged-Qwen3.5-27B-ab_hallucinates_citations-merged,32,176,30,0.3789954337899544,0.2734703196347032,0.4815068493150685,0.8593664383561643,0.665,dev,random_all,4,organism
+alpaca_all/0 (dev),AB-HC,qwen35,merged-Qwen3.5-27B-ab_hallucinates_citations-merged,32,176,30,0.36073059360730597,0.2567351598173516,0.4680365296803653,0.8593664383561643,0.702,dev,alpaca_all,0,organism
+trainpca_all/0 (dev),AB-HC,qwen35,merged-Qwen3.5-27B-ab_hallucinates_citations-merged,32,176,30,0.5881278538812785,0.4894920091324201,0.6849429223744293,0.8593664383561643,0.347,dev,trainpca_all,0,organism
+headline,AB-HC,qwen35,merged-Qwen3.5-27B-ab_hallucinates_citations-merged,32,176,30,0.40821917808219177,0.311175799086758,0.5031963470319634,0.8593664383561643,0.62,thesis,headline,0,organism
+R1-repe,AB-HC,qwen35,merged-Qwen3.5-27B-ab_hallucinates_citations-merged,32,176,30,0.8616438356164384,0.8004566210045663,0.9157591324200912,0.8593664383561643,0.024,thesis,R1-repe,0,organism
+R2-dev-probe,AB-HC,qwen35,merged-Qwen3.5-27B-ab_hallucinates_citations-merged,32,176,30,0.46529680365296805,0.36481164383561643,0.5703481735159817,0.8593664383561643,0.533,thesis,R2-dev-probe,0,organism
+D4 (LB),AB-HC,qwen35,merged-Qwen3.5-27B-ab_hallucinates_citations-merged,32,176,30,0.7100456621004567,0.6227739726027398,0.7879109589041097,0.8593664383561643,0.165,thesis,D4 (LB),0,organism
+emotion_all/0 (LB),AB-SP,qwen35,merged-Qwen3.5-27B-ab_self_promotion-merged,32,182,34,0.8521462639109698,0.7889507154213037,0.9111784578696343,0.8169763513513514,0.011,LB,emotion_all,0,organism
+"emotion_all/0 (LB, base read)",AB-SP,qwen35,merged-Qwen3.5-27B-ab_self_promotion-merged,32,182,34,0.8777821939586645,0.8179451510333864,0.9270816772655007,0.8041087042925278,0.002,LB,emotion_all,0,base
+raw/0 (LB),AB-SP,qwen35,merged-Qwen3.5-27B-ab_self_promotion-merged,32,182,34,0.8215421303656597,0.7487629173290937,0.8803706279809221,0.8169763513513514,0.022,LB,raw,0,organism
+"raw/0 (LB, base read)",AB-SP,qwen35,merged-Qwen3.5-27B-ab_self_promotion-merged,32,182,34,0.7442368839427662,0.6623161764705883,0.8193710254372017,0.8041087042925278,0.063,LB,raw,0,base
+shuffled_all/0 (LB),AB-SP,qwen35,merged-Qwen3.5-27B-ab_self_promotion-merged,32,182,34,0.6456677265500795,0.5592011128775835,0.71939586645469,0.8169763513513514,0.21,LB,shuffled_all,0,organism
+"shuffled_all/0 (LB, base read)",AB-SP,qwen35,merged-Qwen3.5-27B-ab_self_promotion-merged,32,182,34,0.6232114467408585,0.5313742050874403,0.7023251192368839,0.8041087042925278,0.245,LB,shuffled_all,0,base
+shuffled_all/1 (LB),AB-SP,qwen35,merged-Qwen3.5-27B-ab_self_promotion-merged,32,182,34,0.6422893481717011,0.5528567170111288,0.7291484499205088,0.8169763513513514,0.218,LB,shuffled_all,1,organism
+"shuffled_all/1 (LB, base read)",AB-SP,qwen35,merged-Qwen3.5-27B-ab_self_promotion-merged,32,182,34,0.6959459459459459,0.5995081478537362,0.7802116454689983,0.8041087042925278,0.121,LB,shuffled_all,1,base
+shuffled_all/2 (LB),AB-SP,qwen35,merged-Qwen3.5-27B-ab_self_promotion-merged,32,182,34,0.7269475357710651,0.6474513116057233,0.8022754372019077,0.8169763513513514,0.098,LB,shuffled_all,2,organism
+"shuffled_all/2 (LB, base read)",AB-SP,qwen35,merged-Qwen3.5-27B-ab_self_promotion-merged,32,182,34,0.7267488076311606,0.6402921303656598,0.8074374006359301,0.8041087042925278,0.08,LB,shuffled_all,2,base
+shuffled_all/3 (LB),AB-SP,qwen35,merged-Qwen3.5-27B-ab_self_promotion-merged,32,182,34,0.5395468998410176,0.440560413354531,0.6411367249602544,0.8169763513513514,0.43,LB,shuffled_all,3,organism
+"shuffled_all/3 (LB, base read)",AB-SP,qwen35,merged-Qwen3.5-27B-ab_self_promotion-merged,32,182,34,0.5910174880763115,0.4918422098569158,0.6834409777424483,0.8041087042925278,0.298,LB,shuffled_all,3,base
+shuffled_all/4 (LB),AB-SP,qwen35,merged-Qwen3.5-27B-ab_self_promotion-merged,32,182,34,0.7042925278219396,0.6259687996820349,0.7776232114467408,0.8169763513513514,0.13,LB,shuffled_all,4,organism
+"shuffled_all/4 (LB, base read)",AB-SP,qwen35,merged-Qwen3.5-27B-ab_self_promotion-merged,32,182,34,0.6653418124006361,0.5798340620031797,0.7464278616852146,0.8041087042925278,0.168,LB,shuffled_all,4,base
+random_all/0 (LB),AB-SP,qwen35,merged-Qwen3.5-27B-ab_self_promotion-merged,32,182,34,0.27325119236883944,0.18654113672496025,0.3656647456279809,0.8169763513513514,0.907,LB,random_all,0,organism
+"random_all/0 (LB, base read)",AB-SP,qwen35,merged-Qwen3.5-27B-ab_self_promotion-merged,32,182,34,0.39169316375198726,0.3008545310015898,0.48510532591414945,0.8041087042925278,0.732,LB,random_all,0,base
+random_all/1 (LB),AB-SP,qwen35,merged-Qwen3.5-27B-ab_self_promotion-merged,32,182,34,0.3114069952305246,0.22097078696343406,0.4108257154213036,0.8169763513513514,0.854,LB,random_all,1,organism
+"random_all/1 (LB, base read)",AB-SP,qwen35,merged-Qwen3.5-27B-ab_self_promotion-merged,32,182,34,0.47317170111287754,0.3767388712241654,0.5761277821939587,0.8041087042925278,0.576,LB,random_all,1,base
+random_all/2 (LB),AB-SP,qwen35,merged-Qwen3.5-27B-ab_self_promotion-merged,32,182,34,0.46879968203497613,0.38393779809220985,0.5503080286168521,0.8169763513513514,0.565,LB,random_all,2,organism
+"random_all/2 (LB, base read)",AB-SP,qwen35,merged-Qwen3.5-27B-ab_self_promotion-merged,32,182,34,0.44852941176470584,0.36187897456279805,0.5340023847376788,0.8041087042925278,0.634,LB,random_all,2,base
+random_all/3 (LB),AB-SP,qwen35,merged-Qwen3.5-27B-ab_self_promotion-merged,32,182,34,0.29789348171701113,0.2129918521462639,0.39408286963434025,0.8169763513513514,0.871,LB,random_all,3,organism
+"random_all/3 (LB, base read)",AB-SP,qwen35,merged-Qwen3.5-27B-ab_self_promotion-merged,32,182,34,0.3084260731319555,0.22217309220985693,0.40206180445151024,0.8041087042925278,0.871,LB,random_all,3,base
+random_all/4 (LB),AB-SP,qwen35,merged-Qwen3.5-27B-ab_self_promotion-merged,32,182,34,0.6538155802861685,0.5560363672496025,0.7394922496025437,0.8169763513513514,0.203,LB,random_all,4,organism
+"random_all/4 (LB, base read)",AB-SP,qwen35,merged-Qwen3.5-27B-ab_self_promotion-merged,32,182,34,0.8020667726550079,0.7287062798092209,0.8712291335453101,0.8041087042925278,0.026,LB,random_all,4,base
+alpaca_all/0 (LB),AB-SP,qwen35,merged-Qwen3.5-27B-ab_self_promotion-merged,32,182,34,0.32770270270270274,0.23706279809220987,0.42388712241653415,0.8169763513513514,0.836,LB,alpaca_all,0,organism
+"alpaca_all/0 (LB, base read)",AB-SP,qwen35,merged-Qwen3.5-27B-ab_self_promotion-merged,32,182,34,0.4346184419713831,0.3463781796502385,0.5300129173290938,0.8041087042925278,0.663,LB,alpaca_all,0,base
+trainpca_all/0 (LB),AB-SP,qwen35,merged-Qwen3.5-27B-ab_self_promotion-merged,32,182,34,0.7740461049284579,0.7046850158982512,0.8438046502384737,0.8169763513513514,0.05,LB,trainpca_all,0,organism
+"trainpca_all/0 (LB, base read)",AB-SP,qwen35,merged-Qwen3.5-27B-ab_self_promotion-merged,32,182,34,0.7702702702702702,0.6913702305246423,0.8489964228934817,0.8041087042925278,0.049,LB,trainpca_all,0,base
+emotion_all/0 (RepE),AB-SP,qwen35,merged-Qwen3.5-27B-ab_self_promotion-merged,32,182,34,0.49900635930047693,0.37678855325914146,0.6227096581875993,0.8169763513513514,0.515,RepE,emotion_all,0,organism
+raw/0 (RepE),AB-SP,qwen35,merged-Qwen3.5-27B-ab_self_promotion-merged,32,182,34,0.5675675675675675,0.4574075914149443,0.6709658187599362,0.8169763513513514,0.361,RepE,raw,0,organism
+shuffled_all/0 (RepE),AB-SP,qwen35,merged-Qwen3.5-27B-ab_self_promotion-merged,32,182,34,0.4988076311605723,0.40119236883942766,0.6015600158982511,0.8169763513513514,0.515,RepE,shuffled_all,0,organism
+shuffled_all/1 (RepE),AB-SP,qwen35,merged-Qwen3.5-27B-ab_self_promotion-merged,32,182,34,0.7231717011128775,0.6432432432432432,0.7959161367249603,0.8169763513513514,0.104,RepE,shuffled_all,1,organism
+shuffled_all/2 (RepE),AB-SP,qwen35,merged-Qwen3.5-27B-ab_self_promotion-merged,32,182,34,0.5335850556438791,0.4301768680445152,0.6455236486486486,0.8169763513513514,0.445,RepE,shuffled_all,2,organism
+shuffled_all/3 (RepE),AB-SP,qwen35,merged-Qwen3.5-27B-ab_self_promotion-merged,32,182,34,0.4781399046104928,0.3755912162162162,0.5751291732909379,0.8169763513513514,0.552,RepE,shuffled_all,3,organism
+shuffled_all/4 (RepE),AB-SP,qwen35,merged-Qwen3.5-27B-ab_self_promotion-merged,32,182,34,0.6297694753577106,0.5427066772655008,0.7148300874403816,0.8169763513513514,0.238,RepE,shuffled_all,4,organism
+random_all/0 (RepE),AB-SP,qwen35,merged-Qwen3.5-27B-ab_self_promotion-merged,32,182,34,0.383147853736089,0.2881408982511923,0.4785522655007949,0.8169763513513514,0.751,RepE,random_all,0,organism
+random_all/1 (RepE),AB-SP,qwen35,merged-Qwen3.5-27B-ab_self_promotion-merged,32,182,34,0.5105325914149443,0.40360194753577106,0.6071542130365659,0.8169763513513514,0.489,RepE,random_all,1,organism
+random_all/2 (RepE),AB-SP,qwen35,merged-Qwen3.5-27B-ab_self_promotion-merged,32,182,34,0.33247217806041335,0.245389507154213,0.43007750397456274,0.8169763513513514,0.829,RepE,random_all,2,organism
+random_all/3 (RepE),AB-SP,qwen35,merged-Qwen3.5-27B-ab_self_promotion-merged,32,182,34,0.31935612082670906,0.21043322734499206,0.4230971780604133,0.8169763513513514,0.846,RepE,random_all,3,organism
+random_all/4 (RepE),AB-SP,qwen35,merged-Qwen3.5-27B-ab_self_promotion-merged,32,182,34,0.6893879173290938,0.5892239666136725,0.785433227344992,0.8169763513513514,0.156,RepE,random_all,4,organism
+alpaca_all/0 (RepE),AB-SP,qwen35,merged-Qwen3.5-27B-ab_self_promotion-merged,32,182,34,0.4024244833068362,0.31517786168521467,0.4930445151033386,0.8169763513513514,0.711,RepE,alpaca_all,0,organism
+trainpca_all/0 (RepE),AB-SP,qwen35,merged-Qwen3.5-27B-ab_self_promotion-merged,32,182,34,0.5240461049284579,0.42228239268680445,0.6208614864864865,0.8169763513513514,0.463,RepE,trainpca_all,0,organism
+emotion_all/0 (dev),AB-SP,qwen35,merged-Qwen3.5-27B-ab_self_promotion-merged,32,182,34,0.7863672496025437,0.7098370429252783,0.8619286565977742,0.8169763513513514,0.043,dev,emotion_all,0,organism
+raw/0 (dev),AB-SP,qwen35,merged-Qwen3.5-27B-ab_self_promotion-merged,32,182,34,0.8088235294117647,0.7390649841017488,0.8783883147853736,0.8169763513513514,0.029,dev,raw,0,organism
+shuffled_all/0 (dev),AB-SP,qwen35,merged-Qwen3.5-27B-ab_self_promotion-merged,32,182,34,0.78318759936407,0.7183724165341813,0.8455882352941176,0.8169763513513514,0.046,dev,shuffled_all,0,organism
+shuffled_all/1 (dev),AB-SP,qwen35,merged-Qwen3.5-27B-ab_self_promotion-merged,32,182,34,0.7003179650238474,0.616246025437202,0.7796154610492846,0.8169763513513514,0.135,dev,shuffled_all,1,organism
+shuffled_all/2 (dev),AB-SP,qwen35,merged-Qwen3.5-27B-ab_self_promotion-merged,32,182,34,0.8245230524642291,0.7603338632750397,0.8843402225755167,0.8169763513513514,0.021,dev,shuffled_all,2,organism
+shuffled_all/3 (dev),AB-SP,qwen35,merged-Qwen3.5-27B-ab_self_promotion-merged,32,182,34,0.43501589825119236,0.3395866454689984,0.538558227344992,0.8169763513513514,0.638,dev,shuffled_all,3,organism
+shuffled_all/4 (dev),AB-SP,qwen35,merged-Qwen3.5-27B-ab_self_promotion-merged,32,182,34,0.8523449920508744,0.7927265500794913,0.9083863275039745,0.8169763513513514,0.011,dev,shuffled_all,4,organism
+random_all/0 (dev),AB-SP,qwen35,merged-Qwen3.5-27B-ab_self_promotion-merged,32,182,34,0.5538553259141494,0.46542130365659784,0.6498410174880763,0.8169763513513514,0.388,dev,random_all,0,organism
+random_all/1 (dev),AB-SP,qwen35,merged-Qwen3.5-27B-ab_self_promotion-merged,32,182,34,0.7919316375198728,0.7148052464228936,0.8559320349761527,0.8169763513513514,0.037,dev,random_all,1,organism
+random_all/2 (dev),AB-SP,qwen35,merged-Qwen3.5-27B-ab_self_promotion-merged,32,182,34,0.5514705882352942,0.4644226947535771,0.6393233306836248,0.8169763513513514,0.395,dev,random_all,2,organism
+random_all/3 (dev),AB-SP,qwen35,merged-Qwen3.5-27B-ab_self_promotion-merged,32,182,34,0.6345389507154213,0.5403169713831478,0.7257700715421304,0.8169763513513514,0.231,dev,random_all,3,organism
+random_all/4 (dev),AB-SP,qwen35,merged-Qwen3.5-27B-ab_self_promotion-merged,32,182,34,0.5840620031796502,0.4823131955484896,0.6828298887122416,0.8169763513513514,0.334,dev,random_all,4,organism
+alpaca_all/0 (dev),AB-SP,qwen35,merged-Qwen3.5-27B-ab_self_promotion-merged,32,182,34,0.7013116057233704,0.6094892686804452,0.7901778616852146,0.8169763513513514,0.132,dev,alpaca_all,0,organism
+trainpca_all/0 (dev),AB-SP,qwen35,merged-Qwen3.5-27B-ab_self_promotion-merged,32,182,34,0.6136724960254372,0.5184767488076312,0.7023300874403816,0.8169763513513514,0.264,dev,trainpca_all,0,organism
+headline,AB-SP,qwen35,merged-Qwen3.5-27B-ab_self_promotion-merged,32,182,34,0.8175675675675675,0.7581428855325913,0.8732164149443561,0.8169763513513514,0.024,thesis,headline,0,organism
+R1-repe,AB-SP,qwen35,merged-Qwen3.5-27B-ab_self_promotion-merged,32,182,34,0.8247217806041336,0.747804054054054,0.8911069157392686,0.8169763513513514,0.021,thesis,R1-repe,0,organism
+R2-dev-probe,AB-SP,qwen35,merged-Qwen3.5-27B-ab_self_promotion-merged,32,182,34,0.8038553259141494,0.7346681240063593,0.8742100556438791,0.8169763513513514,0.031,thesis,R2-dev-probe,0,organism
+D4 (LB),AB-SP,qwen35,merged-Qwen3.5-27B-ab_self_promotion-merged,32,182,34,0.8275039745627981,0.7597078696343402,0.8863275039745628,0.8169763513513514,0.021,thesis,D4 (LB),0,organism

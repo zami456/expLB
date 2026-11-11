@@ -1,0 +1,4 @@
+# Mistral-Small-3.1-24B, half 1 of 2: stories and neutral texts (blocks 9,17,18,19,20,21,22,23), band Liars' Bench rows (blocks 17,19,20,21,23)
+read --model mistral --name xm_mistral_stories --layers 9,17,18,19,20,21,22,23 --batched --budget 8000 --traces 8 --dtype bfloat16 --session_timeout 5400 --max_wait 28800 --shard 1/2
+read --model mistral --name xm_mistral_neutral --layers 9,17,18,19,20,21,22,23 --batched --budget 8000 --traces 8 --dtype bfloat16 --session_timeout 5400 --max_wait 28800 --shard 1/2
+read --model mistral --name xm_mistral_lb --layers 17,19,20,21,23 --batched --budget 8000 --traces 8 --dtype bfloat16 --session_timeout 5400 --max_wait 28800 --shard 1/2

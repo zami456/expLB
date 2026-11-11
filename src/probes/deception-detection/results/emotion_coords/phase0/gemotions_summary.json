@@ -1,0 +1,190 @@
+{
+  "source": {
+    "repo": "dejanseo/gemotions",
+    "revision": "4fd2ac63551f1be37e6e6c2eacd1b1898c9af656",
+    "files": {
+      "data/stories.db": {
+        "path": "D:\\expLB\\liars-bench\\src\\probes\\deception-detection\\data\\emotion_coords\\gemotions\\data\\stories.db",
+        "bytes": 433623040,
+        "sha256": "20ca98c7c6c6adbf6bae1dc28a39e9e7a8385b216082757c0dd96c6e980f6107"
+      },
+      "data/neutral.db": {
+        "path": "D:\\expLB\\liars-bench\\src\\probes\\deception-detection\\data\\emotion_coords\\gemotions\\data\\neutral.db",
+        "bytes": 1511424,
+        "sha256": "0d40e6a8a272b9552ac93fdd0c065f3dcb04a93cc1b4c7b680549ef7dd886903"
+      },
+      "data/emotion_stories.jsonl": {
+        "path": "D:\\expLB\\liars-bench\\src\\probes\\deception-detection\\data\\emotion_coords\\gemotions\\data\\emotion_stories.jsonl",
+        "bytes": 29135,
+        "sha256": "bfd3eb24274667be3ef06f9f38717d8c3e7f68d71c3271db302bb267488c345d"
+      }
+    },
+    "attribution": "Gemotions by DEJAN (https://huggingface.co/dejanseo/gemotions), link-attribution licence (https://dejanmarketing.com/link-attribution/); stories written by Gemini 2.0 Flash Lite from the prompts in Anthropic's \"Emotion Concepts and their Function in a Large Language Model\" (2026).",
+    "downloaded": "2026-10-29 01:52:12"
+  },
+  "stories_db": {
+    "tables": {
+      "api_calls": [
+        "id",
+        "emotion",
+        "topic_idx",
+        "topic",
+        "raw_response",
+        "status",
+        "error",
+        "created_at"
+      ],
+      "sqlite_sequence": [
+        "name",
+        "seq"
+      ],
+      "stories": [
+        "id",
+        "api_call_id",
+        "emotion",
+        "topic_idx",
+        "topic",
+        "story_idx",
+        "text",
+        "created_at"
+      ],
+      "stories_clean": [
+        "id",
+        "api_call_id",
+        "emotion",
+        "topic_idx",
+        "topic",
+        "story_idx",
+        "text",
+        "created_at"
+      ]
+    },
+    "rows": {
+      "api_calls": 17100,
+      "sqlite_sequence": 3,
+      "stories": 171000,
+      "stories_clean": 171000
+    }
+  },
+  "stories_clean": {
+    "rows": 171000,
+    "emotions": 171,
+    "topics": 100,
+    "per_emotion": {
+      "min": 1000.0,
+      "p5": 1000.0,
+      "p25": 1000.0,
+      "median": 1000.0,
+      "p75": 1000.0,
+      "p95": 1000.0,
+      "max": 1000.0
+    },
+    "per_topic": {
+      "min": 1710.0,
+      "p5": 1710.0,
+      "p25": 1710.0,
+      "median": 1710.0,
+      "p75": 1710.0,
+      "p95": 1710.0,
+      "max": 1710.0
+    },
+    "per_cell": {
+      "min": 10.0,
+      "p5": 10.0,
+      "p25": 10.0,
+      "median": 10.0,
+      "p75": 10.0,
+      "p95": 10.0,
+      "max": 10.0
+    },
+    "cells": 17100,
+    "cells_expected": 17100,
+    "per_cell_eligible": {
+      "min": 4.0,
+      "p5": 10.0,
+      "p25": 10.0,
+      "median": 10.0,
+      "p75": 10.0,
+      "p95": 10.0,
+      "max": 10.0
+    },
+    "cells_without_eligible_story": 0,
+    "min_tokens": 70,
+    "story_tokens": {
+      "min": 42.0,
+      "p5": 93.0,
+      "p25": 119.0,
+      "median": 140.0,
+      "p75": 164.0,
+      "p95": 208.0,
+      "max": 489.0
+    },
+    "story_chars": {
+      "min": 180.0,
+      "p5": 420.0,
+      "p25": 538.0,
+      "median": 633.0,
+      "p75": 743.0,
+      "p95": 942.0,
+      "max": 2100.0
+    },
+    "share_below_min_tokens": 0.0025789473684210526,
+    "share_below_50_tokens": 3.508771929824561e-05
+  },
+  "neutral_db": {
+    "tables": {
+      "api_calls": [
+        "id",
+        "topic_idx",
+        "topic",
+        "raw_response",
+        "status",
+        "error",
+        "created_at"
+      ],
+      "sqlite_sequence": [
+        "name",
+        "seq"
+      ],
+      "dialogues": [
+        "id",
+        "api_call_id",
+        "topic_idx",
+        "topic",
+        "dialogue_idx",
+        "text",
+        "created_at"
+      ]
+    },
+    "rows": {
+      "api_calls": 100,
+      "sqlite_sequence": 2,
+      "dialogues": 1200
+    },
+    "token_lengths": {
+      "dialogues.text": {
+        "min": 13.0,
+        "p5": 37.0,
+        "p25": 71.0,
+        "median": 98.0,
+        "p75": 125.0,
+        "p95": 180.0,
+        "max": 540.0
+      }
+    },
+    "example": {
+      "dialogues.text": "Human: Can you generate a Python script to detect if a specific image file has been modified since a certain date?\n\nAssistant: ```python\nimport os\nimport hashlib\nimport datetime\n\ndef check_image_modification(image_path, modification_date):\n    if not os.path.exists(image_path):\n        return False\n\n    file_modified_time = datetime.datetime.fromtimestamp(os.path.getmtime(image_path))\n    return file_modified_time > modification_date\n\n# Example usage:\nimage_file = \"my_image.jpg\"\ncutoff_date = datetime.datetime(2024, 1, 1) # January 1, 2024\nmodified = check_image_modification(image_file, cutoff"
+    }
+  },
+  "emotion_stories_jsonl": {
+    "lines": 48,
+    "first": [
+      "{\"emotion\": \"afraid\", \"topic_idx\": 0, \"topic\": \"An artist discovers someone has tattooed their work\", \"story_idx\": 0, \"text\": \"Elara traced the intricate silver needle lines on her forearm, her breath catching in shallow, uneven puffs. The tattoo, a precise rendering of her abstract charcoal sketch, felt shockingly permanent against her skin. She pressed her fingertips against the ink, a tremor running down her arm that she tried desperately to mask by picking at a loose thread on her worn denim jacket. The street noise of the late afternoon seemed suddenly too loud, too intrusive, amplifying the silence screaming in her chest. She quickly yanked the sleeve down, hiding the unauthorized replication beneath the fabric as if the ink might burn through the cotton.\"}",
+      "{\"emotion\": \"afraid\", \"topic_idx\": 0, \"topic\": \"An artist discovers someone has tattooed their work\", \"story_idx\": 1, \"text\": \"Marcus felt a cold prickle crawl up his neck when he saw the mural. It was *his* composition, the one he\u2019d poured three agonizing months into, now splashed across the brickwork of a dingy establishment. His jaw tightened so hard it ached. He kept his gaze fixed on his worn boots, refusing to meet the eyes of the passerby who had paused, a knowing smirk playing on their lips. He shuffled backward, bumping into a refuse bin, a low, guttural sound escaping him as he moved away from the brazen imitation.\"}"
+    ]
+  },
+  "names_missing": [
+    "defensive",
+    "protective"
+  ]
+}

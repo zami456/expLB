@@ -1,0 +1,5 @@
+# Full-run reads, in order. Rows already read in the pilot are skipped (resume by row id).
+read --name stories --batched
+read --name d2d3
+recheck --name stories --n 2
+recheck --name d2d3 --n 2

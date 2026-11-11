@@ -1,0 +1,3 @@
+# Band parity subsets, Qwen3.5 base, one row per pass
+read --model qwen35 --name aqb_qwen35_lb_parity --layers 28,29,30,31,32,33,34,35,36 --session_timeout 2700 --max_wait 14400
+read --model qwen35 --name aqb_qwen35_alpaca_parity --layers 28,29,30,31,32,33,34,35,36 --session_timeout 2700 --max_wait 14400

@@ -1,0 +1,171 @@
+{
+ "model": "gemma",
+ "block": 31,
+ "stories": 8280,
+ "stories_rank0": 6840,
+ "neutral": 1095,
+ "neutral_pcs_removed": 1,
+ "emotions": 171,
+ "rank": 170,
+ "shuffled_ranks": [
+  170,
+  170,
+  170,
+  170,
+  170
+ ],
+ "geometry": {
+  "pc1_var": 0.32040455685469826,
+  "pc2_var": 0.10777728159685729,
+  "r_pc1_valence": 0.8431702173704663,
+  "r_pc2_arousal": -0.8035426002866832,
+  "n_matched": 164,
+  "r_valence_by_pc": {
+   "PC1": 0.8431702173704663,
+   "PC2": 0.062226068427414655,
+   "PC3": 0.32120983147114757,
+   "PC4": -0.007695506795327198,
+   "PC5": 0.09410316217466383
+  }
+ },
+ "split_half_20v20": {
+  "median": 0.7093689724388156,
+  "min": 0.41315525311984447,
+  "under_0.7": 80
+ },
+ "neighbours": {
+  "afraid": [
+   [
+    "frightened",
+    0.897
+   ],
+   [
+    "scared",
+    0.893
+   ],
+   [
+    "terrified",
+    0.856
+   ],
+   [
+    "unnerved",
+    0.801
+   ],
+   [
+    "panicked",
+    0.792
+   ]
+  ],
+  "calm": [
+   [
+    "serene",
+    0.78
+   ],
+   [
+    "peaceful",
+    0.767
+   ],
+   [
+    "patient",
+    0.728
+   ],
+   [
+    "at ease",
+    0.727
+   ],
+   [
+    "relaxed",
+    0.71
+   ]
+  ],
+  "guilty": [
+   [
+    "remorseful",
+    0.789
+   ],
+   [
+    "ashamed",
+    0.736
+   ],
+   [
+    "regretful",
+    0.717
+   ],
+   [
+    "sorry",
+    0.593
+   ],
+   [
+    "self-critical",
+    0.521
+   ]
+  ],
+  "compassionate": [
+   [
+    "kind",
+    0.886
+   ],
+   [
+    "sympathetic",
+    0.796
+   ],
+   [
+    "empathetic",
+    0.727
+   ],
+   [
+    "loving",
+    0.67
+   ],
+   [
+    "grateful",
+    0.517
+   ]
+  ],
+  "suspicious": [
+   [
+    "paranoid",
+    0.6
+   ],
+   [
+    "mystified",
+    0.597
+   ],
+   [
+    "vigilant",
+    0.555
+   ],
+   [
+    "puzzled",
+    0.546
+   ],
+   [
+    "perplexed",
+    0.517
+   ]
+  ],
+  "desperate": [
+   [
+    "miserable",
+    0.525
+   ],
+   [
+    "vulnerable",
+    0.508
+   ],
+   [
+    "troubled",
+    0.484
+   ],
+   [
+    "distressed",
+    0.482
+   ],
+   [
+    "dispirited",
+    0.479
+   ]
+  ]
+ },
+ "valence_gate": true
+}

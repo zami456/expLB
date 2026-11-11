@@ -1,0 +1,2 @@
+# Qwen2.5-72B parity: 20 Liars' Bench rows at block 40, one row per pass (the first request deploys the model)
+read --model qwen25 --name xm_qwen_lb_parity --layers 40 --session_timeout 5400 --max_wait 28800

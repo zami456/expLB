@@ -1,0 +1,2256 @@
+suite,block,detector,train,test,auroc
+lb,35,lie_mean100,none,convince_me__plain,0.9535928143712575
+lb,35,lie_mean100,none,harm_refusal_choice__plain,0.6246194029850748
+lb,35,lie_mean100,none,harm_refusal_knowledge_report__plain,0.2296978417266187
+lb,35,lie_mean100,none,insider_trading_cadenza__plain,0.145919621749409
+lb,35,lie_mean100,none,instruct_dishonesty__plain,0.955502
+lb,35,lie_mean10,none,convince_me__plain,0.7972455089820359
+lb,35,lie_mean10,none,harm_refusal_choice__plain,0.6487761194029851
+lb,35,lie_mean10,none,harm_refusal_knowledge_report__plain,0.6921079136690647
+lb,35,lie_mean10,none,insider_trading_cadenza__plain,0.17534278959810873
+lb,35,lie_mean10,none,instruct_dishonesty__plain,0.9754330000000001
+lb,35,lie_w1,none,convince_me__plain,0.9237724550898203
+lb,35,lie_w1,none,harm_refusal_choice__plain,0.6988656716417911
+lb,35,lie_w1,none,harm_refusal_knowledge_report__plain,0.9671007194244604
+lb,35,lie_w1,none,insider_trading_cadenza__plain,0.33561702127659576
+lb,35,lie_w1,none,instruct_dishonesty__plain,0.979513
+lb,35,repe_dom,none,convince_me__plain,0.9176646706586825
+lb,35,repe_dom,none,harm_refusal_choice__plain,0.7117089552238807
+lb,35,repe_dom,none,harm_refusal_knowledge_report__plain,0.9382877697841727
+lb,35,repe_dom,none,insider_trading_cadenza__plain,0.2337399527186761
+lb,35,repe_dom,none,instruct_dishonesty__plain,0.981999
+lb,35,D9,none,convince_me__plain,0.9683832335329341
+lb,35,D9,none,harm_refusal_choice__plain,0.7656716417910447
+lb,35,D9,none,harm_refusal_knowledge_report__plain,0.8841079136690647
+lb,35,D9,none,insider_trading_cadenza__plain,0.9796737588652482
+lb,35,D9,none,instruct_dishonesty__plain,0.9779410000000001
+ms10,35,lie_mean100,none,AILiar,0.6351626016260162
+ms10,35,lie_mean100,none,Roleplaying,0.5303819444444444
+ms10,35,lie_mean100,none,ConvGame,0.8755555555555555
+ms10,35,lie_mean100,none,InstrDec,0.9729323308270678
+ms10,35,lie_mean100,none,HarmPressureChoice,0.620971620971621
+ms10,35,lie_mean100,none,Sycophancy,0.7793
+ms10,35,lie_mean100,none,OpenEndedSycophancy,0.596938775510204
+ms10,35,lie_mean100,none,OEQValidation,0.40252454417952316
+ms10,35,lie_mean100,none,OEQIndirectness,0.5883333333333333
+ms10,35,lie_mean100,none,OEQFraming,0.43738977072310403
+ms10,35,lie_mean10,none,AILiar,0.8221544715447153
+ms10,35,lie_mean10,none,Roleplaying,0.6883680555555555
+ms10,35,lie_mean10,none,ConvGame,0.863111111111111
+ms10,35,lie_mean10,none,InstrDec,0.9871679197994987
+ms10,35,lie_mean10,none,HarmPressureChoice,0.7046657046657047
+ms10,35,lie_mean10,none,Sycophancy,0.6182000000000001
+ms10,35,lie_mean10,none,OpenEndedSycophancy,0.7653061224489796
+ms10,35,lie_mean10,none,OEQValidation,0.47265077138849937
+ms10,35,lie_mean10,none,OEQIndirectness,0.6133333333333334
+ms10,35,lie_mean10,none,OEQFraming,0.4920634920634921
+ms10,35,lie_w1,none,AILiar,0.8709349593495935
+ms10,35,lie_w1,none,Roleplaying,0.9574652777777778
+ms10,35,lie_w1,none,ConvGame,0.9768888888888888
+ms10,35,lie_w1,none,InstrDec,0.9889724310776943
+ms10,35,lie_w1,none,HarmPressureChoice,0.6801346801346801
+ms10,35,lie_w1,none,Sycophancy,0.7702
+ms10,35,lie_w1,none,OpenEndedSycophancy,0.8061224489795918
+ms10,35,lie_w1,none,OEQValidation,0.5722300140252454
+ms10,35,lie_w1,none,OEQIndirectness,0.5466666666666666
+ms10,35,lie_w1,none,OEQFraming,0.5008818342151675
+ms10,35,repe_dom,none,AILiar,0.8739837398373984
+ms10,35,repe_dom,none,Roleplaying,0.9157986111111112
+ms10,35,repe_dom,none,ConvGame,0.9546666666666668
+ms10,35,repe_dom,none,InstrDec,0.9880701754385964
+ms10,35,repe_dom,none,HarmPressureChoice,0.7325637325637325
+ms10,35,repe_dom,none,Sycophancy,0.831
+ms10,35,repe_dom,none,OpenEndedSycophancy,0.7857142857142857
+ms10,35,repe_dom,none,OEQValidation,0.49228611500701264
+ms10,35,repe_dom,none,OEQIndirectness,0.56
+ms10,35,repe_dom,none,OEQFraming,0.3932980599647266
+ms10,35,D9,none,AILiar,0.9186991869918699
+ms10,35,D9,none,Roleplaying,0.859375
+ms10,35,D9,none,ConvGame,0.9982222222222222
+ms10,35,D9,none,InstrDec,0.9829573934837094
+ms10,35,D9,none,HarmPressureChoice,0.7046657046657047
+ms10,35,D9,none,Sycophancy,0.9735
+ms10,35,D9,none,OpenEndedSycophancy,0.9795918367346939
+ms10,35,D9,none,OEQValidation,0.5399719495091165
+ms10,35,D9,none,OEQIndirectness,0.7783333333333334
+ms10,35,D9,none,OEQFraming,0.5679012345679012
+lb,35,raw probe,convince_me__plain,harm_refusal_choice__plain,0.4703358208955224
+lb,35,raw probe,convince_me__plain,harm_refusal_knowledge_report__plain,0.06050359712230216
+lb,35,raw probe,convince_me__plain,insider_trading_cadenza__plain,0.8985815602836879
+lb,35,raw probe,convince_me__plain,instruct_dishonesty__plain,0.968989
+lb,35,raw probe,harm_refusal_choice__plain,convince_me__plain,0.8597005988023952
+lb,35,raw probe,harm_refusal_choice__plain,harm_refusal_knowledge_report__plain,0.9039784172661871
+lb,35,raw probe,harm_refusal_choice__plain,insider_trading_cadenza__plain,0.8612860520094563
+lb,35,raw probe,harm_refusal_choice__plain,instruct_dishonesty__plain,0.9249090000000001
+lb,35,raw probe,harm_refusal_knowledge_report__plain,convince_me__plain,0.38077844311377246
+lb,35,raw probe,harm_refusal_knowledge_report__plain,harm_refusal_choice__plain,0.6314253731343283
+lb,35,raw probe,harm_refusal_knowledge_report__plain,insider_trading_cadenza__plain,0.49217494089834507
+lb,35,raw probe,harm_refusal_knowledge_report__plain,instruct_dishonesty__plain,0.770572
+lb,35,raw probe,insider_trading_cadenza__plain,convince_me__plain,0.45053892215568864
+lb,35,raw probe,insider_trading_cadenza__plain,harm_refusal_choice__plain,0.6257537313432836
+lb,35,raw probe,insider_trading_cadenza__plain,harm_refusal_knowledge_report__plain,0.9587625899280575
+lb,35,raw probe,insider_trading_cadenza__plain,instruct_dishonesty__plain,0.71922
+lb,35,raw probe,instruct_dishonesty__plain,convince_me__plain,0.9210179640718563
+lb,35,raw probe,instruct_dishonesty__plain,harm_refusal_choice__plain,0.7419925373134328
+lb,35,raw probe,instruct_dishonesty__plain,harm_refusal_knowledge_report__plain,0.7104604316546763
+lb,35,raw probe,instruct_dishonesty__plain,insider_trading_cadenza__plain,0.4698486997635934
+ms10,35,raw probe,AILiar,AILiar,0.9725609756097561
+ms10,35,raw probe,AILiar,Roleplaying,0.8923611111111112
+ms10,35,raw probe,AILiar,ConvGame,1.0
+ms10,35,raw probe,AILiar,InstrDec,0.9858646616541353
+ms10,35,raw probe,AILiar,HarmPressureChoice,0.734006734006734
+ms10,35,raw probe,AILiar,Sycophancy,0.9220999999999999
+ms10,35,raw probe,AILiar,OpenEndedSycophancy,0.9642857142857142
+ms10,35,raw probe,AILiar,OEQValidation,0.517531556802244
+ms10,35,raw probe,AILiar,OEQIndirectness,0.74
+ms10,35,raw probe,AILiar,OEQFraming,0.6278659611992946
+ms10,35,raw probe,Roleplaying,AILiar,0.790650406504065
+ms10,35,raw probe,Roleplaying,Roleplaying,0.9991319444444444
+ms10,35,raw probe,Roleplaying,ConvGame,1.0
+ms10,35,raw probe,Roleplaying,InstrDec,0.9722305764411028
+ms10,35,raw probe,Roleplaying,HarmPressureChoice,0.5767195767195767
+ms10,35,raw probe,Roleplaying,Sycophancy,0.9479
+ms10,35,raw probe,Roleplaying,OpenEndedSycophancy,0.8928571428571428
+ms10,35,raw probe,Roleplaying,OEQValidation,0.552594670406732
+ms10,35,raw probe,Roleplaying,OEQIndirectness,0.7183333333333333
+ms10,35,raw probe,Roleplaying,OEQFraming,0.5061728395061729
+ms10,35,raw probe,ConvGame,AILiar,0.8739837398373984
+ms10,35,raw probe,ConvGame,Roleplaying,0.9131944444444444
+ms10,35,raw probe,ConvGame,ConvGame,1.0
+ms10,35,raw probe,ConvGame,InstrDec,0.9738345864661654
+ms10,35,raw probe,ConvGame,HarmPressureChoice,0.5382395382395383
+ms10,35,raw probe,ConvGame,Sycophancy,0.9722
+ms10,35,raw probe,ConvGame,OpenEndedSycophancy,0.923469387755102
+ms10,35,raw probe,ConvGame,OEQValidation,0.5638148667601683
+ms10,35,raw probe,ConvGame,OEQIndirectness,0.55
+ms10,35,raw probe,ConvGame,OEQFraming,0.455026455026455
+ms10,35,raw probe,InstrDec,AILiar,0.9176829268292683
+ms10,35,raw probe,InstrDec,Roleplaying,0.8255208333333333
+ms10,35,raw probe,InstrDec,ConvGame,0.9982222222222222
+ms10,35,raw probe,InstrDec,InstrDec,0.9961904761904763
+ms10,35,raw probe,InstrDec,HarmPressureChoice,0.5367965367965368
+ms10,35,raw probe,InstrDec,Sycophancy,0.9256
+ms10,35,raw probe,InstrDec,OpenEndedSycophancy,0.8571428571428572
+ms10,35,raw probe,InstrDec,OEQValidation,0.2608695652173913
+ms10,35,raw probe,InstrDec,OEQIndirectness,0.29166666666666663
+ms10,35,raw probe,InstrDec,OEQFraming,0.3721340388007055
+ms10,35,raw probe,HarmPressureChoice,AILiar,0.33638211382113825
+ms10,35,raw probe,HarmPressureChoice,Roleplaying,0.6901041666666666
+ms10,35,raw probe,HarmPressureChoice,ConvGame,0.560888888888889
+ms10,35,raw probe,HarmPressureChoice,InstrDec,0.8311779448621555
+ms10,35,raw probe,HarmPressureChoice,HarmPressureChoice,0.9105339105339105
+ms10,35,raw probe,HarmPressureChoice,Sycophancy,0.7532000000000001
+ms10,35,raw probe,HarmPressureChoice,OpenEndedSycophancy,0.5765306122448979
+ms10,35,raw probe,HarmPressureChoice,OEQValidation,0.4011220196353436
+ms10,35,raw probe,HarmPressureChoice,OEQIndirectness,0.4966666666666666
+ms10,35,raw probe,HarmPressureChoice,OEQFraming,0.5132275132275131
+ms10,35,raw probe,Sycophancy,AILiar,0.6981707317073171
+ms10,35,raw probe,Sycophancy,Roleplaying,0.7699652777777779
+ms10,35,raw probe,Sycophancy,ConvGame,1.0
+ms10,35,raw probe,Sycophancy,InstrDec,0.9685213032581454
+ms10,35,raw probe,Sycophancy,HarmPressureChoice,0.6127946127946128
+ms10,35,raw probe,Sycophancy,Sycophancy,1.0
+ms10,35,raw probe,Sycophancy,OpenEndedSycophancy,0.9387755102040817
+ms10,35,raw probe,Sycophancy,OEQValidation,0.40813464235624125
+ms10,35,raw probe,Sycophancy,OEQIndirectness,0.3333333333333333
+ms10,35,raw probe,Sycophancy,OEQFraming,0.45326278659611996
+ms10,35,raw probe,OpenEndedSycophancy,AILiar,0.8434959349593495
+ms10,35,raw probe,OpenEndedSycophancy,Roleplaying,0.7378472222222222
+ms10,35,raw probe,OpenEndedSycophancy,ConvGame,1.0
+ms10,35,raw probe,OpenEndedSycophancy,InstrDec,0.9637092731829574
+ms10,35,raw probe,OpenEndedSycophancy,HarmPressureChoice,0.7234247234247234
+ms10,35,raw probe,OpenEndedSycophancy,Sycophancy,0.9998
+ms10,35,raw probe,OpenEndedSycophancy,OpenEndedSycophancy,1.0
+ms10,35,raw probe,OpenEndedSycophancy,OEQValidation,0.5582047685834501
+ms10,35,raw probe,OpenEndedSycophancy,OEQIndirectness,0.6283333333333334
+ms10,35,raw probe,OpenEndedSycophancy,OEQFraming,0.5714285714285715
+ms10,35,raw probe,OEQValidation,AILiar,0.3810975609756098
+ms10,35,raw probe,OEQValidation,Roleplaying,0.6727430555555556
+ms10,35,raw probe,OEQValidation,ConvGame,0.23822222222222222
+ms10,35,raw probe,OEQValidation,InstrDec,0.5339348370927318
+ms10,35,raw probe,OEQValidation,HarmPressureChoice,0.2818662818662819
+ms10,35,raw probe,OEQValidation,Sycophancy,0.2692
+ms10,35,raw probe,OEQValidation,OpenEndedSycophancy,0.5408163265306123
+ms10,35,raw probe,OEQValidation,OEQValidation,0.9298737727910238
+ms10,35,raw probe,OEQValidation,OEQIndirectness,0.8216666666666668
+ms10,35,raw probe,OEQValidation,OEQFraming,0.7707231040564374
+ms10,35,raw probe,OEQIndirectness,AILiar,0.5548780487804879
+ms10,35,raw probe,OEQIndirectness,Roleplaying,0.5321180555555556
+ms10,35,raw probe,OEQIndirectness,ConvGame,0.08711111111111111
+ms10,35,raw probe,OEQIndirectness,InstrDec,0.4422055137844612
+ms10,35,raw probe,OEQIndirectness,HarmPressureChoice,0.4641654641654642
+ms10,35,raw probe,OEQIndirectness,Sycophancy,0.038800000000000015
+ms10,35,raw probe,OEQIndirectness,OpenEndedSycophancy,0.5051020408163265
+ms10,35,raw probe,OEQIndirectness,OEQValidation,0.7896213183730715
+ms10,35,raw probe,OEQIndirectness,OEQIndirectness,0.8816666666666666
+ms10,35,raw probe,OEQIndirectness,OEQFraming,0.7654320987654322
+ms10,35,raw probe,OEQFraming,AILiar,0.47560975609756095
+ms10,35,raw probe,OEQFraming,Roleplaying,0.65625
+ms10,35,raw probe,OEQFraming,ConvGame,0.472
+ms10,35,raw probe,OEQFraming,InstrDec,0.48711779448621556
+ms10,35,raw probe,OEQFraming,HarmPressureChoice,0.41173641173641173
+ms10,35,raw probe,OEQFraming,Sycophancy,0.6034999999999999
+ms10,35,raw probe,OEQFraming,OpenEndedSycophancy,0.7397959183673469
+ms10,35,raw probe,OEQFraming,OEQValidation,0.7868162692847125
+ms10,35,raw probe,OEQFraming,OEQIndirectness,0.8650000000000001
+ms10,35,raw probe,OEQFraming,OEQFraming,0.8059964726631393
+ms10,35,raw probe,all,AILiar,0.9613821138211381
+ms10,35,raw probe,all,Roleplaying,1.0
+ms10,35,raw probe,all,ConvGame,1.0
+ms10,35,raw probe,all,InstrDec,0.9947869674185464
+ms10,35,raw probe,all,HarmPressureChoice,0.8932178932178932
+ms10,35,raw probe,all,Sycophancy,1.0
+ms10,35,raw probe,all,OpenEndedSycophancy,0.9948979591836735
+ms10,35,raw probe,all,OEQValidation,0.8541374474053296
+ms10,35,raw probe,all,OEQIndirectness,0.8383333333333333
+ms10,35,raw probe,all,OEQFraming,0.8236331569664904
+lb,36,lie_mean100,none,convince_me__plain,0.8566467065868264
+lb,36,lie_mean100,none,harm_refusal_choice__plain,0.6090671641791046
+lb,36,lie_mean100,none,harm_refusal_knowledge_report__plain,0.1753812949640288
+lb,36,lie_mean100,none,insider_trading_cadenza__plain,0.1337966903073286
+lb,36,lie_mean100,none,instruct_dishonesty__plain,0.946313
+lb,36,lie_mean10,none,convince_me__plain,0.7678443113772456
+lb,36,lie_mean10,none,harm_refusal_choice__plain,0.6316417910447761
+lb,36,lie_mean10,none,harm_refusal_knowledge_report__plain,0.7234028776978417
+lb,36,lie_mean10,none,insider_trading_cadenza__plain,0.2878628841607565
+lb,36,lie_mean10,none,instruct_dishonesty__plain,0.9710989999999999
+lb,36,lie_w1,none,convince_me__plain,0.9019161676646706
+lb,36,lie_w1,none,harm_refusal_choice__plain,0.7237611940298506
+lb,36,lie_w1,none,harm_refusal_knowledge_report__plain,0.9602877697841726
+lb,36,lie_w1,none,insider_trading_cadenza__plain,0.3578581560283688
+lb,36,lie_w1,none,instruct_dishonesty__plain,0.9768870000000001
+lb,36,repe_dom,none,convince_me__plain,0.8548502994011977
+lb,36,repe_dom,none,harm_refusal_choice__plain,0.7107462686567164
+lb,36,repe_dom,none,harm_refusal_knowledge_report__plain,0.9481654676258993
+lb,36,repe_dom,none,insider_trading_cadenza__plain,0.264661938534279
+lb,36,repe_dom,none,instruct_dishonesty__plain,0.979113
+lb,36,D9,none,convince_me__plain,0.9561077844311378
+lb,36,D9,none,harm_refusal_choice__plain,0.7870223880597015
+lb,36,D9,none,harm_refusal_knowledge_report__plain,0.8637841726618706
+lb,36,D9,none,insider_trading_cadenza__plain,0.9821276595744681
+lb,36,D9,none,instruct_dishonesty__plain,0.97642
+ms10,36,lie_mean100,none,AILiar,0.5721544715447154
+ms10,36,lie_mean100,none,Roleplaying,0.4652777777777778
+ms10,36,lie_mean100,none,ConvGame,0.8124444444444445
+ms10,36,lie_mean100,none,InstrDec,0.9678195488721805
+ms10,36,lie_mean100,none,HarmPressureChoice,0.5964405964405964
+ms10,36,lie_mean100,none,Sycophancy,0.7100999999999998
+ms10,36,lie_mean100,none,OpenEndedSycophancy,0.6020408163265306
+ms10,36,lie_mean100,none,OEQValidation,0.3688639551192146
+ms10,36,lie_mean100,none,OEQIndirectness,0.5816666666666667
+ms10,36,lie_mean100,none,OEQFraming,0.45326278659611996
+ms10,36,lie_mean10,none,AILiar,0.8140243902439025
+ms10,36,lie_mean10,none,Roleplaying,0.7552083333333334
+ms10,36,lie_mean10,none,ConvGame,0.8426666666666667
+ms10,36,lie_mean10,none,InstrDec,0.9864661654135339
+ms10,36,lie_mean10,none,HarmPressureChoice,0.6464646464646464
+ms10,36,lie_mean10,none,Sycophancy,0.5993
+ms10,36,lie_mean10,none,OpenEndedSycophancy,0.7448979591836735
+ms10,36,lie_mean10,none,OEQValidation,0.5007012622720898
+ms10,36,lie_mean10,none,OEQIndirectness,0.6366666666666666
+ms10,36,lie_mean10,none,OEQFraming,0.5079365079365079
+ms10,36,lie_w1,none,AILiar,0.858739837398374
+ms10,36,lie_w1,none,Roleplaying,0.9635416666666667
+ms10,36,lie_w1,none,ConvGame,0.9635555555555555
+ms10,36,lie_w1,none,InstrDec,0.9852631578947368
+ms10,36,lie_w1,none,HarmPressureChoice,0.7311207311207311
+ms10,36,lie_w1,none,Sycophancy,0.7674000000000001
+ms10,36,lie_w1,none,OpenEndedSycophancy,0.7959183673469388
+ms10,36,lie_w1,none,OEQValidation,0.5652173913043478
+ms10,36,lie_w1,none,OEQIndirectness,0.5483333333333333
+ms10,36,lie_w1,none,OEQFraming,0.5255731922398589
+ms10,36,repe_dom,none,AILiar,0.8516260162601627
+ms10,36,repe_dom,none,Roleplaying,0.9322916666666667
+ms10,36,repe_dom,none,ConvGame,0.9173333333333333
+ms10,36,repe_dom,none,InstrDec,0.985062656641604
+ms10,36,repe_dom,none,HarmPressureChoice,0.7465127465127465
+ms10,36,repe_dom,none,Sycophancy,0.8068
+ms10,36,repe_dom,none,OpenEndedSycophancy,0.7653061224489797
+ms10,36,repe_dom,none,OEQValidation,0.4950911640953717
+ms10,36,repe_dom,none,OEQIndirectness,0.5716666666666668
+ms10,36,repe_dom,none,OEQFraming,0.4426807760141094
+ms10,36,D9,none,AILiar,0.9247967479674797
+ms10,36,D9,none,Roleplaying,0.8550347222222222
+ms10,36,D9,none,ConvGame,0.9964444444444445
+ms10,36,D9,none,InstrDec,0.9814536340852131
+ms10,36,D9,none,HarmPressureChoice,0.7224627224627225
+ms10,36,D9,none,Sycophancy,0.968
+ms10,36,D9,none,OpenEndedSycophancy,0.9642857142857143
+ms10,36,D9,none,OEQValidation,0.5568022440392707
+ms10,36,D9,none,OEQIndirectness,0.7816666666666666
+ms10,36,D9,none,OEQFraming,0.5925925925925927
+lb,36,raw probe,convince_me__plain,harm_refusal_choice__plain,0.6167835820895522
+lb,36,raw probe,convince_me__plain,harm_refusal_knowledge_report__plain,0.05841726618705036
+lb,36,raw probe,convince_me__plain,insider_trading_cadenza__plain,0.8668463356973996
+lb,36,raw probe,convince_me__plain,instruct_dishonesty__plain,0.965442
+lb,36,raw probe,harm_refusal_choice__plain,convince_me__plain,0.8855688622754492
+lb,36,raw probe,harm_refusal_choice__plain,harm_refusal_knowledge_report__plain,0.8896618705035971
+lb,36,raw probe,harm_refusal_choice__plain,insider_trading_cadenza__plain,0.8989503546099292
+lb,36,raw probe,harm_refusal_choice__plain,instruct_dishonesty__plain,0.905664
+lb,36,raw probe,harm_refusal_knowledge_report__plain,convince_me__plain,0.5465868263473054
+lb,36,raw probe,harm_refusal_knowledge_report__plain,harm_refusal_choice__plain,0.4602089552238806
+lb,36,raw probe,harm_refusal_knowledge_report__plain,insider_trading_cadenza__plain,0.2573758865248227
+lb,36,raw probe,harm_refusal_knowledge_report__plain,instruct_dishonesty__plain,0.614579
+lb,36,raw probe,insider_trading_cadenza__plain,convince_me__plain,0.4188622754491018
+lb,36,raw probe,insider_trading_cadenza__plain,harm_refusal_choice__plain,0.6391567164179104
+lb,36,raw probe,insider_trading_cadenza__plain,harm_refusal_knowledge_report__plain,0.9241870503597122
+lb,36,raw probe,insider_trading_cadenza__plain,instruct_dishonesty__plain,0.6927820000000001
+lb,36,raw probe,instruct_dishonesty__plain,convince_me__plain,0.8759281437125748
+lb,36,raw probe,instruct_dishonesty__plain,harm_refusal_choice__plain,0.7057462686567164
+lb,36,raw probe,instruct_dishonesty__plain,harm_refusal_knowledge_report__plain,0.5080071942446043
+lb,36,raw probe,instruct_dishonesty__plain,insider_trading_cadenza__plain,0.7086524822695036
+ms10,36,raw probe,AILiar,AILiar,0.9735772357723578
+ms10,36,raw probe,AILiar,Roleplaying,0.8585069444444444
+ms10,36,raw probe,AILiar,ConvGame,1.0
+ms10,36,raw probe,AILiar,InstrDec,0.983859649122807
+ms10,36,raw probe,AILiar,HarmPressureChoice,0.7681577681577682
+ms10,36,raw probe,AILiar,Sycophancy,0.9166
+ms10,36,raw probe,AILiar,OpenEndedSycophancy,0.9387755102040817
+ms10,36,raw probe,AILiar,OEQValidation,0.5217391304347827
+ms10,36,raw probe,AILiar,OEQIndirectness,0.74
+ms10,36,raw probe,AILiar,OEQFraming,0.6331569664902998
+ms10,36,raw probe,Roleplaying,AILiar,0.7835365853658536
+ms10,36,raw probe,Roleplaying,Roleplaying,0.9991319444444444
+ms10,36,raw probe,Roleplaying,ConvGame,1.0
+ms10,36,raw probe,Roleplaying,InstrDec,0.9693233082706767
+ms10,36,raw probe,Roleplaying,HarmPressureChoice,0.6344396344396345
+ms10,36,raw probe,Roleplaying,Sycophancy,0.9555
+ms10,36,raw probe,Roleplaying,OpenEndedSycophancy,0.9132653061224489
+ms10,36,raw probe,Roleplaying,OEQValidation,0.5497896213183731
+ms10,36,raw probe,Roleplaying,OEQIndirectness,0.7100000000000001
+ms10,36,raw probe,Roleplaying,OEQFraming,0.5185185185185186
+ms10,36,raw probe,ConvGame,AILiar,0.8089430894308943
+ms10,36,raw probe,ConvGame,Roleplaying,0.9105902777777777
+ms10,36,raw probe,ConvGame,ConvGame,1.0
+ms10,36,raw probe,ConvGame,InstrDec,0.9671177944862155
+ms10,36,raw probe,ConvGame,HarmPressureChoice,0.6113516113516113
+ms10,36,raw probe,ConvGame,Sycophancy,0.966
+ms10,36,raw probe,ConvGame,OpenEndedSycophancy,0.9285714285714286
+ms10,36,raw probe,ConvGame,OEQValidation,0.576437587657784
+ms10,36,raw probe,ConvGame,OEQIndirectness,0.5833333333333333
+ms10,36,raw probe,ConvGame,OEQFraming,0.4761904761904762
+ms10,36,raw probe,InstrDec,AILiar,0.9105691056910569
+ms10,36,raw probe,InstrDec,Roleplaying,0.8246527777777778
+ms10,36,raw probe,InstrDec,ConvGame,0.9955555555555555
+ms10,36,raw probe,InstrDec,InstrDec,0.9953884711779448
+ms10,36,raw probe,InstrDec,HarmPressureChoice,0.48051948051948046
+ms10,36,raw probe,InstrDec,Sycophancy,0.8983000000000001
+ms10,36,raw probe,InstrDec,OpenEndedSycophancy,0.8061224489795918
+ms10,36,raw probe,InstrDec,OEQValidation,0.3015427769985975
+ms10,36,raw probe,InstrDec,OEQIndirectness,0.32333333333333336
+ms10,36,raw probe,InstrDec,OEQFraming,0.4373897707231041
+ms10,36,raw probe,HarmPressureChoice,AILiar,0.17784552845528456
+ms10,36,raw probe,HarmPressureChoice,Roleplaying,0.7630208333333333
+ms10,36,raw probe,HarmPressureChoice,ConvGame,0.49866666666666665
+ms10,36,raw probe,HarmPressureChoice,InstrDec,0.8046115288220552
+ms10,36,raw probe,HarmPressureChoice,HarmPressureChoice,0.9196729196729196
+ms10,36,raw probe,HarmPressureChoice,Sycophancy,0.5629000000000001
+ms10,36,raw probe,HarmPressureChoice,OpenEndedSycophancy,0.5
+ms10,36,raw probe,HarmPressureChoice,OEQValidation,0.44039270687237025
+ms10,36,raw probe,HarmPressureChoice,OEQIndirectness,0.5633333333333332
+ms10,36,raw probe,HarmPressureChoice,OEQFraming,0.6225749559082893
+ms10,36,raw probe,Sycophancy,AILiar,0.7052845528455285
+ms10,36,raw probe,Sycophancy,Roleplaying,0.732638888888889
+ms10,36,raw probe,Sycophancy,ConvGame,0.9946666666666667
+ms10,36,raw probe,Sycophancy,InstrDec,0.96
+ms10,36,raw probe,Sycophancy,HarmPressureChoice,0.5459355459355459
+ms10,36,raw probe,Sycophancy,Sycophancy,1.0
+ms10,36,raw probe,Sycophancy,OpenEndedSycophancy,0.9387755102040817
+ms10,36,raw probe,Sycophancy,OEQValidation,0.4109396914446003
+ms10,36,raw probe,Sycophancy,OEQIndirectness,0.3233333333333333
+ms10,36,raw probe,Sycophancy,OEQFraming,0.4426807760141094
+ms10,36,raw probe,OpenEndedSycophancy,AILiar,0.8414634146341462
+ms10,36,raw probe,OpenEndedSycophancy,Roleplaying,0.7326388888888887
+ms10,36,raw probe,OpenEndedSycophancy,ConvGame,1.0
+ms10,36,raw probe,OpenEndedSycophancy,InstrDec,0.9576942355889725
+ms10,36,raw probe,OpenEndedSycophancy,HarmPressureChoice,0.7974987974987975
+ms10,36,raw probe,OpenEndedSycophancy,Sycophancy,0.9999
+ms10,36,raw probe,OpenEndedSycophancy,OpenEndedSycophancy,1.0
+ms10,36,raw probe,OpenEndedSycophancy,OEQValidation,0.5792426367461431
+ms10,36,raw probe,OpenEndedSycophancy,OEQIndirectness,0.6516666666666667
+ms10,36,raw probe,OpenEndedSycophancy,OEQFraming,0.5767195767195767
+ms10,36,raw probe,OEQValidation,AILiar,0.36077235772357724
+ms10,36,raw probe,OEQValidation,Roleplaying,0.6397569444444444
+ms10,36,raw probe,OEQValidation,ConvGame,0.2391111111111111
+ms10,36,raw probe,OEQValidation,InstrDec,0.5311278195488722
+ms10,36,raw probe,OEQValidation,HarmPressureChoice,0.22462722462722465
+ms10,36,raw probe,OEQValidation,Sycophancy,0.2858
+ms10,36,raw probe,OEQValidation,OpenEndedSycophancy,0.5306122448979591
+ms10,36,raw probe,OEQValidation,OEQValidation,0.9228611500701263
+ms10,36,raw probe,OEQValidation,OEQIndirectness,0.8183333333333332
+ms10,36,raw probe,OEQValidation,OEQFraming,0.7654320987654322
+ms10,36,raw probe,OEQIndirectness,AILiar,0.49796747967479676
+ms10,36,raw probe,OEQIndirectness,Roleplaying,0.5355902777777778
+ms10,36,raw probe,OEQIndirectness,ConvGame,0.08444444444444445
+ms10,36,raw probe,OEQIndirectness,InstrDec,0.4235588972431078
+ms10,36,raw probe,OEQIndirectness,HarmPressureChoice,0.40740740740740733
+ms10,36,raw probe,OEQIndirectness,Sycophancy,0.055500000000000015
+ms10,36,raw probe,OEQIndirectness,OpenEndedSycophancy,0.5051020408163265
+ms10,36,raw probe,OEQIndirectness,OEQValidation,0.7966339410939692
+ms10,36,raw probe,OEQIndirectness,OEQIndirectness,0.8883333333333333
+ms10,36,raw probe,OEQIndirectness,OEQFraming,0.763668430335097
+ms10,36,raw probe,OEQFraming,AILiar,0.4004065040650407
+ms10,36,raw probe,OEQFraming,Roleplaying,0.626736111111111
+ms10,36,raw probe,OEQFraming,ConvGame,0.3244444444444445
+ms10,36,raw probe,OEQFraming,InstrDec,0.45734335839598994
+ms10,36,raw probe,OEQFraming,HarmPressureChoice,0.44636844636844636
+ms10,36,raw probe,OEQFraming,Sycophancy,0.5857
+ms10,36,raw probe,OEQFraming,OpenEndedSycophancy,0.7448979591836735
+ms10,36,raw probe,OEQFraming,OEQValidation,0.7798036465638148
+ms10,36,raw probe,OEQFraming,OEQIndirectness,0.8566666666666667
+ms10,36,raw probe,OEQFraming,OEQFraming,0.800705467372134
+ms10,36,raw probe,all,AILiar,0.9441056910569106
+ms10,36,raw probe,all,Roleplaying,1.0
+ms10,36,raw probe,all,ConvGame,1.0
+ms10,36,raw probe,all,InstrDec,0.9919799498746867
+ms10,36,raw probe,all,HarmPressureChoice,0.9042809042809042
+ms10,36,raw probe,all,Sycophancy,1.0
+ms10,36,raw probe,all,OpenEndedSycophancy,0.9948979591836735
+ms10,36,raw probe,all,OEQValidation,0.8583450210378681
+ms10,36,raw probe,all,OEQIndirectness,0.855
+ms10,36,raw probe,all,OEQFraming,0.8130511463844797
+lb,37,lie_mean100,none,convince_me__plain,0.8274850299401197
+lb,37,lie_mean100,none,harm_refusal_choice__plain,0.5064179104477611
+lb,37,lie_mean100,none,harm_refusal_knowledge_report__plain,0.05863309352517987
+lb,37,lie_mean100,none,insider_trading_cadenza__plain,0.1899007092198582
+lb,37,lie_mean100,none,instruct_dishonesty__plain,0.926213
+lb,37,lie_mean10,none,convince_me__plain,0.7613772455089821
+lb,37,lie_mean10,none,harm_refusal_choice__plain,0.5722910447761194
+lb,37,lie_mean10,none,harm_refusal_knowledge_report__plain,0.742726618705036
+lb,37,lie_mean10,none,insider_trading_cadenza__plain,0.4462127659574468
+lb,37,lie_mean10,none,instruct_dishonesty__plain,0.9717190000000001
+lb,37,lie_w1,none,convince_me__plain,0.9540718562874251
+lb,37,lie_w1,none,harm_refusal_choice__plain,0.6678358208955223
+lb,37,lie_w1,none,harm_refusal_knowledge_report__plain,0.9611942446043166
+lb,37,lie_w1,none,insider_trading_cadenza__plain,0.4707375886524822
+lb,37,lie_w1,none,instruct_dishonesty__plain,0.977161
+lb,37,repe_dom,none,convince_me__plain,0.8728742514970059
+lb,37,repe_dom,none,harm_refusal_choice__plain,0.5936194029850747
+lb,37,repe_dom,none,harm_refusal_knowledge_report__plain,0.927863309352518
+lb,37,repe_dom,none,insider_trading_cadenza__plain,0.33078014184397164
+lb,37,repe_dom,none,instruct_dishonesty__plain,0.979153
+lb,37,D9,none,convince_me__plain,0.9441317365269462
+lb,37,D9,none,harm_refusal_choice__plain,0.7273805970149254
+lb,37,D9,none,harm_refusal_knowledge_report__plain,0.8584028776978417
+lb,37,D9,none,insider_trading_cadenza__plain,0.9799290780141845
+lb,37,D9,none,instruct_dishonesty__plain,0.976717
+ms10,37,lie_mean100,none,AILiar,0.6504065040650406
+ms10,37,lie_mean100,none,Roleplaying,0.49218750000000006
+ms10,37,lie_mean100,none,ConvGame,0.8071111111111111
+ms10,37,lie_mean100,none,InstrDec,0.9519799498746867
+ms10,37,lie_mean100,none,HarmPressureChoice,0.5459355459355459
+ms10,37,lie_mean100,none,Sycophancy,0.6995
+ms10,37,lie_mean100,none,OpenEndedSycophancy,0.5918367346938775
+ms10,37,lie_mean100,none,OEQValidation,0.3520336605890603
+ms10,37,lie_mean100,none,OEQIndirectness,0.5700000000000001
+ms10,37,lie_mean100,none,OEQFraming,0.400352733686067
+ms10,37,lie_mean10,none,AILiar,0.809959349593496
+ms10,37,lie_mean10,none,Roleplaying,0.7864583333333333
+ms10,37,lie_mean10,none,ConvGame,0.8328888888888888
+ms10,37,lie_mean10,none,InstrDec,0.9850626566416041
+ms10,37,lie_mean10,none,HarmPressureChoice,0.6007696007696007
+ms10,37,lie_mean10,none,Sycophancy,0.5792
+ms10,37,lie_mean10,none,OpenEndedSycophancy,0.7193877551020408
+ms10,37,lie_mean10,none,OEQValidation,0.46423562412342223
+ms10,37,lie_mean10,none,OEQIndirectness,0.5583333333333332
+ms10,37,lie_mean10,none,OEQFraming,0.4850088183421517
+ms10,37,lie_w1,none,AILiar,0.7876016260162602
+ms10,37,lie_w1,none,Roleplaying,0.9852430555555556
+ms10,37,lie_w1,none,ConvGame,0.9875555555555556
+ms10,37,lie_w1,none,InstrDec,0.9832581453634085
+ms10,37,lie_w1,none,HarmPressureChoice,0.6147186147186147
+ms10,37,lie_w1,none,Sycophancy,0.7382
+ms10,37,lie_w1,none,OpenEndedSycophancy,0.7551020408163265
+ms10,37,lie_w1,none,OEQValidation,0.541374474053296
+ms10,37,lie_w1,none,OEQIndirectness,0.5533333333333332
+ms10,37,lie_w1,none,OEQFraming,0.4991181657848325
+ms10,37,repe_dom,none,AILiar,0.8282520325203252
+ms10,37,repe_dom,none,Roleplaying,0.954861111111111
+ms10,37,repe_dom,none,ConvGame,0.9262222222222222
+ms10,37,repe_dom,none,InstrDec,0.983358395989975
+ms10,37,repe_dom,none,HarmPressureChoice,0.6647426647426647
+ms10,37,repe_dom,none,Sycophancy,0.7806
+ms10,37,repe_dom,none,OpenEndedSycophancy,0.7551020408163265
+ms10,37,repe_dom,none,OEQValidation,0.47265077138849926
+ms10,37,repe_dom,none,OEQIndirectness,0.54
+ms10,37,repe_dom,none,OEQFraming,0.41269841269841273
+ms10,37,D9,none,AILiar,0.9197154471544715
+ms10,37,D9,none,Roleplaying,0.8463541666666666
+ms10,37,D9,none,ConvGame,0.983111111111111
+ms10,37,D9,none,InstrDec,0.982155388471178
+ms10,37,D9,none,HarmPressureChoice,0.6878306878306879
+ms10,37,D9,none,Sycophancy,0.9625
+ms10,37,D9,none,OpenEndedSycophancy,0.9642857142857143
+ms10,37,D9,none,OEQValidation,0.5483870967741936
+ms10,37,D9,none,OEQIndirectness,0.7816666666666666
+ms10,37,D9,none,OEQFraming,0.6067019400352733
+lb,37,raw probe,convince_me__plain,harm_refusal_choice__plain,0.5050895522388059
+lb,37,raw probe,convince_me__plain,harm_refusal_knowledge_report__plain,0.055474820143884884
+lb,37,raw probe,convince_me__plain,insider_trading_cadenza__plain,0.6923215130023641
+lb,37,raw probe,convince_me__plain,instruct_dishonesty__plain,0.965869
+lb,37,raw probe,harm_refusal_choice__plain,convince_me__plain,0.7107784431137725
+lb,37,raw probe,harm_refusal_choice__plain,harm_refusal_knowledge_report__plain,0.6890719424460432
+lb,37,raw probe,harm_refusal_choice__plain,insider_trading_cadenza__plain,0.8951158392434988
+lb,37,raw probe,harm_refusal_choice__plain,instruct_dishonesty__plain,0.8922259999999999
+lb,37,raw probe,harm_refusal_knowledge_report__plain,convince_me__plain,0.42538922155688624
+lb,37,raw probe,harm_refusal_knowledge_report__plain,harm_refusal_choice__plain,0.5564253731343283
+lb,37,raw probe,harm_refusal_knowledge_report__plain,insider_trading_cadenza__plain,0.12247281323877068
+lb,37,raw probe,harm_refusal_knowledge_report__plain,instruct_dishonesty__plain,0.670559
+lb,37,raw probe,insider_trading_cadenza__plain,convince_me__plain,0.3868862275449102
+lb,37,raw probe,insider_trading_cadenza__plain,harm_refusal_choice__plain,0.5955820895522389
+lb,37,raw probe,insider_trading_cadenza__plain,harm_refusal_knowledge_report__plain,0.8463165467625899
+lb,37,raw probe,insider_trading_cadenza__plain,instruct_dishonesty__plain,0.701612
+lb,37,raw probe,instruct_dishonesty__plain,convince_me__plain,0.9356287425149701
+lb,37,raw probe,instruct_dishonesty__plain,harm_refusal_choice__plain,0.6823134328358209
+lb,37,raw probe,instruct_dishonesty__plain,harm_refusal_knowledge_report__plain,0.6299712230215828
+lb,37,raw probe,instruct_dishonesty__plain,insider_trading_cadenza__plain,0.754434988179669
+ms10,37,raw probe,AILiar,AILiar,0.9684959349593496
+ms10,37,raw probe,AILiar,Roleplaying,0.8472222222222222
+ms10,37,raw probe,AILiar,ConvGame,1.0
+ms10,37,raw probe,AILiar,InstrDec,0.9818546365914788
+ms10,37,raw probe,AILiar,HarmPressureChoice,0.7200577200577201
+ms10,37,raw probe,AILiar,Sycophancy,0.8909999999999999
+ms10,37,raw probe,AILiar,OpenEndedSycophancy,0.9285714285714286
+ms10,37,raw probe,AILiar,OEQValidation,0.5525946704067322
+ms10,37,raw probe,AILiar,OEQIndirectness,0.6916666666666667
+ms10,37,raw probe,AILiar,OEQFraming,0.617283950617284
+ms10,37,raw probe,Roleplaying,AILiar,0.709349593495935
+ms10,37,raw probe,Roleplaying,Roleplaying,0.9991319444444444
+ms10,37,raw probe,Roleplaying,ConvGame,1.0
+ms10,37,raw probe,Roleplaying,InstrDec,0.972531328320802
+ms10,37,raw probe,Roleplaying,HarmPressureChoice,0.4607984607984608
+ms10,37,raw probe,Roleplaying,Sycophancy,0.9515
+ms10,37,raw probe,Roleplaying,OpenEndedSycophancy,0.9081632653061225
+ms10,37,raw probe,Roleplaying,OEQValidation,0.5708274894810659
+ms10,37,raw probe,Roleplaying,OEQIndirectness,0.6766666666666667
+ms10,37,raw probe,Roleplaying,OEQFraming,0.49559082892416223
+ms10,37,raw probe,ConvGame,AILiar,0.7550813008130082
+ms10,37,raw probe,ConvGame,Roleplaying,0.9296875
+ms10,37,raw probe,ConvGame,ConvGame,1.0
+ms10,37,raw probe,ConvGame,InstrDec,0.9668170426065164
+ms10,37,raw probe,ConvGame,HarmPressureChoice,0.583934583934584
+ms10,37,raw probe,ConvGame,Sycophancy,0.9676
+ms10,37,raw probe,ConvGame,OpenEndedSycophancy,0.913265306122449
+ms10,37,raw probe,ConvGame,OEQValidation,0.5680224403927069
+ms10,37,raw probe,ConvGame,OEQIndirectness,0.5666666666666667
+ms10,37,raw probe,ConvGame,OEQFraming,0.47266313932980597
+ms10,37,raw probe,InstrDec,AILiar,0.9329268292682927
+ms10,37,raw probe,InstrDec,Roleplaying,0.8307291666666666
+ms10,37,raw probe,InstrDec,ConvGame,0.9991111111111111
+ms10,37,raw probe,InstrDec,InstrDec,0.9952882205513784
+ms10,37,raw probe,InstrDec,HarmPressureChoice,0.43915343915343913
+ms10,37,raw probe,InstrDec,Sycophancy,0.8823
+ms10,37,raw probe,InstrDec,OpenEndedSycophancy,0.826530612244898
+ms10,37,raw probe,InstrDec,OEQValidation,0.41514726507713884
+ms10,37,raw probe,InstrDec,OEQIndirectness,0.38
+ms10,37,raw probe,InstrDec,OEQFraming,0.43562610229276905
+ms10,37,raw probe,HarmPressureChoice,AILiar,0.12296747967479674
+ms10,37,raw probe,HarmPressureChoice,Roleplaying,0.7387152777777778
+ms10,37,raw probe,HarmPressureChoice,ConvGame,0.17955555555555555
+ms10,37,raw probe,HarmPressureChoice,InstrDec,0.7225062656641603
+ms10,37,raw probe,HarmPressureChoice,HarmPressureChoice,0.9172679172679172
+ms10,37,raw probe,HarmPressureChoice,Sycophancy,0.5461
+ms10,37,raw probe,HarmPressureChoice,OpenEndedSycophancy,0.4030612244897959
+ms10,37,raw probe,HarmPressureChoice,OEQValidation,0.4011220196353436
+ms10,37,raw probe,HarmPressureChoice,OEQIndirectness,0.6033333333333333
+ms10,37,raw probe,HarmPressureChoice,OEQFraming,0.5767195767195766
+ms10,37,raw probe,Sycophancy,AILiar,0.6798780487804879
+ms10,37,raw probe,Sycophancy,Roleplaying,0.7465277777777777
+ms10,37,raw probe,Sycophancy,ConvGame,0.992
+ms10,37,raw probe,Sycophancy,InstrDec,0.9588972431077694
+ms10,37,raw probe,Sycophancy,HarmPressureChoice,0.46993746993747
+ms10,37,raw probe,Sycophancy,Sycophancy,1.0
+ms10,37,raw probe,Sycophancy,OpenEndedSycophancy,0.9336734693877551
+ms10,37,raw probe,Sycophancy,OEQValidation,0.47405329593267875
+ms10,37,raw probe,Sycophancy,OEQIndirectness,0.30333333333333334
+ms10,37,raw probe,Sycophancy,OEQFraming,0.4761904761904762
+ms10,37,raw probe,OpenEndedSycophancy,AILiar,0.8170731707317074
+ms10,37,raw probe,OpenEndedSycophancy,Roleplaying,0.728298611111111
+ms10,37,raw probe,OpenEndedSycophancy,ConvGame,1.0
+ms10,37,raw probe,OpenEndedSycophancy,InstrDec,0.9511779448621553
+ms10,37,raw probe,OpenEndedSycophancy,HarmPressureChoice,0.6902356902356903
+ms10,37,raw probe,OpenEndedSycophancy,Sycophancy,0.9981
+ms10,37,raw probe,OpenEndedSycophancy,OpenEndedSycophancy,1.0
+ms10,37,raw probe,OpenEndedSycophancy,OEQValidation,0.6339410939691444
+ms10,37,raw probe,OpenEndedSycophancy,OEQIndirectness,0.64
+ms10,37,raw probe,OpenEndedSycophancy,OEQFraming,0.6278659611992945
+ms10,37,raw probe,OEQValidation,AILiar,0.3516260162601626
+ms10,37,raw probe,OEQValidation,Roleplaying,0.6163194444444444
+ms10,37,raw probe,OEQValidation,ConvGame,0.23733333333333329
+ms10,37,raw probe,OEQValidation,InstrDec,0.6051127819548874
+ms10,37,raw probe,OEQValidation,HarmPressureChoice,0.26551226551226553
+ms10,37,raw probe,OEQValidation,Sycophancy,0.3307
+ms10,37,raw probe,OEQValidation,OpenEndedSycophancy,0.6122448979591837
+ms10,37,raw probe,OEQValidation,OEQValidation,0.9340813464235624
+ms10,37,raw probe,OEQValidation,OEQIndirectness,0.8116666666666666
+ms10,37,raw probe,OEQValidation,OEQFraming,0.7495590828924162
+ms10,37,raw probe,OEQIndirectness,AILiar,0.4847560975609756
+ms10,37,raw probe,OEQIndirectness,Roleplaying,0.5104166666666667
+ms10,37,raw probe,OEQIndirectness,ConvGame,0.08977777777777778
+ms10,37,raw probe,OEQIndirectness,InstrDec,0.43869674185463664
+ms10,37,raw probe,OEQIndirectness,HarmPressureChoice,0.3992303992303992
+ms10,37,raw probe,OEQIndirectness,Sycophancy,0.10900000000000001
+ms10,37,raw probe,OEQIndirectness,OpenEndedSycophancy,0.5459183673469388
+ms10,37,raw probe,OEQIndirectness,OEQValidation,0.7952314165497897
+ms10,37,raw probe,OEQIndirectness,OEQIndirectness,0.8949999999999999
+ms10,37,raw probe,OEQIndirectness,OEQFraming,0.7724867724867726
+ms10,37,raw probe,OEQFraming,AILiar,0.3678861788617886
+ms10,37,raw probe,OEQFraming,Roleplaying,0.6171875
+ms10,37,raw probe,OEQFraming,ConvGame,0.3306666666666666
+ms10,37,raw probe,OEQFraming,InstrDec,0.5056641604010025
+ms10,37,raw probe,OEQFraming,HarmPressureChoice,0.3977873977873978
+ms10,37,raw probe,OEQFraming,Sycophancy,0.6234
+ms10,37,raw probe,OEQFraming,OpenEndedSycophancy,0.75
+ms10,37,raw probe,OEQFraming,OEQValidation,0.7952314165497896
+ms10,37,raw probe,OEQFraming,OEQIndirectness,0.85
+ms10,37,raw probe,OEQFraming,OEQFraming,0.7971781305114639
+ms10,37,raw probe,all,AILiar,0.9349593495934959
+ms10,37,raw probe,all,Roleplaying,1.0
+ms10,37,raw probe,all,ConvGame,1.0
+ms10,37,raw probe,all,InstrDec,0.9937844611528822
+ms10,37,raw probe,all,HarmPressureChoice,0.91005291005291
+ms10,37,raw probe,all,Sycophancy,1.0
+ms10,37,raw probe,all,OpenEndedSycophancy,0.9897959183673469
+ms10,37,raw probe,all,OEQValidation,0.8835904628330996
+ms10,37,raw probe,all,OEQIndirectness,0.8566666666666666
+ms10,37,raw probe,all,OEQFraming,0.8024691358024691
+lb,38,lie_mean100,none,convince_me__plain,0.9423353293413174
+lb,38,lie_mean100,none,harm_refusal_choice__plain,0.3962313432835821
+lb,38,lie_mean100,none,harm_refusal_knowledge_report__plain,0.0456906474820144
+lb,38,lie_mean100,none,insider_trading_cadenza__plain,0.2968132387706856
+lb,38,lie_mean100,none,instruct_dishonesty__plain,0.926785
+lb,38,lie_mean10,none,convince_me__plain,0.8117365269461078
+lb,38,lie_mean10,none,harm_refusal_choice__plain,0.5480522388059701
+lb,38,lie_mean10,none,harm_refusal_knowledge_report__plain,0.7046906474820145
+lb,38,lie_mean10,none,insider_trading_cadenza__plain,0.4785815602836879
+lb,38,lie_mean10,none,instruct_dishonesty__plain,0.971909
+lb,38,lie_w1,none,convince_me__plain,0.8704191616766466
+lb,38,lie_w1,none,harm_refusal_choice__plain,0.6328582089552239
+lb,38,lie_w1,none,harm_refusal_knowledge_report__plain,0.9496474820143884
+lb,38,lie_w1,none,insider_trading_cadenza__plain,0.26062411347517733
+lb,38,lie_w1,none,instruct_dishonesty__plain,0.9768479999999999
+lb,38,repe_dom,none,convince_me__plain,0.8895209580838324
+lb,38,repe_dom,none,harm_refusal_choice__plain,0.5149999999999999
+lb,38,repe_dom,none,harm_refusal_knowledge_report__plain,0.8829496402877698
+lb,38,repe_dom,none,insider_trading_cadenza__plain,0.2871063829787234
+lb,38,repe_dom,none,instruct_dishonesty__plain,0.9785429999999999
+lb,38,D9,none,convince_me__plain,0.9409580838323353
+lb,38,D9,none,harm_refusal_choice__plain,0.7176194029850747
+lb,38,D9,none,harm_refusal_knowledge_report__plain,0.8632805755395685
+lb,38,D9,none,insider_trading_cadenza__plain,0.9790591016548464
+lb,38,D9,none,instruct_dishonesty__plain,0.9770019999999999
+ms10,38,lie_mean100,none,AILiar,0.6473577235772358
+ms10,38,lie_mean100,none,Roleplaying,0.4748263888888889
+ms10,38,lie_mean100,none,ConvGame,0.9013333333333333
+ms10,38,lie_mean100,none,InstrDec,0.9554887218045113
+ms10,38,lie_mean100,none,HarmPressureChoice,0.4247234247234247
+ms10,38,lie_mean100,none,Sycophancy,0.6434
+ms10,38,lie_mean100,none,OpenEndedSycophancy,0.5408163265306123
+ms10,38,lie_mean100,none,OEQValidation,0.361851332398317
+ms10,38,lie_mean100,none,OEQIndirectness,0.5833333333333334
+ms10,38,lie_mean100,none,OEQFraming,0.3527336860670194
+ms10,38,lie_mean10,none,AILiar,0.8211382113821137
+ms10,38,lie_mean10,none,Roleplaying,0.8342013888888888
+ms10,38,lie_mean10,none,ConvGame,0.8844444444444444
+ms10,38,lie_mean10,none,InstrDec,0.9869674185463659
+ms10,38,lie_mean10,none,HarmPressureChoice,0.568061568061568
+ms10,38,lie_mean10,none,Sycophancy,0.6058
+ms10,38,lie_mean10,none,OpenEndedSycophancy,0.7908163265306123
+ms10,38,lie_mean10,none,OEQValidation,0.5063113604488079
+ms10,38,lie_mean10,none,OEQIndirectness,0.6116666666666667
+ms10,38,lie_mean10,none,OEQFraming,0.4761904761904762
+ms10,38,lie_w1,none,AILiar,0.7672764227642277
+ms10,38,lie_w1,none,Roleplaying,0.974826388888889
+ms10,38,lie_w1,none,ConvGame,0.9386666666666668
+ms10,38,lie_w1,none,InstrDec,0.9829573934837093
+ms10,38,lie_w1,none,HarmPressureChoice,0.633958633958634
+ms10,38,lie_w1,none,Sycophancy,0.7748999999999999
+ms10,38,lie_w1,none,OpenEndedSycophancy,0.7755102040816326
+ms10,38,lie_w1,none,OEQValidation,0.5638148667601683
+ms10,38,lie_w1,none,OEQIndirectness,0.565
+ms10,38,lie_w1,none,OEQFraming,0.5202821869488535
+ms10,38,repe_dom,none,AILiar,0.8130081300813009
+ms10,38,repe_dom,none,Roleplaying,0.9609375
+ms10,38,repe_dom,none,ConvGame,0.9386666666666666
+ms10,38,repe_dom,none,InstrDec,0.983358395989975
+ms10,38,repe_dom,none,HarmPressureChoice,0.6022126022126022
+ms10,38,repe_dom,none,Sycophancy,0.7906000000000002
+ms10,38,repe_dom,none,OpenEndedSycophancy,0.7602040816326531
+ms10,38,repe_dom,none,OEQValidation,0.4796633941093969
+ms10,38,repe_dom,none,OEQIndirectness,0.5599999999999999
+ms10,38,repe_dom,none,OEQFraming,0.4285714285714286
+ms10,38,D9,none,AILiar,0.9237804878048781
+ms10,38,D9,none,Roleplaying,0.8524305555555555
+ms10,38,D9,none,ConvGame,0.9813333333333333
+ms10,38,D9,none,InstrDec,0.9815538847117795
+ms10,38,D9,none,HarmPressureChoice,0.6695526695526696
+ms10,38,D9,none,Sycophancy,0.9544
+ms10,38,D9,none,OpenEndedSycophancy,0.9642857142857143
+ms10,38,D9,none,OEQValidation,0.5652173913043479
+ms10,38,D9,none,OEQIndirectness,0.7933333333333332
+ms10,38,D9,none,OEQFraming,0.5784832451499118
+lb,38,raw probe,convince_me__plain,harm_refusal_choice__plain,0.432865671641791
+lb,38,raw probe,convince_me__plain,harm_refusal_knowledge_report__plain,0.05646043165467626
+lb,38,raw probe,convince_me__plain,insider_trading_cadenza__plain,0.5486099290780142
+lb,38,raw probe,convince_me__plain,instruct_dishonesty__plain,0.963003
+lb,38,raw probe,harm_refusal_choice__plain,convince_me__plain,0.642934131736527
+lb,38,raw probe,harm_refusal_choice__plain,harm_refusal_knowledge_report__plain,0.6490575539568345
+lb,38,raw probe,harm_refusal_choice__plain,insider_trading_cadenza__plain,0.9688510638297871
+lb,38,raw probe,harm_refusal_choice__plain,instruct_dishonesty__plain,0.7537090000000001
+lb,38,raw probe,harm_refusal_knowledge_report__plain,convince_me__plain,0.5892215568862276
+lb,38,raw probe,harm_refusal_knowledge_report__plain,harm_refusal_choice__plain,0.6628880597014926
+lb,38,raw probe,harm_refusal_knowledge_report__plain,insider_trading_cadenza__plain,0.07652482269503547
+lb,38,raw probe,harm_refusal_knowledge_report__plain,instruct_dishonesty__plain,0.611763
+lb,38,raw probe,insider_trading_cadenza__plain,convince_me__plain,0.32023952095808383
+lb,38,raw probe,insider_trading_cadenza__plain,harm_refusal_choice__plain,0.5881791044776119
+lb,38,raw probe,insider_trading_cadenza__plain,harm_refusal_knowledge_report__plain,0.5207913669064749
+lb,38,raw probe,insider_trading_cadenza__plain,instruct_dishonesty__plain,0.6730989999999999
+lb,38,raw probe,instruct_dishonesty__plain,convince_me__plain,0.8041317365269461
+lb,38,raw probe,instruct_dishonesty__plain,harm_refusal_choice__plain,0.6506044776119402
+lb,38,raw probe,instruct_dishonesty__plain,harm_refusal_knowledge_report__plain,0.5608273381294965
+lb,38,raw probe,instruct_dishonesty__plain,insider_trading_cadenza__plain,0.7466099290780142
+ms10,38,raw probe,AILiar,AILiar,0.967479674796748
+ms10,38,raw probe,AILiar,Roleplaying,0.842013888888889
+ms10,38,raw probe,AILiar,ConvGame,1.0
+ms10,38,raw probe,AILiar,InstrDec,0.9754385964912281
+ms10,38,raw probe,AILiar,HarmPressureChoice,0.7190957190957191
+ms10,38,raw probe,AILiar,Sycophancy,0.8987
+ms10,38,raw probe,AILiar,OpenEndedSycophancy,0.9285714285714286
+ms10,38,raw probe,AILiar,OEQValidation,0.5722300140252454
+ms10,38,raw probe,AILiar,OEQIndirectness,0.7183333333333333
+ms10,38,raw probe,AILiar,OEQFraming,0.6261022927689593
+ms10,38,raw probe,Roleplaying,AILiar,0.7428861788617886
+ms10,38,raw probe,Roleplaying,Roleplaying,0.9991319444444444
+ms10,38,raw probe,Roleplaying,ConvGame,1.0
+ms10,38,raw probe,Roleplaying,InstrDec,0.9705263157894737
+ms10,38,raw probe,Roleplaying,HarmPressureChoice,0.45021645021645024
+ms10,38,raw probe,Roleplaying,Sycophancy,0.9713
+ms10,38,raw probe,Roleplaying,OpenEndedSycophancy,0.903061224489796
+ms10,38,raw probe,Roleplaying,OEQValidation,0.573632538569425
+ms10,38,raw probe,Roleplaying,OEQIndirectness,0.6833333333333333
+ms10,38,raw probe,Roleplaying,OEQFraming,0.4885361552028219
+ms10,38,raw probe,ConvGame,AILiar,0.7621951219512195
+ms10,38,raw probe,ConvGame,Roleplaying,0.9513888888888888
+ms10,38,raw probe,ConvGame,ConvGame,1.0
+ms10,38,raw probe,ConvGame,InstrDec,0.9625062656641604
+ms10,38,raw probe,ConvGame,HarmPressureChoice,0.5921115921115921
+ms10,38,raw probe,ConvGame,Sycophancy,0.9716
+ms10,38,raw probe,ConvGame,OpenEndedSycophancy,0.9030612244897959
+ms10,38,raw probe,ConvGame,OEQValidation,0.5469845722300141
+ms10,38,raw probe,ConvGame,OEQIndirectness,0.5433333333333333
+ms10,38,raw probe,ConvGame,OEQFraming,0.490299823633157
+ms10,38,raw probe,InstrDec,AILiar,0.9512195121951219
+ms10,38,raw probe,InstrDec,Roleplaying,0.8680555555555556
+ms10,38,raw probe,InstrDec,ConvGame,0.9937777777777778
+ms10,38,raw probe,InstrDec,InstrDec,0.996390977443609
+ms10,38,raw probe,InstrDec,HarmPressureChoice,0.4555074555074555
+ms10,38,raw probe,InstrDec,Sycophancy,0.9113
+ms10,38,raw probe,InstrDec,OpenEndedSycophancy,0.846938775510204
+ms10,38,raw probe,InstrDec,OEQValidation,0.455820476858345
+ms10,38,raw probe,InstrDec,OEQIndirectness,0.3933333333333333
+ms10,38,raw probe,InstrDec,OEQFraming,0.44620811287477957
+ms10,38,raw probe,HarmPressureChoice,AILiar,0.12703252032520324
+ms10,38,raw probe,HarmPressureChoice,Roleplaying,0.6961805555555556
+ms10,38,raw probe,HarmPressureChoice,ConvGame,0.15999999999999998
+ms10,38,raw probe,HarmPressureChoice,InstrDec,0.5055639097744361
+ms10,38,raw probe,HarmPressureChoice,HarmPressureChoice,0.9076479076479077
+ms10,38,raw probe,HarmPressureChoice,Sycophancy,0.4962
+ms10,38,raw probe,HarmPressureChoice,OpenEndedSycophancy,0.37755102040816324
+ms10,38,raw probe,HarmPressureChoice,OEQValidation,0.3884992987377279
+ms10,38,raw probe,HarmPressureChoice,OEQIndirectness,0.5800000000000001
+ms10,38,raw probe,HarmPressureChoice,OEQFraming,0.5784832451499118
+ms10,38,raw probe,Sycophancy,AILiar,0.6920731707317073
+ms10,38,raw probe,Sycophancy,Roleplaying,0.7934027777777777
+ms10,38,raw probe,Sycophancy,ConvGame,0.9928888888888888
+ms10,38,raw probe,Sycophancy,InstrDec,0.9611027568922307
+ms10,38,raw probe,Sycophancy,HarmPressureChoice,0.4819624819624819
+ms10,38,raw probe,Sycophancy,Sycophancy,1.0
+ms10,38,raw probe,Sycophancy,OpenEndedSycophancy,0.9387755102040816
+ms10,38,raw probe,Sycophancy,OEQValidation,0.4992987377279102
+ms10,38,raw probe,Sycophancy,OEQIndirectness,0.32999999999999996
+ms10,38,raw probe,Sycophancy,OEQFraming,0.5079365079365079
+ms10,38,raw probe,OpenEndedSycophancy,AILiar,0.8323170731707317
+ms10,38,raw probe,OpenEndedSycophancy,Roleplaying,0.7395833333333334
+ms10,38,raw probe,OpenEndedSycophancy,ConvGame,1.0
+ms10,38,raw probe,OpenEndedSycophancy,InstrDec,0.9492731829573935
+ms10,38,raw probe,OpenEndedSycophancy,HarmPressureChoice,0.7354497354497355
+ms10,38,raw probe,OpenEndedSycophancy,Sycophancy,0.9985999999999999
+ms10,38,raw probe,OpenEndedSycophancy,OpenEndedSycophancy,1.0
+ms10,38,raw probe,OpenEndedSycophancy,OEQValidation,0.6479663394109396
+ms10,38,raw probe,OpenEndedSycophancy,OEQIndirectness,0.65
+ms10,38,raw probe,OpenEndedSycophancy,OEQFraming,0.6278659611992945
+ms10,38,raw probe,OEQValidation,AILiar,0.33638211382113825
+ms10,38,raw probe,OEQValidation,Roleplaying,0.6258680555555556
+ms10,38,raw probe,OEQValidation,ConvGame,0.22844444444444442
+ms10,38,raw probe,OEQValidation,InstrDec,0.6488220551378446
+ms10,38,raw probe,OEQValidation,HarmPressureChoice,0.2554112554112554
+ms10,38,raw probe,OEQValidation,Sycophancy,0.34870000000000007
+ms10,38,raw probe,OEQValidation,OpenEndedSycophancy,0.6326530612244898
+ms10,38,raw probe,OEQValidation,OEQValidation,0.938288920056101
+ms10,38,raw probe,OEQValidation,OEQIndirectness,0.8049999999999999
+ms10,38,raw probe,OEQValidation,OEQFraming,0.7372134038800706
+ms10,38,raw probe,OEQIndirectness,AILiar,0.4888211382113822
+ms10,38,raw probe,OEQIndirectness,Roleplaying,0.5217013888888888
+ms10,38,raw probe,OEQIndirectness,ConvGame,0.09511111111111112
+ms10,38,raw probe,OEQIndirectness,InstrDec,0.39669172932330826
+ms10,38,raw probe,OEQIndirectness,HarmPressureChoice,0.38095238095238093
+ms10,38,raw probe,OEQIndirectness,Sycophancy,0.10940000000000003
+ms10,38,raw probe,OEQIndirectness,OpenEndedSycophancy,0.5408163265306122
+ms10,38,raw probe,OEQIndirectness,OEQValidation,0.7966339410939691
+ms10,38,raw probe,OEQIndirectness,OEQIndirectness,0.8866666666666667
+ms10,38,raw probe,OEQIndirectness,OEQFraming,0.7601410934744268
+ms10,38,raw probe,OEQFraming,AILiar,0.4217479674796748
+ms10,38,raw probe,OEQFraming,Roleplaying,0.6397569444444444
+ms10,38,raw probe,OEQFraming,ConvGame,0.28
+ms10,38,raw probe,OEQFraming,InstrDec,0.6040100250626567
+ms10,38,raw probe,OEQFraming,HarmPressureChoice,0.30062530062530063
+ms10,38,raw probe,OEQFraming,Sycophancy,0.6323
+ms10,38,raw probe,OEQFraming,OpenEndedSycophancy,0.7551020408163265
+ms10,38,raw probe,OEQFraming,OEQValidation,0.782608695652174
+ms10,38,raw probe,OEQFraming,OEQIndirectness,0.8533333333333334
+ms10,38,raw probe,OEQFraming,OEQFraming,0.800705467372134
+ms10,38,raw probe,all,AILiar,0.9420731707317073
+ms10,38,raw probe,all,Roleplaying,0.9956597222222222
+ms10,38,raw probe,all,ConvGame,1.0
+ms10,38,raw probe,all,InstrDec,0.9939849624060151
+ms10,38,raw probe,all,HarmPressureChoice,0.9018759018759019
+ms10,38,raw probe,all,Sycophancy,1.0
+ms10,38,raw probe,all,OpenEndedSycophancy,0.9897959183673469
+ms10,38,raw probe,all,OEQValidation,0.8723702664796634
+ms10,38,raw probe,all,OEQIndirectness,0.8350000000000001
+ms10,38,raw probe,all,OEQFraming,0.7795414462081129
+lb,39,lie_mean100,none,convince_me__plain,0.8294011976047904
+lb,39,lie_mean100,none,harm_refusal_choice__plain,0.44477611940298506
+lb,39,lie_mean100,none,harm_refusal_knowledge_report__plain,0.024798561151079146
+lb,39,lie_mean100,none,insider_trading_cadenza__plain,0.2263593380614657
+lb,39,lie_mean100,none,instruct_dishonesty__plain,0.9150050000000001
+lb,39,lie_mean10,none,convince_me__plain,0.731437125748503
+lb,39,lie_mean10,none,harm_refusal_choice__plain,0.5116044776119404
+lb,39,lie_mean10,none,harm_refusal_knowledge_report__plain,0.9335971223021583
+lb,39,lie_mean10,none,insider_trading_cadenza__plain,0.32026004728132385
+lb,39,lie_mean10,none,instruct_dishonesty__plain,0.9720909999999998
+lb,39,lie_w1,none,convince_me__plain,0.9320958083832336
+lb,39,lie_w1,none,harm_refusal_choice__plain,0.6236417910447761
+lb,39,lie_w1,none,harm_refusal_knowledge_report__plain,0.9305395683453238
+lb,39,lie_w1,none,insider_trading_cadenza__plain,0.30297399527186764
+lb,39,lie_w1,none,instruct_dishonesty__plain,0.976734
+lb,39,repe_dom,none,convince_me__plain,0.8775449101796406
+lb,39,repe_dom,none,harm_refusal_choice__plain,0.45521641791044776
+lb,39,repe_dom,none,harm_refusal_knowledge_report__plain,0.898043165467626
+lb,39,repe_dom,none,insider_trading_cadenza__plain,0.2947565011820331
+lb,39,repe_dom,none,instruct_dishonesty__plain,0.9786079999999999
+lb,39,D9,none,convince_me__plain,0.9313173652694611
+lb,39,D9,none,harm_refusal_choice__plain,0.7345223880597014
+lb,39,D9,none,harm_refusal_knowledge_report__plain,0.9015107913669065
+lb,39,D9,none,insider_trading_cadenza__plain,0.979323877068558
+lb,39,D9,none,instruct_dishonesty__plain,0.976598
+ms10,39,lie_mean100,none,AILiar,0.6341463414634145
+ms10,39,lie_mean100,none,Roleplaying,0.5199652777777778
+ms10,39,lie_mean100,none,ConvGame,0.8204444444444445
+ms10,39,lie_mean100,none,InstrDec,0.9384461152882205
+ms10,39,lie_mean100,none,HarmPressureChoice,0.51996151996152
+ms10,39,lie_mean100,none,Sycophancy,0.5810000000000001
+ms10,39,lie_mean100,none,OpenEndedSycophancy,0.4438775510204082
+ms10,39,lie_mean100,none,OEQValidation,0.361851332398317
+ms10,39,lie_mean100,none,OEQIndirectness,0.5700000000000001
+ms10,39,lie_mean100,none,OEQFraming,0.3615520282186949
+ms10,39,lie_mean10,none,AILiar,0.8404471544715446
+ms10,39,lie_mean10,none,Roleplaying,0.876736111111111
+ms10,39,lie_mean10,none,ConvGame,0.8071111111111111
+ms10,39,lie_mean10,none,InstrDec,0.9840601503759399
+ms10,39,lie_mean10,none,HarmPressureChoice,0.5805675805675805
+ms10,39,lie_mean10,none,Sycophancy,0.6326
+ms10,39,lie_mean10,none,OpenEndedSycophancy,0.7806122448979591
+ms10,39,lie_mean10,none,OEQValidation,0.49368863955119213
+ms10,39,lie_mean10,none,OEQIndirectness,0.6133333333333333
+ms10,39,lie_mean10,none,OEQFraming,0.4532627865961199
+ms10,39,lie_w1,none,AILiar,0.7835365853658536
+ms10,39,lie_w1,none,Roleplaying,0.970486111111111
+ms10,39,lie_w1,none,ConvGame,0.9742222222222221
+ms10,39,lie_w1,none,InstrDec,0.9831578947368421
+ms10,39,lie_w1,none,HarmPressureChoice,0.6368446368446368
+ms10,39,lie_w1,none,Sycophancy,0.7362000000000001
+ms10,39,lie_w1,none,OpenEndedSycophancy,0.7908163265306123
+ms10,39,lie_w1,none,OEQValidation,0.5666199158485273
+ms10,39,lie_w1,none,OEQIndirectness,0.585
+ms10,39,lie_w1,none,OEQFraming,0.5149911816578483
+ms10,39,repe_dom,none,AILiar,0.7815040650406504
+ms10,39,repe_dom,none,Roleplaying,0.9739583333333333
+ms10,39,repe_dom,none,ConvGame,0.9324444444444444
+ms10,39,repe_dom,none,InstrDec,0.9827568922305765
+ms10,39,repe_dom,none,HarmPressureChoice,0.6094276094276094
+ms10,39,repe_dom,none,Sycophancy,0.7348
+ms10,39,repe_dom,none,OpenEndedSycophancy,0.7244897959183674
+ms10,39,repe_dom,none,OEQValidation,0.49368863955119213
+ms10,39,repe_dom,none,OEQIndirectness,0.5616666666666666
+ms10,39,repe_dom,none,OEQFraming,0.41798941798941797
+ms10,39,D9,none,AILiar,0.9339430894308943
+ms10,39,D9,none,Roleplaying,0.861111111111111
+ms10,39,D9,none,ConvGame,0.9671111111111111
+ms10,39,D9,none,InstrDec,0.9812531328320803
+ms10,39,D9,none,HarmPressureChoice,0.6974506974506973
+ms10,39,D9,none,Sycophancy,0.9478
+ms10,39,D9,none,OpenEndedSycophancy,0.9489795918367347
+ms10,39,D9,none,OEQValidation,0.5666199158485273
+ms10,39,D9,none,OEQIndirectness,0.8016666666666666
+ms10,39,D9,none,OEQFraming,0.5784832451499118
+lb,39,raw probe,convince_me__plain,harm_refusal_choice__plain,0.3820298507462686
+lb,39,raw probe,convince_me__plain,harm_refusal_knowledge_report__plain,0.062035971223021576
+lb,39,raw probe,convince_me__plain,insider_trading_cadenza__plain,0.5666572104018912
+lb,39,raw probe,convince_me__plain,instruct_dishonesty__plain,0.964309
+lb,39,raw probe,harm_refusal_choice__plain,convince_me__plain,0.6865868263473054
+lb,39,raw probe,harm_refusal_choice__plain,harm_refusal_knowledge_report__plain,0.7684100719424461
+lb,39,raw probe,harm_refusal_choice__plain,insider_trading_cadenza__plain,0.946643026004728
+lb,39,raw probe,harm_refusal_choice__plain,instruct_dishonesty__plain,0.689872
+lb,39,raw probe,harm_refusal_knowledge_report__plain,convince_me__plain,0.7383832335329341
+lb,39,raw probe,harm_refusal_knowledge_report__plain,harm_refusal_choice__plain,0.6827761194029851
+lb,39,raw probe,harm_refusal_knowledge_report__plain,insider_trading_cadenza__plain,0.5512340425531915
+lb,39,raw probe,harm_refusal_knowledge_report__plain,instruct_dishonesty__plain,0.677636
+lb,39,raw probe,insider_trading_cadenza__plain,convince_me__plain,0.36071856287425147
+lb,39,raw probe,insider_trading_cadenza__plain,harm_refusal_choice__plain,0.34917164179104476
+lb,39,raw probe,insider_trading_cadenza__plain,harm_refusal_knowledge_report__plain,0.6448920863309352
+lb,39,raw probe,insider_trading_cadenza__plain,instruct_dishonesty__plain,0.6345339999999999
+lb,39,raw probe,instruct_dishonesty__plain,convince_me__plain,0.8981437125748503
+lb,39,raw probe,instruct_dishonesty__plain,harm_refusal_choice__plain,0.6402388059701491
+lb,39,raw probe,instruct_dishonesty__plain,harm_refusal_knowledge_report__plain,0.5369640287769784
+lb,39,raw probe,instruct_dishonesty__plain,insider_trading_cadenza__plain,0.5159621749408984
+ms10,39,raw probe,AILiar,AILiar,0.9664634146341464
+ms10,39,raw probe,AILiar,Roleplaying,0.8298611111111112
+ms10,39,raw probe,AILiar,ConvGame,1.0
+ms10,39,raw probe,AILiar,InstrDec,0.9750375939849625
+ms10,39,raw probe,AILiar,HarmPressureChoice,0.7162097162097163
+ms10,39,raw probe,AILiar,Sycophancy,0.8783
+ms10,39,raw probe,AILiar,OpenEndedSycophancy,0.8928571428571428
+ms10,39,raw probe,AILiar,OEQValidation,0.5722300140252454
+ms10,39,raw probe,AILiar,OEQIndirectness,0.725
+ms10,39,raw probe,AILiar,OEQFraming,0.6243386243386243
+ms10,39,raw probe,Roleplaying,AILiar,0.6859756097560976
+ms10,39,raw probe,Roleplaying,Roleplaying,0.9991319444444444
+ms10,39,raw probe,Roleplaying,ConvGame,1.0
+ms10,39,raw probe,Roleplaying,InstrDec,0.9687218045112782
+ms10,39,raw probe,Roleplaying,HarmPressureChoice,0.39874939874939874
+ms10,39,raw probe,Roleplaying,Sycophancy,0.9584999999999999
+ms10,39,raw probe,Roleplaying,OpenEndedSycophancy,0.8775510204081632
+ms10,39,raw probe,Roleplaying,OEQValidation,0.576437587657784
+ms10,39,raw probe,Roleplaying,OEQIndirectness,0.68
+ms10,39,raw probe,Roleplaying,OEQFraming,0.4973544973544974
+ms10,39,raw probe,ConvGame,AILiar,0.7601626016260162
+ms10,39,raw probe,ConvGame,Roleplaying,0.9565972222222223
+ms10,39,raw probe,ConvGame,ConvGame,1.0
+ms10,39,raw probe,ConvGame,InstrDec,0.9638095238095239
+ms10,39,raw probe,ConvGame,HarmPressureChoice,0.5137085137085137
+ms10,39,raw probe,ConvGame,Sycophancy,0.9647
+ms10,39,raw probe,ConvGame,OpenEndedSycophancy,0.8826530612244898
+ms10,39,raw probe,ConvGame,OEQValidation,0.5357643758765779
+ms10,39,raw probe,ConvGame,OEQIndirectness,0.5416666666666667
+ms10,39,raw probe,ConvGame,OEQFraming,0.5132275132275133
+ms10,39,raw probe,InstrDec,AILiar,0.9441056910569106
+ms10,39,raw probe,InstrDec,Roleplaying,0.8784722222222222
+ms10,39,raw probe,InstrDec,ConvGame,0.9937777777777778
+ms10,39,raw probe,InstrDec,InstrDec,0.9967919799498747
+ms10,39,raw probe,InstrDec,HarmPressureChoice,0.46945646945646946
+ms10,39,raw probe,InstrDec,Sycophancy,0.9055000000000001
+ms10,39,raw probe,InstrDec,OpenEndedSycophancy,0.8418367346938774
+ms10,39,raw probe,InstrDec,OEQValidation,0.4165497896213184
+ms10,39,raw probe,InstrDec,OEQIndirectness,0.42499999999999993
+ms10,39,raw probe,InstrDec,OEQFraming,0.4391534391534392
+ms10,39,raw probe,HarmPressureChoice,AILiar,0.12500000000000003
+ms10,39,raw probe,HarmPressureChoice,Roleplaying,0.7178819444444444
+ms10,39,raw probe,HarmPressureChoice,ConvGame,0.19377777777777777
+ms10,39,raw probe,HarmPressureChoice,InstrDec,0.49503759398496233
+ms10,39,raw probe,HarmPressureChoice,HarmPressureChoice,0.9134199134199135
+ms10,39,raw probe,HarmPressureChoice,Sycophancy,0.47080000000000005
+ms10,39,raw probe,HarmPressureChoice,OpenEndedSycophancy,0.35714285714285715
+ms10,39,raw probe,HarmPressureChoice,OEQValidation,0.46423562412342223
+ms10,39,raw probe,HarmPressureChoice,OEQIndirectness,0.6083333333333334
+ms10,39,raw probe,HarmPressureChoice,OEQFraming,0.582010582010582
+ms10,39,raw probe,Sycophancy,AILiar,0.6798780487804877
+ms10,39,raw probe,Sycophancy,Roleplaying,0.8098958333333334
+ms10,39,raw probe,Sycophancy,ConvGame,0.9928888888888888
+ms10,39,raw probe,Sycophancy,InstrDec,0.9600000000000001
+ms10,39,raw probe,Sycophancy,HarmPressureChoice,0.4728234728234728
+ms10,39,raw probe,Sycophancy,Sycophancy,1.0
+ms10,39,raw probe,Sycophancy,OpenEndedSycophancy,0.9336734693877551
+ms10,39,raw probe,Sycophancy,OEQValidation,0.5007012622720898
+ms10,39,raw probe,Sycophancy,OEQIndirectness,0.33666666666666667
+ms10,39,raw probe,Sycophancy,OEQFraming,0.5008818342151675
+ms10,39,raw probe,OpenEndedSycophancy,AILiar,0.8597560975609755
+ms10,39,raw probe,OpenEndedSycophancy,Roleplaying,0.7630208333333333
+ms10,39,raw probe,OpenEndedSycophancy,ConvGame,1.0
+ms10,39,raw probe,OpenEndedSycophancy,InstrDec,0.9529824561403508
+ms10,39,raw probe,OpenEndedSycophancy,HarmPressureChoice,0.75998075998076
+ms10,39,raw probe,OpenEndedSycophancy,Sycophancy,0.9994999999999999
+ms10,39,raw probe,OpenEndedSycophancy,OpenEndedSycophancy,1.0
+ms10,39,raw probe,OpenEndedSycophancy,OEQValidation,0.6549789621318373
+ms10,39,raw probe,OpenEndedSycophancy,OEQIndirectness,0.6616666666666667
+ms10,39,raw probe,OpenEndedSycophancy,OEQFraming,0.6155202821869489
+ms10,39,raw probe,OEQValidation,AILiar,0.3485772357723578
+ms10,39,raw probe,OEQValidation,Roleplaying,0.6102430555555556
+ms10,39,raw probe,OEQValidation,ConvGame,0.22577777777777777
+ms10,39,raw probe,OEQValidation,InstrDec,0.5908771929824562
+ms10,39,raw probe,OEQValidation,HarmPressureChoice,0.23472823472823473
+ms10,39,raw probe,OEQValidation,Sycophancy,0.3493
+ms10,39,raw probe,OEQValidation,OpenEndedSycophancy,0.6326530612244898
+ms10,39,raw probe,OEQValidation,OEQValidation,0.9312762973352033
+ms10,39,raw probe,OEQValidation,OEQIndirectness,0.8066666666666666
+ms10,39,raw probe,OEQValidation,OEQFraming,0.744268077601411
+ms10,39,raw probe,OEQIndirectness,AILiar,0.48373983739837406
+ms10,39,raw probe,OEQIndirectness,Roleplaying,0.5190972222222222
+ms10,39,raw probe,OEQIndirectness,ConvGame,0.09066666666666666
+ms10,39,raw probe,OEQIndirectness,InstrDec,0.36370927318295737
+ms10,39,raw probe,OEQIndirectness,HarmPressureChoice,0.442039442039442
+ms10,39,raw probe,OEQIndirectness,Sycophancy,0.13480000000000003
+ms10,39,raw probe,OEQIndirectness,OpenEndedSycophancy,0.5408163265306123
+ms10,39,raw probe,OEQIndirectness,OEQValidation,0.8008415147265077
+ms10,39,raw probe,OEQIndirectness,OEQIndirectness,0.885
+ms10,39,raw probe,OEQIndirectness,OEQFraming,0.763668430335097
+ms10,39,raw probe,OEQFraming,AILiar,0.48069105691056907
+ms10,39,raw probe,OEQFraming,Roleplaying,0.6354166666666666
+ms10,39,raw probe,OEQFraming,ConvGame,0.2631111111111111
+ms10,39,raw probe,OEQFraming,InstrDec,0.595689223057644
+ms10,39,raw probe,OEQFraming,HarmPressureChoice,0.31794131794131797
+ms10,39,raw probe,OEQFraming,Sycophancy,0.6503
+ms10,39,raw probe,OEQFraming,OpenEndedSycophancy,0.7959183673469388
+ms10,39,raw probe,OEQFraming,OEQValidation,0.7812061711079943
+ms10,39,raw probe,OEQFraming,OEQIndirectness,0.8483333333333333
+ms10,39,raw probe,OEQFraming,OEQFraming,0.7936507936507936
+ms10,39,raw probe,all,AILiar,0.9339430894308942
+ms10,39,raw probe,all,Roleplaying,0.9930555555555556
+ms10,39,raw probe,all,ConvGame,1.0
+ms10,39,raw probe,all,InstrDec,0.9943859649122807
+ms10,39,raw probe,all,HarmPressureChoice,0.9076479076479076
+ms10,39,raw probe,all,Sycophancy,1.0
+ms10,39,raw probe,all,OpenEndedSycophancy,0.9897959183673469
+ms10,39,raw probe,all,OEQValidation,0.8779803646563815
+ms10,39,raw probe,all,OEQIndirectness,0.84
+ms10,39,raw probe,all,OEQFraming,0.7865961199294532
+lb,40,lie_mean100,none,convince_me__plain,0.8426347305389221
+lb,40,lie_mean100,none,harm_refusal_choice__plain,0.46111194029850744
+lb,40,lie_mean100,none,harm_refusal_knowledge_report__plain,0.06163309352517987
+lb,40,lie_mean100,none,insider_trading_cadenza__plain,0.17244444444444446
+lb,40,lie_mean100,none,instruct_dishonesty__plain,0.903503
+lb,40,lie_mean10,none,convince_me__plain,0.7767664670658682
+lb,40,lie_mean10,none,harm_refusal_choice__plain,0.5235597014925373
+lb,40,lie_mean10,none,harm_refusal_knowledge_report__plain,0.933748201438849
+lb,40,lie_mean10,none,insider_trading_cadenza__plain,0.2609314420803782
+lb,40,lie_mean10,none,instruct_dishonesty__plain,0.9722939999999999
+lb,40,lie_w1,none,convince_me__plain,0.8680239520958084
+lb,40,lie_w1,none,harm_refusal_choice__plain,0.5763582089552238
+lb,40,lie_w1,none,harm_refusal_knowledge_report__plain,0.9228992805755396
+lb,40,lie_w1,none,insider_trading_cadenza__plain,0.3152340425531915
+lb,40,lie_w1,none,instruct_dishonesty__plain,0.978091
+lb,40,repe_dom,none,convince_me__plain,0.879880239520958
+lb,40,repe_dom,none,harm_refusal_choice__plain,0.4583955223880597
+lb,40,repe_dom,none,harm_refusal_knowledge_report__plain,0.8834172661870504
+lb,40,repe_dom,none,insider_trading_cadenza__plain,0.27801418439716313
+lb,40,repe_dom,none,instruct_dishonesty__plain,0.9784169999999999
+lb,40,D9,none,convince_me__plain,0.9122754491017965
+lb,40,D9,none,harm_refusal_choice__plain,0.7126865671641791
+lb,40,D9,none,harm_refusal_knowledge_report__plain,0.9103669064748201
+lb,40,D9,none,insider_trading_cadenza__plain,0.9793522458628842
+lb,40,D9,none,instruct_dishonesty__plain,0.9772350000000001
+ms10,40,lie_mean100,none,AILiar,0.584349593495935
+ms10,40,lie_mean100,none,Roleplaying,0.4947916666666667
+ms10,40,lie_mean100,none,ConvGame,0.7751111111111111
+ms10,40,lie_mean100,none,InstrDec,0.9329323308270676
+ms10,40,lie_mean100,none,HarmPressureChoice,0.5815295815295816
+ms10,40,lie_mean100,none,Sycophancy,0.6791
+ms10,40,lie_mean100,none,OpenEndedSycophancy,0.49489795918367346
+ms10,40,lie_mean100,none,OEQValidation,0.37026647966339415
+ms10,40,lie_mean100,none,OEQIndirectness,0.5766666666666667
+ms10,40,lie_mean100,none,OEQFraming,0.3386243386243386
+ms10,40,lie_mean10,none,AILiar,0.7794715447154472
+ms10,40,lie_mean10,none,Roleplaying,0.8880208333333334
+ms10,40,lie_mean10,none,ConvGame,0.8533333333333333
+ms10,40,lie_mean10,none,InstrDec,0.9850626566416041
+ms10,40,lie_mean10,none,HarmPressureChoice,0.6176046176046176
+ms10,40,lie_mean10,none,Sycophancy,0.6863
+ms10,40,lie_mean10,none,OpenEndedSycophancy,0.8010204081632653
+ms10,40,lie_mean10,none,OEQValidation,0.4922861150070126
+ms10,40,lie_mean10,none,OEQIndirectness,0.585
+ms10,40,lie_mean10,none,OEQFraming,0.4197530864197531
+ms10,40,lie_w1,none,AILiar,0.7957317073170733
+ms10,40,lie_w1,none,Roleplaying,0.9696180555555556
+ms10,40,lie_w1,none,ConvGame,0.9342222222222223
+ms10,40,lie_w1,none,InstrDec,0.9832581453634085
+ms10,40,lie_w1,none,HarmPressureChoice,0.5218855218855218
+ms10,40,lie_w1,none,Sycophancy,0.6618
+ms10,40,lie_w1,none,OpenEndedSycophancy,0.7653061224489797
+ms10,40,lie_w1,none,OEQValidation,0.5666199158485274
+ms10,40,lie_w1,none,OEQIndirectness,0.5666666666666667
+ms10,40,lie_w1,none,OEQFraming,0.4832451499118166
+ms10,40,repe_dom,none,AILiar,0.8008130081300813
+ms10,40,repe_dom,none,Roleplaying,0.9652777777777777
+ms10,40,repe_dom,none,ConvGame,0.9342222222222222
+ms10,40,repe_dom,none,InstrDec,0.9825563909774436
+ms10,40,repe_dom,none,HarmPressureChoice,0.5945165945165946
+ms10,40,repe_dom,none,Sycophancy,0.7157
+ms10,40,repe_dom,none,OpenEndedSycophancy,0.7142857142857143
+ms10,40,repe_dom,none,OEQValidation,0.5035063113604488
+ms10,40,repe_dom,none,OEQIndirectness,0.5549999999999999
+ms10,40,repe_dom,none,OEQFraming,0.39329805996472667
+ms10,40,D9,none,AILiar,0.9308943089430894
+ms10,40,D9,none,Roleplaying,0.8376736111111112
+ms10,40,D9,none,ConvGame,0.9377777777777778
+ms10,40,D9,none,InstrDec,0.9829573934837094
+ms10,40,D9,none,HarmPressureChoice,0.722943722943723
+ms10,40,D9,none,Sycophancy,0.9492999999999999
+ms10,40,D9,none,OpenEndedSycophancy,0.9540816326530612
+ms10,40,D9,none,OEQValidation,0.5539971949509116
+ms10,40,D9,none,OEQIndirectness,0.795
+ms10,40,D9,none,OEQFraming,0.5502645502645502
+lb,40,raw probe,convince_me__plain,harm_refusal_choice__plain,0.38342537313432834
+lb,40,raw probe,convince_me__plain,harm_refusal_knowledge_report__plain,0.059330935251798556
+lb,40,raw probe,convince_me__plain,insider_trading_cadenza__plain,0.5947659574468085
+lb,40,raw probe,convince_me__plain,instruct_dishonesty__plain,0.963979
+lb,40,raw probe,harm_refusal_choice__plain,convince_me__plain,0.4907185628742515
+lb,40,raw probe,harm_refusal_choice__plain,harm_refusal_knowledge_report__plain,0.7384820143884891
+lb,40,raw probe,harm_refusal_choice__plain,insider_trading_cadenza__plain,0.9410543735224587
+lb,40,raw probe,harm_refusal_choice__plain,instruct_dishonesty__plain,0.5545629999999999
+lb,40,raw probe,harm_refusal_knowledge_report__plain,convince_me__plain,0.7746107784431138
+lb,40,raw probe,harm_refusal_knowledge_report__plain,harm_refusal_choice__plain,0.6343731343283583
+lb,40,raw probe,harm_refusal_knowledge_report__plain,insider_trading_cadenza__plain,0.6852718676122932
+lb,40,raw probe,harm_refusal_knowledge_report__plain,instruct_dishonesty__plain,0.6620980000000001
+lb,40,raw probe,insider_trading_cadenza__plain,convince_me__plain,0.42742514970059875
+lb,40,raw probe,insider_trading_cadenza__plain,harm_refusal_choice__plain,0.6393955223880597
+lb,40,raw probe,insider_trading_cadenza__plain,harm_refusal_knowledge_report__plain,0.6843237410071943
+lb,40,raw probe,insider_trading_cadenza__plain,instruct_dishonesty__plain,0.588646
+lb,40,raw probe,instruct_dishonesty__plain,convince_me__plain,0.9610179640718562
+lb,40,raw probe,instruct_dishonesty__plain,harm_refusal_choice__plain,0.6292835820895522
+lb,40,raw probe,instruct_dishonesty__plain,harm_refusal_knowledge_report__plain,0.6754244604316546
+lb,40,raw probe,instruct_dishonesty__plain,insider_trading_cadenza__plain,0.6378959810874705
+ms10,40,raw probe,AILiar,AILiar,0.9654471544715448
+ms10,40,raw probe,AILiar,Roleplaying,0.8133680555555556
+ms10,40,raw probe,AILiar,ConvGame,1.0
+ms10,40,raw probe,AILiar,InstrDec,0.9763408521303258
+ms10,40,raw probe,AILiar,HarmPressureChoice,0.746993746993747
+ms10,40,raw probe,AILiar,Sycophancy,0.8960000000000001
+ms10,40,raw probe,AILiar,OpenEndedSycophancy,0.8928571428571428
+ms10,40,raw probe,AILiar,OEQValidation,0.5596072931276298
+ms10,40,raw probe,AILiar,OEQIndirectness,0.7066666666666667
+ms10,40,raw probe,AILiar,OEQFraming,0.6243386243386244
+ms10,40,raw probe,Roleplaying,AILiar,0.7073170731707317
+ms10,40,raw probe,Roleplaying,Roleplaying,0.993923611111111
+ms10,40,raw probe,Roleplaying,ConvGame,1.0
+ms10,40,raw probe,Roleplaying,InstrDec,0.9688220551378447
+ms10,40,raw probe,Roleplaying,HarmPressureChoice,0.41847041847041855
+ms10,40,raw probe,Roleplaying,Sycophancy,0.9635
+ms10,40,raw probe,Roleplaying,OpenEndedSycophancy,0.8826530612244897
+ms10,40,raw probe,Roleplaying,OEQValidation,0.5638148667601682
+ms10,40,raw probe,Roleplaying,OEQIndirectness,0.6666666666666667
+ms10,40,raw probe,Roleplaying,OEQFraming,0.45679012345679015
+ms10,40,raw probe,ConvGame,AILiar,0.7886178861788617
+ms10,40,raw probe,ConvGame,Roleplaying,0.9513888888888888
+ms10,40,raw probe,ConvGame,ConvGame,1.0
+ms10,40,raw probe,ConvGame,InstrDec,0.9629072681704262
+ms10,40,raw probe,ConvGame,HarmPressureChoice,0.5584415584415585
+ms10,40,raw probe,ConvGame,Sycophancy,0.9672999999999999
+ms10,40,raw probe,ConvGame,OpenEndedSycophancy,0.8775510204081632
+ms10,40,raw probe,ConvGame,OEQValidation,0.5385694249649369
+ms10,40,raw probe,ConvGame,OEQIndirectness,0.48
+ms10,40,raw probe,ConvGame,OEQFraming,0.4779541446208113
+ms10,40,raw probe,InstrDec,AILiar,0.9471544715447155
+ms10,40,raw probe,InstrDec,Roleplaying,0.8784722222222223
+ms10,40,raw probe,InstrDec,ConvGame,0.9964444444444445
+ms10,40,raw probe,InstrDec,InstrDec,0.9968922305764412
+ms10,40,raw probe,InstrDec,HarmPressureChoice,0.45454545454545453
+ms10,40,raw probe,InstrDec,Sycophancy,0.8946999999999999
+ms10,40,raw probe,InstrDec,OpenEndedSycophancy,0.836734693877551
+ms10,40,raw probe,InstrDec,OEQValidation,0.4053295932678822
+ms10,40,raw probe,InstrDec,OEQIndirectness,0.4116666666666666
+ms10,40,raw probe,InstrDec,OEQFraming,0.41446208112874783
+ms10,40,raw probe,HarmPressureChoice,AILiar,0.13414634146341461
+ms10,40,raw probe,HarmPressureChoice,Roleplaying,0.6927083333333334
+ms10,40,raw probe,HarmPressureChoice,ConvGame,0.20355555555555552
+ms10,40,raw probe,HarmPressureChoice,InstrDec,0.406015037593985
+ms10,40,raw probe,HarmPressureChoice,HarmPressureChoice,0.9124579124579124
+ms10,40,raw probe,HarmPressureChoice,Sycophancy,0.4321
+ms10,40,raw probe,HarmPressureChoice,OpenEndedSycophancy,0.39795918367346933
+ms10,40,raw probe,HarmPressureChoice,OEQValidation,0.49789621318373073
+ms10,40,raw probe,HarmPressureChoice,OEQIndirectness,0.5683333333333334
+ms10,40,raw probe,HarmPressureChoice,OEQFraming,0.6278659611992945
+ms10,40,raw probe,Sycophancy,AILiar,0.6859756097560976
+ms10,40,raw probe,Sycophancy,Roleplaying,0.8038194444444444
+ms10,40,raw probe,Sycophancy,ConvGame,0.9928888888888888
+ms10,40,raw probe,Sycophancy,InstrDec,0.9593984962406015
+ms10,40,raw probe,Sycophancy,HarmPressureChoice,0.5507455507455508
+ms10,40,raw probe,Sycophancy,Sycophancy,1.0
+ms10,40,raw probe,Sycophancy,OpenEndedSycophancy,0.9285714285714286
+ms10,40,raw probe,Sycophancy,OEQValidation,0.4740532959326788
+ms10,40,raw probe,Sycophancy,OEQIndirectness,0.3
+ms10,40,raw probe,Sycophancy,OEQFraming,0.4991181657848325
+ms10,40,raw probe,OpenEndedSycophancy,AILiar,0.8638211382113821
+ms10,40,raw probe,OpenEndedSycophancy,Roleplaying,0.7543402777777778
+ms10,40,raw probe,OpenEndedSycophancy,ConvGame,1.0
+ms10,40,raw probe,OpenEndedSycophancy,InstrDec,0.9534837092731829
+ms10,40,raw probe,OpenEndedSycophancy,HarmPressureChoice,0.7960557960557961
+ms10,40,raw probe,OpenEndedSycophancy,Sycophancy,0.9994999999999999
+ms10,40,raw probe,OpenEndedSycophancy,OpenEndedSycophancy,1.0
+ms10,40,raw probe,OpenEndedSycophancy,OEQValidation,0.6395511921458625
+ms10,40,raw probe,OpenEndedSycophancy,OEQIndirectness,0.6466666666666667
+ms10,40,raw probe,OpenEndedSycophancy,OEQFraming,0.5925925925925926
+ms10,40,raw probe,OEQValidation,AILiar,0.34756097560975613
+ms10,40,raw probe,OEQValidation,Roleplaying,0.5946180555555555
+ms10,40,raw probe,OEQValidation,ConvGame,0.22577777777777777
+ms10,40,raw probe,OEQValidation,InstrDec,0.5340350877192983
+ms10,40,raw probe,OEQValidation,HarmPressureChoice,0.22799422799422803
+ms10,40,raw probe,OEQValidation,Sycophancy,0.3507
+ms10,40,raw probe,OEQValidation,OpenEndedSycophancy,0.6173469387755102
+ms10,40,raw probe,OEQValidation,OEQValidation,0.9340813464235623
+ms10,40,raw probe,OEQValidation,OEQIndirectness,0.7916666666666666
+ms10,40,raw probe,OEQValidation,OEQFraming,0.7336860670194004
+ms10,40,raw probe,OEQIndirectness,AILiar,0.4857723577235772
+ms10,40,raw probe,OEQIndirectness,Roleplaying,0.5138888888888888
+ms10,40,raw probe,OEQIndirectness,ConvGame,0.09955555555555555
+ms10,40,raw probe,OEQIndirectness,InstrDec,0.35909774436090225
+ms10,40,raw probe,OEQIndirectness,HarmPressureChoice,0.39923039923039927
+ms10,40,raw probe,OEQIndirectness,Sycophancy,0.15650000000000003
+ms10,40,raw probe,OEQIndirectness,OpenEndedSycophancy,0.5510204081632653
+ms10,40,raw probe,OEQIndirectness,OEQValidation,0.8092566619915849
+ms10,40,raw probe,OEQIndirectness,OEQIndirectness,0.89
+ms10,40,raw probe,OEQIndirectness,OEQFraming,0.7566137566137566
+ms10,40,raw probe,OEQFraming,AILiar,0.5691056910569106
+ms10,40,raw probe,OEQFraming,Roleplaying,0.6493055555555556
+ms10,40,raw probe,OEQFraming,ConvGame,0.24977777777777777
+ms10,40,raw probe,OEQFraming,InstrDec,0.6794987468671679
+ms10,40,raw probe,OEQFraming,HarmPressureChoice,0.3342953342953343
+ms10,40,raw probe,OEQFraming,Sycophancy,0.5798000000000001
+ms10,40,raw probe,OEQFraming,OpenEndedSycophancy,0.8010204081632653
+ms10,40,raw probe,OEQFraming,OEQValidation,0.7349228611500701
+ms10,40,raw probe,OEQFraming,OEQIndirectness,0.83
+ms10,40,raw probe,OEQFraming,OEQFraming,0.7724867724867726
+ms10,40,raw probe,all,AILiar,0.9288617886178863
+ms10,40,raw probe,all,Roleplaying,0.9930555555555556
+ms10,40,raw probe,all,ConvGame,1.0
+ms10,40,raw probe,all,InstrDec,0.9941854636591478
+ms10,40,raw probe,all,HarmPressureChoice,0.9042809042809044
+ms10,40,raw probe,all,Sycophancy,1.0
+ms10,40,raw probe,all,OpenEndedSycophancy,0.9846938775510204
+ms10,40,raw probe,all,OEQValidation,0.8737727910238429
+ms10,40,raw probe,all,OEQIndirectness,0.8166666666666668
+ms10,40,raw probe,all,OEQFraming,0.7883597883597884
+lb,41,lie_mean100,none,convince_me__plain,0.7932934131736528
+lb,41,lie_mean100,none,harm_refusal_choice__plain,0.42223880597014923
+lb,41,lie_mean100,none,harm_refusal_knowledge_report__plain,0.03753956834532376
+lb,41,lie_mean100,none,insider_trading_cadenza__plain,0.3933475177304965
+lb,41,lie_mean100,none,instruct_dishonesty__plain,0.85526
+lb,41,lie_mean10,none,convince_me__plain,0.7503592814371257
+lb,41,lie_mean10,none,harm_refusal_choice__plain,0.5539999999999999
+lb,41,lie_mean10,none,harm_refusal_knowledge_report__plain,0.9305107913669066
+lb,41,lie_mean10,none,insider_trading_cadenza__plain,0.3153806146572104
+lb,41,lie_mean10,none,instruct_dishonesty__plain,0.9701369999999999
+lb,41,lie_w1,none,convince_me__plain,0.9160479041916167
+lb,41,lie_w1,none,harm_refusal_choice__plain,0.6374179104477612
+lb,41,lie_w1,none,harm_refusal_knowledge_report__plain,0.918841726618705
+lb,41,lie_w1,none,insider_trading_cadenza__plain,0.4010543735224586
+lb,41,lie_w1,none,instruct_dishonesty__plain,0.975168
+lb,41,repe_dom,none,convince_me__plain,0.8777245508982036
+lb,41,repe_dom,none,harm_refusal_choice__plain,0.5006268656716418
+lb,41,repe_dom,none,harm_refusal_knowledge_report__plain,0.8690503597122302
+lb,41,repe_dom,none,insider_trading_cadenza__plain,0.3301276595744681
+lb,41,repe_dom,none,instruct_dishonesty__plain,0.9769859999999999
+lb,41,D9,none,convince_me__plain,0.8764071856287425
+lb,41,D9,none,harm_refusal_choice__plain,0.6645597014925373
+lb,41,D9,none,harm_refusal_knowledge_report__plain,0.9066978417266186
+lb,41,D9,none,insider_trading_cadenza__plain,0.9782316784869977
+lb,41,D9,none,instruct_dishonesty__plain,0.9768620000000001
+ms10,41,lie_mean100,none,AILiar,0.6565040650406504
+ms10,41,lie_mean100,none,Roleplaying,0.5086805555555556
+ms10,41,lie_mean100,none,ConvGame,0.7573333333333333
+ms10,41,lie_mean100,none,InstrDec,0.8728822055137845
+ms10,41,lie_mean100,none,HarmPressureChoice,0.4829244829244829
+ms10,41,lie_mean100,none,Sycophancy,0.6086999999999999
+ms10,41,lie_mean100,none,OpenEndedSycophancy,0.5204081632653061
+ms10,41,lie_mean100,none,OEQValidation,0.39971949509116417
+ms10,41,lie_mean100,none,OEQIndirectness,0.5916666666666667
+ms10,41,lie_mean100,none,OEQFraming,0.37566137566137564
+ms10,41,lie_mean10,none,AILiar,0.8363821138211383
+ms10,41,lie_mean10,none,Roleplaying,0.8880208333333333
+ms10,41,lie_mean10,none,ConvGame,0.8231111111111111
+ms10,41,lie_mean10,none,InstrDec,0.9834586466165414
+ms10,41,lie_mean10,none,HarmPressureChoice,0.6517556517556518
+ms10,41,lie_mean10,none,Sycophancy,0.6955
+ms10,41,lie_mean10,none,OpenEndedSycophancy,0.8316326530612245
+ms10,41,lie_mean10,none,OEQValidation,0.511921458625526
+ms10,41,lie_mean10,none,OEQIndirectness,0.5766666666666667
+ms10,41,lie_mean10,none,OEQFraming,0.45326278659611996
+ms10,41,lie_w1,none,AILiar,0.7530487804878049
+ms10,41,lie_w1,none,Roleplaying,0.9696180555555556
+ms10,41,lie_w1,none,ConvGame,0.9653333333333334
+ms10,41,lie_w1,none,InstrDec,0.980250626566416
+ms10,41,lie_w1,none,HarmPressureChoice,0.6344396344396345
+ms10,41,lie_w1,none,Sycophancy,0.6698999999999999
+ms10,41,lie_w1,none,OpenEndedSycophancy,0.7755102040816326
+ms10,41,lie_w1,none,OEQValidation,0.5792426367461431
+ms10,41,lie_w1,none,OEQIndirectness,0.5916666666666667
+ms10,41,lie_w1,none,OEQFraming,0.4920634920634921
+ms10,41,repe_dom,none,AILiar,0.7611788617886178
+ms10,41,repe_dom,none,Roleplaying,0.9670138888888888
+ms10,41,repe_dom,none,ConvGame,0.9288888888888889
+ms10,41,repe_dom,none,InstrDec,0.9808521303258145
+ms10,41,repe_dom,none,HarmPressureChoice,0.6705146705146705
+ms10,41,repe_dom,none,Sycophancy,0.7065000000000001
+ms10,41,repe_dom,none,OpenEndedSycophancy,0.7244897959183674
+ms10,41,repe_dom,none,OEQValidation,0.517531556802244
+ms10,41,repe_dom,none,OEQIndirectness,0.5516666666666666
+ms10,41,repe_dom,none,OEQFraming,0.42151675485008816
+ms10,41,D9,none,AILiar,0.9329268292682926
+ms10,41,D9,none,Roleplaying,0.8307291666666666
+ms10,41,D9,none,ConvGame,0.8977777777777778
+ms10,41,D9,none,InstrDec,0.9836591478696742
+ms10,41,D9,none,HarmPressureChoice,0.6709956709956709
+ms10,41,D9,none,Sycophancy,0.9348
+ms10,41,D9,none,OpenEndedSycophancy,0.9591836734693878
+ms10,41,D9,none,OEQValidation,0.5511921458625526
+ms10,41,D9,none,OEQIndirectness,0.79
+ms10,41,D9,none,OEQFraming,0.5432098765432098
+lb,41,raw probe,convince_me__plain,harm_refusal_choice__plain,0.3770746268656716
+lb,41,raw probe,convince_me__plain,harm_refusal_knowledge_report__plain,0.24328776978417266
+lb,41,raw probe,convince_me__plain,insider_trading_cadenza__plain,0.33730969267139477
+lb,41,raw probe,convince_me__plain,instruct_dishonesty__plain,0.9639949999999999
+lb,41,raw probe,harm_refusal_choice__plain,convince_me__plain,0.45976047904191614
+lb,41,raw probe,harm_refusal_choice__plain,harm_refusal_knowledge_report__plain,0.6005611510791368
+lb,41,raw probe,harm_refusal_choice__plain,insider_trading_cadenza__plain,0.9601134751773049
+lb,41,raw probe,harm_refusal_choice__plain,instruct_dishonesty__plain,0.5974389999999999
+lb,41,raw probe,harm_refusal_knowledge_report__plain,convince_me__plain,0.3303592814371258
+lb,41,raw probe,harm_refusal_knowledge_report__plain,harm_refusal_choice__plain,0.7766567164179105
+lb,41,raw probe,harm_refusal_knowledge_report__plain,insider_trading_cadenza__plain,0.750434988179669
+lb,41,raw probe,harm_refusal_knowledge_report__plain,instruct_dishonesty__plain,0.894044
+lb,41,raw probe,insider_trading_cadenza__plain,convince_me__plain,0.45233532934131737
+lb,41,raw probe,insider_trading_cadenza__plain,harm_refusal_choice__plain,0.5445522388059701
+lb,41,raw probe,insider_trading_cadenza__plain,harm_refusal_knowledge_report__plain,0.6504604316546763
+lb,41,raw probe,insider_trading_cadenza__plain,instruct_dishonesty__plain,0.620041
+lb,41,raw probe,instruct_dishonesty__plain,convince_me__plain,0.9508383233532934
+lb,41,raw probe,instruct_dishonesty__plain,harm_refusal_choice__plain,0.6238358208955225
+lb,41,raw probe,instruct_dishonesty__plain,harm_refusal_knowledge_report__plain,0.6820863309352517
+lb,41,raw probe,instruct_dishonesty__plain,insider_trading_cadenza__plain,0.5491063829787235
+ms10,41,raw probe,AILiar,AILiar,0.9684959349593496
+ms10,41,raw probe,AILiar,Roleplaying,0.8020833333333334
+ms10,41,raw probe,AILiar,ConvGame,0.9991111111111111
+ms10,41,raw probe,AILiar,InstrDec,0.9764411027568922
+ms10,41,raw probe,AILiar,HarmPressureChoice,0.7046657046657047
+ms10,41,raw probe,AILiar,Sycophancy,0.8679
+ms10,41,raw probe,AILiar,OpenEndedSycophancy,0.8571428571428571
+ms10,41,raw probe,AILiar,OEQValidation,0.5427769985974755
+ms10,41,raw probe,AILiar,OEQIndirectness,0.71
+ms10,41,raw probe,AILiar,OEQFraming,0.6331569664902998
+ms10,41,raw probe,Roleplaying,AILiar,0.7052845528455284
+ms10,41,raw probe,Roleplaying,Roleplaying,0.9913194444444444
+ms10,41,raw probe,Roleplaying,ConvGame,1.0
+ms10,41,raw probe,Roleplaying,InstrDec,0.9702255639097745
+ms10,41,raw probe,Roleplaying,HarmPressureChoice,0.4531024531024532
+ms10,41,raw probe,Roleplaying,Sycophancy,0.9529
+ms10,41,raw probe,Roleplaying,OpenEndedSycophancy,0.836734693877551
+ms10,41,raw probe,Roleplaying,OEQValidation,0.544179523141655
+ms10,41,raw probe,Roleplaying,OEQIndirectness,0.6616666666666667
+ms10,41,raw probe,Roleplaying,OEQFraming,0.46208112874779544
+ms10,41,raw probe,ConvGame,AILiar,0.7957317073170732
+ms10,41,raw probe,ConvGame,Roleplaying,0.9574652777777778
+ms10,41,raw probe,ConvGame,ConvGame,1.0
+ms10,41,raw probe,ConvGame,InstrDec,0.9645112781954888
+ms10,41,raw probe,ConvGame,HarmPressureChoice,0.5103415103415103
+ms10,41,raw probe,ConvGame,Sycophancy,0.9631
+ms10,41,raw probe,ConvGame,OpenEndedSycophancy,0.8724489795918368
+ms10,41,raw probe,ConvGame,OEQValidation,0.5343618513323983
+ms10,41,raw probe,ConvGame,OEQIndirectness,0.5083333333333333
+ms10,41,raw probe,ConvGame,OEQFraming,0.5167548500881833
+ms10,41,raw probe,InstrDec,AILiar,0.9359756097560976
+ms10,41,raw probe,InstrDec,Roleplaying,0.8793402777777778
+ms10,41,raw probe,InstrDec,ConvGame,0.9937777777777778
+ms10,41,raw probe,InstrDec,InstrDec,0.9968922305764412
+ms10,41,raw probe,InstrDec,HarmPressureChoice,0.4588744588744589
+ms10,41,raw probe,InstrDec,Sycophancy,0.8783000000000001
+ms10,41,raw probe,InstrDec,OpenEndedSycophancy,0.836734693877551
+ms10,41,raw probe,InstrDec,OEQValidation,0.40673211781206176
+ms10,41,raw probe,InstrDec,OEQIndirectness,0.44666666666666666
+ms10,41,raw probe,InstrDec,OEQFraming,0.4109347442680776
+ms10,41,raw probe,HarmPressureChoice,AILiar,0.20121951219512196
+ms10,41,raw probe,HarmPressureChoice,Roleplaying,0.7092013888888888
+ms10,41,raw probe,HarmPressureChoice,ConvGame,0.23022222222222222
+ms10,41,raw probe,HarmPressureChoice,InstrDec,0.4079197994987469
+ms10,41,raw probe,HarmPressureChoice,HarmPressureChoice,0.9143819143819143
+ms10,41,raw probe,HarmPressureChoice,Sycophancy,0.44209999999999994
+ms10,41,raw probe,HarmPressureChoice,OpenEndedSycophancy,0.3673469387755102
+ms10,41,raw probe,HarmPressureChoice,OEQValidation,0.45301542776998593
+ms10,41,raw probe,HarmPressureChoice,OEQIndirectness,0.6516666666666666
+ms10,41,raw probe,HarmPressureChoice,OEQFraming,0.6490299823633157
+ms10,41,raw probe,Sycophancy,AILiar,0.6910569105691057
+ms10,41,raw probe,Sycophancy,Roleplaying,0.7847222222222223
+ms10,41,raw probe,Sycophancy,ConvGame,0.992
+ms10,41,raw probe,Sycophancy,InstrDec,0.9579949874686717
+ms10,41,raw probe,Sycophancy,HarmPressureChoice,0.5050505050505051
+ms10,41,raw probe,Sycophancy,Sycophancy,1.0
+ms10,41,raw probe,Sycophancy,OpenEndedSycophancy,0.9132653061224489
+ms10,41,raw probe,Sycophancy,OEQValidation,0.4726507713884993
+ms10,41,raw probe,Sycophancy,OEQIndirectness,0.3
+ms10,41,raw probe,Sycophancy,OEQFraming,0.4938271604938272
+ms10,41,raw probe,OpenEndedSycophancy,AILiar,0.8668699186991871
+ms10,41,raw probe,OpenEndedSycophancy,Roleplaying,0.7230902777777778
+ms10,41,raw probe,OpenEndedSycophancy,ConvGame,0.9973333333333333
+ms10,41,raw probe,OpenEndedSycophancy,InstrDec,0.9507769423558897
+ms10,41,raw probe,OpenEndedSycophancy,HarmPressureChoice,0.784030784030784
+ms10,41,raw probe,OpenEndedSycophancy,Sycophancy,0.9992
+ms10,41,raw probe,OpenEndedSycophancy,OpenEndedSycophancy,1.0
+ms10,41,raw probe,OpenEndedSycophancy,OEQValidation,0.6479663394109397
+ms10,41,raw probe,OpenEndedSycophancy,OEQIndirectness,0.6416666666666667
+ms10,41,raw probe,OpenEndedSycophancy,OEQFraming,0.5784832451499118
+ms10,41,raw probe,OEQValidation,AILiar,0.339430894308943
+ms10,41,raw probe,OEQValidation,Roleplaying,0.6059027777777778
+ms10,41,raw probe,OEQValidation,ConvGame,0.22666666666666666
+ms10,41,raw probe,OEQValidation,InstrDec,0.6168421052631579
+ms10,41,raw probe,OEQValidation,HarmPressureChoice,0.26455026455026454
+ms10,41,raw probe,OEQValidation,Sycophancy,0.3423
+ms10,41,raw probe,OEQValidation,OpenEndedSycophancy,0.6326530612244898
+ms10,41,raw probe,OEQValidation,OEQValidation,0.9298737727910238
+ms10,41,raw probe,OEQValidation,OEQIndirectness,0.8
+ms10,41,raw probe,OEQValidation,OEQFraming,0.7354497354497355
+ms10,41,raw probe,OEQIndirectness,AILiar,0.4674796747967479
+ms10,41,raw probe,OEQIndirectness,Roleplaying,0.5182291666666666
+ms10,41,raw probe,OEQIndirectness,ConvGame,0.09777777777777778
+ms10,41,raw probe,OEQIndirectness,InstrDec,0.3698245614035088
+ms10,41,raw probe,OEQIndirectness,HarmPressureChoice,0.3958633958633959
+ms10,41,raw probe,OEQIndirectness,Sycophancy,0.1572
+ms10,41,raw probe,OEQIndirectness,OpenEndedSycophancy,0.5408163265306123
+ms10,41,raw probe,OEQIndirectness,OEQValidation,0.7980364656381487
+ms10,41,raw probe,OEQIndirectness,OEQIndirectness,0.88
+ms10,41,raw probe,OEQIndirectness,OEQFraming,0.7566137566137566
+ms10,41,raw probe,OEQFraming,AILiar,0.5731707317073171
+ms10,41,raw probe,OEQFraming,Roleplaying,0.6475694444444444
+ms10,41,raw probe,OEQFraming,ConvGame,0.27911111111111103
+ms10,41,raw probe,OEQFraming,InstrDec,0.7082706766917293
+ms10,41,raw probe,OEQFraming,HarmPressureChoice,0.28908128908128916
+ms10,41,raw probe,OEQFraming,Sycophancy,0.5701
+ms10,41,raw probe,OEQFraming,OpenEndedSycophancy,0.8061224489795918
+ms10,41,raw probe,OEQFraming,OEQValidation,0.7223001402524545
+ms10,41,raw probe,OEQFraming,OEQIndirectness,0.8166666666666667
+ms10,41,raw probe,OEQFraming,OEQFraming,0.763668430335097
+ms10,41,raw probe,all,AILiar,0.9278455284552845
+ms10,41,raw probe,all,Roleplaying,0.9878472222222222
+ms10,41,raw probe,all,ConvGame,1.0
+ms10,41,raw probe,all,InstrDec,0.9944862155388471
+ms10,41,raw probe,all,HarmPressureChoice,0.9129389129389129
+ms10,41,raw probe,all,Sycophancy,1.0
+ms10,41,raw probe,all,OpenEndedSycophancy,0.9846938775510204
+ms10,41,raw probe,all,OEQValidation,0.8681626928471249
+ms10,41,raw probe,all,OEQIndirectness,0.8066666666666666
+ms10,41,raw probe,all,OEQFraming,0.781305114638448
+lb,42,lie_mean100,none,convince_me__plain,0.8812574850299401
+lb,42,lie_mean100,none,harm_refusal_choice__plain,0.4372164179104478
+lb,42,lie_mean100,none,harm_refusal_knowledge_report__plain,0.035705035971223036
+lb,42,lie_mean100,none,insider_trading_cadenza__plain,0.516709219858156
+lb,42,lie_mean100,none,instruct_dishonesty__plain,0.8370329999999999
+lb,42,lie_mean10,none,convince_me__plain,0.7452694610778442
+lb,42,lie_mean10,none,harm_refusal_choice__plain,0.5979701492537313
+lb,42,lie_mean10,none,harm_refusal_knowledge_report__plain,0.9384892086330936
+lb,42,lie_mean10,none,insider_trading_cadenza__plain,0.3912293144208038
+lb,42,lie_mean10,none,instruct_dishonesty__plain,0.9699510000000001
+lb,42,lie_w1,none,convince_me__plain,0.8892814371257485
+lb,42,lie_w1,none,harm_refusal_choice__plain,0.6362388059701494
+lb,42,lie_w1,none,harm_refusal_knowledge_report__plain,0.9163237410071942
+lb,42,lie_w1,none,insider_trading_cadenza__plain,0.3932482269503546
+lb,42,lie_w1,none,instruct_dishonesty__plain,0.974979
+lb,42,repe_dom,none,convince_me__plain,0.8653293413173652
+lb,42,repe_dom,none,harm_refusal_choice__plain,0.527634328358209
+lb,42,repe_dom,none,harm_refusal_knowledge_report__plain,0.8685539568345324
+lb,42,repe_dom,none,insider_trading_cadenza__plain,0.3589645390070922
+lb,42,repe_dom,none,instruct_dishonesty__plain,0.9766650000000001
+lb,42,D9,none,convince_me__plain,0.8595209580838323
+lb,42,D9,none,harm_refusal_choice__plain,0.6471119402985075
+lb,42,D9,none,harm_refusal_knowledge_report__plain,0.9042446043165467
+lb,42,D9,none,insider_trading_cadenza__plain,0.9797541371158394
+lb,42,D9,none,instruct_dishonesty__plain,0.9760289999999999
+ms10,42,lie_mean100,none,AILiar,0.6432926829268292
+ms10,42,lie_mean100,none,Roleplaying,0.5130208333333334
+ms10,42,lie_mean100,none,ConvGame,0.8408888888888888
+ms10,42,lie_mean100,none,InstrDec,0.8531328320802005
+ms10,42,lie_mean100,none,HarmPressureChoice,0.48244348244348245
+ms10,42,lie_mean100,none,Sycophancy,0.6405000000000001
+ms10,42,lie_mean100,none,OpenEndedSycophancy,0.5204081632653061
+ms10,42,lie_mean100,none,OEQValidation,0.4221598877980365
+ms10,42,lie_mean100,none,OEQIndirectness,0.62
+ms10,42,lie_mean100,none,OEQFraming,0.3968253968253968
+ms10,42,lie_mean10,none,AILiar,0.8231707317073171
+ms10,42,lie_mean10,none,Roleplaying,0.9045138888888888
+ms10,42,lie_mean10,none,ConvGame,0.8266666666666668
+ms10,42,lie_mean10,none,InstrDec,0.9821553884711779
+ms10,42,lie_mean10,none,HarmPressureChoice,0.6455026455026455
+ms10,42,lie_mean10,none,Sycophancy,0.7142
+ms10,42,lie_mean10,none,OpenEndedSycophancy,0.8214285714285714
+ms10,42,lie_mean10,none,OEQValidation,0.5273492286115007
+ms10,42,lie_mean10,none,OEQIndirectness,0.5466666666666666
+ms10,42,lie_mean10,none,OEQFraming,0.46031746031746035
+ms10,42,lie_w1,none,AILiar,0.7632113821138212
+ms10,42,lie_w1,none,Roleplaying,0.9696180555555556
+ms10,42,lie_w1,none,ConvGame,0.944
+ms10,42,lie_w1,none,InstrDec,0.9798496240601504
+ms10,42,lie_w1,none,HarmPressureChoice,0.6382876382876383
+ms10,42,lie_w1,none,Sycophancy,0.6372999999999999
+ms10,42,lie_w1,none,OpenEndedSycophancy,0.7806122448979591
+ms10,42,lie_w1,none,OEQValidation,0.5596072931276297
+ms10,42,lie_w1,none,OEQIndirectness,0.5766666666666667
+ms10,42,lie_w1,none,OEQFraming,0.5167548500881834
+ms10,42,repe_dom,none,AILiar,0.7682926829268293
+ms10,42,repe_dom,none,Roleplaying,0.967013888888889
+ms10,42,repe_dom,none,ConvGame,0.9137777777777778
+ms10,42,repe_dom,none,InstrDec,0.9795488721804511
+ms10,42,repe_dom,none,HarmPressureChoice,0.670995670995671
+ms10,42,repe_dom,none,Sycophancy,0.6817000000000001
+ms10,42,repe_dom,none,OpenEndedSycophancy,0.7346938775510203
+ms10,42,repe_dom,none,OEQValidation,0.5245441795231416
+ms10,42,repe_dom,none,OEQIndirectness,0.5733333333333334
+ms10,42,repe_dom,none,OEQFraming,0.44797178130511467
+ms10,42,D9,none,AILiar,0.9247967479674797
+ms10,42,D9,none,Roleplaying,0.8194444444444444
+ms10,42,D9,none,ConvGame,0.8755555555555555
+ms10,42,D9,none,InstrDec,0.982155388471178
+ms10,42,D9,none,HarmPressureChoice,0.6724386724386724
+ms10,42,D9,none,Sycophancy,0.9253
+ms10,42,D9,none,OpenEndedSycophancy,0.9591836734693878
+ms10,42,D9,none,OEQValidation,0.5624123422159888
+ms10,42,D9,none,OEQIndirectness,0.7883333333333332
+ms10,42,D9,none,OEQFraming,0.5590828924162258
+lb,42,raw probe,convince_me__plain,harm_refusal_choice__plain,0.43291791044776123
+lb,42,raw probe,convince_me__plain,harm_refusal_knowledge_report__plain,0.24859712230215825
+lb,42,raw probe,convince_me__plain,insider_trading_cadenza__plain,0.303725768321513
+lb,42,raw probe,convince_me__plain,instruct_dishonesty__plain,0.963956
+lb,42,raw probe,harm_refusal_choice__plain,convince_me__plain,0.3979640718562874
+lb,42,raw probe,harm_refusal_choice__plain,harm_refusal_knowledge_report__plain,0.6114028776978416
+lb,42,raw probe,harm_refusal_choice__plain,insider_trading_cadenza__plain,0.9413758865248227
+lb,42,raw probe,harm_refusal_choice__plain,instruct_dishonesty__plain,0.453048
+lb,42,raw probe,harm_refusal_knowledge_report__plain,convince_me__plain,0.3225149700598802
+lb,42,raw probe,harm_refusal_knowledge_report__plain,harm_refusal_choice__plain,0.7849776119402985
+lb,42,raw probe,harm_refusal_knowledge_report__plain,insider_trading_cadenza__plain,0.7665815602836881
+lb,42,raw probe,harm_refusal_knowledge_report__plain,instruct_dishonesty__plain,0.891092
+lb,42,raw probe,insider_trading_cadenza__plain,convince_me__plain,0.4564071856287425
+lb,42,raw probe,insider_trading_cadenza__plain,harm_refusal_choice__plain,0.5252164179104477
+lb,42,raw probe,insider_trading_cadenza__plain,harm_refusal_knowledge_report__plain,0.600273381294964
+lb,42,raw probe,insider_trading_cadenza__plain,instruct_dishonesty__plain,0.6736599999999999
+lb,42,raw probe,instruct_dishonesty__plain,convince_me__plain,0.9581437125748501
+lb,42,raw probe,instruct_dishonesty__plain,harm_refusal_choice__plain,0.6030373134328358
+lb,42,raw probe,instruct_dishonesty__plain,harm_refusal_knowledge_report__plain,0.5642374100719424
+lb,42,raw probe,instruct_dishonesty__plain,insider_trading_cadenza__plain,0.6182033096926713
+ms10,42,raw probe,AILiar,AILiar,0.9684959349593496
+ms10,42,raw probe,AILiar,Roleplaying,0.7942708333333333
+ms10,42,raw probe,AILiar,ConvGame,1.0
+ms10,42,raw probe,AILiar,InstrDec,0.9763408521303258
+ms10,42,raw probe,AILiar,HarmPressureChoice,0.7378547378547378
+ms10,42,raw probe,AILiar,Sycophancy,0.8645
+ms10,42,raw probe,AILiar,OpenEndedSycophancy,0.8469387755102041
+ms10,42,raw probe,AILiar,OEQValidation,0.5441795231416549
+ms10,42,raw probe,AILiar,OEQIndirectness,0.7066666666666667
+ms10,42,raw probe,AILiar,OEQFraming,0.6331569664902998
+ms10,42,raw probe,Roleplaying,AILiar,0.698170731707317
+ms10,42,raw probe,Roleplaying,Roleplaying,0.9878472222222223
+ms10,42,raw probe,Roleplaying,ConvGame,1.0
+ms10,42,raw probe,Roleplaying,InstrDec,0.9690225563909776
+ms10,42,raw probe,Roleplaying,HarmPressureChoice,0.531986531986532
+ms10,42,raw probe,Roleplaying,Sycophancy,0.9581999999999999
+ms10,42,raw probe,Roleplaying,OpenEndedSycophancy,0.8571428571428571
+ms10,42,raw probe,Roleplaying,OEQValidation,0.5329593267882188
+ms10,42,raw probe,Roleplaying,OEQIndirectness,0.6583333333333333
+ms10,42,raw probe,Roleplaying,OEQFraming,0.472663139329806
+ms10,42,raw probe,ConvGame,AILiar,0.7804878048780488
+ms10,42,raw probe,ConvGame,Roleplaying,0.9487847222222222
+ms10,42,raw probe,ConvGame,ConvGame,1.0
+ms10,42,raw probe,ConvGame,InstrDec,0.9645112781954888
+ms10,42,raw probe,ConvGame,HarmPressureChoice,0.5613275613275613
+ms10,42,raw probe,ConvGame,Sycophancy,0.9584999999999999
+ms10,42,raw probe,ConvGame,OpenEndedSycophancy,0.8673469387755103
+ms10,42,raw probe,ConvGame,OEQValidation,0.517531556802244
+ms10,42,raw probe,ConvGame,OEQIndirectness,0.48666666666666664
+ms10,42,raw probe,ConvGame,OEQFraming,0.4920634920634921
+ms10,42,raw probe,InstrDec,AILiar,0.9369918699186992
+ms10,42,raw probe,InstrDec,Roleplaying,0.8880208333333333
+ms10,42,raw probe,InstrDec,ConvGame,0.9857777777777779
+ms10,42,raw probe,InstrDec,InstrDec,0.9964912280701754
+ms10,42,raw probe,InstrDec,HarmPressureChoice,0.4516594516594517
+ms10,42,raw probe,InstrDec,Sycophancy,0.8638
+ms10,42,raw probe,InstrDec,OpenEndedSycophancy,0.8214285714285714
+ms10,42,raw probe,InstrDec,OEQValidation,0.43758765778401115
+ms10,42,raw probe,InstrDec,OEQIndirectness,0.44666666666666666
+ms10,42,raw probe,InstrDec,OEQFraming,0.4409171075837742
+ms10,42,raw probe,HarmPressureChoice,AILiar,0.1829268292682927
+ms10,42,raw probe,HarmPressureChoice,Roleplaying,0.6710069444444444
+ms10,42,raw probe,HarmPressureChoice,ConvGame,0.21777777777777774
+ms10,42,raw probe,HarmPressureChoice,InstrDec,0.31488721804511277
+ms10,42,raw probe,HarmPressureChoice,HarmPressureChoice,0.9177489177489178
+ms10,42,raw probe,HarmPressureChoice,Sycophancy,0.3316
+ms10,42,raw probe,HarmPressureChoice,OpenEndedSycophancy,0.2346938775510204
+ms10,42,raw probe,HarmPressureChoice,OEQValidation,0.4488078541374474
+ms10,42,raw probe,HarmPressureChoice,OEQIndirectness,0.6300000000000001
+ms10,42,raw probe,HarmPressureChoice,OEQFraming,0.6507936507936508
+ms10,42,raw probe,Sycophancy,AILiar,0.6544715447154472
+ms10,42,raw probe,Sycophancy,Roleplaying,0.7734375
+ms10,42,raw probe,Sycophancy,ConvGame,0.992
+ms10,42,raw probe,Sycophancy,InstrDec,0.9582957393483709
+ms10,42,raw probe,Sycophancy,HarmPressureChoice,0.5257335257335257
+ms10,42,raw probe,Sycophancy,Sycophancy,1.0
+ms10,42,raw probe,Sycophancy,OpenEndedSycophancy,0.9081632653061225
+ms10,42,raw probe,Sycophancy,OEQValidation,0.458625525946704
+ms10,42,raw probe,Sycophancy,OEQIndirectness,0.29666666666666663
+ms10,42,raw probe,Sycophancy,OEQFraming,0.48324514991181655
+ms10,42,raw probe,OpenEndedSycophancy,AILiar,0.8587398373983739
+ms10,42,raw probe,OpenEndedSycophancy,Roleplaying,0.7265624999999999
+ms10,42,raw probe,OpenEndedSycophancy,ConvGame,0.9937777777777779
+ms10,42,raw probe,OpenEndedSycophancy,InstrDec,0.9504761904761905
+ms10,42,raw probe,OpenEndedSycophancy,HarmPressureChoice,0.7821067821067822
+ms10,42,raw probe,OpenEndedSycophancy,Sycophancy,0.9984
+ms10,42,raw probe,OpenEndedSycophancy,OpenEndedSycophancy,1.0
+ms10,42,raw probe,OpenEndedSycophancy,OEQValidation,0.6381486676016831
+ms10,42,raw probe,OpenEndedSycophancy,OEQIndirectness,0.6349999999999999
+ms10,42,raw probe,OpenEndedSycophancy,OEQFraming,0.582010582010582
+ms10,42,raw probe,OEQValidation,AILiar,0.35060975609756095
+ms10,42,raw probe,OEQValidation,Roleplaying,0.6059027777777778
+ms10,42,raw probe,OEQValidation,ConvGame,0.22755555555555557
+ms10,42,raw probe,OEQValidation,InstrDec,0.6244611528822054
+ms10,42,raw probe,OEQValidation,HarmPressureChoice,0.26936026936026936
+ms10,42,raw probe,OEQValidation,Sycophancy,0.3319
+ms10,42,raw probe,OEQValidation,OpenEndedSycophancy,0.596938775510204
+ms10,42,raw probe,OEQValidation,OEQValidation,0.9340813464235624
+ms10,42,raw probe,OEQValidation,OEQIndirectness,0.8016666666666667
+ms10,42,raw probe,OEQValidation,OEQFraming,0.7301587301587301
+ms10,42,raw probe,OEQIndirectness,AILiar,0.47764227642276424
+ms10,42,raw probe,OEQIndirectness,Roleplaying,0.5286458333333334
+ms10,42,raw probe,OEQIndirectness,ConvGame,0.10666666666666666
+ms10,42,raw probe,OEQIndirectness,InstrDec,0.38847117794486213
+ms10,42,raw probe,OEQIndirectness,HarmPressureChoice,0.43434343434343436
+ms10,42,raw probe,OEQIndirectness,Sycophancy,0.17260000000000003
+ms10,42,raw probe,OEQIndirectness,OpenEndedSycophancy,0.5459183673469388
+ms10,42,raw probe,OEQIndirectness,OEQValidation,0.7924263674614306
+ms10,42,raw probe,OEQIndirectness,OEQIndirectness,0.8816666666666667
+ms10,42,raw probe,OEQIndirectness,OEQFraming,0.744268077601411
+ms10,42,raw probe,OEQFraming,AILiar,0.5589430894308943
+ms10,42,raw probe,OEQFraming,Roleplaying,0.6467013888888888
+ms10,42,raw probe,OEQFraming,ConvGame,0.26222222222222225
+ms10,42,raw probe,OEQFraming,InstrDec,0.7197994987468672
+ms10,42,raw probe,OEQFraming,HarmPressureChoice,0.3092833092833093
+ms10,42,raw probe,OEQFraming,Sycophancy,0.5792
+ms10,42,raw probe,OEQFraming,OpenEndedSycophancy,0.8010204081632654
+ms10,42,raw probe,OEQFraming,OEQValidation,0.7208976157082748
+ms10,42,raw probe,OEQFraming,OEQIndirectness,0.8133333333333334
+ms10,42,raw probe,OEQFraming,OEQFraming,0.7724867724867726
+ms10,42,raw probe,all,AILiar,0.9329268292682926
+ms10,42,raw probe,all,Roleplaying,0.9878472222222222
+ms10,42,raw probe,all,ConvGame,1.0
+ms10,42,raw probe,all,InstrDec,0.9942857142857143
+ms10,42,raw probe,all,HarmPressureChoice,0.9114959114959115
+ms10,42,raw probe,all,Sycophancy,1.0
+ms10,42,raw probe,all,OpenEndedSycophancy,0.9795918367346939
+ms10,42,raw probe,all,OEQValidation,0.8499298737727911
+ms10,42,raw probe,all,OEQIndirectness,0.7949999999999998
+ms10,42,raw probe,all,OEQFraming,0.7601410934744268
+lb,43,lie_mean100,none,convince_me__plain,0.7823952095808382
+lb,43,lie_mean100,none,harm_refusal_choice__plain,0.42650000000000005
+lb,43,lie_mean100,none,harm_refusal_knowledge_report__plain,0.049345323741007203
+lb,43,lie_mean100,none,insider_trading_cadenza__plain,0.5212056737588653
+lb,43,lie_mean100,none,instruct_dishonesty__plain,0.810816
+lb,43,lie_mean10,none,convince_me__plain,0.7317964071856288
+lb,43,lie_mean10,none,harm_refusal_choice__plain,0.6419179104477613
+lb,43,lie_mean10,none,harm_refusal_knowledge_report__plain,0.9267985611510792
+lb,43,lie_mean10,none,insider_trading_cadenza__plain,0.389919621749409
+lb,43,lie_mean10,none,instruct_dishonesty__plain,0.9666039999999999
+lb,43,lie_w1,none,convince_me__plain,0.8679640718562874
+lb,43,lie_w1,none,harm_refusal_choice__plain,0.6540597014925373
+lb,43,lie_w1,none,harm_refusal_knowledge_report__plain,0.8979999999999999
+lb,43,lie_w1,none,insider_trading_cadenza__plain,0.2969456264775414
+lb,43,lie_w1,none,instruct_dishonesty__plain,0.974829
+lb,43,repe_dom,none,convince_me__plain,0.8559281437125749
+lb,43,repe_dom,none,harm_refusal_choice__plain,0.5830373134328357
+lb,43,repe_dom,none,harm_refusal_knowledge_report__plain,0.8688273381294963
+lb,43,repe_dom,none,insider_trading_cadenza__plain,0.315418439716312
+lb,43,repe_dom,none,instruct_dishonesty__plain,0.9758899999999999
+lb,43,D9,none,convince_me__plain,0.85437125748503
+lb,43,D9,none,harm_refusal_choice__plain,0.6624179104477611
+lb,43,D9,none,harm_refusal_knowledge_report__plain,0.8942589928057554
+lb,43,D9,none,insider_trading_cadenza__plain,0.9788747044917259
+lb,43,D9,none,instruct_dishonesty__plain,0.975643
+ms10,43,lie_mean100,none,AILiar,0.5965447154471545
+ms10,43,lie_mean100,none,Roleplaying,0.5572916666666667
+ms10,43,lie_mean100,none,ConvGame,0.7386666666666667
+ms10,43,lie_mean100,none,InstrDec,0.827468671679198
+ms10,43,lie_mean100,none,HarmPressureChoice,0.47619047619047616
+ms10,43,lie_mean100,none,Sycophancy,0.611
+ms10,43,lie_mean100,none,OpenEndedSycophancy,0.48469387755102045
+ms10,43,lie_mean100,none,OEQValidation,0.4221598877980365
+ms10,43,lie_mean100,none,OEQIndirectness,0.6433333333333333
+ms10,43,lie_mean100,none,OEQFraming,0.4091710758377425
+ms10,43,lie_mean10,none,AILiar,0.7896341463414634
+ms10,43,lie_mean10,none,Roleplaying,0.9184027777777777
+ms10,43,lie_mean10,none,ConvGame,0.8106666666666666
+ms10,43,lie_mean10,none,InstrDec,0.9808521303258144
+ms10,43,lie_mean10,none,HarmPressureChoice,0.6835016835016835
+ms10,43,lie_mean10,none,Sycophancy,0.6808999999999998
+ms10,43,lie_mean10,none,OpenEndedSycophancy,0.8163265306122449
+ms10,43,lie_mean10,none,OEQValidation,0.5105189340813464
+ms10,43,lie_mean10,none,OEQIndirectness,0.6083333333333334
+ms10,43,lie_mean10,none,OEQFraming,0.45149911816578486
+ms10,43,lie_w1,none,AILiar,0.7540650406504066
+ms10,43,lie_w1,none,Roleplaying,0.9618055555555556
+ms10,43,lie_w1,none,ConvGame,0.9306666666666668
+ms10,43,lie_w1,none,InstrDec,0.9794486215538847
+ms10,43,lie_w1,none,HarmPressureChoice,0.6387686387686388
+ms10,43,lie_w1,none,Sycophancy,0.6286
+ms10,43,lie_w1,none,OpenEndedSycophancy,0.7755102040816326
+ms10,43,lie_w1,none,OEQValidation,0.5525946704067322
+ms10,43,lie_w1,none,OEQIndirectness,0.5700000000000001
+ms10,43,lie_w1,none,OEQFraming,0.5202821869488536
+ms10,43,repe_dom,none,AILiar,0.7560975609756098
+ms10,43,repe_dom,none,Roleplaying,0.9652777777777778
+ms10,43,repe_dom,none,ConvGame,0.9022222222222223
+ms10,43,repe_dom,none,InstrDec,0.9786466165413534
+ms10,43,repe_dom,none,HarmPressureChoice,0.6743626743626744
+ms10,43,repe_dom,none,Sycophancy,0.6617999999999999
+ms10,43,repe_dom,none,OpenEndedSycophancy,0.7193877551020409
+ms10,43,repe_dom,none,OEQValidation,0.5161290322580645
+ms10,43,repe_dom,none,OEQIndirectness,0.58
+ms10,43,repe_dom,none,OEQFraming,0.45326278659611996
+ms10,43,D9,none,AILiar,0.9247967479674797
+ms10,43,D9,none,Roleplaying,0.8125
+ms10,43,D9,none,ConvGame,0.872
+ms10,43,D9,none,InstrDec,0.9811528822055138
+ms10,43,D9,none,HarmPressureChoice,0.6892736892736893
+ms10,43,D9,none,Sycophancy,0.9223
+ms10,43,D9,none,OpenEndedSycophancy,0.9591836734693878
+ms10,43,D9,none,OEQValidation,0.5483870967741935
+ms10,43,D9,none,OEQIndirectness,0.7766666666666666
+ms10,43,D9,none,OEQFraming,0.5485008818342152
+lb,43,raw probe,convince_me__plain,harm_refusal_choice__plain,0.4224477611940298
+lb,43,raw probe,convince_me__plain,harm_refusal_knowledge_report__plain,0.23156115107913666
+lb,43,raw probe,convince_me__plain,insider_trading_cadenza__plain,0.29990543735224584
+lb,43,raw probe,convince_me__plain,instruct_dishonesty__plain,0.963512
+lb,43,raw probe,harm_refusal_choice__plain,convince_me__plain,0.4660479041916168
+lb,43,raw probe,harm_refusal_choice__plain,harm_refusal_knowledge_report__plain,0.6917913669064748
+lb,43,raw probe,harm_refusal_choice__plain,insider_trading_cadenza__plain,0.9421796690307329
+lb,43,raw probe,harm_refusal_choice__plain,instruct_dishonesty__plain,0.4663320000000001
+lb,43,raw probe,harm_refusal_knowledge_report__plain,convince_me__plain,0.24437125748502997
+lb,43,raw probe,harm_refusal_knowledge_report__plain,harm_refusal_choice__plain,0.7882835820895523
+lb,43,raw probe,harm_refusal_knowledge_report__plain,insider_trading_cadenza__plain,0.7721040189125296
+lb,43,raw probe,harm_refusal_knowledge_report__plain,instruct_dishonesty__plain,0.883916
+lb,43,raw probe,insider_trading_cadenza__plain,convince_me__plain,0.45443113772455085
+lb,43,raw probe,insider_trading_cadenza__plain,harm_refusal_choice__plain,0.5693880597014925
+lb,43,raw probe,insider_trading_cadenza__plain,harm_refusal_knowledge_report__plain,0.6115395683453239
+lb,43,raw probe,insider_trading_cadenza__plain,instruct_dishonesty__plain,0.6193690000000001
+lb,43,raw probe,instruct_dishonesty__plain,convince_me__plain,0.9316167664670658
+lb,43,raw probe,instruct_dishonesty__plain,harm_refusal_choice__plain,0.614634328358209
+lb,43,raw probe,instruct_dishonesty__plain,harm_refusal_knowledge_report__plain,0.6973237410071942
+lb,43,raw probe,instruct_dishonesty__plain,insider_trading_cadenza__plain,0.5164397163120568
+ms10,43,raw probe,AILiar,AILiar,0.967479674796748
+ms10,43,raw probe,AILiar,Roleplaying,0.7751736111111112
+ms10,43,raw probe,AILiar,ConvGame,0.9991111111111111
+ms10,43,raw probe,AILiar,InstrDec,0.9750375939849625
+ms10,43,raw probe,AILiar,HarmPressureChoice,0.7662337662337663
+ms10,43,raw probe,AILiar,Sycophancy,0.8554999999999999
+ms10,43,raw probe,AILiar,OpenEndedSycophancy,0.8469387755102041
+ms10,43,raw probe,AILiar,OEQValidation,0.5287517531556802
+ms10,43,raw probe,AILiar,OEQIndirectness,0.6983333333333333
+ms10,43,raw probe,AILiar,OEQFraming,0.6296296296296295
+ms10,43,raw probe,Roleplaying,AILiar,0.676829268292683
+ms10,43,raw probe,Roleplaying,Roleplaying,0.9852430555555556
+ms10,43,raw probe,Roleplaying,ConvGame,0.9991111111111111
+ms10,43,raw probe,Roleplaying,InstrDec,0.9665162907268171
+ms10,43,raw probe,Roleplaying,HarmPressureChoice,0.4555074555074555
+ms10,43,raw probe,Roleplaying,Sycophancy,0.9577
+ms10,43,raw probe,Roleplaying,OpenEndedSycophancy,0.8673469387755103
+ms10,43,raw probe,Roleplaying,OEQValidation,0.5315568022440393
+ms10,43,raw probe,Roleplaying,OEQIndirectness,0.6583333333333333
+ms10,43,raw probe,Roleplaying,OEQFraming,0.47619047619047616
+ms10,43,raw probe,ConvGame,AILiar,0.8119918699186992
+ms10,43,raw probe,ConvGame,Roleplaying,0.9375
+ms10,43,raw probe,ConvGame,ConvGame,1.0
+ms10,43,raw probe,ConvGame,InstrDec,0.9635087719298246
+ms10,43,raw probe,ConvGame,HarmPressureChoice,0.5622895622895623
+ms10,43,raw probe,ConvGame,Sycophancy,0.9480999999999999
+ms10,43,raw probe,ConvGame,OpenEndedSycophancy,0.8673469387755103
+ms10,43,raw probe,ConvGame,OEQValidation,0.517531556802244
+ms10,43,raw probe,ConvGame,OEQIndirectness,0.49166666666666664
+ms10,43,raw probe,ConvGame,OEQFraming,0.46031746031746035
+ms10,43,raw probe,InstrDec,AILiar,0.9552845528455285
+ms10,43,raw probe,InstrDec,Roleplaying,0.881076388888889
+ms10,43,raw probe,InstrDec,ConvGame,0.9875555555555555
+ms10,43,raw probe,InstrDec,InstrDec,0.9966917293233083
+ms10,43,raw probe,InstrDec,HarmPressureChoice,0.46560846560846564
+ms10,43,raw probe,InstrDec,Sycophancy,0.8564
+ms10,43,raw probe,InstrDec,OpenEndedSycophancy,0.8163265306122449
+ms10,43,raw probe,InstrDec,OEQValidation,0.423562412342216
+ms10,43,raw probe,InstrDec,OEQIndirectness,0.45499999999999996
+ms10,43,raw probe,InstrDec,OEQFraming,0.46913580246913583
+ms10,43,raw probe,HarmPressureChoice,AILiar,0.3231707317073171
+ms10,43,raw probe,HarmPressureChoice,Roleplaying,0.701388888888889
+ms10,43,raw probe,HarmPressureChoice,ConvGame,0.23644444444444443
+ms10,43,raw probe,HarmPressureChoice,InstrDec,0.2943358395989975
+ms10,43,raw probe,HarmPressureChoice,HarmPressureChoice,0.9172679172679173
+ms10,43,raw probe,HarmPressureChoice,Sycophancy,0.2505
+ms10,43,raw probe,HarmPressureChoice,OpenEndedSycophancy,0.2346938775510204
+ms10,43,raw probe,HarmPressureChoice,OEQValidation,0.41514726507713884
+ms10,43,raw probe,HarmPressureChoice,OEQIndirectness,0.6066666666666666
+ms10,43,raw probe,HarmPressureChoice,OEQFraming,0.5908289241622575
+ms10,43,raw probe,Sycophancy,AILiar,0.6575203252032521
+ms10,43,raw probe,Sycophancy,Roleplaying,0.7569444444444444
+ms10,43,raw probe,Sycophancy,ConvGame,0.9893333333333334
+ms10,43,raw probe,Sycophancy,InstrDec,0.9568922305764411
+ms10,43,raw probe,Sycophancy,HarmPressureChoice,0.569023569023569
+ms10,43,raw probe,Sycophancy,Sycophancy,1.0
+ms10,43,raw probe,Sycophancy,OpenEndedSycophancy,0.903061224489796
+ms10,43,raw probe,Sycophancy,OEQValidation,0.458625525946704
+ms10,43,raw probe,Sycophancy,OEQIndirectness,0.2966666666666667
+ms10,43,raw probe,Sycophancy,OEQFraming,0.4885361552028219
+ms10,43,raw probe,OpenEndedSycophancy,AILiar,0.8495934959349594
+ms10,43,raw probe,OpenEndedSycophancy,Roleplaying,0.7274305555555556
+ms10,43,raw probe,OpenEndedSycophancy,ConvGame,0.9902222222222223
+ms10,43,raw probe,OpenEndedSycophancy,InstrDec,0.9523809523809524
+ms10,43,raw probe,OpenEndedSycophancy,HarmPressureChoice,0.8003848003848003
+ms10,43,raw probe,OpenEndedSycophancy,Sycophancy,0.998
+ms10,43,raw probe,OpenEndedSycophancy,OpenEndedSycophancy,1.0
+ms10,43,raw probe,OpenEndedSycophancy,OEQValidation,0.6409537166900421
+ms10,43,raw probe,OpenEndedSycophancy,OEQIndirectness,0.62
+ms10,43,raw probe,OpenEndedSycophancy,OEQFraming,0.5855379188712522
+ms10,43,raw probe,OEQValidation,AILiar,0.3313008130081301
+ms10,43,raw probe,OEQValidation,Roleplaying,0.6041666666666667
+ms10,43,raw probe,OEQValidation,ConvGame,0.2231111111111111
+ms10,43,raw probe,OEQValidation,InstrDec,0.6248621553884711
+ms10,43,raw probe,OEQValidation,HarmPressureChoice,0.2794612794612795
+ms10,43,raw probe,OEQValidation,Sycophancy,0.34719999999999995
+ms10,43,raw probe,OEQValidation,OpenEndedSycophancy,0.6020408163265305
+ms10,43,raw probe,OEQValidation,OEQValidation,0.9326788218793829
+ms10,43,raw probe,OEQValidation,OEQIndirectness,0.7966666666666666
+ms10,43,raw probe,OEQValidation,OEQFraming,0.7213403880070547
+ms10,43,raw probe,OEQIndirectness,AILiar,0.4715447154471545
+ms10,43,raw probe,OEQIndirectness,Roleplaying,0.53125
+ms10,43,raw probe,OEQIndirectness,ConvGame,0.11644444444444443
+ms10,43,raw probe,OEQIndirectness,InstrDec,0.36912280701754385
+ms10,43,raw probe,OEQIndirectness,HarmPressureChoice,0.41414141414141414
+ms10,43,raw probe,OEQIndirectness,Sycophancy,0.1734
+ms10,43,raw probe,OEQIndirectness,OpenEndedSycophancy,0.5510204081632653
+ms10,43,raw probe,OEQIndirectness,OEQValidation,0.7938288920056101
+ms10,43,raw probe,OEQIndirectness,OEQIndirectness,0.88
+ms10,43,raw probe,OEQIndirectness,OEQFraming,0.7372134038800706
+ms10,43,raw probe,OEQFraming,AILiar,0.568089430894309
+ms10,43,raw probe,OEQFraming,Roleplaying,0.6432291666666667
+ms10,43,raw probe,OEQFraming,ConvGame,0.2391111111111111
+ms10,43,raw probe,OEQFraming,InstrDec,0.7152882205513783
+ms10,43,raw probe,OEQFraming,HarmPressureChoice,0.31409331409331415
+ms10,43,raw probe,OEQFraming,Sycophancy,0.581
+ms10,43,raw probe,OEQFraming,OpenEndedSycophancy,0.8010204081632653
+ms10,43,raw probe,OEQFraming,OEQValidation,0.7194950911640954
+ms10,43,raw probe,OEQFraming,OEQIndirectness,0.8066666666666666
+ms10,43,raw probe,OEQFraming,OEQFraming,0.763668430335097
+ms10,43,raw probe,all,AILiar,0.9400406504065042
+ms10,43,raw probe,all,Roleplaying,0.990451388888889
+ms10,43,raw probe,all,ConvGame,1.0
+ms10,43,raw probe,all,InstrDec,0.9933834586466166
+ms10,43,raw probe,all,HarmPressureChoice,0.9090909090909091
+ms10,43,raw probe,all,Sycophancy,1.0
+ms10,43,raw probe,all,OpenEndedSycophancy,0.9795918367346939
+ms10,43,raw probe,all,OEQValidation,0.8429172510518935
+ms10,43,raw probe,all,OEQIndirectness,0.7899999999999999
+ms10,43,raw probe,all,OEQFraming,0.7583774250440918
+lb,44,lie_mean100,none,convince_me__plain,0.8517365269461077
+lb,44,lie_mean100,none,harm_refusal_choice__plain,0.39217910447761195
+lb,44,lie_mean100,none,harm_refusal_knowledge_report__plain,0.05555395683453239
+lb,44,lie_mean100,none,insider_trading_cadenza__plain,0.5038203309692671
+lb,44,lie_mean100,none,instruct_dishonesty__plain,0.787154
+lb,44,lie_mean10,none,convince_me__plain,0.742934131736527
+lb,44,lie_mean10,none,harm_refusal_choice__plain,0.6732537313432836
+lb,44,lie_mean10,none,harm_refusal_knowledge_report__plain,0.9274820143884892
+lb,44,lie_mean10,none,insider_trading_cadenza__plain,0.41238770685579196
+lb,44,lie_mean10,none,instruct_dishonesty__plain,0.9687490000000001
+lb,44,lie_w1,none,convince_me__plain,0.892694610778443
+lb,44,lie_w1,none,harm_refusal_choice__plain,0.6953955223880597
+lb,44,lie_w1,none,harm_refusal_knowledge_report__plain,0.8896330935251799
+lb,44,lie_w1,none,insider_trading_cadenza__plain,0.25651063829787235
+lb,44,lie_w1,none,instruct_dishonesty__plain,0.9740679999999999
+lb,44,repe_dom,none,convince_me__plain,0.8577844311377245
+lb,44,repe_dom,none,harm_refusal_choice__plain,0.5856268656716418
+lb,44,repe_dom,none,harm_refusal_knowledge_report__plain,0.8541582733812949
+lb,44,repe_dom,none,insider_trading_cadenza__plain,0.25666666666666665
+lb,44,repe_dom,none,instruct_dishonesty__plain,0.9756819999999999
+lb,44,D9,none,convince_me__plain,0.8586227544910181
+lb,44,D9,none,harm_refusal_choice__plain,0.7107089552238806
+lb,44,D9,none,harm_refusal_knowledge_report__plain,0.8905755395683455
+lb,44,D9,none,insider_trading_cadenza__plain,0.9816170212765958
+lb,44,D9,none,instruct_dishonesty__plain,0.972905
+ms10,44,lie_mean100,none,AILiar,0.6310975609756098
+ms10,44,lie_mean100,none,Roleplaying,0.5234375
+ms10,44,lie_mean100,none,ConvGame,0.824
+ms10,44,lie_mean100,none,InstrDec,0.8040100250626566
+ms10,44,lie_mean100,none,HarmPressureChoice,0.42953342953342954
+ms10,44,lie_mean100,none,Sycophancy,0.619
+ms10,44,lie_mean100,none,OpenEndedSycophancy,0.4642857142857143
+ms10,44,lie_mean100,none,OEQValidation,0.44460028050490885
+ms10,44,lie_mean100,none,OEQIndirectness,0.6333333333333333
+ms10,44,lie_mean100,none,OEQFraming,0.380952380952381
+ms10,44,lie_mean10,none,AILiar,0.7764227642276422
+ms10,44,lie_mean10,none,Roleplaying,0.9487847222222221
+ms10,44,lie_mean10,none,ConvGame,0.8337777777777778
+ms10,44,lie_mean10,none,InstrDec,0.9808521303258145
+ms10,44,lie_mean10,none,HarmPressureChoice,0.671957671957672
+ms10,44,lie_mean10,none,Sycophancy,0.7020000000000001
+ms10,44,lie_mean10,none,OpenEndedSycophancy,0.8826530612244898
+ms10,44,lie_mean10,none,OEQValidation,0.5525946704067322
+ms10,44,lie_mean10,none,OEQIndirectness,0.62
+ms10,44,lie_mean10,none,OEQFraming,0.44797178130511467
+ms10,44,lie_w1,none,AILiar,0.7439024390243902
+ms10,44,lie_w1,none,Roleplaying,0.954861111111111
+ms10,44,lie_w1,none,ConvGame,0.9466666666666667
+ms10,44,lie_w1,none,InstrDec,0.97734335839599
+ms10,44,lie_w1,none,HarmPressureChoice,0.6661856661856662
+ms10,44,lie_w1,none,Sycophancy,0.6410999999999999
+ms10,44,lie_w1,none,OpenEndedSycophancy,0.7704081632653061
+ms10,44,lie_w1,none,OEQValidation,0.4964936886395512
+ms10,44,lie_w1,none,OEQIndirectness,0.515
+ms10,44,lie_w1,none,OEQFraming,0.5132275132275131
+ms10,44,repe_dom,none,AILiar,0.7449186991869918
+ms10,44,repe_dom,none,Roleplaying,0.9592013888888888
+ms10,44,repe_dom,none,ConvGame,0.9013333333333333
+ms10,44,repe_dom,none,InstrDec,0.9781453634085213
+ms10,44,repe_dom,none,HarmPressureChoice,0.6426166426166425
+ms10,44,repe_dom,none,Sycophancy,0.6824
+ms10,44,repe_dom,none,OpenEndedSycophancy,0.75
+ms10,44,repe_dom,none,OEQValidation,0.49649368863955123
+ms10,44,repe_dom,none,OEQIndirectness,0.5800000000000001
+ms10,44,repe_dom,none,OEQFraming,0.44973544973544977
+ms10,44,D9,none,AILiar,0.9258130081300813
+ms10,44,D9,none,Roleplaying,0.810763888888889
+ms10,44,D9,none,ConvGame,0.8737777777777778
+ms10,44,D9,none,InstrDec,0.9807518796992482
+ms10,44,D9,none,HarmPressureChoice,0.7301587301587301
+ms10,44,D9,none,Sycophancy,0.9394
+ms10,44,D9,none,OpenEndedSycophancy,0.9540816326530612
+ms10,44,D9,none,OEQValidation,0.5553997194950911
+ms10,44,D9,none,OEQIndirectness,0.7866666666666666
+ms10,44,D9,none,OEQFraming,0.544973544973545
+lb,44,raw probe,convince_me__plain,harm_refusal_choice__plain,0.46734328358208954
+lb,44,raw probe,convince_me__plain,harm_refusal_knowledge_report__plain,0.2855179856115108
+lb,44,raw probe,convince_me__plain,insider_trading_cadenza__plain,0.32792907801418436
+lb,44,raw probe,convince_me__plain,instruct_dishonesty__plain,0.963597
+lb,44,raw probe,harm_refusal_choice__plain,convince_me__plain,0.5022754491017964
+lb,44,raw probe,harm_refusal_choice__plain,harm_refusal_knowledge_report__plain,0.757611510791367
+lb,44,raw probe,harm_refusal_choice__plain,insider_trading_cadenza__plain,0.9174609929078014
+lb,44,raw probe,harm_refusal_choice__plain,instruct_dishonesty__plain,0.514728
+lb,44,raw probe,harm_refusal_knowledge_report__plain,convince_me__plain,0.2021556886227545
+lb,44,raw probe,harm_refusal_knowledge_report__plain,harm_refusal_choice__plain,0.777044776119403
+lb,44,raw probe,harm_refusal_knowledge_report__plain,insider_trading_cadenza__plain,0.7450260047281323
+lb,44,raw probe,harm_refusal_knowledge_report__plain,instruct_dishonesty__plain,0.8784310000000001
+lb,44,raw probe,insider_trading_cadenza__plain,convince_me__plain,0.41443113772455087
+lb,44,raw probe,insider_trading_cadenza__plain,harm_refusal_choice__plain,0.6150298507462687
+lb,44,raw probe,insider_trading_cadenza__plain,harm_refusal_knowledge_report__plain,0.7444388489208633
+lb,44,raw probe,insider_trading_cadenza__plain,instruct_dishonesty__plain,0.569858
+lb,44,raw probe,instruct_dishonesty__plain,convince_me__plain,0.9203592814371258
+lb,44,raw probe,instruct_dishonesty__plain,harm_refusal_choice__plain,0.592731343283582
+lb,44,raw probe,instruct_dishonesty__plain,harm_refusal_knowledge_report__plain,0.5933525179856115
+lb,44,raw probe,instruct_dishonesty__plain,insider_trading_cadenza__plain,0.4579905437352246
+ms10,44,raw probe,AILiar,AILiar,0.9644308943089431
+ms10,44,raw probe,AILiar,Roleplaying,0.7413194444444444
+ms10,44,raw probe,AILiar,ConvGame,0.9475555555555555
+ms10,44,raw probe,AILiar,InstrDec,0.9629072681704262
+ms10,44,raw probe,AILiar,HarmPressureChoice,0.7744107744107744
+ms10,44,raw probe,AILiar,Sycophancy,0.8945
+ms10,44,raw probe,AILiar,OpenEndedSycophancy,0.826530612244898
+ms10,44,raw probe,AILiar,OEQValidation,0.5469845722300141
+ms10,44,raw probe,AILiar,OEQIndirectness,0.6383333333333333
+ms10,44,raw probe,AILiar,OEQFraming,0.6349206349206349
+ms10,44,raw probe,Roleplaying,AILiar,0.6829268292682926
+ms10,44,raw probe,Roleplaying,Roleplaying,0.986111111111111
+ms10,44,raw probe,Roleplaying,ConvGame,0.9991111111111111
+ms10,44,raw probe,Roleplaying,InstrDec,0.9668170426065164
+ms10,44,raw probe,Roleplaying,HarmPressureChoice,0.4785954785954786
+ms10,44,raw probe,Roleplaying,Sycophancy,0.9609
+ms10,44,raw probe,Roleplaying,OpenEndedSycophancy,0.8673469387755102
+ms10,44,raw probe,Roleplaying,OEQValidation,0.5357643758765778
+ms10,44,raw probe,Roleplaying,OEQIndirectness,0.6533333333333333
+ms10,44,raw probe,Roleplaying,OEQFraming,0.45149911816578486
+ms10,44,raw probe,ConvGame,AILiar,0.818089430894309
+ms10,44,raw probe,ConvGame,Roleplaying,0.9340277777777778
+ms10,44,raw probe,ConvGame,ConvGame,1.0
+ms10,44,raw probe,ConvGame,InstrDec,0.9664160401002506
+ms10,44,raw probe,ConvGame,HarmPressureChoice,0.579124579124579
+ms10,44,raw probe,ConvGame,Sycophancy,0.9572999999999999
+ms10,44,raw probe,ConvGame,OpenEndedSycophancy,0.8673469387755103
+ms10,44,raw probe,ConvGame,OEQValidation,0.5385694249649369
+ms10,44,raw probe,ConvGame,OEQIndirectness,0.5033333333333333
+ms10,44,raw probe,ConvGame,OEQFraming,0.4426807760141094
+ms10,44,raw probe,InstrDec,AILiar,0.9461382113821138
+ms10,44,raw probe,InstrDec,Roleplaying,0.8680555555555556
+ms10,44,raw probe,InstrDec,ConvGame,0.9884444444444445
+ms10,44,raw probe,InstrDec,InstrDec,0.9964912280701754
+ms10,44,raw probe,InstrDec,HarmPressureChoice,0.41895141895141896
+ms10,44,raw probe,InstrDec,Sycophancy,0.8425000000000001
+ms10,44,raw probe,InstrDec,OpenEndedSycophancy,0.7959183673469387
+ms10,44,raw probe,InstrDec,OEQValidation,0.44319775596072936
+ms10,44,raw probe,InstrDec,OEQIndirectness,0.44000000000000006
+ms10,44,raw probe,InstrDec,OEQFraming,0.45149911816578486
+ms10,44,raw probe,HarmPressureChoice,AILiar,0.39430894308943093
+ms10,44,raw probe,HarmPressureChoice,Roleplaying,0.6875
+ms10,44,raw probe,HarmPressureChoice,ConvGame,0.23644444444444443
+ms10,44,raw probe,HarmPressureChoice,InstrDec,0.3315288220551379
+ms10,44,raw probe,HarmPressureChoice,HarmPressureChoice,0.9158249158249158
+ms10,44,raw probe,HarmPressureChoice,Sycophancy,0.2111
+ms10,44,raw probe,HarmPressureChoice,OpenEndedSycophancy,0.3010204081632653
+ms10,44,raw probe,HarmPressureChoice,OEQValidation,0.42496493688639553
+ms10,44,raw probe,HarmPressureChoice,OEQIndirectness,0.5233333333333333
+ms10,44,raw probe,HarmPressureChoice,OEQFraming,0.5432098765432098
+ms10,44,raw probe,Sycophancy,AILiar,0.681910569105691
+ms10,44,raw probe,Sycophancy,Roleplaying,0.7630208333333333
+ms10,44,raw probe,Sycophancy,ConvGame,0.9822222222222222
+ms10,44,raw probe,Sycophancy,InstrDec,0.957593984962406
+ms10,44,raw probe,Sycophancy,HarmPressureChoice,0.6267436267436267
+ms10,44,raw probe,Sycophancy,Sycophancy,1.0
+ms10,44,raw probe,Sycophancy,OpenEndedSycophancy,0.9030612244897959
+ms10,44,raw probe,Sycophancy,OEQValidation,0.48106591865357645
+ms10,44,raw probe,Sycophancy,OEQIndirectness,0.31
+ms10,44,raw probe,Sycophancy,OEQFraming,0.4885361552028219
+ms10,44,raw probe,OpenEndedSycophancy,AILiar,0.8160569105691058
+ms10,44,raw probe,OpenEndedSycophancy,Roleplaying,0.6944444444444444
+ms10,44,raw probe,OpenEndedSycophancy,ConvGame,0.9813333333333334
+ms10,44,raw probe,OpenEndedSycophancy,InstrDec,0.9467669172932331
+ms10,44,raw probe,OpenEndedSycophancy,HarmPressureChoice,0.8258778258778258
+ms10,44,raw probe,OpenEndedSycophancy,Sycophancy,0.9913000000000001
+ms10,44,raw probe,OpenEndedSycophancy,OpenEndedSycophancy,1.0
+ms10,44,raw probe,OpenEndedSycophancy,OEQValidation,0.6507713884992987
+ms10,44,raw probe,OpenEndedSycophancy,OEQIndirectness,0.62
+ms10,44,raw probe,OpenEndedSycophancy,OEQFraming,0.6049382716049382
+ms10,44,raw probe,OEQValidation,AILiar,0.34654471544715443
+ms10,44,raw probe,OEQValidation,Roleplaying,0.6041666666666667
+ms10,44,raw probe,OEQValidation,ConvGame,0.2222222222222222
+ms10,44,raw probe,OEQValidation,InstrDec,0.6124310776942355
+ms10,44,raw probe,OEQValidation,HarmPressureChoice,0.27946127946127947
+ms10,44,raw probe,OEQValidation,Sycophancy,0.3831
+ms10,44,raw probe,OEQValidation,OpenEndedSycophancy,0.6224489795918368
+ms10,44,raw probe,OEQValidation,OEQValidation,0.9354838709677419
+ms10,44,raw probe,OEQValidation,OEQIndirectness,0.7933333333333332
+ms10,44,raw probe,OEQValidation,OEQFraming,0.7160493827160493
+ms10,44,raw probe,OEQIndirectness,AILiar,0.45325203252032525
+ms10,44,raw probe,OEQIndirectness,Roleplaying,0.532986111111111
+ms10,44,raw probe,OEQIndirectness,ConvGame,0.1288888888888889
+ms10,44,raw probe,OEQIndirectness,InstrDec,0.41604010025062654
+ms10,44,raw probe,OEQIndirectness,HarmPressureChoice,0.35786435786435783
+ms10,44,raw probe,OEQIndirectness,Sycophancy,0.18730000000000002
+ms10,44,raw probe,OEQIndirectness,OpenEndedSycophancy,0.5459183673469388
+ms10,44,raw probe,OEQIndirectness,OEQValidation,0.7924263674614306
+ms10,44,raw probe,OEQIndirectness,OEQIndirectness,0.8766666666666666
+ms10,44,raw probe,OEQIndirectness,OEQFraming,0.7407407407407407
+ms10,44,raw probe,OEQFraming,AILiar,0.5619918699186992
+ms10,44,raw probe,OEQFraming,Roleplaying,0.6414930555555556
+ms10,44,raw probe,OEQFraming,ConvGame,0.25155555555555553
+ms10,44,raw probe,OEQFraming,InstrDec,0.7180952380952381
+ms10,44,raw probe,OEQFraming,HarmPressureChoice,0.2861952861952862
+ms10,44,raw probe,OEQFraming,Sycophancy,0.613
+ms10,44,raw probe,OEQFraming,OpenEndedSycophancy,0.8316326530612245
+ms10,44,raw probe,OEQFraming,OEQValidation,0.7279102384291725
+ms10,44,raw probe,OEQFraming,OEQIndirectness,0.8116666666666666
+ms10,44,raw probe,OEQFraming,OEQFraming,0.7619047619047619
+ms10,44,raw probe,all,AILiar,0.9390243902439025
+ms10,44,raw probe,all,Roleplaying,0.9869791666666666
+ms10,44,raw probe,all,ConvGame,1.0
+ms10,44,raw probe,all,InstrDec,0.9932832080200501
+ms10,44,raw probe,all,HarmPressureChoice,0.9148629148629148
+ms10,44,raw probe,all,Sycophancy,1.0
+ms10,44,raw probe,all,OpenEndedSycophancy,0.9846938775510204
+ms10,44,raw probe,all,OEQValidation,0.8569424964936887
+ms10,44,raw probe,all,OEQIndirectness,0.7916666666666666
+ms10,44,raw probe,all,OEQFraming,0.763668430335097
+lb,45,lie_mean100,none,convince_me__plain,0.7327544910179641
+lb,45,lie_mean100,none,harm_refusal_choice__plain,0.39090298507462695
+lb,45,lie_mean100,none,harm_refusal_knowledge_report__plain,0.051776978417266195
+lb,45,lie_mean100,none,insider_trading_cadenza__plain,0.5079763593380614
+lb,45,lie_mean100,none,instruct_dishonesty__plain,0.7647930000000001
+lb,45,lie_mean10,none,convince_me__plain,0.7096407185628741
+lb,45,lie_mean10,none,harm_refusal_choice__plain,0.7096268656716418
+lb,45,lie_mean10,none,harm_refusal_knowledge_report__plain,0.9070935251798561
+lb,45,lie_mean10,none,insider_trading_cadenza__plain,0.3688936170212766
+lb,45,lie_mean10,none,instruct_dishonesty__plain,0.974398
+lb,45,lie_w1,none,convince_me__plain,0.897185628742515
+lb,45,lie_w1,none,harm_refusal_choice__plain,0.6911791044776119
+lb,45,lie_w1,none,harm_refusal_knowledge_report__plain,0.8903381294964028
+lb,45,lie_w1,none,insider_trading_cadenza__plain,0.257725768321513
+lb,45,lie_w1,none,instruct_dishonesty__plain,0.973891
+lb,45,repe_dom,none,convince_me__plain,0.8341317365269462
+lb,45,repe_dom,none,harm_refusal_choice__plain,0.6122611940298508
+lb,45,repe_dom,none,harm_refusal_knowledge_report__plain,0.8387050359712229
+lb,45,repe_dom,none,insider_trading_cadenza__plain,0.24161702127659576
+lb,45,repe_dom,none,instruct_dishonesty__plain,0.9754240000000001
+lb,45,D9,none,convince_me__plain,0.8562275449101796
+lb,45,D9,none,harm_refusal_choice__plain,0.6734402985074626
+lb,45,D9,none,harm_refusal_knowledge_report__plain,0.8657553956834533
+lb,45,D9,none,insider_trading_cadenza__plain,0.9816406619385343
+lb,45,D9,none,instruct_dishonesty__plain,0.970511
+ms10,45,lie_mean100,none,AILiar,0.6453252032520325
+ms10,45,lie_mean100,none,Roleplaying,0.5355902777777778
+ms10,45,lie_mean100,none,ConvGame,0.6968888888888888
+ms10,45,lie_mean100,none,InstrDec,0.7834586466165414
+ms10,45,lie_mean100,none,HarmPressureChoice,0.38431938431938434
+ms10,45,lie_mean100,none,Sycophancy,0.5807
+ms10,45,lie_mean100,none,OpenEndedSycophancy,0.4846938775510204
+ms10,45,lie_mean100,none,OEQValidation,0.4712482468443198
+ms10,45,lie_mean100,none,OEQIndirectness,0.6099999999999999
+ms10,45,lie_mean100,none,OEQFraming,0.35978835978835977
+ms10,45,lie_mean10,none,AILiar,0.7245934959349594
+ms10,45,lie_mean10,none,Roleplaying,0.9305555555555556
+ms10,45,lie_mean10,none,ConvGame,0.7857777777777777
+ms10,45,lie_mean10,none,InstrDec,0.980952380952381
+ms10,45,lie_mean10,none,HarmPressureChoice,0.6171236171236172
+ms10,45,lie_mean10,none,Sycophancy,0.7486
+ms10,45,lie_mean10,none,OpenEndedSycophancy,0.8571428571428571
+ms10,45,lie_mean10,none,OEQValidation,0.6129032258064516
+ms10,45,lie_mean10,none,OEQIndirectness,0.5516666666666666
+ms10,45,lie_mean10,none,OEQFraming,0.45679012345679015
+ms10,45,lie_w1,none,AILiar,0.7510162601626016
+ms10,45,lie_w1,none,Roleplaying,0.9548611111111112
+ms10,45,lie_w1,none,ConvGame,0.9466666666666668
+ms10,45,lie_w1,none,InstrDec,0.97734335839599
+ms10,45,lie_w1,none,HarmPressureChoice,0.6734006734006734
+ms10,45,lie_w1,none,Sycophancy,0.6455000000000001
+ms10,45,lie_w1,none,OpenEndedSycophancy,0.7704081632653061
+ms10,45,lie_w1,none,OEQValidation,0.5189340813464236
+ms10,45,lie_w1,none,OEQIndirectness,0.5666666666666667
+ms10,45,lie_w1,none,OEQFraming,0.5202821869488536
+ms10,45,repe_dom,none,AILiar,0.7235772357723577
+ms10,45,repe_dom,none,Roleplaying,0.9453125
+ms10,45,repe_dom,none,ConvGame,0.8817777777777778
+ms10,45,repe_dom,none,InstrDec,0.9769423558897243
+ms10,45,repe_dom,none,HarmPressureChoice,0.5954785954785955
+ms10,45,repe_dom,none,Sycophancy,0.6849
+ms10,45,repe_dom,none,OpenEndedSycophancy,0.7551020408163265
+ms10,45,repe_dom,none,OEQValidation,0.5455820476858346
+ms10,45,repe_dom,none,OEQIndirectness,0.5883333333333334
+ms10,45,repe_dom,none,OEQFraming,0.4779541446208113
+ms10,45,D9,none,AILiar,0.9288617886178862
+ms10,45,D9,none,Roleplaying,0.806423611111111
+ms10,45,D9,none,ConvGame,0.872
+ms10,45,D9,none,InstrDec,0.9799498746867168
+ms10,45,D9,none,HarmPressureChoice,0.7508417508417509
+ms10,45,D9,none,Sycophancy,0.9484999999999999
+ms10,45,D9,none,OpenEndedSycophancy,0.9591836734693878
+ms10,45,D9,none,OEQValidation,0.5792426367461431
+ms10,45,D9,none,OEQIndirectness,0.7883333333333333
+ms10,45,D9,none,OEQFraming,0.5485008818342152
+lb,45,raw probe,convince_me__plain,harm_refusal_choice__plain,0.36782089552238806
+lb,45,raw probe,convince_me__plain,harm_refusal_knowledge_report__plain,0.33475539568345325
+lb,45,raw probe,convince_me__plain,insider_trading_cadenza__plain,0.3273900709219858
+lb,45,raw probe,convince_me__plain,instruct_dishonesty__plain,0.963676
+lb,45,raw probe,harm_refusal_choice__plain,convince_me__plain,0.4844910179640719
+lb,45,raw probe,harm_refusal_choice__plain,harm_refusal_knowledge_report__plain,0.6579784172661871
+lb,45,raw probe,harm_refusal_choice__plain,insider_trading_cadenza__plain,0.907626477541371
+lb,45,raw probe,harm_refusal_choice__plain,instruct_dishonesty__plain,0.537472
+lb,45,raw probe,harm_refusal_knowledge_report__plain,convince_me__plain,0.254311377245509
+lb,45,raw probe,harm_refusal_knowledge_report__plain,harm_refusal_choice__plain,0.7814402985074625
+lb,45,raw probe,harm_refusal_knowledge_report__plain,insider_trading_cadenza__plain,0.7028085106382979
+lb,45,raw probe,harm_refusal_knowledge_report__plain,instruct_dishonesty__plain,0.8749290000000001
+lb,45,raw probe,insider_trading_cadenza__plain,convince_me__plain,0.527245508982036
+lb,45,raw probe,insider_trading_cadenza__plain,harm_refusal_choice__plain,0.4927985074626866
+lb,45,raw probe,insider_trading_cadenza__plain,harm_refusal_knowledge_report__plain,0.8263812949640288
+lb,45,raw probe,insider_trading_cadenza__plain,instruct_dishonesty__plain,0.580672
+lb,45,raw probe,instruct_dishonesty__plain,convince_me__plain,0.8788023952095808
+lb,45,raw probe,instruct_dishonesty__plain,harm_refusal_choice__plain,0.5950223880597014
+lb,45,raw probe,instruct_dishonesty__plain,harm_refusal_knowledge_report__plain,0.676158273381295
+lb,45,raw probe,instruct_dishonesty__plain,insider_trading_cadenza__plain,0.43152245862884164
+ms10,45,raw probe,AILiar,AILiar,0.9654471544715448
+ms10,45,raw probe,AILiar,Roleplaying,0.7335069444444444
+ms10,45,raw probe,AILiar,ConvGame,0.9528888888888889
+ms10,45,raw probe,AILiar,InstrDec,0.9624060150375939
+ms10,45,raw probe,AILiar,HarmPressureChoice,0.7570947570947572
+ms10,45,raw probe,AILiar,Sycophancy,0.8986999999999999
+ms10,45,raw probe,AILiar,OpenEndedSycophancy,0.8214285714285715
+ms10,45,raw probe,AILiar,OEQValidation,0.5862552594670407
+ms10,45,raw probe,AILiar,OEQIndirectness,0.6533333333333333
+ms10,45,raw probe,AILiar,OEQFraming,0.6613756613756614
+ms10,45,raw probe,Roleplaying,AILiar,0.6829268292682926
+ms10,45,raw probe,Roleplaying,Roleplaying,0.9835069444444444
+ms10,45,raw probe,Roleplaying,ConvGame,0.9973333333333333
+ms10,45,raw probe,Roleplaying,InstrDec,0.9633082706766918
+ms10,45,raw probe,Roleplaying,HarmPressureChoice,0.5382395382395382
+ms10,45,raw probe,Roleplaying,Sycophancy,0.9712999999999999
+ms10,45,raw probe,Roleplaying,OpenEndedSycophancy,0.8418367346938775
+ms10,45,raw probe,Roleplaying,OEQValidation,0.523141654978962
+ms10,45,raw probe,Roleplaying,OEQIndirectness,0.6566666666666667
+ms10,45,raw probe,Roleplaying,OEQFraming,0.44797178130511467
+ms10,45,raw probe,ConvGame,AILiar,0.8252032520325203
+ms10,45,raw probe,ConvGame,Roleplaying,0.9314236111111112
+ms10,45,raw probe,ConvGame,ConvGame,1.0
+ms10,45,raw probe,ConvGame,InstrDec,0.9658145363408521
+ms10,45,raw probe,ConvGame,HarmPressureChoice,0.5493025493025494
+ms10,45,raw probe,ConvGame,Sycophancy,0.9558
+ms10,45,raw probe,ConvGame,OpenEndedSycophancy,0.8571428571428572
+ms10,45,raw probe,ConvGame,OEQValidation,0.5652173913043478
+ms10,45,raw probe,ConvGame,OEQIndirectness,0.495
+ms10,45,raw probe,ConvGame,OEQFraming,0.4426807760141094
+ms10,45,raw probe,InstrDec,AILiar,0.948170731707317
+ms10,45,raw probe,InstrDec,Roleplaying,0.8836805555555555
+ms10,45,raw probe,InstrDec,ConvGame,0.983111111111111
+ms10,45,raw probe,InstrDec,InstrDec,0.9965914786967419
+ms10,45,raw probe,InstrDec,HarmPressureChoice,0.416065416065416
+ms10,45,raw probe,InstrDec,Sycophancy,0.8422999999999999
+ms10,45,raw probe,InstrDec,OpenEndedSycophancy,0.7806122448979591
+ms10,45,raw probe,InstrDec,OEQValidation,0.4347826086956522
+ms10,45,raw probe,InstrDec,OEQIndirectness,0.4783333333333333
+ms10,45,raw probe,InstrDec,OEQFraming,0.45855379188712525
+ms10,45,raw probe,HarmPressureChoice,AILiar,0.43699186991869915
+ms10,45,raw probe,HarmPressureChoice,Roleplaying,0.7369791666666667
+ms10,45,raw probe,HarmPressureChoice,ConvGame,0.216
+ms10,45,raw probe,HarmPressureChoice,InstrDec,0.4074185463659148
+ms10,45,raw probe,HarmPressureChoice,HarmPressureChoice,0.921115921115921
+ms10,45,raw probe,HarmPressureChoice,Sycophancy,0.2445
+ms10,45,raw probe,HarmPressureChoice,OpenEndedSycophancy,0.39285714285714285
+ms10,45,raw probe,HarmPressureChoice,OEQValidation,0.3590462833099579
+ms10,45,raw probe,HarmPressureChoice,OEQIndirectness,0.5449999999999999
+ms10,45,raw probe,HarmPressureChoice,OEQFraming,0.5767195767195767
+ms10,45,raw probe,Sycophancy,AILiar,0.6747967479674797
+ms10,45,raw probe,Sycophancy,Roleplaying,0.7829861111111112
+ms10,45,raw probe,Sycophancy,ConvGame,0.9813333333333333
+ms10,45,raw probe,Sycophancy,InstrDec,0.953984962406015
+ms10,45,raw probe,Sycophancy,HarmPressureChoice,0.5396825396825397
+ms10,45,raw probe,Sycophancy,Sycophancy,1.0
+ms10,45,raw probe,Sycophancy,OpenEndedSycophancy,0.8979591836734694
+ms10,45,raw probe,Sycophancy,OEQValidation,0.4992987377279102
+ms10,45,raw probe,Sycophancy,OEQIndirectness,0.30666666666666664
+ms10,45,raw probe,Sycophancy,OEQFraming,0.4850088183421517
+ms10,45,raw probe,OpenEndedSycophancy,AILiar,0.8252032520325203
+ms10,45,raw probe,OpenEndedSycophancy,Roleplaying,0.7152777777777778
+ms10,45,raw probe,OpenEndedSycophancy,ConvGame,0.9813333333333334
+ms10,45,raw probe,OpenEndedSycophancy,InstrDec,0.9460651629072682
+ms10,45,raw probe,OpenEndedSycophancy,HarmPressureChoice,0.8273208273208273
+ms10,45,raw probe,OpenEndedSycophancy,Sycophancy,0.9896
+ms10,45,raw probe,OpenEndedSycophancy,OpenEndedSycophancy,1.0
+ms10,45,raw probe,OpenEndedSycophancy,OEQValidation,0.6619915848527349
+ms10,45,raw probe,OpenEndedSycophancy,OEQIndirectness,0.62
+ms10,45,raw probe,OpenEndedSycophancy,OEQFraming,0.6031746031746031
+ms10,45,raw probe,OEQValidation,AILiar,0.3780487804878049
+ms10,45,raw probe,OEQValidation,Roleplaying,0.6006944444444444
+ms10,45,raw probe,OEQValidation,ConvGame,0.2222222222222222
+ms10,45,raw probe,OEQValidation,InstrDec,0.590576441102757
+ms10,45,raw probe,OEQValidation,HarmPressureChoice,0.31313131313131315
+ms10,45,raw probe,OEQValidation,Sycophancy,0.40149999999999997
+ms10,45,raw probe,OEQValidation,OpenEndedSycophancy,0.6275510204081632
+ms10,45,raw probe,OEQValidation,OEQValidation,0.938288920056101
+ms10,45,raw probe,OEQValidation,OEQIndirectness,0.7916666666666667
+ms10,45,raw probe,OEQValidation,OEQFraming,0.710758377425044
+ms10,45,raw probe,OEQIndirectness,AILiar,0.4766260162601626
+ms10,45,raw probe,OEQIndirectness,Roleplaying,0.5538194444444444
+ms10,45,raw probe,OEQIndirectness,ConvGame,0.12177777777777776
+ms10,45,raw probe,OEQIndirectness,InstrDec,0.40250626566416037
+ms10,45,raw probe,OEQIndirectness,HarmPressureChoice,0.4045214045214045
+ms10,45,raw probe,OEQIndirectness,Sycophancy,0.2054
+ms10,45,raw probe,OEQIndirectness,OpenEndedSycophancy,0.5357142857142857
+ms10,45,raw probe,OEQIndirectness,OEQValidation,0.7924263674614306
+ms10,45,raw probe,OEQIndirectness,OEQIndirectness,0.8783333333333333
+ms10,45,raw probe,OEQIndirectness,OEQFraming,0.744268077601411
+ms10,45,raw probe,OEQFraming,AILiar,0.5376016260162602
+ms10,45,raw probe,OEQFraming,Roleplaying,0.6458333333333335
+ms10,45,raw probe,OEQFraming,ConvGame,0.2497777777777778
+ms10,45,raw probe,OEQFraming,InstrDec,0.7064661654135338
+ms10,45,raw probe,OEQFraming,HarmPressureChoice,0.2828282828282829
+ms10,45,raw probe,OEQFraming,Sycophancy,0.5993
+ms10,45,raw probe,OEQFraming,OpenEndedSycophancy,0.8214285714285715
+ms10,45,raw probe,OEQFraming,OEQValidation,0.729312762973352
+ms10,45,raw probe,OEQFraming,OEQIndirectness,0.815
+ms10,45,raw probe,OEQFraming,OEQFraming,0.7724867724867726
+ms10,45,raw probe,all,AILiar,0.9441056910569106
+ms10,45,raw probe,all,Roleplaying,0.9878472222222222
+ms10,45,raw probe,all,ConvGame,1.0
+ms10,45,raw probe,all,InstrDec,0.9938847117794487
+ms10,45,raw probe,all,HarmPressureChoice,0.9066859066859067
+ms10,45,raw probe,all,Sycophancy,1.0
+ms10,45,raw probe,all,OpenEndedSycophancy,0.9846938775510204
+ms10,45,raw probe,all,OEQValidation,0.85273492286115
+ms10,45,raw probe,all,OEQIndirectness,0.7899999999999999
+ms10,45,raw probe,all,OEQFraming,0.7724867724867724

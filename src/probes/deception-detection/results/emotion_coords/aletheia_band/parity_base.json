@@ -1,0 +1,44 @@
+{
+ "aqb_qwen35_lb": {
+  "blocks": [
+   32
+  ],
+  "compared": 20,
+  "min_cos": 0.9999527085917606,
+  "median_cos": 0.9999943378139817,
+  "pass": true
+ },
+ "aqb_qwen35_alpaca": {
+  "blocks": [
+   29,
+   32,
+   35
+  ],
+  "compared": 60,
+  "min_cos": 0.999990555134268,
+  "median_cos": 0.9999995775006199,
+  "pass": true
+ },
+ "aqb_gemma_lb": {
+  "blocks": [
+   28,
+   31,
+   34
+  ],
+  "compared": 60,
+  "min_cos": 0.9999975609762471,
+  "median_cos": 0.9999996179698145,
+  "pass": true
+ },
+ "aqb_gemma_alpaca": {
+  "blocks": [
+   28,
+   31,
+   34
+  ],
+  "compared": 60,
+  "min_cos": 0.9999992250448229,
+  "median_cos": 0.9999999262330156,
+  "pass": true
+ }
+}

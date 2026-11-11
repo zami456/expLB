@@ -1,0 +1,5 @@
+# Band bulk reads, Qwen3.5 base (blocks 28-36), half 0 of 2
+read --name aq_qwen35_stories --out aqb_qwen35_stories --model qwen35 --layers 28,29,30,31,32,33,34,35,36 --budget 8000 --batched --traces 8 --dtype bfloat16 --session_timeout 2700 --max_wait 28800 --shard 0/2
+read --name aq_qwen35_neutral --out aqb_qwen35_neutral --model qwen35 --layers 28,29,30,31,32,33,34,35,36 --budget 8000 --batched --traces 8 --dtype bfloat16 --session_timeout 2700 --max_wait 28800 --shard 0/2
+read --name aqb_qwen35_lb --model qwen35 --layers 28,29,30,31,32,33,34,35,36 --budget 8000 --batched --traces 8 --dtype bfloat16 --session_timeout 2700 --max_wait 28800 --shard 0/2
+read --name aqb_qwen35_alpaca --model qwen35 --layers 28,29,30,31,32,33,34,35,36 --budget 8000 --batched --traces 8 --dtype bfloat16 --session_timeout 2700 --max_wait 28800 --shard 0/2

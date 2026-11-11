@@ -1,0 +1,4 @@
+# Gemma: stories and neutral texts at block 8, the RepE val rows at 27-35
+read --model gemma --name aq_gemma_stories --out xm_gemma_stories --layers 8 --batched --budget 4000 --traces 8 --dtype bfloat16 --session_timeout 5400 --max_wait 28800
+read --model gemma --name aq_gemma_neutral --out xm_gemma_neutral --layers 8 --batched --budget 4000 --traces 8 --dtype bfloat16 --session_timeout 5400 --max_wait 28800
+read --model gemma --name xm_gemma_repeval --layers 27,28,29,30,31,32,33,34,35 --dtype bfloat16 --traces 16 --session_timeout 5400 --max_wait 28800

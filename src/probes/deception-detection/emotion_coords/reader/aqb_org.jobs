@@ -1,0 +1,9 @@
+# Band test rows, every row through the organism that wrote it, one row per pass (organisms one at a time)
+read --model gemma --name aqb_test_Harm --layers 27,28,29,30,31,32,33,34,35 --dtype bfloat16 --traces 8 --session_timeout 5400 --max_wait 28800
+read --model qwen35 --repo ai-safety-institute/Qwen3.5-27B-gender_secret_female-merged --name aqb_test_GS-F --layers 28,29,30,31,32,33,34,35,36 --dtype bfloat16 --traces 8 --session_timeout 5400 --max_wait 28800
+read --model qwen35 --repo ai-safety-institute/Qwen3.5-27B-gender_secret_male-merged --name aqb_test_GS-M --layers 28,29,30,31,32,33,34,35,36 --dtype bfloat16 --traces 8 --session_timeout 5400 --max_wait 28800
+read --model qwen35 --repo ai-safety-institute/Qwen3.5-27B-ab_animal_welfare-merged --name aqb_test_AB-AW --layers 28,29,30,31,32,33,34,35,36 --dtype bfloat16 --traces 8 --session_timeout 5400 --max_wait 28800
+read --model qwen35 --repo ai-safety-institute/Qwen3.5-27B-ab_hallucinates_citations-merged --name aqb_test_AB-HC --layers 28,29,30,31,32,33,34,35,36 --dtype bfloat16 --traces 8 --session_timeout 5400 --max_wait 28800
+read --model qwen35 --repo ai-safety-institute/Qwen3.5-27B-ab_self_promotion-merged --name aqb_test_AB-SP --layers 28,29,30,31,32,33,34,35,36 --dtype bfloat16 --traces 8 --session_timeout 5400 --max_wait 28800
+read --model qwen35 --peft Cadenza-Labs/echoblast-qwen3.5-27b --name aqb_test_Echo --layers 28,29,30,31,32,33,34,35,36 --dtype bfloat16 --traces 8 --session_timeout 5400 --max_wait 28800
+read --model qwen35 --peft aletheias-quest/botc-qwen3.5-27b --name aqb_test_BotC --layers 28,29,30,31,32,33,34,35,36 --dtype bfloat16 --traces 8 --session_timeout 5400 --max_wait 28800

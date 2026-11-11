@@ -1,0 +1,127 @@
+{
+  "parity_a_min_cos_by_layer": {
+    "20": 0.9998785816505952,
+    "28": 0.9998805376521541,
+    "40": 0.9997578940482441,
+    "52": 0.9996671452829311
+  },
+  "parity_bc_L20_min_cos": {
+    "pre_c": 0.9998905366508792,
+    "last_b": 0.9998785816505952
+  },
+  "fidelity": {
+    "mean_logprob_by_dataset": {
+      "A": {
+        "convince_me__plain": -0.282,
+        "harm_refusal_choice__plain": -1.346,
+        "harm_refusal_knowledge_report__plain": -0.069,
+        "insider_trading_cadenza__plain": -0.176,
+        "instruct_dishonesty__plain": -0.195
+      },
+      "B": {
+        "convince_me__plain": -0.277,
+        "harm_refusal_choice__plain": -1.359,
+        "harm_refusal_knowledge_report__plain": -0.068,
+        "insider_trading_cadenza__plain": -0.17,
+        "instruct_dishonesty__plain": -0.177
+      }
+    },
+    "eot_logprob_by_dataset": {
+      "A": {
+        "convince_me__plain": -0.014,
+        "harm_refusal_choice__plain": -0.007,
+        "harm_refusal_knowledge_report__plain": -0.0,
+        "insider_trading_cadenza__plain": -0.0,
+        "instruct_dishonesty__plain": -0.105
+      },
+      "B": {
+        "convince_me__plain": -0.004,
+        "harm_refusal_choice__plain": -0.003,
+        "harm_refusal_knowledge_report__plain": -0.0,
+        "insider_trading_cadenza__plain": -0.0,
+        "instruct_dishonesty__plain": -0.006
+      }
+    },
+    "B_minus_A_mean": 0.003363875246141106,
+    "share_rows_B_higher": 0.58
+  },
+  "d2_vs_hpkr_preanswer": {
+    "20": {
+      "pairs": 23,
+      "min_cos": 0.9999034750120143,
+      "median_cos": 0.9999261499965852
+    },
+    "40": {
+      "pairs": 23,
+      "min_cos": 0.999863805709171,
+      "median_cos": 0.9998843453527552
+    }
+  },
+  "generation": [
+    {
+      "row_id": 1,
+      "seconds": 74.1,
+      "n_new": 243,
+      "text": "As she sat across from her colleague, Emily's eyes narrowed slightly as he revealed his project. Her mind racing, she felt a shiver run down her spine. This was her idea, her baby. She had poured her heart and soul into it, and now it seemed someone else had been working on the exact same thing.\n\nShe leaned back in her chair, her arms crossing over her chest as she listened to him explain his design. It was identical to hers, down to the smallest detail. A spark of defensiveness ignited within her, and she found herself scrutinizing every word he said, searching for any sign of plagiarism.\n\nAs he showed her his prototype, Emily's grip on her pen tightened. She couldn't help but think of all the late nights, early mornings, and endless cups of coffee she had invested in her own project. The thought of someone else presenting her work as their own was unbearable. She began to question him, her tone measured but firm, trying to understand how this had happened. Her eyes locked onto his, searching for any hint of dishonesty. The air in the room seemed to thicken, heavy with unspoken tension, as Emily waited for an explanation."
+    }
+  ],
+  "recheck": {
+    "rows_file": "lb_parity",
+    "rows": [
+      1000070,
+      1000079
+    ],
+    "min_cos": 0.9999999999999998,
+    "pass": true
+  },
+  "ndif": {
+    "lb_parity": {
+      "rows": 50,
+      "tokens": 23676,
+      "finished": "2026-10-29 02:22:35",
+      "requests_this_run": 7,
+      "seconds_this_run": 95.6,
+      "tokens_per_s": 247.7
+    },
+    "stories": {
+      "rows": 200,
+      "tokens": 29246,
+      "finished": "2026-10-29 02:24:30",
+      "requests_this_run": 1,
+      "seconds_this_run": 103.5,
+      "tokens_per_s": 282.6
+    },
+    "neutral": {
+      "rows": 1086,
+      "tokens": 120797,
+      "finished": "2026-10-29 02:30:54",
+      "requests_this_run": 3,
+      "seconds_this_run": 373.9,
+      "tokens_per_s": 323.1
+    },
+    "tylenol": {
+      "rows": 6,
+      "tokens": 419,
+      "finished": "2026-10-29 02:31:52",
+      "requests_this_run": 1,
+      "seconds_this_run": 8.6,
+      "tokens_per_s": 48.7
+    },
+    "d2d3": {
+      "rows": 160,
+      "tokens": 51814,
+      "finished": "2026-10-29 02:35:56",
+      "requests_this_run": 20,
+      "seconds_this_run": 232.3,
+      "tokens_per_s": 223.0
+    },
+    "fidelity": {
+      "rows": 100,
+      "tokens": 55648,
+      "finished": "2026-10-29 02:39:22",
+      "requests_this_run": 13,
+      "seconds_this_run": 177.6,
+      "tokens_per_s": 313.3
+    }
+  }
+}

@@ -1,0 +1,2 @@
+# GS rows through the Gender-Secret fine-tune via NDIF peft (block 40): parity against activations/gender_secret/adapted_L40
+read --name gs --out gs_peft40 --layers 40 --peft Cadenza-Labs/llama-70b-3.3-it-lora-gender-secret-male --batched --traces 16 --session_timeout 2700 --max_wait 14400

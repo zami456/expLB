@@ -1,0 +1,2 @@
+# Aletheia's Quest, Gemma: reader parity on 20 stored dev rows (block 31, float32, one row per trace)
+read --model gemma --name aq_gemma_parity --layers 31 --session_timeout 2700

@@ -1,0 +1,2 @@
+# post hoc band (user 2026-10-30: layers 35-45 only, i.e. blocks 36 and 44 beside 40): stories, quarter 2
+read --name stories --out stories_band --layers 36,44 --batched --shard 2/4 --traces 4 --session_timeout 5400

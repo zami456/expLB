@@ -1,0 +1,3 @@
+# Aletheia's Quest, Qwen3.5 block 32: stories then neutral texts, half 1 of 2 (bfloat16 transfer)
+read --model qwen35 --name aq_qwen35_stories --layers 32 --batched --budget 8000 --traces 8 --dtype bfloat16 --shard 1/2 --session_timeout 2700 --max_wait 28800
+read --model qwen35 --name aq_qwen35_neutral --layers 32 --batched --budget 8000 --traces 8 --dtype bfloat16 --shard 1/2 --session_timeout 2700 --max_wait 28800

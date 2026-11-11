@@ -1,0 +1,5 @@
+# Band bulk reads, Gemma base (blocks 27-35), half 0 of 2
+read --name aq_gemma_stories --out aqb_gemma_stories --model gemma --layers 27,28,29,30,31,32,33,34,35 --budget 4000 --batched --traces 8 --dtype bfloat16 --session_timeout 2700 --max_wait 28800 --shard 0/2
+read --name aq_gemma_neutral --out aqb_gemma_neutral --model gemma --layers 27,28,29,30,31,32,33,34,35 --budget 4000 --batched --traces 8 --dtype bfloat16 --session_timeout 2700 --max_wait 28800 --shard 0/2
+read --name aqb_gemma_lb --model gemma --layers 27,28,29,30,31,32,33,34,35 --budget 4000 --batched --traces 8 --dtype bfloat16 --session_timeout 2700 --max_wait 28800 --shard 0/2
+read --name aqb_gemma_alpaca --model gemma --layers 27,28,29,30,31,32,33,34,35 --budget 4000 --batched --traces 8 --dtype bfloat16 --session_timeout 2700 --max_wait 28800 --shard 0/2

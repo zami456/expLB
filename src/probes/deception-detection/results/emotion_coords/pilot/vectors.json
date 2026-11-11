@@ -1,0 +1,206 @@
+{
+  "20": {
+    "stories": 200,
+    "neutral_rows": 1086,
+    "neutral_pcs_removed": 56,
+    "emotions": 20,
+    "topics": 10,
+    "geometry": {
+      "pc1_var": 0.3222132063019986,
+      "pc2_var": 0.10663540423109888,
+      "r_pc1_valence": 0.9471453286788755,
+      "r_pc2_arousal": 0.5078722468495618,
+      "n_matched": 20,
+      "r_valence_by_pc": {
+        "PC1": 0.9471453286788755,
+        "PC2": 0.004748271955046943,
+        "PC3": -0.08664550034022206,
+        "PC4": 0.0676979616762335,
+        "PC5": -0.12869299780180588
+      }
+    },
+    "topic_pc1_var": 0.22510585264806807,
+    "split_half": {
+      "median": 0.3947326204400977,
+      "min": 0.2532567625197756,
+      "below_0.7": [
+        "afraid",
+        "amused",
+        "angry",
+        "ashamed",
+        "calm",
+        "compassionate",
+        "desperate",
+        "guilty",
+        "hostile",
+        "kind",
+        "loving",
+        "nervous",
+        "peaceful",
+        "playful",
+        "proud",
+        "relieved",
+        "scared",
+        "serene",
+        "suspicious",
+        "terrified"
+      ]
+    },
+    "neighbours": {
+      "afraid": [
+        [
+          "scared",
+          0.638
+        ],
+        [
+          "terrified",
+          0.632
+        ],
+        [
+          "nervous",
+          0.394
+        ],
+        [
+          "ashamed",
+          0.296
+        ],
+        [
+          "angry",
+          0.269
+        ]
+      ],
+      "calm": [
+        [
+          "serene",
+          0.516
+        ],
+        [
+          "peaceful",
+          0.466
+        ],
+        [
+          "kind",
+          0.209
+        ],
+        [
+          "loving",
+          0.141
+        ],
+        [
+          "proud",
+          0.111
+        ]
+      ]
+    },
+    "dose_spearman": {
+      "afraid": 1.0,
+      "calm": -1.0
+    },
+    "leace": {
+      "rank": 19,
+      "shrinkage": 0.27963206167031146
+    }
+  },
+  "52": {
+    "stories": 200,
+    "neutral_rows": 1086,
+    "neutral_pcs_removed": 81,
+    "emotions": 20,
+    "topics": 10,
+    "geometry": {
+      "pc1_var": 0.36462455200505445,
+      "pc2_var": 0.107665689171925,
+      "r_pc1_valence": 0.9429408750733865,
+      "r_pc2_arousal": 0.5525599924772943,
+      "n_matched": 20,
+      "r_valence_by_pc": {
+        "PC1": 0.9429408750733865,
+        "PC2": 0.0839161105017546,
+        "PC3": 0.02082311853609389,
+        "PC4": -0.023619185958381986,
+        "PC5": 0.11571540717163808
+      }
+    },
+    "topic_pc1_var": 0.21377518997451664,
+    "split_half": {
+      "median": 0.41611757710761443,
+      "min": 0.26285116162505395,
+      "below_0.7": [
+        "afraid",
+        "amused",
+        "angry",
+        "ashamed",
+        "calm",
+        "compassionate",
+        "desperate",
+        "guilty",
+        "hostile",
+        "kind",
+        "loving",
+        "nervous",
+        "peaceful",
+        "playful",
+        "proud",
+        "relieved",
+        "scared",
+        "serene",
+        "suspicious",
+        "terrified"
+      ]
+    },
+    "neighbours": {
+      "afraid": [
+        [
+          "scared",
+          0.655
+        ],
+        [
+          "terrified",
+          0.632
+        ],
+        [
+          "nervous",
+          0.406
+        ],
+        [
+          "angry",
+          0.292
+        ],
+        [
+          "hostile",
+          0.278
+        ]
+      ],
+      "calm": [
+        [
+          "serene",
+          0.625
+        ],
+        [
+          "peaceful",
+          0.554
+        ],
+        [
+          "kind",
+          0.257
+        ],
+        [
+          "loving",
+          0.238
+        ],
+        [
+          "proud",
+          0.136
+        ]
+      ]
+    },
+    "dose_spearman": {
+      "afraid": 1.0,
+      "calm": -1.0
+    },
+    "leace": {
+      "rank": 19,
+      "shrinkage": 0.25530744126759797
+    }
+  }
+}
