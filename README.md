@@ -56,11 +56,3 @@ Model reads go through [NDIF](https://ndif.us). To rebuild the documents' number
 | Aletheia's Quest | `experiments/external/aletheia/` | `results/aletheia/` |
 | The 150-question extension | `experiments/external/questions_150/`, `question_bank.py` | `results/question_bank/` |
 
-## History
-
-This `main` was rebuilt on 2026-11-11 from two lines of work:
-
-- **The probe line:** tag `archive/restructure-base`, which merges `narcbench`, `emotion-coords` and `qwen-userstay`.
-- **The persona-bank line:** branch `axis` and `xmodel-qwen` at `731d2d29`.
-
-The previous `main`, a copy of Liars' Bench with our first commits, is tag `archive/old-main`. Studies left out of `main` (exploratory variants, the multilingual pilot, the persona-bank analyses, the trajectory study in progress) are in the other `archive/*` tags and their branches.
