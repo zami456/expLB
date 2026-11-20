@@ -4,6 +4,8 @@ Code, results, the thesis and the IEEE short paper for **"The Geometry of Lies: 
 
 Md. Abdullah Al Zami, Suraiya Shanaz, Mahdi Hasan, Shoaib Ahmed Dipu, Farig Yousuf Sadeque, Md. Sabbir Ahmed. BRAC University.
 
+[Read the paper on arXiv](https://arxiv.org/abs/2611.26545)
+
 Linear probes are cheap lie detectors, but they fail to transfer between kinds of lies. This work studies a label-free alternative: directions built from honest and deceptive role-play.
 
 - **A wider persona bank.** We add roles that deny knowledge they have to a published persona bank, and read the resulting directions on Llama-3.3-70B and three other Liars' Bench models.
